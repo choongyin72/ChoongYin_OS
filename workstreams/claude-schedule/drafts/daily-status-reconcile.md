@@ -1,6 +1,6 @@
 ---
 slug: daily-status-reconcile
-status: draft
+status: approved
 schedule: "daily 08:00 AWST"
 permission_level: L2
 ---
