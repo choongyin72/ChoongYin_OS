@@ -3,7 +3,20 @@
     "allow": [
       "Bash(cmd.exe /c \"where gh 2>nul\")",
       "Bash(git --version)",
-      "Bash(git config *)"
+      "Bash(git config *)",
+      "Bash(cmd.exe /c *)",
+      "Bash(mkdir -p *)",
+      "Bash(/c/Tools/gh/gh.exe auth status*)",
+      "Bash(/c/Tools/gh/gh.exe auth setup-git*)",
+      "Bash(curl --version)",
+      "Bash(curl -s *)",
+      "Bash(taskkill /F /IM gh.exe*)",
+      "mcp__claude_ai_Microsoft_365__read_resource",
+      "mcp__claude_ai_Microsoft_365__chat_message_search",
+      "mcp__claude_ai_Microsoft_365__sharepoint_search",
+      "mcp__claude_ai_Microsoft_365__sharepoint_folder_search",
+      "mcp__claude_ai_Microsoft_365__outlook_email_search",
+      "mcp__claude_ai_Microsoft_365__outlook_calendar_search"
     ]
   }
 }
