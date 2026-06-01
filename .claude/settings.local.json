@@ -5,7 +5,10 @@
       "Bash(ls \"/c/Program Files/\" | grep -i github 2>/dev/null; ls \"/c/Users/choong-yin.lee/AppData/Local/\" | grep -i github 2>/dev/null; ls \"/c/Users/choong-yin.lee/scoop/shims/\" 2>/dev/null | grep gh)",
       "Read(//c/Program Files//**)",
       "Read(//c/Users/choong-yin.lee/AppData/Local//**)",
-      "Read(//c/Users/choong-yin.lee/scoop/**)"
+      "Read(//c/Users/choong-yin.lee/scoop/**)",
+      "Bash(git -C /c/DEV/GIT/woodside_impl_pluto_12839 log --all --oneline --grep=\"PHD\" --grep=\"tag\" --grep=\"validation\" -i)",
+      "Bash(git -C /c/DEV/GIT/woodside_impl_pluto_12839 show 9aabba43 --stat)",
+      "Bash(git -C /c/DEV/GIT/woodside_impl_pluto_12839 log --all --oneline --grep=\"PHD\\\\|phd\\\\|tag\\\\|TAG\" -i --since=\"2025-12-01\")"
     ]
   }
 }
