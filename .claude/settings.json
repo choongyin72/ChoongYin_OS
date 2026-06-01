@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd.exe /c \"where gh 2>nul\")",
+      "Bash(git --version)",
+      "Bash(git config *)"
+    ]
+  }
+}

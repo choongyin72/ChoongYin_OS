@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh auth *)",
+      "Bash(ls \"/c/Program Files/\" | grep -i github 2>/dev/null; ls \"/c/Users/choong-yin.lee/AppData/Local/\" | grep -i github 2>/dev/null; ls \"/c/Users/choong-yin.lee/scoop/shims/\" 2>/dev/null | grep gh)",
+      "Read(//c/Program Files//**)",
+      "Read(//c/Users/choong-yin.lee/AppData/Local//**)",
+      "Read(//c/Users/choong-yin.lee/scoop/**)"
+    ]
+  }
+}
