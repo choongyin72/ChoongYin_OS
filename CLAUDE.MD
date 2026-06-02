@@ -26,3 +26,6 @@ Notepad++            : C:\Program Files\Notepad++
 - Python 3.14       : C:\Tools\python\Python314\python.exe  (use `py` launcher)
 - VS Code           : C:\Tools\Microsoft VS Code\Code.exe
 - Notepad++         : C:\Program Files\Notepad++\notepad++.exe
+
+# Client SharePoint (added 2026-06-02)
+- Woodside Pluto Client SP : https://woodsideenergy.sharepoint.com/sites/PHBRQuorum

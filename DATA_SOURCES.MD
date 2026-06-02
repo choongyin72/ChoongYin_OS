@@ -20,3 +20,6 @@ SharePoint
 12839 - 2024 - ECaaS - Implementation - TM : https://qbsol.sharepoint.com/:f:/r/sites/GlobalServices/Shared%20Documents/Projects/APAC%20PS/Woodside/Active%20Projects/12839%20-%202024%20-%20ECaaS%20-%20Implementation%20-%20TM?csf=1&web=1&e=zaLqa9
 
 email outlook : choong-yin.lee@quorumsoftware.com
+
+Client SharePoint
+woodside Pluto : https://woodsideenergy.sharepoint.com/sites/PHBRQuorum?e=1%3A0f466f3301834ab2a4f07acffc7f7317
