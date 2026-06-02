@@ -6,6 +6,11 @@ EC DB Url            : db.plutodev.woodside-pluto.tieto-og.cloud:1521/plutodev
 EC DB User Id        : ECKERNEL_EC
 EC DB User Password  : energy
 
+EC Hub Url              : https://hub.energycomponents.com/
+EC Hub User Id          : choong-yin.lee@tieto.com
+EC Hub User Password    : Xinyee!20090330
+EC Techincal Documention: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/ecindex.html
+
 Java                 : C:\Tools\java\zulu21.36.17-ca-jdk21.0.4-win_x64
 VS Code              : C:\Tools\Microsoft VS Code\Code.exe
 Maven                : C:\Tools\maven\apache-maven-3.8.4-bin

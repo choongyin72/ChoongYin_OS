@@ -29,3 +29,7 @@ Notepad++            : C:\Program Files\Notepad++
 
 # Client SharePoint (added 2026-06-02)
 - Woodside Pluto Client SP : https://woodsideenergy.sharepoint.com/sites/PHBRQuorum
+
+# Additional Verified Sources (added 2026-06-02)
+- EC Hub (Nexus Repo) : https://hub.energycomponents.com/ (user: choong-yin.lee@tieto.com)
+- EC Tech Docs 14.2.5 : https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/ecindex.html
