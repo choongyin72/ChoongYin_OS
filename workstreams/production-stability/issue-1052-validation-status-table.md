@@ -16,189 +16,259 @@ _Scope: All active PHD tags with LAST_TRANSFER >= 1 Dec 2025_
 
 ---
 
-## Category 1 — Both Class Validation AND Check Rule (81 tags)
-> Tags fully covered: class validation configured AND at least one check rule active.
+## Category 1 — ✅ Both Class Validation AND Check Rule (81 tags)
 
-| EC Class | Attribute | Tag Count | From Unit | Check Rule IDs | Severity |
-|----------|-----------|-----------|-----------|----------------|---------|
-| PWEL_DAY_STATUS | AVG_BH_PRESS | 12 | MPA | 1016–1102 (mandatory, frozen, std dev, % diff) | ERROR/WARNING |
-| PWEL_DAY_STATUS | AVG_BH_TEMP | 12 | NULL | 1016–1102 | ERROR/WARNING |
-| PWEL_DAY_STATUS | AVG_COND_MASS | 12 | SM3/D | 1016–1102 (NODATA_COND, frozen) | ERROR/WARNING |
-| PWEL_DAY_STATUS | AVG_FLOW_MASS | 12 | SM3/D | 1016–1102 (NODATA, frozen, std dev) | ERROR/WARNING |
-| PWEL_DAY_STATUS | AVG_GAS_MASS | 21 | KG | 1016–1102 | ERROR/WARNING |
-| PWEL_DAY_STATUS | AVG_WATER_MASS | 12 | SM3/D | 1016–1102 | ERROR/WARNING |
-| PWEL_DAY_STATUS | AVG_WH_PRESS | 12 | KPA | 1016–1102 (NODATA_WHPRESS) | ERROR/WARNING |
-| PWEL_DAY_STATUS | AVG_WH_TEMP | 12 | NULL | 1016–1102 | ERROR/WARNING |
+| EC Class | Class Attribute | Object Name | Tag ID | From Unit | CV | CR IDs | CR Severity |
+|----------|----------------|------------|--------|-----------|----|---------|----|
+| PWEL_DAY_STATUS | AVG_BH_PRESS | Wells PLA-01 to PLA-08, PYA-01/02, XNA-01/02, PL-PYA-02 (12 wells) | PRP.01–12PI001002.DACA.PV | MPA | YES | 1016–1102 | ERROR/WARNING |
+| PWEL_DAY_STATUS | AVG_BH_TEMP | Same 12 wells | PRP.01–12TI001002.DACA.PV | NULL | YES | 1016–1102 | ERROR/WARNING |
+| PWEL_DAY_STATUS | AVG_COND_MASS | Same 12 wells | PRP.VT_*_AVG_COND_MASS | SM3/D | YES | 1016–1102 | ERROR/WARNING |
+| PWEL_DAY_STATUS | AVG_FLOW_MASS | Same 12 wells | PAS.PRP_VT_*_AVG_FLOW_MASS | SM3/D | YES | 1016–1102 | ERROR/WARNING |
+| PWEL_DAY_STATUS | AVG_GAS_MASS | 21 wells (incl. SCA wells) | PRP.VT_*_AVG_GAS_MASS | KG | YES | 1016–1102 | ERROR/WARNING |
+| PWEL_DAY_STATUS | AVG_WATER_MASS | Same 12 wells | PRP.VT_*_AVG_WATER_MASS | SM3/D | YES | 1016–1102 | ERROR/WARNING |
+| PWEL_DAY_STATUS | AVG_WH_PRESS | Same 12 wells | PRP.01–12PI001.DACA.PV | KPA | YES | 1016–1102 | ERROR/WARNING |
+| PWEL_DAY_STATUS | AVG_WH_TEMP | Same 12 wells | PRP.01–12TI001.DACA.PV | NULL | YES | 1016–1102 | ERROR/WARNING |
 
-**Class attributes validated:** ON_STREAM_HRS, AVG_FLOW_MASS, AVG_COND_MASS, AVG_GAS_MASS, AVG_WATER_MASS, AVG_BH_PRESS, AVG_BH_TEMP, AVG_WH_PRESS, AVG_WH_TEMP
-
----
-
-## Category 2 — Check Rule ONLY, No Class Validation (449 tags)
-> Check rules fire on the class but no class attribute validation row is configured.
-> Partially protected — anomaly detection works but no min/max/mandatory class-level enforcement.
-
-| EC Class | Attribute | Tags | From Unit | Check Rule IDs | Severity | Notes |
-|----------|-----------|------|-----------|----------------|---------|-------|
-| PWEL_DAY_STATUS | ON_STREAM_HRS | 12 | NULL | CR 1016 (on strm hrs), 1031 (0–24 check), MISSING_DATA | ERROR | OK |
-| PWEL_DAY_STATUS | AVG_CHOKE_SIZE | 12 | NULL | Generic PWEL rules only — no choke-specific range check | ERROR/WARNING | Gap: no 0–100% rule |
-| PWEL_DAY_STATUS | AVG_GAS_RATE | 9 | NULL | Generic PWEL rules only | ERROR/WARNING | Not in As-Built 05/09 |
-| STRM_DAY_STREAM_MEAS_GAS | GRS_MASS_GAS | 135 | KG/NULL | CR 1039–1058 (mandatory, frozen, variance, std dev) | ERROR/WARNING | OK |
-| STRM_DAY_STREAM_MEAS_GAS | GRS_VOL_GAS | 112 | SM3/NULL | CR 1039–1058 | ERROR/WARNING | OK |
-| STRM_DAY_STREAM_MEAS_GAS | MEAS_ENERGY | 80 | GJ/NULL | CR 1039–1058 | ERROR/WARNING | OK |
-| STRM_DAY_STREAM_MEAS_ELE | POWER_CONSUMPTION | 36 | KWH/NULL | CR 1057, 1073, 1074 (mandatory, ELE checks) | ERROR | OK |
-| STRM_DAY_STREAM_MEAS_OIL | GRS_MASS_OIL | 15 | KG | CR 1051–1058 (mandatory, frozen, variance) | ERROR/WARNING | OK |
-| STRM_DAY_STREAM_MEAS_OIL | GRS_VOL_OIL | 9 | SM3/NULL | CR 1051–1058 | ERROR/WARNING | OK |
-| STRM_DAY_STREAM_MEAS_WAT | GRS_VOL_WAT | 2 | NULL/SM3 | CR 1048 (mandatory), 1049 (frozen), 1068 (missing data) | ERROR/WARNING | OK |
-| EQPM_DAY_STATUS | ON_STREAM_HRS | 2 | NULL | CR 1118/1119 (ARGU/RTO 0–24), 1137/1138 (mandatory) | ERROR | OK |
+**Class attributes with validation:** ON_STREAM_HRS, AVG_FLOW_MASS, AVG_COND_MASS, AVG_GAS_MASS, AVG_WATER_MASS, AVG_BH_PRESS, AVG_BH_TEMP, AVG_WH_PRESS, AVG_WH_TEMP
 
 ---
 
-## Category 3 — Class Validation ONLY (0 tags)
-> **None.** No tags have class validation without a check rule.
+## Category 2 — 🟡 Check Rule ONLY, No Class Validation (449 tags)
+
+| EC Class | Class Attribute | Object Name | Tags | From Unit | Check Rule IDs | Severity | Notes |
+|----------|----------------|------------|------|-----------|----------------|---------|-------|
+| PWEL_DAY_STATUS | ON_STREAM_HRS | Wells (12) | 12 | NULL | CR 1016, 1031 (0–24 hrs), MISSING_DATA | ERROR | OK |
+| PWEL_DAY_STATUS | AVG_CHOKE_SIZE | Wells (12) | 12 | NULL | Generic PWEL rules only | ERROR/WARNING | ⚠️ No 0–100% range rule |
+| PWEL_DAY_STATUS | AVG_GAS_RATE | Wells (9) | 9 | NULL | Generic PWEL rules only | ERROR/WARNING | ⚠️ Not in As-Built |
+| STRM_DAY_STREAM_MEAS_GAS | GRS_MASS_GAS | Gas streams (135 streams) | 135 | KG/NULL | CR 1039–1058 (mandatory, frozen, variance, std dev) | ERROR/WARNING | OK |
+| STRM_DAY_STREAM_MEAS_GAS | GRS_VOL_GAS | Gas streams (112 streams) | 112 | SM3/NULL | CR 1039–1058 | ERROR/WARNING | OK |
+| STRM_DAY_STREAM_MEAS_GAS | MEAS_ENERGY | Gas streams (80 streams) | 80 | GJ/NULL | CR 1039–1058 | ERROR/WARNING | OK |
+| STRM_DAY_STREAM_MEAS_ELE | POWER_CONSUMPTION | Electrical streams (36) | 36 | KWH/NULL | CR 1057, 1073, 1074 | ERROR | OK |
+| STRM_DAY_STREAM_MEAS_OIL | GRS_MASS_OIL | Oil/condensate streams (15) | 15 | KG | CR 1051–1058 | ERROR/WARNING | OK |
+| STRM_DAY_STREAM_MEAS_OIL | GRS_VOL_OIL | Oil/condensate streams (9) | 9 | SM3/NULL | CR 1051–1058 | ERROR/WARNING | OK |
+| STRM_DAY_STREAM_MEAS_WAT | GRS_VOL_WAT | Water streams (2) | 2 | NULL/SM3 | CR 1048, 1049, 1068 | ERROR/WARNING | OK |
+| EQPM_DAY_STATUS | ON_STREAM_HRS | ARGU Processing Unit, RTO Processing Unit | 2 | NULL | CR 1118, 1119, 1137, 1138 | ERROR | OK |
 
 ---
 
-## Category 4 — NEITHER Class Validation NOR Check Rule (131 tags)
-> **Highest risk. No validation of any kind. Bad data passes through silently.**
+## Category 3 — 🔵 Class Validation ONLY (0 tags)
+**None.**
+
+---
+
+## Category 4 — 🔴 NEITHER Class Validation NOR Check Rule (131 tags)
 
 ### 4A. STRM_COMP_ANALYSIS — MOL_PCT (78 tags) — CRITICAL
-_Gas composition mol % — feeds GCV calculations and allocation_
 
-| EC Class | Class Attribute | PHD Tag | From Unit | CV | CR |
-|----------|----------------|---------|-----------|----|----|
-| STRM_COMP_ANALYSIS | MOL_PCT | PGP.10QY001_2B/2C/2D/2E/2F/2G/2H/2L/2N/2T.PV (10) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | MOL_PCT | PGP.114QI201–207_FWA.DACA.PV (7 — stream 1C1401_TO_E1405AB) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | MOL_PCT | PGP.44QI101–106_FWA + copies (12) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | MOL_PCT | PGP.44QI110_FWA + copy (2) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | MOL_PCT | PGP.44QI201–206_FWA + copies (24) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | MOL_PCT | PGP.44QI210_FWA + copies (4) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | MOL_PCT | PGP.44QI210C/D/E/F/G/H/I/J/K/M.PV (10) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | MOL_PCT | PGP.TOT_HP_CH4_ATM_FWA_YDAY.DACA.PV (1) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | MOL_PCT | PAS.PGP_ZERO_TAG-COPY-14 to COPY-21 (8) | NULL | NO | NO |
+| # | EC Class | Class Attribute | Object Code | Object Name | Component | PHD Tag ID | From Unit | CV | CR |
+|---|----------|----------------|------------|------------|-----------|-----------|-----------|----|----|
+| 1 | STRM_COMP_ANALYSIS | MOL_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | C1 | PGP.114QI201_FWA.DACA.PV | NULL | NO | NO |
+| 2 | STRM_COMP_ANALYSIS | MOL_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | C2 | PGP.114QI202_FWA.DACA.PV | NULL | NO | NO |
+| 3 | STRM_COMP_ANALYSIS | MOL_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | C3 | PGP.114QI203_FWA.DACA.PV | NULL | NO | NO |
+| 4 | STRM_COMP_ANALYSIS | MOL_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | IC4 | PGP.114QI204_FWA.DACA.PV | NULL | NO | NO |
+| 5 | STRM_COMP_ANALYSIS | MOL_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | NC4 | PGP.114QI205_FWA.DACA.PV | NULL | NO | NO |
+| 6 | STRM_COMP_ANALYSIS | MOL_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | NC5 | PGP.114QI206_FWA.DACA.PV | NULL | NO | NO |
+| 7 | STRM_COMP_ANALYSIS | MOL_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | N2 | PGP.114QI207_FWA.DACA.PV | NULL | NO | NO |
+| 8 | STRM_COMP_ANALYSIS | MOL_PCT | DBNGP_PG_EXPORT_GAS | DBNGP Pipeline Export Gas | CO2 | PGP.44QI210C.PV | NULL | NO | NO |
+| 9 | STRM_COMP_ANALYSIS | MOL_PCT | DBNGP_PG_EXPORT_GAS | DBNGP Pipeline Export Gas | N2 | PGP.44QI210D.PV | NULL | NO | NO |
+| 10 | STRM_COMP_ANALYSIS | MOL_PCT | DBNGP_PG_EXPORT_GAS | DBNGP Pipeline Export Gas | C1 | PGP.44QI210E.PV | NULL | NO | NO |
+| 11 | STRM_COMP_ANALYSIS | MOL_PCT | DBNGP_PG_EXPORT_GAS | DBNGP Pipeline Export Gas | C2 | PGP.44QI210F.PV | NULL | NO | NO |
+| 12 | STRM_COMP_ANALYSIS | MOL_PCT | DBNGP_PG_EXPORT_GAS | DBNGP Pipeline Export Gas | C3 | PGP.44QI210G.PV | NULL | NO | NO |
+| 13 | STRM_COMP_ANALYSIS | MOL_PCT | DBNGP_PG_EXPORT_GAS | DBNGP Pipeline Export Gas | IC4 | PGP.44QI210H.PV | NULL | NO | NO |
+| 14 | STRM_COMP_ANALYSIS | MOL_PCT | DBNGP_PG_EXPORT_GAS | DBNGP Pipeline Export Gas | NC4 | PGP.44QI210I.PV | NULL | NO | NO |
+| 15 | STRM_COMP_ANALYSIS | MOL_PCT | DBNGP_PG_EXPORT_GAS | DBNGP Pipeline Export Gas | IC5 | PGP.44QI210J.PV | NULL | NO | NO |
+| 16 | STRM_COMP_ANALYSIS | MOL_PCT | DBNGP_PG_EXPORT_GAS | DBNGP Pipeline Export Gas | NC5 | PGP.44QI210K.PV | NULL | NO | NO |
+| 17 | STRM_COMP_ANALYSIS | MOL_PCT | DBNGP_PG_EXPORT_GAS | DBNGP Pipeline Export Gas | C6+ | PGP.44QI210M.PV | NULL | NO | NO |
+| 18 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1410 | HP Fuel Gas to 1KT1410 | N2 | PGP.44QI101_FWA.DACA.PV | NULL | NO | NO |
+| 19 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1410 | HP Fuel Gas to 1KT1410 | C1 | PGP.44QI102_FWA.DACA.PV | NULL | NO | NO |
+| 20 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1410 | HP Fuel Gas to 1KT1410 | C2 | PGP.44QI103_FWA.DACA.PV | NULL | NO | NO |
+| 21 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1410 | HP Fuel Gas to 1KT1410 | C3 | PGP.44QI104_FWA.DACA.PV | NULL | NO | NO |
+| 22 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1410 | HP Fuel Gas to 1KT1410 | NC4 | PGP.44QI105_FWA.DACA.PV | NULL | NO | NO |
+| 23 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1410 | HP Fuel Gas to 1KT1410 | NC5 | PGP.44QI106_FWA.DACA.PV | NULL | NO | NO |
+| 24 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1410 | HP Fuel Gas to 1KT1410 | CO2 | PGP.44QI110_FWA.DACA.PV | NULL | NO | NO |
+| 25 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1430 | HP Fuel Gas to 1KT1430 | N2 | PGP.44QI101_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 26 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1430 | HP Fuel Gas to 1KT1430 | C1 | PGP.44QI102_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 27 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1430 | HP Fuel Gas to 1KT1430 | C2 | PGP.44QI103_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 28 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1430 | HP Fuel Gas to 1KT1430 | C3 | PGP.44QI104_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 29 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1430 | HP Fuel Gas to 1KT1430 | NC4 | PGP.44QI105_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 30 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1430 | HP Fuel Gas to 1KT1430 | NC5 | PGP.44QI106_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 31 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_HP_TO_1KT1430 | HP Fuel Gas to 1KT1430 | CO2 | PGP.44QI110_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 32 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4001 | MP Fuel Gas to GT4001 | N2 | PGP.44QI201_FWA.DACA.PV | NULL | NO | NO |
+| 33 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4001 | MP Fuel Gas to GT4001 | C1 | PGP.44QI202_FWA.DACA.PV | NULL | NO | NO |
+| 34 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4001 | MP Fuel Gas to GT4001 | C2 | PGP.44QI203_FWA.DACA.PV | NULL | NO | NO |
+| 35 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4001 | MP Fuel Gas to GT4001 | C3 | PGP.44QI204_FWA.DACA.PV | NULL | NO | NO |
+| 36 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4001 | MP Fuel Gas to GT4001 | NC4 | PGP.44QI205_FWA.DACA.PV | NULL | NO | NO |
+| 37 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4001 | MP Fuel Gas to GT4001 | NC5 | PGP.44QI206_FWA.DACA.PV | NULL | NO | NO |
+| 38 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4001 | MP Fuel Gas to GT4001 | CO2 | PGP.44QI210_FWA.DACA.PV | NULL | NO | NO |
+| 39 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4002 | MP Fuel Gas to GT4002 | N2 | PGP.44QI201_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 40 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4002 | MP Fuel Gas to GT4002 | C1 | PGP.44QI202_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 41 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4002 | MP Fuel Gas to GT4002 | C2 | PGP.44QI203_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 42 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4002 | MP Fuel Gas to GT4002 | C3 | PGP.44QI204_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 43 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4002 | MP Fuel Gas to GT4002 | NC4 | PGP.44QI205_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 44 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4002 | MP Fuel Gas to GT4002 | NC5 | PGP.44QI206_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 45 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4002 | MP Fuel Gas to GT4002 | CO2 | PGP.44QI210_FWA.DACA.PV-COPY-1 | NULL | NO | NO |
+| 46 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4003 | MP Fuel Gas to GT4003 | N2 | PGP.44QI201_FWA.DACA.PV-COPY-2 | NULL | NO | NO |
+| 47 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4003 | MP Fuel Gas to GT4003 | C1 | PGP.44QI202_FWA.DACA.PV-COPY-2 | NULL | NO | NO |
+| 48 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4003 | MP Fuel Gas to GT4003 | C2 | PGP.44QI203_FWA.DACA.PV-COPY-2 | NULL | NO | NO |
+| 49 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4003 | MP Fuel Gas to GT4003 | C3 | PGP.44QI204_FWA.DACA.PV-COPY-2 | NULL | NO | NO |
+| 50 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4003 | MP Fuel Gas to GT4003 | NC4 | PGP.44QI205_FWA.DACA.PV-COPY-2 | NULL | NO | NO |
+| 51 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4003 | MP Fuel Gas to GT4003 | NC5 | PGP.44QI206_FWA.DACA.PV-COPY-2 | NULL | NO | NO |
+| 52 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4003 | MP Fuel Gas to GT4003 | CO2 | PGP.44QI210_FWA.DACA.PV-COPY-2 | NULL | NO | NO |
+| 53 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4004 | MP Fuel Gas to GT4004 | N2 | PGP.44QI201_FWA.DACA.PV-COPY-3 | NULL | NO | NO |
+| 54 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4004 | MP Fuel Gas to GT4004 | C1 | PGP.44QI202_FWA.DACA.PV-COPY-3 | NULL | NO | NO |
+| 55 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4004 | MP Fuel Gas to GT4004 | C2 | PGP.44QI203_FWA.DACA.PV-COPY-3 | NULL | NO | NO |
+| 56 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4004 | MP Fuel Gas to GT4004 | C3 | PGP.44QI204_FWA.DACA.PV-COPY-3 | NULL | NO | NO |
+| 57 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4004 | MP Fuel Gas to GT4004 | NC4 | PGP.44QI205_FWA.DACA.PV-COPY-3 | NULL | NO | NO |
+| 58 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4004 | MP Fuel Gas to GT4004 | NC5 | PGP.44QI206_FWA.DACA.PV-COPY-3 | NULL | NO | NO |
+| 59 | STRM_COMP_ANALYSIS | MOL_PCT | FUEL_GAS_MP_TO_GT4004 | MP Fuel Gas to GT4004 | CO2 | PGP.44QI210_FWA.DACA.PV-COPY-3 | NULL | NO | NO |
+| 60 | STRM_COMP_ANALYSIS | MOL_PCT | PLU_FEED_REFERENCE | Pluto UG Natural Gas Feed Reference (10QT001/002/003) | C1 | PGP.10QY001_2B.PV | NULL | NO | NO |
+| 61 | STRM_COMP_ANALYSIS | MOL_PCT | PLU_FEED_REFERENCE | Pluto UG Natural Gas Feed Reference (10QT001/002/003) | C2 | PGP.10QY001_2C.PV | NULL | NO | NO |
+| 62 | STRM_COMP_ANALYSIS | MOL_PCT | PLU_FEED_REFERENCE | Pluto UG Natural Gas Feed Reference (10QT001/002/003) | C3 | PGP.10QY001_2D.PV | NULL | NO | NO |
+| 63 | STRM_COMP_ANALYSIS | MOL_PCT | PLU_FEED_REFERENCE | Pluto UG Natural Gas Feed Reference (10QT001/002/003) | IC4 | PGP.10QY001_2E.PV | NULL | NO | NO |
+| 64 | STRM_COMP_ANALYSIS | MOL_PCT | PLU_FEED_REFERENCE | Pluto UG Natural Gas Feed Reference (10QT001/002/003) | NC4 | PGP.10QY001_2F.PV | NULL | NO | NO |
+| 65 | STRM_COMP_ANALYSIS | MOL_PCT | PLU_FEED_REFERENCE | Pluto UG Natural Gas Feed Reference (10QT001/002/003) | IC5 | PGP.10QY001_2G.PV | NULL | NO | NO |
+| 66 | STRM_COMP_ANALYSIS | MOL_PCT | PLU_FEED_REFERENCE | Pluto UG Natural Gas Feed Reference (10QT001/002/003) | NC5 | PGP.10QY001_2H.PV | NULL | NO | NO |
+| 67 | STRM_COMP_ANALYSIS | MOL_PCT | PLU_FEED_REFERENCE | Pluto UG Natural Gas Feed Reference (10QT001/002/003) | C6+ | PGP.10QY001_2L.PV | NULL | NO | NO |
+| 68 | STRM_COMP_ANALYSIS | MOL_PCT | PLU_FEED_REFERENCE | Pluto UG Natural Gas Feed Reference (10QT001/002/003) | N2 | PGP.10QY001_2N.PV | NULL | NO | NO |
+| 69 | STRM_COMP_ANALYSIS | MOL_PCT | PLU_FEED_REFERENCE | Pluto UG Natural Gas Feed Reference (10QT001/002/003) | CO2 | PGP.10QY001_2T.PV | NULL | NO | NO |
+| 70 | STRM_COMP_ANALYSIS | MOL_PCT | VENT_T1_HP_N2 | Train 1 HP N2 Vent | C2 | PAS.PGP_ZERO_TAG-COPY-14 | NULL | NO | NO |
+| 71 | STRM_COMP_ANALYSIS | MOL_PCT | VENT_T1_HP_N2 | Train 1 HP N2 Vent | C3 | PAS.PGP_ZERO_TAG-COPY-15 | NULL | NO | NO |
+| 72 | STRM_COMP_ANALYSIS | MOL_PCT | VENT_T1_HP_N2 | Train 1 HP N2 Vent | IC4 | PAS.PGP_ZERO_TAG-COPY-16 | NULL | NO | NO |
+| 73 | STRM_COMP_ANALYSIS | MOL_PCT | VENT_T1_HP_N2 | Train 1 HP N2 Vent | NC4 | PAS.PGP_ZERO_TAG-COPY-17 | NULL | NO | NO |
+| 74 | STRM_COMP_ANALYSIS | MOL_PCT | VENT_T1_HP_N2 | Train 1 HP N2 Vent | IC5 | PAS.PGP_ZERO_TAG-COPY-18 | NULL | NO | NO |
+| 75 | STRM_COMP_ANALYSIS | MOL_PCT | VENT_T1_HP_N2 | Train 1 HP N2 Vent | NC5 | PAS.PGP_ZERO_TAG-COPY-19 | NULL | NO | NO |
+| 76 | STRM_COMP_ANALYSIS | MOL_PCT | VENT_T1_HP_N2 | Train 1 HP N2 Vent | C6+ | PAS.PGP_ZERO_TAG-COPY-20 | NULL | NO | NO |
+| 77 | STRM_COMP_ANALYSIS | MOL_PCT | VENT_T1_HP_N2 | Train 1 HP N2 Vent | CO2 | PAS.PGP_ZERO_TAG-COPY-21 | NULL | NO | NO |
+| 78 | STRM_COMP_ANALYSIS | MOL_PCT | VENT_T1_HP_N2 | Train 1 HP N2 Vent | C1 | PGP.TOT_HP_CH4_ATM_FWA_YDAY.DACA.PV | NULL | NO | NO |
 
-**Validation required:** Range 0–100% (ERROR), Sum of components 98–102% (ERROR), Mandatory (ERROR), Frozen value (WARNING)
+**Validation required:** Range 0–100% (ERROR), Sum of all components 98–102% (ERROR), Mandatory (ERROR), Frozen value (WARNING)
 
 ---
 
 ### 4B. STRM_COMP_ANALYSIS — WT_PCT (24 tags) — CRITICAL
-_Gas composition weight % — feeds GCV and heating value calculations_
 
-| EC Class | Class Attribute | PHD Tag | From Unit | CV | CR |
-|----------|----------------|---------|-----------|----|----|
-| STRM_COMP_ANALYSIS | WT_PCT | PGP.114QI201W–207W_FWA.DACA.PV (7) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | WT_PCT | PGP.44QI201W–206W_FWA.DACA.PV (6) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | WT_PCT | PGP.44QI210W_FWA.DACA.PV (1) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | WT_PCT | PGP.56QQ211A–217A, 222A, 223A.PV (9) | NULL | NO | NO |
-| STRM_COMP_ANALYSIS | WT_PCT | PAS.PGP_VT_56QQ218A_C6+ (1) | NULL | NO | NO |
-
-**Validation required:** Range 0–100% (ERROR), Sum 98–102% (ERROR), Mandatory (ERROR), Frozen value (WARNING)
+| # | EC Class | Class Attribute | Object Code | Object Name | Component | PHD Tag ID | From Unit | CV | CR |
+|---|----------|----------------|------------|------------|-----------|-----------|-----------|----|----|
+| 1 | STRM_COMP_ANALYSIS | WT_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | C1 | PGP.114QI201W_FWA.DACA.PV | NULL | NO | NO |
+| 2 | STRM_COMP_ANALYSIS | WT_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | C2 | PGP.114QI202W_FWA.DACA.PV | NULL | NO | NO |
+| 3 | STRM_COMP_ANALYSIS | WT_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | C3 | PGP.114QI203W_FWA.DACA.PV | NULL | NO | NO |
+| 4 | STRM_COMP_ANALYSIS | WT_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | IC4 | PGP.114QI204W_FWA.DACA.PV | NULL | NO | NO |
+| 5 | STRM_COMP_ANALYSIS | WT_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | NC4 | PGP.114QI205W_FWA.DACA.PV | NULL | NO | NO |
+| 6 | STRM_COMP_ANALYSIS | WT_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | NC5 | PGP.114QI206W_FWA.DACA.PV | NULL | NO | NO |
+| 7 | STRM_COMP_ANALYSIS | WT_PCT | 1C1401_TO_E1405AB | 1C1401 to E1405A/B | N2 | PGP.114QI207W_FWA.DACA.PV | NULL | NO | NO |
+| 8 | STRM_COMP_ANALYSIS | WT_PCT | FLARE_PILOT_A | Flare Pilot (Site A) | N2 | PGP.44QI201W_FWA.DACA.PV | NULL | NO | NO |
+| 9 | STRM_COMP_ANALYSIS | WT_PCT | FLARE_PILOT_A | Flare Pilot (Site A) | C1 | PGP.44QI202W_FWA.DACA.PV | NULL | NO | NO |
+| 10 | STRM_COMP_ANALYSIS | WT_PCT | FLARE_PILOT_A | Flare Pilot (Site A) | C2 | PGP.44QI203W_FWA.DACA.PV | NULL | NO | NO |
+| 11 | STRM_COMP_ANALYSIS | WT_PCT | FLARE_PILOT_A | Flare Pilot (Site A) | C3 | PGP.44QI204W_FWA.DACA.PV | NULL | NO | NO |
+| 12 | STRM_COMP_ANALYSIS | WT_PCT | FLARE_PILOT_A | Flare Pilot (Site A) | NC4 | PGP.44QI205W_FWA.DACA.PV | NULL | NO | NO |
+| 13 | STRM_COMP_ANALYSIS | WT_PCT | FLARE_PILOT_A | Flare Pilot (Site A) | NC5 | PGP.44QI206W_FWA.DACA.PV | NULL | NO | NO |
+| 14 | STRM_COMP_ANALYSIS | WT_PCT | FLARE_PILOT_A | Flare Pilot (Site A) | CO2 | PGP.44QI210W_FWA.DACA.PV | NULL | NO | NO |
+| 15 | STRM_COMP_ANALYSIS | WT_PCT | PNI_EXPORT | Pluto-NWS Interconnector Export | C6+ | PAS.PGP_VT_56QQ218A_C6+ | NULL | NO | NO |
+| 16 | STRM_COMP_ANALYSIS | WT_PCT | PNI_EXPORT | Pluto-NWS Interconnector Export | C1 | PGP.56QQ211A.PV | NULL | NO | NO |
+| 17 | STRM_COMP_ANALYSIS | WT_PCT | PNI_EXPORT | Pluto-NWS Interconnector Export | C2 | PGP.56QQ212A.PV | NULL | NO | NO |
+| 18 | STRM_COMP_ANALYSIS | WT_PCT | PNI_EXPORT | Pluto-NWS Interconnector Export | C3 | PGP.56QQ213A.PV | NULL | NO | NO |
+| 19 | STRM_COMP_ANALYSIS | WT_PCT | PNI_EXPORT | Pluto-NWS Interconnector Export | IC4 | PGP.56QQ214A.PV | NULL | NO | NO |
+| 20 | STRM_COMP_ANALYSIS | WT_PCT | PNI_EXPORT | Pluto-NWS Interconnector Export | NC4 | PGP.56QQ215A.PV | NULL | NO | NO |
+| 21 | STRM_COMP_ANALYSIS | WT_PCT | PNI_EXPORT | Pluto-NWS Interconnector Export | IC5 | PGP.56QQ216A.PV | NULL | NO | NO |
+| 22 | STRM_COMP_ANALYSIS | WT_PCT | PNI_EXPORT | Pluto-NWS Interconnector Export | NC5 | PGP.56QQ217A.PV | NULL | NO | NO |
+| 23 | STRM_COMP_ANALYSIS | WT_PCT | PNI_EXPORT | Pluto-NWS Interconnector Export | N2 | PGP.56QQ222A.PV | NULL | NO | NO |
+| 24 | STRM_COMP_ANALYSIS | WT_PCT | PNI_EXPORT | Pluto-NWS Interconnector Export | CO2 | PGP.56QQ223A.PV | NULL | NO | NO |
 
 ---
 
 ### 4C. STRM_ANALYSIS — DENSITY (6 tags) — HIGH
-_Stream density — As-Built 05 says calculated by ZWP_PostPHDImport schedule (double-write risk)_
 
-| EC Class | Class Attribute | PHD Tag | From Unit | CV | CR |
-|----------|----------------|---------|-----------|----|----|
-| STRM_ANALYSIS | DENSITY | PGP.114FT058_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
-| STRM_ANALYSIS | DENSITY | PGP.114FT059_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
-| STRM_ANALYSIS | DENSITY | PGP.401FE001_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
-| STRM_ANALYSIS | DENSITY | PGP.402FE001_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
-| STRM_ANALYSIS | DENSITY | PGP.403FE001_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
-| STRM_ANALYSIS | DENSITY | PGP.404FE001_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
-
-**Validation required:** >= 0 (ERROR), Frozen value (WARNING). Investigate ZWP_PostPHDImport conflict.
+| # | EC Class | Class Attribute | Object Code | Object Name | PHD Tag ID | From Unit | CV | CR |
+|---|----------|----------------|------------|------------|-----------|-----------|----|----|
+| 1 | STRM_ANALYSIS | DENSITY | FUEL_GAS_HP_TO_1KT1410 | HP Fuel Gas to 1KT1410 | PGP.114FT058_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
+| 2 | STRM_ANALYSIS | DENSITY | FUEL_GAS_HP_TO_1KT1430 | HP Fuel Gas to 1KT1430 | PGP.114FT059_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
+| 3 | STRM_ANALYSIS | DENSITY | FUEL_GAS_MP_TO_GT4001 | MP Fuel Gas to GT4001 | PGP.401FE001_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
+| 4 | STRM_ANALYSIS | DENSITY | FUEL_GAS_MP_TO_GT4002 | MP Fuel Gas to GT4002 | PGP.402FE001_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
+| 5 | STRM_ANALYSIS | DENSITY | FUEL_GAS_MP_TO_GT4003 | MP Fuel Gas to GT4003 | PGP.403FE001_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
+| 6 | STRM_ANALYSIS | DENSITY | FUEL_GAS_MP_TO_GT4004 | MP Fuel Gas to GT4004 | PGP.404FE001_FWA.PREV_DAY_SDENS.PV | NULL | NO | NO |
 
 ---
 
 ### 4D. STRM_ANALYSIS — GCV (9 tags) — HIGH
-_Gross Calorific Value — was calculated by schedule, now also from PHD_
 
-| EC Class | Class Attribute | PHD Tag | From Unit | CV | CR |
-|----------|----------------|---------|-----------|----|----|
-| STRM_ANALYSIS | GCV | PGP.114FT058_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
-| STRM_ANALYSIS | GCV | PGP.114FT059_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
-| STRM_ANALYSIS | GCV | PGP.401FE001_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
-| STRM_ANALYSIS | GCV | PGP.402FE001_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
-| STRM_ANALYSIS | GCV | PGP.403FE001_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
-| STRM_ANALYSIS | GCV | PGP.404FE001_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
-| STRM_ANALYSIS | GCV | PGP.44QI210A.PV | MJPERSM3 | NO | NO |
-| STRM_ANALYSIS | GCV | PGP.44QI210A.PV-COPY-1 | MJPERSM3 | NO | NO |
-| STRM_ANALYSIS | GCV | PGP.44QI210A.PV-COPY-2 | MJPERSM3 | NO | NO |
-
-**Validation required:** >= 0 (ERROR), Frozen value (WARNING). Investigate ZWP_PostPHDImport conflict.
+| # | EC Class | Class Attribute | Object Code | Object Name | PHD Tag ID | From Unit | CV | CR |
+|---|----------|----------------|------------|------------|-----------|-----------|----|----|
+| 1 | STRM_ANALYSIS | GCV | FUEL_GAS_HP_TO_1KT1410 | HP Fuel Gas to 1KT1410 | PGP.114FT058_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
+| 2 | STRM_ANALYSIS | GCV | FUEL_GAS_HP_TO_1KT1430 | HP Fuel Gas to 1KT1430 | PGP.114FT059_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
+| 3 | STRM_ANALYSIS | GCV | FUEL_GAS_MP_TO_GT4001 | MP Fuel Gas to GT4001 | PGP.401FE001_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
+| 4 | STRM_ANALYSIS | GCV | FUEL_GAS_MP_TO_GT4002 | MP Fuel Gas to GT4002 | PGP.402FE001_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
+| 5 | STRM_ANALYSIS | GCV | FUEL_GAS_MP_TO_GT4003 | MP Fuel Gas to GT4003 | PGP.403FE001_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
+| 6 | STRM_ANALYSIS | GCV | FUEL_GAS_MP_TO_GT4004 | MP Fuel Gas to GT4004 | PGP.404FE001_FWA.PREV_DAY_CV.PV | NULL | NO | NO |
+| 7 | STRM_ANALYSIS | GCV | FLARE_PILOT_A | Flare Pilot (Site A) | PGP.44QI210A.PV | MJPERSM3 | NO | NO |
+| 8 | STRM_ANALYSIS | GCV | FLARE_PILOT_B | Flare Pilot (Site B) | PGP.44QI210A.PV-COPY-1 | MJPERSM3 | NO | NO |
+| 9 | STRM_ANALYSIS | GCV | FUEL_TO_T1_RTO_PILOT | Fuel Gas to Train 1 RTO Pilots | PGP.44QI210A.PV-COPY-2 | MJPERSM3 | NO | NO |
 
 ---
 
 ### 4E. TANK_DAY_DIP_STATUS — AVG_TEMP (5 tags) — MEDIUM
-_Condensate tank temperature — not in As-Built_
 
-| EC Class | Class Attribute | PHD Tag | From Unit | CV | CR |
-|----------|----------------|---------|-----------|----|----|
-| TANK_DAY_DIP_STATUS | AVG_TEMP | PGP.34LDI005_5.PV | NULL | NO | NO |
-| TANK_DAY_DIP_STATUS | AVG_TEMP | PGP.34LDI006_19.PV | NULL | NO | NO |
-| TANK_DAY_DIP_STATUS | AVG_TEMP | PGP.T3301_TEMP.TEMP.PV | NULL | NO | NO |
-| TANK_DAY_DIP_STATUS | AVG_TEMP | PGP.T3302_TEMP.TEMP.PV | NULL | NO | NO |
-| TANK_DAY_DIP_STATUS | AVG_TEMP | PGP.T3303_TEMP.TEMP.PV | NULL | NO | NO |
+| # | EC Class | Class Attribute | Object Code | Object Name | PHD Tag ID | From Unit | CV | CR |
+|---|----------|----------------|------------|------------|-----------|-----------|----|----|
+| 1 | TANK_DAY_DIP_STATUS | AVG_TEMP | PLU_COND_TANK_1 | Condensate Tank T3301 | PGP.T3301_TEMP.TEMP.PV | NULL | NO | NO |
+| 2 | TANK_DAY_DIP_STATUS | AVG_TEMP | PLU_COND_TANK_2 | Condensate Tank T3302 | PGP.T3302_TEMP.TEMP.PV | NULL | NO | NO |
+| 3 | TANK_DAY_DIP_STATUS | AVG_TEMP | PLU_COND_TANK_3 | Condensate Tank T3303 | PGP.T3303_TEMP.TEMP.PV | NULL | NO | NO |
+| 4 | TANK_DAY_DIP_STATUS | AVG_TEMP | T_LNG_T3101 | LNG Tank 3101 | PGP.34LDI005_5.PV | NULL | NO | NO |
+| 5 | TANK_DAY_DIP_STATUS | AVG_TEMP | T_LNG_T3102 | LNG Tank 3102 | PGP.34LDI006_19.PV | NULL | NO | NO |
 
 ---
 
 ### 4F. TANK_DAY_DIP_STATUS — GRS_VOL (5 tags) — MEDIUM
-_Condensate tank gross volume — feeds inventory and allocation_
 
-| EC Class | Class Attribute | PHD Tag | From Unit | CV | CR |
-|----------|----------------|---------|-----------|----|----|
-| TANK_DAY_DIP_STATUS | GRS_VOL | PGP.T3101_TOTS.VOLUME.PV | NULL | NO | NO |
-| TANK_DAY_DIP_STATUS | GRS_VOL | PGP.T3102_TOTS.VOLUME.PV | NULL | NO | NO |
-| TANK_DAY_DIP_STATUS | GRS_VOL | PGP.T3301_TOTS.VOLUME.PV | NULL | NO | NO |
-| TANK_DAY_DIP_STATUS | GRS_VOL | PGP.T3302_TOTS.VOLUME.PV | NULL | NO | NO |
-| TANK_DAY_DIP_STATUS | GRS_VOL | PGP.T3303_TOTS.VOLUME.PV | NULL | NO | NO |
+| # | EC Class | Class Attribute | Object Code | Object Name | PHD Tag ID | From Unit | CV | CR |
+|---|----------|----------------|------------|------------|-----------|-----------|----|----|
+| 1 | TANK_DAY_DIP_STATUS | GRS_VOL | PLU_COND_TANK_1 | Condensate Tank T3301 | PGP.T3301_TOTS.VOLUME.PV | NULL | NO | NO |
+| 2 | TANK_DAY_DIP_STATUS | GRS_VOL | PLU_COND_TANK_2 | Condensate Tank T3302 | PGP.T3302_TOTS.VOLUME.PV | NULL | NO | NO |
+| 3 | TANK_DAY_DIP_STATUS | GRS_VOL | PLU_COND_TANK_3 | Condensate Tank T3303 | PGP.T3303_TOTS.VOLUME.PV | NULL | NO | NO |
+| 4 | TANK_DAY_DIP_STATUS | GRS_VOL | T_LNG_T3101 | LNG Tank 3101 | PGP.T3101_TOTS.VOLUME.PV | NULL | NO | NO |
+| 5 | TANK_DAY_DIP_STATUS | GRS_VOL | T_LNG_T3102 | LNG Tank 3102 | PGP.T3102_TOTS.VOLUME.PV | NULL | NO | NO |
 
 ---
 
 ### 4G. TANK_DAY_DIP_STATUS — MEAS_STD_DENSITY (2 tags) — MEDIUM
 
-| EC Class | Class Attribute | PHD Tag | From Unit | CV | CR |
-|----------|----------------|---------|-----------|----|----|
-| TANK_DAY_DIP_STATUS | MEAS_STD_DENSITY | PGP.34LDI005_6.PV | NULL | NO | NO |
-| TANK_DAY_DIP_STATUS | MEAS_STD_DENSITY | PGP.34LDI006_18.PV | NULL | NO | NO |
+| # | EC Class | Class Attribute | Object Code | Object Name | PHD Tag ID | From Unit | CV | CR |
+|---|----------|----------------|------------|------------|-----------|-----------|----|----|
+| 1 | TANK_DAY_DIP_STATUS | MEAS_STD_DENSITY | T_LNG_T3101 | LNG Tank 3101 | PGP.34LDI005_6.PV | NULL | NO | NO |
+| 2 | TANK_DAY_DIP_STATUS | MEAS_STD_DENSITY | T_LNG_T3102 | LNG Tank 3102 | PGP.34LDI006_18.PV | NULL | NO | NO |
 
 ---
 
 ### 4H. TANK_DAY_DIP_STATUS — ZWP_GRS_MASS (2 tags) — MEDIUM
 
-| EC Class | Class Attribute | PHD Tag | From Unit | CV | CR |
-|----------|----------------|---------|-----------|----|----|
-| TANK_DAY_DIP_STATUS | ZWP_GRS_MASS | PGP.T3101_TOTS.MASS.PV | TONNES | NO | NO |
-| TANK_DAY_DIP_STATUS | ZWP_GRS_MASS | PGP.T3102_TOTS.MASS.PV | TONNES | NO | NO |
+| # | EC Class | Class Attribute | Object Code | Object Name | PHD Tag ID | From Unit | CV | CR |
+|---|----------|----------------|------------|------------|-----------|-----------|----|----|
+| 1 | TANK_DAY_DIP_STATUS | ZWP_GRS_MASS | T_LNG_T3101 | LNG Tank 3101 | PGP.T3101_TOTS.MASS.PV | TONNES | NO | NO |
+| 2 | TANK_DAY_DIP_STATUS | ZWP_GRS_MASS | T_LNG_T3102 | LNG Tank 3102 | PGP.T3102_TOTS.MASS.PV | TONNES | NO | NO |
 
 ---
 
 ### 4I. STRM_DAY_STREAM_MEAS_WAT — ZWT_OILINWAT (1 tag) — LOW
 
-| EC Class | Class Attribute | PHD Tag | From Unit | CV | CR | Notes |
-|----------|----------------|---------|-----------|----|----|-------|
-| STRM_DAY_STREAM_MEAS_WAT | ZWT_OILINWAT | PRP.00AI02631XR24.DACA.PV | NULL | NO | NO | EC Target blank in As-Built 05. Unit = mg/L |
+| # | EC Class | Class Attribute | Object Code | Object Name | PHD Tag ID | From Unit | CV | CR |
+|---|----------|----------------|------------|------------|-----------|-----------|----|----|
+| 1 | STRM_DAY_STREAM_MEAS_WAT | ZWT_OILINWAT | WATER_OVERBOARD | Water Overboard | PRP.00AI02631XR24.DACA.PV | NULL (should be mg/L) | NO | NO |
 
 ---
 
 ## Prioritised Action Plan
 
-| # | Priority | EC Class | Attribute | Tags | Validation to Add | ECPR |
-|---|----------|----------|-----------|------|-------------------|------|
-| 1 | CRITICAL | STRM_COMP_ANALYSIS | MOL_PCT | 78 | Range 0–100%, sum 98–102%, mandatory, frozen | Draft-A |
-| 2 | CRITICAL | STRM_COMP_ANALYSIS | WT_PCT | 24 | Range 0–100%, sum 98–102%, mandatory, frozen | Draft-A |
-| 3 | HIGH | STRM_ANALYSIS | GCV | 9 | >= 0, frozen + investigate ZWP_PostPHDImport conflict | Draft-B |
-| 4 | HIGH | STRM_ANALYSIS | DENSITY | 6 | >= 0, frozen + investigate ZWP_PostPHDImport conflict | Draft-B |
-| 5 | MEDIUM | TANK_DAY_DIP_STATUS | GRS_VOL | 5 | >= 0, mandatory, frozen | Draft-C |
-| 6 | MEDIUM | TANK_DAY_DIP_STATUS | ZWP_GRS_MASS | 2 | >= 0, mandatory | Draft-C |
-| 7 | MEDIUM | TANK_DAY_DIP_STATUS | AVG_TEMP | 5 | Range check, frozen | Draft-C |
-| 8 | MEDIUM | TANK_DAY_DIP_STATUS | MEAS_STD_DENSITY | 2 | >= 0 | Draft-C |
-| 9 | LOW | PWEL_DAY_STATUS | AVG_CHOKE_SIZE | 12 | Range 0–100% | Draft-E |
-| 10 | LOW | PWEL_DAY_STATUS | AVG_GAS_RATE | 9 | Document in As-Built, confirm UOM, add rules | Draft-D |
-| 11 | LOW | STRM_DAY_STREAM_MEAS_WAT | ZWT_OILINWAT | 1 | FROM_UNIT=mg/L, >= 0, frozen | Draft-F |
+| Priority | EC Class | Class Attribute | Object Names Affected | Tags | Action | ECPR Draft |
+|----------|----------|----------------|----------------------|------|--------|-----------|
+| CRITICAL | STRM_COMP_ANALYSIS | MOL_PCT | 1C1401 to E1405A/B, DBNGP Pipeline Export, HP/MP Fuel Gas to GT4001-4004 & 1KT1410/1430, Pluto Feed Reference, Train 1 HP N2 Vent | 78 | Add check rules: 0–100%, sum 98–102%, mandatory, frozen | Draft-A |
+| CRITICAL | STRM_COMP_ANALYSIS | WT_PCT | 1C1401 to E1405A/B, Flare Pilot (Site A), Pluto-NWS Interconnector Export | 24 | Same as above | Draft-A |
+| HIGH | STRM_ANALYSIS | GCV | HP/MP Fuel Gas to GT4001-4004 & 1KT1410/1430, Flare Pilots A/B, Train 1 RTO | 9 | Investigate ZWP_PostPHDImport double-write + add >= 0, frozen | Draft-B |
+| HIGH | STRM_ANALYSIS | DENSITY | HP/MP Fuel Gas to GT4001-4004 & 1KT1410/1430 | 6 | Same as above | Draft-B |
+| MEDIUM | TANK_DAY_DIP_STATUS | GRS_VOL | LNG Tank 3101/3102, Condensate Tanks T3301/3302/3303 | 5 | Add >= 0, mandatory, frozen | Draft-C |
+| MEDIUM | TANK_DAY_DIP_STATUS | AVG_TEMP | LNG Tank 3101/3102, Condensate Tanks T3301/3302/3303 | 5 | Add range check, frozen | Draft-C |
+| MEDIUM | TANK_DAY_DIP_STATUS | MEAS_STD_DENSITY | LNG Tank 3101/3102 | 2 | Add >= 0 | Draft-C |
+| MEDIUM | TANK_DAY_DIP_STATUS | ZWP_GRS_MASS | LNG Tank 3101/3102 | 2 | Add >= 0, mandatory | Draft-C |
+| LOW | STRM_DAY_STREAM_MEAS_WAT | ZWT_OILINWAT | Water Overboard | 1 | Set FROM_UNIT=mg/L, add >= 0, frozen | Draft-F |
 
 ---
-_Verified via read-only DB query on 2026-06-02_
-_Total: 661 active PHD tags since 1 Dec 2025 | 131 (20%) with no validation_
+_Source: Oracle DB V_TRANS_CONFIG, TV_CLASS_ATTR_VALIDATION, TV_CTRL_CHECK_RULES, TV_OBJECTS — read-only_
+_661 active PHD tags verified | 131 (20%) with no validation coverage_
