@@ -1,7 +1,6 @@
 from docx import Document
 from docx.shared import Pt, RGBColor, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 from datetime import datetime
@@ -28,7 +27,7 @@ def hdr(cell, text, size=9):
     set_bg(cell, '1F497D')
 
 
-def cell_val(cell, text, size=8.5, bold=False, color=None, bg=None, center=False):
+def cv(cell, text, size=8.5, bold=False, color=None, bg=None, center=False):
     cell.text = ''
     p = cell.paragraphs[0]
     if center:
@@ -49,14 +48,13 @@ for s in doc.sections:
     s.left_margin = Cm(2)
     s.right_margin = Cm(2)
 
-# ── Title ──────────────────────────────────────────────────────────────────────
+# Title
 h = doc.add_heading('', 0)
 h.alignment = WD_ALIGN_PARAGRAPH.CENTER
 r = h.add_run('Issue_1052 — PHD Tag Check Rule Validation')
 r.font.size = Pt(16)
 r.bold = True
 r.font.color.rgb = RGBColor(0x1F, 0x49, 0x7D)
-
 sub = doc.add_paragraph()
 sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
 r2 = sub.add_run('Test Evidence Document — COPS DEV Environment')
@@ -65,10 +63,10 @@ r2.italic = True
 r2.font.color.rgb = RGBColor(0x59, 0x59, 0x59)
 doc.add_paragraph()
 
-# ── Info table ─────────────────────────────────────────────────────────────────
+# Info table
 info = doc.add_table(rows=7, cols=2)
 info.style = 'Table Grid'
-info_data = [
+for i, (lbl, val) in enumerate([
     ('Document Title',  'Issue_1052 — PHD Check Rule Validation Evidence'),
     ('Prepared by',     'Choong-Yin Lee  |  choong-yin.lee@quorumsoftware.com'),
     ('Date',            datetime.now().strftime('%d %B %Y')),
@@ -76,42 +74,34 @@ info_data = [
     ('Database',        'db.plutodev.woodside-pluto.tieto-og.cloud:1521/plutodev'),
     ('Schema',          'ECKERNEL_EC'),
     ('JIRA Reference',  'Issue_1052 — Review PHD Validations for added TAGs >= 1 Dec 2025'),
-]
-for i, (lbl, val) in enumerate(info_data):
+]):
     hdr(info.rows[i].cells[0], lbl, 9)
-    cell_val(info.rows[i].cells[1], val, 9)
+    cv(info.rows[i].cells[1], val, 9)
 doc.add_paragraph()
 
-# ── Section 1 ──────────────────────────────────────────────────────────────────
+# Section 1
 doc.add_heading('1. Purpose', level=1)
 p1 = doc.add_paragraph(
-    'This document provides evidence that the check rule SQL scripts for Issue_1052 have been '
-    'successfully tested. The scripts implement check rules for 131 PHD tags (added since 1 Dec 2025) '
-    'that had NO check rule validation configured in the system.'
+    'This document provides evidence that the check rule SQL script for Issue_1052 has been '
+    'successfully tested in the COPS DEV environment. The script implements check rules for '
+    '131 PHD tags (added since 1 Dec 2025) that had NO check rule validation configured.'
 )
 p1.runs[0].font.size = Pt(10)
 
-# ── Section 2 ──────────────────────────────────────────────────────────────────
-doc.add_heading('2. Scripts Tested', level=1)
-t2 = doc.add_table(rows=3, cols=3)
+# Section 2 - Script (INSERT only)
+doc.add_heading('2. Script Tested', level=1)
+t2 = doc.add_table(rows=2, cols=3)
 t2.style = 'Table Grid'
 for i, txt in enumerate(['Script File', 'Purpose', 'Status']):
     hdr(t2.rows[0].cells[i], txt)
-script_data = [
-    ('Issue1052_PHD_Check_Rules.sql',
-     'INSERT/UPDATE 8 check rules — UPDATE-then-INSERT pattern (re-runnable)'),
-    ('Issue1052_PHD_Check_Rules_ROLLBACK.sql',
-     'DELETE 8 check rules + variables — for cleanup and re-testing'),
-]
-for i, (fname, purpose) in enumerate(script_data):
-    cell_val(t2.rows[i+1].cells[0], fname, 8.5)
-    cell_val(t2.rows[i+1].cells[1], purpose, 8.5)
-    cell_val(t2.rows[i+1].cells[2], 'PASS  ✅', 9, bold=True, bg='00B050', color='FFFFFF', center=True)
+cv(t2.rows[1].cells[0], 'Issue1052_PHD_Check_Rules.sql', 8.5)
+cv(t2.rows[1].cells[1], 'INSERT / UPDATE 8 check rules — UPDATE-then-INSERT pattern (re-runnable)', 8.5)
+cv(t2.rows[1].cells[2], 'PASS  ✅', 9, bold=True, bg='00B050', color='FFFFFF', center=True)
 doc.add_paragraph()
 
-# ── Section 3 ──────────────────────────────────────────────────────────────────
+# Section 3 - Test Steps (3 steps only — no rollback)
 doc.add_heading('3. Test Steps & Results', level=1)
-t3 = doc.add_table(rows=6, cols=4)
+t3 = doc.add_table(rows=4, cols=4)
 t3.style = 'Table Grid'
 for i, txt in enumerate(['Step', 'Action', 'Expected', 'Actual Result']):
     hdr(t3.rows[0].cells[i], txt)
@@ -119,33 +109,31 @@ steps_data = [
     ('1', 'Verify baseline — no check rules exist in DB', '0 rows', '0 rows    PASS'),
     ('2', 'Run Issue1052_PHD_Check_Rules.sql\n8 rules INSERTED, COMMIT OK', '8 INSERTED', '8 rules INSERTED    PASS'),
     ('3', 'Verify after INSERT — query DB for all 8 rules', '8 rows', '8 rows confirmed    PASS'),
-    ('4', 'Run Issue1052_PHD_Check_Rules_ROLLBACK.sql\n8 rules DELETED, COMMIT OK', '8 DELETED', '8 rules DELETED    PASS'),
-    ('5', 'Verify after ROLLBACK — clean state restored', '0 rows', '0 rows confirmed    PASS'),
 ]
-row_bgs = ['F2F2F2', 'FFFFFF', 'F2F2F2', 'FFFFFF', 'F2F2F2']
+bgs = ['F2F2F2', 'FFFFFF', 'F2F2F2']
 for i, (step, action, exp, act) in enumerate(steps_data):
-    bg = row_bgs[i]
-    cell_val(t3.rows[i+1].cells[0], step, 9, center=True, bg=bg)
-    cell_val(t3.rows[i+1].cells[1], action, 8.5, bg=bg)
-    cell_val(t3.rows[i+1].cells[2], exp, 8.5, center=True, bg=bg)
-    cell_val(t3.rows[i+1].cells[3], act, 8.5, bold=True, bg='E2EFDA')
+    cv(t3.rows[i+1].cells[0], step, 9, center=True, bg=bgs[i])
+    cv(t3.rows[i+1].cells[1], action, 8.5, bg=bgs[i])
+    cv(t3.rows[i+1].cells[2], exp, 8.5, center=True, bg=bgs[i])
+    cv(t3.rows[i+1].cells[3], act, 8.5, bold=True, bg='E2EFDA')
 doc.add_paragraph()
 
-# ── Section 4 ──────────────────────────────────────────────────────────────────
-doc.add_heading('4. Database Evidence — Check Rules Verified (After INSERT)', level=1)
+# Section 4 - DB Evidence
+doc.add_heading('4. Database Evidence — Check Rules Verified', level=1)
 doc.add_paragraph(
     'Records confirmed in TV_CTRL_CHECK_RULES and TV_CTRL_CHECK_RULE_VARIABLE '
-    '(timestamp: ' + datetime.now().strftime('%Y-%m-%d') + '):').runs[0].font.size = Pt(9)
+    '(timestamp: ' + datetime.now().strftime('%Y-%m-%d') + '):'
+).runs[0].font.size = Pt(9)
 
 db_rows = [
-    (1142, 'PHD_STRM_COMP_MOL_PCT_VAL1',     'RV_STRM_COMP_ANALYSIS',  'ERROR', 'MolPct = MOL_PCT',                    'ECPR-Issue1052'),
-    (1143, 'PHD_STRM_COMP_WT_PCT_VAL1',      'RV_STRM_COMP_ANALYSIS',  'ERROR', 'WtPct = WT_PCT',                      'ECPR-Issue1052'),
-    (1144, 'PHD_STRM_ANALYSIS_DENSITY_VAL1', 'RV_STRM_ANALYSIS',       'ERROR', 'Density = DENSITY',                   'ECPR-Issue1052'),
-    (1145, 'PHD_STRM_ANALYSIS_GCV_VAL1',     'RV_STRM_ANALYSIS',       'ERROR', 'Gcv = GCV_MJPERSM3',                  'ECPR-Issue1052'),
-    (1146, 'PHD_TANK_DIP_GRS_VOL_VAL1',      'RV_TANK_DAY_DIP_STATUS', 'ERROR', 'GrsVol = GRS_VOL_SM3',               'ECPR-Issue1052'),
-    (1147, 'PHD_TANK_DIP_GRS_MASS_VAL1',     'RV_TANK_DAY_DIP_STATUS', 'ERROR', 'GrsMass = ZWP_GRS_MASS_TONNES',      'ECPR-Issue1052'),
-    (1148, 'PHD_TANK_DIP_AVG_TEMP_VAL1',     'RV_TANK_DAY_DIP_STATUS', 'ERROR', 'AvgTemp = AVG_TEMP_C',               'ECPR-Issue1052'),
-    (1149, 'PHD_TANK_DIP_STD_DENSITY_VAL1',  'RV_TANK_DAY_DIP_STATUS', 'ERROR', 'StdDensity = MEAS_STD_DENSITY_KGPERSM3', 'ECPR-Issue1052'),
+    (1142, 'PHD_STRM_COMP_MOL_PCT_VAL1',     'RV_STRM_COMP_ANALYSIS',  'ERROR', 'MolPct = MOL_PCT',                         'ECPR-Issue1052'),
+    (1143, 'PHD_STRM_COMP_WT_PCT_VAL1',      'RV_STRM_COMP_ANALYSIS',  'ERROR', 'WtPct = WT_PCT',                           'ECPR-Issue1052'),
+    (1144, 'PHD_STRM_ANALYSIS_DENSITY_VAL1', 'RV_STRM_ANALYSIS',       'ERROR', 'Density = DENSITY',                        'ECPR-Issue1052'),
+    (1145, 'PHD_STRM_ANALYSIS_GCV_VAL1',     'RV_STRM_ANALYSIS',       'ERROR', 'Gcv = GCV_MJPERSM3',                       'ECPR-Issue1052'),
+    (1146, 'PHD_TANK_DIP_GRS_VOL_VAL1',      'RV_TANK_DAY_DIP_STATUS', 'ERROR', 'GrsVol = GRS_VOL_SM3',                    'ECPR-Issue1052'),
+    (1147, 'PHD_TANK_DIP_GRS_MASS_VAL1',     'RV_TANK_DAY_DIP_STATUS', 'ERROR', 'GrsMass = ZWP_GRS_MASS_TONNES',           'ECPR-Issue1052'),
+    (1148, 'PHD_TANK_DIP_AVG_TEMP_VAL1',     'RV_TANK_DAY_DIP_STATUS', 'ERROR', 'AvgTemp = AVG_TEMP_C',                    'ECPR-Issue1052'),
+    (1149, 'PHD_TANK_DIP_STD_DENSITY_VAL1',  'RV_TANK_DAY_DIP_STATUS', 'ERROR', 'StdDensity = MEAS_STD_DENSITY_KGPERSM3',  'ECPR-Issue1052'),
 ]
 t4 = doc.add_table(rows=len(db_rows)+1, cols=6)
 t4.style = 'Table Grid'
@@ -154,35 +142,34 @@ for i, txt in enumerate(['CHECK_ID', 'CHECK_NAME', 'TABLE_ID', 'SEV', 'VARIABLE 
 for i, row in enumerate(db_rows):
     bg = 'F2F2F2' if i % 2 == 0 else 'FFFFFF'
     for j, val in enumerate([str(row[0]), row[1], row[2], row[3], row[4], row[5]]):
-        cell_val(t4.rows[i+1].cells[j], val, 8, bg=bg)
+        cv(t4.rows[i+1].cells[j], val, 8, bg=bg)
 doc.add_paragraph()
 
-# ── Section 5 ──────────────────────────────────────────────────────────────────
+# Section 5 - EC Web App Screenshots
 doc.add_heading('5. EC Web App Screen Evidence', level=1)
 doc.add_paragraph(
-    'After running the INSERT script, navigate to the following EC screens to capture screenshots '
-    'as visual evidence. Paste screenshots in the placeholder boxes below.'
+    'After running the INSERT script, navigate to the following EC screens '
+    'and paste screenshots in the placeholder boxes below.'
 ).runs[0].font.size = Pt(10)
 
 screens = [
     ('Screen 1', 'Maintain Check Rules — CO.0201',
      'Path: Admin > Configuration > Maintain Check Rules\n'
-     'Filter by CHECK_NAME = PHD_STRM_COMP_MOL_PCT_VAL1\n'
+     'Filter: CHECK_NAME = PHD_STRM_COMP_MOL_PCT_VAL1\n'
      'Verify: TABLE_ID = RV_STRM_COMP_ANALYSIS | SEVERITY_LEVEL = ERROR | REV_TEXT = ECPR-Issue1052'),
     ('Screen 2', 'Check Rule Variables — CO.0201 Variables Tab',
-     'Select rule: PHD_STRM_COMP_MOL_PCT_VAL1 > click Variables tab\n'
+     'Select rule: PHD_STRM_COMP_MOL_PCT_VAL1 > Variables tab\n'
      'Verify: VARIABLE_NAME = MolPct | VARIABLE_TYPE = ATTRIBUTE | VARIABLE_VALUE = MOL_PCT'),
     ('Screen 3', 'Validation Overview — CO.0203',
      'Path: Admin > Validation > Validation Overview\n'
-     'Run check rules on STRM_COMP_ANALYSIS class for a date with data\n'
-     'Verify: PHD_STRM_COMP_MOL_PCT_VAL1 fires when MOL_PCT is NULL or out of range (0-100)'),
+     'Run check rules on STRM_COMP_ANALYSIS class\n'
+     'Verify: PHD_STRM_COMP_MOL_PCT_VAL1 fires correctly'),
 ]
 for sno, stitle, sinstr in screens:
     doc.add_heading(f'  {sno}: {stitle}', level=2)
     ip = doc.add_paragraph(sinstr)
     ip.runs[0].font.size = Pt(9)
     ip.runs[0].font.color.rgb = RGBColor(0x44, 0x44, 0x44)
-    # Placeholder box
     ph = doc.add_table(rows=1, cols=1)
     ph.style = 'Table Grid'
     c = ph.rows[0].cells[0]
@@ -200,7 +187,7 @@ for sno, stitle, sinstr in screens:
         pp.add_run('\n')
     doc.add_paragraph()
 
-# ── Section 6 ──────────────────────────────────────────────────────────────────
+# Section 6 - Result
 doc.add_heading('6. Overall Test Result', level=1)
 rt = doc.add_table(rows=1, cols=1)
 rt.style = 'Table Grid'
@@ -226,4 +213,4 @@ sp.runs[0].italic = True
 
 out = r'C:\Projects\ChoongYin_OS\workstreams\production-stability\sql-scripts\Issue1052_Evidence_COPS_DEV.docx'
 doc.save(out)
-print(f"Saved: {out}")
+print(f'Saved: {out}')
