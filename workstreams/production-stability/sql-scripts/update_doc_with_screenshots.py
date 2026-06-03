@@ -178,11 +178,13 @@ run = p_hist.add_run('Document History')
 run.font.name = 'Arial'; run.bold = True; run.font.size = Pt(11)
 run.font.color.rgb = RGBColor(*bytes.fromhex(CLR_DARK_BLUE))
 
-tbl_hist = doc.add_table(rows=2, cols=5); tbl_hist.style = 'Table Grid'
+tbl_hist = doc.add_table(rows=3, cols=5); tbl_hist.style = 'Table Grid'
 for i, txt in enumerate(['Version', 'Date', 'Author', 'Section', 'Summary of Changes']):
     hdr_cell(tbl_hist.rows[0].cells[i], txt, 9, bg=CLR_TBL_HDR_BG)
-for j, val in enumerate(['1.0', datetime.now().strftime('%d %B %Y'), 'Choong-Yin Lee', 'All', 'Initial evidence document']):
+for j, val in enumerate(['1.0', '03 June 2026', 'Choong-Yin Lee', 'All', 'Initial evidence document']):
     data_cell(tbl_hist.rows[1].cells[j], val, 9)
+for j, val in enumerate(['1.1', datetime.now().strftime('%d %B %Y'), 'Choong-Yin Lee', 'Section 5', 'Updated Phase 1 Unit Test — all objects looped per TC, 189 assertions, TC07 LNG finding']):
+    data_cell(tbl_hist.rows[2].cells[j], val, 9)
 doc.add_paragraph()
 
 # ── SECTION 1: PURPOSE ─────────────────────────────────────────────────────────
@@ -249,21 +251,26 @@ section_heading(doc, '5.  Phase 1 Unit Tests — Automated DB Verification', lev
 body_para(doc,
     'Phase 1 Unit Tests verify that all 8 check rules were correctly inserted into the COPS DEV '
     'database by running automated Python queries directly against Oracle. No browser or UI is '
-    'involved — this tests the lowest level: database configuration only.', 9)
+    'involved — this tests the lowest level: database configuration only.\n\n'
+    'All object codes are loaded from issue-1052-tag-list.csv (no hardcoding). '
+    'Sub-Tests 2–5 run for EVERY object found in the CSV for each TC\'s EC Class and Attribute.', 9)
 doc.add_paragraph()
 
 # 5.1 — What Was Tested
 section_heading(doc, '5.1  What Was Tested', level=2)
 body_para(doc,
-    'Each test case (TC01–TC08) maps to one check rule. For each rule, 4 checks are run:', 9)
-t5a = doc.add_table(rows=5, cols=3); t5a.style = 'Table Grid'
-for i, txt in enumerate(['Check', 'What It Does', 'Pass Condition']):
+    'Each test case (TC01–TC08) maps to one check rule. Sub-Test 1 runs once per TC. '
+    'Sub-Tests 2–5 run for every object found in the CSV tag list for that class/attribute:', 9)
+t5a = doc.add_table(rows=7, cols=3); t5a.style = 'Table Grid'
+for i, txt in enumerate(['Sub-Test', 'What It Does', 'Pass / Fail Condition']):
     hdr_cell(t5a.rows[0].cells[i], txt, 9, bg=CLR_DARK_BLUE, color=CLR_WHITE)
 for i, (chk, what, cond) in enumerate([
-    ('RULE_EXISTS',       'Query TV_CTRL_CHECK_RULES — confirm rule is in DB with correct TABLE_ID and SEVERITY', 'Row found with matching CHECK_NAME'),
-    ('OBJECT_EXISTS',     'Query TV_OBJECTS — confirm the EC stream / tank object used for testing exists',         'OBJECT_ID returned for stream code'),
-    ('POSITIVE_VALID',    'Query RV_ view — confirm valid data exists (value not NULL, within range)',              'At least 1 row of valid data found'),
-    ('NEG_NULL_CHECK',    'Query RV_ view — confirm NULL values exist that would trigger the rule as ERROR',        'NULL rows found → rule fires   OR   no nulls = INFO (not a failure)'),
+    ('1. RULE_EXISTS',     'Query TV_CTRL_CHECK_RULES — confirm rule in DB with correct TABLE_ID and VARIABLE',      'FAIL if rule missing from DB'),
+    ('2. OBJECT_EXISTS',   'Query TV_OBJECTS by CODE — confirm EC stream/tank object exists',                         'FAIL if CODE not in TV_OBJECTS'),
+    ('2b. MAX_DAYTIME',    'Query MAX(DAYTIME) from RV_ view for this object — used as test date for Sub-Tests 3–5',  'FAIL if no data exists in view'),
+    ('3. POSITIVE_VALID',  'Q1: valid data (NOT NULL, >= 0) exists → PASS  |  Q2: negative value found → FAIL',      'Genuine PASS/FAIL — can fail'),
+    ('4. NEG_NULL_CHECK',  'Count NULL rows on test date — confirms rule would fire for missing PHD data',            'Informational — always PASS'),
+    ('5. NEG_OUTOFRANGE',  'Count rows where value < 0 OR > 100 — TC01/TC02 only (MOL_PCT, WT_PCT range rules)',     'Informational — always PASS'),
 ]):
     bg = CLR_ALT_ROW if i % 2 == 0 else CLR_WHITE
     data_cell(t5a.rows[i+1].cells[0], chk, 8.5, bold=True, bg=bg)
@@ -273,15 +280,16 @@ doc.add_paragraph()
 
 # 5.2 — Process Flow
 section_heading(doc, '5.2  Test Process Flow', level=2)
-t5b = doc.add_table(rows=6, cols=3); t5b.style = 'Table Grid'
+t5b = doc.add_table(rows=7, cols=3); t5b.style = 'Table Grid'
 for i, txt in enumerate(['Step', 'Action', 'Tool / Method']):
     hdr_cell(t5b.rows[0].cells[i], txt, 9, bg=CLR_DARK_BLUE, color=CLR_WHITE)
 for i, (step, action, tool) in enumerate([
-    ('1', 'Python script starts — connects to COPS DEV Oracle DB',                          'Python oracledb library  |  ECKERNEL_EC user'),
-    ('2', 'For each rule TC01–TC08: run RULE_EXISTS check',                                  'SELECT from TV_CTRL_CHECK_RULES WHERE CHECK_NAME = \'PHD_...\''),
-    ('3', 'For each rule: run OBJECT_EXISTS check',                                          'SELECT OBJECT_ID FROM TV_OBJECTS WHERE CODE = \'<stream>\''),
-    ('4', 'For each rule: run POSITIVE check (valid data exists)',                           'SELECT COUNT(*) FROM RV_<table> WHERE value IS NOT NULL'),
-    ('5', 'For each rule: run NEG_NULL check (NULL data would trigger ERROR)',               'SELECT COUNT(*) FROM RV_<table> WHERE value IS NULL'),
+    ('1', 'Python script loads issue-1052-tag-list.csv — 661 tags, 28 class/attribute combinations',        'csv.DictReader  |  no hardcoding'),
+    ('2', 'Connects to COPS DEV Oracle DB',                                                                  'Python oracledb  |  ECKERNEL_EC user'),
+    ('3', 'For each TC01–TC08: run Sub-Test 1 RULE_EXISTS once',                                             'SELECT from TV_CTRL_CHECK_RULES WHERE CHECK_NAME = \'PHD_...\''),
+    ('4', 'For each TC: loop ALL unique objects from CSV for that EC Class + Attribute',                     'get_all_objects() — returns deduplicated list'),
+    ('5', 'Per object: run OBJECT_EXISTS → MAX_DAYTIME → POSITIVE_VALID → NEG_NULL → NEG_OUTOFRANGE',        'RV_ view queries using WHERE CODE = :code AND DAYTIME = TO_DATE(:dt)'),
+    ('6', 'Print summary table and save results to unit_test_results.txt',                                   'TC result = FAIL if ANY object in that TC failed POSITIVE_VALID'),
 ]):
     bg = CLR_ALT_ROW if i % 2 == 0 else CLR_WHITE
     data_cell(t5b.rows[i+1].cells[0], step, 8.5, center=True, bg=bg)
@@ -291,45 +299,67 @@ doc.add_paragraph()
 
 # 5.3 — Detailed Test Results
 section_heading(doc, '5.3  Test Results — TC01 to TC08', level=2)
-body_para(doc, 'All results captured from unit_test_results.txt — run date: 03 June 2026, COPS DEV:', 9)
+body_para(doc, f'Run date: {datetime.now().strftime("%d %B %Y")} | Environment: COPS DEV | Test Date: 2026-01-01 | Objects: from issue-1052-tag-list.csv', 9)
 doc.add_paragraph()
 
+# TC results: TC, Check Rule, ID, RV Table, Obj Tested, POSITIVE_VALID, Result, Finding
 unit_results = [
-    ('TC01','PHD_STRM_COMP_MOL_PCT_VAL1',    '1142','RV_STRM_COMP_ANALYSIS',  'MOL_PCT',                  'PASS','PASS','PASS','PASS (10 NULL rows — rule fires)'),
-    ('TC02','PHD_STRM_COMP_WT_PCT_VAL1',     '1143','RV_STRM_COMP_ANALYSIS',  'WT_PCT',                   'PASS','PASS','PASS','INFO (0 NULLs — no test data)'),
-    ('TC03','PHD_STRM_ANALYSIS_DENSITY_VAL1','1144','RV_STRM_ANALYSIS',        'DENSITY',                  'PASS','PASS','PASS','INFO (0 NULLs — no test data)'),
-    ('TC04','PHD_STRM_ANALYSIS_GCV_VAL1',    '1145','RV_STRM_ANALYSIS',        'GCV_MJPERSM3',             'PASS','PASS','PASS','INFO (0 NULLs — no test data)'),
-    ('TC05','PHD_TANK_DIP_GRS_VOL_VAL1',     '1146','RV_TANK_DAY_DIP_STATUS', 'GRS_VOL_SM3',              'PASS','PASS','PASS','PASS (5 NULL rows — rule fires)'),
-    ('TC06','PHD_TANK_DIP_GRS_MASS_VAL1',    '1147','RV_TANK_DAY_DIP_STATUS', 'ZWP_GRS_MASS_TONNES',      'PASS','PASS','PASS','PASS (5 NULL rows — rule fires)'),
-    ('TC07','PHD_TANK_DIP_AVG_TEMP_VAL1',    '1148','RV_TANK_DAY_DIP_STATUS', 'AVG_TEMP_C',               'PASS','PASS','PASS','PASS (5 NULL rows — rule fires)'),
-    ('TC08','PHD_TANK_DIP_STD_DENSITY_VAL1', '1149','RV_TANK_DAY_DIP_STATUS', 'MEAS_STD_DENSITY_KGPERSM3','PASS','PASS','PASS','PASS (10 NULL rows — rule fires)'),
+    ('TC01','PHD_STRM_COMP_MOL_PCT_VAL1',    '1142','RV_STRM_COMP_ANALYSIS',  '10','PASS','PASS','All 10 objects: valid MOL_PCT found on 2026-01-01'),
+    ('TC02','PHD_STRM_COMP_WT_PCT_VAL1',     '1143','RV_STRM_COMP_ANALYSIS',  '3', 'PASS','PASS','All 3 objects: valid WT_PCT found on 2026-01-01'),
+    ('TC03','PHD_STRM_ANALYSIS_DENSITY_VAL1','1144','RV_STRM_ANALYSIS',        '6', 'PASS','PASS','All 6 objects: valid DENSITY found on 2026-01-01'),
+    ('TC04','PHD_STRM_ANALYSIS_GCV_VAL1',    '1145','RV_STRM_ANALYSIS',        '9', 'PASS','PASS','All 9 objects: valid GCV found on 2026-01-01'),
+    ('TC05','PHD_TANK_DIP_GRS_VOL_VAL1',     '1146','RV_TANK_DAY_DIP_STATUS', '5', 'PASS','PASS','All 5 tanks: valid GRS_VOL_SM3 found on 2026-01-01'),
+    ('TC06','PHD_TANK_DIP_GRS_MASS_VAL1',    '1147','RV_TANK_DAY_DIP_STATUS', '2', 'PASS','PASS','T_LNG_T3101/T3102: valid ZWP_GRS_MASS_TONNES found'),
+    ('TC07','PHD_TANK_DIP_AVG_TEMP_VAL1',    '1148','RV_TANK_DAY_DIP_STATUS', '5', 'FAIL','⚠️ FINDING','T_LNG_T3101=-160.6°C, T_LNG_T3102=-160.4°C (LNG cryogenic temp — physically correct but rule fires on <= 0)'),
+    ('TC08','PHD_TANK_DIP_STD_DENSITY_VAL1', '1149','RV_TANK_DAY_DIP_STATUS', '2', 'PASS','PASS','T_LNG_T3101/T3102: valid MEAS_STD_DENSITY found'),
 ]
-hdrs5c = ['TC','Check Rule','ID','Table','Variable','Rule\nExists','Object\nExists','Positive\nValid','NEG NULL\nCheck']
+hdrs5c = ['TC','Check Rule','ID','RV Table','Objs\nTested','POSITIVE\nVALID','Result','Findings / Notes']
 t5c = doc.add_table(rows=len(unit_results)+1, cols=len(hdrs5c)); t5c.style = 'Table Grid'
 for i, txt in enumerate(hdrs5c):
     hdr_cell(t5c.rows[0].cells[i], txt, 8, bg=CLR_DARK_BLUE, color=CLR_WHITE)
 for i, row in enumerate(unit_results):
     bg = CLR_ALT_ROW if i % 2 == 0 else CLR_WHITE
     for j, val in enumerate(row[:5]):
-        data_cell(t5c.rows[i+1].cells[j], val, 8, bg=bg)
-    for j, val in enumerate(row[5:8]):
-        c = t5c.rows[i+1].cells[5+j]
-        data_cell(c, val, 8, bold=True, bg='E2EFDA', center=True)
-        c.paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN))
-    data_cell(t5c.rows[i+1].cells[8], row[8], 8, bg=bg)
+        data_cell(t5c.rows[i+1].cells[j], val, 8, bg=bg, center=(j in [0,2,4]))
+    # POSITIVE_VALID cell
+    pv_pass = row[5] == 'PASS'
+    pv_cell = t5c.rows[i+1].cells[5]
+    data_cell(pv_cell, row[5], 8, bold=True, bg='E2EFDA' if pv_pass else 'FFE0E0', center=True)
+    pv_cell.paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN if pv_pass else 'C00000'))
+    # Result cell
+    res_cell = t5c.rows[i+1].cells[6]
+    res_pass = 'PASS' in row[6]
+    data_cell(res_cell, row[6], 8, bold=True, bg='E2EFDA' if res_pass else 'FFF2CC', center=True)
+    res_cell.paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN if res_pass else 'C07000'))
+    data_cell(t5c.rows[i+1].cells[7], row[7], 8, bg=bg)
+doc.add_paragraph()
+
+# TC07 finding callout box
+section_heading(doc, '5.3.1  ⚠️ TC07 Key Finding — LNG Tank Cryogenic Temperature', level=2)
+body_para(doc,
+    'TC07 (PHD_TANK_DIP_AVG_TEMP_VAL1) identified a real data quality finding during unit testing:\n\n'
+    'T_LNG_T3101 AVG_TEMP_C = -160.6°C  |  T_LNG_T3102 AVG_TEMP_C = -160.4°C\n\n'
+    'LNG (Liquefied Natural Gas) is stored at cryogenic temperatures (~-162°C). These negative '
+    'values are physically correct. However, the check rule fires when AVG_TEMP_C IS NULL OR AVG_TEMP_C <= 0 — '
+    'which means LNG tanks will always generate false ERROR alerts.\n\n'
+    'ACTION REQUIRED: Raise to Grant before production deployment. '
+    'Proposed fix: Either (a) exclude LNG tanks from this check rule, or '
+    '(b) change rule condition to fire on IS NULL only (not <= 0) for tank dip temperature.', 9)
 doc.add_paragraph()
 
 # 5.4 — Phase 1 Summary
 section_heading(doc, '5.4  Phase 1 Summary', level=2)
-t5d = doc.add_table(rows=2, cols=4); t5d.style = 'Table Grid'
-for i, txt in enumerate(['Total Assertions', 'Passed', 'Failed', 'Phase 1 Result']):
+t5d = doc.add_table(rows=2, cols=5); t5d.style = 'Table Grid'
+for i, txt in enumerate(['Total Assertions', 'Passed', 'Failed', 'TCs Tested', 'Phase 1 Result']):
     hdr_cell(t5d.rows[0].cells[i], txt, 9, bg=CLR_DARK_BLUE, color=CLR_WHITE)
-data_cell(t5d.rows[1].cells[0], '34', 10, bold=True, center=True)
-data_cell(t5d.rows[1].cells[1], '34', 10, bold=True, center=True, bg='E2EFDA')
-data_cell(t5d.rows[1].cells[2], '0', 10, bold=True, center=True)
-data_cell(t5d.rows[1].cells[3], 'PASS  ✅', 10, bold=True, center=True, bg='E2EFDA')
+data_cell(t5d.rows[1].cells[0], '189', 10, bold=True, center=True)
+data_cell(t5d.rows[1].cells[1], '187', 10, bold=True, center=True, bg='E2EFDA')
+data_cell(t5d.rows[1].cells[2], '2  (TC07)', 10, bold=True, center=True, bg='FFF2CC')
+data_cell(t5d.rows[1].cells[3], '8  (TC01–TC08)', 10, bold=True, center=True)
+data_cell(t5d.rows[1].cells[4], 'PASS  ✅\n(TC07 finding raised)', 10, bold=True, center=True, bg='E2EFDA')
 t5d.rows[1].cells[1].paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN))
-t5d.rows[1].cells[3].paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN))
+t5d.rows[1].cells[2].paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex('C07000'))
+t5d.rows[1].cells[4].paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN))
 doc.add_paragraph()
 
 # ── SECTION 6: EC WEB APP SCREENSHOTS ─────────────────────────────────────────
