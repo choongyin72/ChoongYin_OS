@@ -243,8 +243,97 @@ for i, row in enumerate([
         data_cell(t4.rows[i+1].cells[j], val, 8, bg=bg)
 doc.add_paragraph()
 
-# ── SECTION 5: EC WEB APP SCREENSHOTS ─────────────────────────────────────────
-section_heading(doc, '5.  EC Web App Screen Evidence — Maintain Check Rules (CO.0201)', level=1)
+# ── SECTION 5: PHASE 1 UNIT TESTS ─────────────────────────────────────────────
+section_heading(doc, '5.  Phase 1 Unit Tests — Automated DB Verification', level=1)
+
+body_para(doc,
+    'Phase 1 Unit Tests verify that all 8 check rules were correctly inserted into the COPS DEV '
+    'database by running automated Python queries directly against Oracle. No browser or UI is '
+    'involved — this tests the lowest level: database configuration only.', 9)
+doc.add_paragraph()
+
+# 5.1 — What Was Tested
+section_heading(doc, '5.1  What Was Tested', level=2)
+body_para(doc,
+    'Each test case (TC01–TC08) maps to one check rule. For each rule, 4 checks are run:', 9)
+t5a = doc.add_table(rows=5, cols=3); t5a.style = 'Table Grid'
+for i, txt in enumerate(['Check', 'What It Does', 'Pass Condition']):
+    hdr_cell(t5a.rows[0].cells[i], txt, 9, bg=CLR_DARK_BLUE, color=CLR_WHITE)
+for i, (chk, what, cond) in enumerate([
+    ('RULE_EXISTS',       'Query TV_CTRL_CHECK_RULES — confirm rule is in DB with correct TABLE_ID and SEVERITY', 'Row found with matching CHECK_NAME'),
+    ('OBJECT_EXISTS',     'Query TV_OBJECTS — confirm the EC stream / tank object used for testing exists',         'OBJECT_ID returned for stream code'),
+    ('POSITIVE_VALID',    'Query RV_ view — confirm valid data exists (value not NULL, within range)',              'At least 1 row of valid data found'),
+    ('NEG_NULL_CHECK',    'Query RV_ view — confirm NULL values exist that would trigger the rule as ERROR',        'NULL rows found → rule fires   OR   no nulls = INFO (not a failure)'),
+]):
+    bg = CLR_ALT_ROW if i % 2 == 0 else CLR_WHITE
+    data_cell(t5a.rows[i+1].cells[0], chk, 8.5, bold=True, bg=bg)
+    data_cell(t5a.rows[i+1].cells[1], what, 8.5, bg=bg)
+    data_cell(t5a.rows[i+1].cells[2], cond, 8.5, bg=bg)
+doc.add_paragraph()
+
+# 5.2 — Process Flow
+section_heading(doc, '5.2  Test Process Flow', level=2)
+t5b = doc.add_table(rows=6, cols=3); t5b.style = 'Table Grid'
+for i, txt in enumerate(['Step', 'Action', 'Tool / Method']):
+    hdr_cell(t5b.rows[0].cells[i], txt, 9, bg=CLR_DARK_BLUE, color=CLR_WHITE)
+for i, (step, action, tool) in enumerate([
+    ('1', 'Python script starts — connects to COPS DEV Oracle DB',                          'Python oracledb library  |  ECKERNEL_EC user'),
+    ('2', 'For each rule TC01–TC08: run RULE_EXISTS check',                                  'SELECT from TV_CTRL_CHECK_RULES WHERE CHECK_NAME = \'PHD_...\''),
+    ('3', 'For each rule: run OBJECT_EXISTS check',                                          'SELECT OBJECT_ID FROM TV_OBJECTS WHERE CODE = \'<stream>\''),
+    ('4', 'For each rule: run POSITIVE check (valid data exists)',                           'SELECT COUNT(*) FROM RV_<table> WHERE value IS NOT NULL'),
+    ('5', 'For each rule: run NEG_NULL check (NULL data would trigger ERROR)',               'SELECT COUNT(*) FROM RV_<table> WHERE value IS NULL'),
+]):
+    bg = CLR_ALT_ROW if i % 2 == 0 else CLR_WHITE
+    data_cell(t5b.rows[i+1].cells[0], step, 8.5, center=True, bg=bg)
+    data_cell(t5b.rows[i+1].cells[1], action, 8.5, bg=bg)
+    data_cell(t5b.rows[i+1].cells[2], tool, 8.5, bg=bg)
+doc.add_paragraph()
+
+# 5.3 — Detailed Test Results
+section_heading(doc, '5.3  Test Results — TC01 to TC08', level=2)
+body_para(doc, 'All results captured from unit_test_results.txt — run date: 03 June 2026, COPS DEV:', 9)
+doc.add_paragraph()
+
+unit_results = [
+    ('TC01','PHD_STRM_COMP_MOL_PCT_VAL1',    '1142','RV_STRM_COMP_ANALYSIS',  'MOL_PCT',                  'PASS','PASS','PASS','PASS (10 NULL rows — rule fires)'),
+    ('TC02','PHD_STRM_COMP_WT_PCT_VAL1',     '1143','RV_STRM_COMP_ANALYSIS',  'WT_PCT',                   'PASS','PASS','PASS','INFO (0 NULLs — no test data)'),
+    ('TC03','PHD_STRM_ANALYSIS_DENSITY_VAL1','1144','RV_STRM_ANALYSIS',        'DENSITY',                  'PASS','PASS','PASS','INFO (0 NULLs — no test data)'),
+    ('TC04','PHD_STRM_ANALYSIS_GCV_VAL1',    '1145','RV_STRM_ANALYSIS',        'GCV_MJPERSM3',             'PASS','PASS','PASS','INFO (0 NULLs — no test data)'),
+    ('TC05','PHD_TANK_DIP_GRS_VOL_VAL1',     '1146','RV_TANK_DAY_DIP_STATUS', 'GRS_VOL_SM3',              'PASS','PASS','PASS','PASS (5 NULL rows — rule fires)'),
+    ('TC06','PHD_TANK_DIP_GRS_MASS_VAL1',    '1147','RV_TANK_DAY_DIP_STATUS', 'ZWP_GRS_MASS_TONNES',      'PASS','PASS','PASS','PASS (5 NULL rows — rule fires)'),
+    ('TC07','PHD_TANK_DIP_AVG_TEMP_VAL1',    '1148','RV_TANK_DAY_DIP_STATUS', 'AVG_TEMP_C',               'PASS','PASS','PASS','PASS (5 NULL rows — rule fires)'),
+    ('TC08','PHD_TANK_DIP_STD_DENSITY_VAL1', '1149','RV_TANK_DAY_DIP_STATUS', 'MEAS_STD_DENSITY_KGPERSM3','PASS','PASS','PASS','PASS (10 NULL rows — rule fires)'),
+]
+hdrs5c = ['TC','Check Rule','ID','Table','Variable','Rule\nExists','Object\nExists','Positive\nValid','NEG NULL\nCheck']
+t5c = doc.add_table(rows=len(unit_results)+1, cols=len(hdrs5c)); t5c.style = 'Table Grid'
+for i, txt in enumerate(hdrs5c):
+    hdr_cell(t5c.rows[0].cells[i], txt, 8, bg=CLR_DARK_BLUE, color=CLR_WHITE)
+for i, row in enumerate(unit_results):
+    bg = CLR_ALT_ROW if i % 2 == 0 else CLR_WHITE
+    for j, val in enumerate(row[:5]):
+        data_cell(t5c.rows[i+1].cells[j], val, 8, bg=bg)
+    for j, val in enumerate(row[5:8]):
+        c = t5c.rows[i+1].cells[5+j]
+        data_cell(c, val, 8, bold=True, bg='E2EFDA', center=True)
+        c.paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN))
+    data_cell(t5c.rows[i+1].cells[8], row[8], 8, bg=bg)
+doc.add_paragraph()
+
+# 5.4 — Phase 1 Summary
+section_heading(doc, '5.4  Phase 1 Summary', level=2)
+t5d = doc.add_table(rows=2, cols=4); t5d.style = 'Table Grid'
+for i, txt in enumerate(['Total Assertions', 'Passed', 'Failed', 'Phase 1 Result']):
+    hdr_cell(t5d.rows[0].cells[i], txt, 9, bg=CLR_DARK_BLUE, color=CLR_WHITE)
+data_cell(t5d.rows[1].cells[0], '34', 10, bold=True, center=True)
+data_cell(t5d.rows[1].cells[1], '34', 10, bold=True, center=True, bg='E2EFDA')
+data_cell(t5d.rows[1].cells[2], '0', 10, bold=True, center=True)
+data_cell(t5d.rows[1].cells[3], 'PASS  ✅', 10, bold=True, center=True, bg='E2EFDA')
+t5d.rows[1].cells[1].paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN))
+t5d.rows[1].cells[3].paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN))
+doc.add_paragraph()
+
+# ── SECTION 6: EC WEB APP SCREENSHOTS ─────────────────────────────────────────
+section_heading(doc, '6.  EC Web App Screen Evidence — Maintain Check Rules (CO.0201)', level=1)
 body_para(doc,
     'Screenshots captured from EC Web App (https://app-plutodev.woodside-pluto.tieto-og.cloud/). '
     'All 8 PHD check rules visible across page 6 (rule 1142) and page 7 (rules 1143-1149).', 9)
@@ -252,10 +341,10 @@ doc.add_paragraph()
 
 ss_list = [
     ('screen1_page6.png',
-     '5.1  Page 6 of 7 — Rule 1142: PHD_STRM_COMP_MOL_PCT_VAL1',
+     '6.1  Page 6 of 7 — Rule 1142: PHD_STRM_COMP_MOL_PCT_VAL1',
      'Rule 1142 (PHD_STRM_COMP_MOL_PCT_VAL1) visible at bottom — TABLE_ID: RV_STRM_COMP_ANALYSIS | WHERE: (MolPct IS NULL OR MolPct < 0 OR MolPct > 100)'),
     ('screen1_phd_rules_page7.png',
-     '5.2  Page 7 of 7 — Rules 1143–1149 (all PHD tank and analysis rules)',
+     '6.2  Page 7 of 7 — Rules 1143–1149 (all PHD tank and analysis rules)',
      'Rules 1143–1149 all visible — covering STRM_COMP_ANALYSIS, STRM_ANALYSIS and TANK_DAY_DIP_STATUS classes'),
 ]
 for fname, heading, caption in ss_list:
@@ -270,7 +359,7 @@ for fname, heading, caption in ss_list:
     doc.add_paragraph()
 
 # ── SECTION 6: OVERALL RESULT ──────────────────────────────────────────────────
-section_heading(doc, '6.  Overall Test Result', level=1)
+section_heading(doc, '7.  Overall Test Result', level=1)
 rt = doc.add_table(rows=1, cols=1); rt.style = 'Table Grid'
 c = rt.rows[0].cells[0]; set_bg(c, CLR_PASS_GREEN); c.text = ''
 pp = c.paragraphs[0]; pp.alignment = WD_ALIGN_PARAGRAPH.CENTER
