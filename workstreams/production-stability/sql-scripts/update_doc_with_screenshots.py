@@ -290,5 +290,16 @@ run.font.size = Pt(9); run.italic = True; run.font.name = 'Arial'
 run.font.color.rgb = RGBColor(*bytes.fromhex(CLR_LIGHT_BLUE))
 
 # Save
+
+# POST-BUILD FIXES
+for section in doc.sections:
+    for para in section.header.paragraphs:
+        for run in para.runs:
+            if 'Technical Gap Analysis' in (run.text or ''):
+                run.text = run.text.replace('Technical Gap Analysis', 'Test Evidence')
+for para in list(doc.paragraphs):
+    if 'Project Management Methodology' in para.text:
+        para._element.getparent().remove(para._element)
+
 doc.save(OUT)
 print(f'Saved: {OUT}')
