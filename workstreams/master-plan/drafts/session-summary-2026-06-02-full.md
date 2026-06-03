@@ -232,3 +232,72 @@ _Session: 2026-06-02 | Claude Code Sonnet 4.6 | choong-yin.lee@quorumsoftware.co
 5. Get permission before moving to Woodside project
 6. Raise ECPR-A (sum check — 102 tags, most critical)
 7. Investigate STRM_ANALYSIS double-write (ECPR-B)
+
+---
+
+## UPDATE — 2026-06-03: EC Best Practices (BPR Confluence) Connected
+
+### Source Details
+- URL: https://energycomponents.atlassian.net/wiki/spaces/BPR
+- Cloud ID: energycomponents.atlassian.net
+- Name: EC Professional Services - Best Practices & Sandbox ("ECpedia")
+- Launched: 1 April 2026 | 50+ pages
+- Maintained by: Steinar Hestnes (Upstream Lead), Erik Winn (Midstream Lead)
+- Access: Via Atlassian MCP connector (already authenticated)
+
+### Space Structure (50 pages)
+| Section | Pages | Description |
+|---------|-------|-------------|
+| Calculation Design | 6 | Naming conventions, equation blocks, data model rules, library calcs |
+| EC Upstream Sandbox (Polar Bear) | 10 | Reference offshore upstream implementation — EC 14.2.5 |
+| EC Midstream Sandbox (LNG Export) | 10 | LNG terminal reference — 4 extensions ZLC/ZLD/ZLAPP/ZLT |
+| EC SaaS Scorecard | 1 | Mandatory compliance tool for all EC projects |
+| Standards & Governance | 5 | TRAP process, doc management, template pages |
+| Tools & Training | 4 | CME/ECCT tools, BPM build guide, training materials |
+
+### Key Best Practice Rules Learned
+1. **Never read from screen classes** — use _DATA suffix classes (e.g. STRM_DAY_STREAM_DATA)
+2. **Never write to screen classes** — use _ALLOC suffix classes (e.g. STRM_DAY_ALLOC)
+3. **Naming: Upper Camel Case, max 25 chars, no underscore except named constants**
+4. **EC SaaS Scorecard mandatory at 5 milestones** — blocks go-live if not completed
+5. **Library Calculations** — new standard from EC 14.2.x for reusable calculation components
+
+### Direct Impact on Woodside Pluto
+| Finding | Relevance |
+|---------|-----------|
+| "Never query screen classes/views" rule | Officially validates Task 4 — R_BLP_MONTHLY_ALLOC_PLUTO querying ZWP_V_REP_BLP_MTH_ALLOC directly is a best practice violation. Use as ECPR reference. |
+| SaaS Scorecard mandatory at 5 milestones | Go-live risk — check with Kirsten/Grant if scorecard is current. Blocking scores prevent GCC approval. |
+| Polar Bear Sandbox (EC 14.2.5) | Best reference for Woodside allocation/report issues — same offshore upstream setup with daily/monthly allocations, well testing, deferments, BPM |
+| RV_ views correct for check rules | Confirms Issue_1052 SQL script approach is correct |
+| Library Calculations from 14.2.x | Post go-live CR28 upgrade planning — adopt for better maintainability |
+
+### Useful Page URLs
+- Calculation Data Model Best Practices: https://energycomponents.atlassian.net/wiki/spaces/BPR/pages/337051706
+- EC SaaS Scorecard: https://energycomponents.atlassian.net/wiki/spaces/BPR/pages/547520762
+- Calculation Design: https://energycomponents.atlassian.net/wiki/spaces/BPR/pages/279511052
+- Naming Conventions Generic: https://energycomponents.atlassian.net/wiki/spaces/BPR/pages/374735229
+- Polar Bear Overview: https://energycomponents.atlassian.net/wiki/spaces/BPR/pages/519700627
+- EC Upstream Sandbox: https://energycomponents.atlassian.net/wiki/spaces/BPR/pages/378699784
+
+### Atlassian Notice
+After 30 June 2026, the HTTP+SSE endpoint (mcp.atlassian.com/v1/sse) will be deprecated. Switch to mcp.atlassian.com/v1/mcp before that date.
+
+---
+
+## UPDATE — 2026-06-03: Teams Updates Today
+| Time AWST | Who | Update |
+|-----------|-----|--------|
+| 08:09 | Daniel Perez | Sick today |
+| 09:10 | Jamilin | Checking CI fix (Dinesh's request) |
+| 09:47 | Rizki | Flagged ECSR-35153 — queried if in scope |
+| 09:49 | Simon | Confirmed: not in scope, one-time effort only |
+| 09:53 | Kirsten | Confirmed: ECaaS UAT issues not taken. Will track Geoff's notes from 20 May meeting. |
+| 10:25 | Simon | Approved PR #650 (Dinesh CI fix). Feedback: DELETE + INSERT for repeatable scripts |
+| 10:43 | Simon | Approved PR #644 (Ricardo's work, tagged Tahura) |
+| 10:45 | Dinesh | Added DELETE statements as per Simon's feedback |
+
+### Key Update on ECSR-35153
+CLOSED — Kirsten confirmed ECaaS UAT issues are out of scope (one-time effort). Does NOT affect Workstream H.
+
+---
+_Last updated: 2026-06-03_
