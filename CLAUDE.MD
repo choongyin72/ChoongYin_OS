@@ -33,3 +33,9 @@ Notepad++            : C:\Program Files\Notepad++
 # Additional Verified Sources (added 2026-06-02)
 - EC Hub (Nexus Repo) : https://hub.energycomponents.com/ (user: choong-yin.lee@tieto.com)
 - EC Tech Docs 14.2.5 : https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/ecindex.html
+
+# EC Best Practices (added 2026-06-03)
+- EC Best Practices Confluence (BPR space): https://energycomponents.atlassian.net/wiki/spaces/BPR
+- Cloud ID: energycomponents.atlassian.net
+- Space: EC Professional Services - Best Practices & Sandbox
+- Nickname: ECpedia | Launched: 1 April 2026 | 50+ pages

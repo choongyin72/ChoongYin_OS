@@ -28,3 +28,6 @@ email outlook : choong-yin.lee@quorumsoftware.com
 
 Client SharePoint
 woodside Pluto : https://woodsideenergy.sharepoint.com/sites/PHBRQuorum?e=1%3A0f466f3301834ab2a4f07acffc7f7317
+
+
+EC Best Practices : https://energycomponents.atlassian.net/wiki/spaces/BPR/folder/466223241?atlOrigin=eyJpIjoiZTZkNjg3MWEzMGFlNDMzMzhkMWU1ZmY0MWI2ZDJjY2IiLCJwIjoiYyJ9
