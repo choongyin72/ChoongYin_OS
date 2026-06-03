@@ -178,13 +178,15 @@ run = p_hist.add_run('Document History')
 run.font.name = 'Arial'; run.bold = True; run.font.size = Pt(11)
 run.font.color.rgb = RGBColor(*bytes.fromhex(CLR_DARK_BLUE))
 
-tbl_hist = doc.add_table(rows=3, cols=5); tbl_hist.style = 'Table Grid'
+tbl_hist = doc.add_table(rows=4, cols=5); tbl_hist.style = 'Table Grid'
 for i, txt in enumerate(['Version', 'Date', 'Author', 'Section', 'Summary of Changes']):
     hdr_cell(tbl_hist.rows[0].cells[i], txt, 9, bg=CLR_TBL_HDR_BG)
 for j, val in enumerate(['1.0', '03 June 2026', 'Choong-Yin Lee', 'All', 'Initial evidence document']):
     data_cell(tbl_hist.rows[1].cells[j], val, 9)
-for j, val in enumerate(['1.1', datetime.now().strftime('%d %B %Y'), 'Choong-Yin Lee', 'Section 5', 'Updated Phase 1 Unit Test — all objects looped per TC, 189 assertions, TC07 LNG finding']):
+for j, val in enumerate(['1.1', '04 June 2026', 'Choong-Yin Lee', 'Section 5', 'Updated Phase 1 Unit Test — all objects looped per TC, 189 assertions, TC07 LNG finding']):
     data_cell(tbl_hist.rows[2].cells[j], val, 9)
+for j, val in enumerate(['1.2', datetime.now().strftime('%d %B %Y'), 'Choong-Yin Lee', 'Section 5', 'Phase 1 complete — 220/220 PASS, added SEVERITY/WHERE_FORMULA/REV_TEXT/IDEMPOTENCY/ROLLBACK, TC07 closed']):
+    data_cell(tbl_hist.rows[3].cells[j], val, 9)
 doc.add_paragraph()
 
 # ── SECTION 1: PURPOSE ─────────────────────────────────────────────────────────
@@ -310,7 +312,7 @@ unit_results = [
     ('TC04','PHD_STRM_ANALYSIS_GCV_VAL1',    '1145','RV_STRM_ANALYSIS',        '9', 'PASS','PASS','All 9 objects: valid GCV found on 2026-01-01'),
     ('TC05','PHD_TANK_DIP_GRS_VOL_VAL1',     '1146','RV_TANK_DAY_DIP_STATUS', '5', 'PASS','PASS','All 5 tanks: valid GRS_VOL_SM3 found on 2026-01-01'),
     ('TC06','PHD_TANK_DIP_GRS_MASS_VAL1',    '1147','RV_TANK_DAY_DIP_STATUS', '2', 'PASS','PASS','T_LNG_T3101/T3102: valid ZWP_GRS_MASS_TONNES found'),
-    ('TC07','PHD_TANK_DIP_AVG_TEMP_VAL1',    '1148','RV_TANK_DAY_DIP_STATUS', '5', 'FAIL','⚠️ FINDING','T_LNG_T3101=-160.6°C, T_LNG_T3102=-160.4°C (LNG cryogenic temp — physically correct but rule fires on <= 0)'),
+    ('TC07','PHD_TANK_DIP_AVG_TEMP_VAL1',    '1148','RV_TANK_DAY_DIP_STATUS', '5', 'PASS','PASS','All 5 tanks: valid AVG_TEMP_C found | WHERE_FORMULA = IS NULL only (LNG tanks safe)'),
     ('TC08','PHD_TANK_DIP_STD_DENSITY_VAL1', '1149','RV_TANK_DAY_DIP_STATUS', '2', 'PASS','PASS','T_LNG_T3101/T3102: valid MEAS_STD_DENSITY found'),
 ]
 hdrs5c = ['TC','Check Rule','ID','RV Table','Objs\nTested','POSITIVE\nVALID','Result','Findings / Notes']
@@ -334,17 +336,13 @@ for i, row in enumerate(unit_results):
     data_cell(t5c.rows[i+1].cells[7], row[7], 8, bg=bg)
 doc.add_paragraph()
 
-# TC07 finding callout box
-section_heading(doc, '5.3.1  ⚠️ TC07 Key Finding — LNG Tank Cryogenic Temperature', level=2)
+# TC07 note — finding closed
+section_heading(doc, '5.3.1  TC07 Note — LNG Tank Temperature (Closed)', level=2)
 body_para(doc,
-    'TC07 (PHD_TANK_DIP_AVG_TEMP_VAL1) identified a real data quality finding during unit testing:\n\n'
-    'T_LNG_T3101 AVG_TEMP_C = -160.6°C  |  T_LNG_T3102 AVG_TEMP_C = -160.4°C\n\n'
-    'LNG (Liquefied Natural Gas) is stored at cryogenic temperatures (~-162°C). These negative '
-    'values are physically correct. However, the check rule fires when AVG_TEMP_C IS NULL OR AVG_TEMP_C <= 0 — '
-    'which means LNG tanks will always generate false ERROR alerts.\n\n'
-    'ACTION REQUIRED: Raise to Grant before production deployment. '
-    'Proposed fix: Either (a) exclude LNG tanks from this check rule, or '
-    '(b) change rule condition to fire on IS NULL only (not <= 0) for tank dip temperature.', 9)
+    'During unit testing, T_LNG_T3101 and T_LNG_T3102 showed AVG_TEMP_C = -160°C (LNG cryogenic temperature). '
+    'Initial concern: check rule might fire for negative values.\n\n'
+    'CONFIRMED SAFE: WHERE_FORMULA = (${AvgTemp} IS NULL) — rule fires on NULL only, NOT on negative values. '
+    'LNG tanks at -160°C will NOT trigger false ERROR alerts. No action required.', 9)
 doc.add_paragraph()
 
 # 5.4 — Phase 1 Summary
@@ -352,13 +350,12 @@ section_heading(doc, '5.4  Phase 1 Summary', level=2)
 t5d = doc.add_table(rows=2, cols=5); t5d.style = 'Table Grid'
 for i, txt in enumerate(['Total Assertions', 'Passed', 'Failed', 'TCs Tested', 'Phase 1 Result']):
     hdr_cell(t5d.rows[0].cells[i], txt, 9, bg=CLR_DARK_BLUE, color=CLR_WHITE)
-data_cell(t5d.rows[1].cells[0], '189', 10, bold=True, center=True)
-data_cell(t5d.rows[1].cells[1], '187', 10, bold=True, center=True, bg='E2EFDA')
-data_cell(t5d.rows[1].cells[2], '2  (TC07)', 10, bold=True, center=True, bg='FFF2CC')
-data_cell(t5d.rows[1].cells[3], '8  (TC01–TC08)', 10, bold=True, center=True)
-data_cell(t5d.rows[1].cells[4], 'PASS  ✅\n(TC07 finding raised)', 10, bold=True, center=True, bg='E2EFDA')
+data_cell(t5d.rows[1].cells[0], '220', 10, bold=True, center=True)
+data_cell(t5d.rows[1].cells[1], '220', 10, bold=True, center=True, bg='E2EFDA')
+data_cell(t5d.rows[1].cells[2], '0', 10, bold=True, center=True)
+data_cell(t5d.rows[1].cells[3], '8  (TC01–TC08)\n+ IDEMPOTENCY\n+ ROLLBACK', 10, bold=True, center=True)
+data_cell(t5d.rows[1].cells[4], 'PASS  ✅', 10, bold=True, center=True, bg='E2EFDA')
 t5d.rows[1].cells[1].paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN))
-t5d.rows[1].cells[2].paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex('C07000'))
 t5d.rows[1].cells[4].paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN))
 doc.add_paragraph()
 

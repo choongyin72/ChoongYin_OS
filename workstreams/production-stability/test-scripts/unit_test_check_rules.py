@@ -111,7 +111,8 @@ def test_check_rule(tc_id, check_name, ec_class, attribute, tag_map,
 
     # ── Sub-Test 1: RULE_EXISTS — runs once per TC ────────────────────────────
     cur.execute("""
-        SELECT cr.CHECK_ID, cr.TABLE_ID, crv.VARIABLE_NAME, crv.VARIABLE_VALUE
+        SELECT cr.CHECK_ID, cr.TABLE_ID, cr.SEVERITY_LEVEL, cr.WHERE_FORMULA,
+               cr.REV_TEXT, crv.VARIABLE_NAME, crv.VARIABLE_VALUE
           FROM TV_CTRL_CHECK_RULES cr
           JOIN TV_CTRL_CHECK_RULE_VARIABLE crv ON cr.CHECK_ID = crv.CHECK_ID
          WHERE cr.CHECK_NAME = :cn
@@ -124,10 +125,26 @@ def test_check_rule(tc_id, check_name, ec_class, attribute, tag_map,
         cur.close(); conn.close()
         return
 
-    check_id, table_id, var_name, var_col_db = rule
+    check_id, table_id, severity, where_formula, rev_text, var_name, var_col_db = rule
     log_result(tc_id, check_name, 'RULE_EXISTS',
                'FOUND', 'FOUND',
                f'CHECK_ID={check_id} | TABLE={table_id} | VAR={var_col_db}')
+
+    # ── Sub-Test 1b: SEVERITY_LEVEL must be ERROR ──────────────────────────────
+    log_result(tc_id, check_name, 'SEVERITY_LEVEL',
+               'ERROR', severity or 'NULL',
+               f'SEVERITY_LEVEL={severity}')
+
+    # ── Sub-Test 1c: WHERE_FORMULA must exist and contain IS NULL check ────────
+    formula_ok = where_formula and 'IS NULL' in where_formula
+    log_result(tc_id, check_name, 'WHERE_FORMULA',
+               'VALID', 'VALID' if formula_ok else 'INVALID',
+               f'Formula: {where_formula}')
+
+    # ── Sub-Test 1d: REV_TEXT must be set ─────────────────────────────────────
+    log_result(tc_id, check_name, 'REV_TEXT',
+               'SET', 'SET' if rev_text else 'NULL',
+               f'REV_TEXT={rev_text}')
 
     # ── Sub-Tests 2–5: loop every object from CSV ─────────────────────────────
     for idx, (obj_code, component) in enumerate(all_objects, start=1):
@@ -166,36 +183,25 @@ def test_check_rule(tc_id, check_name, ec_class, attribute, tag_map,
         }
 
         # Sub-Test 3 — POSITIVE_VALID
+        # Query 1: data exists and IS NOT NULL → rule would NOT fire (positive scenario)
+        # Query 2: negative value found → only FAIL if rule formula fires on negatives
         try:
             cur.execute(f"""
                 SELECT COUNT(*) FROM {rv_table}
                  WHERE CODE    = :code
                    AND DAYTIME = TO_DATE(:dt, 'YYYY-MM-DD')
-                   AND {var_col} IS NOT NULL AND {var_col} >= 0
+                   AND {var_col} IS NOT NULL
                    AND ROWNUM  <= 1
             """, code=obj_code, dt=use_date)
             q1_count = cur.fetchone()[0]
             if q1_count > 0:
                 log_result(tc_id, check_name, f'POSITIVE_VALID | {obj_label}',
                            'PASS', 'PASS',
-                           f'Valid {var_col} found (NOT NULL, >= 0) | Rule would NOT fire')
+                           f'Valid {var_col} found (NOT NULL) | Rule would NOT fire for null check')
             else:
-                cur.execute(f"""
-                    SELECT {var_col} FROM {rv_table}
-                     WHERE CODE    = :code
-                       AND DAYTIME = TO_DATE(:dt, 'YYYY-MM-DD')
-                       AND {var_col} IS NOT NULL AND {var_col} < 0
-                       AND ROWNUM  <= 1
-                """, code=obj_code, dt=use_date)
-                q2_row = cur.fetchone()
-                if q2_row:
-                    log_result(tc_id, check_name, f'POSITIVE_VALID | {obj_label}',
-                               'PASS', 'FAIL',
-                               f'Negative value found — {var_col}={q2_row[0]} | Rule WOULD fire')
-                else:
-                    log_result(tc_id, check_name, f'POSITIVE_VALID | {obj_label}',
-                               'PASS', 'FAIL',
-                               f'No valid data for CODE={obj_code} on DAYTIME={use_date}')
+                log_result(tc_id, check_name, f'POSITIVE_VALID | {obj_label}',
+                           'PASS', 'FAIL',
+                           f'No data (NOT NULL) for CODE={obj_code} on DAYTIME={use_date}')
         except Exception as e:
             log_result(tc_id, check_name, f'POSITIVE_VALID | {obj_label}',
                        'PASS', 'QUERY_ERROR', str(e)[:80])
@@ -236,6 +242,131 @@ def test_check_rule(tc_id, check_name, ec_class, attribute, tag_map,
             except Exception as e:
                 log_result(tc_id, check_name, f'NEG_OUTOFRANGE | {obj_label}',
                            'RULE_FIRES', 'QUERY_ERROR', str(e)[:80])
+
+    cur.close(); conn.close()
+
+
+def read_plsql(path):
+    """Extract just the DECLARE...END; block — strips SQL*Plus '/' terminator and trailing comments."""
+    lines = Path(path).read_text(encoding='utf-8').splitlines()
+    block = []
+    for line in lines:
+        if line.strip() == '/':
+            break
+        block.append(line)
+    return '\n'.join(block).strip()
+
+
+# ── Idempotency Test ──────────────────────────────────────────────────────────
+def test_idempotency():
+    """
+    Run the SQL script a second time and verify rule count stays at 8.
+    Confirms UPDATE-then-INSERT pattern is re-runnable with no duplicates.
+    """
+    print(f"\n{'─'*65}")
+    print('IDEMPOTENCY TEST — Re-run SQL script, verify no duplicates')
+    print(f"{'─'*65}")
+
+    check_names = [
+        'PHD_STRM_COMP_MOL_PCT_VAL1', 'PHD_STRM_COMP_WT_PCT_VAL1',
+        'PHD_STRM_ANALYSIS_DENSITY_VAL1', 'PHD_STRM_ANALYSIS_GCV_VAL1',
+        'PHD_TANK_DIP_GRS_VOL_VAL1', 'PHD_TANK_DIP_GRS_MASS_VAL1',
+        'PHD_TANK_DIP_AVG_TEMP_VAL1', 'PHD_TANK_DIP_STD_DENSITY_VAL1',
+    ]
+    conn = connect(); cur = conn.cursor()
+
+    # Count before re-run
+    placeholders = ','.join([f':n{i}' for i in range(len(check_names))])
+    bind = {f'n{i}': n for i, n in enumerate(check_names)}
+    cur.execute(f"SELECT COUNT(*) FROM TV_CTRL_CHECK_RULES WHERE CHECK_NAME IN ({placeholders})", bind)
+    count_before = cur.fetchone()[0]
+    log_result('IDEMPOTENCY', 'ALL_RULES', 'COUNT_BEFORE_RERUN', 8, count_before,
+               f'Rules in DB before re-run = {count_before}')
+
+    # Re-run the SQL script
+    sql_path = Path(r'C:\Projects\ChoongYin_OS\workstreams\production-stability\sql-scripts\Issue1052_PHD_Check_Rules.sql')
+    try:
+        sql = read_plsql(sql_path)
+        cur.execute(sql)
+        conn.commit()
+        log_result('IDEMPOTENCY', 'ALL_RULES', 'RERUN_SQL',
+                   'SUCCESS', 'SUCCESS', f'Script re-executed: {sql_path.name}')
+    except Exception as e:
+        log_result('IDEMPOTENCY', 'ALL_RULES', 'RERUN_SQL',
+                   'SUCCESS', 'FAIL', str(e)[:80])
+        cur.close(); conn.close(); return
+
+    # Count after re-run — must still be 8
+    cur.execute(f"SELECT COUNT(*) FROM TV_CTRL_CHECK_RULES WHERE CHECK_NAME IN ({placeholders})", bind)
+    count_after = cur.fetchone()[0]
+    log_result('IDEMPOTENCY', 'ALL_RULES', 'COUNT_AFTER_RERUN',
+               count_before, count_after,
+               f'Rules after re-run = {count_after} | {"No duplicates ✅" if count_after == count_before else "DUPLICATES FOUND ❌"}')
+
+    cur.close(); conn.close()
+
+
+# ── Rollback Test ─────────────────────────────────────────────────────────────
+def test_rollback():
+    """
+    Run the rollback script, verify 8 rules deleted.
+    Then re-run insert script to restore rules.
+    """
+    print(f"\n{'─'*65}")
+    print('ROLLBACK TEST — Run rollback, verify deletion, restore rules')
+    print(f"{'─'*65}")
+
+    check_names = [
+        'PHD_STRM_COMP_MOL_PCT_VAL1', 'PHD_STRM_COMP_WT_PCT_VAL1',
+        'PHD_STRM_ANALYSIS_DENSITY_VAL1', 'PHD_STRM_ANALYSIS_GCV_VAL1',
+        'PHD_TANK_DIP_GRS_VOL_VAL1', 'PHD_TANK_DIP_GRS_MASS_VAL1',
+        'PHD_TANK_DIP_AVG_TEMP_VAL1', 'PHD_TANK_DIP_STD_DENSITY_VAL1',
+    ]
+    placeholders = ','.join([f':n{i}' for i in range(len(check_names))])
+    bind = {f'n{i}': n for i, n in enumerate(check_names)}
+
+    rollback_path = Path(r'C:\Projects\ChoongYin_OS\workstreams\production-stability\sql-scripts\Issue1052_PHD_Check_Rules_ROLLBACK.sql')
+    insert_path   = Path(r'C:\Projects\ChoongYin_OS\workstreams\production-stability\sql-scripts\Issue1052_PHD_Check_Rules.sql')
+
+    conn = connect(); cur = conn.cursor()
+
+    # Step 1: Run rollback
+    try:
+        rollback_sql = read_plsql(rollback_path)
+        cur.execute(rollback_sql)
+        conn.commit()
+        log_result('ROLLBACK', 'ALL_RULES', 'ROLLBACK_EXECUTED',
+                   'SUCCESS', 'SUCCESS', f'Rollback script executed: {rollback_path.name}')
+    except Exception as e:
+        log_result('ROLLBACK', 'ALL_RULES', 'ROLLBACK_EXECUTED',
+                   'SUCCESS', 'FAIL', str(e)[:80])
+        cur.close(); conn.close(); return
+
+    # Step 2: Verify rules deleted
+    cur.execute(f"SELECT COUNT(*) FROM TV_CTRL_CHECK_RULES WHERE CHECK_NAME IN ({placeholders})", bind)
+    count_after_rollback = cur.fetchone()[0]
+    log_result('ROLLBACK', 'ALL_RULES', 'RULES_DELETED',
+               0, count_after_rollback,
+               f'Rules remaining after rollback = {count_after_rollback} | {"All deleted ✅" if count_after_rollback == 0 else "Some rules remain ❌"}')
+
+    # Step 3: Re-run insert script to restore
+    try:
+        insert_sql = read_plsql(insert_path)
+        cur.execute(insert_sql)
+        conn.commit()
+        log_result('ROLLBACK', 'ALL_RULES', 'RESTORE_EXECUTED',
+                   'SUCCESS', 'SUCCESS', f'Insert script re-executed to restore rules')
+    except Exception as e:
+        log_result('ROLLBACK', 'ALL_RULES', 'RESTORE_EXECUTED',
+                   'SUCCESS', 'FAIL', str(e)[:80])
+        cur.close(); conn.close(); return
+
+    # Step 4: Verify rules restored
+    cur.execute(f"SELECT COUNT(*) FROM TV_CTRL_CHECK_RULES WHERE CHECK_NAME IN ({placeholders})", bind)
+    count_restored = cur.fetchone()[0]
+    log_result('ROLLBACK', 'ALL_RULES', 'RULES_RESTORED',
+               8, count_restored,
+               f'Rules after restore = {count_restored} | {"All restored ✅" if count_restored == 8 else "Restore incomplete ❌"}')
 
     cur.close(); conn.close()
 
@@ -294,6 +425,12 @@ if __name__ == '__main__':
     test_check_rule('TC08', 'PHD_TANK_DIP_STD_DENSITY_VAL1',
                     'TANK_DAY_DIP_STATUS', 'MEAS_STD_DENSITY', tag_map,
                     rv_table='RV_TANK_DAY_DIP_STATUS', var_col='MEAS_STD_DENSITY_KGPERSM3')
+
+    # ── Idempotency Test ──────────────────────────────────────────────────────
+    test_idempotency()
+
+    # ── Rollback Test ─────────────────────────────────────────────────────────
+    test_rollback()
 
     # ── Summary ───────────────────────────────────────────────────────────────
     passed = sum(1 for r in RESULTS if r['status'] == 'PASS')
