@@ -1,18 +1,53 @@
 """
-Rebuild the evidence Word document with actual EC Web App screenshots.
+Generate Issue_1052 evidence document using Technical Gap Analysis template.
+Template: C:\Projects\ChoongYin_OS\Template Sources\Technical Gap Analysis.dotx
 """
+import shutil, zipfile, os
 from docx import Document
-from docx.shared import Pt, RGBColor, Cm, Inches
+from docx.shared import Pt, RGBColor, Inches, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 from datetime import datetime
 from pathlib import Path
+from copy import deepcopy
+from lxml import etree
 
 SCRIPTS_DIR = Path(r'C:\Projects\ChoongYin_OS\workstreams\production-stability\sql-scripts')
 SS_DIR = SCRIPTS_DIR / 'screenshots'
+TPL_SRC = r'C:\Projects\ChoongYin_OS\Template Sources\Technical Gap Analysis.dotx'
+OUT = str(SCRIPTS_DIR / 'Issue1052_Evidence_COPS_DEV.docx')
+
+# Template color scheme
+CLR_DARK_BLUE = '1F497D'
+CLR_LIGHT_BLUE = '548DD4'
+CLR_TBL_HDR_BG = 'DAEEF3'
+CLR_WHITE = 'FFFFFF'
+CLR_PASS_GREEN = '00B050'
+CLR_ALT_ROW = 'EEF3FB'
 
 
+# ── Load template by patching content type ─────────────────────────────────────
+def load_template(src):
+    tmp = src + '_tmp.docx'
+    shutil.copy(src, tmp)
+    with zipfile.ZipFile(tmp) as zin:
+        ct = zin.read('[Content_Types].xml')
+    ct2 = ct.replace(
+        b'wordprocessingml.template.main+xml',
+        b'wordprocessingml.document.main+xml'
+    )
+    tmp2 = src + '_patched.docx'
+    with zipfile.ZipFile(tmp, 'r') as zin:
+        with zipfile.ZipFile(tmp2, 'w', zipfile.ZIP_DEFLATED) as zout:
+            for item in zin.namelist():
+                zout.writestr(item, ct2 if item == '[Content_Types].xml' else zin.read(item))
+    doc = Document(tmp2)
+    os.remove(tmp); os.remove(tmp2)
+    return doc
+
+
+# ── Helpers ────────────────────────────────────────────────────────────────────
 def set_bg(cell, color):
     tc = cell._tc; tcPr = tc.get_or_add_tcPr()
     shd = OxmlElement('w:shd')
@@ -20,93 +55,179 @@ def set_bg(cell, color):
     tcPr.append(shd)
 
 
-def hdr(cell, text, size=9):
+def add_run(para, text, size=10, bold=False, color=None, italic=False):
+    run = para.add_run(text)
+    run.font.size = Pt(size); run.bold = bold; run.italic = italic
+    if color:
+        run.font.color.rgb = RGBColor(*bytes.fromhex(color))
+    return run
+
+
+def hdr_cell(cell, text, size=9, bg=CLR_TBL_HDR_BG, color='17375E'):
     cell.text = ''
     p = cell.paragraphs[0]; p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     run = p.add_run(text); run.bold = True; run.font.size = Pt(size)
-    run.font.color.rgb = RGBColor(255, 255, 255); set_bg(cell, '1F497D')
+    run.font.color.rgb = RGBColor(*bytes.fromhex(color))
+    set_bg(cell, bg)
 
 
-def cv(cell, text, size=8.5, bold=False, color=None, bg=None, center=False):
+def data_cell(cell, text, size=8.5, bold=False, bg=None, center=False):
     cell.text = ''
     p = cell.paragraphs[0]
     if center: p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     run = p.add_run(str(text) if text else '-')
     run.font.size = Pt(size); run.bold = bold
-    if color: run.font.color.rgb = RGBColor(*bytes.fromhex(color))
     if bg: set_bg(cell, bg)
 
 
-doc = Document()
-for s in doc.sections:
-    s.top_margin = Cm(1.5); s.bottom_margin = Cm(1.5)
-    s.left_margin = Cm(2); s.right_margin = Cm(2)
+def section_heading(doc, text, level=1):
+    p = doc.add_paragraph(style=f'Heading {level}')
+    p.clear()
+    run = p.add_run(text)
+    run.bold = True
+    run.font.name = 'Arial'
+    run.font.color.rgb = RGBColor(*bytes.fromhex(CLR_DARK_BLUE))
+    if level == 1: run.font.size = Pt(14)
+    else: run.font.size = Pt(12)
+    return p
 
-# ── Title ──────────────────────────────────────────────────────────────────────
-h = doc.add_heading('', 0); h.alignment = WD_ALIGN_PARAGRAPH.CENTER
-r = h.add_run('Issue_1052 — PHD Tag Check Rule Validation')
-r.font.size = Pt(16); r.bold = True; r.font.color.rgb = RGBColor(0x1F, 0x49, 0x7D)
-sub = doc.add_paragraph(); sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
-r2 = sub.add_run('Test Evidence Document — COPS DEV Environment')
-r2.font.size = Pt(11); r2.italic = True; r2.font.color.rgb = RGBColor(0x59, 0x59, 0x59)
+
+def body_para(doc, text, size=10):
+    try:
+        p = doc.add_paragraph(style='Normal (Boxtext)')
+    except:
+        p = doc.add_paragraph()
+    p.clear()
+    run = p.add_run(text)
+    run.font.size = Pt(size)
+    run.font.name = 'Arial'
+    return p
+
+
+# ── Build Document ─────────────────────────────────────────────────────────────
+print("Loading template...")
+doc = load_template(TPL_SRC)
+
+# Clear ALL existing content from the template
+for element in list(doc.element.body):
+    if element.tag.endswith('}sectPr'):
+        continue  # keep section properties
+    doc.element.body.remove(element)
+
+print("Building evidence document from template...")
+
+# ── TITLE BLOCK ────────────────────────────────────────────────────────────────
+# "Project Management Methodology" banner
+p_banner = doc.add_paragraph()
+try:
+    p_banner.style = doc.styles['Normal (Boxtext)']
+except:
+    pass
+p_banner.alignment = WD_ALIGN_PARAGRAPH.LEFT
+run = p_banner.add_run('\tProject Management Methodology')
+run.bold = True; run.font.name = 'Arial'; run.font.size = Pt(10)
+run.font.color.rgb = RGBColor(*bytes.fromhex(CLR_LIGHT_BLUE))
+
+# Document title
+p_title = doc.add_paragraph()
+try: p_title.style = doc.styles['Title']
+except: pass
+p_title.alignment = WD_ALIGN_PARAGRAPH.LEFT
+run = p_title.add_run('Issue_1052 — PHD Tag Check Rule Validation')
+run.font.name = 'Arial'; run.font.size = Pt(22); run.bold = True
+run.font.color.rgb = RGBColor(*bytes.fromhex(CLR_DARK_BLUE))
+
+p_sub = doc.add_paragraph()
+try: p_sub.style = doc.styles['Title']
+except: pass
+run2 = p_sub.add_run('Test Evidence Document — COPS DEV Environment')
+run2.font.name = 'Arial'; run2.font.size = Pt(14)
+run2.font.color.rgb = RGBColor(*bytes.fromhex(CLR_LIGHT_BLUE))
 doc.add_paragraph()
 
-# ── Info ───────────────────────────────────────────────────────────────────────
-info = doc.add_table(rows=7, cols=2); info.style = 'Table Grid'
-for i, (lbl, val) in enumerate([
-    ('Document Title',  'Issue_1052 — PHD Check Rule Validation Evidence'),
-    ('Prepared by',     'Choong-Yin Lee  |  choong-yin.lee@quorumsoftware.com'),
-    ('Date',            datetime.now().strftime('%d %B %Y')),
-    ('Environment',     'COPS DEV  |  EC 14.1.5.1'),
-    ('Database',        'db.plutodev.woodside-pluto.tieto-og.cloud:1521/plutodev'),
-    ('Schema',          'ECKERNEL_EC'),
-    ('JIRA Reference',  'Issue_1052 — Review PHD Validations for added TAGs >= 1 Dec 2025'),
-]):
-    hdr(info.rows[i].cells[0], lbl, 9); cv(info.rows[i].cells[1], val, 9)
+# ── SUMMARY TABLE (template style) ────────────────────────────────────────────
+p_sh = doc.add_paragraph()
+try: p_sh.style = doc.styles['Small Heading']
+except: pass
+run = p_sh.add_run('Summary Page')
+run.font.name = 'Arial'; run.bold = True; run.font.size = Pt(11)
+run.font.color.rgb = RGBColor(*bytes.fromhex(CLR_DARK_BLUE))
+
+tbl_info = doc.add_table(rows=8, cols=2)
+tbl_info.style = 'Table Grid'
+summary_data = [
+    ('Document Name',    'Issue_1052 — PHD Check Rule Validation Evidence'),
+    ('Author',           'Choong-Yin Lee'),
+    ('Project',          'Woodside Pluto ECaaS Implementation (12839)'),
+    ('Project Phase',    'Wave 03 — UAT'),
+    ('Project Task ID',  '12839 / 15681'),
+    ('Document Issue',   f'Draft — {datetime.now().strftime("%d %B %Y")}'),
+    ('Environment',      'COPS DEV  |  EC 14.1.5.1'),
+    ('JIRA Reference',   'Issue_1052 — PHD Validations for TAGs >= 1 Dec 2025'),
+]
+for i, (lbl, val) in enumerate(summary_data):
+    hdr_cell(tbl_info.rows[i].cells[0], lbl, 9, bg=CLR_TBL_HDR_BG, color='17375E')
+    data_cell(tbl_info.rows[i].cells[1], val, 9)
 doc.add_paragraph()
 
-# ── Section 1 ──────────────────────────────────────────────────────────────────
-doc.add_heading('1. Purpose', level=1)
-p1 = doc.add_paragraph(
+# ── DOCUMENT HISTORY TABLE ─────────────────────────────────────────────────────
+p_hist = doc.add_paragraph()
+try: p_hist.style = doc.styles['Small Heading']
+except: pass
+run = p_hist.add_run('Document History')
+run.font.name = 'Arial'; run.bold = True; run.font.size = Pt(11)
+run.font.color.rgb = RGBColor(*bytes.fromhex(CLR_DARK_BLUE))
+
+tbl_hist = doc.add_table(rows=2, cols=5); tbl_hist.style = 'Table Grid'
+for i, txt in enumerate(['Version', 'Date', 'Author', 'Section', 'Summary of Changes']):
+    hdr_cell(tbl_hist.rows[0].cells[i], txt, 9, bg=CLR_TBL_HDR_BG)
+for j, val in enumerate(['1.0', datetime.now().strftime('%d %B %Y'), 'Choong-Yin Lee', 'All', 'Initial evidence document']):
+    data_cell(tbl_hist.rows[1].cells[j], val, 9)
+doc.add_paragraph()
+
+# ── SECTION 1: PURPOSE ─────────────────────────────────────────────────────────
+section_heading(doc, '1.  Purpose', level=1)
+body_para(doc,
     'This document provides evidence that the check rule SQL script for Issue_1052 has been '
-    'successfully tested in the COPS DEV environment. The script implements check rules for '
-    '131 PHD tags (added since 1 Dec 2025) that had NO check rule validation configured.')
-p1.runs[0].font.size = Pt(10)
-
-# ── Section 2 ──────────────────────────────────────────────────────────────────
-doc.add_heading('2. Script Tested', level=1)
-t2 = doc.add_table(rows=2, cols=3); t2.style = 'Table Grid'
-for i, txt in enumerate(['Script File', 'Purpose', 'Status']): hdr(t2.rows[0].cells[i], txt)
-cv(t2.rows[1].cells[0], 'Issue1052_PHD_Check_Rules.sql', 8.5)
-cv(t2.rows[1].cells[1], 'INSERT / UPDATE 8 check rules — UPDATE-then-INSERT pattern (re-runnable)', 8.5)
-cv(t2.rows[1].cells[2], 'PASS  ✅', 9, bold=True, bg='00B050', color='FFFFFF', center=True)
+    'successfully tested in the COPS DEV environment. '
+    'The script implements check rules for 131 PHD tags (added since 1 Dec 2025) that had '
+    'NO check rule validation configured in the system.')
 doc.add_paragraph()
 
-# ── Section 3 ──────────────────────────────────────────────────────────────────
-doc.add_heading('3. Test Steps & Results', level=1)
+# ── SECTION 2: SCRIPT TESTED ──────────────────────────────────────────────────
+section_heading(doc, '2.  Script Tested', level=1)
+t2 = doc.add_table(rows=2, cols=3); t2.style = 'Table Grid'
+for i, txt in enumerate(['Script File', 'Purpose', 'Status']):
+    hdr_cell(t2.rows[0].cells[i], txt, 9, bg=CLR_DARK_BLUE, color=CLR_WHITE)
+data_cell(t2.rows[1].cells[0], 'Issue1052_PHD_Check_Rules.sql', 9)
+data_cell(t2.rows[1].cells[1], 'INSERT / UPDATE 8 check rules — UPDATE-then-INSERT pattern (re-runnable)', 9)
+data_cell(t2.rows[1].cells[2], 'PASS  ✅', 9, bold=True, bg=CLR_PASS_GREEN, center=True)
+t2.rows[1].cells[2].paragraphs[0].runs[0].font.color.rgb = RGBColor(255, 255, 255)
+doc.add_paragraph()
+
+# ── SECTION 3: TEST STEPS ─────────────────────────────────────────────────────
+section_heading(doc, '3.  Test Steps & Results', level=1)
 t3 = doc.add_table(rows=4, cols=4); t3.style = 'Table Grid'
-for i, txt in enumerate(['Step', 'Action', 'Expected', 'Actual Result']): hdr(t3.rows[0].cells[i], txt)
+for i, txt in enumerate(['Step', 'Action', 'Expected', 'Actual Result']):
+    hdr_cell(t3.rows[0].cells[i], txt, 9, bg=CLR_DARK_BLUE, color=CLR_WHITE)
 for i, (step, action, exp, act) in enumerate([
     ('1', 'Verify baseline — no check rules exist in DB', '0 rows', '0 rows    PASS'),
     ('2', 'Run Issue1052_PHD_Check_Rules.sql\n8 rules INSERTED, COMMIT OK', '8 INSERTED', '8 rules INSERTED    PASS'),
     ('3', 'Verify after INSERT — query DB for all 8 rules', '8 rows', '8 rows confirmed    PASS'),
 ]):
-    bg = 'F2F2F2' if i % 2 == 0 else 'FFFFFF'
-    cv(t3.rows[i+1].cells[0], step, 9, center=True, bg=bg)
-    cv(t3.rows[i+1].cells[1], action, 8.5, bg=bg)
-    cv(t3.rows[i+1].cells[2], exp, 8.5, center=True, bg=bg)
-    cv(t3.rows[i+1].cells[3], act, 8.5, bold=True, bg='E2EFDA')
+    bg = CLR_ALT_ROW if i % 2 == 0 else CLR_WHITE
+    data_cell(t3.rows[i+1].cells[0], step, 9, center=True, bg=bg)
+    data_cell(t3.rows[i+1].cells[1], action, 9, bg=bg)
+    data_cell(t3.rows[i+1].cells[2], exp, 9, center=True, bg=bg)
+    data_cell(t3.rows[i+1].cells[3], act, 9, bold=True, bg='E2EFDA')
 doc.add_paragraph()
 
-# ── Section 4 ──────────────────────────────────────────────────────────────────
-doc.add_heading('4. Database Evidence — Check Rules Verified', level=1)
-doc.add_paragraph(
-    'Records confirmed in TV_CTRL_CHECK_RULES and TV_CTRL_CHECK_RULE_VARIABLE '
-    '(timestamp: ' + datetime.now().strftime('%Y-%m-%d') + '):'
-).runs[0].font.size = Pt(9)
+# ── SECTION 4: DB EVIDENCE ────────────────────────────────────────────────────
+section_heading(doc, '4.  Database Evidence — Check Rules Verified', level=1)
+body_para(doc, f'Records confirmed in TV_CTRL_CHECK_RULES and TV_CTRL_CHECK_RULE_VARIABLE ({datetime.now().strftime("%Y-%m-%d")}):', 9)
 t4 = doc.add_table(rows=9, cols=6); t4.style = 'Table Grid'
 for i, txt in enumerate(['CHECK_ID', 'CHECK_NAME', 'TABLE_ID', 'SEV', 'VARIABLE  VALUE', 'REV_TEXT']):
-    hdr(t4.rows[0].cells[i], txt, 8)
+    hdr_cell(t4.rows[0].cells[i], txt, 8, bg=CLR_DARK_BLUE, color=CLR_WHITE)
 for i, row in enumerate([
     (1142,'PHD_STRM_COMP_MOL_PCT_VAL1',    'RV_STRM_COMP_ANALYSIS', 'ERROR','MolPct = MOL_PCT',                    'ECPR-Issue1052'),
     (1143,'PHD_STRM_COMP_WT_PCT_VAL1',     'RV_STRM_COMP_ANALYSIS', 'ERROR','WtPct = WT_PCT',                      'ECPR-Issue1052'),
@@ -117,52 +238,57 @@ for i, row in enumerate([
     (1148,'PHD_TANK_DIP_AVG_TEMP_VAL1',    'RV_TANK_DAY_DIP_STATUS','ERROR','AvgTemp = AVG_TEMP_C',               'ECPR-Issue1052'),
     (1149,'PHD_TANK_DIP_STD_DENSITY_VAL1', 'RV_TANK_DAY_DIP_STATUS','ERROR','StdDensity = MEAS_STD_DENSITY_KGPERSM3','ECPR-Issue1052'),
 ]):
-    bg = 'F2F2F2' if i % 2 == 0 else 'FFFFFF'
-    for j, val in enumerate([str(row[0]), row[1], row[2], row[3], row[4], row[5]]):
-        cv(t4.rows[i+1].cells[j], val, 8, bg=bg)
+    bg = CLR_ALT_ROW if i % 2 == 0 else CLR_WHITE
+    for j, val in enumerate([str(row[0]),row[1],row[2],row[3],row[4],row[5]]):
+        data_cell(t4.rows[i+1].cells[j], val, 8, bg=bg)
 doc.add_paragraph()
 
-# ── Section 5 — EC WEB APP SCREENSHOTS ────────────────────────────────────────
-doc.add_heading('5. EC Web App Screen Evidence — Maintain Check Rules (CO.0201)', level=1)
-doc.add_paragraph(
-    'Screenshots captured from EC Web App (https://app-plutodev.woodside-pluto.tieto-og.cloud/) '
-    'showing the 8 PHD check rules successfully created in the Maintain Check Rules screen.\n'
-    'All 8 rules visible across page 6 (rule 1142) and page 7 (rules 1143-1149).'
-).runs[0].font.size = Pt(9)
+# ── SECTION 5: EC WEB APP SCREENSHOTS ─────────────────────────────────────────
+section_heading(doc, '5.  EC Web App Screen Evidence — Maintain Check Rules (CO.0201)', level=1)
+body_para(doc,
+    'Screenshots captured from EC Web App (https://app-plutodev.woodside-pluto.tieto-og.cloud/). '
+    'All 8 PHD check rules visible across page 6 (rule 1142) and page 7 (rules 1143-1149).', 9)
+doc.add_paragraph()
 
 ss_list = [
-    ('screen1_page6.png',       'Screen 1A — Maintain Check Rules (Page 6 of 7)\nRule 1142: PHD_STRM_COMP_MOL_PCT_VAL1 visible at bottom — TABLE_ID: RV_STRM_COMP_ANALYSIS'),
-    ('screen1_phd_rules_page7.png', 'Screen 1B — Maintain Check Rules (Page 7 of 7)\nRules 1143–1149 all visible — TANK_DAY_DIP_STATUS and STRM_ANALYSIS rules'),
+    ('screen1_page6.png',
+     '5.1  Page 6 of 7 — Rule 1142: PHD_STRM_COMP_MOL_PCT_VAL1',
+     'Rule 1142 (PHD_STRM_COMP_MOL_PCT_VAL1) visible at bottom — TABLE_ID: RV_STRM_COMP_ANALYSIS | WHERE: (MolPct IS NULL OR MolPct < 0 OR MolPct > 100)'),
+    ('screen1_phd_rules_page7.png',
+     '5.2  Page 7 of 7 — Rules 1143–1149 (all PHD tank and analysis rules)',
+     'Rules 1143–1149 all visible — covering STRM_COMP_ANALYSIS, STRM_ANALYSIS and TANK_DAY_DIP_STATUS classes'),
 ]
-
-for fname, caption in ss_list:
+for fname, heading, caption in ss_list:
     fpath = SS_DIR / fname
+    section_heading(doc, heading, level=2)
+    body_para(doc, caption, 8)
     if fpath.exists():
-        doc.add_heading(f'  {caption.split(chr(10))[0]}', level=2)
-        note = doc.add_paragraph(caption.split('\n')[1] if '\n' in caption else '')
-        note.runs[0].font.size = Pt(8)
-        note.runs[0].font.color.rgb = RGBColor(0x60, 0x60, 0x60)
-        doc.add_picture(str(fpath), width=Inches(6.5))
+        doc.add_picture(str(fpath), width=Inches(6.2))
         doc.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
-        doc.add_paragraph()
     else:
-        doc.add_paragraph(f'[Screenshot not found: {fname}]')
+        body_para(doc, f'[Screenshot not found: {fname}]', 9)
+    doc.add_paragraph()
 
-# ── Section 6 ──────────────────────────────────────────────────────────────────
-doc.add_heading('6. Overall Test Result', level=1)
+# ── SECTION 6: OVERALL RESULT ──────────────────────────────────────────────────
+section_heading(doc, '6.  Overall Test Result', level=1)
 rt = doc.add_table(rows=1, cols=1); rt.style = 'Table Grid'
-c = rt.rows[0].cells[0]; set_bg(c, '00B050'); c.text = ''
+c = rt.rows[0].cells[0]; set_bg(c, CLR_PASS_GREEN); c.text = ''
 pp = c.paragraphs[0]; pp.alignment = WD_ALIGN_PARAGRAPH.CENTER
 r4 = pp.add_run('OVERALL RESULT:   PASS   ✅')
-r4.font.size = Pt(14); r4.bold = True; r4.font.color.rgb = RGBColor(255, 255, 255)
+r4.font.size = Pt(14); r4.bold = True; r4.font.name = 'Arial'
+r4.font.color.rgb = RGBColor(255, 255, 255)
 doc.add_paragraph()
-sp = doc.add_paragraph(
+
+# Sign-off
+p_sign = doc.add_paragraph()
+p_sign.alignment = WD_ALIGN_PARAGRAPH.CENTER
+run = p_sign.add_run(
     f'Tested by: Choong-Yin Lee    |    '
     f'Date: {datetime.now().strftime("%d %B %Y")}    |    '
     f'Environment: COPS DEV (EC 14.1.5.1)')
-sp.alignment = WD_ALIGN_PARAGRAPH.CENTER
-sp.runs[0].font.size = Pt(9); sp.runs[0].italic = True
+run.font.size = Pt(9); run.italic = True; run.font.name = 'Arial'
+run.font.color.rgb = RGBColor(*bytes.fromhex(CLR_LIGHT_BLUE))
 
-out = str(SCRIPTS_DIR / 'Issue1052_Evidence_COPS_DEV.docx')
-doc.save(out)
-print(f'Saved: {out}')
+# Save
+doc.save(OUT)
+print(f'Saved: {OUT}')
