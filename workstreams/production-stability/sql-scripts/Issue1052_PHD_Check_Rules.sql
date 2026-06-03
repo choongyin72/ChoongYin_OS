@@ -4,12 +4,15 @@
 -- Author : Choong-Yin Lee
 -- Date   : 2026-06-03
 -- Status : LOCAL DRAFT - DO NOT DEPLOY without Grant approval
--- Pattern: UPDATE then INSERT (re-runnable, no MERGE)
+-- Pattern: UPDATE then INSERT (re-runnable)
 --          CHECK_ID dynamically assigned per DB instance
+-- ECPR   : TBD - replace 'ECPR-Issue1052' with actual ECPR ticket before deploy
 -- Covers : 131 NEITHER PHD tags (no check rule, no class validation)
 -- =============================================================================
 
 DECLARE
+
+    c_rev_text CONSTANT VARCHAR2(50) := 'ECPR-Issue1052'; -- TODO: replace with actual ECPR no.
 
     PROCEDURE upsert_check_rule (
         p_check_name   IN VARCHAR2,
@@ -21,7 +24,6 @@ DECLARE
         p_var_value    IN VARCHAR2
     ) IS
         v_check_id  NUMBER;
-        v_action    VARCHAR2(10);
     BEGIN
         -- Step 1: Try UPDATE on check rule (match by CHECK_NAME)
         UPDATE TV_CTRL_CHECK_RULES SET
@@ -29,46 +31,48 @@ DECLARE
             CLASS_OBJ_VALIDATION_IND = 'N',
             WHERE_FORMULA            = p_where,
             CHECK_MESSAGE            = p_message,
-            SEVERITY_LEVEL           = p_severity
+            SEVERITY_LEVEL           = p_severity,
+            REV_TEXT                 = c_rev_text
         WHERE CHECK_NAME = p_check_name;
 
         IF SQL%ROWCOUNT > 0 THEN
-            -- Rule existed and was updated - get its ID
+            -- Rule existed - get its ID
             SELECT CHECK_ID INTO v_check_id
               FROM CTRL_CHECK_RULES
              WHERE CHECK_NAME = p_check_name;
-            v_action := 'UPDATED';
         ELSE
-            -- Rule does not exist - INSERT with next available ID for this DB
+            -- Rule does not exist - INSERT with next available ID for this DB instance
             SELECT NVL(MAX(CHECK_ID), 0) + 1 INTO v_check_id
               FROM CTRL_CHECK_RULES;
 
             INSERT INTO TV_CTRL_CHECK_RULES
                 (TABLE_CLASS_NAME, CHECK_ID, CHECK_NAME, SELECT_CLAUSE, TABLE_ID,
-                 CLASS_OBJ_VALIDATION_IND, WHERE_FORMULA, CHECK_MESSAGE, SEVERITY_LEVEL)
+                 CLASS_OBJ_VALIDATION_IND, WHERE_FORMULA, CHECK_MESSAGE, SEVERITY_LEVEL,
+                 REV_TEXT)
             VALUES
                 ('CTRL_CHECK_RULES', v_check_id, p_check_name, 'Count(*)', p_table_id,
-                 'N', p_where, p_message, p_severity);
-            v_action := 'INSERTED';
+                 'N', p_where, p_message, p_severity,
+                 c_rev_text);
         END IF;
 
         -- Step 2: Try UPDATE on variable (match by CHECK_ID + VARIABLE_NAME)
         UPDATE TV_CTRL_CHECK_RULE_VARIABLE SET
             VARIABLE_TYPE  = 'ATTRIBUTE',
-            VARIABLE_VALUE = p_var_value
-        WHERE CHECK_ID = v_check_id
+            VARIABLE_VALUE = p_var_value,
+            REV_TEXT       = c_rev_text
+        WHERE CHECK_ID    = v_check_id
           AND VARIABLE_NAME = p_var_name;
 
         IF SQL%ROWCOUNT = 0 THEN
             -- Variable does not exist - INSERT
             INSERT INTO TV_CTRL_CHECK_RULE_VARIABLE
-                (TABLE_CLASS_NAME, CHECK_ID, VARIABLE_NAME, VARIABLE_TYPE, VARIABLE_VALUE)
+                (TABLE_CLASS_NAME, CHECK_ID, VARIABLE_NAME, VARIABLE_TYPE, VARIABLE_VALUE,
+                 REV_TEXT)
             VALUES
-                ('CTRL_CHECK_RULE_VARIABLE', v_check_id, p_var_name, 'ATTRIBUTE', p_var_value);
+                ('CTRL_CHECK_RULE_VARIABLE', v_check_id, p_var_name, 'ATTRIBUTE', p_var_value,
+                 c_rev_text);
         END IF;
 
-        DBMS_OUTPUT.PUT_LINE('OK [' || v_action || ']: ' || p_check_name ||
-                             ' (CHECK_ID=' || v_check_id || ')');
     END upsert_check_rule;
 
 BEGIN
@@ -187,12 +191,10 @@ BEGIN
     );
 
     COMMIT;
-    DBMS_OUTPUT.PUT_LINE('All 8 check rules processed successfully.');
 
 EXCEPTION
     WHEN OTHERS THEN
         ROLLBACK;
-        DBMS_OUTPUT.PUT_LINE('ERROR: ' || SQLERRM);
         RAISE;
 END;
 /
@@ -200,7 +202,7 @@ END;
 -- =============================================================================
 -- VERIFY: Confirm all 8 rules exist after running
 -- =============================================================================
-SELECT CHECK_ID, CHECK_NAME, TABLE_ID, SEVERITY_LEVEL
+SELECT CHECK_ID, CHECK_NAME, TABLE_ID, SEVERITY_LEVEL, REV_TEXT
   FROM TV_CTRL_CHECK_RULES
  WHERE CHECK_NAME IN (
     'PHD_STRM_COMP_MOL_PCT_VAL1',
