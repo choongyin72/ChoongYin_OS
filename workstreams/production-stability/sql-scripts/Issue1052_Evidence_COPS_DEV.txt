@@ -1,0 +1,75 @@
+
+========================================================================================================================
+  STEP 1 — BEFORE INSERT (Baseline)
+  Timestamp : 2026-06-03 14:57:49
+  Rows found: 0
+========================================================================================================================
+  >> NO ROWS FOUND
+
+========================================================================================================================
+  STEP 2 — RUNNING INSERT (Issue1052_PHD_Check_Rules.sql)
+  Timestamp : 2026-06-03 14:57:49
+========================================================================================================================
+  >> [INSERTED] PHD_STRM_COMP_MOL_PCT_VAL1 (CHECK_ID=1142)
+  >> [INSERTED] PHD_STRM_COMP_WT_PCT_VAL1 (CHECK_ID=1143)
+  >> [INSERTED] PHD_STRM_ANALYSIS_DENSITY_VAL1 (CHECK_ID=1144)
+  >> [INSERTED] PHD_STRM_ANALYSIS_GCV_VAL1 (CHECK_ID=1145)
+  >> [INSERTED] PHD_TANK_DIP_GRS_VOL_VAL1 (CHECK_ID=1146)
+  >> [INSERTED] PHD_TANK_DIP_GRS_MASS_VAL1 (CHECK_ID=1147)
+  >> [INSERTED] PHD_TANK_DIP_AVG_TEMP_VAL1 (CHECK_ID=1148)
+  >> [INSERTED] PHD_TANK_DIP_STD_DENSITY_VAL1 (CHECK_ID=1149)
+  >> COMMIT OK
+
+========================================================================================================================
+  STEP 3 — AFTER INSERT VERIFY
+  Timestamp : 2026-06-03 14:57:54
+  Rows found: 8
+========================================================================================================================
+  CHECK_ID   CHECK_NAME                                 TABLE_ID                         SEV    VAR             VALUE                     REV_TEXT
+  -------------------------------------------------------------------------------------------------------------------
+  1142       PHD_STRM_COMP_MOL_PCT_VAL1                 RV_STRM_COMP_ANALYSIS            ERROR  MolPct          MOL_PCT                   ECPR-Issue1052
+  1143       PHD_STRM_COMP_WT_PCT_VAL1                  RV_STRM_COMP_ANALYSIS            ERROR  WtPct           WT_PCT                    ECPR-Issue1052
+  1144       PHD_STRM_ANALYSIS_DENSITY_VAL1             RV_STRM_ANALYSIS                 ERROR  Density         DENSITY                   ECPR-Issue1052
+  1145       PHD_STRM_ANALYSIS_GCV_VAL1                 RV_STRM_ANALYSIS                 ERROR  Gcv             GCV_MJPERSM3              ECPR-Issue1052
+  1146       PHD_TANK_DIP_GRS_VOL_VAL1                  RV_TANK_DAY_DIP_STATUS           ERROR  GrsVol          GRS_VOL_SM3               ECPR-Issue1052
+  1147       PHD_TANK_DIP_GRS_MASS_VAL1                 RV_TANK_DAY_DIP_STATUS           ERROR  GrsMass         ZWP_GRS_MASS_TONNES       ECPR-Issue1052
+  1148       PHD_TANK_DIP_AVG_TEMP_VAL1                 RV_TANK_DAY_DIP_STATUS           ERROR  AvgTemp         AVG_TEMP_C                ECPR-Issue1052
+  1149       PHD_TANK_DIP_STD_DENSITY_VAL1              RV_TANK_DAY_DIP_STATUS           ERROR  StdDensity      MEAS_STD_DENSITY_KGPERSM3 ECPR-Issue1052
+
+========================================================================================================================
+  STEP 4 — RUNNING ROLLBACK (Issue1052_PHD_Check_Rules_ROLLBACK.sql)
+  Timestamp : 2026-06-03 14:57:54
+========================================================================================================================
+  >> [DELETED] PHD_STRM_COMP_MOL_PCT_VAL1 (CHECK_ID=1142, 1 variable(s) removed)
+  >> [DELETED] PHD_STRM_COMP_WT_PCT_VAL1 (CHECK_ID=1143, 1 variable(s) removed)
+  >> [DELETED] PHD_STRM_ANALYSIS_DENSITY_VAL1 (CHECK_ID=1144, 1 variable(s) removed)
+  >> [DELETED] PHD_STRM_ANALYSIS_GCV_VAL1 (CHECK_ID=1145, 1 variable(s) removed)
+  >> [DELETED] PHD_TANK_DIP_GRS_VOL_VAL1 (CHECK_ID=1146, 1 variable(s) removed)
+  >> [DELETED] PHD_TANK_DIP_GRS_MASS_VAL1 (CHECK_ID=1147, 1 variable(s) removed)
+  >> [DELETED] PHD_TANK_DIP_AVG_TEMP_VAL1 (CHECK_ID=1148, 1 variable(s) removed)
+  >> [DELETED] PHD_TANK_DIP_STD_DENSITY_VAL1 (CHECK_ID=1149, 1 variable(s) removed)
+  >> COMMIT OK
+
+========================================================================================================================
+  STEP 5 — AFTER ROLLBACK VERIFY
+  Timestamp : 2026-06-03 14:58:01
+  Rows found: 0
+========================================================================================================================
+  >> NO ROWS FOUND
+
+========================================================================================================================
+  TEST EVIDENCE SUMMARY
+========================================================================================================================
+  Script 1 : Issue1052_PHD_Check_Rules.sql
+  Script 2 : Issue1052_PHD_Check_Rules_ROLLBACK.sql
+  Database  : db.plutodev.woodside-pluto.tieto-og.cloud:1521/plutodev
+  Schema    : ECKERNEL_EC
+  Tested by : Choong-Yin Lee
+  Date      : 2026-06-03
+  --------------------------------------------------------------------------------
+  Step 1 — Before INSERT  :   0 rows  (Expected: 0)   PASS
+  Step 3 — After INSERT   :   8 rows  (Expected: 8)   PASS
+  Step 5 — After ROLLBACK :   0 rows  (Expected: 0)   PASS
+  --------------------------------------------------------------------------------
+  OVERALL RESULT: PASS
+========================================================================================================================
