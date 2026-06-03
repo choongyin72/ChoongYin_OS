@@ -169,3 +169,66 @@ Items to raise:
 
 ---
 _Session: 2026-06-02 | Claude Code Sonnet 4.6 | choong-yin.lee@quorumsoftware.com_
+
+---
+
+## UPDATE — 2026-06-03: Issue_1052 Deep Retrospective
+
+### What Was Done
+| Step | Done |
+|------|------|
+| Read defects image — understood scope | Done |
+| DB analysis (661 PHD tags since 1 Dec 2025, read-only) | Done |
+| Cross-referenced As-Built 09 (Validations) + As-Built 05 (Interfaces) | Done |
+| Categorised 661 tags: BOTH/CR_ONLY/CV_ONLY/NEITHER | Done |
+| Identified 131 NEITHER tags with object names and PHD tag IDs | Done |
+| Found RV_ view column names for WHERE formula | Done |
+| Wrote SQL migration script (3 code review iterations) | Done |
+| Produced validation summary table, CSV, full tag list (692 lines) | Done |
+| Drafted 6 ECPRs (A-F) | Done |
+
+### What Was Learned
+1. STRM_COMP_ANALYSIS != STRM_GAS_COMPONENT — As-Built 05 specifies STRM_GAS_COMPONENT but DB uses STRM_COMP_ANALYSIS. Mismatch between spec and implementation — check rules on STRM_GAS_COMPONENT never fire.
+2. EC 14.1.5.1 bug (ECPD-166168) — Validation Overview screen unreliable for child group check rules. Must verify via DB query, not UI screen.
+3. ZWP_PostPHDImport double-write risk — STRM_ANALYSIS DENSITY/GCV written by both schedule and PHD direct import. Conflict not yet resolved.
+4. N2 MOL_PCT stuck (PGP.114QI207_FWA.DACA.PV) — LAST_TRANSFER stuck at 31-DEC-2025. Could be ECIS timeout bug (fixed in 14.1.6).
+5. FROM_UNIT NULL matters — REST API precision change in EC 14.2.5 means untyped tags could produce inconsistent values post-upgrade.
+6. RV_ view columns != attribute names — e.g. attribute GCV maps to GCV_MJPERSM3 in the view. Must use view column name in WHERE formula.
+7. Simon Lee's standard — DELETE then INSERT OR UPDATE then INSERT — scripts must be re-runnable. Not MERGE.
+8. REV_TEXT is mandatory — all Woodside extension scripts must reference ECPR ticket number (e.g. 'ECPR-31012').
+
+### What Was Done WRONGLY
+| Mistake | Fix Applied |
+|---------|------------|
+| Hardcoded CHECK_ID = 1142 — fails on different DB instances | Changed to SELECT NVL(MAX(CHECK_ID),0)+1 FROM CTRL_CHECK_RULES |
+| INSERT only — not re-runnable, fails on duplicate key | Changed to UPDATE then if SQL%ROWCOUNT=0 then INSERT |
+| Used MERGE — not Woodside style | Removed, replaced with pure UPDATE-then-INSERT |
+| DBMS_OUTPUT.PUT_LINE included | Removed entirely |
+| Missing REV_TEXT column | Added c_rev_text constant 'ECPR-Issue1052' (placeholder) |
+| CV_ONLY = 0 but presented as if it existed | Should have stated upfront: no PHD tag has CV without CR |
+| ECPR placeholder not a valid JIRA ticket | Needs real ECPR number before deploy |
+
+### What Is NOT Covered / Still Open
+| Gap | ECPR | Priority |
+|-----|------|----------|
+| Sum check 98-102% for MOL_PCT + WT_PCT | ECPR-A | CRITICAL |
+| Frozen value check for new tags | ECPR-A | HIGH |
+| ZWT_OILINWAT FROM_UNIT fix | ECPR-F | LOW (deferred) |
+| STRM_ANALYSIS double-write investigation | ECPR-B | HIGH |
+| AVG_CHOKE_SIZE check rule (12 tags) | ECPR-E | LOW |
+| AVG_GAS_RATE doc + check rule (9 tags) | ECPR-D | LOW |
+| SQL script NOT tested on dev DB yet | Task 9 | Next |
+| Script NOT moved to Woodside project | Awaiting permission | Next |
+| Proper Flyway filename (V1.0.37.xxxx__ECPR-XXXXX.sql) | After ECPR raised | Next |
+| REV_TEXT still placeholder 'ECPR-Issue1052' | After ECPR raised | Next |
+| Task 6 — Reply to Grant still not sent | Task 6 | Urgent |
+| 6 ECPR drafts not raised in JIRA | Task 9 | Pending Grant |
+
+### Priority Order — What's Next
+1. Reply to Grant (Task 6) — unblock decision
+2. Get real ECPR number — update c_rev_text in SQL
+3. Test SQL on dev DB (write access)
+4. Rename SQL file with proper Flyway version
+5. Get permission before moving to Woodside project
+6. Raise ECPR-A (sum check — 102 tags, most critical)
+7. Investigate STRM_ANALYSIS double-write (ECPR-B)
