@@ -644,3 +644,43 @@ OBJECT_ATTR_VALIDATION: same + OBJECT_ID + EXT_VALIDATION_IND
 - `addMissingAttrClass()` / `addMissingAttrObject()` — add new attributes after class change
 
 **Woodside Pluto note:** Issue_1052 check rules have `CLASS_OBJ_VALIDATION_IND = N` — SQL-based, correct. For per-stream range checks (different limits per stream) → use CO.1032.01.
+
+---
+
+### Item #2: Check Group + Rule Group Combination (8→9) ✅
+
+**CTRL_CHECK_GROUP:** CHECK_GROUP (PK), EC_USER_OBJECT (screen path), PARENT_GROUP (hierarchy), CHECK_RULE_TARGET
+**CTRL_CHECK_COMBINATION:** CHECK_ID + CHECK_GROUP (many-to-many junction)
+
+**Run All button flow:**
+```
+CO.0203 runAllButton
+  → RunCheckGroupCollectionAction.java
+  → pck_gen_check.run_check(from_date, to_date, group, facility)
+  → PL/SQL runs dynamic SQL per rule in group
+  → Violations INSERT into CTRL_CHECK_LOG
+  → UI refreshes async
+```
+
+**CTRL_CHECK_LOG:** CHECK_ID, CHECK_GROUP, DAYTIME, OBJECT_ID, CLASS_NAME, ATTRIBUTE_NAME,
+SEVERITY_LEVEL, LOG_MESSAGE, STATUS (NULL=open / Y=acknowledged / FIXED=resolved / H=hidden)
+
+**Existing PHD groups (all children of V_DAILY_PHD_VALIDATION):**
+- V_PHD_PWEL_STATUS → daily_well_status screen
+- V_PHD_STREAM_GAS → daily_stream_status (GAS)
+- V_PHD_STREAM_LIQUID → daily_stream_status (OIL)
+- V_PHD_STREAM_WATER → daily_stream_status (WAT)
+- V_PHD_EQPM_STATUS → daily_equipment_status
+- V_PHD_STREAM_SUB_DAY_GAS → sub_daily_gas_stream_status
+
+**🔴 CRITICAL FINDING — Issue_1052 rules 1142-1149 NOT in any group (GROUP=None)**
+They will NEVER run in CO.0203 or any Validation tab until assigned.
+This explains why CO.0203 showed 0 errors during exploration.
+
+New groups needed:
+- V_PHD_STRM_COMP_ANALYSIS → STRM_COMP_ANALYSIS screen (TC01/TC02)
+- V_PHD_STRM_ANALYSIS → STRM_ANALYSIS screen (TC03/TC04)
+- V_PHD_TANK_DIP_STATUS → TANK_DAY_DIP_STATUS screen (TC05-TC08)
+Parent: V_DAILY_PHD_VALIDATION
+
+**Action: Add Check Group + Rule Group Combination INSERT to Issue_1052 SQL script. Raise to Grant.**
