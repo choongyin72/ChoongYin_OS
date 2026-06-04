@@ -684,3 +684,37 @@ New groups needed:
 Parent: V_DAILY_PHD_VALIDATION
 
 **Action: Add Check Group + Rule Group Combination INSERT to Issue_1052 SQL script. Raise to Grant.**
+
+---
+
+### Item #3: ECPD-166168 Bug — Validation Overview (8→9) ✅
+
+**Bug:** Child group check rule logs NOT updated when re-running validation on parent group.
+
+**Root cause** in `pck_gen_check_body.sql` lines 665-674:
+```sql
+CONNECT BY g.parent_group = PRIOR g.check_group
+-- Traverses UP only (child→parent). Does NOT traverse DOWN (parent→children).
+-- Running parent group = child group logs not cleared after data fix.
+```
+
+**Java layer** (`RunCheckGroupCollectionAction.java`):
+```java
+for (String group : groupAndChildren) {
+    pck_gen_check.run_check(..., group, ...);  // Calls per group separately
+}
+// Each call doesn't know about hierarchy relationship
+```
+
+**Timeline:**
+- Bug exists: pre-14.1.7
+- Fixed: EC 14.1.7 (ECPD-166168) — re-fixed in 14.2.3 (ECPD-166320)
+- Woodside Pluto: **EC 14.1.5.1 — BUG IS STILL PRESENT**
+
+**Impact:** First-time run works (violations ARE logged correctly). Bug only affects RE-running after fixing data — old violations don't clear from CTRL_CHECK_LOG.
+
+**Workaround for Woodside on 14.1.5.1:**
+- Run each child group independently (not via parent group)
+- Or: direct DB UPDATE on CTRL_CHECK_LOG to mark old violations as FIXED
+
+**Phase 2 impact:** Once Issue_1052 rules are assigned to groups, run each new group separately in TC_UI_08 to avoid the bug.
