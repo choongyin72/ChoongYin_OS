@@ -84,7 +84,7 @@ def log_result(tc_id, rule_name, scenario, expected, actual, detail=''):
 
 # ── Core test function ────────────────────────────────────────────────────────
 def test_check_rule(tc_id, check_name, ec_class, attribute, tag_map,
-                    rv_table, var_col, check_range=False):
+                    rv_table, var_col, check_range=False, strict_positive=False, null_only=False):
     """
     Sub-Test 1 (RULE_EXISTS) runs once per TC.
     Sub-Tests 2–5 run for EVERY object found in issue-1052-tag-list.csv
@@ -183,25 +183,35 @@ def test_check_rule(tc_id, check_name, ec_class, attribute, tag_map,
         }
 
         # Sub-Test 3 — POSITIVE_VALID
-        # Query 1: data exists and IS NOT NULL → rule would NOT fire (positive scenario)
-        # Query 2: negative value found → only FAIL if rule formula fires on negatives
+        # null_only=True     → rule fires on IS NULL only (e.g. AVG_TEMP_C) — any NOT NULL value is valid
+        # strict_positive    → rule fires on <= 0, so positive means > 0
+        # default            → rule fires on < 0 or IS NULL, so >= 0 is valid
+        if null_only:
+            pos_condition = f'{var_col} IS NOT NULL'
+            pos_label     = 'IS NOT NULL (rule fires on IS NULL only)'
+        elif strict_positive:
+            pos_condition = f'{var_col} IS NOT NULL AND {var_col} > 0'
+            pos_label     = '> 0 (strict: rule fires on <= 0)'
+        else:
+            pos_condition = f'{var_col} IS NOT NULL AND {var_col} >= 0'
+            pos_label     = '>= 0'
         try:
             cur.execute(f"""
                 SELECT COUNT(*) FROM {rv_table}
                  WHERE CODE    = :code
                    AND DAYTIME = TO_DATE(:dt, 'YYYY-MM-DD')
-                   AND {var_col} IS NOT NULL
+                   AND {pos_condition}
                    AND ROWNUM  <= 1
             """, code=obj_code, dt=use_date)
             q1_count = cur.fetchone()[0]
             if q1_count > 0:
                 log_result(tc_id, check_name, f'POSITIVE_VALID | {obj_label}',
                            'PASS', 'PASS',
-                           f'Valid {var_col} found (NOT NULL) | Rule would NOT fire for null check')
+                           f'Valid {var_col} found ({pos_label}) | Rule would NOT fire')
             else:
                 log_result(tc_id, check_name, f'POSITIVE_VALID | {obj_label}',
                            'PASS', 'FAIL',
-                           f'No data (NOT NULL) for CODE={obj_code} on DAYTIME={use_date}')
+                           f'No valid data ({pos_label}) for CODE={obj_code} on DAYTIME={use_date}')
         except Exception as e:
             log_result(tc_id, check_name, f'POSITIVE_VALID | {obj_label}',
                        'PASS', 'QUERY_ERROR', str(e)[:80])
@@ -394,12 +404,12 @@ if __name__ == '__main__':
                     'STRM_COMP_ANALYSIS', 'WT_PCT', tag_map,
                     rv_table='RV_STRM_COMP_ANALYSIS', var_col='WT_PCT', check_range=True)
 
-    # TC03 — STRM_ANALYSIS / DENSITY
+    # TC03 — STRM_ANALYSIS / DENSITY  (rule: IS NULL OR < 0)
     test_check_rule('TC03', 'PHD_STRM_ANALYSIS_DENSITY_VAL1',
                     'STRM_ANALYSIS', 'DENSITY', tag_map,
                     rv_table='RV_STRM_ANALYSIS', var_col='DENSITY')
 
-    # TC04 — STRM_ANALYSIS / GCV
+    # TC04 — STRM_ANALYSIS / GCV  (rule: IS NULL OR < 0)
     test_check_rule('TC04', 'PHD_STRM_ANALYSIS_GCV_VAL1',
                     'STRM_ANALYSIS', 'GCV', tag_map,
                     rv_table='RV_STRM_ANALYSIS', var_col='GCV_MJPERSM3')
@@ -416,12 +426,12 @@ if __name__ == '__main__':
                     'TANK_DAY_DIP_STATUS', 'ZWP_GRS_MASS', tag_map,
                     rv_table='RV_TANK_DAY_DIP_STATUS', var_col='ZWP_GRS_MASS_TONNES')
 
-    # TC07 — TANK_DAY_DIP_STATUS / AVG_TEMP
+    # TC07 — TANK_DAY_DIP_STATUS / AVG_TEMP  (rule: IS NULL only — any NOT NULL value is valid)
     test_check_rule('TC07', 'PHD_TANK_DIP_AVG_TEMP_VAL1',
                     'TANK_DAY_DIP_STATUS', 'AVG_TEMP', tag_map,
-                    rv_table='RV_TANK_DAY_DIP_STATUS', var_col='AVG_TEMP_C')
+                    rv_table='RV_TANK_DAY_DIP_STATUS', var_col='AVG_TEMP_C', null_only=True)
 
-    # TC08 — TANK_DAY_DIP_STATUS / STD_DENSITY (CSV lookup via MEAS_STD_DENSITY — T_LNG_T3101/T3102)
+    # TC08 — TANK_DAY_DIP_STATUS / STD_DENSITY  (rule: IS NULL OR < 0)
     test_check_rule('TC08', 'PHD_TANK_DIP_STD_DENSITY_VAL1',
                     'TANK_DAY_DIP_STATUS', 'MEAS_STD_DENSITY', tag_map,
                     rv_table='RV_TANK_DAY_DIP_STATUS', var_col='MEAS_STD_DENSITY_KGPERSM3')

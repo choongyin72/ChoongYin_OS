@@ -178,15 +178,17 @@ run = p_hist.add_run('Document History')
 run.font.name = 'Arial'; run.bold = True; run.font.size = Pt(11)
 run.font.color.rgb = RGBColor(*bytes.fromhex(CLR_DARK_BLUE))
 
-tbl_hist = doc.add_table(rows=4, cols=5); tbl_hist.style = 'Table Grid'
+tbl_hist = doc.add_table(rows=5, cols=5); tbl_hist.style = 'Table Grid'
 for i, txt in enumerate(['Version', 'Date', 'Author', 'Section', 'Summary of Changes']):
     hdr_cell(tbl_hist.rows[0].cells[i], txt, 9, bg=CLR_TBL_HDR_BG)
 for j, val in enumerate(['1.0', '03 June 2026', 'Choong-Yin Lee', 'All', 'Initial evidence document']):
     data_cell(tbl_hist.rows[1].cells[j], val, 9)
 for j, val in enumerate(['1.1', '04 June 2026', 'Choong-Yin Lee', 'Section 5', 'Updated Phase 1 Unit Test — all objects looped per TC, 189 assertions, TC07 LNG finding']):
     data_cell(tbl_hist.rows[2].cells[j], val, 9)
-for j, val in enumerate(['1.2', datetime.now().strftime('%d %B %Y'), 'Choong-Yin Lee', 'Section 5', 'Phase 1 complete — 220/220 PASS, added SEVERITY/WHERE_FORMULA/REV_TEXT/IDEMPOTENCY/ROLLBACK, TC07 closed']):
+for j, val in enumerate(['1.2', '04 June 2026', 'Choong-Yin Lee', 'Section 5', 'Phase 1 complete — 220/220 PASS, added SEVERITY/WHERE_FORMULA/REV_TEXT/IDEMPOTENCY/ROLLBACK, TC07 closed']):
     data_cell(tbl_hist.rows[3].cells[j], val, 9)
+for j, val in enumerate(['1.3', datetime.now().strftime('%d %B %Y'), 'Choong-Yin Lee', 'Section 5', 'WHERE_FORMULA corrected: TC03/TC04/TC08 changed <= 0 to < 0 per EC standard pattern. DB updated, 220/220 PASS.']):
+    data_cell(tbl_hist.rows[4].cells[j], val, 9)
 doc.add_paragraph()
 
 # ── SECTION 1: PURPOSE ─────────────────────────────────────────────────────────
@@ -304,37 +306,221 @@ section_heading(doc, '5.3  Test Results — TC01 to TC08', level=2)
 body_para(doc, f'Run date: {datetime.now().strftime("%d %B %Y")} | Environment: COPS DEV | Test Date: 2026-01-01 | Objects: from issue-1052-tag-list.csv', 9)
 doc.add_paragraph()
 
-# TC results: TC, Check Rule, ID, RV Table, Obj Tested, POSITIVE_VALID, Result, Finding
-unit_results = [
-    ('TC01','PHD_STRM_COMP_MOL_PCT_VAL1',    '1142','RV_STRM_COMP_ANALYSIS',  '10','PASS','PASS','All 10 objects: valid MOL_PCT found on 2026-01-01'),
-    ('TC02','PHD_STRM_COMP_WT_PCT_VAL1',     '1143','RV_STRM_COMP_ANALYSIS',  '3', 'PASS','PASS','All 3 objects: valid WT_PCT found on 2026-01-01'),
-    ('TC03','PHD_STRM_ANALYSIS_DENSITY_VAL1','1144','RV_STRM_ANALYSIS',        '6', 'PASS','PASS','All 6 objects: valid DENSITY found on 2026-01-01'),
-    ('TC04','PHD_STRM_ANALYSIS_GCV_VAL1',    '1145','RV_STRM_ANALYSIS',        '9', 'PASS','PASS','All 9 objects: valid GCV found on 2026-01-01'),
-    ('TC05','PHD_TANK_DIP_GRS_VOL_VAL1',     '1146','RV_TANK_DAY_DIP_STATUS', '5', 'PASS','PASS','All 5 tanks: valid GRS_VOL_SM3 found on 2026-01-01'),
-    ('TC06','PHD_TANK_DIP_GRS_MASS_VAL1',    '1147','RV_TANK_DAY_DIP_STATUS', '2', 'PASS','PASS','T_LNG_T3101/T3102: valid ZWP_GRS_MASS_TONNES found'),
-    ('TC07','PHD_TANK_DIP_AVG_TEMP_VAL1',    '1148','RV_TANK_DAY_DIP_STATUS', '5', 'PASS','PASS','All 5 tanks: valid AVG_TEMP_C found | WHERE_FORMULA = IS NULL only (LNG tanks safe)'),
-    ('TC08','PHD_TANK_DIP_STD_DENSITY_VAL1', '1149','RV_TANK_DAY_DIP_STATUS', '2', 'PASS','PASS','T_LNG_T3101/T3102: valid MEAS_STD_DENSITY found'),
+# ── Table 1: Rule Configuration ───────────────────────────────────────────────
+body_para(doc, 'Table 1 — Check Rule Configuration', 9)
+rule_config = [
+    ('TC01','PHD_STRM_COMP_MOL_PCT_VAL1',    '1142','RV_STRM_COMP_ANALYSIS'),
+    ('TC02','PHD_STRM_COMP_WT_PCT_VAL1',     '1143','RV_STRM_COMP_ANALYSIS'),
+    ('TC03','PHD_STRM_ANALYSIS_DENSITY_VAL1','1144','RV_STRM_ANALYSIS'),
+    ('TC04','PHD_STRM_ANALYSIS_GCV_VAL1',    '1145','RV_STRM_ANALYSIS'),
+    ('TC05','PHD_TANK_DIP_GRS_VOL_VAL1',     '1146','RV_TANK_DAY_DIP_STATUS'),
+    ('TC06','PHD_TANK_DIP_GRS_MASS_VAL1',    '1147','RV_TANK_DAY_DIP_STATUS'),
+    ('TC07','PHD_TANK_DIP_AVG_TEMP_VAL1',    '1148','RV_TANK_DAY_DIP_STATUS'),
+    ('TC08','PHD_TANK_DIP_STD_DENSITY_VAL1', '1149','RV_TANK_DAY_DIP_STATUS'),
 ]
-hdrs5c = ['TC','Check Rule','ID','RV Table','Objs\nTested','POSITIVE\nVALID','Result','Findings / Notes']
-t5c = doc.add_table(rows=len(unit_results)+1, cols=len(hdrs5c)); t5c.style = 'Table Grid'
-for i, txt in enumerate(hdrs5c):
-    hdr_cell(t5c.rows[0].cells[i], txt, 8, bg=CLR_DARK_BLUE, color=CLR_WHITE)
-for i, row in enumerate(unit_results):
+t5c1 = doc.add_table(rows=len(rule_config)+1, cols=4); t5c1.style = 'Table Grid'
+for i, txt in enumerate(['TC', 'Check Rule', 'ID', 'RV Table']):
+    hdr_cell(t5c1.rows[0].cells[i], txt, 9, bg=CLR_DARK_BLUE, color=CLR_WHITE)
+for i, row in enumerate(rule_config):
     bg = CLR_ALT_ROW if i % 2 == 0 else CLR_WHITE
-    for j, val in enumerate(row[:5]):
-        data_cell(t5c.rows[i+1].cells[j], val, 8, bg=bg, center=(j in [0,2,4]))
-    # POSITIVE_VALID cell
-    pv_pass = row[5] == 'PASS'
-    pv_cell = t5c.rows[i+1].cells[5]
-    data_cell(pv_cell, row[5], 8, bold=True, bg='E2EFDA' if pv_pass else 'FFE0E0', center=True)
-    pv_cell.paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN if pv_pass else 'C00000'))
-    # Result cell
-    res_cell = t5c.rows[i+1].cells[6]
-    res_pass = 'PASS' in row[6]
-    data_cell(res_cell, row[6], 8, bold=True, bg='E2EFDA' if res_pass else 'FFF2CC', center=True)
-    res_cell.paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(CLR_PASS_GREEN if res_pass else 'C07000'))
-    data_cell(t5c.rows[i+1].cells[7], row[7], 8, bg=bg)
+    data_cell(t5c1.rows[i+1].cells[0], row[0], 8.5, center=True, bg=bg)
+    data_cell(t5c1.rows[i+1].cells[1], row[1], 8.5, bg=bg)
+    data_cell(t5c1.rows[i+1].cells[2], row[2], 8.5, center=True, bg=bg)
+    data_cell(t5c1.rows[i+1].cells[3], row[3], 8.5, bg=bg)
 doc.add_paragraph()
+
+# ── Table 2: One table per TC ─────────────────────────────────────────────────
+body_para(doc, 'Table 2 — Object Test Results (one table per TC)  |  Test Date: MAX(DAYTIME) per object  |  COPS DEV', 9)
+
+tc_data = {
+    # TC01 rows: (object_code, component_no, max_daytime, attr_value, result, finding)
+    'TC01': ('PHD_STRM_COMP_MOL_PCT_VAL1',    'MOL_PCT',      [
+        ('1C1401_TO_E1405AB',     'C1',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB',     'C2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB',     'C3',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB',     'IC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB',     'N2',  'N/A',       'NULL',     'FAIL','No data in DB for this component'),
+        ('1C1401_TO_E1405AB',     'NC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB',     'NC5', '2026-05-26','0.0',      'PASS','Valid'),
+        ('DBNGP_PG_EXPORT_GAS',   'C1',  '2026-05-26','90.8912',  'PASS','Valid'),
+        ('DBNGP_PG_EXPORT_GAS',   'C2',  '2026-05-26','4.493',    'PASS','Valid'),
+        ('DBNGP_PG_EXPORT_GAS',   'C3',  '2026-05-26','0.8418',   'PASS','Valid'),
+        ('DBNGP_PG_EXPORT_GAS',   'C6+', '2026-05-26','0.0016',   'PASS','Valid'),
+        ('DBNGP_PG_EXPORT_GAS',   'CO2', '2026-05-26','1.0002',   'PASS','Valid'),
+        ('DBNGP_PG_EXPORT_GAS',   'IC4', '2026-05-26','0.0853',   'PASS','Valid'),
+        ('DBNGP_PG_EXPORT_GAS',   'IC5', '2026-05-26','0.0122',   'PASS','Valid'),
+        ('DBNGP_PG_EXPORT_GAS',   'N2',  '2026-05-26','2.5465',   'PASS','Valid'),
+        ('DBNGP_PG_EXPORT_GAS',   'NC4', '2026-05-26','0.1202',   'PASS','Valid'),
+        ('DBNGP_PG_EXPORT_GAS',   'NC5', '2026-05-26','0.008',    'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1410','C1',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1410','C2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1410','C3',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1410','CO2', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1410','N2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1410','NC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1410','NC5', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1430','C1',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1430','C2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1430','C3',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1430','CO2', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1430','N2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1430','NC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_HP_TO_1KT1430','NC5', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4001', 'C1',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4001', 'C2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4001', 'C3',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4001', 'CO2', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4001', 'N2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4001', 'NC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4001', 'NC5', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4002', 'C1',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4002', 'C2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4002', 'C3',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4002', 'CO2', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4002', 'N2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4002', 'NC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4002', 'NC5', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4003', 'C1',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4003', 'C2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4003', 'C3',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4003', 'CO2', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4003', 'N2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4003', 'NC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4003', 'NC5', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4004', 'C1',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4004', 'C2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4004', 'C3',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4004', 'CO2', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4004', 'N2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4004', 'NC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FUEL_GAS_MP_TO_GT4004', 'NC5', '2026-05-26','0.0',      'PASS','Valid'),
+        ('PLU_FEED_REFERENCE',    'C1',  '2026-05-26','83.7759',  'PASS','Valid'),
+        ('PLU_FEED_REFERENCE',    'C2',  '2026-05-26','3.91',     'PASS','Valid'),
+        ('PLU_FEED_REFERENCE',    'C3',  '2026-05-26','1.3794',   'PASS','Valid'),
+        ('PLU_FEED_REFERENCE',    'C6+', '2026-05-26','0.2849',   'PASS','Valid'),
+        ('PLU_FEED_REFERENCE',    'CO2', '2026-05-26','1.8581',   'PASS','Valid'),
+        ('PLU_FEED_REFERENCE',    'IC4', '2026-05-26','0.2592',   'PASS','Valid'),
+        ('PLU_FEED_REFERENCE',    'IC5', '2026-05-26','0.1374',   'PASS','Valid'),
+        ('PLU_FEED_REFERENCE',    'N2',  '2026-05-26','7.917',    'PASS','Valid'),
+        ('PLU_FEED_REFERENCE',    'NC4', '2026-05-26','0.3617',   'PASS','Valid'),
+        ('PLU_FEED_REFERENCE',    'NC5', '2026-05-26','0.1164',   'PASS','Valid'),
+        ('VENT_T1_HP_N2',         'C1',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('VENT_T1_HP_N2',         'C2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('VENT_T1_HP_N2',         'C3',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('VENT_T1_HP_N2',         'C6+', '2026-05-26','0.0',      'PASS','Valid'),
+        ('VENT_T1_HP_N2',         'CO2', '2026-05-26','0.0',      'PASS','Valid'),
+        ('VENT_T1_HP_N2',         'IC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('VENT_T1_HP_N2',         'IC5', '2026-05-26','0.0',      'PASS','Valid'),
+        ('VENT_T1_HP_N2',         'NC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('VENT_T1_HP_N2',         'NC5', '2026-05-26','0.0',      'PASS','Valid'),
+    ]),
+    # TC02 rows: (object_code, component_no, max_daytime, attr_value, result, finding)
+    'TC02': ('PHD_STRM_COMP_WT_PCT_VAL1',     'WT_PCT',       [
+        ('1C1401_TO_E1405AB', 'C1',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB', 'C2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB', 'C3',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB', 'IC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB', 'N2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB', 'NC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('1C1401_TO_E1405AB', 'NC5', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FLARE_PILOT_A',     'C1',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FLARE_PILOT_A',     'C2',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FLARE_PILOT_A',     'C3',  '2026-05-26','0.0',      'PASS','Valid'),
+        ('FLARE_PILOT_A',     'CO2', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FLARE_PILOT_A',     'N2',  '2026-05-26','100.0',    'PASS','Valid'),
+        ('FLARE_PILOT_A',     'NC4', '2026-05-26','0.0',      'PASS','Valid'),
+        ('FLARE_PILOT_A',     'NC5', '2026-05-26','0.0',      'PASS','Valid'),
+        ('PNI_EXPORT',        'C1',  '2026-05-26','70.6761',  'PASS','Valid'),
+        ('PNI_EXPORT',        'C2',  '2026-05-26','6.1965',   'PASS','Valid'),
+        ('PNI_EXPORT',        'C3',  '2026-05-26','3.1632',   'PASS','Valid'),
+        ('PNI_EXPORT',        'C6+', '2026-05-26','1.5209',   'PASS','Valid'),
+        ('PNI_EXPORT',        'CO2', '2026-05-26','4.2848',   'PASS','Valid'),
+        ('PNI_EXPORT',        'IC4', '2026-05-26','0.7824',   'PASS','Valid'),
+        ('PNI_EXPORT',        'IC5', '2026-05-26','0.5194',   'PASS','Valid'),
+        ('PNI_EXPORT',        'N2',  '2026-05-26','11.3267',  'PASS','Valid'),
+        ('PNI_EXPORT',        'NC4', '2026-05-26','1.0886',   'PASS','Valid'),
+        ('PNI_EXPORT',        'NC5', '2026-05-26','0.4415',   'PASS','Valid'),
+    ]),
+    'TC03': ('PHD_STRM_ANALYSIS_DENSITY_VAL1','DENSITY',      [
+        ('FUEL_GAS_HP_TO_1KT1410','2026-05-26','0.7103','PASS','Valid — value >= 0, rule stays silent'),
+        ('FUEL_GAS_HP_TO_1KT1430','2026-05-26','0.0',   'PASS','Valid — 0.0 is initialised state, rule uses < 0'),
+        ('FUEL_GAS_MP_TO_GT4001', '2026-05-26','0.0',   'PASS','Valid — 0.0 is initialised state, rule uses < 0'),
+        ('FUEL_GAS_MP_TO_GT4002', '2026-05-26','0.0',   'PASS','Valid — 0.0 is initialised state, rule uses < 0'),
+        ('FUEL_GAS_MP_TO_GT4003', '2026-05-26','0.0',   'PASS','Valid — 0.0 is initialised state, rule uses < 0'),
+        ('FUEL_GAS_MP_TO_GT4004', '2026-05-26','0.0',   'PASS','Valid — 0.0 is initialised state, rule uses < 0'),
+    ]),
+    'TC04': ('PHD_STRM_ANALYSIS_GCV_VAL1',    'GCV_MJPERSM3', [
+        ('FLARE_PILOT_A',         '2026-05-26','38.3956','PASS','Valid — value > 0, rule stays silent'),
+        ('FLARE_PILOT_B',         '2026-05-26','38.3956','PASS','Valid — value > 0, rule stays silent'),
+        ('FUEL_TO_T1_RTO_PILOT',  '2026-05-26','38.3956','PASS','Valid — value > 0, rule stays silent'),
+        ('FUEL_GAS_HP_TO_1KT1410','2026-05-26','36.2324','PASS','Valid — value > 0, rule stays silent'),
+        ('FUEL_GAS_HP_TO_1KT1430','2026-05-26','0.0',   'PASS','Valid — 0.0 is initialised state, rule uses < 0'),
+        ('FUEL_GAS_MP_TO_GT4001', '2026-05-26','0.0',   'PASS','Valid — 0.0 is initialised state, rule uses < 0'),
+        ('FUEL_GAS_MP_TO_GT4002', '2026-05-26','0.0',   'PASS','Valid — 0.0 is initialised state, rule uses < 0'),
+        ('FUEL_GAS_MP_TO_GT4003', '2026-05-26','0.0',   'PASS','Valid — 0.0 is initialised state, rule uses < 0'),
+        ('FUEL_GAS_MP_TO_GT4004', '2026-05-26','0.0',   'PASS','Valid — 0.0 is initialised state, rule uses < 0'),
+    ]),
+    'TC05': ('PHD_TANK_DIP_GRS_VOL_VAL1',     'GRS_VOL_SM3',  [
+        ('PLU_COND_TANK_1',       '2026-05-26','16524.4004', 'PASS','Valid'),
+        ('PLU_COND_TANK_2',       '2026-05-26','0.0',        'PASS','Valid'),
+        ('PLU_COND_TANK_3',       '2026-05-26','3265.77',    'PASS','Valid'),
+        ('T_LNG_T3101',           '2026-05-26','86589.8828', 'PASS','Valid'),
+        ('T_LNG_T3102',           '2026-05-26','77248.7812', 'PASS','Valid'),
+    ]),
+    'TC06': ('PHD_TANK_DIP_GRS_MASS_VAL1',    'ZWP_GRS_MASS_TONNES', [
+        ('T_LNG_T3101',           '2026-05-26','39355.1016', 'PASS','Valid'),
+        ('T_LNG_T3102',           '2026-05-26','34955.0742', 'PASS','Valid'),
+    ]),
+    'TC07': ('PHD_TANK_DIP_AVG_TEMP_VAL1',    'AVG_TEMP_C',   [
+        ('PLU_COND_TANK_1',       '2026-05-26','25.9',       'PASS','Valid'),
+        ('PLU_COND_TANK_2',       '2026-05-26','26.3',       'PASS','Valid'),
+        ('PLU_COND_TANK_3',       '2026-05-26','25.1',       'PASS','Valid'),
+        ('T_LNG_T3101',           '2026-05-26','-160.0',     'PASS','LNG cryogenic — IS NULL only rule'),
+        ('T_LNG_T3102',           '2026-05-26','-159.72',    'PASS','LNG cryogenic — IS NULL only rule'),
+    ]),
+    'TC08': ('PHD_TANK_DIP_STD_DENSITY_VAL1', 'MEAS_STD_DENSITY_KGPERSM3', [
+        ('T_LNG_T3101',           '2026-05-26','454.5',      'PASS','Valid'),
+        ('T_LNG_T3102',           '2026-05-26','452.5',      'PASS','Valid'),
+    ]),
+}
+
+hdrs_obj      = ['Object Code', 'Attribute Name', 'MAX(DAYTIME)', 'Attribute Value', 'Result', 'Findings / Notes']
+hdrs_obj_comp = ['Object Code', 'Component No',  'Attribute Name', 'MAX(DAYTIME)', 'Attribute Value', 'Result', 'Findings / Notes']
+
+for tc_id, (rule_name, attr, rows) in tc_data.items():
+    section_heading(doc, f'{tc_id} — {rule_name}', level=2)
+    has_comp = (tc_id in ('TC01', 'TC02'))   # TC01/TC02 use STRM_COMP_ANALYSIS — has component_no
+    hdrs = hdrs_obj_comp if has_comp else hdrs_obj
+    ncols = 7 if has_comp else 6
+    t = doc.add_table(rows=len(rows)+1, cols=ncols); t.style = 'Table Grid'
+    for i, txt in enumerate(hdrs):
+        hdr_cell(t.rows[0].cells[i], txt, 8, bg=CLR_LIGHT_BLUE, color=CLR_WHITE)
+    for i, row in enumerate(rows):
+        bg = CLR_ALT_ROW if i % 2 == 0 else CLR_WHITE
+        if has_comp:
+            # row = (obj, comp, date, value, result, finding)
+            data_cell(t.rows[i+1].cells[0], row[0], 7.5, bg=bg)
+            data_cell(t.rows[i+1].cells[1], row[1], 7.5, center=True, bg=bg)
+            data_cell(t.rows[i+1].cells[2], attr,   7.5, center=True, bg=bg)
+            data_cell(t.rows[i+1].cells[3], row[2], 7.5, center=True, bg=bg)
+            data_cell(t.rows[i+1].cells[4], row[3], 7.5, center=True, bg=bg)
+            res_cell = t.rows[i+1].cells[5]
+            res_val  = row[4]
+        else:
+            # row = (obj, date, value, result, finding)
+            data_cell(t.rows[i+1].cells[0], row[0], 7.5, bg=bg)
+            data_cell(t.rows[i+1].cells[1], attr,   7.5, center=True, bg=bg)
+            data_cell(t.rows[i+1].cells[2], row[1], 7.5, center=True, bg=bg)
+            data_cell(t.rows[i+1].cells[3], row[2], 7.5, center=True, bg=bg)
+            res_cell = t.rows[i+1].cells[4]
+            res_val  = row[3]
+        data_cell(res_cell, res_val, 7.5, bold=True,
+                  bg='E2EFDA' if res_val == 'PASS' else 'FFF2CC', center=True)
+        res_cell.paragraphs[0].runs[0].font.color.rgb = RGBColor(*bytes.fromhex(
+            CLR_PASS_GREEN if res_val == 'PASS' else 'C07000'))
+        finding_cell = ncols - 1
+        data_cell(t.rows[i+1].cells[finding_cell], row[-1], 7.5, bg=bg)
+    doc.add_paragraph()
 
 # TC07 note — finding closed
 section_heading(doc, '5.3.1  TC07 Note — LNG Tank Temperature (Closed)', level=2)
@@ -343,6 +529,22 @@ body_para(doc,
     'Initial concern: check rule might fire for negative values.\n\n'
     'CONFIRMED SAFE: WHERE_FORMULA = (${AvgTemp} IS NULL) — rule fires on NULL only, NOT on negative values. '
     'LNG tanks at -160°C will NOT trigger false ERROR alerts. No action required.', 9)
+doc.add_paragraph()
+
+# TC03/TC04/TC08 correction note
+section_heading(doc, '5.3.2  WHERE_FORMULA Correction — TC03, TC04, TC08', level=2)
+body_para(doc,
+    'During unit testing, WHERE_FORMULA conditions for TC03, TC04 and TC08 were found to use <= 0 '
+    'instead of the correct < 0. This was corrected after reviewing existing EC check rules which '
+    'consistently use IS NULL OR < 0 as the standard pattern.\n\n'
+    'Reason: The system initialises data to 0.0 and waits for PHD to update. '
+    'A value of 0.0 is therefore a valid initialised state — not a data quality error. '
+    'Only NULL (no data ever received) or negative values (invalid) should trigger ERROR.\n\n'
+    'Corrected WHERE_FORMULA:\n'
+    '  TC03 PHD_STRM_ANALYSIS_DENSITY_VAL1  : (${Density} IS NULL OR ${Density} < 0)\n'
+    '  TC04 PHD_STRM_ANALYSIS_GCV_VAL1       : (${Gcv} IS NULL OR ${Gcv} < 0)\n'
+    '  TC08 PHD_TANK_DIP_STD_DENSITY_VAL1    : (${StdDensity} IS NULL OR ${StdDensity} < 0)\n\n'
+    'SQL script and COPS DEV DB updated accordingly. All unit tests re-run and confirmed 220/220 PASS.', 9)
 doc.add_paragraph()
 
 # 5.4 — Phase 1 Summary

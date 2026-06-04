@@ -113,7 +113,7 @@ BEGIN
     upsert_check_rule(
         p_check_name => 'PHD_STRM_ANALYSIS_DENSITY_VAL1',
         p_table_id   => 'RV_STRM_ANALYSIS',
-        p_where      => '(${Density} IS NULL OR ${Density} <= 0)',
+        p_where      => '(${Density} IS NULL OR ${Density} < 0)',
         p_message    => 'Stream :STREAM_NAME has invalid or missing Density value for :DAYTIME',
         p_severity   => 'ERROR',
         p_var_name   => 'Density',
@@ -127,7 +127,7 @@ BEGIN
     upsert_check_rule(
         p_check_name => 'PHD_STRM_ANALYSIS_GCV_VAL1',
         p_table_id   => 'RV_STRM_ANALYSIS',
-        p_where      => '(${Gcv} IS NULL OR ${Gcv} <= 0)',
+        p_where      => '(${Gcv} IS NULL OR ${Gcv} < 0)',
         p_message    => 'Stream :STREAM_NAME has invalid or missing GCV value for :DAYTIME',
         p_severity   => 'ERROR',
         p_var_name   => 'Gcv',
@@ -183,7 +183,7 @@ BEGIN
     upsert_check_rule(
         p_check_name => 'PHD_TANK_DIP_STD_DENSITY_VAL1',
         p_table_id   => 'RV_TANK_DAY_DIP_STATUS',
-        p_where      => '(${StdDensity} IS NULL OR ${StdDensity} <= 0)',
+        p_where      => '(${StdDensity} IS NULL OR ${StdDensity} < 0)',
         p_message    => 'Tank :TANK_NAME has invalid or missing Standard Density for :DAYTIME',
         p_severity   => 'ERROR',
         p_var_name   => 'StdDensity',
