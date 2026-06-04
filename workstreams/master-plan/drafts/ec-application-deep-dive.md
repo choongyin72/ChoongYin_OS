@@ -1,7 +1,9 @@
 # EC Application — Deep Dive Learning Notes
 
 **Date:** 2026-06-05
-**Source:** C:\DEV\GIT\ec-application
+**Sources:**
+- `C:\DEV\GIT\ec-application` — EC source code
+- `https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/` — Official EC Technical Docs 14.2.5
 **Purpose:** Deep learning of EC application architecture, patterns and internals
 
 ---
@@ -371,3 +373,232 @@ EC Integration Services connects to external systems:
 - UI testing works reliably because IDs are deterministic
 - Class validation (`_DATA`, `_ALLOC` patterns) follows EC's built-in class model
 - SQL scripts must respect Owner Context — never query without OC filter
+
+---
+
+## Official EC Technical Docs — Key Learnings (14.2.5)
+
+### 1. Check Rules — Official Definition
+
+**Check rules validate data quality. They run as DB jobs and store results in `CTRL_CHECK_LOG`.**
+
+Triggered from:
+- Validation Overview (CO.0203)
+- Validation Overview by Facility (CO.0204)
+- The Validation tab on individual screens
+- Scheduled jobs
+
+**The goal:** Write a SELECT WHERE condition that returns a row when validation **FAILS**.
+
+**WHERE Formula syntax — supported keywords:**
+`AND, OR, IS NULL, IS NOT NULL, IN, LIKE, NULL, NOT, NVL, COALESCE, SUBSTR, LENGTH, ROUND, TRUNC, COUNT, MAX, MIN, ABS, GREATEST, LEAST, SYSDATE, DECODE, BETWEEN, CASE, WHEN, THEN, ELSE, END, EXISTS, ADD_MONTHS, LAST_DAY`
+
+**Variable types in `${variableName}`:**
+- **Constant** — free text value bound as parameter
+- **Attribute** — column from the RV view
+- **Function call** — calls a PL/SQL function (EC packages, Z-prefixed custom packages, or packages listed in `CHECK_RULE_PACKAGE` EC codes)
+- **Sub query** — one view only; used for record counts, averages, object lists
+
+**Function call example:** `ec_pwel_day_status.avg_oil_rate(object_id, (daytime - 1), '=')`
+
+**Allowed packages for function calls:**
+- EC packages of classes with "Include in Validation" = Y
+- EC packages: ECBP_WELL_THEORETICAL, ECBP_STREAM_FLUID, EC_WELL_REFERENCE_VALUE, EC_STRM_REFERENCE_VALUE
+- Packages starting with Z (customer custom)
+- Packages in EC codes with Code Type `CHECK_RULE_PACKAGE`
+
+**Connecting check rules to screens:**
+- CO.0079 Check Group — connected to a screen
+- CO.0080 Rule Group Combination — connects check rules to the check group
+This controls the Validation tab log records and the "Run All" button.
+
+---
+
+### 2. Classes and Objects — Official Definition
+
+**Four class types:**
+
+| Type | Description | Examples |
+|---|---|---|
+| **Object class** | Static physical objects | Facility, Tank, Well, Separator |
+| **Data class** | Measurements/events owned by an object | Daily tank readings, exported volumes |
+| **Interface class** | Abstraction over multiple object classes | Common subset of attributes across well types |
+| **Table class** | Like data class but with less framework support | No object owner, no timestamp PK requirement |
+
+**What the class abstraction enables:**
+- Common validation + integrity without mixing with business logic
+- Virtual (calculated) or stored attributes without changing tables
+- Configurable screen navigation
+- Generic concepts: four-eye approval, ringfencing, data locking, replication
+
+---
+
+### 3. View Generator and Class Model — Official Definition
+
+**EC Data Services generates views automatically from class definitions.**
+
+**View types:**
+| Prefix | Type | Insert/Update/Delete? |
+|---|---|---|
+| `OV_xxx` | Object views | Insert, Update only (no delete — use END_DATE) |
+| `IV_xxx` | Interface views | Insert, Update (UNION ALL of OV views) |
+| `DV_xxx` | Data views | Insert, Update, Delete |
+| `TV_xxx` | Table views | Full DML |
+| `RV_xxx` | Reporting views | Read-only; used for queries (our SQL uses these) |
+| `IUD_xxx` | Instead-of triggers | Applied on OV/DV/IV/TV views |
+
+**Standard columns auto-added to EVERY view:**
+`CLASS_NAME, RECORD_STATUS, CREATED_BY, CREATED_DATE, LAST_UPDATED_BY, LAST_UPDATED_DATE, REV_NO, REV_TEXT, APPROVAL_STATE, APPROVAL_BY, APPROVAL_DATE, REC_ID`
+
+**Key core metadata tables:**
+- `CLASS_CNFG` — class definitions
+- `CLASS_ATTRIBUTE_CNFG` — attribute definitions
+- `CLASS_REL_CNFG` — relationships
+- `CLASS_TRIGGER_ACTN_CNFG` — custom PL/SQL injected into IUD triggers
+- `CLASS_DEPENDENCY_CNFG` — interface implementations
+
+**Report view (RV_xxx) structure:**
+- DATA class: includes owner object attributes + data attributes + unit conversions (both native + converted columns)
+- Uses tables directly (not OV/DV) for performance
+- ANSI joins
+
+**View generator API:**
+```sql
+EXECUTE ecdp_viewlayer.BuildViewLayer();             -- all dirty classes
+EXECUTE ecdp_viewlayer.BuildViewLayer('WELL');        -- single class
+EXECUTE ecdp_viewlayer.BuildReportLayer();            -- all RV_ views
+EXECUTE ecdp_viewlayer.BuildViewLayer('WELL', p_force => 'Y');  -- force rebuild
+```
+
+---
+
+### 4. ECIS — Official Architecture (PHD Integration)
+
+**ECIS = EC Integration Services. Handles all external data integration.**
+
+**Two integration types:**
+- **SCADA/Tag-Based** — for real-time sensor/metering tag data (PHD is this type)
+- **File-Based** — for row-based file exchange
+
+**Two-stage pipeline (separated by JMS message queue):**
+```
+EXTERNAL SOURCE (PHD/PI/OPC)
+        ↓
+SOURCE STAGE
+  Source Adapter reads tags
+  Tag aggregation (time weighting, DST handling)
+  Source mapping → DTOs
+        ↓
+JMS MESSAGE QUEUE (800MB capacity = ~12M samples)
+        ↓
+TARGET STAGE
+  Aggregate DTOs
+  Map to EC class attribute
+  UOM conversion
+  Insert/Update EC Data Storage
+```
+
+**Tag Adapters:**
+- PI Web API Adapter (`PiRestAdapter`) — REST
+- PI MS SQL Adapter (`PiJdbcAdapter`) — JDBC
+- OPC UA Adapter
+- OPC Classic Adapter
+- IP21 JDBC Adapter (Windows only)
+- Tag File Adapter
+- **Woodside likely uses PI Web API or PI JDBC (OSIsoft PI historian)**
+
+**Key mapping parameters:**
+| Parameter | Purpose |
+|---|---|
+| `TAG_ID` | Tag name in source system (PHD tag ID) |
+| `ATTRIBUTE` | EC Class attribute to map the tag value into |
+| `TEMPLATE_CODE` | Template defining aggregation/interval rules |
+| `FROM_UNIT` | Source unit of measure |
+| `TO_UNIT` | Target unit for conversion |
+| `LAST_TRANSFER` | Latest timestamp written — move this to re-read historical data |
+| `OVERWRITE_STATUS` | Highest record status ECIS can overwrite |
+
+**Source functions (how PHD data is read):**
+`SUM, MIN, MAX, MEAN, AVG (time-weighted), SAMPLE (all timestamps), VALUE_AT_START, VALUE_AT_END, COMPRESSED (PI only), LATEST_IN_INTERVAL (PI REST only)`
+
+**Template parameters:**
+- `SOURCE_INTERVAL` — how often to request from source
+- `SOURCE_DELAY` — delay before requesting (allows PHD to settle)
+- `TARGET_INTERVAL` — resolution for EC writes (e.g., 1 day = daily writes)
+- `TARGET_FUNCTION` — aggregation (SUM, AVG, LATEST, etc.)
+- `PROD_DAY_START` — production day offset in hours
+- `MINIMUM_SAMPLES` — min samples before completing a period
+
+**Why PHD tags get NULL:** No data in the message queue → Tag Aggregation Service has nothing → EC Class Service inserts NULL or skips → check rule fires on NULL.
+
+**Recovery:** If extraction fails → retry at next schedule. `LAST_TRANSFER` date unchanged → data re-extracted on next run.
+
+**Monitoring:** `trans_process_log` for errors; Scheduler History Log for source; Tag data capture monitoring screen (last 100 rows).
+
+---
+
+### 5. Data Modelling Standard — Every Table Has 11 Columns
+
+**All EC database tables MUST have these 11 standard columns:**
+
+| Column | Type | Description |
+|---|---|---|
+| RECORD_STATUS | VARCHAR2(1) | P=Provisional, V=Verified, A=Approved; default P |
+| CREATED_BY | VARCHAR2(30) | NOT NULL — who created the row |
+| CREATED_DATE | DATE | NOT NULL — creation timestamp |
+| LAST_UPDATED_BY | VARCHAR2(30) | Last updater |
+| LAST_UPDATED_DATE | DATE | Last update time |
+| REV_NO | NUMBER | Starts 0, incremented per journal rule |
+| **REV_TEXT** | **VARCHAR2(240)** | **Reason for change — this is what ECPR-Issue1052 goes in** |
+| APPROVAL_STATE | VARCHAR2(1) | N=New, O=Official, U=Updated, D=Deleted |
+| APPROVAL_BY | VARCHAR2(30) | Four-eye approver |
+| APPROVAL_DATE | DATE | Approval timestamp |
+| REC_ID | VARCHAR2(30) | Oracle GUID — FK for extension tables |
+
+**Sub-daily timestamp standard (DAYTIME tables):**
+- `DAYTIME` DATE — local time (PK)
+- `SUMMER_TIME` VARCHAR2(1) — DST flag Y/N (PK — to handle overlapping DST hour)
+- `UTC_DAYTIME` DATE — UTC representation
+- `PRODUCTION_DAY` DATE — may differ from TRUNC(DAYTIME)
+
+**Trigger naming hierarchy (one trigger per physical table):**
+| Name | Type | Priority |
+|---|---|---|
+| `IUG_xxx` | Generated (Ecdp_generate) | Lowest — skipped if IUC or IU exists |
+| `IUC_xxx` | Hand-coded common | Overrides IUG |
+| `IU_xxx` | Project-specific | Highest priority — overrides both |
+| `AP_xxx` | PINC/install trigger | Separate — records config changes |
+| `JN_xxx` | Journal trigger | After Update or Delete |
+| `IUR_xxx` | Sets REC_ID | Before Insert or Update |
+
+**PL/SQL package naming:**
+| Prefix | Description |
+|---|---|
+| `EC_xxx` | Generated; single-value lookups by PK |
+| `ECDP_xxx` | Hand-coded data technical operations |
+| `ECBP_xxx` | Hand-coded business logic |
+| `ECC_xxx` | Generated support package for object class IUD triggers |
+| `UE_xxx` | User Exit package (overridable) |
+| `Z_xxx` | Customer custom packages |
+
+---
+
+### 6. EC Extensions — How Woodside's Code Works
+
+**Extensions are binary software components that extend core EC:**
+- Managed via Extensions Manager screen
+- Have full lifecycle: start, stop, disable, update, DB migrate
+- "Run on startup" = downloads, extracts, verifies DB migration on every EC boot
+
+**Extension development rules (hard-enforced):**
+- All attribute names must be **prefixed with extension ID** (e.g., `ZWP_`, `ZWD_`)
+- All Oracle DB objects must be prefixed with extension ID
+- All relation names must be prefixed with extension ID
+- Cannot disable attributes from a different app space context
+- Max class name length: 100 chars
+- Max DB object name: 100 chars
+
+**This explains Woodside extension patterns:**
+- `ZWP_` prefix = Woodside Pluto extension attributes
+- `ZWT_` prefix = another Woodside extension
+- SQL scripts: `TV_` prefix = transaction views for DML in extensions
