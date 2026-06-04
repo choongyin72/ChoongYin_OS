@@ -718,3 +718,86 @@ for (String group : groupAndChildren) {
 - Or: direct DB UPDATE on CTRL_CHECK_LOG to mark old violations as FIXED
 
 **Phase 2 impact:** Once Issue_1052 rules are assigned to groups, run each new group separately in TC_UI_08 to avoid the bug.
+
+---
+
+## Session B — Deep Dive Results
+
+### Item #4: Group Model Concept (6→9) ✅
+
+**Group Model = hierarchical navigation tree defining object class relationships for screen navigation.**
+
+NOT the same as Check Group:
+- Group Model: FACILITY→WELL→EQUIPMENT class hierarchy (navigation) — table: `GROUP_MODEL`, `GROUPS`
+- Check Group: grouping of validation rules — table: `CTRL_CHECK_GROUP`
+
+**URL path decoded:** `/GROUPMODEL/WELL/TARGET/WELL`
+- GROUPMODEL = literal indicator
+- WELL = group model type (hierarchy type)
+- TARGET/WELL = target class
+
+**Navigator linking:**
+1. Date range → FROMDATE/TODATE stored
+2. First dropdown → top-level objects from GROUP_MODEL top class
+3. Each subsequent dropdown → filters by PARENT_OBJECT_ID from previous level
+4. Final selection → OBJECT_ID populates screen
+5. Date filter: DAYTIME between from_date and to_date on GROUPS table
+
+**Key tables:** `GROUP_MODEL` (config), `GROUPS` (runtime with temporal validity DAYTIME/END_DATE),
+`CLASS_REL_CNFG` (relationships), `DAO_CLASS_DEPENDENCY` (parent/child)
+
+---
+
+### Item #5: Interface Classes and IV_ Views (7→9) ✅
+
+**Interface class = minimum attribute contract multiple object classes must implement.
+IV_ view = UNION ALL across all implementing classes.**
+
+**Example — ALLOCATEABLE_OBJECT:**
+```sql
+CREATE VIEW IV_ALLOCATEABLE_OBJECT AS
+SELECT NETWORK_CODE as CODE, OBJECT_ID, NAME FROM ALLOC_NETWORK
+UNION ALL
+SELECT NODE_CODE as CODE, OBJECT_ID, NAME FROM ALLOC_NODE
+UNION ALL
+SELECT FACILITY_CODE as CODE, OBJECT_ID, NAME FROM ALLOC_FACILITY
+```
+
+**Use case:** UI needs to show "any object of a type" without knowing specific class.
+
+**INTERFACE_ALIAS:** When implementing class has different column name.
+e.g. Interface expects `CODE`, ALLOC_NETWORK has `NETWORK_CODE` → set `INTERFACE_ALIAS='NETWORK_CODE'`
+
+**Rules:**
+- Interface defines MINIMUM attributes all implementers must have
+- Implementing classes CAN have extra attributes
+- Interface CANNOT reference attributes some implementers don't have (UNION ALL fails)
+- `CLASS_DEPENDENCY_CNFG`: DEPENDENCY_TYPE=IMPLEMENTS records which classes implement the interface
+
+---
+
+### Item #6: Class Trigger Actions CLASS_TRIGGER_ACTN_CNFG (7→9) ✅
+
+**Meta-configuration that injects PL/SQL into auto-generated IUD triggers.**
+
+**Table:** `CLASS_TRIGGER_ACTN_CNFG`
+Columns: CLASS_NAME, TRIGGERING_EVENT (INSERTING/UPDATING/DELETING), TRIGGER_TYPE (BEFORE/AFTER),
+SORT_ORDER, DB_SQL_SYNTAX, APP_SPACE_CNTX
+
+**Real example — view layer invalidation:**
+```sql
+TRIGGERING_EVENT: INSERTING|UPDATING|DELETING  TRIGGER_TYPE: AFTER  SORT_ORDER: 100
+DB_SQL_SYNTAX:
+  ecdp_viewlayer_utils.set_dirty_ind(nvl(:new.class_name,:old.class_name),'VIEWLAYER',TRUE);
+-- When trigger config changes → mark class views as needing regeneration
+```
+
+**BEFORE vs AFTER:**
+- BEFORE: Can modify :NEW values — use for defaults, validation, computed fields
+- AFTER: Read-only — use for audit, cascading updates, firing events
+
+**vs Regular Oracle Trigger:**
+- CLASS_TRIGGER_ACTN_CNFG = EC-managed, multiple per class (SORT_ORDER), disableable via config
+- Regular trigger = standalone DDL, one per event, requires recompile
+
+**Woodside note:** Woodside extension custom logic (ZWP_ tables) should use CLASS_TRIGGER_ACTN_CNFG entries, NOT standalone Oracle triggers. Keeps code within EC framework lifecycle management.
