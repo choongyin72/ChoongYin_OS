@@ -31,3 +31,12 @@ woodside Pluto : https://woodsideenergy.sharepoint.com/sites/PHBRQuorum?e=1%3A0f
 
 
 EC Best Practices : https://energycomponents.atlassian.net/wiki/spaces/BPR/folder/466223241?atlOrigin=eyJpIjoiZTZkNjg3MWEzMGFlNDMzMzhkMWU1ZmY0MWI2ZDJjY2IiLCJwIjoiYyJ9
+
+
+
+EC APP GIT Project Folder   : C:\DEV\GIT\ec-application
+EC Web App Url              : https://bitbucket.org/energycomponents/ec-application/src/
+
+
+EC Automation Project Folder   : C:\DEV\GIT\ecaas_clp_hongkong\ectestautomation
+EC Web App Url                 : https://bitbucket.org/energycomponents/ecaas_clp_hongkong/src/main/
