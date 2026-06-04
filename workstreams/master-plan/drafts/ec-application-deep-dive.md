@@ -602,3 +602,45 @@ TARGET STAGE
 - `ZWP_` prefix = Woodside Pluto extension attributes
 - `ZWT_` prefix = another Woodside extension
 - SQL scripts: `TV_` prefix = transaction views for DML in extensions
+
+---
+
+## Session A — Deep Dive Results
+
+### Item #1: Class vs Object Validation (7→9) ✅
+
+**Three validation types:**
+
+| Type | Screen | Scope | DB Tables |
+|---|---|---|---|
+| Class Validation | CO.1031 | ALL objects of a class | `CLASS_ATTR_VALIDATION`, `CLASS_ATTR_EDITABLE` |
+| Object Validation | CO.1032.01 | ONE specific object | `OBJECT_ATTR_VALIDATION`, `OBJECT_ATTR_EDITABLE` |
+| Hierarchical Validation | CO.0253 | Object + parent hierarchy | `OBJECT_ATTR_*` with cascade |
+
+Note: CO.1032 (old Object Validation) **DEPRECATED** since v14.0.0 — replaced by CO.1032.01.
+
+**CLASS_OBJ_VALIDATION_IND checkbox on Check Rules:**
+- `N` (unchecked) = traditional SQL check rule (`WHERE_FORMULA` + `SELECT_CLAUSE`)
+- `Y` (checked) = execute Class/Object validation engine. `WHERE_FORMULA` must be EMPTY. System reads WARN_MIN/MAX, ERR_MIN/MAX, ERR_MANDATORY_IND from `CLASS_ATTR_VALIDATION` or `OBJECT_ATTR_VALIDATION`
+
+**Override precedence:**
+- Class BLOCKS object override for: `NOT_EDITABLE`, `MANDATORY`
+- Object OVERRIDES class for: `WARN_MIN/MAX`, `ERR_MIN/MAX`, `REQUIRE_EVENT`
+- Hierarchical: Object > Parent hierarchy > Class Validation
+
+**Key DB tables:**
+```
+CLASS_ATTR_VALIDATION: CLASS_NAME, ATTRIBUTE_NAME, DAYTIME,
+  WARN_MIN, WARN_MAX, WARN_PCT, ERR_MIN, ERR_MAX,
+  ERR_MANDATORY_IND, ERR_CONDITIONAL_IND, REQ_EVENT
+
+OBJECT_ATTR_VALIDATION: same + OBJECT_ID + EXT_VALIDATION_IND
+```
+
+**PL/SQL package: `EcDp_Class_Validation`**
+- `newVersionClass()` / `deleteVersionClass()` — class version management
+- `newVersionObject()` / `deleteVersionObject()` — object version management
+- `copyValidation(from_obj, to_obj, from_dt, to_dt)` — copy config between objects
+- `addMissingAttrClass()` / `addMissingAttrObject()` — add new attributes after class change
+
+**Woodside Pluto note:** Issue_1052 check rules have `CLASS_OBJ_VALIDATION_IND = N` — SQL-based, correct. For per-stream range checks (different limits per stream) → use CO.1032.01.
