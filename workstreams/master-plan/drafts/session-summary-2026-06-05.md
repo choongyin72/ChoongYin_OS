@@ -138,6 +138,37 @@ RV_STRM_COMP_ANALYSIS, RV_STRM_ANALYSIS, RV_TANK_DAY_DIP_STATUS
 | 8 | Issue_1052: 6 ECPR drafts A–F | ⏳ Waiting Grant |
 | 9 | Morning Briefing automation | ⏳ Waiting IT admin approval |
 
+### 3. ECpedia Index Scan — COMPLETE
+
+**158 pages** fully scanned and mapped to all 9 EC deep dive sessions.
+
+Key ECpedia findings:
+- Launched April 1, 2026 — only 2 months old, some pages not yet "Verified"
+- ⚠️ Only use pages marked **"Verified"** — others may be outdated
+- 5 mandatory training sessions for PS team (EC SaaS, Extensions, Integrations, Scorecard)
+- **EC SaaS Scorecard** — mandatory for all EC projects, 60+ items, blocking scores prevent go-live
+- **TRAP process** — all customisations must follow Technical Review and Approval Process
+- Sandbox environments: EC Upstream (Polar Bear) + EC Midstream — for hands-on learning
+- Rich calculation engine pages (Library Calcs, Naming Conventions, Equation Blocks — all relevant for Session G)
+
+### 4. ectestautomation Deep Dive — COMPLETE
+
+**File saved:** `workstreams/master-plan/drafts/ectestautomation-deep-dive.md`
+
+**Rating: 7.5/10** — 21 areas below 9/10 scheduled for sessions ET-A to ET-E
+
+Key findings:
+- Java 11 / Arquillian / Graphene / Cucumber — production-grade BDD framework
+- 96 feature files, 90+ step classes, 113 page objects, 20+ test runners
+- **CheckRulePage.java + ValidationOverviewPage.java** — Java constants confirm our DOM scan 100%
+- `runAllButton` in `groups:form:runAllButton` ✅ confirmed working in production
+- Wait values for EC: GUI=10s, AJAX=30s, Model=60s — proven in production
+- Confirmation dialogs after every Save — must handle in Robot Framework Phase 2
+- 9 test users configured for multi-user workflow testing
+- Multi-user workflow pattern (User1 creates → User2 verifies → User3 approves)
+
+**ectestautomation deep dive sessions (ET-A to ET-E) added to todo list**
+
 ---
 
 ## Key Files

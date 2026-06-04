@@ -40,3 +40,7 @@ EC Web App Url              : https://bitbucket.org/energycomponents/ec-applicat
 
 EC Automation Project Folder   : C:\DEV\GIT\ecaas_clp_hongkong\ectestautomation
 EC Web App Url                 : https://bitbucket.org/energycomponents/ecaas_clp_hongkong/src/main/
+
+
+
+ECpedia :                       https://energycomponents.atlassian.net/wiki/spaces/IH/overview?mode=global
