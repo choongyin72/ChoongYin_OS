@@ -1,0 +1,57 @@
+name: Playwright EC Web App Tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  playwright-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1/2, 2/2]   # 2 shards — adjust based on test count
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests (Shard ${{ matrix.shard }})
+        run: npx playwright test --shard=${{ matrix.shard }}
+        env:
+          EC_URL: ${{ secrets.EC_URL }}
+          EC_USERNAME: ${{ secrets.EC_USERNAME }}
+          EC_PASSWORD: ${{ secrets.EC_PASSWORD }}
+          HEADLESS: 'true'
+          CI: 'true'
+
+      - name: Upload HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-shard-${{ strategy.job-index }}
+          path: playwright-report/
+          retention-days: 7
+
+      - name: Upload trace on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces-shard-${{ strategy.job-index }}
+          path: results/
+          retention-days: 3

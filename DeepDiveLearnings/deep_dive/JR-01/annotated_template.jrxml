@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================
+     EC Daily Production Report — JasperReports v7.0.3+ Template
+     Data source: Oracle DB (ECKERNEL_EC schema)
+     Connects to: RV_PWEL_DAY_STATUS and OBJ (object table)
+     Parameters: P_DAYTIME (Date), P_FACILITY_CODE (String)
+     ============================================================ -->
+<jasperReport
+    xmlns="http://jasperreports.sourceforge.net/jasperreports"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+    name="EC_Daily_Production_Report"
+    pageWidth="842" pageHeight="595"
+    orientation="Landscape"
+    columnWidth="782" leftMargin="30" rightMargin="30"
+    topMargin="20" bottomMargin="20"
+    whenNoDataType="NoData"
+    isTitleNewPage="false">
+
+    <!-- ============================================================
+         STYLES — Define reusable styles once, apply by name
+         ============================================================ -->
+    <style name="DefaultStyle" isDefault="true" fontName="Helvetica" fontSize="9"
+           pdfFontName="Helvetica" isPdfEmbedded="false" pdfEncoding="Cp1252"/>
+
+    <style name="TitleStyle" style="DefaultStyle" fontSize="14" isBold="true"
+           pdfFontName="Helvetica-Bold"/>
+
+    <style name="HeaderStyle" style="DefaultStyle" fontSize="9" isBold="true"
+           backcolor="#C0C0C0" mode="Opaque" pdfFontName="Helvetica-Bold"/>
+
+    <style name="DataStyle" style="DefaultStyle" fontSize="9"/>
+
+    <!-- Zebra-stripe conditional style — applied to detail band rows -->
+    <style name="DataAlternate" style="DataStyle">
+        <conditionalStyle>
+            <conditionExpression><![CDATA[$V{REPORT_COUNT} % 2 == 0]]></conditionExpression>
+            <style backcolor="#F0F0F0" mode="Opaque"/>
+        </conditionalStyle>
+    </style>
+
+    <!-- ============================================================
+         PARAMETERS — Passed from EC at runtime
+         ============================================================ -->
+
+    <!-- Production date — defaults to today if not supplied -->
+    <parameter name="P_DAYTIME" class="java.util.Date">
+        <defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+    </parameter>
+
+    <!-- Facility filter — "ALL" means no filter -->
+    <parameter name="P_FACILITY_CODE" class="java.lang.String">
+        <defaultValueExpression><![CDATA["ALL"]]></defaultValueExpression>
+    </parameter>
+
+    <!-- JDBC connection passed from EC framework -->
+    <parameter name="REPORT_CONNECTION" class="java.sql.Connection" isForPrompting="false"/>
+
+    <!-- ============================================================
+         QUERY — Oracle SQL against EC production views
+         $P{} = safe parameterised placeholder
+         $P!{} = raw SQL injection (use with caution — validate input)
+         ============================================================ -->
+    <queryString language="sql">
+        <![CDATA[
+        SELECT
+            o.object_code                               AS OBJECT_CODE,
+            o.name                                      AS OBJECT_NAME,
+            TRUNC(s.daytime)                            AS PROD_DATE,
+            NVL(s.net_oil_vol_sm3, 0)                  AS NET_OIL_VOL,
+            NVL(s.gas_vol_sm3, 0)                       AS GAS_VOL,
+            NVL(s.water_vol_sm3, 0)                     AS WATER_VOL,
+            NVL(s.on_stream_hrs, 0)                     AS ON_STREAM_HRS,
+            s.record_status                             AS STATUS
+        FROM
+            rv_pwel_day_status s
+            JOIN object o ON o.object_id = s.object_id
+        WHERE
+            TRUNC(s.daytime) = TRUNC($P{P_DAYTIME})
+            AND ($P{P_FACILITY_CODE} = 'ALL'
+                 OR o.object_code LIKE $P{P_FACILITY_CODE} || '%')
+        ORDER BY
+            o.object_code
+        ]]>
+    </queryString>
+
+    <!-- ============================================================
+         FIELDS — Must match SQL column aliases exactly
+         class must match Oracle/JDBC Java type mapping
+         ============================================================ -->
+    <field name="OBJECT_CODE"    class="java.lang.String"/>
+    <field name="OBJECT_NAME"    class="java.lang.String"/>
+    <field name="PROD_DATE"      class="java.util.Date"/>
+    <field name="NET_OIL_VOL"    class="java.lang.Double"/>
+    <field name="GAS_VOL"        class="java.lang.Double"/>
+    <field name="WATER_VOL"      class="java.lang.Double"/>
+    <field name="ON_STREAM_HRS"  class="java.lang.Double"/>
+    <field name="STATUS"         class="java.lang.String"/>
+
+    <!-- ============================================================
+         VARIABLES — Calculated values
+         resetType: Report=once, Page=per page, Group=per group, None=running
+         calculation: Sum, Count, Average, Highest, Lowest, First, System
+         ============================================================ -->
+
+    <!-- Grand total oil — resets once per report -->
+    <variable name="TOTAL_OIL" class="java.lang.Double"
+              calculation="Sum" resetType="Report">
+        <variableExpression><![CDATA[$F{NET_OIL_VOL}]]></variableExpression>
+        <initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+    </variable>
+
+    <!-- Grand total gas -->
+    <variable name="TOTAL_GAS" class="java.lang.Double"
+              calculation="Sum" resetType="Report">
+        <variableExpression><![CDATA[$F{GAS_VOL}]]></variableExpression>
+        <initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+    </variable>
+
+    <!-- Row counter — used for zebra striping -->
+    <variable name="ROW_NUM" class="java.lang.Integer"
+              calculation="Count" resetType="Report">
+        <variableExpression><![CDATA[1]]></variableExpression>
+    </variable>
+
+    <!-- ============================================================
+         BAND: title — Renders once at the very beginning
+         ============================================================ -->
+    <title>
+        <band height="50" splitType="Stretch">
+            <!-- Report title -->
+            <textField>
+                <reportElement style="TitleStyle" x="0" y="5" width="500" height="25"/>
+                <textElement>
+                    <font fontName="Helvetica" pdfFontName="Helvetica-Bold"
+                          isBold="true" size="14" isPdfEmbedded="false"/>
+                </textElement>
+                <textFieldExpression><![CDATA["EC Daily Production Report"]]></textFieldExpression>
+            </textField>
+
+            <!-- Run date/time -->
+            <textField>
+                <reportElement style="DefaultStyle" x="0" y="30" width="400" height="15"/>
+                <textFieldExpression>
+                    <![CDATA["Production Date: " +
+                        new java.text.SimpleDateFormat("dd-MMM-yyyy").format($P{P_DAYTIME}) +
+                        "   |   Facility: " + $P{P_FACILITY_CODE}]]>
+                </textFieldExpression>
+            </textField>
+
+            <!-- Generated timestamp -->
+            <textField evaluationTime="Report">
+                <reportElement style="DefaultStyle" x="600" y="5" width="182" height="15"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA["Generated: " +
+                        new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm").format(new java.util.Date())]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <!-- ============================================================
+         BAND: pageHeader — Top of every page
+         ============================================================ -->
+    <pageHeader>
+        <band height="5" splitType="Stretch">
+            <!-- Thin top rule line -->
+            <line>
+                <reportElement x="0" y="0" width="782" height="1"/>
+                <graphicElement>
+                    <pen lineWidth="0.5" lineColor="#666666"/>
+                </graphicElement>
+            </line>
+        </band>
+    </pageHeader>
+
+    <!-- ============================================================
+         BAND: columnHeader — Column labels above the data rows
+         ============================================================ -->
+    <columnHeader>
+        <band height="20" splitType="Stretch">
+            <!-- Background -->
+            <rectangle>
+                <reportElement x="0" y="0" width="782" height="20" backcolor="#404040" mode="Opaque"/>
+            </rectangle>
+
+            <!-- Column headers — white text on dark background -->
+            <staticText>
+                <reportElement style="HeaderStyle" x="0" y="2" width="100" height="16"
+                               forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement><font isBold="true" forecolor="#FFFFFF"
+                                   pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/></textElement>
+                <text><![CDATA[Well Code]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="HeaderStyle" x="100" y="2" width="150" height="16"
+                               forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement><font isBold="true" forecolor="#FFFFFF"
+                                   pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/></textElement>
+                <text><![CDATA[Well Name]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="HeaderStyle" x="250" y="2" width="100" height="16"
+                               forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" forecolor="#FFFFFF"
+                          pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[Oil (SM3)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="HeaderStyle" x="350" y="2" width="100" height="16"
+                               forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" forecolor="#FFFFFF"
+                          pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[Gas (SM3)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="HeaderStyle" x="450" y="2" width="100" height="16"
+                               forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" forecolor="#FFFFFF"
+                          pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[Water (SM3)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="HeaderStyle" x="550" y="2" width="80" height="16"
+                               forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" forecolor="#FFFFFF"
+                          pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[On-Stream (h)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="HeaderStyle" x="630" y="2" width="80" height="16"
+                               forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true" forecolor="#FFFFFF"
+                          pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[Status]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- ============================================================
+         BAND: detail — Renders once per data source row
+         Uses DataAlternate style for zebra striping
+         ============================================================ -->
+    <detail>
+        <band height="16" splitType="Prevent">
+            <!-- Alternating row background — handled by conditionalStyle -->
+            <rectangle>
+                <reportElement style="DataAlternate" x="0" y="0" width="782" height="16"
+                               mode="Opaque"/>
+            </rectangle>
+
+            <!-- Well Code -->
+            <textField>
+                <reportElement style="DataStyle" x="0" y="1" width="100" height="14"/>
+                <textFieldExpression><![CDATA[$F{OBJECT_CODE}]]></textFieldExpression>
+            </textField>
+
+            <!-- Well Name — truncate if too long -->
+            <textField isStretchWithOverflow="false">
+                <reportElement style="DataStyle" x="100" y="1" width="150" height="14"/>
+                <textFieldExpression>
+                    <![CDATA[$F{OBJECT_NAME} != null ?
+                        ($F{OBJECT_NAME}.length() > 22 ?
+                            $F{OBJECT_NAME}.substring(0, 22) + "…" :
+                            $F{OBJECT_NAME}) :
+                        ""]]>
+                </textFieldExpression>
+            </textField>
+
+            <!-- Oil volume — formatted with 3 decimal places, null-safe -->
+            <textField>
+                <reportElement style="DataStyle" x="250" y="1" width="100" height="14"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA[$F{NET_OIL_VOL} != null ?
+                        new java.text.DecimalFormat("#,##0.000").format($F{NET_OIL_VOL}) :
+                        "0.000"]]>
+                </textFieldExpression>
+            </textField>
+
+            <!-- Gas volume -->
+            <textField>
+                <reportElement style="DataStyle" x="350" y="1" width="100" height="14"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA[$F{GAS_VOL} != null ?
+                        new java.text.DecimalFormat("#,##0.000").format($F{GAS_VOL}) :
+                        "0.000"]]>
+                </textFieldExpression>
+            </textField>
+
+            <!-- Water volume -->
+            <textField>
+                <reportElement style="DataStyle" x="450" y="1" width="100" height="14"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA[$F{WATER_VOL} != null ?
+                        new java.text.DecimalFormat("#,##0.000").format($F{WATER_VOL}) :
+                        "0.000"]]>
+                </textFieldExpression>
+            </textField>
+
+            <!-- On-stream hours -->
+            <textField>
+                <reportElement style="DataStyle" x="550" y="1" width="80" height="14"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA[$F{ON_STREAM_HRS} != null ?
+                        new java.text.DecimalFormat("##0.0").format($F{ON_STREAM_HRS}) :
+                        "0.0"]]>
+                </textFieldExpression>
+            </textField>
+
+            <!-- Status — show only if not Provisional (conditionally hide P status) -->
+            <textField>
+                <reportElement style="DataStyle" x="630" y="1" width="80" height="14">
+                    <!-- Only show status when it is not Provisional -->
+                    <printWhenExpression>
+                        <![CDATA[$F{STATUS} != null && !$F{STATUS}.equals("P")]]>
+                    </printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA[$F{STATUS} != null ?
+                        ($F{STATUS}.equals("V") ? "Verified" :
+                        ($F{STATUS}.equals("A") ? "Approved" : $F{STATUS})) :
+                        ""]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <!-- ============================================================
+         BAND: columnFooter — After all detail rows on each page
+         ============================================================ -->
+    <columnFooter>
+        <band height="3" splitType="Stretch">
+            <!-- Thin separator line -->
+            <line>
+                <reportElement x="0" y="0" width="782" height="1"/>
+                <graphicElement><pen lineWidth="0.5" lineColor="#999999"/></graphicElement>
+            </line>
+        </band>
+    </columnFooter>
+
+    <!-- ============================================================
+         BAND: pageFooter — Bottom of every page
+         Shows page number; suppressed on summary page by lastPageFooter
+         ============================================================ -->
+    <pageFooter>
+        <band height="20" splitType="Stretch">
+            <!-- Page number centred -->
+            <textField>
+                <reportElement style="DefaultStyle" x="0" y="3" width="782" height="14"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA["Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <!-- ============================================================
+         BAND: lastPageFooter — Replaces pageFooter on the final page
+         Shows grand totals here instead of in summary band
+         ============================================================ -->
+    <lastPageFooter>
+        <band height="40" splitType="Stretch">
+            <!-- Separator line above totals -->
+            <line>
+                <reportElement x="0" y="0" width="782" height="1"/>
+                <graphicElement><pen lineWidth="1.0" lineColor="#404040"/></graphicElement>
+            </line>
+
+            <!-- TOTALS label -->
+            <staticText>
+                <reportElement style="HeaderStyle" x="0" y="5" width="250" height="16"/>
+                <textElement>
+                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[GRAND TOTAL]]></text>
+            </staticText>
+
+            <!-- Total oil -->
+            <textField>
+                <reportElement style="DefaultStyle" x="250" y="5" width="100" height="16"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <textFieldExpression>
+                    <![CDATA[$V{TOTAL_OIL} != null ?
+                        new java.text.DecimalFormat("#,##0.000").format($V{TOTAL_OIL}) :
+                        "0.000"]]>
+                </textFieldExpression>
+            </textField>
+
+            <!-- Total gas -->
+            <textField>
+                <reportElement style="DefaultStyle" x="350" y="5" width="100" height="16"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <textFieldExpression>
+                    <![CDATA[$V{TOTAL_GAS} != null ?
+                        new java.text.DecimalFormat("#,##0.000").format($V{TOTAL_GAS}) :
+                        "0.000"]]>
+                </textFieldExpression>
+            </textField>
+
+            <!-- Page info on last page -->
+            <textField>
+                <reportElement style="DefaultStyle" x="0" y="25" width="782" height="14"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA["Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT} +
+                        "   |   Total Records: " + $V{ROW_NUM}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </lastPageFooter>
+
+    <!-- ============================================================
+         BAND: summary — Renders after all pages, before lastPageFooter
+         Kept empty here as totals are in lastPageFooter
+         ============================================================ -->
+    <summary>
+        <band height="0"/>
+    </summary>
+
+    <!-- ============================================================
+         BAND: noData — Renders when query returns zero rows
+         ALWAYS include this band — Oracle queries can return empty
+         ============================================================ -->
+    <noData>
+        <band height="60">
+            <staticText>
+                <reportElement style="DefaultStyle" x="0" y="10" width="782" height="20"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[No production data found for the selected criteria.]]></text>
+            </staticText>
+            <textField>
+                <reportElement style="DefaultStyle" x="0" y="30" width="782" height="20"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA["Production Date: " +
+                        new java.text.SimpleDateFormat("dd-MMM-yyyy").format($P{P_DAYTIME}) +
+                        "   |   Facility: " + $P{P_FACILITY_CODE}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </noData>
+
+</jasperReport>

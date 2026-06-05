@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================
+     CSV Data Source Report Demo — JR-02
+     v7.0.3 compliant | CSV data source (no database required)
+     Useful for: import validation reports, offline testing
+     CSV format: objectCode,daytime,netOilVol,gasVol,status
+     ============================================================ -->
+<jasperReport
+    xmlns="http://jasperreports.sourceforge.net/jasperreports"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+    name="EC_CSV_Import_Validation"
+    pageWidth="595" pageHeight="842"
+    columnWidth="535" leftMargin="30" rightMargin="30"
+    topMargin="20" bottomMargin="20"
+    whenNoDataType="NoData">
+
+    <style name="Default" isDefault="true" fontName="Helvetica" fontSize="9"
+           pdfFontName="Helvetica" isPdfEmbedded="false" pdfEncoding="Cp1252"/>
+
+    <!-- No queryString needed for CSV — columns mapped by name via fieldDescription -->
+
+    <!-- ============================================================
+         FIELDS — fieldDescription maps to CSV column name
+         ============================================================ -->
+    <field name="objectCode" class="java.lang.String">
+        <fieldDescription><![CDATA[objectCode]]></fieldDescription>
+    </field>
+    <field name="daytime" class="java.lang.String">
+        <!-- CSV has no native Date type — read as String, format in expression -->
+        <fieldDescription><![CDATA[daytime]]></fieldDescription>
+    </field>
+    <field name="netOilVol" class="java.lang.String">
+        <!-- Read as String from CSV, parse to Double in expression -->
+        <fieldDescription><![CDATA[netOilVol]]></fieldDescription>
+    </field>
+    <field name="gasVol" class="java.lang.String">
+        <fieldDescription><![CDATA[gasVol]]></fieldDescription>
+    </field>
+    <field name="status" class="java.lang.String">
+        <fieldDescription><![CDATA[status]]></fieldDescription>
+    </field>
+
+    <!-- ============================================================
+         VARIABLE — Count rows
+         ============================================================ -->
+    <variable name="ROW_COUNT" class="java.lang.Integer" calculation="Count" resetType="Report">
+        <variableExpression><![CDATA[1]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+
+    <!-- ============================================================
+         TITLE
+         ============================================================ -->
+    <title>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="5" width="535" height="20"/>
+                <textElement>
+                    <font fontName="Helvetica" pdfFontName="Helvetica-Bold"
+                          isBold="true" size="12" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[EC Import Data Validation Report (CSV)]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <pageHeader><band height="2"/></pageHeader>
+
+    <!-- ============================================================
+         COLUMN HEADER
+         ============================================================ -->
+    <columnHeader>
+        <band height="16">
+            <rectangle>
+                <reportElement x="0" y="0" width="535" height="16" backcolor="#404040" mode="Opaque"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="0" y="1" width="100" height="14" forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement><font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/></textElement>
+                <text><![CDATA[Object Code]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="100" y="1" width="100" height="14" forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement><font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/></textElement>
+                <text><![CDATA[Date]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="200" y="1" width="100" height="14" forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[Oil (SM3)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="300" y="1" width="100" height="14" forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[Gas (SM3)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="400" y="1" width="80" height="14" forecolor="#FFFFFF" backcolor="#404040"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[Status]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- ============================================================
+         DETAIL — CSV fields are String; parse numerics in expression
+         ============================================================ -->
+    <detail>
+        <band height="14">
+            <textField>
+                <reportElement x="0" y="1" width="100" height="12"/>
+                <textFieldExpression>
+                    <![CDATA[java.util.Objects.toString($F{objectCode}, "")]]>
+                </textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="100" y="1" width="100" height="12"/>
+                <textFieldExpression>
+                    <![CDATA[java.util.Objects.toString($F{daytime}, "")]]>
+                </textFieldExpression>
+            </textField>
+            <!-- Parse CSV string to Double for display -->
+            <textField>
+                <reportElement x="200" y="1" width="100" height="12"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA[$F{netOilVol} != null && !$F{netOilVol}.trim().isEmpty() ?
+                        new java.text.DecimalFormat("#,##0.000").format(
+                            Double.parseDouble($F{netOilVol}.trim())) :
+                        "0.000"]]>
+                </textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="300" y="1" width="100" height="12"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA[$F{gasVol} != null && !$F{gasVol}.trim().isEmpty() ?
+                        new java.text.DecimalFormat("#,##0.000").format(
+                            Double.parseDouble($F{gasVol}.trim())) :
+                        "0.000"]]>
+                </textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="400" y="1" width="80" height="12"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA[java.util.Objects.toString($F{status}, "")]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <columnFooter><band height="2"/></columnFooter>
+
+    <!-- ============================================================
+         LAST PAGE FOOTER
+         ============================================================ -->
+    <lastPageFooter>
+        <band height="20">
+            <textField>
+                <reportElement x="0" y="2" width="535" height="16"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA["Total records imported: " + $V{ROW_COUNT} +
+                        "   |   Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </lastPageFooter>
+
+    <pageFooter>
+        <band height="16">
+            <textField>
+                <reportElement x="0" y="1" width="535" height="14"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA["Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <summary><band height="0"/></summary>
+
+    <noData>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="5" width="535" height="20"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[No data rows found in CSV file.]]></text>
+            </staticText>
+        </band>
+    </noData>
+
+</jasperReport>

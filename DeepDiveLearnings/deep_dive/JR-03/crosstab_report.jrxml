@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================
+     CROSSTAB REPORT: Monthly Production by Stream and Phase
+     Rows: Stream codes | Columns: Month (MMM-YY)
+     Measure: Sum of oil volume | Row + Column grand totals
+     Conditional style: alternating row background
+     ============================================================ -->
+<jasperReport
+    xmlns="http://jasperreports.sourceforge.net/jasperreports"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+    name="crosstab_report"
+    pageWidth="842" pageHeight="595"
+    orientation="Landscape"
+    columnWidth="782" leftMargin="30" rightMargin="30"
+    topMargin="20" bottomMargin="20"
+    whenNoDataType="NoData">
+
+    <style name="Default" isDefault="true" fontName="Helvetica" fontSize="8"
+           pdfFontName="Helvetica" isPdfEmbedded="false" pdfEncoding="Cp1252"/>
+    <style name="Bold" style="Default" isBold="true" pdfFontName="Helvetica-Bold"/>
+    <style name="CrosstabHeader" style="Bold" backcolor="#2F5496" forecolor="#FFFFFF" mode="Opaque"/>
+    <style name="CrosstabTotal" style="Bold" backcolor="#E8EDF5" mode="Opaque"/>
+
+    <parameter name="P_YEAR" class="java.lang.Integer">
+        <defaultValueExpression><![CDATA[2025]]></defaultValueExpression>
+    </parameter>
+
+    <!-- Sub-dataset for crosstab (separate from main report query) -->
+    <subDataset name="CROSSTAB_DATASET">
+        <parameter name="P_YEAR" class="java.lang.Integer">
+            <defaultValueExpression><![CDATA[2025]]></defaultValueExpression>
+        </parameter>
+        <queryString language="sql">
+            <![CDATA[
+            SELECT
+                o.object_code                           AS stream_code,
+                TRUNC(s.daytime, 'MM')                  AS month_start,
+                NVL(s.net_oil_vol_sm3, 0)              AS oil_vol
+            FROM
+                rv_strm_day_status s
+                JOIN object o ON o.object_id = s.object_id
+            WHERE
+                EXTRACT(YEAR FROM s.daytime) = $P{P_YEAR}
+            ORDER BY
+                o.object_code, TRUNC(s.daytime, 'MM')
+            ]]>
+        </queryString>
+        <field name="stream_code" class="java.lang.String"/>
+        <field name="month_start" class="java.util.Date"/>
+        <field name="oil_vol"     class="java.lang.Double"/>
+    </subDataset>
+
+    <!-- Main query: just to trigger the report (crosstab uses subDataset) -->
+    <queryString language="sql">
+        <![CDATA[SELECT 1 FROM DUAL]]>
+    </queryString>
+
+    <title>
+        <band height="30">
+            <textField>
+                <reportElement x="0" y="5" width="782" height="18"/>
+                <textElement>
+                    <font fontName="Helvetica" pdfFontName="Helvetica-Bold" isBold="true" size="12" isPdfEmbedded="false"/>
+                </textElement>
+                <textFieldExpression>
+                    <![CDATA["Monthly Stream Oil Production Crosstab — Year " + $P{P_YEAR}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <pageHeader><band height="2"/></pageHeader>
+    <columnHeader><band height="0"/></columnHeader>
+
+    <detail>
+        <band height="500" splitType="Prevent">
+            <!-- ============================================================
+                 CROSSTAB ELEMENT
+                 ============================================================ -->
+            <crosstab isRepeatColumnHeaders="true" isRepeatRowHeaders="true">
+                <reportElement x="0" y="10" width="782" height="480"/>
+
+                <!-- Sub-dataset binding -->
+                <crosstabDataset>
+                    <dataset>
+                        <datasetRun subDataset="CROSSTAB_DATASET">
+                            <datasetParameter name="P_YEAR">
+                                <datasetParameterExpression><![CDATA[$P{P_YEAR}]]></datasetParameterExpression>
+                            </datasetParameter>
+                            <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+                        </datasetRun>
+                    </dataset>
+                </crosstabDataset>
+
+                <!-- Row Group: Stream Code -->
+                <rowGroup name="STREAM_GROUP" width="120" totalPosition="End">
+                    <bucket class="java.lang.String" order="Ascending">
+                        <bucketExpression><![CDATA[$F{stream_code}]]></bucketExpression>
+                    </bucket>
+                    <crosstabRowHeader>
+                        <cellContents>
+                            <textField>
+                                <reportElement x="0" y="0" width="120" height="16"/>
+                                <textFieldExpression>
+                                    <![CDATA[java.util.Objects.toString($V{STREAM_GROUP}, "")]]>
+                                </textFieldExpression>
+                            </textField>
+                        </cellContents>
+                    </crosstabRowHeader>
+                    <crosstabTotalRowHeader>
+                        <cellContents>
+                            <staticText>
+                                <reportElement style="CrosstabTotal" x="0" y="0" width="120" height="16"/>
+                                <textElement><font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/></textElement>
+                                <text><![CDATA[TOTAL]]></text>
+                            </staticText>
+                        </cellContents>
+                    </crosstabTotalRowHeader>
+                </rowGroup>
+
+                <!-- Column Group: Month -->
+                <columnGroup name="MONTH_GROUP" height="20" totalPosition="End">
+                    <bucket class="java.util.Date" order="Ascending">
+                        <bucketExpression><![CDATA[$F{month_start}]]></bucketExpression>
+                    </bucket>
+                    <crosstabColumnHeader>
+                        <cellContents>
+                            <textField>
+                                <reportElement style="CrosstabHeader" x="0" y="0" width="55" height="20"/>
+                                <textElement textAlignment="Center">
+                                    <font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                                </textElement>
+                                <textFieldExpression>
+                                    <![CDATA[$V{MONTH_GROUP} != null ?
+                                        new java.text.SimpleDateFormat("MMM-yy").format($V{MONTH_GROUP}) : ""]]>
+                                </textFieldExpression>
+                            </textField>
+                        </cellContents>
+                    </crosstabColumnHeader>
+                    <crosstabTotalColumnHeader>
+                        <cellContents>
+                            <staticText>
+                                <reportElement style="CrosstabTotal" x="0" y="0" width="70" height="20"/>
+                                <textElement textAlignment="Center">
+                                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                                </textElement>
+                                <text><![CDATA[YR TOTAL]]></text>
+                            </staticText>
+                        </cellContents>
+                    </crosstabTotalColumnHeader>
+                </columnGroup>
+
+                <!-- Measure: Sum of oil volume -->
+                <measure name="OIL_SUM" class="java.lang.Double" calculation="Sum">
+                    <measureExpression><![CDATA[$F{oil_vol}]]></measureExpression>
+                </measure>
+
+                <!-- Detail cell (stream × month) — with alternating row background -->
+                <crosstabCell width="55" height="16">
+                    <cellContents>
+                        <textField>
+                            <reportElement x="0" y="0" width="55" height="16"/>
+                            <textElement textAlignment="Right"/>
+                            <textFieldExpression>
+                                <![CDATA[$V{OIL_SUM} != null ?
+                                    new java.text.DecimalFormat("#,##0.0").format($V{OIL_SUM}) : "-"]]>
+                            </textFieldExpression>
+                        </textField>
+                    </cellContents>
+                </crosstabCell>
+
+                <!-- Row total cell (stream × YR TOTAL column) -->
+                <crosstabCell width="70" height="16" columnTotalGroup="MONTH_GROUP">
+                    <cellContents>
+                        <textField>
+                            <reportElement style="CrosstabTotal" x="0" y="0" width="70" height="16"/>
+                            <textElement textAlignment="Right">
+                                <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                            </textElement>
+                            <textFieldExpression>
+                                <![CDATA[$V{OIL_SUM} != null ?
+                                    new java.text.DecimalFormat("#,##0.0").format($V{OIL_SUM}) : "0.0"]]>
+                            </textFieldExpression>
+                        </textField>
+                    </cellContents>
+                </crosstabCell>
+
+                <!-- Column total cell (TOTAL row × month column) -->
+                <crosstabCell width="55" height="16" rowTotalGroup="STREAM_GROUP">
+                    <cellContents>
+                        <textField>
+                            <reportElement style="CrosstabTotal" x="0" y="0" width="55" height="16"/>
+                            <textElement textAlignment="Right">
+                                <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                            </textElement>
+                            <textFieldExpression>
+                                <![CDATA[$V{OIL_SUM} != null ?
+                                    new java.text.DecimalFormat("#,##0.0").format($V{OIL_SUM}) : "0.0"]]>
+                            </textFieldExpression>
+                        </textField>
+                    </cellContents>
+                </crosstabCell>
+
+                <!-- Grand total cell (TOTAL row × YR TOTAL column) -->
+                <crosstabCell width="70" height="16"
+                              rowTotalGroup="STREAM_GROUP" columnTotalGroup="MONTH_GROUP">
+                    <cellContents>
+                        <textField>
+                            <reportElement style="CrosstabTotal" x="0" y="0" width="70" height="16"/>
+                            <textElement textAlignment="Right">
+                                <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false" size="9"/>
+                            </textElement>
+                            <textFieldExpression>
+                                <![CDATA[$V{OIL_SUM} != null ?
+                                    new java.text.DecimalFormat("#,##0.0").format($V{OIL_SUM}) : "0.0"]]>
+                            </textFieldExpression>
+                        </textField>
+                    </cellContents>
+                </crosstabCell>
+
+            </crosstab>
+        </band>
+    </detail>
+
+    <columnFooter><band height="0"/></columnFooter>
+    <pageFooter>
+        <band height="16">
+            <textField>
+                <reportElement x="0" y="1" width="782" height="14"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression><![CDATA["Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT}]]></textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+    <lastPageFooter><band height="0"/></lastPageFooter>
+    <summary><band height="0"/></summary>
+    <noData>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="5" width="782" height="20"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[No data available for the selected year.]]></text>
+            </staticText>
+        </band>
+    </noData>
+
+</jasperReport>

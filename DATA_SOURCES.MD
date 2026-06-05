@@ -44,3 +44,14 @@ EC Web App Url                 : https://bitbucket.org/energycomponents/ecaas_cl
 
 
 ECpedia :                       https://energycomponents.atlassian.net/wiki/spaces/IH/overview?mode=global
+
+
+Local EC Web App Url       : https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/
+EC WebUser Id        : sysadmin
+EC Web User Password : Sysadmin
+
+EC Local oracle db server url : localhost:1521/ORCL
+EC DB User Id                 : ECKERNEL_EC
+EC DB User Password           : energy
+
+sqlplus ECKERNEL_EC/energy@localhost:1521/ORCL

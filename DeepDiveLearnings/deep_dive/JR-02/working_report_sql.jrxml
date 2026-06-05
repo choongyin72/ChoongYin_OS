@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================
+     EC Stream Component Analysis Report — JR-02 SQL Demo
+     v7.0.3 compliant | Oracle JDBC data source
+     Demonstrates: 2 parameters ($P{} and $X{IN}), 5 fields,
+     3 variables (Sum, Count, System), 2 groups, conditional print
+     ============================================================ -->
+<jasperReport
+    xmlns="http://jasperreports.sourceforge.net/jasperreports"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+    name="EC_Stream_Component_Analysis"
+    pageWidth="842" pageHeight="595"
+    orientation="Landscape"
+    columnWidth="782" leftMargin="30" rightMargin="30"
+    topMargin="20" bottomMargin="20"
+    whenNoDataType="NoData">
+
+    <!-- Styles -->
+    <style name="Default" isDefault="true" fontName="Helvetica" fontSize="9"
+           pdfFontName="Helvetica" isPdfEmbedded="false" pdfEncoding="Cp1252"/>
+    <style name="Bold" style="Default" isBold="true" pdfFontName="Helvetica-Bold"/>
+    <style name="Header" style="Bold" backcolor="#2F5496" forecolor="#FFFFFF" mode="Opaque"/>
+
+    <!-- ============================================================
+         PARAMETERS
+         ============================================================ -->
+
+    <!-- $P{} — safe JDBC binding -->
+    <parameter name="P_DAYTIME" class="java.util.Date">
+        <defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+    </parameter>
+
+    <!-- $X{IN, column, param} — multi-value IN clause; param is java.util.Collection -->
+    <parameter name="P_STREAM_CODES" class="java.util.Collection">
+        <defaultValueExpression>
+            <![CDATA[java.util.Arrays.asList("STRM_001", "STRM_002", "STRM_003")]]>
+        </defaultValueExpression>
+    </parameter>
+
+    <!-- ============================================================
+         QUERY — Uses both $P{} and $X{IN} syntax
+         ============================================================ -->
+    <queryString language="sql">
+        <![CDATA[
+        SELECT
+            o.object_code                               AS stream_code,
+            o.name                                      AS stream_name,
+            NVL(ca.mol_pct_c1, 0)                      AS mol_pct_c1,
+            NVL(ca.mol_pct_c2, 0)                      AS mol_pct_c2,
+            NVL(ca.mol_pct_co2, 0)                     AS mol_pct_co2,
+            NVL(ca.gross_calorific_value, 0)           AS gcv,
+            ca.record_status                            AS rec_status
+        FROM
+            rv_strm_comp_analysis ca
+            JOIN object o ON o.object_id = ca.object_id
+        WHERE
+            TRUNC(ca.daytime) = TRUNC($P{P_DAYTIME})
+            AND $X{IN, o.object_code, P_STREAM_CODES}
+        ORDER BY
+            o.object_code
+        ]]>
+    </queryString>
+
+    <!-- ============================================================
+         FIELDS
+         ============================================================ -->
+    <field name="stream_code"   class="java.lang.String"/>
+    <field name="stream_name"   class="java.lang.String"/>
+    <field name="mol_pct_c1"    class="java.lang.Double"/>
+    <field name="mol_pct_c2"    class="java.lang.Double"/>
+    <field name="mol_pct_co2"   class="java.lang.Double"/>
+    <field name="gcv"           class="java.lang.Double"/>
+    <field name="rec_status"    class="java.lang.String"/>
+
+    <!-- ============================================================
+         VARIABLES
+         ============================================================ -->
+
+    <!-- Sum: Average GCV across all streams (uses Sum/Count pattern) -->
+    <variable name="TOTAL_GCV" class="java.lang.Double" calculation="Sum" resetType="Report">
+        <variableExpression><![CDATA[$F{gcv}]]></variableExpression>
+        <initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+    </variable>
+
+    <!-- Count: Total stream records -->
+    <variable name="STREAM_COUNT" class="java.lang.Integer" calculation="Count" resetType="Report">
+        <variableExpression><![CDATA[1]]></variableExpression>
+        <initialValueExpression><![CDATA[0]]></initialValueExpression>
+    </variable>
+
+    <!-- System: Manually-computed average GCV (used in summary) -->
+    <variable name="AVG_GCV" class="java.lang.Double" calculation="System" resetType="Report">
+        <variableExpression>
+            <![CDATA[($V{STREAM_COUNT} != null && $V{STREAM_COUNT} > 0) ?
+                $V{TOTAL_GCV} / $V{STREAM_COUNT} : 0.0]]>
+        </variableExpression>
+        <initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+    </variable>
+
+    <!-- ============================================================
+         TITLE
+         ============================================================ -->
+    <title>
+        <band height="40">
+            <textField>
+                <reportElement x="0" y="5" width="600" height="20"/>
+                <textElement>
+                    <font fontName="Helvetica" pdfFontName="Helvetica-Bold"
+                          isBold="true" size="13" isPdfEmbedded="false"/>
+                </textElement>
+                <textFieldExpression>
+                    <![CDATA["Stream Component Analysis — " +
+                        new java.text.SimpleDateFormat("dd-MMM-yyyy").format($P{P_DAYTIME})]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <!-- ============================================================
+         PAGE HEADER
+         ============================================================ -->
+    <pageHeader>
+        <band height="2"/>
+    </pageHeader>
+
+    <!-- ============================================================
+         COLUMN HEADER
+         ============================================================ -->
+    <columnHeader>
+        <band height="18">
+            <rectangle>
+                <reportElement x="0" y="0" width="782" height="18" backcolor="#2F5496" mode="Opaque"/>
+            </rectangle>
+            <staticText>
+                <reportElement style="Header" x="0" y="1" width="100" height="16"/>
+                <text><![CDATA[Stream Code]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Header" x="100" y="1" width="180" height="16"/>
+                <text><![CDATA[Stream Name]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Header" x="280" y="1" width="80" height="16"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[C1 (mol%)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Header" x="360" y="1" width="80" height="16"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[C2 (mol%)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Header" x="440" y="1" width="80" height="16"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[CO2 (mol%)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Header" x="520" y="1" width="120" height="16"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[GCV (MJ/SM3)]]></text>
+            </staticText>
+            <staticText>
+                <reportElement style="Header" x="640" y="1" width="80" height="16"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true" forecolor="#FFFFFF" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[Status]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- ============================================================
+         DETAIL
+         ============================================================ -->
+    <detail>
+        <band height="14" splitType="Prevent">
+            <textField>
+                <reportElement x="0" y="1" width="100" height="12"/>
+                <textFieldExpression><![CDATA[$F{stream_code}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="100" y="1" width="180" height="12"/>
+                <textFieldExpression>
+                    <![CDATA[java.util.Objects.toString($F{stream_name}, "")]]>
+                </textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="280" y="1" width="80" height="12"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA[$F{mol_pct_c1} != null ?
+                        new java.text.DecimalFormat("##0.000").format($F{mol_pct_c1}) : "0.000"]]>
+                </textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="360" y="1" width="80" height="12"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA[$F{mol_pct_c2} != null ?
+                        new java.text.DecimalFormat("##0.000").format($F{mol_pct_c2}) : "0.000"]]>
+                </textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="440" y="1" width="80" height="12"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA[$F{mol_pct_co2} != null ?
+                        new java.text.DecimalFormat("##0.000").format($F{mol_pct_co2}) : "0.000"]]>
+                </textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="520" y="1" width="120" height="12"/>
+                <textElement textAlignment="Right"/>
+                <textFieldExpression>
+                    <![CDATA[$F{gcv} != null ?
+                        new java.text.DecimalFormat("#,##0.000").format($F{gcv}) : "0.000"]]>
+                </textFieldExpression>
+            </textField>
+            <!-- Status — only print when Verified or Approved (hide Provisional) -->
+            <textField>
+                <reportElement x="640" y="1" width="80" height="12">
+                    <printWhenExpression>
+                        <![CDATA[$F{rec_status} != null && !$F{rec_status}.equals("P")]]>
+                    </printWhenExpression>
+                </reportElement>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA[$F{rec_status} != null ?
+                        ($F{rec_status}.equals("V") ? "Verified" :
+                        ($F{rec_status}.equals("A") ? "Approved" : $F{rec_status})) : ""]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <!-- ============================================================
+         COLUMN FOOTER
+         ============================================================ -->
+    <columnFooter>
+        <band height="2"/>
+    </columnFooter>
+
+    <!-- ============================================================
+         PAGE FOOTER
+         ============================================================ -->
+    <pageFooter>
+        <band height="16">
+            <textField>
+                <reportElement x="0" y="1" width="782" height="14"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA["Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <!-- ============================================================
+         LAST PAGE FOOTER
+         ============================================================ -->
+    <lastPageFooter>
+        <band height="36">
+            <line>
+                <reportElement x="0" y="0" width="782" height="1"/>
+                <graphicElement><pen lineWidth="1.0" lineColor="#2F5496"/></graphicElement>
+            </line>
+            <staticText>
+                <reportElement x="0" y="4" width="200" height="14"/>
+                <textElement><font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/></textElement>
+                <text><![CDATA[Summary Statistics:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="200" y="4" width="400" height="14"/>
+                <textFieldExpression>
+                    <![CDATA["Streams analysed: " + $V{STREAM_COUNT} +
+                        "   |   Avg GCV: " +
+                        new java.text.DecimalFormat("#,##0.000").format($V{AVG_GCV}) +
+                        " MJ/SM3"]]>
+                </textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="0" y="20" width="782" height="14"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA["Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </lastPageFooter>
+
+    <!-- ============================================================
+         SUMMARY — empty (totals in lastPageFooter)
+         ============================================================ -->
+    <summary>
+        <band height="0"/>
+    </summary>
+
+    <!-- ============================================================
+         NO DATA BAND
+         ============================================================ -->
+    <noData>
+        <band height="40">
+            <staticText>
+                <reportElement x="0" y="10" width="782" height="16"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text>
+                    <![CDATA[No stream component analysis data found for the selected date and streams.]]>
+                </text>
+            </staticText>
+        </band>
+    </noData>
+
+</jasperReport>

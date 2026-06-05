@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ============================================================
+     MASTER REPORT: EC Facility Production with Well Detail Subreport
+     Groups by facility → calls subreport_detail.jrxml per facility
+     Receives subtotal oil back from subreport via returnValue
+     ============================================================ -->
+<jasperReport
+    xmlns="http://jasperreports.sourceforge.net/jasperreports"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports
+        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+    name="master_with_subreport"
+    pageWidth="842" pageHeight="595"
+    orientation="Landscape"
+    columnWidth="782" leftMargin="30" rightMargin="30"
+    topMargin="20" bottomMargin="20"
+    whenNoDataType="NoData">
+
+    <style name="Default" isDefault="true" fontName="Helvetica" fontSize="9"
+           pdfFontName="Helvetica" isPdfEmbedded="false" pdfEncoding="Cp1252"/>
+    <style name="Bold" style="Default" isBold="true" pdfFontName="Helvetica-Bold"/>
+    <style name="FacilityHeader" style="Bold" backcolor="#2F5496" forecolor="#FFFFFF" mode="Opaque" fontSize="10"/>
+
+    <!-- Parameters -->
+    <parameter name="P_DAYTIME" class="java.util.Date">
+        <defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+    </parameter>
+    <!-- Directory where subreport .jasper file lives -->
+    <parameter name="P_SUBREPORT_DIR" class="java.lang.String">
+        <defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+    </parameter>
+
+    <!-- Master query: one row per facility -->
+    <queryString language="sql">
+        <![CDATA[
+        SELECT DISTINCT
+            f.object_code   AS facility_code,
+            f.name          AS facility_name
+        FROM
+            object f
+            JOIN object w ON w.facility_id = f.object_id
+            JOIN rv_pwel_day_status s ON s.object_id = w.object_id
+        WHERE
+            TRUNC(s.daytime) = TRUNC($P{P_DAYTIME})
+        ORDER BY
+            f.object_code
+        ]]>
+    </queryString>
+
+    <field name="facility_code" class="java.lang.String"/>
+    <field name="facility_name" class="java.lang.String"/>
+
+    <!-- Received from subreport via returnValue -->
+    <variable name="MASTER_OIL_TOTAL" class="java.lang.Double"
+              calculation="Sum" resetType="Report">
+        <variableExpression><![CDATA[0.0]]></variableExpression>
+        <initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+    </variable>
+
+    <!-- Per-facility oil total (received from subreport) -->
+    <variable name="FACILITY_OIL_TOTAL" class="java.lang.Double"
+              calculation="System" resetType="Report">
+        <variableExpression><![CDATA[$V{FACILITY_OIL_TOTAL}]]></variableExpression>
+        <initialValueExpression><![CDATA[0.0]]></initialValueExpression>
+    </variable>
+
+    <!-- ============================================================
+         TITLE
+         ============================================================ -->
+    <title>
+        <band height="35">
+            <textField>
+                <reportElement x="0" y="5" width="600" height="20"/>
+                <textElement>
+                    <font fontName="Helvetica" pdfFontName="Helvetica-Bold" isBold="true" size="13" isPdfEmbedded="false"/>
+                </textElement>
+                <textFieldExpression>
+                    <![CDATA["EC Facility Production Report — " +
+                        new java.text.SimpleDateFormat("dd-MMM-yyyy").format($P{P_DAYTIME})]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </title>
+
+    <pageHeader><band height="2"/></pageHeader>
+    <columnHeader><band height="0"/></columnHeader>
+
+    <!-- ============================================================
+         DETAIL — One per facility (outer loop)
+         Contains: facility header + subreport call
+         ============================================================ -->
+    <detail>
+        <band height="180" splitType="Prevent">
+            <!-- Facility header row -->
+            <textField>
+                <reportElement style="FacilityHeader" x="0" y="0" width="782" height="18"/>
+                <textFieldExpression>
+                    <![CDATA["Facility: " + $F{facility_code} +
+                        " — " + ($F{facility_name} != null ? $F{facility_name} : "")]]>
+                </textFieldExpression>
+            </textField>
+
+            <!-- Subreport: well detail for this facility -->
+            <subreport>
+                <reportElement x="0" y="20" width="782" height="150"/>
+
+                <!-- Pass facility code and date to subreport -->
+                <subreportParameter name="P_FACILITY_ID">
+                    <subreportParameterExpression>
+                        <![CDATA[$F{facility_code}]]>
+                    </subreportParameterExpression>
+                </subreportParameter>
+                <subreportParameter name="P_DAYTIME">
+                    <subreportParameterExpression>
+                        <![CDATA[$P{P_DAYTIME}]]>
+                    </subreportParameterExpression>
+                </subreportParameter>
+
+                <!-- JDBC connection — same connection as master -->
+                <connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+
+                <!-- Receive subtotal from subreport -->
+                <returnValue subreportVariable="SUBTOTAL_OIL"
+                             toVariable="FACILITY_OIL_TOTAL"
+                             calculation="Sum"/>
+
+                <!-- Path: parameter + filename -->
+                <subreportExpression>
+                    <![CDATA[$P{P_SUBREPORT_DIR} + "subreport_detail.jasper"]]>
+                </subreportExpression>
+            </subreport>
+
+            <!-- Show facility oil total (returned from subreport) -->
+            <textField>
+                <reportElement x="230" y="173" width="200" height="12"/>
+                <textElement textAlignment="Right">
+                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false" size="8"/>
+                </textElement>
+                <textFieldExpression>
+                    <![CDATA["Facility Total Oil: " +
+                        new java.text.DecimalFormat("#,##0.000").format($V{FACILITY_OIL_TOTAL}) +
+                        " SM3"]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+    <columnFooter><band height="2"/></columnFooter>
+
+    <lastPageFooter>
+        <band height="24">
+            <line>
+                <reportElement x="0" y="0" width="782" height="1"/>
+                <graphicElement><pen lineWidth="1.0" lineColor="#2F5496"/></graphicElement>
+            </line>
+            <textField>
+                <reportElement x="0" y="4" width="782" height="16"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <textFieldExpression>
+                    <![CDATA["Grand Total Oil (All Facilities): " +
+                        new java.text.DecimalFormat("#,##0.000").format($V{MASTER_OIL_TOTAL}) +
+                        " SM3   |   Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </lastPageFooter>
+
+    <pageFooter>
+        <band height="16">
+            <textField>
+                <reportElement x="0" y="1" width="782" height="14"/>
+                <textElement textAlignment="Center"/>
+                <textFieldExpression>
+                    <![CDATA["Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_COUNT}]]>
+                </textFieldExpression>
+            </textField>
+        </band>
+    </pageFooter>
+
+    <summary><band height="0"/></summary>
+    <noData>
+        <band height="30">
+            <staticText>
+                <reportElement x="0" y="5" width="782" height="20"/>
+                <textElement textAlignment="Center">
+                    <font isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="false"/>
+                </textElement>
+                <text><![CDATA[No facility production data found for selected date.]]></text>
+            </staticText>
+        </band>
+    </noData>
+
+</jasperReport>
