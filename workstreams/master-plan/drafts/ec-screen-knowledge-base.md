@@ -1,213 +1,221 @@
 # EC Screen Knowledge Base
-**Source:** Live DOM exploration of `https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/`
-**Date:** 2026-06-06 | **User:** sysadmin
+**Sources:** 
+- Local EC sandbox (`ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/`) — sysadmin
+- Woodside Pluto COPS DEV (`app-plutodev.woodside-pluto.tieto-og.cloud/`) — sysadmin
+**Date:** 2026-06-06
 **Purpose:** Screen types, navigator fields, IUD capability — for Robot Framework automation
+
+---
+
+## Important: Two EC Instances
+
+| Instance | URL | Screen Set | When to use |
+|---|---|---|---|
+| **Local EC sandbox** | `ap-f0a7g341jn6d:8443` | Generic EC screens (Configuration, Reporting, Process Automation) | Learning, framework testing |
+| **Woodside Pluto COPS DEV** | `app-plutodev.woodside-pluto.tieto-og.cloud` | Woodside-specific production screens (Daily Stream Status, Well Status, Check Rules, PHD data) | All Woodside Pluto work |
+
+The local EC has ~685 screens (generic EC). Woodside Pluto has the same plus the Woodside production screens (ZWT/ZWP extensions).
 
 ---
 
 ## Screen Type Classification
 
-| Type | Count | Pattern | When to use in RF |
-|---|---|---|---|
-| **NAVIGATOR+TABLE** | 14 | Fill navigator → Go → data shows in table | Fill navigator fields → click Go → verify table loads |
-| **NAVIGATOR-ONLY** | 12 | Has navigator but no table on load | Fill navigator → Go → content loads in non-table format |
-| **ACTION/EMPTY** | 6 | No navigator, no table at load | Special screens — need investigation per screen |
+| Type | Pattern | RF approach |
+|---|---|---|
+| **NAVIGATOR+TABLE** | Fill navigator fields → Go → data table loads | Fill inputs → click Go → assert table has rows |
+| **NAVIGATOR-ONLY** | Has navigator but loads chart/dashboard (no table) | Fill navigator → Go → check specific content loaded |
+| **TABLE-ONLY** | No navigator — table loads immediately | Assert table visible → interact with rows directly |
+| **ACTION/EMPTY** | Special config screens — content loads differently | Wait for specific elements per screen |
 
 ### IUD Indicators
-- `S` = Save button enabled (can save changes)
-- `+` = Insert menu enabled (can add new records)
-- `D` = Delete menu enabled (can delete records)
+- `S` = Save enabled (modify records)
+- `+` = Insert menu enabled (add new records)
+- `D` = Delete menu enabled (remove records)
+- `-` = Not available on this screen
 
 ---
 
-## All 32 Screens — Complete Reference
+## Full EC Tree — 685 screens found (Local EC Sandbox)
 
-### Configuration / Framework Screens
+### Configuration (380 screens) — key ones
 
-| Screen | Type | IUD | Navigator Fields | Table Columns | Notes |
-|---|---|---|---|---|---|
-| Authentication Audit | NAVIGATOR+TABLE | --- | From Daytime UTC, To Daytime UTC | Time UTC, Type, Realm | Audit log — read only |
-| Object Partition | NAVIGATOR-ONLY | --- | Class Name, Created by, Record status | — | Select class → loads access rules |
-| Analytics Object Access | NAVIGATOR+TABLE | -+- | Object Type, Access, Created by | Object Type, Object Name, Access, Comments | Can insert access rules |
+| Screen | Type | Notes |
+|---|---|---|
+| **Check Group** (CO.0079) | Config | Defines check rule groups — links check rules to screens |
+| **Rule Group Combination** (CO.0080) | Config | Many-to-many: check rules ↔ groups |
+| **Validation Overview** (CO.0203) | NAVIGATOR+TABLE | Main validation screen — run check rules, view violations |
+| **Validation Overview by Facility** | NAVIGATOR+TABLE | Facility-filtered validation view |
+| **Class Validation** (CO.1031) | Config | Class-level min/max validation config |
+| **Hierarchical Object Validation** (CO.0253) | Config | Cascaded object validation |
+| **Object Validation - Default** (CO.1032.01) | Config | Object-level validation |
+| **Maintain Calculation** | Config | Create/edit EC calculations |
+| **Maintain Library Calculation** | Config | Library calc management |
+| **Calculation Group Setup** (CO.0246) | Config | Calculation group config + logs |
+| **Stream Node Diagram** | NAVIGATOR+TABLE | Visual allocation network diagram |
+| **Validation Overview** | NAVIGATOR+TABLE | nav: Date, Facility | See check rule violations |
+| **Initiate Day** | Config | Initialize production day |
+| **Production Day Table** | Config | Production day configuration |
+| **Business Actions** | Config | BPM business action configuration |
+| **Schedules** | Config | EC scheduler management |
+| **Adapter Configuration** | Config | ECIS adapter setup (PHD/PI) |
+| **Maintain Mappings** | Config | ECIS tag-to-attribute mappings |
+| **Check Group** | Config | Check rule group definition |
+| **Rule Group Combination** | Config | Links check rules to groups |
+| **Node** | Config | Allocation network node |
+| **Alloc Job Status Process Conn** | Config | Allocation BPM connection config |
 
-### EC Production
+### EC Production (34 screens) — sysadmin access
+
+| Screen | Type | Navigator Fields | Notes |
+|---|---|---|---|
+| **Daily Dashboard** | NAVIGATOR-ONLY | Date, Production Unit | Daily production overview |
+| **Deferment Dashboard** | NAVIGATOR-ONLY | (none) | Deferment status dashboard |
+| **Production Efficiency** | NAVIGATOR-ONLY | From Date, To Date | Efficiency KPIs |
+| Well Finder | NAVIGATOR-ONLY | — | Find wells by criteria |
+| Equipment Finder | NAVIGATOR-ONLY | — | Find equipment |
+| Stream Finder | NAVIGATOR-ONLY | — | Find streams |
+| Tank Finder | NAVIGATOR-ONLY | — | Find tanks |
+| **Deferment** | NAVIGATOR+TABLE | — | Deferment records |
+| **Deferment Day** | NAVIGATOR+TABLE | — | Day-level deferment |
+| **Daily Data Status Processes** | NAVIGATOR+TABLE | — | Production→Verified status |
+| **Daily Data Status Processes - by Facility** | NAVIGATOR+TABLE | — | Facility-filtered |
+| **Daily Data Status Processes - Single Date** | NAVIGATOR+TABLE | Date | Single date status |
+| **Monthly Data Status Processes** | NAVIGATOR+TABLE | — | Monthly verification |
+| **Monthly Data Locking** | NAVIGATOR+TABLE | — | Lock monthly data |
+| **Period Process Calculations** | NAVIGATOR+TABLE | — | Run period calcs |
+| **Monthly Account Balance Calculation** | NAVIGATOR+TABLE | — | Monthly balance run |
+| Analysis And Measurements | NAVIGATOR+TABLE | — | Lab analysis data |
+
+### EC Production — NOT visible (Woodside Pluto only)
+These screens appear in Woodside Pluto COPS DEV but NOT in the local sandbox:
+- Daily Oil Stream Status (PO.0001)
+- Daily Gas Stream Status (PO.0002)
+- Daily Water Stream Status (PO.0003)
+- Daily Production Well Status 1 (WR.0001)
+- Monthly Production Well Status
+- Monthly Allocated Production Well Data
+- Stream Component Analysis (TC01/TC02 screens)
+- Stream Analysis (TC03/TC04 screens)
+- Daily Tank Status (TC05-TC08 screens)
+- Maintain Check Rules (CO.0201) — check rule maintenance screen
+- Daily Allocation (HA.0002)
+- Monthly Allocation (HA.0003)
+
+**These screens require the ZWT/ZWP Woodside extensions to be deployed.**
+
+### Reporting (14 screens) — from earlier exploration
+
+| Screen | Type | IUD | Notes |
+|---|---|---|---|
+| Report Template | NAVIGATOR+TABLE | -+D | Create/delete report templates |
+| Report Definition | NAVIGATOR+TABLE | -+D | Define report structure |
+| Report Generation | NAVIGATOR+TABLE | -+D | Run/schedule reports |
+| Report Queue Status | NAVIGATOR+TABLE | --- | Monitor queued reports |
+| Report Publishing | NAVIGATOR+TABLE | -+- | Publish completed reports |
+| Display Published Report | NAVIGATOR+TABLE | --- | View published output |
+| Report Area | NAVIGATOR-ONLY | --- | Config screen |
+| Export to Excel Express | NAVIGATOR-ONLY | --- | Quick Excel export |
+
+### Process Automation (13 screens) — from earlier exploration
 
 | Screen | Type | IUD | Navigator Fields | Notes |
 |---|---|---|---|---|
-| Daily Dashboard | NAVIGATOR-ONLY | --- | Date, Production Unit | Dashboard view — fill date+unit → load |
-| Deferment Dashboard | NAVIGATOR-ONLY | --- | (none visible) | Special dashboard screen |
-| Production Efficiency | NAVIGATOR-ONLY | --- | From Date, To Date | Date range → efficiency chart/view |
-
-### EC Revenue
-
-| Screen | Type | IUD | Navigator Fields | Notes |
-|---|---|---|---|---|
-| Document Tracing | NAVIGATOR-ONLY | --- | (none visible) | Document trace view |
-| Visual Tracing | NAVIGATOR-ONLY | --- | Year, Property | Year + property → visual trace |
-
-### Reporting
-
-| Screen | Type | IUD | Navigator Fields | Table Columns | Notes |
-|---|---|---|---|---|---|
-| Report Area | NAVIGATOR-ONLY | --- | (none) | — | Config screen |
-| Report and Analytics | ACTION/EMPTY | --- | — | — | Dashboard/iframe? Needs deeper look |
-| **Report Template** | NAVIGATOR+TABLE | -+D | Created by, Record status | Report Template Code, Name, System | Create/delete templates — active IUD |
-| **Report Definition** | NAVIGATOR+TABLE | -+D | Created by, Record status | Definition Code, Name, Functional Area | Define report structure — active IUD |
-| Report Administration | ACTION/EMPTY | --- | — | — | Admin config — loads differently |
-| **Report Generation** | NAVIGATOR+TABLE | -+D | Date, Functional Area, Generation Start | Name, Report Definition, Report Area | Run/schedule reports — active IUD |
-| Report Set Administration | ACTION/EMPTY | --- | — | — | Config screen |
-| **Report Queue Status** | NAVIGATOR+TABLE | --- | From Date, To Date | Report Name, Status, Generation Start | Monitor running reports — read only |
-| Export to Excel Express | NAVIGATOR-ONLY | --- | (none) | — | Quick Excel export tool |
-| **Report Publishing** | NAVIGATOR+TABLE | -+- | From Date, To Date | Functional Area, Publication Type, Generated Date | Publish reports — can insert |
-| **Display Published Report** | NAVIGATOR+TABLE | --- | From Date, To Date | Report Date, Generated Date, Publish Start Date | View published reports |
-
-### Process Automation (BPM)
-
-| Screen | Type | IUD | Navigator Fields | Table Columns | Notes |
-|---|---|---|---|---|---|
-| **Project Management** | NAVIGATOR+TABLE | -+- | Created by, Record status | Name, Group Id, Artifact Id | Deploy BPM JARs — Undeploy/Delete btns |
-| Process Action | ACTION/EMPTY | --- | — | — | Config screen |
-| **Process Template** | NAVIGATOR+TABLE | -+D | Created by, Record status | Process Template, Deployment Id, Process Id | Configure BPM process templates |
-| Process Execution | NAVIGATOR-ONLY | --- | Date, Functional Area | — | Start BPM process instances |
-| Process Overview | NAVIGATOR-ONLY | --- | From, To | — | Monitor active processes |
-| Process Overview Configuration | ACTION/EMPTY | --- | — | — | Config screen |
-| Process Overview Legacy | NAVIGATOR+TABLE | --- | From date, To date | Start, End, Process Template | Historical BPM view |
-| Todo List | ACTION/EMPTY | --- | — | — | Dynamic task list — loads differently |
-| **Task Management** | NAVIGATOR+TABLE | --- | (none visible) | — | Manage user tasks |
-| Process Notifications | NAVIGATOR-ONLY | --- | (none) | — | Notification config |
-| Process Monitor | NAVIGATOR-ONLY | --- | Daytime, Functional Area | — | Monitor processes by date/area |
-| **Process Monitor Configuration** | NAVIGATOR+TABLE | -+- | Created by, Record status | Code, Name, Functional Area | Configure monitors — can insert |
-| **Viewer Tag** | NAVIGATOR+TABLE | -+D | Created by, Record status | Name, Description, Property | BPM viewer configuration — active IUD |
+| **Project Management** | NAVIGATOR+TABLE | -+- | Created by, Record status | Deploy BPM JARs |
+| **Process Template** | NAVIGATOR+TABLE | -+D | Created by, Record status | Configure BPM templates |
+| **Process Execution** | NAVIGATOR-ONLY | --- | Date, Functional Area | Start BPM processes |
+| **Process Overview** | NAVIGATOR-ONLY | --- | From, To | Monitor processes |
+| **Process Overview Legacy** | NAVIGATOR+TABLE | --- | From date, To date | Historical view |
+| **Todo List** | ACTION/EMPTY | --- | — | User task queue |
+| **Task Management** | NAVIGATOR+TABLE | --- | — | Manage user tasks |
+| **Process Monitor** | NAVIGATOR-ONLY | --- | Daytime, Functional Area | Monitor by date |
+| **Process Monitor Configuration** | NAVIGATOR+TABLE | -+- | Created by, Record status | Config monitors |
+| **Viewer Tag** | NAVIGATOR+TABLE | -+D | Created by, Record status | BPM viewer config |
 
 ---
 
-## Robot Framework Patterns by Screen Type
+## Robot Framework Screen Patterns
 
-### Pattern A: NAVIGATOR+TABLE (most data entry screens)
+### Pattern 1: NAVIGATOR+TABLE (most common)
 ```robot
-# Fill navigator fields
-Fill Text    id=${NAV_FIELD_1_ID}    ${value}
-Select Options By    id=${NAV_FIELD_2_ID}    label    ${option}
-# Click Go button
+# Standard pattern — fill navigator, click Go, assert table
+${NAV_FIELD}=    Set Variable    {screenlet}:form:G:0:R:0:C:1:{type}
+Fill Text    id=${NAV_FIELD}    ${value}
 Click    id=button:form:B
 Wait For Load State    networkidle    timeout=30s
-# Verify table loaded
-Wait For Elements State    css=.ui-datatable tbody tr    visible    30s
+Wait For Elements State    css=.ui-datatable tbody tr    visible    20s
+${row_count}=    Get Element Count    css=.ui-datatable tbody tr
+Should Be True    ${row_count} > 0
 ```
 
-### Pattern B: NAVIGATOR-ONLY (dashboards, charts, special views)
+### Pattern 2: Check Group / Validation Overview
 ```robot
-# Fill navigator
-Fill Text    id=${NAV_DATE_ID}    2025-01-01
-# Click Go
-Click    id=button:form:B
+# CO.0079 Check Group — no navigator needed, data loads directly
+Search And Open Screen    Check Group
 Wait For Load State    networkidle    timeout=30s
-# Verify content loaded (no table — check specific element)
-Wait For Elements State    id=screenToolbar:form:screenLabel    visible    10s
+# Insert new check group:
+Click    xpath=//a[.//span[contains(@class,'ui-icon-insert')]]
+Wait For Load State    networkidle    timeout=15s
+
+# CO.0203 Validation Overview — has navigator + Go + Run All button
+Search And Open Screen    Validation Overview
+Click    id=button:form:B    # Go
+Wait For Load State    networkidle    timeout=30s
+Click    xpath=//*[contains(@id,'runAllButton')]
+Wait For Load State    networkidle    timeout=60s
 ```
 
-### Pattern C: ACTION/EMPTY (config screens loaded differently)
+### Pattern 3: Check Rule navigation (Woodside Pluto COPS DEV)
 ```robot
-# These screens may load via AJAX or special handlers
-# Navigate and wait for networkidle — content appears without Go
-Wait For Load State    networkidle    timeout=30s
-# Check if specific elements are visible
-${has_content}=    Get Element Count    css=.ECScreenlet
+# These work on COPS DEV (app-plutodev.woodside-pluto.tieto-og.cloud)
+Search And Open Screen    Check Rule
+# Navigate to last page to find PHD check rules (rules 1142-1149)
+Click    css=span.ui-icon-seek-end
+Wait For Load State    networkidle    timeout=15s
+# Verify rule visible
+Verify Rule Visible In Grid    PHD_STRM_COMP_MOL_PCT_VAL1
 ```
 
 ---
 
-## Key DOM IDs per Screen (from live exploration)
+## Key DOM Selectors for These Screens
 
-### Common navigator cell ID pattern
-`{screenletId}:form:G:{grid}:R:{row}:C:{col}:{type}`
+```robot
+# Check Group screen (CO.0079)
+${SCREEN_CHECK_GROUP}        Check Group
+# After opening: no navigator needed, table shows all groups
+# Table ID: typically check_group:form
+# Insert: xpath=//a[.//span[contains(@class,'ui-icon-insert')]]
 
-### Authentication Audit
-```
-Navigator: form screenlet with date range inputs
-From/To UTC date inputs
-Go button: button:form:B
-Table shows: audit events (Time UTC, Type, Realm, ...)
-```
+# Validation Overview (CO.0203)
+${SCREEN_VALIDATION}         Validation Overview
+# Navigator: date range + facility
+# Run All button: xpath=//*[contains(@id,'runAllButton')]
+# Groups table: groups:form
+# Logs table: logs:form
 
-### Report Template / Report Definition / Process Template / Viewer Tag
-```
-Navigator: Created by + Record status filters only
-Table loads immediately (no Go needed for initial view)
-Insert enabled: can create new records
-Delete enabled: can remove records
-```
+# Daily Data Status Processes
+${SCREEN_DAILY_STATUS}       Daily Data Status Processes
+# Navigator: date + facility
+# Shows: Provisional → Verified status transitions
 
-### Process Execution
-```
-Navigator: Date + Functional Area
-Purpose: Launch a BPM process
-After Go: shows process instances to start
-```
-
-### Project Management (BPM)
-```
-Table shows: deployed BPM JARs (Name, Group Id, Artifact Id, Version)
-Action buttons: Undeploy, Delete
-Insert: upload new BPM deployment
-Used for: deploying process templates from .zip/.jar files
+# Schedules screen
+${SCREEN_SCHEDULES}          Schedules
+# Shows all EC scheduled jobs
+# Insert: create new schedule
+# Can trigger jobs manually
 ```
 
 ---
 
-## Screens That Support Insert (active + enabled)
-
-| Screen | Section | What gets inserted |
-|---|---|---|
-| Analytics Object Access | Configuration | Access rule for an object |
-| Report Template | Reporting | New report template |
-| Report Definition | Reporting | New report definition |
-| Report Generation | Reporting | New report generation job |
-| Report Publishing | Reporting | New publication rule |
-| Project Management | Process Automation | New BPM deployment |
-| Process Template | Process Automation | New process template |
-| Process Monitor Configuration | Process Automation | New monitor config |
-| Viewer Tag | Process Automation | New viewer tag |
+## Screen Inventory Files
+- **Full tree (685 items):** `docs/EC/ec_full_tree_inventory.json`
+- **32 explored screens:** `docs/EC/screenshots/screens/`
+- **Dom reference:** `docs/EC/screenshots/` (login, dashboard, Object Partition)
 
 ---
 
-## Screens That Support Delete (active + enabled)
-
-| Screen | Section |
-|---|---|
-| Report Template | Reporting |
-| Report Definition | Reporting |
-| Report Generation | Reporting |
-| Process Template | Process Automation |
-| Viewer Tag | Process Automation |
-
----
-
-## ACTION/EMPTY Screens — Investigation Needed
-
-These 6 screens showed empty content at load time. They likely:
-- Load content via JavaScript after a user action
-- Display in an embedded iframe or dashboard widget
-- Require different navigation/interaction patterns
-
-| Screen | Section | Likely behaviour |
-|---|---|---|
-| Report and Analytics | Reporting | Yellowfin/analytics dashboard iframe |
-| Report Administration | Reporting | Admin config — tree/accordion structure |
-| Report Set Administration | Reporting | Set config screen |
-| Process Action | Process Automation | Action config — tree/list |
-| Process Overview Configuration | Process Automation | Config screen |
-| Todo List | Process Automation | Dynamic task list — loaded via BPM event |
-
----
-
-## EC Treeview — Full Screen Inventory (sysadmin access)
-
-**Total accessible screens found: 32** (from menu expansion)
-
-Missing from list (not accessible to sysadmin or not in scope):
-- All EC Production specific screens (Daily Well Status, Check Rules, Validation Overview, etc.) — need to search by name
-- EC Chemistry, EC Transport, EC Sales screens — same
-- These screens exist but didn't appear in the expanded tree for sysadmin
-
-**To access domain screens:** Use the search box with screen name, or navigate via sub-sub-sections after expanding domain sections further.
+## Next Steps for Screen Knowledge Base
+1. Connect to **Woodside Pluto COPS DEV** and explore production screens there
+2. Capture: Daily Oil Stream Status, Check Rule screen, Stream Component Analysis
+3. Document exact screenlet IDs for Issue_1052 Phase 2 RF tests
+4. Add to this knowledge base as Woodside Pluto section
