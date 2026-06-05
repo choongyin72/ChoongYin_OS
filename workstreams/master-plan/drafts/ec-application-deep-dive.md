@@ -872,3 +872,8 @@ WHERE LAST_TRANSFER < sysdate - 1 AND ACTIVE = 'Y';
 ```
 
 **Woodside Issue_1052 note:** PHD tags showing NULL → check TRANS_SOURCE_TIME.LAST_TRANSFER. If stuck, move it back to force re-read. This is the root cause diagnostic tool.
+
+
+### Item #19: Extension DB Migration (7→9) ✅
+
+
