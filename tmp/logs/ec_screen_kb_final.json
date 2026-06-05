@@ -2217,146 +2217,958 @@
   "Configuration::Calculation Context": {
     "name": "Calculation Context",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/CALC_CONTEXT",
+    "screen_label": "Calculation Context",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Calc Context Code",
+        "Calc Context Name",
+        "Description",
+        "Comments"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Calc Context Code",
+          "Calc Context Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 14,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Calc Context Code"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Database Object Types": {
     "name": "Database Object Types",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/db_object_type",
+    "screen_label": "Database Object Types",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Calculation Context"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Simple Object Types": {
     "name": "Simple Object Types",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/simple_predefined_object_type",
+    "screen_label": "Simple Object Types",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Calculation Context"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Variable Definitions": {
     "name": "Variable Definitions",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/variable_definition",
+    "screen_label": "Variable Definitions",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Calculation Context",
+        "Variable Name",
+        "Dimension 1",
+        "Dimension 2"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Global Attributes": {
     "name": "Global Attributes",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/global_attribute",
+    "screen_label": "Global Attributes",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Calculation Context"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Create Calculation": {
     "name": "Create Calculation",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/create_calculation",
+    "screen_label": "Create Calculation",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Calculation Context"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Maintain Calculation": {
     "name": "Maintain Calculation",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/maintain_calculation",
+    "screen_label": "",
+    "has_navigator": false,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "ACTION/EMPTY",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Calculation Library": {
     "name": "Calculation Library",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object/CLASS_NAME/CALC_LIBRARY",
+    "screen_label": "",
+    "has_navigator": false,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "ACTION/EMPTY",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Create Library Calculation": {
     "name": "Create Library Calculation",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/create_library_calculation",
+    "screen_label": "Create Library Calculation",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Calculation Library"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Maintain Library Calculation": {
     "name": "Maintain Library Calculation",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/maintain_calculation/CALC_SCOPE/PUBLIC_SUB",
+    "screen_label": "Maintain Library Calculation",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Calculation Library",
+        "Calculation Context",
+        "Calculation"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Maintain Calculation Log Profiles": {
     "name": "Maintain Calculation Log Profiles",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/maintain_calc_log_profile",
+    "screen_label": "Maintain Calculation Log Profiles",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 2,
+    "datatables": [
+      {
+        "id": "tab:tabPanel:calcLogProfile:form:T",
+        "cols": [
+          "Code",
+          "Name",
+          "Description"
+        ],
+        "rows": 3,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:calcLogProfParam:form:T",
+        "cols": [
+          "Parameter Name",
+          "Parameter Value"
+        ],
+        "rows": 9,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": true,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Component Template": {
     "name": "Component Template",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/component_template",
+    "screen_label": "Component Template",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Calculation Context"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Component Report": {
     "name": "Component Report",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.bs.calc.screens/component_report",
+    "screen_label": "Component Report",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Calculation Context"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Calculation Group Context": {
     "name": "Calculation Group Context",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/CALC_GRP_CONTEXT",
+    "screen_label": "Calculation Group Context",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Calculation Group Context Code",
+        "Calculation Group Context Name",
+        "Description",
+        "Comments",
+        "Calculation Group Object Class"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Calculation Group Context",
+          "Calculation Group Context",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 6,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Calculation Group Context"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Calculation Group Setup": {
     "name": "Calculation Group Setup",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/calculation_group",
+    "screen_label": "Calculation Group Setup",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Calculation Group Context"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Alloc Job Status Process Conn": {
     "name": "Alloc Job Status Process Conn",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/alloc_process_job_conn",
+    "screen_label": "Alloc Job Status Process Conn",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Allocation Network",
+        "Allocation Job"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Node": {
     "name": "Node",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/NODE/TARGET/NODE/CLASS_NAME/NODE",
+    "screen_label": "Node",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Production Unit",
+        "Area",
+        "Facility Class 1"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Stream Node Diagram": {
     "name": "Stream Node Diagram",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens.snd/stream_node_diagram/OBJ_CLASS/ALLOC_NETWORK/DATA_CLASS/ALLOC_NETWORK_LIST?statusArea=false",
+    "screen_label": "Stream Node Diagram",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Allocation Network",
+        "Display type"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::SND Production Data Menu": {
     "name": "SND Production Data Menu",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens.snd/production_data_menu",
+    "screen_label": "SND Production Data Menu",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "snd_prod_data_menu:form:T",
+        "cols": [
+          "Node Type",
+          "Business Screen",
+          "Description"
+        ],
+        "rows": 9,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": true,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Asset Calculation Attributes": {
     "name": "Asset Calculation Attributes",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/asset_calc_attribute",
+    "screen_label": "Asset Calculation Attributes",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "From Date",
+        "To Date",
+        "Asset Type"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "asset_calc_attribute_table:form:T",
+        "cols": [
+          "Attribute",
+          "Daytime",
+          "Asset Type",
+          "Asset",
+          "Attribute Type",
+          "Value",
+          "Text",
+          "Comments"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Config Variable": {
     "name": "Config Variable",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/CONFIG_VARIABLE",
+    "screen_label": "Config Variable",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Code",
+        "Name",
+        "Description",
+        "Calculation Context",
+        "Source Variable"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Code",
+          "Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 20,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Code"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Config Variable Parameter": {
     "name": "Config Variable Parameter",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_relation/CLASS_NAME/CONFIG_VARIABLE_PARAM/FROM_CLASS_NAME/CONFIG_VARIABLE/ROLE_ID/CONFIG_VARIABLE_ID",
+    "screen_label": "Config Variable Parameter",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Code",
+        "Name",
+        "Transaction Variable",
+        "Dimension",
+        "Type"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 4,
+    "datatables": [
+      {
+        "id": "from_class:form:T",
+        "cols": [
+          "Code",
+          "Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 20,
+        "filters": []
+      },
+      {
+        "id": "to_class:form:T",
+        "cols": [
+          "Code",
+          "Name"
+        ],
+        "rows": 2,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Production Unit": {
     "name": "Production Unit",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/PRODUCTIONUNIT",
+    "screen_label": "Production Unit",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Production Unit Code",
+        "Production Unit Name",
+        "Master System Code",
+        "Master System Name",
+        "System of Measurement"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Production Unit Code",
+          "Production Unit Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 20,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Production Unit Code"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Business Unit": {
     "name": "Business Unit",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/BUSINESS_UNIT",
+    "screen_label": "Business Unit",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Business Unit Code",
+        "Business Unit Name",
+        "Comments"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Business Unit Code",
+          "Business Unit Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 16,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Business Unit Code"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Production Sub Unit": {
     "name": "Production Sub Unit",
@@ -2402,26 +3214,183 @@
   "Configuration::Country": {
     "name": "Country",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/COUNTRY",
+    "screen_label": "Country",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Country Code",
+        "Country Name",
+        "Master System Code",
+        "Master System Name",
+        "Local Name"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Country Code",
+          "Country Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 20,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Country Code"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::State": {
     "name": "State",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/STATE",
+    "screen_label": "State",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "State Code",
+          "State Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::County": {
     "name": "County",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/COUNTY",
+    "screen_label": "County",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "County Code",
+          "County Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Area": {
     "name": "Area",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/AREA/TARGET/AREA/CLASS_NAME/AREA",
+    "screen_label": "Area",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date",
+        "Production Unit"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Sub Area": {
     "name": "Sub Area",
@@ -2457,26 +3426,110 @@
   "Configuration::Region": {
     "name": "Region",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/REGION",
+    "screen_label": "Region",
+    "has_navigator": true,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Regulatory Permits": {
     "name": "Regulatory Permits",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/regulatory_permits/CLASS_NAME/REGULATORY_PERMITS",
+    "screen_label": "Regulatory Permits",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "nav:form:T",
+        "cols": [
+          "Permit Code",
+          "Permit Name",
+          "Regulatory Agency",
+          "executeOnOnhideREGULATORY"
+        ],
+        "rows": 1,
+        "filters": [
+          "nav:form:T:sfilter0_ft_filter",
+          "nav:form:T:sfilter1_ft_filter",
+          "nav:form:T:sfilter2_cb_filter_focus"
+        ]
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Object List": {
     "name": "Object List",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/OBJECT_LIST",
+    "screen_label": "Object List",
+    "has_navigator": true,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Object List Setup": {
     "name": "Object List Setup",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.cd/manage_object_list",
+    "screen_label": "Object List Setup",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Daytime",
+        "List Class",
+        "Object List"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Functional Area": {
     "name": "Functional Area",
@@ -2547,32 +3600,251 @@
   "Configuration::Well Mode Attributes": {
     "name": "Well Mode Attributes",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/object_mode_attributes",
+    "screen_label": "Well Mode Attributes",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "enable_attr:form:T",
+        "cols": [
+          "Attribute Name",
+          "Label",
+          "Enabled"
+        ],
+        "rows": 20,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Sync Attributes"
+    ],
+    "found": true
   },
   "Configuration::Well Mode": {
     "name": "Well Mode",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/object_mode/OBJECT_TYPE/WELL",
+    "screen_label": "Well Mode",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "manageObject:form:T",
+        "cols": [
+          "Well Mode Code",
+          "Well Mode Name"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Hydrocarbon Component": {
     "name": "Hydrocarbon Component",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/hydrocarbon_component",
+    "screen_label": "Hydrocarbon Component",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "hydrocarbon_component_table:form:T",
+        "cols": [
+          "Hydrocarbon Component Cod",
+          "Hydrocarbon Component Nam",
+          "Sort Order",
+          "Mol. Wt[g/mol]",
+          "Carbon Number",
+          "Inert",
+          "VOC",
+          "nmVOC"
+        ],
+        "rows": 20,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": true,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Product": {
     "name": "Product",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/PRODUCT",
+    "screen_label": "Product",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Master System Code",
+        "Master System Name",
+        "Product Code",
+        "Product Name",
+        "Hydrocarbon Component"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Product Code",
+          "Product Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 20,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Product Code"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Blend": {
     "name": "Blend",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/BLEND",
+    "screen_label": "Blend",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Master System Code",
+        "Master System Name",
+        "Blend Code",
+        "Blend Name",
+        "Sort Order"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Blend Code",
+          "Blend Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Blend Code"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Maintain Blend Content Split": {
     "name": "Maintain Blend Content Split",
@@ -2609,80 +3881,502 @@
   "Configuration::Disposition Type": {
     "name": "Disposition Type",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/DISPOSITION_TYPE",
+    "screen_label": "Disposition Type",
+    "has_navigator": true,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Component Set": {
     "name": "Component Set",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/comp_set",
+    "screen_label": "Component Set",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "comp_set_table:form:T",
+        "cols": [
+          "Component Set Code",
+          "Component Set Name",
+          "Object Type",
+          "Phase"
+        ],
+        "rows": 20,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": true,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Component Set List": {
     "name": "Component Set List",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/comp_set_list",
+    "screen_label": "Component Set List",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Name"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "comp_set_list_table:form:T",
+        "cols": [
+          "Start Date",
+          "End Date",
+          "Component Name",
+          "UOM",
+          "Allocation Component",
+          "Sort Order"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Constant Standard": {
     "name": "Constant Standard",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/constant_standard_list",
+    "screen_label": "Constant Standard",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "New Code",
+        "New Name"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "cstandard:form:T",
+        "cols": [
+          "Standard Code",
+          "Standard Name",
+          "Start Date",
+          "End Date",
+          "Daytime",
+          "Description",
+          "Reference Pressure[mbar]",
+          "Editable"
+        ],
+        "rows": 6,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Copy"
+    ],
+    "found": true
   },
   "Configuration::Component Constant": {
     "name": "Component Constant",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/constant_standard/CLASS_NAME/COMPONENT_CONSTANT?LAYOUT_NAME=/com.ec.prod.co.screens/layout/const_std_cc.xml",
+    "screen_label": "Component Constant",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Constant Standard Name"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "cstandard:form:T",
+        "cols": [
+          "Daytime",
+          "Component",
+          "Sort Order",
+          "Mol Wt",
+          "Mol Vol",
+          "Compressibility Factor",
+          "Ideal Density",
+          "Summation Factor",
+          "Ideal GCV",
+          "Ideal NCV"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Equation Of State": {
     "name": "Equation Of State",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/equation_of_state/CLASS_NAME/EOS_CONFIG/CLASS_NAME_1/EOS_COMP_PROPERTY",
+    "screen_label": "Equation Of State",
+    "has_navigator": true,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Licence": {
     "name": "Licence",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/LICENCE",
+    "screen_label": "Licence",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Licence Code",
+        "Licence Name",
+        "Sort Order",
+        "Description",
+        "Master System Code"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Licence Code",
+          "Licence Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 12,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Licence Code"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::MMS Lease": {
     "name": "MMS Lease",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/MMS_LEASE",
+    "screen_label": "",
+    "has_navigator": false,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "ACTION/EMPTY",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::State Lease": {
     "name": "State Lease",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/STATE_LEASE",
+    "screen_label": "State Lease",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "State Lease Code",
+          "State Lease Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Operator Lease": {
     "name": "Operator Lease",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/OPERATOR_LEASE",
+    "screen_label": "Operator Lease",
+    "has_navigator": true,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Company": {
     "name": "Company",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/COMPANY",
+    "screen_label": "Company",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Company Code",
+        "Company Name",
+        "Sort Order",
+        "Master System Code",
+        "Master System Name"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Company Code",
+          "Company Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 20,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Company Code"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Company Contact": {
     "name": "Company Contact",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/company_contact",
+    "screen_label": "",
+    "has_navigator": false,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "ACTION/EMPTY",
+    "action_buttons": [],
+    "found": true
   },
   "Configuration::Customer": {
     "name": "Customer",
     "section": "Configuration",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/CUSTOMER",
+    "screen_label": "Customer",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Date"
+      ],
+      [
+        "Start Date",
+        "End Date"
+      ],
+      [
+        "Code",
+        "Name",
+        "Description",
+        "Comments",
+        "ERP Customer Code"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 3,
+    "datatables": [
+      {
+        "id": "manage_object_nav_nav:form:T",
+        "cols": [
+          "Code",
+          "Name",
+          "Start Date",
+          "End Date"
+        ],
+        "rows": 20,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:daytimes:form:T",
+        "cols": [
+          "Daytime"
+        ],
+        "rows": 1,
+        "filters": []
+      },
+      {
+        "id": "tab:tabPanel:versions:form:T",
+        "cols": [
+          "Daytime",
+          "Code"
+        ],
+        "rows": 1,
+        "filters": []
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go..."
+    ],
+    "found": true
   },
   "Configuration::Customer VAT Reg No": {
     "name": "Customer VAT Reg No",
