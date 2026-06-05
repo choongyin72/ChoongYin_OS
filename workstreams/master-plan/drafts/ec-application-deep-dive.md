@@ -873,6 +873,81 @@ WHERE LAST_TRANSFER < sysdate - 1 AND ACTIVE = 'Y';
 
 **Woodside Issue_1052 note:** PHD tags showing NULL → check TRANS_SOURCE_TIME.LAST_TRANSFER. If stuck, move it back to force re-read. This is the root cause diagnostic tool.
 
+---
+
+## Session D — Deep Dive Results (Option A — Python gathered, Claude analysed)
+
+### Item #19: Extension DB Migration (7→9) ✅
+
+**Flyway in EC Extensions:**
+- Naming: `V{Major}.{Minor}.{Patch}.{Seq}__{description}.sql`
+- Packaged as `ec-db-migration.jar` inside WAR `WEB-INF/lib/` via maven-assembly-plugin
+- Location: `src/main/webapp/WEB-INF/db/migration/`
+- **V__ (Versioned):** One-time delta — code inserts, table creates
+- **R__ (Repeatable):** Re-executed when changed — used for XML class definitions
+- Directory: `1.0.0/config/`, `1.0.0/tables/`, `common/classes/`
+- Declared via: `<Extension-MigrationLocation>db/migration</Extension-MigrationLocation>`
+
+**vs Core EC migration:** Core uses `owner_context_X/FRMW/PROD/` with timestamps. Extensions use version-based functional grouping.
+
+**After creating a table, always run:**
+```sql
+BEGIN ecdp_generate.generate('ZWT_TABLE', EcDp_Generate.PACKAGES+EcDp_Generate.ALL_TRIGGERS); END;
+```
+
+---
+
+### Item #20: Creating Extension Classes (5→9) ✅
+
+**Exact steps from real Woodside R__08000_WELL.xml:**
+
+1. File: `common/classes/R__NNNNN_CLASSNAME.xml`
+2. Root: `<class-ref owner-cntx="1001" class-name="WELL" version="1.0">`
+3. Scope: `<app-space-cntx id="ZWT">`
+4. Each attribute:
+```xml
+<class-attribute-cnfg attribute-name="ZWT_RPT_NAME"
+  data-type="STRING" db-mapping-type="EXT_JOIN"
+  db-join-table="ZWT_WELL_VERSION">
+  <db-sql-syntax>ZWT_RPT_NAME</db-sql-syntax>
+</class-attribute-cnfg>
+```
+5. Properties: LABEL, DESCRIPTION, SCREEN_SORT_ORDER, viewtype, IS_MANDATORY, viewwidth
+
+**`db-mapping-type="EXT_JOIN"`** = stored in separate extension table joined to base object. ZWT_ attributes extend WELL without touching core WELL table.
+
+**Data types:** BOOLEAN (checkbox), STRING, NUMBER, DATE, DECIMAL
+
+---
+
+### Item #21: ZWP_/ZWT_ Woodside Extension Patterns (7→9) ✅
+
+**9 extensions, 2 prefix families:**
+
+| Prefix | Full Name | Context | Version | Purpose |
+|---|---|---|---|---|
+| ZWT | Woodside Template | 1001 | 1.15.0 | Reusable base template — generic domain model |
+| ZWTI | Woodside Template Interfaces | 1001 | 1.14.0 | External system interface mappings |
+| ZWP | Woodside Pluto Hub | 3000 | 1.1.0 | Production implementation on top of ZWT |
+| ZWPC | Woodside Pluto Config | 3000 | - | Pluto codes, system attributes |
+| ZWPA | Woodside Pluto Application | 3000 | - | Java code, user exits, business logic |
+
+**ZWT = template (generic, reusable). ZWP = implementation (Pluto-specific, built on ZWT).**
+
+**Consistent patterns across ALL extensions:**
+- Java 21, EC ≥ 14.0.3
+- JAR signing via keystore (password: energy)
+- `ecextension-maven-plugin` for deployment
+- Owner context isolates data partitions (1001=ZWT, 3000=ZWP)
+- `app_space_cntx` initialised first via 100_pre_product_overrides
+
+**Separation of concerns:**
+- Base = data model (tables, classes)
+- Config = codes, lookups, rules
+- App = business logic, user exits
+- Reports = report definitions
+- Testdata = test data loading
+
 
 ### Item #19: Extension DB Migration (7→9) ✅
 
