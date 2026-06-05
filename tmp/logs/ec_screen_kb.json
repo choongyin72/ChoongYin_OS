@@ -3077,8 +3077,60 @@
   "EC Transport::Daily Nomination Point AFS": {
     "name": "Daily Nomination Point AFS",
     "section": "EC Transport",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/analytics_object_access",
+    "screen_label": "Analytics Object Access",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Object Type",
+        "Access"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 1,
+    "datatables": [
+      {
+        "id": "table:form:T",
+        "cols": [
+          "Object Type",
+          "Object Name",
+          "Access",
+          "Comments",
+          "executeOnOnhideOBJECT_TYP",
+          "executeOnOnhideOBJECT_NAM",
+          "executeOnOnhideACCESS_IND"
+        ],
+        "rows": 1,
+        "filters": [
+          "table:form:T:sfilter0_cb_filter_focus",
+          "table:form:T:sfilter1_cb_filter_focus",
+          "table:form:T:sfilter2_cb_filter_focus",
+          "table:form:T:sfilter3_ft_filter"
+        ]
+      }
+    ],
+    "save_enabled": false,
+    "insert_enabled": true,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR+TABLE",
+    "action_buttons": [
+      "Go...",
+      "Apply Changes"
+    ],
+    "screenlet_ids": [
+      "nav:form",
+      "button:form",
+      "table:form",
+      "syncGrantsSynonyms:form",
+      "statusarea_tab:tabPanel:_sa_recordstatus:form"
+    ],
+    "found": true
   },
   "EC Transport::Monthly AFS Chart": {
     "name": "Monthly AFS Chart",
@@ -3695,20 +3747,135 @@
   "EC Revenue::Project Data Extract Accrual": {
     "name": "Project Data Extract Accrual",
     "section": "EC Revenue",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.sp/cont_summary/ACCRUAL_IND/Y",
+    "screen_label": "Project Data Extract Accrual",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Month",
+        "Business Unit",
+        "Property",
+        "Project",
+        "Data Extract"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "screenlet_ids": [
+      "OpenPeriodForm:form",
+      "nav:form",
+      "buttongo:form",
+      "verify_button:form",
+      "unverify_button:form",
+      "dateform:form",
+      "newSummaryButton:form",
+      "btnTraceDoc:form",
+      "summary_documents:form",
+      "statusarea_tab:tabPanel:_sa_recordstatus:form"
+    ],
+    "found": true
   },
   "EC Revenue::Project Data Extract By Year": {
     "name": "Project Data Extract By Year",
     "section": "EC Revenue",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.sp/cont_summary_year/CLASS_NAME/SUMMARY_YEARLY",
+    "screen_label": "Project Data Extract By Year",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Year",
+        "Business Unit",
+        "Property",
+        "Data Extract Set"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "screenlet_ids": [
+      "OpenPeriodForm:form",
+      "nav:form",
+      "buttongo:form",
+      "summary_set_setup_table:form",
+      "scope_form:form",
+      "create_button:form",
+      "create_all_button:form",
+      "approve_button:form",
+      "approve_all_button:form",
+      "unapprove_button:form"
+    ],
+    "found": true
   },
   "EC Revenue::Project Data Extract For 10 Years": {
     "name": "Project Data Extract For 10 Years",
     "section": "EC Revenue",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.sp/cont_summary_year/CLASS_NAME/SUMMARY_DECADE",
+    "screen_label": "Project Data Extract For 10 Years",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Year",
+        "Business Unit",
+        "Property",
+        "Data Extract Set"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "screenlet_ids": [
+      "OpenPeriodForm:form",
+      "nav:form",
+      "buttongo:form",
+      "summary_set_setup_table:form",
+      "scope_form:form",
+      "create_button:form",
+      "create_all_button:form",
+      "approve_button:form",
+      "approve_all_button:form",
+      "unapprove_button:form"
+    ],
+    "found": true
   },
   "EC Revenue::Cost of Service": {
     "name": "Cost of Service",
@@ -3803,8 +3970,46 @@
   "EC Revenue::Yearly Financial Item Calculation": {
     "name": "Yearly Financial Item Calculation",
     "section": "EC Revenue",
-    "found": false,
-    "screen_type": "NOT_FOUND"
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.fi/fin_item_calc/TIME_SPAN/YR",
+    "screen_label": "Yearly Financial Item Calculation",
+    "has_navigator": true,
+    "nav_labels": [
+      [
+        "Year",
+        "Calculation Group",
+        "Financial Item Template",
+        "Calculation Job"
+      ],
+      [
+        "Created by",
+        "Record status",
+        "Last updated by",
+        "Revision text",
+        "Revision Event"
+      ]
+    ],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [
+      "Go..."
+    ],
+    "screenlet_ids": [
+      "nav:form",
+      "navButton:form",
+      "dateStartJob:form",
+      "FinItemCalculationButton:form",
+      "FinItemCalculationButtonyr:form",
+      "RunningJobs:form",
+      "log_list:form",
+      "alarms:form",
+      "download:form",
+      "view:form"
+    ],
+    "found": true
   },
   "Reporting::Report Context": {
     "name": "Report Context",

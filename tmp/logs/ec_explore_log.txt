@@ -768,3 +768,877 @@ PHASE 2: Navigating to 545 screens...
   202[Configurat]---[N] Planned Well             |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
   203[Configurat]-+-[Y] Well                     |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Well"
   204[Configurat]---[N] Manage Well              |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  205[Configurat]---[Y] Maintain Wells           |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Maintain Wells"
+  206[Configurat]-+-[Y] Well Bore                |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Well Bore"
+  207[Configurat]---[Y] Well Bore Split          |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Well Bore Split"
+  208[Configurat]-+-[Y] Well Bore Interval       |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Well Bore Interval"
+  209[Configurat]---[Y] Well Bore Interval Split |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Well Bore Interval Spl"
+  210[Configurat]-+-[Y] Perforation Interval     |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Perforation Interval"
+  211[Configurat]---[Y] Perforation Interval Spli|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Perforation Interval S"
+  212[Configurat]---[Y] Flowline Well Connection |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Flowline Well Connecti"
+  213[Configurat]---[Y] Swing Well Connection    |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Swing Well Connection"
+  214[Configurat]---[Y] Well Reference Value     |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Well Reference Value"
+  215[Configurat]---[Y] Well Seasonal Value      |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Well Seasonal Value"
+  216[Configurat]-+-[Y] Choke                    |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Choke Code', 'Choke Name', 'Start Date']|"Choke"
+  217[Configurat]---[Y] Choke Conversion         |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Choke']|cols=[]|"Choke Conversion"
+  218[Configurat]---[Y] Choke Gas Lift Conversion|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Choke Gas Lift Convers"
+  219[Configurat]-+-[Y] Equipment                |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Equipment"
+  220[Configurat]---[N] Maintain Equipment       |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  ... checkpoint saved (211 screens)
+  221[Configurat]---[Y] Equipment Connection     |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Equipment Connection"
+  222[Configurat]---[Y] Equipment Reference Value|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Equipment Reference Va"
+  223[Configurat]-+-[Y] Test Device              |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Test Device"
+  224[Configurat]---[Y] Test Device Reference Val|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Test Device Reference "
+  225[Configurat]-+D[Y] Adapter Configuration    |NAVIGATOR+TABLE |dt=2|nav=['Created by', 'Record status']|cols=['Disable', 'Name', 'Type']|"Adapter Configuration"
+  226[Configurat]-+D[Y] Maintain Templates       |NAVIGATOR+TABLE |dt=1|nav=['Template Code', 'Description']|cols=['Template Code', 'Description', 'Source Function']|"Maintain Templates"
+  227[Configurat]---[N] Event Route Configuration|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  228[Configurat]-+D[Y] Remote Endpoint Configura|NAVIGATOR+TABLE |dt=2|nav=['SecretServiceBasic', 'Created by']|cols=['Code', 'Name', 'Remote Type']|"Remote Endpoint Config"
+  229[Configurat]---[Y] Maintain Mappings        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Class Name']|cols=[]|"Maintain Mappings"
+  230[Configurat]---[Y] Maintain Mappings Overvie|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Class Name']|cols=[]|"Maintain Mappings Over"
+  231[Configurat]---[Y] Generate Tag Mappings    |NAVIGATOR-ONLY  |dt=0|nav=['Object Class', 'Object Name']|cols=[]|"Generate Tag Mappings"
+  232[Configurat]---[Y] Transform Tag Activity   |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Last Transfer', 'Class', 'PK Value']|"Transform Tag Activity"
+  233[Configurat]---[Y] Transform Process Log    |NAVIGATOR+TABLE |dt=1|nav=['From Daytime', 'To Daytime']|cols=['Service name', 'Log Level', 'Daytime']|"Transform Process Log"
+  234[Configurat]---[Y] ECIS Agent Log           |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"ECIS Agent Log"
+  235[Configurat]---[Y] Tag Event Status         |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Tag Event Status"
+  236[Configurat]-+-[Y] Dummy Tag Event Object   |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Dummy Tag Event Object Co', 'Dummy Tag Event Object Na', 'Start Date']|"Dummy Tag Event Object"
+  237[Configurat]-+D[Y] Business Actions         |NAVIGATOR+TABLE |dt=3|nav=['Created by', 'Record status']|cols=['Name', 'Java Class', 'Name']|"Business Actions"
+  238[Configurat]---[N] Schedules                |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  239[Configurat]---[Y] Schedule History         |NAVIGATOR+TABLE |dt=2|nav=['Active Status', 'From Daytime']|cols=['Name', 'Description', 'Functional Area']|"Schedule History"
+  240[Configurat]---[N] Manage Scheduler         |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  ... checkpoint saved (231 screens)
+  241[Configurat]-+-[Y] Maintain Contact Group Se|NAVIGATOR+TABLE |dt=1|nav=['Date', 'Functional Area']|cols=['Contact Group Set Code', 'Name', 'Start Date']|"Maintain Contact Group"
+  242[Configurat]---[N] Maintain Message Type    |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  243[Configurat]-+-[Y] Message Group            |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Functional Area']|cols=['Message Group Code', 'Name', 'Start Date']|"Message Group"
+  244[Configurat]---[Y] Message Format           |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Functional Area']|cols=[]|"Message Format"
+  245[Configurat]---[Y] Freetext Message Template|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Functional Area']|cols=[]|"Freetext Message Templ"
+  246[Configurat]---[Y] Actor Maintenance        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Functional Area']|cols=[]|"Actor Maintenance"
+  247[Configurat]-+-[Y] Task Process             |NAVIGATOR+TABLE |dt=3|nav=['Start date', 'End date']|cols=['Task Process Code', 'Task Process Name', 'Start date']|"Task Process"
+  248[Configurat]---[N] Task Process Item        |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  249[Configurat]-+D[Y] Business Action          |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Name', 'Java Class', 'Type']|"Business Action"
+  250[Configurat]-+-[Y] Action Trigger           |NAVIGATOR+TABLE |dt=3|nav=['Start date', 'End date']|cols=['Action Trigger Code', 'Action Trigger Name', 'Start date']|"Action Trigger"
+  251[Configurat]---[Y] Action Trigger Connection|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Action Trigger']|cols=[]|"Action Trigger Connect"
+  252[EC Product]---[Y] Daily Dashboard          |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Daily Dashboard"
+  253[EC Product]---[Y] Deferment Dashboard      |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Deferment Dashboard"
+  254[EC Product]---[Y] Production Efficiency    |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Production Efficiency"
+  255[EC Product]---[Y] Well Finder              |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Well Search']|cols=[]|"Well Finder"
+  256[EC Product]---[N] Sub Surface Connection In|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  257[EC Product]---[Y] Equipment Finder         |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Equipment Search']|cols=[]|"Equipment Finder"
+  258[EC Product]---[Y] Stream Finder            |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Stream Search']|cols=[]|"Stream Finder"
+  259[EC Product]---[Y] Tank Finder              |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Tank Search']|cols=[]|"Tank Finder"
+  260[EC Product]---[N] Test Device Finder       |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  ... checkpoint saved (251 screens)
+  261[EC Product]---[Y] Well Performance Curves  |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Well Performance Curve"
+  262[EC Product]---[Y] Flowline Performance Curv|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Flowline Performance C"
+  263[EC Product]---[N] Trend and Validate Test R|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  264[EC Product]---[Y] Well Decline Curves      |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Well Decline Curves"
+  265[EC Product]---[Y] Automatic Deferment Raw D|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Automatic Deferment Ra"
+  266[EC Product]---[N] Master Events            |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  267[EC Product]---[Y] Deferment                |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Deferment"
+  268[EC Product]---[Y] Deferment - by Well      |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Deferment - by Well"
+  269[EC Product]---[Y] Period Deferment Calculat|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Period Deferment Calcu"
+  270[EC Product]---[Y] Deferment Day            |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Deferment Day"
+  271[EC Product]---[Y] Deferment Summary        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Deferment Summary"
+  272[EC Product]---[N] Deferment Corrective Acti|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  273[EC Product]---[Y] Equipment Downtime       |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Equipment Downtime"
+  274[EC Product]---[N] Daily Data Status Process|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  275[EC Product]---[Y] Daily Data Status Process|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Data Status Proc"
+  276[EC Product]---[Y] Daily Data Status Process|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Process']|cols=[]|"Daily Data Status Proc"
+  277[EC Product]---[Y] Monthly Data Status Proce|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Process']|cols=[]|"Monthly Data Status Pr"
+  278[EC Product]---[Y] Monthly Data Locking     |NAVIGATOR+TABLE |dt=1|nav=['From month', 'To month']|cols=['Month', 'Lock', 'Comments']|"Monthly Data Locking"
+  279[EC Product]---[Y] Monthly Local Data Lockin|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Local Data Loc"
+  280[EC Product]---[N] Period Process Calculatio|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  ... checkpoint saved (271 screens)
+  281[EC Product]-+D[Y] Cargo And Parcel Informat|NAVIGATOR+TABLE |dt=4|nav=['Created by', 'Record status']|cols=['Cargo Code', 'Est. Arrival From', 'Cargo Status']|"Cargo And Parcel Infor"
+  282[EC Product]--D[Y] Cargo Load and Analysis  |NAVIGATOR+TABLE |dt=3|nav=['Created by', 'Record status']|cols=['Cargo Code', 'Est. Arrival From', 'Cargo Status']|"Cargo Load and Analysi"
+  283[EC Product]-+D[Y] Port Log                 |NAVIGATOR+TABLE |dt=2|nav=['Created by', 'Record status']|cols=['Cargo Code', 'Est. Arrival From', 'Cargo Status']|"Port Log"
+  284[EC Product]---[N] Monthly Account Balance C|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  285[EC Product]---[Y] Analysis And Measurements|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Analysis And Measureme"
+  286[EC Chemist]---[N] Sample Manager           |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  287[EC Chemist]---[Y] Sample Analysis          |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Sample Analysis"
+  288[EC Chemist]---[Y] Daily Analysis And Measur|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Daily Analysis And Mea"
+  289[EC Transpo]---[Y] Tab Cargo Menu           |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Tab Cargo Menu"
+  290[EC Transpo]---[Y] Tab Cargo Planner        |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Tab Cargo Planner"
+  291[EC Transpo]---[Y] Lifting Program          |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Lifting Program"
+  292[EC Transpo]---[Y] Lifting Program - Month  |NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Lifting Program - Mont"
+  293[EC Transpo]---[Y] Nomination Entry         |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Nomination Entry"
+  294[EC Transpo]---[Y] Schedule Lifting Overview|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Schedule Lifting Overv"
+  295[EC Transpo]---[Y] Schedule Lifting Overview|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Schedule Lifting Overv"
+  296[EC Transpo]---[Y] Schedule Lifting Chart - |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Schedule Lifting Chart"
+  297[EC Transpo]---[N] Schedule Lifting Chart   |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  298[EC Transpo]---[Y] Storage and Tank Chart   |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Storage and Tank Chart"
+  299[EC Transpo]---[Y] Cargo Information        |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Cargo Information"
+  300[EC Transpo]---[Y] Nomination Details       |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Nomination Details"
+  ... checkpoint saved (291 screens)
+  301[EC Transpo]---[N] Nomination Split         |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  302[EC Transpo]---[Y] Lifting Instruction      |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Lifting Instruction"
+  303[EC Transpo]---[N] Document Instruction     |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  304[EC Transpo]---[Y] Daily Storage Forecast   |NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Production Unit']|cols=[]|"Daily Storage Forecast"
+  305[EC Transpo]---[N] Daily Entitlement RBS    |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  306[EC Transpo]---[Y] Daily Entitlement        |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Entitlement"
+  307[EC Transpo]---[Y] Daily Entitlement - Singl|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Entitlement - Si"
+  308[EC Transpo]---[Y] Daily Entitlement - Singl|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Entitlement - Si"
+  309[EC Transpo]---[Y] Daily Entitlement - Lifti|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Entitlement - Li"
+  310[EC Transpo]---[Y] Daily Entitlement - Lifti|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Entitlement - Li"
+  311[EC Transpo]---[Y] Estimated Monthly Account|NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Production Unit']|cols=[]|"Estimated Monthly Acco"
+  312[EC Transpo]---[N] Monthly Schedule Overview|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  313[EC Transpo]---[Y] Monthly Storage Profit Ce|NAVIGATOR-ONLY  |dt=0|nav=['Year', 'Production Unit']|cols=[]|"Monthly Storage Profit"
+  314[EC Transpo]---[Y] Daily Storage Profit Cent|NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Production Unit']|cols=[]|"Daily Storage Profit C"
+  315[EC Transpo]---[Y] Official Daily Receipt   |NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Production Unit']|cols=[]|"Official Daily Receipt"
+  316[EC Transpo]---[Y] Period Process Train Stor|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Period Process Train S"
+  317[EC Transpo]---[Y] Process Train Event      |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Process Train Event"
+  318[EC Transpo]---[Y] Contract KPI Monitoring  |NAVIGATOR-ONLY  |dt=0|nav=['Year', 'Business Unit']|cols=[]|"Contract KPI Monitorin"
+  319[EC Transpo]---[N] Carrier Availability     |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  320[EC Transpo]---[Y] Contract Delivery Trackin|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Contract Delivery Trac"
+  ... checkpoint saved (311 screens)
+  321[EC Transpo]---[Y] Daily Rundown Actuals vs.|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Rundown Actuals "
+  322[EC Transpo]---[Y] Daily Rundown Total Actua|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Rundown Total Ac"
+  323[EC Transpo]---[N] Monthly Reference Entitle|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  324[EC Transpo]---[Y] Berth Slot Calendar      |NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Production Unit']|cols=[]|"Berth Slot Calendar"
+  325[EC Transpo]---[N] Lifting Account Entitleme|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  326[EC Transpo]---[Y] Lifting Account Entitleme|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Lifting Account Entitl"
+  327[EC Transpo]-+-[Y] Carrier Maintenance      |NAVIGATOR+TABLE |dt=1|nav=['From Date', 'To Date']|cols=['Maintenance Type', 'Carrier Name', 'Start Window Date']|"Carrier Maintenance"
+  328[EC Transpo]---[N] Port Weather Information |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  329[EC Transpo]---[Y] Parcel Nomination        |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Parcel Nomination"
+  330[EC Transpo]---[Y] Master Plan              |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Master Plan"
+  331[EC Transpo]---[Y] Tab Harbour Menu         |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Tab Harbour Menu"
+  332[EC Transpo]---[Y] Vehicle Log              |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Tab Harbour Menu"
+  333[EC Transpo]---[Y] Tab Cargo Operations     |NAVIGATOR-ONLY  |dt=0|nav=[]|cols=[]|"Tab Cargo Operations"
+  334[EC Transpo]---[Y] Batch Quantity           |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Batch Quantity"
+  335[EC Transpo]---[Y] BL/MR Info               |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"BL/MR Info"
+  336[EC Transpo]---[Y] BL/MR Light              |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"BL/MR Light"
+  337[EC Transpo]---[Y] Cargo Analysis           |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Cargo Analysis"
+  338[EC Transpo]---[Y] Cargo Activity Timesheet |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Cargo Activity Timeshe"
+  339[EC Transpo]---[Y] Terminal Operation Delays|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Terminal Operation Del"
+  340[EC Transpo]---[Y] Harbour Interruption     |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Harbour Interruption"
+  ... checkpoint saved (331 screens)
+  341[EC Transpo]---[Y] Harbour Dues             |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Harbour Dues"
+  342[EC Transpo]---[Y] Ship Info and Ullages    |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Ship Info and Ullages"
+  343[EC Transpo]---[Y] Demurrage                |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Demurrage"
+  344[EC Transpo]---[Y] Day End Not Lifted       |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Day End Not Lifted"
+  345[EC Transpo]---[Y] Month End Not Lifted     |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Month End Not Lifted"
+  346[EC Transpo]---[Y] Nomination Closing Balanc|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Nomination Closing Bal"
+  347[EC Transpo]---[Y] Letter of Protest        |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Letter of Protest"
+  348[EC Transpo]---[Y] Cargo Document           |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Cargo Document"
+  349[EC Transpo]---[Y] Cargo Document Parcel    |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Cargo Document Parcel"
+  350[EC Transpo]---[Y] Cargo Document Other     |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Cargo Document Other"
+  351[EC Transpo]---[Y] Sailing Advice           |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Sailing Advice"
+  352[EC Transpo]---[Y] Batch Quantity Unload    |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Batch Quantity Unload"
+  353[EC Transpo]---[Y] Unload Info              |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Unload Info"
+  354[EC Transpo]---[Y] Cargo Analysis Unload    |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Cargo Analysis Unload"
+  355[EC Transpo]---[Y] Cargo Activity Timesheet |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Cargo Activity Timeshe"
+  356[EC Transpo]---[Y] Terminal Operation Unload|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Terminal Operation Unl"
+  357[EC Transpo]---[Y] Demurrage Unload         |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Demurrage Unload"
+  358[EC Transpo]---[Y] Port Resource Usage      |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Port Resource Usage"
+  359[EC Transpo]---[Y] Port Resources Restrictio|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Port Resources Restric"
+  360[EC Transpo]---[Y] Marine Notices           |NAVIGATOR-ONLY  |dt=0|nav=['Year', 'Production Unit']|cols=[]|"Marine Notices"
+  ... checkpoint saved (351 screens)
+  361[EC Transpo]---[Y] Daily Capacity Adjustment|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Capacity Adjustm"
+  362[EC Transpo]-+-[Y] Daily Contract Capacity R|NAVIGATOR+TABLE |dt=2|nav=['Date', 'Transport Contracts']|cols=['Contract Name', 'Contract Capacity', 'Available Capacity']|"Daily Contract Capacit"
+  363[EC Transpo]---[Y] Sub Daily - Lifting Accou|NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Production Unit']|cols=[]|"Sub Daily - Lifting Ac"
+  364[EC Transpo]---[Y] Lifting Account Adjustmen|NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Production Unit']|cols=[]|"Lifting Account Adjust"
+  365[EC Transpo]---[Y] Monthly Account Status   |NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Production Unit']|cols=[]|"Monthly Account Status"
+  366[EC Transpo]---[N] Forecast                 |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  367[EC Transpo]---[Y] Forecast Input Contract  |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Input Contrac"
+  368[EC Transpo]---[Y] Forecast Input Delivery P|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Input Deliver"
+  369[EC Transpo]---[Y] Forecast Input Nomination|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Input Nominat"
+  370[EC Transpo]---[N] Forecast Input Nomination|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  371[EC Transpo]---[Y] Forecast Monthly Input No|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Forecast Monthly Input"
+  372[EC Transpo]---[N] Forecast Analysis Contrac|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  373[EC Transpo]---[Y] Forecast Analysis Deliver|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Analysis Deli"
+  374[EC Transpo]---[Y] Forecast Analysis Nominat|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Analysis Nomi"
+  375[EC Transpo]---[Y] Calculate Forecast       |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Calculate Forecast"
+  376[EC Transpo]---[Y] Forecast Daily Operationa|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Daily Operati"
+  377[EC Transpo]---[Y] Forecast Period Operation|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Period Operat"
+  378[EC Transpo]---[N] Forecast Period Component|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  379[EC Transpo]---[Y] Forecast Period Product C|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Period Produc"
+  380[EC Transpo]---[N] Daily AFS                |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  ... checkpoint saved (371 screens)
+  381[EC Transpo]---[Y] Daily Nomination Point AF|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Daily Nomination Point"
+  382[EC Transpo]---[Y] Monthly AFS Chart        |NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Business Unit']|cols=[]|"Monthly AFS Chart"
+  383[EC Transpo]---[Y] Forecast Contract Capacit|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Contract Capa"
+  384[EC Transpo]---[Y] Contract Bundle Transfer |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Contract Bundle Transf"
+  385[EC Transpo]---[Y] Output Nomination        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Exit Delivery Point']|cols=[]|"Output Nomination"
+  386[EC Transpo]---[Y] Input Nomination         |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Exit Delivery Point']|cols=[]|"Input Nomination"
+  387[EC Transpo]---[Y] Exit Point Matching      |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['Exit Delivery Point Name', 'Upstream Nominated Qty[kW', 'Downstream Nominated Qty[']|"Exit Point Matching"
+  388[EC Transpo]---[Y] Aggregated Exit Point Mat|NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['Exit Delivery Point Name', 'Upstream Nominated Qty[kW', 'Downstream Nominated Qty[']|"Aggregated Exit Point "
+  389[EC Transpo]---[Y] Delivery Point Target    |NAVIGATOR+TABLE |dt=2|nav=['Date', 'Created by']|cols=['Exit Delivery Point Name', 'Output Nominated Qty[kWh]', 'Target Qty[kWh]']|"Delivery Point Target"
+  390[EC Transpo]---[N] Monthly Transport Factors|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  391 SKIP  [EC Transpo] Pipeline Trading Request
+  392 SKIP  [EC Transpo] Pipeline Trading Confirmation
+  393 SKIP  [EC Transpo] Create Output Nomination Message
+  394[EC Transpo]---[Y] Sub Daily Delivery Calcul|NAVIGATOR+TABLE |dt=1|nav=['Date', 'Exit Delivery Point']|cols=['Time (HH:mm)', 'Output Nominated Qty[kWh]', 'Target Qty[kWh]']|"Sub Daily Delivery Cal"
+  395[EC Transpo]---[Y] Sub Daily Estimate Calcul|NAVIGATOR+TABLE |dt=1|nav=['Date', 'Exit Delivery Point']|cols=['Time (HH:mm)', 'Output Nominated Qty[kWh]', 'Target Qty[kWh]']|"Sub Daily Estimate Cal"
+  396[EC Sales  ]---[Y] Daily Gas Sales Forecast |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Gas Sales Foreca"
+  397[EC Sales  ]---[Y] Monthly Forecast         |NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Forecast"
+  398[EC Sales  ]---[Y] Daily Nomination         |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Nomination"
+  399[EC Sales  ]---[Y] Daily Re-Nomination      |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Re-Nomination"
+  400[EC Sales  ]---[N] Daily Delivery           |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  ... checkpoint saved (388 screens)
+  401[EC Sales  ]---[Y] Monthly Delivery         |NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Delivery"
+  402[EC Sales  ]---[N] Daily Profit Centre Deliv|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  403[EC Sales  ]---[Y] Monthly Profit Centre Del|NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Business Unit']|cols=[]|"Monthly Profit Centre "
+  404[EC Sales  ]---[Y] Gas Delivery Events      |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Gas Delivery Events"
+  405[EC Sales  ]---[Y] Forecast Component Analys|NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Business Unit']|cols=[]|"Forecast Component Ana"
+  406[EC Sales  ]---[Y] Delivery Component Analys|NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Business Unit']|cols=[]|"Delivery Component Ana"
+  407[EC Sales  ]---[Y] Planned Delivery Restrict|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Planned Delivery Restr"
+  408[EC Sales  ]---[Y] Wet Gas Export and Fuel  |NAVIGATOR+TABLE |dt=4|nav=['Date', 'Corrected daily flow rate:']|cols=['Last Run Date', 'Status', 'Profit Centre']|"Wet Gas Export and Fue"
+  409[EC Sales  ]---[Y] NGL Export               |NAVIGATOR+TABLE |dt=2|nav=['Date', 'Corrected daily flow rate:']|cols=['Field', 'Predicted Export', 'UOM']|"NGL Export"
+  410[EC Sales  ]---[Y] Wet Gas Hourly Profile   |NAVIGATOR+TABLE |dt=2|nav=['Date', 'Created by']|cols=['Stream Name', 'Daily Flow', 'UOM']|"Wet Gas Hourly Profile"
+  411[EC Sales  ]---[Y] Daily Availability       |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Delivery Point']|cols=[]|"Daily Availability"
+  412[EC Sales  ]---[Y] Daily Nomination Overview|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Delivery Point']|cols=[]|"Daily Nomination Overv"
+  413[EC Sales  ]---[N] Before Day Target        |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  414 SKIP  [EC Sales] Within Day Target
+  415[EC Sales  ]---[Y] Daily Dry Gas Flow Profil|NAVIGATOR+TABLE |dt=2|nav=['Date', 'Created by']|cols=['Valid From', 'Target Qty[TJ]', 'Change Reason']|"Daily Dry Gas Flow Pro"
+  416[EC Sales  ]---[Y] Unit Price               |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Unit Price"
+  417[EC Sales  ]---[Y] Exchange Rates           |NAVIGATOR-ONLY  |dt=0|nav=['From Date:', 'To Date:']|cols=[]|"Exchange Rates"
+  418[EC Sales  ]---[Y] Product Price List       |NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Product Price List"
+  419[EC Sales  ]---[Y] Sub Daily Product Price L|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Sub Daily Product Pric"
+  420[EC Sales  ]---[Y] Contract Price List      |NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Contract Price List"
+  ... checkpoint saved (407 screens)
+  421[EC Sales  ]---[N] Contract Price List - Dat|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  422[EC Sales  ]---[Y] Contract Location Price L|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Contract Location Pric"
+  423[EC Sales  ]---[Y] Sub Daily Contract Price |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Sub Daily Contract Pri"
+  424[EC Sales  ]---[N] Cargo Price List         |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  425 SKIP  [EC Sales] Cargo/Parcel Price List
+  426[EC Sales  ]---[Y] Cargo Price List - Datase|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Cargo Price List - Dat"
+  427[EC Sales  ]---[Y] Price Component          |NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Business Unit']|cols=[]|"Price Component"
+  428[EC Sales  ]---[Y] Daily Price Index        |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Price Index"
+  429[EC Sales  ]---[Y] Daily Price Index - Datas|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Price Index - Da"
+  430[EC Sales  ]---[N] Daily Price Index - Datas|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  431 SKIP  [EC Sales] Sub Daily Price Index
+  432 SKIP  [EC Sales] Monthly Price Index
+  433[EC Sales  ]---[Y] Product Price List - Data|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Product Price List - D"
+  434[EC Sales  ]---[Y] Monthly Price Index - Dat|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Price Index - "
+  435[EC Sales  ]---[Y] Monthly Price Index - Dat|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Price Index - "
+  436[EC Sales  ]---[N] Monthly Price Index Forec|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  437[EC Sales  ]---[Y] Yearly Price Index       |NAVIGATOR-ONLY  |dt=0|nav=['From Year', 'To Year']|cols=[]|"Yearly Price Index"
+  438[EC Sales  ]---[Y] Price Calculations       |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Price Group']|cols=[]|"Price Calculations"
+  439[EC Sales  ]---[Y] Price Calculations - by P|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Price Group']|cols=[]|"Price Calculations - b"
+  440[EC Sales  ]---[Y] Contract Cargo Elements  |NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Contract Cargo Element"
+  ... checkpoint saved (424 screens)
+  441[EC Sales  ]---[Y] Daily Price Rate         |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Price Rate"
+  442[EC Sales  ]---[N] Daily Price Rate - Datase|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  443[EC Sales  ]---[Y] Daily Price Rate - Datase|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Price Rate - Dat"
+  444[EC Sales  ]---[N] Monthly Price Rate       |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  445[EC Sales  ]---[Y] Monthly Price Rate - Data|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Price Rate - D"
+  446[EC Sales  ]---[Y] Monthly Price Rate - Data|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Price Rate - D"
+  447[EC Sales  ]---[Y] Yearly Price Rate        |NAVIGATOR-ONLY  |dt=0|nav=['From Year', 'To Year']|cols=[]|"Yearly Price Rate"
+  448[EC Sales  ]---[Y] Matrix Price List        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Matrix Price List"
+  449[EC Sales  ]---[Y] Daily Contract Calculatio|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Contract Calcula"
+  450[EC Sales  ]---[Y] Daily Contract Calculatio|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Contract Calcula"
+  451[EC Sales  ]---[Y] Monthly Contract Calculat|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Contract Calcu"
+  452[EC Sales  ]---[Y] Monthly Contract Calculat|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Contract Calcu"
+  453[EC Sales  ]---[Y] Yearly Contract Calculati|NAVIGATOR-ONLY  |dt=0|nav=['Year', 'Contract Group']|cols=[]|"Yearly Contract Calcul"
+  454[EC Sales  ]---[N] Yearly Contract Calculati|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  455[EC Sales  ]---[Y] Monthly Contract Allocati|NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Company Name']|cols=[]|"Monthly Contract Alloc"
+  456[EC Sales  ]---[N] Sub Daily Contract Accoun|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  457[EC Sales  ]---[Y] Monthly Contract Account |NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Contract Accou"
+  458[EC Sales  ]---[Y] Daily Contract Account Ev|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Contract Account"
+  459[EC Sales  ]---[Y] Monthly Contract Account |NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Contract Accou"
+  460[EC Sales  ]---[Y] Yearly Contract Account E|NAVIGATOR-ONLY  |dt=0|nav=['From Year', 'To Year']|cols=[]|"Yearly Contract Accoun"
+  ... checkpoint saved (444 screens)
+  461[EC Sales  ]---[Y] Monthly Expenditure Forec|NAVIGATOR-ONLY  |dt=0|nav=['Month', 'Business Unit']|cols=[]|"Monthly Expenditure Fo"
+  462[EC Sales  ]---[N] Monthly Expenditure      |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  463[EC Sales  ]---[Y] Cargo Contract Account St|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Cargo Contract Account"
+  464[EC Sales  ]---[Y] Daily Contractual Volume |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Contractual Volu"
+  465[EC Sales  ]---[Y] Monthly Contractual Volum|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Contractual Vo"
+  466[EC Sales  ]---[N] Period Contract Lifting  |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  467 SKIP  [EC Sales] Daily Contract Account Status
+  468 SKIP  [EC Sales] Monthly Contract Account Status
+  469 SKIP  [EC Sales] Yearly Contract Account Status
+  470[EC Revenue]---[Y] Document Tracing         |NAVIGATOR-ONLY  |dt=0|nav=['Process From Date', 'Process To Date']|cols=[]|"Document Tracing"
+  471[EC Revenue]---[Y] Visual Tracing           |NAVIGATOR-ONLY  |dt=0|nav=['Year', 'Property']|cols=[]|"Visual Tracing"
+  472[EC Revenue]---[Y] Document Finder          |NAVIGATOR-ONLY  |dt=0|nav=['Document Key', 'Document No']|cols=[]|"Document Finder"
+  473[EC Revenue]---[Y] Period Document          |NAVIGATOR-ONLY  |dt=0|nav=[]|cols=[]|"Period Document"
+  474[EC Revenue]---[Y] ERP Document             |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"ERP Document"
+  475[EC Revenue]---[Y] Payment Tracking         |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"ERP Document"
+  476 SKIP  [EC Revenue] Interface Files
+  477 SKIP  [EC Revenue] Cargo Data
+  478 SKIP  [EC Revenue] Data Entry Interface
+  479 SKIP  [EC Revenue] Project Data Entry
+  480 SKIP  [EC Revenue] Data Entry Reconciliation
+  481 SKIP  [EC Revenue] Project Data Mapping
+  482 SKIP  [EC Revenue] Project Data Mapping Accrual
+  483 SKIP  [EC Revenue] Project Data Extract
+  484 SKIP  [EC Revenue] Project Data Extract Accrual
+  485 SKIP  [EC Revenue] Project Data Extract By Year
+  486 SKIP  [EC Revenue] Project Data Extract For 10 Years
+  487 SKIP  [EC Revenue] Cost of Service
+  488 SKIP  [EC Revenue] Revenue Lock Module
+  489 SKIP  [EC Revenue] Revenue Booking Period - Close
+  490 SKIP  [EC Revenue] Revenue Reporting Period - Close
+  491 SKIP  [EC Revenue] Revenue Booking Period - Re-open
+  492 SKIP  [EC Revenue] Revenue Reporting Period - Re-open
+  493 SKIP  [EC Revenue] Revenue Detailed Log
+  494 SKIP  [EC Revenue] Calculation Log
+  495 SKIP  [EC Revenue] Financial Item Definition
+  496 SKIP  [EC Revenue] Financial Item Template
+  497 SKIP  [EC Revenue] Daily Financial Item
+  498 SKIP  [EC Revenue] Daily Financial Item Calculation
+  499 SKIP  [EC Revenue] Monthly Financial Item
+  500[EC Revenue]---[Y] Monthly Financial Item Ca|NAVIGATOR-ONLY  |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Financial Item"
+  ... checkpoint saved (457 screens)
+  501[EC Revenue]-+-[Y] Yearly Financial Item    |NAVIGATOR+TABLE |dt=1|nav=['Year', 'Business Unit']|cols=['Sort Order', 'Financial Item Source Obj', 'Financial Item Name']|"Yearly Financial Item"
+  502[EC Revenue]---[Y] Yearly Financial Item Cal|NAVIGATOR-ONLY  |dt=0|nav=['Year', 'Calculation Group']|cols=[]|"Yearly Financial Item "
+  503[Reporting ]-+-[Y] Report Context           |NAVIGATOR+TABLE |dt=3|nav=['Start Date', 'End Date']|cols=['Code', 'Name', 'Start Date']|"Report Context"
+  504[Reporting ]-+-[Y] Excel Report Objects     |NAVIGATOR+TABLE |dt=1|nav=['Report Context', 'Created by']|cols=['Class Type', 'Object Type', 'Class Label']|"Excel Report Objects"
+  505[Reporting ]---[Y] Excel Report Sets        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Report Context']|cols=[]|"Excel Report Sets"
+  506[Reporting ]-+-[Y] Report Area              |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start date']|cols=['Report Area Code', 'Report Area Name', 'Start date']|"Report Area"
+  507[Reporting ]---[N] Report and Analytics     |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  508 SKIP  [Reporting] Report Template
+  509 SKIP  [Reporting] Report Definition
+  510 SKIP  [Reporting] Report Administration
+  511[Reporting ]---[Y] Report Generation        |NAVIGATOR-ONLY  |dt=0|nav=[]|cols=[]|"Report Generation"
+  512[Reporting ]-+D[Y] Report Set Administration|NAVIGATOR+TABLE |dt=3|nav=['Date', 'Functional Area']|cols=['Name', 'Report Definition', 'Report Area']|"Report Generation"
+  513[Reporting ]-+-[Y] Report Queue Status      |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Functional Area']|cols=['Report Set No', 'Report Set Name', 'Functional Area']|"Report Set Administrat"
+  514[Reporting ]---[Y] Export to Excel Express  |NAVIGATOR-ONLY  |dt=0|nav=['Functional Area', 'Select View']|cols=[]|"Export to Excel Expres"
+  515[Reporting ]-+-[Y] Report Publishing        |NAVIGATOR+TABLE |dt=1|nav=['From Date', 'To Date']|cols=['Functional Area', 'Publication Type', 'Generated Date']|"Report Publishing"
+  516[Reporting ]---[N] Display Published Report |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  517 SKIP  [Process Au] Project Management
+  518 SKIP  [Process Au] Process Action
+  519 SKIP  [Process Au] Process Template
+  520 SKIP  [Process Au] Process Execution
+  521 SKIP  [Process Au] Process Overview
+  522 SKIP  [Process Au] Process Overview Configuration
+  523 SKIP  [Process Au] Process Overview Legacy
+  524 SKIP  [Process Au] Todo List
+  525[Process Au]---[Y] Task Management          |NAVIGATOR+TABLE |dt=1|nav=[]|cols=[]|"Task Management"
+  526[Process Au]---[Y] Process Notifications    |NAVIGATOR+TABLE |dt=1|nav=['From Date', 'To Date']|cols=['Notification', 'Type', 'Severity']|"Process Notifications"
+  527[Process Au]---[Y] Process Monitor          |NAVIGATOR-ONLY  |dt=0|nav=['Daytime', 'Functional Area']|cols=[]|"Process Monitor"
+  528[Process Au]-+-[Y] Process Monitor Configura|NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Code', 'Name', 'Functional Area']|"Process Monitor Config"
+  529[Process Au]-+D[Y] Viewer Tag               |NAVIGATOR+TABLE |dt=2|nav=['Created by', 'Record status']|cols=['Name', 'Description', 'Property']|"Viewer Tag"
+  530[Messaging ]---[Y] EDI Address              |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Company']|cols=[]|"EDI Address"
+  531[Messaging ]-+-[Y] Value Mapping Maintenance|NAVIGATOR+TABLE |dt=1|nav=['Category', 'Created by']|cols=['Source ID', 'Source Value', 'Daytime']|"Value Mapping Maintena"
+  532[Messaging ]---[Y] Distribution List        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Functional Area']|cols=[]|"Distribution List"
+  533[Messaging ]---[Y] Send Freetext Message    |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Functional Area']|cols=[]|"Send Freetext Message"
+  534[Messaging ]---[N] Communication Status     |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  535[Messaging ]---[Y] Message Alerts           |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Received Date', 'Message Id', 'Valid From']|"Message Alerts"
+  536[Messaging ]---[Y] Message Distribution     |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Functional Area']|cols=[]|"Message Distribution"
+  537[Messaging ]---[Y] Message Group List       |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Functional Area']|cols=[]|"Message Group List"
+  538[Messaging ]---[N] Outgoing Messages        |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  539 SKIP  [Messaging] Incoming Messages
+  540 SKIP  [Messaging] Message Journal
+  541 SKIP  [Messaging] Message Workflow Overview
+  542 SKIP  [Messaging] Message Generation
+  543[Messaging ]---[Y] Manage Outgoing Messages |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Functional Area']|cols=[]|"Manage Outgoing Messag"
+  544[Task List ]---[Y] Four Eye Approval        |NAVIGATOR+TABLE |dt=2|nav=['Class Name', 'Updated By']|cols=['Class Name', 'Key Values', 'Changed Columns']|"Four Eye Approval"
+  545[Task List ]---[Y] Logbook                  |NAVIGATOR+TABLE |dt=2|nav=['Class Name', 'Updated By']|cols=['Class Name', 'Key Values', 'Changed Columns']|"Four Eye Approval"
+
+================================================================================
+PHASE 3: Saving knowledge base...
+Explored: 487 screens | Failed: 58
+
+================================================================================
+COMPLETE SCREEN KNOWLEDGE BASE
+================================================================================
+
+[?] — 3 screens
+  --- [ACTION/EMPTY    ] Authentication Audit           nav=[] cols=[]
+  --- [ACTION/EMPTY    ] Object Partition               nav=[] cols=[]
+  --- [ACTION/EMPTY    ] Analytics Object Access        nav=[] cols=[]
+
+[Configuration] — 239 screens
+  --- [ACTION/EMPTY    ] Documentation                  nav=[] cols=[]
+  --- [NAVIGATOR+TABLE ] Personal Settings              nav=['From Daytime UTC', 'To Daytime UTC'] cols=['Time UTC', 'Type']
+  --- [NAVIGATOR-ONLY  ] Create Preference              nav=['Property', 'Label'] cols=[]
+  --- [NAVIGATOR-ONLY  ] EC Codes - All                 nav=['Code Type', 'Created by'] cols=[]
+  --- [NAVIGATOR-ONLY  ] EC Codes - Non-System Codes    nav=['Code Type', 'Created by'] cols=[]
+  --- [NAVIGATOR-ONLY  ] EC Codes - System Codes        nav=['Code Type', 'Created by'] cols=[]
+  -+- [NAVIGATOR+TABLE ] EC Code Object                 nav=['Date', 'Created by'] cols=['Object Code', 'Name']
+  -+D [NAVIGATOR+TABLE ] System Attributes              nav=['Created by', 'Record status'] cols=['From Date', 'Attribute Type']
+  --- [NAVIGATOR-ONLY  ] PKI Signature Verification     nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Class Configuration            nav=['Class Type', 'Class Name'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Class Attribute Configuration  nav=['Class Type', 'Class Name'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Class Attribute Presentation Config nav=['Class Type', 'Class Name'] cols=[]
+  --- [NAVIGATOR+TABLE ] Class Property Codes           nav=['Created by', 'Record status'] cols=['Property Table Name', 'Property Code']
+  --- [NAVIGATOR-ONLY  ] Group Model                    nav=['Group Type', 'Created by'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Navigation Model               nav=['Model Type', 'Created by'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Business Function              nav=['BF Code', 'Name'] cols=['BF Code', 'Name']
+  --- [NAVIGATOR-ONLY  ] Business Function Profiles     nav=['Class Name', 'Created by'] cols=[]
+  -+D [NAVIGATOR+TABLE ] Maintain Treeview              nav=['Search', 'Filter by roles'] cols=['Main', 'Name']
+  --- [NAVIGATOR+TABLE ] Initiate Day                   nav=['From Date', 'To Date'] cols=['Start Time', 'Status']
+  --- [NAVIGATOR+TABLE ] Integrity Status               nav=['From Date', 'To Date'] cols=['Date', 'Report Type']
+  -+- [NAVIGATOR+TABLE ] Production Day Table           nav=['Created by', 'Record status'] cols=['Object Code', 'Time Zone']
+  -+D [NAVIGATOR+TABLE ] User Exit Package Configuration nav=['App Space Cntx', 'Created by'] cols=['Active', 'App Space Cntx']
+  --- [ACTION/EMPTY    ] Scenario Definition            nav=[] cols=[]
+  -+D [NAVIGATOR+TABLE ] MIME Type Mapping              nav=['Created by', 'Record status'] cols=['MIME Type', 'File Extensions']
+  --- [NAVIGATOR-ONLY  ] Analytics Integration Workflow Configuration nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Analytics Manager              nav=[] cols=[]
+  -+- [NAVIGATOR+TABLE ] Data purging                   nav=['Schedule is not enabled.', 'Created by'] cols=['Active', 'Exec Order']
+  --- [TABLE-ONLY      ] Flush Cache                    nav=[] cols=['Cache Name', 'Hit Ratio']
+  --- [ACTION/EMPTY    ] Event Monitor                  nav=[] cols=[]
+  --- [TABLE-ONLY      ] Versions                       nav=[] cols=['Name', 'Version']
+  --- [ACTION/EMPTY    ] Application Server Health      nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Generation of BF Documentation nav=['EC Version', 'Release Year'] cols=[]
+  --- [ACTION/EMPTY    ] Application Server Performance nav=[] cols=[]
+  -+D [NAVIGATOR+TABLE ] Units                          nav=['Created by', 'Record status'] cols=['Unit', 'Label']
+  -+D [NAVIGATOR+TABLE ] Unit Conversion                nav=['Created by', 'Record status'] cols=['From Unit', 'To Unit']
+  -+D [NAVIGATOR+TABLE ] Measurement Types              nav=['Created by', 'Record status'] cols=['Measurement Type', 'Database Unit']
+  -+- [NAVIGATOR+TABLE ] Conversion Group               nav=['Created by', 'Record status'] cols=['Conversion Group Code', 'Conversion Group Name']
+  -+- [NAVIGATOR+TABLE ] Asset Unit Conversion          nav=['Created by', 'Record status'] cols=['From Unit', 'To Unit']
+  --- [NAVIGATOR-ONLY  ] Inter-Group Conversion         nav=['Year', 'Level'] cols=[]
+  --- [NAVIGATOR-ONLY  ] BOE Conversion                 nav=['Year', 'Level'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Form Designer                  nav=['Example forms'] cols=[]
+  --- [TABLE-ONLY      ] Extensions Manager             nav=[] cols=['Id', 'Name']
+  --- [NAVIGATOR-ONLY  ] Configuration Export           nav=['Include product'] cols=[]
+  -+D [NAVIGATOR+TABLE ] Configuration Type             nav=['Created by', 'Record status'] cols=['Configuration Type', 'Name']
+  -+D [NAVIGATOR+TABLE ] Text Translation               nav=['Language', 'Source'] cols=['Source', 'Target']
+  -+D [NAVIGATOR+TABLE ] Language                       nav=['Created by', 'Record status'] cols=['Id', 'Language']
+  --- [NAVIGATOR-ONLY  ] Class Validation               nav=['Object Class', 'Created by'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Hierarchical Object Validation nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Object Validation - Default    nav=['Object Class', 'Object Name'] cols=[]
+  -+D [NAVIGATOR+TABLE ] Check Group                    nav=['Created by', 'Record status'] cols=['Group', 'Parent Group']
+  -+- [NAVIGATOR+TABLE ] Rule Group Combination         nav=['Group', 'Created by'] cols=['Check Rule', 'Check Group']
+  --- [NAVIGATOR+TABLE ] Validation Overview            nav=['From date', 'To date'] cols=['Group', 'Status']
+  --- [NAVIGATOR-ONLY  ] Validation Overview by Facility nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Mismeasurement Event           nav=['From Daytime', 'To Daytime'] cols=['Event NO', 'Validate From']
+  -+- [NAVIGATOR+TABLE ] Calculation Context            nav=['Date', 'Start Date'] cols=['Calc Context Code', 'Calc Context Name']
+  --- [NAVIGATOR-ONLY  ] Database Object Types          nav=['Date', 'Calculation Context'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Simple Object Types            nav=['Date', 'Calculation Context'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Variable Definitions           nav=['Date', 'Calculation Context'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Global Attributes              nav=['Date', 'Calculation Context'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Create Calculation             nav=['Date', 'Calculation Context'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Maintain Calculation           nav=['Date', 'Calculation Context'] cols=[]
+  --- [ACTION/EMPTY    ] Calculation Library            nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Create Library Calculation     nav=['Date', 'Calculation Library'] cols=[]
+  --- [ACTION/EMPTY    ] Maintain Library Calculation   nav=[] cols=[]
+  -+D [NAVIGATOR+TABLE ] Maintain Calculation Log Profiles nav=['Created by', 'Record status'] cols=['Code', 'Name']
+  --- [NAVIGATOR-ONLY  ] Component Template             nav=['Date', 'Calculation Context'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Component Report               nav=['Date', 'Calculation Context'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Calculation Group Context      nav=['Date', 'Start Date'] cols=['Calculation Group Context', 'Calculation Group Context']
+  --- [NAVIGATOR-ONLY  ] Calculation Group Setup        nav=['Date', 'Calculation Group Context'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Alloc Job Status Process Conn  nav=['Date', 'Allocation Network'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Node                           nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Stream Node Diagram            nav=['Date', 'Allocation Network'] cols=[]
+  -+D [NAVIGATOR+TABLE ] SND Production Data Menu       nav=['Created by', 'Record status'] cols=['Node Type', 'Business Screen']
+  -+- [NAVIGATOR+TABLE ] Asset Calculation Attributes   nav=['From Date', 'To Date'] cols=['Attribute', 'Daytime']
+  -+- [NAVIGATOR+TABLE ] Config Variable                nav=['Date', 'Start Date'] cols=['Code', 'Name']
+  -+- [NAVIGATOR+TABLE ] Config Variable Parameter      nav=['Start Date', 'End Date'] cols=['Code', 'Name']
+  -+- [NAVIGATOR+TABLE ] Production Unit                nav=['Date', 'Start Date'] cols=['Production Unit Code', 'Production Unit Name']
+  --- [ACTION/EMPTY    ] Business Unit                  nav=[] cols=[]
+  -+- [NAVIGATOR+TABLE ] Production Sub Unit            nav=['Date', 'Created by'] cols=['Production Sub Unit Code', 'Production Sub Unit Name']
+  -+- [NAVIGATOR+TABLE ] Country                        nav=['Date', 'Start Date'] cols=['Country Code', 'Country Name']
+  -+- [NAVIGATOR+TABLE ] State                          nav=['Date', 'Created by'] cols=['State Code', 'State Name']
+  -+- [NAVIGATOR+TABLE ] County                         nav=['Date', 'Created by'] cols=['County Code', 'County Name']
+  -+- [NAVIGATOR-ONLY  ] Area                           nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Sub Area                       nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Region                         nav=['Date', 'Start Date'] cols=['Region Code', 'Region Name']
+  -+- [NAVIGATOR+TABLE ] Regulatory Permits             nav=['Date', 'Created by'] cols=['Permit Code', 'Permit Name']
+  -+- [NAVIGATOR+TABLE ] Object List                    nav=['Date', 'Start Date'] cols=['Code', 'Name']
+  --- [NAVIGATOR-ONLY  ] Object List Setup              nav=['Daytime', 'List Class'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Functional Area                nav=['Date', 'Start date'] cols=['Area Code', 'Area Name']
+  --- [NAVIGATOR+TABLE ] Well Mode Attributes           nav=['Created by', 'Record status'] cols=['Attribute Name', 'Label']
+  -+- [NAVIGATOR+TABLE ] Well Mode                      nav=['Created by', 'Record status'] cols=['Well Mode Code', 'Well Mode Name']
+  -+D [NAVIGATOR+TABLE ] Hydrocarbon Component          nav=['Created by', 'Record status'] cols=['Hydrocarbon Component Cod', 'Hydrocarbon Component Nam']
+  -+- [NAVIGATOR+TABLE ] Product                        nav=['Date', 'Start Date'] cols=['Product Code', 'Product Name']
+  -+- [NAVIGATOR+TABLE ] Blend                          nav=['Date', 'Start Date'] cols=['Blend Code', 'Blend Name']
+  --- [NAVIGATOR-ONLY  ] Maintain Blend Content Split   nav=['Date', 'Blend'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Disposition Type               nav=['Date', 'Created by'] cols=['Disposition Code', 'Disposition Name']
+  -+D [NAVIGATOR+TABLE ] Component Set                  nav=['Created by', 'Record status'] cols=['Component Set Code', 'Component Set Name']
+  -+- [NAVIGATOR+TABLE ] Component Set List             nav=['Name', 'Created by'] cols=['Start Date', 'End Date']
+  -+- [NAVIGATOR+TABLE ] Constant Standard              nav=['New Code', 'New Name'] cols=['Standard Code', 'Standard Name']
+  -+- [NAVIGATOR+TABLE ] Component Constant             nav=['Constant Standard Name', 'Created by'] cols=['Daytime', 'Component']
+  --- [NAVIGATOR-ONLY  ] Equation Of State              nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Licence                        nav=['Date', 'Start Date'] cols=['Licence Code', 'Licence Name']
+  -+- [NAVIGATOR+TABLE ] MMS Lease                      nav=['Date', 'Created by'] cols=['MMS Lease Code', 'MMS Lease Name']
+  -+- [NAVIGATOR+TABLE ] State Lease                    nav=['Date', 'Created by'] cols=['State Lease Code', 'State Lease Name']
+  -+- [NAVIGATOR+TABLE ] Operator Lease                 nav=['Date', 'Created by'] cols=['Operator Lease Code', 'Operator Lease Name']
+  -+- [NAVIGATOR+TABLE ] Company                        nav=['Date', 'Start Date'] cols=['Company Code', 'Company Name']
+  -+- [NAVIGATOR+TABLE ] Company Contact                nav=['Date', 'Company'] cols=['Contact Code', 'Contact Name']
+  -+- [NAVIGATOR+TABLE ] Customer                       nav=['Date', 'Start Date'] cols=['Code', 'Name']
+  --- [NAVIGATOR-ONLY  ] Customer VAT Reg No            nav=['Date', 'Created by'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Restricted Customer Setup      nav=['Date', 'Created by'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Vendor                         nav=['Date', 'Start Date'] cols=['Code', 'Name']
+  --- [NAVIGATOR-ONLY  ] Vendor VAT Reg No              nav=['Date', 'Created by'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Restricted Vendor Setup        nav=['Date', 'Created by'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Field                          nav=['Date', 'Area'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Sub Field                      nav=['Date', 'Created by'] cols=['Sub Field Code', 'Sub Field Name']
+  -+- [NAVIGATOR+TABLE ] Field Group                    nav=['Date', 'Start Date'] cols=['Code', 'Name']
+  --- [NAVIGATOR-ONLY  ] Field Group Setup              nav=['Date', 'Created by'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Commercial Entity              nav=['Date', 'Licence'] cols=['Commercial Entity Code', 'Commercial Entity Name']
+  --- [NAVIGATOR-ONLY  ] Maintain Equity Share          nav=['Date', 'Licence'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Document Date Term             nav=['Date', 'Start Date'] cols=['Code', 'Name']
+  -+- [NAVIGATOR+TABLE ] Document Received Term         nav=['Date', 'Start Date'] cols=['Code', 'Name']
+  --- [ACTION/EMPTY    ] Payment Term                   nav=[] cols=[]
+  -+- [NAVIGATOR+TABLE ] Calendar                       nav=['Date', 'Start Date'] cols=['Calendar Code', 'Calendar Name']
+  -+- [NAVIGATOR+TABLE ] Calendar Collection            nav=['Date', 'Start Date'] cols=['Code', 'Name']
+  --- [ACTION/EMPTY    ] Facility Class 1               nav=[] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Manage Facility Class 1        nav=['Date', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Facility Class 2               nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Facility Reference Values      nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Facility Analysis Items        nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] External Location              nav=['Date', 'Ext Loc Code'] cols=[]
+  --- [ACTION/EMPTY    ] External Location Reference Value nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Facility - External Location Connection nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Operator Route                 nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Collection Point               nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Collection Point Hierarchy Reorganization nav=['Date', 'Production Unit'] cols=['Select', 'Object Type']
+  -+- [NAVIGATOR-ONLY  ] Flowline                       nav=['Date', 'Production Unit'] cols=[]
+  -+D [NAVIGATOR+TABLE ] Area Codes                     nav=['Created by', 'Record status'] cols=['Area Code', 'Start Date']
+  -+- [NAVIGATOR-ONLY  ] Test Separator                 nav=['Date', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Production Separator           nav=[] cols=[]
+  -+D [NAVIGATOR+TABLE ] Vessel                         nav=['Created by', 'Record status'] cols=['Vessel Code', 'Vessel Name']
+  -+D [NAVIGATOR+TABLE ] Weather Site                   nav=['Created by', 'Record status'] cols=['Facility Name', 'Description']
+  -+- [NAVIGATOR-ONLY  ] Pipeline                       nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Process Train                  nav=['Date', 'Start Date'] cols=['Process Train Code', 'Process Train Name']
+  -+- [NAVIGATOR+TABLE ] Report Group                   nav=['Date', 'Created by'] cols=['Reporting Group Code', 'Reporting Group Name']
+  --- [NAVIGATOR-ONLY  ] Process Train Event Profiles   nav=['Date', 'Facility Class 1'] cols=[]
+  --- [NAVIGATOR+TABLE ] Report Group Connection        nav=['Date', 'Created by'] cols=['Reporting Group Code', 'Reporting Group Name']
+  --- [NAVIGATOR-ONLY  ] Object Group Connection        nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Maintain System Reference Value nav=['Created by', 'Record status'] cols=['Daytime']
+  -+- [NAVIGATOR-ONLY  ] Well Hookup                    nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Shift                          nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Stream - by Group Model        nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Manage Stream                  nav=['Date', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Maintain Streams               nav=[] cols=[]
+  -+- [NAVIGATOR+TABLE ] Stream Set                     nav=['Created by', 'Record status'] cols=['Stream Set Code', 'Stream Set Name']
+  --- [NAVIGATOR-ONLY  ] Stream Set List                nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Stream Formula Editor          nav=['Date', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Stream Reference Values        nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Stream Seasonal Values         nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Revenue Stream Category        nav=['Date', 'Start Date'] cols=['Stream Category Code', 'Name']
+  --- [NAVIGATOR-ONLY  ] Revenue Stream Category Setup  nav=['Date', 'Created by'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Stream Item Category           nav=['Date', 'Start Date'] cols=['Code', 'Name']
+  -+- [NAVIGATOR+TABLE ] Stream - All                   nav=['Date', 'Start Date'] cols=['Stream Code', 'Stream Name']
+  --- [ACTION/EMPTY    ] Stream Item                    nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Stream Item           nav=['Code', 'Category'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Orifice Plate                  nav=['Date', 'Start Date'] cols=['Orifice Code', 'Orifice Name']
+  --- [NAVIGATOR-ONLY  ] Stream ORF Values              nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Meter Run                      nav=['Date', 'Start Date'] cols=['Meter Run Code', 'Meter Run Name']
+  --- [NAVIGATOR-ONLY  ] Meter Run and Orifice Plate Connection nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Stream PT Conversion Values    nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Stream DPT Conversion Values   nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Stream Profit Centre Connection nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Stream Well Connection         nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Choke Model                    nav=['Date', 'Start Date'] cols=['Choke Model Code', 'Choke Model Name']
+  --- [NAVIGATOR-ONLY  ] Choke Model Reference Values   nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Storage                        nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Maintain Storages              nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Tank                           nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Manage Tank                    nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Maintain Tanks                 nav=['Date', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Tank Usage                     nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Tank Strapping                 nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Tank Tap                       nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Intermediate Storage Products  nav=['Storage', 'Created by'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Storage Profit Centre Connection nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Storage Flow                   nav=['Date', 'Start Date'] cols=['Storage Flow Code', 'Storage Flow Name']
+  -+- [NAVIGATOR+TABLE ] Reservoir Block                nav=['Date', 'Start Date'] cols=['Reservoir Block Code', 'Reservoir Block Name']
+  -+- [NAVIGATOR+TABLE ] Reservoir Formation            nav=['Date', 'Start Date'] cols=['Reservoir Formation Code', 'Reservoir Formation Name']
+  --- [ACTION/EMPTY    ] Reservoir Block Formation      nav=[] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Well Hole                      nav=['Date', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Planned Well                   nav=[] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Well                           nav=['Date', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Manage Well                    nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Maintain Wells                 nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Well Bore                      nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Well Bore Split                nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Well Bore Interval             nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Well Bore Interval Split       nav=['Date', 'Production Unit'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Perforation Interval           nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Perforation Interval Split     nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Flowline Well Connection       nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Swing Well Connection          nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Well Reference Value           nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Well Seasonal Value            nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Choke                          nav=['Date', 'Start Date'] cols=['Choke Code', 'Choke Name']
+  --- [NAVIGATOR-ONLY  ] Choke Conversion               nav=['Date', 'Choke'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Choke Gas Lift Conversion      nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Equipment                      nav=['Date', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Maintain Equipment             nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Equipment Connection           nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Equipment Reference Value      nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR-ONLY  ] Test Device                    nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Test Device Reference Values   nav=['From Date', 'To Date'] cols=[]
+  -+D [NAVIGATOR+TABLE ] Adapter Configuration          nav=['Created by', 'Record status'] cols=['Disable', 'Name']
+  -+D [NAVIGATOR+TABLE ] Maintain Templates             nav=['Template Code', 'Description'] cols=['Template Code', 'Description']
+  --- [ACTION/EMPTY    ] Event Route Configuration      nav=[] cols=[]
+  -+D [NAVIGATOR+TABLE ] Remote Endpoint Configuration  nav=['SecretServiceBasic', 'Created by'] cols=['Code', 'Name']
+  --- [NAVIGATOR-ONLY  ] Maintain Mappings              nav=['Date', 'Class Name'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Maintain Mappings Overview     nav=['Date', 'Class Name'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Generate Tag Mappings          nav=['Object Class', 'Object Name'] cols=[]
+  --- [NAVIGATOR+TABLE ] Transform Tag Activity         nav=['Created by', 'Record status'] cols=['Last Transfer', 'Class']
+  --- [NAVIGATOR+TABLE ] Transform Process Log          nav=['From Daytime', 'To Daytime'] cols=['Service name', 'Log Level']
+  --- [NAVIGATOR-ONLY  ] ECIS Agent Log                 nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Tag Event Status               nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Dummy Tag Event Object         nav=['Date', 'Start Date'] cols=['Dummy Tag Event Object Co', 'Dummy Tag Event Object Na']
+  -+D [NAVIGATOR+TABLE ] Business Actions               nav=['Created by', 'Record status'] cols=['Name', 'Java Class']
+  --- [ACTION/EMPTY    ] Schedules                      nav=[] cols=[]
+  --- [NAVIGATOR+TABLE ] Schedule History               nav=['Active Status', 'From Daytime'] cols=['Name', 'Description']
+  --- [ACTION/EMPTY    ] Manage Scheduler               nav=[] cols=[]
+  -+- [NAVIGATOR+TABLE ] Maintain Contact Group Set     nav=['Date', 'Functional Area'] cols=['Contact Group Set Code', 'Name']
+  --- [ACTION/EMPTY    ] Maintain Message Type          nav=[] cols=[]
+  -+- [NAVIGATOR+TABLE ] Message Group                  nav=['Date', 'Functional Area'] cols=['Message Group Code', 'Name']
+  --- [NAVIGATOR-ONLY  ] Message Format                 nav=['Date', 'Functional Area'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Freetext Message Template      nav=['Date', 'Functional Area'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Actor Maintenance              nav=['Date', 'Functional Area'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Task Process                   nav=['Start date', 'End date'] cols=['Task Process Code', 'Task Process Name']
+  --- [ACTION/EMPTY    ] Task Process Item              nav=[] cols=[]
+  -+D [NAVIGATOR+TABLE ] Business Action                nav=['Created by', 'Record status'] cols=['Name', 'Java Class']
+  -+- [NAVIGATOR+TABLE ] Action Trigger                 nav=['Start date', 'End date'] cols=['Action Trigger Code', 'Action Trigger Name']
+  --- [NAVIGATOR-ONLY  ] Action Trigger Connection      nav=['Date', 'Action Trigger'] cols=[]
+
+[EC Chemistry] — 3 screens
+  --- [ACTION/EMPTY    ] Sample Manager                 nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Sample Analysis                nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Analysis And Measurements nav=['Date', 'Production Unit'] cols=[]
+
+[EC Production] — 34 screens
+  --- [NAVIGATOR-ONLY  ] Daily Dashboard                nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Deferment Dashboard            nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Production Efficiency          nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Well Finder                    nav=['Date', 'Well Search'] cols=[]
+  --- [ACTION/EMPTY    ] Sub Surface Connection Information nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Equipment Finder               nav=['Date', 'Equipment Search'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Stream Finder                  nav=['Date', 'Stream Search'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Tank Finder                    nav=['Date', 'Tank Search'] cols=[]
+  --- [ACTION/EMPTY    ] Test Device Finder             nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Well Performance Curves        nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Flowline Performance Curves    nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Trend and Validate Test Result nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Well Decline Curves            nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Automatic Deferment Raw Data   nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Master Events                  nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Deferment                      nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Deferment - by Well            nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Period Deferment Calculations  nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Deferment Day                  nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Deferment Summary              nav=['Date', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Deferment Corrective Action    nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Equipment Downtime             nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Daily Data Status Processes    nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Data Status Processes - by Facility nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Data Status Processes - Single Date nav=['Date', 'Process'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Data Status Processes  nav=['Date', 'Process'] cols=[]
+  --- [NAVIGATOR+TABLE ] Monthly Data Locking           nav=['From month', 'To month'] cols=['Month', 'Lock']
+  --- [NAVIGATOR-ONLY  ] Monthly Local Data Locking     nav=['From Month', 'To Month'] cols=[]
+  --- [ACTION/EMPTY    ] Period Process Calculations    nav=[] cols=[]
+  -+D [NAVIGATOR+TABLE ] Cargo And Parcel Information   nav=['Created by', 'Record status'] cols=['Cargo Code', 'Est. Arrival From']
+  --D [NAVIGATOR+TABLE ] Cargo Load and Analysis        nav=['Created by', 'Record status'] cols=['Cargo Code', 'Est. Arrival From']
+  -+D [NAVIGATOR+TABLE ] Port Log                       nav=['Created by', 'Record status'] cols=['Cargo Code', 'Est. Arrival From']
+  --- [ACTION/EMPTY    ] Monthly Account Balance Calculation nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Analysis And Measurements      nav=['From Date', 'To Date'] cols=[]
+
+[EC Revenue] — 9 screens
+  --- [NAVIGATOR-ONLY  ] Document Tracing               nav=['Process From Date', 'Process To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Visual Tracing                 nav=['Year', 'Property'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Document Finder                nav=['Document Key', 'Document No'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Period Document                nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] ERP Document                   nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Payment Tracking               nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Financial Item Calculation nav=['From Month', 'To Month'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Yearly Financial Item          nav=['Year', 'Business Unit'] cols=['Sort Order', 'Financial Item Source Obj']
+  --- [NAVIGATOR-ONLY  ] Yearly Financial Item Calculation nav=['Year', 'Calculation Group'] cols=[]
+
+[EC Sales] — 67 screens
+  --- [NAVIGATOR-ONLY  ] Daily Gas Sales Forecast       nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Forecast               nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Nomination               nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Re-Nomination            nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Daily Delivery                 nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Delivery               nav=['From Month', 'To Month'] cols=[]
+  --- [ACTION/EMPTY    ] Daily Profit Centre Delivery   nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Profit Centre Delivery nav=['Month', 'Business Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Gas Delivery Events            nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Component Analysis    nav=['Month', 'Business Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Delivery Component Analysis    nav=['Month', 'Business Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Planned Delivery Restrictions  nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR+TABLE ] Wet Gas Export and Fuel        nav=['Date', 'Corrected daily flow rate:'] cols=['Last Run Date', 'Status']
+  --- [NAVIGATOR+TABLE ] NGL Export                     nav=['Date', 'Corrected daily flow rate:'] cols=['Field', 'Predicted Export']
+  --- [NAVIGATOR+TABLE ] Wet Gas Hourly Profile         nav=['Date', 'Created by'] cols=['Stream Name', 'Daily Flow']
+  --- [NAVIGATOR-ONLY  ] Daily Availability             nav=['Date', 'Delivery Point'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Nomination Overview      nav=['Date', 'Delivery Point'] cols=[]
+  --- [ACTION/EMPTY    ] Before Day Target              nav=[] cols=[]
+  --- [NAVIGATOR+TABLE ] Daily Dry Gas Flow Profile     nav=['Date', 'Created by'] cols=['Valid From', 'Target Qty[TJ]']
+  --- [NAVIGATOR-ONLY  ] Unit Price                     nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Exchange Rates                 nav=['From Date:', 'To Date:'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Product Price List             nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Sub Daily Product Price List   nav=['Date', 'Business Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Contract Price List            nav=['From Month', 'To Month'] cols=[]
+  --- [ACTION/EMPTY    ] Contract Price List - Dataset  nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Contract Location Price List - Dataset nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Sub Daily Contract Price List  nav=['Date', 'Business Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Cargo Price List               nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Cargo Price List - Dataset     nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Price Component                nav=['Month', 'Business Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Price Index              nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Price Index - Dataset    nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Daily Price Index - Dataset and Price Object nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Product Price List - Dataset   nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Price Index - Dataset  nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Price Index - Dataset and Price Object nav=['From Month', 'To Month'] cols=[]
+  --- [ACTION/EMPTY    ] Monthly Price Index Forecast   nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Yearly Price Index             nav=['From Year', 'To Year'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Price Calculations             nav=['Date', 'Price Group'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Price Calculations - by Price Object nav=['Date', 'Price Group'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Contract Cargo Elements        nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Price Rate               nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Daily Price Rate - Dataset     nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Price Rate - Dataset and Price Object nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Monthly Price Rate             nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Price Rate - Dataset   nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Price Rate - Dataset and Price Object nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Yearly Price Rate              nav=['From Year', 'To Year'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Matrix Price List              nav=['Date', 'Business Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Contract Calculation     nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Contract Calculation - by Contract nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Contract Calculation   nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Contract Calculation - by Contract nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Yearly Contract Calculation    nav=['Year', 'Contract Group'] cols=[]
+  --- [ACTION/EMPTY    ] Yearly Contract Calculation - by Contract nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Contract Allocation Adjustment nav=['Month', 'Company Name'] cols=[]
+  --- [ACTION/EMPTY    ] Sub Daily Contract Account Status nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Contract Account Company Status nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Contract Account Events  nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Contract Account Events nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Yearly Contract Account Events nav=['From Year', 'To Year'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Expenditure Forecast   nav=['Month', 'Business Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Monthly Expenditure            nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Cargo Contract Account Status  nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Contractual Volume       nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Contractual Volume     nav=['From Month', 'To Month'] cols=[]
+  --- [ACTION/EMPTY    ] Period Contract Lifting        nav=[] cols=[]
+
+[EC Transport] — 104 screens
+  --- [NAVIGATOR-ONLY  ] Tab Cargo Menu                 nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Tab Cargo Planner              nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Lifting Program                nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Lifting Program - Month        nav=['From Month', 'To Month'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Nomination Entry               nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Schedule Lifting Overview - RBS nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Schedule Lifting Overview      nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Schedule Lifting Chart - RBS   nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Schedule Lifting Chart         nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Storage and Tank Chart         nav=['Date', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Cargo Information              nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Nomination Details             nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Nomination Split               nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Lifting Instruction            nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Document Instruction           nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Storage Forecast         nav=['Month', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Daily Entitlement RBS          nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Entitlement              nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Entitlement - Single Lifting Account RBS nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Entitlement - Single Lifting Account nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Entitlement - Lifting Account RBS nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Entitlement - Lifting Account nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Estimated Monthly Account Status nav=['Month', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Monthly Schedule Overview      nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Storage Profit Centre Forecast nav=['Year', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Storage Profit Centre Forecast nav=['Month', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Official Daily Receipt         nav=['Month', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Period Process Train Storage Yield nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Process Train Event            nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Contract KPI Monitoring        nav=['Year', 'Business Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Carrier Availability           nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Contract Delivery Tracking     nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Rundown Actuals vs. Forecast nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Rundown Total Actuals vs. Forecast nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Monthly Reference Entitlement  nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Berth Slot Calendar            nav=['Month', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Lifting Account Entitlement Chart RBS nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Lifting Account Entitlement Chart nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Carrier Maintenance            nav=['From Date', 'To Date'] cols=['Maintenance Type', 'Carrier Name']
+  --- [ACTION/EMPTY    ] Port Weather Information       nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Parcel Nomination              nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Master Plan                    nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Tab Harbour Menu               nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Vehicle Log                    nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Tab Cargo Operations           nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Batch Quantity                 nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] BL/MR Info                     nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] BL/MR Light                    nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Cargo Analysis                 nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Cargo Activity Timesheet       nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Terminal Operation Delays      nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Harbour Interruption           nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Harbour Dues                   nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Ship Info and Ullages          nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Demurrage                      nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Day End Not Lifted             nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Month End Not Lifted           nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Nomination Closing Balance     nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Letter of Protest              nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Cargo Document                 nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Cargo Document Parcel          nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Cargo Document Other           nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Sailing Advice                 nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Batch Quantity Unload          nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Unload Info                    nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Cargo Analysis Unload          nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Cargo Activity Timesheet Unload nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Terminal Operation Unload Delays nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Demurrage Unload               nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Port Resource Usage            nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Port Resources Restriction     nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Marine Notices                 nav=['Year', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Capacity Adjustment      nav=['From Date', 'To Date'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Daily Contract Capacity Request nav=['Date', 'Transport Contracts'] cols=['Contract Name', 'Contract Capacity']
+  --- [NAVIGATOR-ONLY  ] Sub Daily - Lifting Account Adjustment nav=['Month', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Lifting Account Adjustment     nav=['Month', 'Production Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly Account Status         nav=['Month', 'Production Unit'] cols=[]
+  --- [ACTION/EMPTY    ] Forecast                       nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Input Contract        nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Input Delivery Point  nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Input Nomination Point nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Forecast Input Nomination Location nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Monthly Input Nomination Location nav=['From Month', 'To Month'] cols=[]
+  --- [ACTION/EMPTY    ] Forecast Analysis Contract     nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Analysis Delivery Point nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Analysis Nomination Point nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Calculate Forecast             nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Daily Operational Restriction nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Period Operational Restriction nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Forecast Period Component Recovery Factors nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Period Product Component Recovery Factors nav=['From Date', 'To Date'] cols=[]
+  --- [ACTION/EMPTY    ] Daily AFS                      nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Daily Nomination Point AFS     nav=['Date', 'Business Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Monthly AFS Chart              nav=['Month', 'Business Unit'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Forecast Contract Capacity Factors nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Contract Bundle Transfer       nav=['From Date', 'To Date'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Output Nomination              nav=['Date', 'Exit Delivery Point'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Input Nomination               nav=['Date', 'Exit Delivery Point'] cols=[]
+  --- [NAVIGATOR+TABLE ] Exit Point Matching            nav=['Date', 'Created by'] cols=['Exit Delivery Point Name', 'Upstream Nominated Qty[kW']
+  --- [NAVIGATOR+TABLE ] Aggregated Exit Point Matching nav=['Date', 'Created by'] cols=['Exit Delivery Point Name', 'Upstream Nominated Qty[kW']
+  --- [NAVIGATOR+TABLE ] Delivery Point Target          nav=['Date', 'Created by'] cols=['Exit Delivery Point Name', 'Output Nominated Qty[kWh]']
+  --- [ACTION/EMPTY    ] Monthly Transport Factors      nav=[] cols=[]
+  --- [NAVIGATOR+TABLE ] Sub Daily Delivery Calculations nav=['Date', 'Exit Delivery Point'] cols=['Time (HH:mm)', 'Output Nominated Qty[kWh]']
+  --- [NAVIGATOR+TABLE ] Sub Daily Estimate Calculations nav=['Date', 'Exit Delivery Point'] cols=['Time (HH:mm)', 'Output Nominated Qty[kWh]']
+
+[Messaging] — 10 screens
+  --- [NAVIGATOR-ONLY  ] EDI Address                    nav=['Date', 'Company'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Value Mapping Maintenance      nav=['Category', 'Created by'] cols=['Source ID', 'Source Value']
+  --- [NAVIGATOR-ONLY  ] Distribution List              nav=['Date', 'Functional Area'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Send Freetext Message          nav=['Date', 'Functional Area'] cols=[]
+  --- [ACTION/EMPTY    ] Communication Status           nav=[] cols=[]
+  --- [NAVIGATOR+TABLE ] Message Alerts                 nav=['Created by', 'Record status'] cols=['Received Date', 'Message Id']
+  --- [NAVIGATOR-ONLY  ] Message Distribution           nav=['Date', 'Functional Area'] cols=[]
+  --- [NAVIGATOR-ONLY  ] Message Group List             nav=['Date', 'Functional Area'] cols=[]
+  --- [ACTION/EMPTY    ] Outgoing Messages              nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Manage Outgoing Messages       nav=['Date', 'Functional Area'] cols=[]
+
+[Process Automation] — 5 screens
+  --- [NAVIGATOR+TABLE ] Task Management                nav=[] cols=[]
+  --- [NAVIGATOR+TABLE ] Process Notifications          nav=['From Date', 'To Date'] cols=['Notification', 'Type']
+  --- [NAVIGATOR-ONLY  ] Process Monitor                nav=['Daytime', 'Functional Area'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Process Monitor Configuration  nav=['Created by', 'Record status'] cols=['Code', 'Name']
+  -+D [NAVIGATOR+TABLE ] Viewer Tag                     nav=['Created by', 'Record status'] cols=['Name', 'Description']
+
+[Reporting] — 11 screens
+  -+- [NAVIGATOR+TABLE ] Report Context                 nav=['Start Date', 'End Date'] cols=['Code', 'Name']
+  -+- [NAVIGATOR+TABLE ] Excel Report Objects           nav=['Report Context', 'Created by'] cols=['Class Type', 'Object Type']
+  --- [NAVIGATOR-ONLY  ] Excel Report Sets              nav=['Date', 'Report Context'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Report Area                    nav=['Date', 'Start date'] cols=['Report Area Code', 'Report Area Name']
+  --- [ACTION/EMPTY    ] Report and Analytics           nav=[] cols=[]
+  --- [NAVIGATOR-ONLY  ] Report Generation              nav=[] cols=[]
+  -+D [NAVIGATOR+TABLE ] Report Set Administration      nav=['Date', 'Functional Area'] cols=['Name', 'Report Definition']
+  -+- [NAVIGATOR+TABLE ] Report Queue Status            nav=['Date', 'Functional Area'] cols=['Report Set No', 'Report Set Name']
+  --- [NAVIGATOR-ONLY  ] Export to Excel Express        nav=['Functional Area', 'Select View'] cols=[]
+  -+- [NAVIGATOR+TABLE ] Report Publishing              nav=['From Date', 'To Date'] cols=['Functional Area', 'Publication Type']
+  --- [ACTION/EMPTY    ] Display Published Report       nav=[] cols=[]
+
+[Task List] — 2 screens
+  --- [NAVIGATOR+TABLE ] Four Eye Approval              nav=['Class Name', 'Updated By'] cols=['Class Name', 'Key Values']
+  --- [NAVIGATOR+TABLE ] Logbook                        nav=['Class Name', 'Updated By'] cols=['Class Name', 'Key Values']
+
+Saved to: c:\Projects\ChoongYin_OS\tmp\logs\ec_full_screen_kb.json

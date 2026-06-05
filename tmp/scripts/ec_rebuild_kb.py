@@ -1,20 +1,17 @@
 """
-EC Screen KB Builder v3
-- Expand tree ONCE at start
-- Click each label directly (no search, no going back to dashboard)
-- Only re-expand if navigated away from EC
-- Skip known external links
+EC KB Rebuilder + Full Exploration
+- Merge-safe: reads KB, merges new results, never overwrites with fewer entries
+- Uses both tree expansion AND search to find screens
+- Accumulates across all runs
 """
 from playwright.sync_api import sync_playwright
 import json, os, sys
 
-EC_URL  = 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/'
-SS_DIR  = r'c:\Projects\ChoongYin_OS\docs\EC\screenshots\all_screens'
-KB_PATH = r'c:\Projects\ChoongYin_OS\tmp\logs\ec_screen_kb_v3.json'
-LOG_PATH= r'c:\Projects\ChoongYin_OS\tmp\logs\ec_explore_v3.txt'
-INV_PATH= r'c:\Projects\ChoongYin_OS\docs\EC\ec_full_tree_inventory.json'
+EC_URL   = 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/'
+KB_PATH  = r'c:\Projects\ChoongYin_OS\tmp\logs\ec_screen_kb_final.json'
+LOG_PATH = r'c:\Projects\ChoongYin_OS\tmp\logs\ec_rebuild_log.txt'
+INV_PATH = r'c:\Projects\ChoongYin_OS\docs\EC\ec_full_tree_inventory.json'
 
-os.makedirs(SS_DIR, exist_ok=True)
 os.makedirs(r'c:\Projects\ChoongYin_OS\tmp\logs', exist_ok=True)
 
 class Tee:
@@ -85,9 +82,28 @@ ANALYZE_JS = """(args) => {
 }"""
 
 
-def expand_all(page, max_passes=5):
+def merge_save(screen_db, new_entries):
+    """Merge-safe save: load existing file, merge, save — never reduces entry count."""
+    existing = {}
+    if os.path.exists(KB_PATH):
+        try:
+            with open(KB_PATH, 'r', encoding='utf-8') as f:
+                existing = json.load(f)
+        except:
+            pass
+    # Merge: prefer found=True over found=False
+    merged = dict(existing)
+    for k, v in new_entries.items():
+        if k not in merged or (v.get('found') and not merged[k].get('found')):
+            merged[k] = v
+    with open(KB_PATH, 'w', encoding='utf-8') as f:
+        json.dump(merged, f, indent=2, ensure_ascii=False)
+    return merged
+
+
+def expand_all(page, passes=5):
     total = 0
-    for _ in range(max_passes):
+    for _ in range(passes):
         n = page.evaluate("""() => {
             let c = 0;
             document.querySelectorAll('.ui-tree-toggler.ui-icon-triangle-1-e').forEach(t => {
@@ -97,46 +113,58 @@ def expand_all(page, max_passes=5):
         }""")
         total += n
         if n > 0:
-            page.wait_for_load_state('networkidle', timeout=6000)
-            page.wait_for_timeout(400)
-        if n == 0:
-            break
+            page.wait_for_load_state('networkidle', timeout=5000)
+            page.wait_for_timeout(300)
+        if n == 0: break
     return total
 
 
 def is_on_ec(page):
-    url = page.url
-    return any(x in url for x in ['xhtml', 'com.ec.', 'dashboard', 'ap-f0a7g'])
+    return any(x in page.url for x in ['xhtml', 'com.ec.', 'ap-f0a7g'])
 
 
-def recover_to_ec(page):
-    """Return to EC dashboard and re-expand tree."""
-    try:
-        page.goto(EC_URL + 'xhtml/pages/dashboard.jsf', wait_until='networkidle', timeout=20000)
-        page.wait_for_timeout(500)
-        expand_all(page)
-        return True
-    except:
-        return False
-
-
-def click_tree_label(page, screen_text):
-    """Click a tv-link label that is currently visible in the tree."""
+def navigate_by_label(page, screen_text):
     if "'" in screen_text:
         parts = screen_text.split("'")
-        xpath_val = "concat('" + "',\"'\",'".join(parts) + "')"
-        sel = f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())={xpath_val}]"
+        xv = "concat('" + "',\"'\",'".join(parts) + "')"
+        sel = f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())={xv}]"
     else:
         sel = f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='{screen_text}']"
     try:
         el = page.locator(sel)
-        if el.count() > 0:
-            visible = el.first.is_visible()
-            if visible:
-                el.first.click()
-                page.wait_for_load_state('networkidle', timeout=20000)
-                page.wait_for_timeout(600)
-                return True
+        if el.count() > 0 and el.first.is_visible():
+            el.first.click()
+            page.wait_for_load_state('networkidle', timeout=15000)
+            page.wait_for_timeout(500)
+            return is_on_ec(page)
+    except:
+        pass
+    return False
+
+
+def navigate_by_search(page, screen_text):
+    try:
+        si = page.locator("xpath=//input[@id='menu:searchForm:searchTxt']")
+        si.wait_for(state='visible', timeout=5000)
+        si.clear()
+        si.type(screen_text[:35], delay=50)
+        page.wait_for_load_state('networkidle', timeout=6000)
+        page.wait_for_timeout(300)
+        if "'" in screen_text:
+            parts = screen_text.split("'")
+            xv = "concat('" + "',\"'\",'".join(parts) + "')"
+            sel = f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())={xv}]"
+        else:
+            sel = f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='{screen_text}']"
+        el = page.locator(sel)
+        if el.count() > 0 and el.first.is_visible():
+            el.first.click()
+            page.wait_for_load_state('networkidle', timeout=15000)
+            page.wait_for_timeout(500)
+            if not is_on_ec(page):
+                page.goto(EC_URL + 'xhtml/pages/dashboard.jsf', wait_until='networkidle', timeout=15000)
+                return False
+            return True
     except:
         pass
     return False
@@ -146,33 +174,35 @@ def click_tree_label(page, screen_text):
 with open(INV_PATH, 'r', encoding='utf-8') as f:
     inventory = json.load(f)
 
+# Load current KB
+current_kb = {}
+if os.path.exists(KB_PATH):
+    try:
+        with open(KB_PATH, 'r', encoding='utf-8') as f:
+            current_kb = json.load(f)
+    except:
+        pass
+
+already_found = sum(1 for v in current_kb.values() if v.get('found'))
+print(f'Current KB: {len(current_kb)} entries | {already_found} already found')
+
+# Build unique list of all screens
 seen = set()
-screens_to_explore = []
+all_screens = []
 for item in inventory:
     txt = item['text']
     if txt not in TOP_LEVEL and txt not in SKIP_SCREENS and txt not in seen and len(txt) > 2:
         seen.add(txt)
-        screens_to_explore.append({'text': txt, 'section': item.get('section','?')})
+        all_screens.append({'text': txt, 'section': item.get('section','?')})
 
-# Load previous KB to accumulate results across runs
-screen_db = {}
-if os.path.exists(KB_PATH):
-    try:
-        with open(KB_PATH, 'r', encoding='utf-8') as f:
-            screen_db = json.load(f)
-        already_found = sum(1 for v in screen_db.values() if v.get('found'))
-        print(f'Loaded previous KB: {len(screen_db)} entries, {already_found} already found')
-    except:
-        screen_db = {}
+# Screens not yet found
+to_explore = [s for s in all_screens
+              if not current_kb.get(f'{s["section"]}::{s["text"]}', {}).get('found', False)]
+print(f'Total screens: {len(all_screens)} | Not yet found: {len(to_explore)}\n')
 
-# Skip screens already successfully captured
-screens_to_explore = [s for s in screens_to_explore
-                      if not screen_db.get(f'{s["section"]}::{s["text"]}', {}).get('found', False)]
-print(f'Screens remaining to explore: {len(screens_to_explore)} (of 670 total)\n')
-
+session_db = {}  # results from THIS session only
 success = 0
 skip = 0
-recover_count = 0
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=True, args=['--ignore-certificate-errors'])
@@ -181,68 +211,53 @@ with sync_playwright() as p:
 
     # Login
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin'); page.fill('#password', 'sysadmin')
+    page.fill('#username', 'sysadmin')
+    page.fill('#password', 'sysadmin')
     page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000)
     page.wait_for_load_state('networkidle', timeout=30000)
     print('Logged in')
 
-    # Expand full tree
+    # Expand tree
     n = expand_all(page)
-    print(f'Tree expanded: {n} togglers clicked\n')
+    print(f'Tree expanded: {n} togglers\n')
 
-    for i, item in enumerate(screens_to_explore):
+    for i, item in enumerate(to_explore):
         screen  = item['text']
         section = item['section']
+        key     = f'{section}::{screen}'
 
-        # Recover if navigated away from EC
         if not is_on_ec(page):
-            recover_count += 1
-            recover_to_ec(page)
+            try:
+                page.goto(EC_URL + 'xhtml/pages/dashboard.jsf', wait_until='networkidle', timeout=15000)
+                expand_all(page)
+            except:
+                pass
 
-        # Click the label
-        ok = click_tree_label(page, screen)
+        # Try label click first (faster), then search fallback
+        ok = navigate_by_label(page, screen)
+        if not ok:
+            ok = navigate_by_search(page, screen)
+
         if not ok:
             skip += 1
-            # Re-expand and try once more
-            expand_all(page)
-            ok = click_tree_label(page, screen)
-            if not ok:
-                screen_db[f'{section}::{screen}'] = {'name':screen,'section':section,'found':False,'screen_type':'NOT_FOUND'}
-                continue
-
-        # Analyze — wait for page to fully settle
-        if not is_on_ec(page):
-            recover_to_ec(page)
-            screen_db[f'{section}::{screen}'] = {'name':screen,'section':section,'found':False,'screen_type':'EXTERNAL'}
+            session_db[key] = {'name':screen,'section':section,'found':False,'screen_type':'NOT_FOUND'}
             continue
 
         try:
-            page.wait_for_load_state('networkidle', timeout=15000)
-            page.wait_for_timeout(500)
+            page.wait_for_load_state('networkidle', timeout=10000)
+            page.wait_for_timeout(400)
             info = page.evaluate(ANALYZE_JS, [screen, section])
-            # Verify we got the right screen
-            if not info.get('screen_label') and not info.get('has_navigator') and info.get('datatable_count',0) == 0:
-                # Page might not be loaded yet — wait more
-                page.wait_for_timeout(1000)
-                info = page.evaluate(ANALYZE_JS, [screen, section])
         except Exception:
             try:
-                page.wait_for_load_state('networkidle', timeout=10000)
-                page.wait_for_timeout(800)
+                page.wait_for_load_state('networkidle', timeout=8000)
                 info = page.evaluate(ANALYZE_JS, [screen, section])
             except:
                 skip += 1; continue
 
         info['found'] = True
-        screen_db[f'{section}::{screen}'] = info
+        session_db[key] = info
         success += 1
-
-        # Screenshot every 20th
-        if success % 20 == 0:
-            ss = os.path.join(SS_DIR, f'{i+1:03d}_{screen[:15].replace(" ","_").lower()}.png')
-            try: page.screenshot(path=ss)
-            except: pass
 
         stype = info.get('screen_type','?')
         nav   = 'Y' if info.get('has_navigator') else 'N'
@@ -250,39 +265,24 @@ with sync_playwright() as p:
         save  = 'S' if info.get('save_enabled') else '-'
         ins   = '+' if info.get('insert_enabled') else '-'
         dele  = 'D' if info.get('delete_enabled') else '-'
-        cols  = [c for dt in info.get('datatables',[]) for c in dt.get('cols',[])[:2]]
         nav_l = [la for g in info.get('nav_labels',[]) for la in g[:2]]
+        cols  = [c for dt in info.get('datatables',[]) for c in dt.get('cols',[])[:2]]
         label = info.get('screen_label','')[:20]
-        print(f'  {i+1:03d}[{section[:10]:<10}]{save}{ins}{dele}[{nav}] {screen[:25]:<25}|{stype:<18}|dt={dts}|nav={nav_l[:2]}|cols={cols[:2]}|"{label}"')
+        print(f'  {i+1:03d}[{section[:10]:<10}]{save}{ins}{dele}[{nav}] {screen[:25]:<25}|{stype:<16}|dt={dts}|nav={nav_l[:2]}|cols={cols[:2]}|"{label}"')
 
-        # Checkpoint every 50
-        if success % 50 == 0:
-            with open(KB_PATH,'w',encoding='utf-8') as f: json.dump(screen_db,f,indent=2)
-            print(f'  ... checkpoint: {success} ok / {skip} skip / {recover_count} recovers')
+        # Merge-safe checkpoint save every 25 screens
+        if success % 25 == 0:
+            merged = merge_save(current_kb, session_db)
+            total = sum(1 for v in merged.values() if v.get('found'))
+            print(f'  ... saved: {total} total found ({success} this run)')
 
     ctx.close()
     browser.close()
 
-# Final save
-with open(KB_PATH,'w',encoding='utf-8') as f: json.dump(screen_db,f,indent=2)
-
+# Final merge-safe save
+merged = merge_save(current_kb, session_db)
+total_found = sum(1 for v in merged.values() if v.get('found'))
 print(f'\n{"="*70}')
-print(f'DONE: {success} navigated | {skip} skipped | {recover_count} recoveries | Total: {len(screen_db)}')
-
-types={}
-for v in screen_db.values():
-    if v.get('found'):
-        t=v.get('screen_type','?')
-        if t not in types: types[t]=[]
-        types[t].append({'n':v.get('name',''),'s':v.get('section',''),
-            'cols':[c for dt in v.get('datatables',[]) for c in dt.get('cols',[])[:2]],
-            'nav':[la for g in v.get('nav_labels',[]) for la in g[:2]],
-            'save':v.get('save_enabled',False),'ins':v.get('insert_enabled',False)})
-
-for t, screens in sorted(types.items()):
-    print(f'\n--- {t} ({len(screens)}) ---')
-    for s in screens:
-        iud=('S' if s['save'] else '-')+('+' if s['ins'] else '-')
-        print(f'  {iud} [{s["s"][:12]:<12}] {s["n"]:<30} nav={s["nav"][:2]} cols={s["cols"][:2]}')
-
+print(f'DONE: {total_found}/{len(all_screens)} total found | +{success} this run | {skip} skipped')
+print(f'Saved to: {KB_PATH}')
 _log.close()

@@ -1,0 +1,119 @@
+Loaded previous KB: 50 entries, 50 already found
+Screens not yet found: 620
+
+Logged in
+
+  SKIP [Configurat] Form Designer
+  SKIP [Configurat] Extensions Manager
+  SKIP [Configurat] Configuration Export
+  SKIP [Configurat] Configuration Type
+  SKIP [Configurat] Text Translation
+  SKIP [Configurat] Language
+  SKIP [Configurat] Class Validation
+  SKIP [Configurat] Hierarchical Object Validation
+  SKIP [Configurat] Object Validation - Default
+  SKIP [Configurat] Check Group
+  013[Configurat]---[Y] Validation Overview by Fa|NAVIGATOR-ONLY    |dt=0|nav=[]|cols=[]|"Validation Overview "
+  023[Configurat]---[Y] Create Library Calculatio|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Calculation Library']|cols=[]|"Create Library Calcu"
+  032[Configurat]---[N] Stream Node Diagram      |ACTION/EMPTY      |dt=0|nav=[]|cols=[]|""
+  036[Configurat]---[N] Config Variable Parameter|ACTION/EMPTY      |dt=0|nav=[]|cols=[]|""
+  044[Configurat]-+-[Y] Sub Area                 |NAVIGATOR+TABLE   |dt=4|nav=['Start Date', 'End Date']|cols=['Code', 'Name']|"Config Variable Para"
+  048[Configurat]---[Y] Object List Setup        |NAVIGATOR-ONLY    |dt=0|nav=['Daytime', 'List Class']|cols=[]|"Object List Setup"
+  055[Configurat]---[Y] Maintain Blend Content Sp|NAVIGATOR-ONLY    |dt=0|nav=['Daytime', 'List Class']|cols=[]|"Object List Setup"
+  SKIP [Configurat] Component Set
+  058[Configurat]---[Y] Component Set List       |NAVIGATOR-ONLY    |dt=0|nav=[]|cols=[]|"Component Set List"
+  067[Configurat]-+-[Y] Company Contact          |NAVIGATOR+TABLE   |dt=1|nav=['Date', 'Company']|cols=['Contact Code', 'Contact Name']|"Company Contact"
+  069[Configurat]---[Y] Customer VAT Reg No      |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Created by']|cols=[]|"Customer VAT Reg No"
+  072[Configurat]---[N] Vendor VAT Reg No        |ACTION/EMPTY      |dt=0|nav=[]|cols=[]|""
+  075[Configurat]-+-[Y] Sub Field                |NAVIGATOR+TABLE   |dt=1|nav=['Date', 'Created by']|cols=['Sub Field Code', 'Sub Field Name']|"Sub Field"
+  077[Configurat]---[Y] Field Group Setup        |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Created by']|cols=[]|"Field Group Setup"
+  084[Configurat]-+-[Y] Calendar Collection      |NAVIGATOR+TABLE   |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name']|"Calendar Collection"
+  086[Configurat]-+-[Y] Manage Facility Class 1  |NAVIGATOR+TABLE   |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name']|"Calendar Collection"
+  091[Configurat]-+-[Y] External Location Referen|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Manage Facility Clas"
+  095[Configurat]---[N] Collection Point Hierarch|ACTION/EMPTY      |dt=0|nav=[]|cols=[]|""
+  096[Configurat]-+-[Y] Flowline                 |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Flowline"
+  115[Configurat]-+-[Y] Stream Set List          |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Flowline"
+  SKIP [Configurat] Revenue Stream Category
+  120[Configurat]---[Y] Revenue Stream Category S|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Stream Set List"
+  124[Configurat]---[Y] Forecast Stream Item     |NAVIGATOR-ONLY    |dt=0|nav=['Code', 'Category']|cols=[]|"Forecast Stream Item"
+  128[Configurat]---[Y] Meter Run and Orifice Pla|NAVIGATOR-ONLY    |dt=0|nav=['Code', 'Category']|cols=[]|"Forecast Stream Item"
+  134[Configurat]---[Y] Choke Model Reference Val|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Choke Model Referenc"
+  136[Configurat]---[Y] Maintain Storages        |NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Choke Model Referenc"
+  148[Configurat]-+-[Y] Reservoir Block Formation|NAVIGATOR+TABLE   |dt=3|nav=['Date', 'Start Date']|cols=['Resv Block Formation Code', 'Resv Block Formation Name']|"Reservoir Block Form"
+  152[Configurat]-+-[Y] Manage Well              |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Manage Well"
+  155[Configurat]-+-[Y] Well Bore Split          |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Manage Well"
+  157[Configurat]---[Y] Well Bore Interval Split |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Well Bore Split"
+  159[Configurat]---[Y] Perforation Interval Spli|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Perforation Interval"
+  165[Configurat]---[Y] Choke Conversion         |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Choke']|cols=[]|"Choke Conversion"
+  166[Configurat]---[Y] Choke Gas Lift Conversion|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Choke Gas Lift Conve"
+  168[Configurat]---[Y] Maintain Equipment       |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Maintain Equipment"
+  172[Configurat]---[Y] Test Device Reference Val|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Test Device Referenc"
+  180[Configurat]-+-[Y] Chemical Transport Tank  |NAVIGATOR+TABLE   |dt=1|nav=['Date', 'Created by']|cols=['Transport Tank Code', 'Transport Tank Name']|"Chemical Transport T"
+  182[Configurat]---[Y] Chemical Tank Product Com|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Chemical Tank Produc"
+  185[Configurat]---[Y] Contract Parties         |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Contract Parties"
+  SKIP [Configurat] Contract Template
+  189[Configurat]---[Y] Transport Contract Attrib|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Transport Contract A"
+  198[Configurat]-+-[Y] Contract Area Setup      |NAVIGATOR+TABLE   |dt=1|nav=['Created by', 'Record status']|cols=['Contract Area Setup Code', 'Contract Area Setup Name']|"Contract Area Setup"
+  200[Configurat]-+-[Y] Contract Capacity Locatio|NAVIGATOR+TABLE   |dt=1|nav=['Created by', 'Record status']|cols=['Contract Area Setup Code', 'Contract Area Setup Name']|"Contract Area Setup"
+  203[Configurat]---[Y] Contract Profit Centre Co|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Contract Profit Cent"
+  215[Configurat]---[Y] Initialize Lifting Accoun|NAVIGATOR-ONLY    |dt=0|nav=['Month', 'Production Unit']|cols=[]|"Initialize Lifting A"
+  217[Configurat]---[Y] Product Lifting Activity |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Product']|cols=[]|"Product Lifting Acti"
+  223[Configurat]---[Y] Product Analysis Item    |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Product']|cols=[]|"Product Analysis Ite"
+  SKIP [Configurat] Canal Transit
+  248[Configurat]-+-[Y] Pilot Boat               |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Pilot Boat"
+  270[Configurat]---[Y] Nomination Point Connecti|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Nomination Point Con"
+  272[Configurat]---[Y] Nomination Point Profit C|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Nomination Point Pro"
+  280[Configurat]-+D[Y] Service Template         |NAVIGATOR+TABLE   |dt=2|nav=['New Template Code for Copy', 'New Template Name for Copy']|cols=['Service Template Code', 'Service Template Name']|"Service Template"
+  281[Configurat]-+D[Y] Service Account Template |NAVIGATOR+TABLE   |dt=2|nav=['New Template Code for Copy', 'New Template Name for Copy']|cols=['Service Template Code', 'Service Template Name']|"Service Template"
+  291[Configurat]---[Y] Profit Centre Company Nom|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Delivery Point']|cols=[]|"Profit Centre Compan"
+  293[Configurat]---[Y] Price Index Factor       |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Price Index Factor"
+  ... checkpoint: 100 total found (50 this run / 243 skipped)
+  296[Configurat]-+-[Y] Product Price Object     |NAVIGATOR+TABLE   |dt=3|nav=['Start Date', 'End Date']|cols=['Price Object Code', 'Price Object Name']|"Product Price Object"
+  SKIP [Configurat] Maintain Templates
+  305[Configurat]---[Y] Maintain Mappings Overvie|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Class Name']|cols=[]|"Maintain Mappings Ov"
+  323[Configurat]---[Y] Task Process Item        |NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Task Process']|cols=[]|"Task Process Item"
+  326[Configurat]---[Y] Action Trigger Connection|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Action Trigger']|cols=[]|"Action Trigger Conne"
+  343[EC Product]---[Y] Deferment - by Well      |NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Deferment - by Well"
+  350[EC Product]---[Y] Daily Data Status Process|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Data Status Pr"
+  354[EC Product]---[Y] Monthly Local Data Lockin|NAVIGATOR-ONLY    |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Local Data L"
+  SKIP [EC Product] Cargo Load and Analysis
+  367[EC Transpo]---[Y] Lifting Program - Month  |NAVIGATOR-ONLY    |dt=0|nav=['From Month', 'To Month']|cols=[]|"Lifting Program - Mo"
+  382[EC Transpo]---[Y] Daily Entitlement - Singl|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Entitlement - "
+  383[EC Transpo]---[Y] Daily Entitlement - Singl|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Entitlement - "
+  385[EC Transpo]---[Y] Daily Entitlement - Lifti|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Entitlement - "
+  397[EC Transpo]---[N] Daily Rundown Total Actua|ACTION/EMPTY      |dt=0|nav=[]|cols=[]|""
+  401[EC Transpo]---[Y] Lifting Account Entitleme|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Lifting Account Enti"
+  SKIP [EC Transpo] Cargo Activity Timesheet
+  424[EC Transpo]---[Y] Cargo Document Parcel    |NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Cargo Document Parce"
+  442[EC Transpo]---[Y] Forecast Input Contract  |NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Cargo Document Parce"
+  446[EC Transpo]---[N] Forecast Monthly Input No|ACTION/EMPTY      |dt=0|nav=[]|cols=[]|""
+  454[EC Transpo]---[Y] Forecast Period Product C|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Period Prod"
+  456[EC Transpo]---[Y] Daily Nomination Point AF|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Forecast Period Prod"
+  463[EC Transpo]---[Y] Aggregated Exit Point Mat|NAVIGATOR+TABLE   |dt=1|nav=['Date', 'Created by']|cols=['Exit Delivery Point Name', 'Upstream Nominated Qty[kW']|"Aggregated Exit Poin"
+  SKIP [EC Transpo] Sub Daily Delivery Calculations
+  474[EC Sales  ]---[Y] Daily Re-Nomination      |NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Re-Nomination"
+  494[EC Sales  ]---[Y] Sub Daily Product Price L|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Business Unit']|cols=[]|"Sub Daily Product Pr"
+  496[EC Sales  ]---[Y] Contract Price List - Dat|NAVIGATOR-ONLY    |dt=0|nav=['From Month', 'To Month']|cols=[]|"Contract Price List "
+  497[EC Sales  ]---[Y] Contract Location Price L|NAVIGATOR-ONLY    |dt=0|nav=['From Month', 'To Month']|cols=[]|"Contract Location Pr"
+  500[EC Sales  ]---[Y] Cargo/Parcel Price List  |NAVIGATOR-ONLY    |dt=0|nav=['From Month', 'To Month']|cols=[]|"Cargo/Parcel Price L"
+  504[EC Sales  ]---[Y] Daily Price Index - Datas|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Price Index - "
+  505[EC Sales  ]---[Y] Daily Price Index - Datas|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Price Index - "
+  510[EC Sales  ]---[N] Monthly Price Index - Dat|ACTION/EMPTY      |dt=0|nav=[]|cols=[]|""
+  514[EC Sales  ]---[Y] Price Calculations - by P|NAVIGATOR-ONLY    |dt=0|nav=['Date', 'Price Group']|cols=[]|"Price Calculations -"
+  517[EC Sales  ]---[Y] Daily Price Rate - Datase|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Price Rate - D"
+  518[EC Sales  ]---[Y] Daily Price Rate - Datase|NAVIGATOR-ONLY    |dt=0|nav=[]|cols=[]|"Daily Price Rate - D"
+  520[EC Sales  ]---[Y] Monthly Price Rate - Data|NAVIGATOR-ONLY    |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Price Rate -"
+  521[EC Sales  ]---[Y] Monthly Price Rate - Data|NAVIGATOR-ONLY    |dt=0|nav=['From Month', 'To Month']|cols=[]|"Monthly Price Rate -"
+  525[EC Sales  ]---[Y] Daily Contract Calculatio|NAVIGATOR-ONLY    |dt=0|nav=[]|cols=[]|"Daily Contract Calcu"
+  527[EC Sales  ]---[Y] Monthly Contract Calculat|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Contract Calcu"
+  SKIP [EC Sales] Monthly Contract Account Events
+  557[EC Revenue]---[Y] Project Data Mapping Accr|NAVIGATOR-ONLY    |dt=0|nav=['Month', 'Business Unit']|cols=[]|"Project Data Mapping"
+  559[EC Revenue]---[Y] Project Data Extract Accr|NAVIGATOR-ONLY    |dt=0|nav=['Month', 'Business Unit']|cols=[]|"Project Data Mapping"
+  573[EC Revenue]---[Y] Daily Financial Item Calc|NAVIGATOR-ONLY    |dt=0|nav=['Month', 'Business Unit']|cols=[]|"Project Data Extract"
+  577[EC Revenue]---[Y] Yearly Financial Item Cal|NAVIGATOR-ONLY    |dt=0|nav=['From Date', 'To Date']|cols=[]|"Daily Financial Item"
+  SKIP [Reporting] Report Queue Status
+  597[Process Au]-+D[Y] Process Overview Configur|NAVIGATOR+TABLE   |dt=1|nav=['Created by', 'Record status']|cols=['Display order', 'Name']|"Process Overview Con"
+  603[Process Au]-+D[Y] Process Monitor Configura|NAVIGATOR+TABLE   |dt=1|nav=['Created by', 'Record status']|cols=['Display order', 'Name']|"Process Overview Con"
+
+======================================================================
+DONE: 140/670 total found | +90 this run | 530 skipped

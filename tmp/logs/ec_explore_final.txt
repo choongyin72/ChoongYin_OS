@@ -35,16 +35,28 @@ Logged in
   403 SKIP  [EC Productio] Monthly Data Locking
   453 SKIP  [EC Transport] Port Weather Information
   503 SKIP  [EC Transport] Forecast Period Component Recovery Factors
-  553 SKIP  [EC Sales] Daily Price Index
-  603 SKIP  [EC Revenue] Data Entry Interface
-  653 SKIP  [Process Auto] Process Monitor Configuration
+  506[EC Transpo]-+-[Y] Daily Nomination Point AF|NAVIGATOR+TABLE   |dt=1|nav=['Object Type', 'Access']|cols=['Object Type', 'Object Name']|"Analytics Object Acc"
+  554 SKIP  [EC Sales] Daily Price Index - Dataset
+  604 SKIP  [EC Revenue] Project Data Entry
+  609[EC Revenue]---[Y] Project Data Extract Accr|NAVIGATOR-ONLY    |dt=0|nav=['Month', 'Business Unit']|cols=[]|"Project Data Extract"
+  610[EC Revenue]---[Y] Project Data Extract By Y|NAVIGATOR-ONLY    |dt=0|nav=['Year', 'Business Unit']|cols=[]|"Project Data Extract"
+  611[EC Revenue]---[Y] Project Data Extract For |NAVIGATOR-ONLY    |dt=0|nav=['Year', 'Business Unit']|cols=[]|"Project Data Extract"
+  627[EC Revenue]---[Y] Yearly Financial Item Cal|NAVIGATOR-ONLY    |dt=0|nav=['Year', 'Calculation Group']|cols=[]|"Yearly Financial Ite"
+  658 SKIP  [Messaging] Send Freetext Message
 
 ======================================================================
-COMPLETE: 3 navigated | 667 skipped | Total: 670
+COMPLETE: 8 navigated | 662 skipped | Total: 670
 
 --- ACTION/EMPTY (1) ---
   -- [?           ] Authentication Audit           nav=[] cols=[]
 
---- NAVIGATOR-ONLY (2) ---
+--- NAVIGATOR+TABLE (1) ---
+  -+ [EC Transport] Daily Nomination Point AFS     nav=['Object Type', 'Access'] cols=['Object Type', 'Object Name']
+
+--- NAVIGATOR-ONLY (6) ---
   -- [?           ] Object Partition               nav=[] cols=[]
   -- [?           ] Analytics Object Access        nav=[] cols=[]
+  -- [EC Revenue  ] Project Data Extract Accrual   nav=['Month', 'Business Unit'] cols=[]
+  -- [EC Revenue  ] Project Data Extract By Year   nav=['Year', 'Business Unit'] cols=[]
+  -- [EC Revenue  ] Project Data Extract For 10 Years nav=['Year', 'Business Unit'] cols=[]
+  -- [EC Revenue  ] Yearly Financial Item Calculation nav=['Year', 'Calculation Group'] cols=[]
