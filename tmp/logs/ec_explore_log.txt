@@ -1,0 +1,770 @@
+=== LOGGED IN ===
+
+PHASE 1: Expanding full treeview...
+  Total togglers clicked: 374
+  Total visible items: 556
+  Unique navigable screens: 545
+
+Full screen list:
+  [?              ] d=1 Authentication Audit
+  [?              ] d=1 Object Partition
+  [?              ] d=1 Analytics Object Access
+  [Configuration  ] d=2 Documentation
+  [Configuration  ] d=3 Account Settings
+  [Configuration  ] d=3 User Maintenance
+  [Configuration  ] d=3 Role Maintenance
+  [Configuration  ] d=3 Group Maintenance
+  [Configuration  ] d=3 Object Maintenance
+  [Configuration  ] d=3 Role Users
+  [Configuration  ] d=3 Group Users
+  [Configuration  ] d=3 Maintain System Settings
+  [Configuration  ] d=3 Maintain User Settings
+  [Configuration  ] d=3 Personal Settings
+  [Configuration  ] d=3 Create Preference
+  [Configuration  ] d=3 EC Codes - All
+  [Configuration  ] d=3 EC Codes - Non-System Codes
+  [Configuration  ] d=3 EC Codes - System Codes
+  [Configuration  ] d=3 EC Code Object
+  [Configuration  ] d=3 System Attributes
+  [Configuration  ] d=3 PKI Signature Verification
+  [Configuration  ] d=3 Class Configuration
+  [Configuration  ] d=3 Class Attribute Configuration
+  [Configuration  ] d=3 Class Attribute Presentation Config
+  [Configuration  ] d=3 Class Property Codes
+  [Configuration  ] d=3 Group Model
+  [Configuration  ] d=3 Navigation Model
+  [Configuration  ] d=3 Business Function
+  [Configuration  ] d=3 Business Function Profiles
+  [Configuration  ] d=3 Maintain Treeview
+  [Configuration  ] d=3 Initiate Day
+  [Configuration  ] d=3 Integrity Status
+  [Configuration  ] d=3 Production Day Table
+  [Configuration  ] d=3 User Exit Package Configuration
+  [Configuration  ] d=3 Scenario Definition
+  [Configuration  ] d=3 MIME Type Mapping
+  [Configuration  ] d=3 Analytics Integration Workflow Configuration
+  [Configuration  ] d=3 Analytics Manager
+  [Configuration  ] d=3 Data purging
+  [Configuration  ] d=4 Flush Cache
+  [Configuration  ] d=4 Event Monitor
+  [Configuration  ] d=4 Versions
+  [Configuration  ] d=4 Application Server Health
+  [Configuration  ] d=4 Generation of BF Documentation
+  [Configuration  ] d=4 Application Server Performance
+  [Configuration  ] d=4 Units
+  [Configuration  ] d=4 Unit Conversion
+  [Configuration  ] d=4 Measurement Types
+  [Configuration  ] d=4 Conversion Group
+  [Configuration  ] d=4 Asset Unit Conversion
+  [Configuration  ] d=4 Inter-Group Conversion
+  [Configuration  ] d=4 BOE Conversion
+  [Configuration  ] d=4 Form Designer
+  [Configuration  ] d=4 Extensions Manager
+  [Configuration  ] d=4 Configuration Export
+  [Configuration  ] d=4 Configuration Type
+  [Configuration  ] d=4 Text Translation
+  [Configuration  ] d=4 Language
+  [Configuration  ] d=4 Class Validation
+  [Configuration  ] d=4 Hierarchical Object Validation
+  [Configuration  ] d=4 Object Validation - Default
+  [Configuration  ] d=4 Check Group
+  [Configuration  ] d=4 Rule Group Combination
+  [Configuration  ] d=4 Validation Overview
+  [Configuration  ] d=4 Validation Overview by Facility
+  [Configuration  ] d=4 Mismeasurement Event
+  [Configuration  ] d=4 Calculation Context
+  [Configuration  ] d=4 Database Object Types
+  [Configuration  ] d=4 Simple Object Types
+  [Configuration  ] d=4 Variable Definitions
+  [Configuration  ] d=4 Global Attributes
+  [Configuration  ] d=4 Create Calculation
+  [Configuration  ] d=4 Maintain Calculation
+  [Configuration  ] d=4 Calculation Library
+  [Configuration  ] d=4 Create Library Calculation
+  [Configuration  ] d=4 Maintain Library Calculation
+  [Configuration  ] d=4 Maintain Calculation Log Profiles
+  [Configuration  ] d=4 Component Template
+  [Configuration  ] d=4 Component Report
+  [Configuration  ] d=4 Calculation Group Context
+  [Configuration  ] d=4 Calculation Group Setup
+  [Configuration  ] d=4 Alloc Job Status Process Conn
+  [Configuration  ] d=4 Node
+  [Configuration  ] d=4 Stream Node Diagram
+  [Configuration  ] d=4 SND Production Data Menu
+  [Configuration  ] d=4 Asset Calculation Attributes
+  [Configuration  ] d=4 Config Variable
+  [Configuration  ] d=4 Config Variable Parameter
+  [Configuration  ] d=4 Production Unit
+  [Configuration  ] d=4 Business Unit
+  [Configuration  ] d=4 Production Sub Unit
+  [Configuration  ] d=4 Country
+  [Configuration  ] d=4 State
+  [Configuration  ] d=4 County
+  [Configuration  ] d=4 Area
+  [Configuration  ] d=4 Sub Area
+  [Configuration  ] d=4 Region
+  [Configuration  ] d=4 Regulatory Permits
+  [Configuration  ] d=4 Object List
+  [Configuration  ] d=4 Object List Setup
+  [Configuration  ] d=4 Functional Area
+  [Configuration  ] d=4 Well Mode Attributes
+  [Configuration  ] d=4 Well Mode
+  [Configuration  ] d=4 Hydrocarbon Component
+  [Configuration  ] d=4 Product
+  [Configuration  ] d=4 Blend
+  [Configuration  ] d=4 Maintain Blend Content Split
+  [Configuration  ] d=4 Disposition Type
+  [Configuration  ] d=4 Component Set
+  [Configuration  ] d=4 Component Set List
+  [Configuration  ] d=4 Constant Standard
+  [Configuration  ] d=4 Component Constant
+  [Configuration  ] d=4 Equation Of State
+  [Configuration  ] d=4 Licence
+  [Configuration  ] d=4 MMS Lease
+  [Configuration  ] d=4 State Lease
+  [Configuration  ] d=4 Operator Lease
+  [Configuration  ] d=4 Company
+  [Configuration  ] d=4 Company Contact
+  [Configuration  ] d=4 Customer
+  [Configuration  ] d=4 Customer VAT Reg No
+  [Configuration  ] d=4 Restricted Customer Setup
+  [Configuration  ] d=4 Vendor
+  [Configuration  ] d=4 Vendor VAT Reg No
+  [Configuration  ] d=4 Restricted Vendor Setup
+  [Configuration  ] d=4 Field
+  [Configuration  ] d=4 Sub Field
+  [Configuration  ] d=4 Field Group
+  [Configuration  ] d=4 Field Group Setup
+  [Configuration  ] d=4 Commercial Entity
+  [Configuration  ] d=4 Maintain Equity Share
+  [Configuration  ] d=4 Document Date Term
+  [Configuration  ] d=4 Document Received Term
+  [Configuration  ] d=4 Payment Term
+  [Configuration  ] d=4 Calendar
+  [Configuration  ] d=4 Calendar Collection
+  [Configuration  ] d=4 Facility Class 1
+  [Configuration  ] d=4 Manage Facility Class 1
+  [Configuration  ] d=4 Facility Class 2
+  [Configuration  ] d=4 Facility Reference Values
+  [Configuration  ] d=4 Facility Analysis Items
+  [Configuration  ] d=4 External Location
+  [Configuration  ] d=4 External Location Reference Value
+  [Configuration  ] d=4 Facility - External Location Connection
+  [Configuration  ] d=4 Operator Route
+  [Configuration  ] d=4 Collection Point
+  [Configuration  ] d=4 Collection Point Hierarchy Reorganization
+  [Configuration  ] d=4 Flowline
+  [Configuration  ] d=4 Area Codes
+  [Configuration  ] d=4 Test Separator
+  [Configuration  ] d=4 Production Separator
+  [Configuration  ] d=4 Vessel
+  [Configuration  ] d=4 Weather Site
+  [Configuration  ] d=4 Pipeline
+  [Configuration  ] d=4 Process Train
+  [Configuration  ] d=4 Report Group
+  [Configuration  ] d=4 Process Train Event Profiles
+  [Configuration  ] d=4 Report Group Connection
+  [Configuration  ] d=4 Object Group Connection
+  [Configuration  ] d=4 Maintain System Reference Value
+  [Configuration  ] d=4 Well Hookup
+  [Configuration  ] d=4 Shift
+  [Configuration  ] d=4 Stream - by Group Model
+  [Configuration  ] d=4 Manage Stream
+  [Configuration  ] d=4 Maintain Streams
+  [Configuration  ] d=4 Stream Set
+  [Configuration  ] d=4 Stream Set List
+  [Configuration  ] d=4 Stream Formula Editor
+  [Configuration  ] d=4 Stream Reference Values
+  [Configuration  ] d=4 Stream Seasonal Values
+  [Configuration  ] d=4 Revenue Stream Category
+  [Configuration  ] d=4 Revenue Stream Category Setup
+  [Configuration  ] d=4 Stream Item Category
+  [Configuration  ] d=4 Stream - All
+  [Configuration  ] d=4 Stream Item
+  [Configuration  ] d=4 Forecast Stream Item
+  [Configuration  ] d=4 Orifice Plate
+  [Configuration  ] d=4 Stream ORF Values
+  [Configuration  ] d=4 Meter Run
+  [Configuration  ] d=4 Meter Run and Orifice Plate Connection
+  [Configuration  ] d=4 Stream PT Conversion Values
+  [Configuration  ] d=4 Stream DPT Conversion Values
+  [Configuration  ] d=4 Stream Profit Centre Connection
+  [Configuration  ] d=4 Stream Well Connection
+  [Configuration  ] d=4 Choke Model
+  [Configuration  ] d=4 Choke Model Reference Values
+  [Configuration  ] d=4 Storage
+  [Configuration  ] d=4 Maintain Storages
+  [Configuration  ] d=4 Tank
+  [Configuration  ] d=4 Manage Tank
+  [Configuration  ] d=4 Maintain Tanks
+  [Configuration  ] d=4 Tank Usage
+  [Configuration  ] d=4 Tank Strapping
+  [Configuration  ] d=4 Tank Tap
+  [Configuration  ] d=4 Intermediate Storage Products
+  [Configuration  ] d=4 Storage Profit Centre Connection
+  [Configuration  ] d=4 Storage Flow
+  [Configuration  ] d=4 Reservoir Block
+  [Configuration  ] d=4 Reservoir Formation
+  [Configuration  ] d=4 Reservoir Block Formation
+  [Configuration  ] d=4 Well Hole
+  [Configuration  ] d=4 Planned Well
+  [Configuration  ] d=4 Well
+  [Configuration  ] d=4 Manage Well
+  [Configuration  ] d=4 Maintain Wells
+  [Configuration  ] d=4 Well Bore
+  [Configuration  ] d=4 Well Bore Split
+  [Configuration  ] d=4 Well Bore Interval
+  [Configuration  ] d=4 Well Bore Interval Split
+  [Configuration  ] d=4 Perforation Interval
+  [Configuration  ] d=4 Perforation Interval Split
+  [Configuration  ] d=4 Flowline Well Connection
+  [Configuration  ] d=4 Swing Well Connection
+  [Configuration  ] d=4 Well Reference Value
+  [Configuration  ] d=4 Well Seasonal Value
+  [Configuration  ] d=4 Choke
+  [Configuration  ] d=4 Choke Conversion
+  [Configuration  ] d=4 Choke Gas Lift Conversion
+  [Configuration  ] d=4 Equipment
+  [Configuration  ] d=4 Maintain Equipment
+  [Configuration  ] d=4 Equipment Connection
+  [Configuration  ] d=4 Equipment Reference Value
+  [Configuration  ] d=4 Test Device
+  [Configuration  ] d=4 Test Device Reference Values
+  [Configuration  ] d=3 Adapter Configuration
+  [Configuration  ] d=3 Maintain Templates
+  [Configuration  ] d=3 Event Route Configuration
+  [Configuration  ] d=3 Remote Endpoint Configuration
+  [Configuration  ] d=3 Maintain Mappings
+  [Configuration  ] d=3 Maintain Mappings Overview
+  [Configuration  ] d=3 Generate Tag Mappings
+  [Configuration  ] d=3 Transform Tag Activity
+  [Configuration  ] d=3 Transform Process Log
+  [Configuration  ] d=3 ECIS Agent Log
+  [Configuration  ] d=3 Tag Event Status
+  [Configuration  ] d=3 Dummy Tag Event Object
+  [Configuration  ] d=3 Business Actions
+  [Configuration  ] d=3 Schedules
+  [Configuration  ] d=3 Schedule History
+  [Configuration  ] d=3 Manage Scheduler
+  [Configuration  ] d=3 Maintain Contact Group Set
+  [Configuration  ] d=3 Maintain Message Type
+  [Configuration  ] d=3 Message Group
+  [Configuration  ] d=3 Message Format
+  [Configuration  ] d=3 Freetext Message Template
+  [Configuration  ] d=3 Actor Maintenance
+  [Configuration  ] d=3 Task Process
+  [Configuration  ] d=3 Task Process Item
+  [Configuration  ] d=3 Business Action
+  [Configuration  ] d=3 Action Trigger
+  [Configuration  ] d=3 Action Trigger Connection
+  [EC Production  ] d=2 Daily Dashboard
+  [EC Production  ] d=2 Deferment Dashboard
+  [EC Production  ] d=2 Production Efficiency
+  [EC Production  ] d=3 Well Finder
+  [EC Production  ] d=3 Sub Surface Connection Information
+  [EC Production  ] d=3 Equipment Finder
+  [EC Production  ] d=3 Stream Finder
+  [EC Production  ] d=3 Tank Finder
+  [EC Production  ] d=3 Test Device Finder
+  [EC Production  ] d=3 Well Performance Curves
+  [EC Production  ] d=3 Flowline Performance Curves
+  [EC Production  ] d=3 Trend and Validate Test Result
+  [EC Production  ] d=3 Well Decline Curves
+  [EC Production  ] d=3 Automatic Deferment Raw Data
+  [EC Production  ] d=3 Master Events
+  [EC Production  ] d=3 Deferment
+  [EC Production  ] d=3 Deferment - by Well
+  [EC Production  ] d=3 Period Deferment Calculations
+  [EC Production  ] d=3 Deferment Day
+  [EC Production  ] d=3 Deferment Summary
+  [EC Production  ] d=3 Deferment Corrective Action
+  [EC Production  ] d=3 Equipment Downtime
+  [EC Production  ] d=3 Daily Data Status Processes
+  [EC Production  ] d=3 Daily Data Status Processes - by Facility
+  [EC Production  ] d=3 Daily Data Status Processes - Single Date
+  [EC Production  ] d=3 Monthly Data Status Processes
+  [EC Production  ] d=3 Monthly Data Locking
+  [EC Production  ] d=3 Monthly Local Data Locking
+  [EC Production  ] d=3 Period Process Calculations
+  [EC Production  ] d=3 Cargo And Parcel Information
+  [EC Production  ] d=3 Cargo Load and Analysis
+  [EC Production  ] d=3 Port Log
+  [EC Production  ] d=3 Monthly Account Balance Calculation
+  [EC Production  ] d=3 Analysis And Measurements
+  [EC Chemistry   ] d=3 Sample Manager
+  [EC Chemistry   ] d=3 Sample Analysis
+  [EC Chemistry   ] d=3 Daily Analysis And Measurements
+  [EC Transport   ] d=3 Tab Cargo Menu
+  [EC Transport   ] d=3 Tab Cargo Planner
+  [EC Transport   ] d=3 Lifting Program
+  [EC Transport   ] d=3 Lifting Program - Month
+  [EC Transport   ] d=3 Nomination Entry
+  [EC Transport   ] d=3 Schedule Lifting Overview - RBS
+  [EC Transport   ] d=3 Schedule Lifting Overview
+  [EC Transport   ] d=3 Schedule Lifting Chart - RBS
+  [EC Transport   ] d=3 Schedule Lifting Chart
+  [EC Transport   ] d=3 Storage and Tank Chart
+  [EC Transport   ] d=3 Cargo Information
+  [EC Transport   ] d=3 Nomination Details
+  [EC Transport   ] d=3 Nomination Split
+  [EC Transport   ] d=3 Lifting Instruction
+  [EC Transport   ] d=3 Document Instruction
+  [EC Transport   ] d=3 Daily Storage Forecast
+  [EC Transport   ] d=3 Daily Entitlement RBS
+  [EC Transport   ] d=3 Daily Entitlement
+  [EC Transport   ] d=3 Daily Entitlement - Single Lifting Account RBS
+  [EC Transport   ] d=3 Daily Entitlement - Single Lifting Account
+  [EC Transport   ] d=3 Daily Entitlement - Lifting Account RBS
+  [EC Transport   ] d=3 Daily Entitlement - Lifting Account
+  [EC Transport   ] d=3 Estimated Monthly Account Status
+  [EC Transport   ] d=3 Monthly Schedule Overview
+  [EC Transport   ] d=3 Monthly Storage Profit Centre Forecast
+  [EC Transport   ] d=3 Daily Storage Profit Centre Forecast
+  [EC Transport   ] d=3 Official Daily Receipt
+  [EC Transport   ] d=3 Period Process Train Storage Yield
+  [EC Transport   ] d=3 Process Train Event
+  [EC Transport   ] d=3 Contract KPI Monitoring
+  [EC Transport   ] d=3 Carrier Availability
+  [EC Transport   ] d=3 Contract Delivery Tracking
+  [EC Transport   ] d=3 Daily Rundown Actuals vs. Forecast
+  [EC Transport   ] d=3 Daily Rundown Total Actuals vs. Forecast
+  [EC Transport   ] d=3 Monthly Reference Entitlement
+  [EC Transport   ] d=3 Berth Slot Calendar
+  [EC Transport   ] d=3 Lifting Account Entitlement Chart RBS
+  [EC Transport   ] d=3 Lifting Account Entitlement Chart
+  [EC Transport   ] d=3 Carrier Maintenance
+  [EC Transport   ] d=3 Port Weather Information
+  [EC Transport   ] d=3 Parcel Nomination
+  [EC Transport   ] d=3 Master Plan
+  [EC Transport   ] d=3 Tab Harbour Menu
+  [EC Transport   ] d=3 Vehicle Log
+  [EC Transport   ] d=3 Tab Cargo Operations
+  [EC Transport   ] d=3 Batch Quantity
+  [EC Transport   ] d=3 BL/MR Info
+  [EC Transport   ] d=3 BL/MR Light
+  [EC Transport   ] d=3 Cargo Analysis
+  [EC Transport   ] d=3 Cargo Activity Timesheet
+  [EC Transport   ] d=3 Terminal Operation Delays
+  [EC Transport   ] d=3 Harbour Interruption
+  [EC Transport   ] d=3 Harbour Dues
+  [EC Transport   ] d=3 Ship Info and Ullages
+  [EC Transport   ] d=3 Demurrage
+  [EC Transport   ] d=3 Day End Not Lifted
+  [EC Transport   ] d=3 Month End Not Lifted
+  [EC Transport   ] d=3 Nomination Closing Balance
+  [EC Transport   ] d=3 Letter of Protest
+  [EC Transport   ] d=3 Cargo Document
+  [EC Transport   ] d=3 Cargo Document Parcel
+  [EC Transport   ] d=3 Cargo Document Other
+  [EC Transport   ] d=3 Sailing Advice
+  [EC Transport   ] d=3 Batch Quantity Unload
+  [EC Transport   ] d=3 Unload Info
+  [EC Transport   ] d=3 Cargo Analysis Unload
+  [EC Transport   ] d=3 Cargo Activity Timesheet Unload
+  [EC Transport   ] d=3 Terminal Operation Unload Delays
+  [EC Transport   ] d=3 Demurrage Unload
+  [EC Transport   ] d=3 Port Resource Usage
+  [EC Transport   ] d=3 Port Resources Restriction
+  [EC Transport   ] d=3 Marine Notices
+  [EC Transport   ] d=3 Daily Capacity Adjustment
+  [EC Transport   ] d=3 Daily Contract Capacity Request
+  [EC Transport   ] d=3 Sub Daily - Lifting Account Adjustment
+  [EC Transport   ] d=3 Lifting Account Adjustment
+  [EC Transport   ] d=3 Monthly Account Status
+  [EC Transport   ] d=3 Forecast
+  [EC Transport   ] d=3 Forecast Input Contract
+  [EC Transport   ] d=3 Forecast Input Delivery Point
+  [EC Transport   ] d=3 Forecast Input Nomination Point
+  [EC Transport   ] d=3 Forecast Input Nomination Location
+  [EC Transport   ] d=3 Forecast Monthly Input Nomination Location
+  [EC Transport   ] d=3 Forecast Analysis Contract
+  [EC Transport   ] d=3 Forecast Analysis Delivery Point
+  [EC Transport   ] d=3 Forecast Analysis Nomination Point
+  [EC Transport   ] d=3 Calculate Forecast
+  [EC Transport   ] d=3 Forecast Daily Operational Restriction
+  [EC Transport   ] d=3 Forecast Period Operational Restriction
+  [EC Transport   ] d=3 Forecast Period Component Recovery Factors
+  [EC Transport   ] d=3 Forecast Period Product Component Recovery Factors
+  [EC Transport   ] d=3 Daily AFS
+  [EC Transport   ] d=3 Daily Nomination Point AFS
+  [EC Transport   ] d=3 Monthly AFS Chart
+  [EC Transport   ] d=3 Forecast Contract Capacity Factors
+  [EC Transport   ] d=3 Contract Bundle Transfer
+  [EC Transport   ] d=3 Output Nomination
+  [EC Transport   ] d=3 Input Nomination
+  [EC Transport   ] d=3 Exit Point Matching
+  [EC Transport   ] d=3 Aggregated Exit Point Matching
+  [EC Transport   ] d=3 Delivery Point Target
+  [EC Transport   ] d=3 Monthly Transport Factors
+  [EC Transport   ] d=3 Pipeline Trading Request
+  [EC Transport   ] d=3 Pipeline Trading Confirmation
+  [EC Transport   ] d=3 Create Output Nomination Message
+  [EC Transport   ] d=3 Sub Daily Delivery Calculations
+  [EC Transport   ] d=3 Sub Daily Estimate Calculations
+  [EC Sales       ] d=3 Daily Gas Sales Forecast
+  [EC Sales       ] d=3 Monthly Forecast
+  [EC Sales       ] d=3 Daily Nomination
+  [EC Sales       ] d=3 Daily Re-Nomination
+  [EC Sales       ] d=3 Daily Delivery
+  [EC Sales       ] d=3 Monthly Delivery
+  [EC Sales       ] d=3 Daily Profit Centre Delivery
+  [EC Sales       ] d=3 Monthly Profit Centre Delivery
+  [EC Sales       ] d=3 Gas Delivery Events
+  [EC Sales       ] d=3 Forecast Component Analysis
+  [EC Sales       ] d=3 Delivery Component Analysis
+  [EC Sales       ] d=3 Planned Delivery Restrictions
+  [EC Sales       ] d=3 Wet Gas Export and Fuel
+  [EC Sales       ] d=3 NGL Export
+  [EC Sales       ] d=3 Wet Gas Hourly Profile
+  [EC Sales       ] d=3 Daily Availability
+  [EC Sales       ] d=3 Daily Nomination Overview
+  [EC Sales       ] d=3 Before Day Target
+  [EC Sales       ] d=3 Within Day Target
+  [EC Sales       ] d=3 Daily Dry Gas Flow Profile
+  [EC Sales       ] d=3 Unit Price
+  [EC Sales       ] d=3 Exchange Rates
+  [EC Sales       ] d=3 Product Price List
+  [EC Sales       ] d=3 Sub Daily Product Price List
+  [EC Sales       ] d=3 Contract Price List
+  [EC Sales       ] d=3 Contract Price List - Dataset
+  [EC Sales       ] d=3 Contract Location Price List - Dataset
+  [EC Sales       ] d=3 Sub Daily Contract Price List
+  [EC Sales       ] d=3 Cargo Price List
+  [EC Sales       ] d=3 Cargo/Parcel Price List
+  [EC Sales       ] d=3 Cargo Price List - Dataset
+  [EC Sales       ] d=3 Price Component
+  [EC Sales       ] d=3 Daily Price Index
+  [EC Sales       ] d=3 Daily Price Index - Dataset
+  [EC Sales       ] d=3 Daily Price Index - Dataset and Price Object
+  [EC Sales       ] d=3 Sub Daily Price Index
+  [EC Sales       ] d=3 Monthly Price Index
+  [EC Sales       ] d=3 Product Price List - Dataset
+  [EC Sales       ] d=3 Monthly Price Index - Dataset
+  [EC Sales       ] d=3 Monthly Price Index - Dataset and Price Object
+  [EC Sales       ] d=3 Monthly Price Index Forecast
+  [EC Sales       ] d=3 Yearly Price Index
+  [EC Sales       ] d=3 Price Calculations
+  [EC Sales       ] d=3 Price Calculations - by Price Object
+  [EC Sales       ] d=3 Contract Cargo Elements
+  [EC Sales       ] d=3 Daily Price Rate
+  [EC Sales       ] d=3 Daily Price Rate - Dataset
+  [EC Sales       ] d=3 Daily Price Rate - Dataset and Price Object
+  [EC Sales       ] d=3 Monthly Price Rate
+  [EC Sales       ] d=3 Monthly Price Rate - Dataset
+  [EC Sales       ] d=3 Monthly Price Rate - Dataset and Price Object
+  [EC Sales       ] d=3 Yearly Price Rate
+  [EC Sales       ] d=3 Matrix Price List
+  [EC Sales       ] d=3 Daily Contract Calculation
+  [EC Sales       ] d=3 Daily Contract Calculation - by Contract
+  [EC Sales       ] d=3 Monthly Contract Calculation
+  [EC Sales       ] d=3 Monthly Contract Calculation - by Contract
+  [EC Sales       ] d=3 Yearly Contract Calculation
+  [EC Sales       ] d=3 Yearly Contract Calculation - by Contract
+  [EC Sales       ] d=3 Monthly Contract Allocation Adjustment
+  [EC Sales       ] d=3 Sub Daily Contract Account Status
+  [EC Sales       ] d=3 Monthly Contract Account Company Status
+  [EC Sales       ] d=3 Daily Contract Account Events
+  [EC Sales       ] d=3 Monthly Contract Account Events
+  [EC Sales       ] d=3 Yearly Contract Account Events
+  [EC Sales       ] d=3 Monthly Expenditure Forecast
+  [EC Sales       ] d=3 Monthly Expenditure
+  [EC Sales       ] d=3 Cargo Contract Account Status
+  [EC Sales       ] d=3 Daily Contractual Volume
+  [EC Sales       ] d=3 Monthly Contractual Volume
+  [EC Sales       ] d=3 Period Contract Lifting
+  [EC Sales       ] d=3 Daily Contract Account Status
+  [EC Sales       ] d=3 Monthly Contract Account Status
+  [EC Sales       ] d=3 Yearly Contract Account Status
+  [EC Revenue     ] d=2 Document Tracing
+  [EC Revenue     ] d=2 Visual Tracing
+  [EC Revenue     ] d=3 Document Finder
+  [EC Revenue     ] d=3 Period Document
+  [EC Revenue     ] d=3 ERP Document
+  [EC Revenue     ] d=3 Payment Tracking
+  [EC Revenue     ] d=3 Interface Files
+  [EC Revenue     ] d=3 Cargo Data
+  [EC Revenue     ] d=3 Data Entry Interface
+  [EC Revenue     ] d=3 Project Data Entry
+  [EC Revenue     ] d=3 Data Entry Reconciliation
+  [EC Revenue     ] d=3 Project Data Mapping
+  [EC Revenue     ] d=3 Project Data Mapping Accrual
+  [EC Revenue     ] d=3 Project Data Extract
+  [EC Revenue     ] d=3 Project Data Extract Accrual
+  [EC Revenue     ] d=3 Project Data Extract By Year
+  [EC Revenue     ] d=3 Project Data Extract For 10 Years
+  [EC Revenue     ] d=3 Cost of Service
+  [EC Revenue     ] d=3 Revenue Lock Module
+  [EC Revenue     ] d=3 Revenue Booking Period - Close
+  [EC Revenue     ] d=3 Revenue Reporting Period - Close
+  [EC Revenue     ] d=3 Revenue Booking Period - Re-open
+  [EC Revenue     ] d=3 Revenue Reporting Period - Re-open
+  [EC Revenue     ] d=3 Revenue Detailed Log
+  [EC Revenue     ] d=3 Calculation Log
+  [EC Revenue     ] d=3 Financial Item Definition
+  [EC Revenue     ] d=3 Financial Item Template
+  [EC Revenue     ] d=3 Daily Financial Item
+  [EC Revenue     ] d=3 Daily Financial Item Calculation
+  [EC Revenue     ] d=3 Monthly Financial Item
+  [EC Revenue     ] d=3 Monthly Financial Item Calculation
+  [EC Revenue     ] d=3 Yearly Financial Item
+  [EC Revenue     ] d=3 Yearly Financial Item Calculation
+  [Reporting      ] d=3 Report Context
+  [Reporting      ] d=3 Excel Report Objects
+  [Reporting      ] d=3 Excel Report Sets
+  [Reporting      ] d=2 Report Area
+  [Reporting      ] d=2 Report and Analytics
+  [Reporting      ] d=2 Report Template
+  [Reporting      ] d=2 Report Definition
+  [Reporting      ] d=2 Report Administration
+  [Reporting      ] d=2 Report Generation
+  [Reporting      ] d=2 Report Set Administration
+  [Reporting      ] d=2 Report Queue Status
+  [Reporting      ] d=2 Export to Excel Express
+  [Reporting      ] d=2 Report Publishing
+  [Reporting      ] d=2 Display Published Report
+  [Process Automat] d=2 Project Management
+  [Process Automat] d=2 Process Action
+  [Process Automat] d=2 Process Template
+  [Process Automat] d=2 Process Execution
+  [Process Automat] d=2 Process Overview
+  [Process Automat] d=2 Process Overview Configuration
+  [Process Automat] d=2 Process Overview Legacy
+  [Process Automat] d=2 Todo List
+  [Process Automat] d=2 Task Management
+  [Process Automat] d=2 Process Notifications
+  [Process Automat] d=2 Process Monitor
+  [Process Automat] d=2 Process Monitor Configuration
+  [Process Automat] d=2 Viewer Tag
+  [Messaging      ] d=2 EDI Address
+  [Messaging      ] d=2 Value Mapping Maintenance
+  [Messaging      ] d=2 Distribution List
+  [Messaging      ] d=2 Send Freetext Message
+  [Messaging      ] d=2 Communication Status
+  [Messaging      ] d=2 Message Alerts
+  [Messaging      ] d=2 Message Distribution
+  [Messaging      ] d=2 Message Group List
+  [Messaging      ] d=2 Outgoing Messages
+  [Messaging      ] d=2 Incoming Messages
+  [Messaging      ] d=2 Message Journal
+  [Messaging      ] d=2 Message Workflow Overview
+  [Messaging      ] d=2 Message Generation
+  [Messaging      ] d=2 Manage Outgoing Messages
+  [Task List      ] d=2 Four Eye Approval
+  [Task List      ] d=2 Logbook
+
+PHASE 2: Navigating to 545 screens...
+
+  001[?         ]---[N] Authentication Audit     |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  002[?         ]---[N] Object Partition         |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  003[?         ]---[N] Analytics Object Access  |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  004[Configurat]---[N] Documentation            |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  005 SKIP  [Configurat] Account Settings
+  006 SKIP  [Configurat] User Maintenance
+  007 SKIP  [Configurat] Role Maintenance
+  008 SKIP  [Configurat] Group Maintenance
+  009 SKIP  [Configurat] Object Maintenance
+  010 SKIP  [Configurat] Role Users
+  011 SKIP  [Configurat] Group Users
+  012 SKIP  [Configurat] Maintain System Settings
+  013 SKIP  [Configurat] Maintain User Settings
+  014[Configurat]---[Y] Personal Settings        |NAVIGATOR+TABLE |dt=1|nav=['From Daytime UTC', 'To Daytime UTC']|cols=['Time UTC', 'Type', 'Realm']|"Authentication Audit"
+  015[Configurat]---[Y] Create Preference        |NAVIGATOR-ONLY  |dt=0|nav=['Property', 'Label']|cols=[]|"Create Preference"
+  016[Configurat]---[Y] EC Codes - All           |NAVIGATOR-ONLY  |dt=0|nav=['Code Type', 'Created by']|cols=[]|"EC Codes - All"
+  017[Configurat]---[Y] EC Codes - Non-System Cod|NAVIGATOR-ONLY  |dt=0|nav=['Code Type', 'Created by']|cols=[]|"EC Codes - Non-System "
+  018[Configurat]---[Y] EC Codes - System Codes  |NAVIGATOR-ONLY  |dt=0|nav=['Code Type', 'Created by']|cols=[]|"EC Codes - System Code"
+  019[Configurat]-+-[Y] EC Code Object           |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['Object Code', 'Name', 'Start Date']|"EC Code Object"
+  020[Configurat]-+D[Y] System Attributes        |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['From Date', 'Attribute Type', 'Attribute Value']|"System Attributes"
+  ... checkpoint saved (11 screens)
+  021[Configurat]---[Y] PKI Signature Verificatio|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"PKI Signature Verifica"
+  022[Configurat]---[Y] Class Configuration      |NAVIGATOR-ONLY  |dt=0|nav=['Class Type', 'Class Name']|cols=[]|"Class Configuration"
+  023[Configurat]---[Y] Class Attribute Configura|NAVIGATOR-ONLY  |dt=0|nav=['Class Type', 'Class Name']|cols=[]|"Class Attribute Config"
+  024[Configurat]---[Y] Class Attribute Presentat|NAVIGATOR-ONLY  |dt=0|nav=['Class Type', 'Class Name']|cols=[]|"Class Attribute Presen"
+  025[Configurat]---[Y] Class Property Codes     |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Property Table Name', 'Property Code', 'Property Type']|"Class Property Codes"
+  026[Configurat]---[Y] Group Model              |NAVIGATOR-ONLY  |dt=0|nav=['Group Type', 'Created by']|cols=[]|"Group Model"
+  027[Configurat]---[Y] Navigation Model         |NAVIGATOR-ONLY  |dt=0|nav=['Model Type', 'Created by']|cols=[]|"Navigation Model"
+  028[Configurat]-+-[Y] Business Function        |NAVIGATOR+TABLE |dt=1|nav=['BF Code', 'Name']|cols=['BF Code', 'Name', 'App Space Cntx']|"Business Function"
+  029[Configurat]---[Y] Business Function Profile|NAVIGATOR-ONLY  |dt=0|nav=['Class Name', 'Created by']|cols=[]|"Business Function Prof"
+  030[Configurat]-+D[Y] Maintain Treeview        |NAVIGATOR+TABLE |dt=1|nav=['Search', 'Filter by roles']|cols=['Main', 'Name', 'Owner Context']|"Maintain Treeview"
+  031[Configurat]---[Y] Initiate Day             |NAVIGATOR+TABLE |dt=1|nav=['From Date', 'To Date']|cols=['Start Time', 'Status']|"Initiate Day"
+  032[Configurat]---[Y] Integrity Status         |NAVIGATOR+TABLE |dt=2|nav=['From Date', 'To Date']|cols=['Date', 'Report Type', 'Filter']|"Integrity Status"
+  033[Configurat]-+-[Y] Production Day Table     |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Object Code', 'Time Zone', 'Start Date']|"Production Day Table"
+  034[Configurat]-+D[Y] User Exit Package Configu|NAVIGATOR+TABLE |dt=1|nav=['App Space Cntx', 'Created by']|cols=['Active', 'App Space Cntx', 'Owner Cntx']|"User Exit Package Conf"
+  035[Configurat]---[N] Scenario Definition      |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|"Scenario Definition"
+  036[Configurat]-+D[Y] MIME Type Mapping        |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['MIME Type', 'File Extensions']|"MIME Type Mapping"
+  037[Configurat]---[Y] Analytics Integration Wor|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Analytics Integration "
+  038[Configurat]---[N] Analytics Manager        |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  039[Configurat]-+-[Y] Data purging             |NAVIGATOR+TABLE |dt=1|nav=['Schedule is not enabled.', 'Created by']|cols=['Active', 'Exec Order', 'Policy Name']|"Data purging"
+  040[Configurat]---[N] Flush Cache              |TABLE-ONLY      |dt=1|nav=[]|cols=['Cache Name', 'Hit Ratio', 'Hit/Miss']|"Flush Cache"
+  ... checkpoint saved (31 screens)
+  041[Configurat]---[N] Event Monitor            |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|"Event Monitor"
+  042[Configurat]---[N] Versions                 |TABLE-ONLY      |dt=1|nav=[]|cols=['Name', 'Version', 'License']|"Versions"
+  043[Configurat]---[N] Application Server Health|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|"Application Server Hea"
+  044[Configurat]---[Y] Generation of BF Document|NAVIGATOR-ONLY  |dt=0|nav=['EC Version', 'Release Year']|cols=[]|"Generation of BF Docum"
+  045[Configurat]---[N] Application Server Perfor|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|"Application Server Per"
+  046[Configurat]-+D[Y] Units                    |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Unit', 'Label', 'Description']|"Units"
+  047[Configurat]-+D[Y] Unit Conversion          |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['From Unit', 'To Unit', 'Daytime']|"Unit Conversion"
+  048[Configurat]-+D[Y] Measurement Types        |NAVIGATOR+TABLE |dt=3|nav=['Created by', 'Record status']|cols=['Measurement Type', 'Database Unit', 'Description']|"Measurement Types"
+  049[Configurat]-+-[Y] Conversion Group         |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Conversion Group Code', 'Conversion Group Name', 'Start Date']|"Conversion Group"
+  050[Configurat]-+-[Y] Asset Unit Conversion    |NAVIGATOR+TABLE |dt=2|nav=['Created by', 'Record status']|cols=['From Unit', 'To Unit', 'Daytime']|"Asset Unit Conversion"
+  051[Configurat]---[Y] Inter-Group Conversion   |NAVIGATOR-ONLY  |dt=0|nav=['Year', 'Level']|cols=[]|"Inter-Group Conversion"
+  052[Configurat]---[Y] BOE Conversion           |NAVIGATOR-ONLY  |dt=0|nav=['Year', 'Level']|cols=[]|"BOE Conversion"
+  053[Configurat]---[Y] Form Designer            |NAVIGATOR-ONLY  |dt=0|nav=['Example forms']|cols=[]|"Form Designer"
+  054[Configurat]---[N] Extensions Manager       |TABLE-ONLY      |dt=1|nav=[]|cols=['Id', 'Name', 'Owner cntx']|"Extensions Manager"
+  055[Configurat]---[Y] Configuration Export     |NAVIGATOR-ONLY  |dt=0|nav=['Include product']|cols=[]|"Configuration Export"
+  056[Configurat]-+D[Y] Configuration Type       |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Configuration Type', 'Name', 'Version']|"Configuration Type"
+  057[Configurat]-+D[Y] Text Translation         |NAVIGATOR+TABLE |dt=1|nav=['Language', 'Source']|cols=['Source', 'Target']|"Text Translation"
+  058[Configurat]-+D[Y] Language                 |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Id', 'Language', 'Name']|"Language"
+  059[Configurat]---[Y] Class Validation         |NAVIGATOR-ONLY  |dt=0|nav=['Object Class', 'Created by']|cols=[]|"Class Validation"
+  060[Configurat]---[Y] Hierarchical Object Valid|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Hierarchical Object Va"
+  ... checkpoint saved (51 screens)
+  061[Configurat]---[Y] Object Validation - Defau|NAVIGATOR-ONLY  |dt=0|nav=['Object Class', 'Object Name']|cols=[]|"Object Validation - De"
+  062[Configurat]-+D[Y] Check Group              |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Group', 'Parent Group', 'Screen']|"Check Group"
+  063[Configurat]-+-[Y] Rule Group Combination   |NAVIGATOR+TABLE |dt=1|nav=['Group', 'Created by']|cols=['Check Rule', 'Check Group', 'Check Group Description']|"Rule Group Combination"
+  064[Configurat]---[Y] Validation Overview      |NAVIGATOR+TABLE |dt=1|nav=['From date', 'To date']|cols=['Group', 'Status', 'Summary']|"Validation Overview"
+  065[Configurat]---[Y] Validation Overview by Fa|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Validation Overview by"
+  066[Configurat]-+-[Y] Mismeasurement Event     |NAVIGATOR+TABLE |dt=1|nav=['From Daytime', 'To Daytime']|cols=['Event NO', 'Validate From', 'Validate To']|"Mismeasurement Event"
+  067[Configurat]-+-[Y] Calculation Context      |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Calc Context Code', 'Calc Context Name', 'Start Date']|"Calculation Context"
+  068[Configurat]---[Y] Database Object Types    |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Calculation Context']|cols=[]|"Database Object Types"
+  069[Configurat]---[Y] Simple Object Types      |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Calculation Context']|cols=[]|"Simple Object Types"
+  070[Configurat]---[Y] Variable Definitions     |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Calculation Context']|cols=[]|"Variable Definitions"
+  071[Configurat]---[Y] Global Attributes        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Calculation Context']|cols=[]|"Global Attributes"
+  072[Configurat]---[Y] Create Calculation       |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Calculation Context']|cols=[]|"Create Calculation"
+  073[Configurat]---[Y] Maintain Calculation     |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Calculation Context']|cols=[]|"Maintain Calculation"
+  074[Configurat]---[N] Calculation Library      |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  075[Configurat]---[Y] Create Library Calculatio|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Calculation Library']|cols=[]|"Create Library Calcula"
+  076[Configurat]---[N] Maintain Library Calculat|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  077[Configurat]-+D[Y] Maintain Calculation Log |NAVIGATOR+TABLE |dt=2|nav=['Created by', 'Record status']|cols=['Code', 'Name', 'Description']|"Maintain Calculation L"
+  078[Configurat]---[Y] Component Template       |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Calculation Context']|cols=[]|"Component Template"
+  079[Configurat]---[Y] Component Report         |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Calculation Context']|cols=[]|"Component Report"
+  080[Configurat]-+-[Y] Calculation Group Context|NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Calculation Group Context', 'Calculation Group Context', 'Start Date']|"Calculation Group Cont"
+  ... checkpoint saved (71 screens)
+  081[Configurat]---[Y] Calculation Group Setup  |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Calculation Group Context']|cols=[]|"Calculation Group Setu"
+  082[Configurat]---[Y] Alloc Job Status Process |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Allocation Network']|cols=[]|"Alloc Job Status Proce"
+  083[Configurat]-+-[Y] Node                     |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Node"
+  084[Configurat]---[Y] Stream Node Diagram      |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Allocation Network']|cols=[]|"Stream Node Diagram"
+  085[Configurat]-+D[Y] SND Production Data Menu |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Node Type', 'Business Screen', 'Description']|"SND Production Data Me"
+  086[Configurat]-+-[Y] Asset Calculation Attribu|NAVIGATOR+TABLE |dt=1|nav=['From Date', 'To Date']|cols=['Attribute', 'Daytime', 'Asset Type']|"Asset Calculation Attr"
+  087[Configurat]-+-[Y] Config Variable          |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name', 'Start Date']|"Config Variable"
+  088[Configurat]-+-[Y] Config Variable Parameter|NAVIGATOR+TABLE |dt=4|nav=['Start Date', 'End Date']|cols=['Code', 'Name', 'Start Date']|"Config Variable Parame"
+  089[Configurat]-+-[Y] Production Unit          |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Production Unit Code', 'Production Unit Name', 'Start Date']|"Production Unit"
+  090[Configurat]---[N] Business Unit            |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  091[Configurat]-+-[Y] Production Sub Unit      |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['Production Sub Unit Code', 'Production Sub Unit Name', 'Start Date']|"Production Sub Unit"
+  092[Configurat]-+-[Y] Country                  |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Country Code', 'Country Name', 'Start Date']|"Country"
+  093[Configurat]-+-[Y] State                    |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['State Code', 'State Name', 'Start Date']|"State"
+  094[Configurat]-+-[Y] County                   |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['County Code', 'County Name', 'Start Date']|"County"
+  095[Configurat]-+-[Y] Area                     |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Area"
+  096[Configurat]-+-[Y] Sub Area                 |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Sub Area"
+  097[Configurat]-+-[Y] Region                   |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Region Code', 'Region Name', 'Start Date']|"Region"
+  098[Configurat]-+-[Y] Regulatory Permits       |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['Permit Code', 'Permit Name', 'Regulatory Agency']|"Regulatory Permits"
+  099[Configurat]-+-[Y] Object List              |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name', 'Start Date']|"Object List"
+  100[Configurat]---[Y] Object List Setup        |NAVIGATOR-ONLY  |dt=0|nav=['Daytime', 'List Class']|cols=[]|"Object List Setup"
+  ... checkpoint saved (91 screens)
+  101[Configurat]-+-[Y] Functional Area          |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start date']|cols=['Area Code', 'Area Name', 'Start date']|"Functional Area"
+  102[Configurat]---[Y] Well Mode Attributes     |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Attribute Name', 'Label', 'Enabled']|"Well Mode Attributes"
+  103[Configurat]-+-[Y] Well Mode                |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Well Mode Code', 'Well Mode Name']|"Well Mode"
+  104[Configurat]-+D[Y] Hydrocarbon Component    |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Hydrocarbon Component Cod', 'Hydrocarbon Component Nam', 'Sort Order']|"Hydrocarbon Component"
+  105[Configurat]-+-[Y] Product                  |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Product Code', 'Product Name', 'Start Date']|"Product"
+  106[Configurat]-+-[Y] Blend                    |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Blend Code', 'Blend Name', 'Start Date']|"Blend"
+  107[Configurat]---[Y] Maintain Blend Content Sp|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Blend']|cols=[]|"Maintain Blend Content"
+  108[Configurat]-+-[Y] Disposition Type         |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['Disposition Code', 'Disposition Name', 'Start Date']|"Disposition Type"
+  109[Configurat]-+D[Y] Component Set            |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Component Set Code', 'Component Set Name', 'Object Type']|"Component Set"
+  110[Configurat]-+-[Y] Component Set List       |NAVIGATOR+TABLE |dt=1|nav=['Name', 'Created by']|cols=['Start Date', 'End Date', 'Component Name']|"Component Set List"
+  111[Configurat]-+-[Y] Constant Standard        |NAVIGATOR+TABLE |dt=1|nav=['New Code', 'New Name']|cols=['Standard Code', 'Standard Name', 'Start Date']|"Constant Standard"
+  112[Configurat]-+-[Y] Component Constant       |NAVIGATOR+TABLE |dt=1|nav=['Constant Standard Name', 'Created by']|cols=['Daytime', 'Component', 'Sort Order']|"Component Constant"
+  113[Configurat]---[Y] Equation Of State        |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Equation Of State"
+  114[Configurat]-+-[Y] Licence                  |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Licence Code', 'Licence Name', 'Start Date']|"Licence"
+  115[Configurat]-+-[Y] MMS Lease                |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['MMS Lease Code', 'MMS Lease Name', 'Start Date']|"MMS Lease"
+  116[Configurat]-+-[Y] State Lease              |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['State Lease Code', 'State Lease Name', 'Start Date']|"State Lease"
+  117[Configurat]-+-[Y] Operator Lease           |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['Operator Lease Code', 'Operator Lease Name', 'Start Date']|"Operator Lease"
+  118[Configurat]-+-[Y] Company                  |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Company Code', 'Company Name', 'Start Date']|"Company"
+  119[Configurat]-+-[Y] Company Contact          |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Company']|cols=['Contact Code', 'Contact Name', 'Start Date']|"Company Contact"
+  120[Configurat]-+-[Y] Customer                 |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name', 'Start Date']|"Customer"
+  ... checkpoint saved (111 screens)
+  121[Configurat]---[Y] Customer VAT Reg No      |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Created by']|cols=[]|"Customer VAT Reg No"
+  122[Configurat]---[Y] Restricted Customer Setup|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Created by']|cols=[]|"Restricted Customer Se"
+  123[Configurat]-+-[Y] Vendor                   |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name', 'Start Date']|"Vendor"
+  124[Configurat]---[Y] Vendor VAT Reg No        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Created by']|cols=[]|"Vendor VAT Reg No"
+  125[Configurat]---[Y] Restricted Vendor Setup  |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Created by']|cols=[]|"Restricted Vendor Setu"
+  126[Configurat]-+-[Y] Field                    |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Area']|cols=[]|"Field"
+  127[Configurat]-+-[Y] Sub Field                |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['Sub Field Code', 'Sub Field Name', 'Start Date']|"Sub Field"
+  128[Configurat]-+-[Y] Field Group              |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name', 'Start Date']|"Field Group"
+  129[Configurat]---[Y] Field Group Setup        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Created by']|cols=[]|"Field Group Setup"
+  130[Configurat]-+-[Y] Commercial Entity        |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Licence']|cols=['Commercial Entity Code', 'Commercial Entity Name', 'Start Date']|"Commercial Entity"
+  131[Configurat]---[Y] Maintain Equity Share    |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Licence']|cols=[]|"Maintain Equity Share"
+  132[Configurat]-+-[Y] Document Date Term       |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name', 'Start Date']|"Document Date Term"
+  133[Configurat]-+-[Y] Document Received Term   |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name', 'Start Date']|"Document Received Term"
+  134[Configurat]---[N] Payment Term             |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  135[Configurat]-+-[Y] Calendar                 |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Calendar Code', 'Calendar Name', 'Description']|"Calendar"
+  136[Configurat]-+-[Y] Calendar Collection      |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name', 'Description']|"Calendar Collection"
+  137[Configurat]---[N] Facility Class 1         |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  138[Configurat]-+-[Y] Manage Facility Class 1  |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Manage Facility Class "
+  139[Configurat]---[N] Facility Class 2         |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  140[Configurat]---[Y] Facility Reference Values|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Facility Reference Val"
+  ... checkpoint saved (131 screens)
+  141[Configurat]---[Y] Facility Analysis Items  |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Facility Analysis Item"
+  142[Configurat]-+-[Y] External Location        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Ext Loc Code']|cols=[]|"External Location"
+  143[Configurat]---[N] External Location Referen|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  144[Configurat]---[Y] Facility - External Locat|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Facility - External Lo"
+  145[Configurat]-+-[Y] Operator Route           |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Operator Route"
+  146[Configurat]-+-[Y] Collection Point         |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Collection Point"
+  147[Configurat]-+-[Y] Collection Point Hierarch|NAVIGATOR+TABLE |dt=1|nav=['Date', 'Production Unit']|cols=['Select', 'Object Type', 'Object Name']|"Collection Point Hiera"
+  148[Configurat]-+-[Y] Flowline                 |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Flowline"
+  149[Configurat]-+D[Y] Area Codes               |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Area Code', 'Start Date', 'End Date']|"Area Codes"
+  150[Configurat]-+-[Y] Test Separator           |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Test Separator"
+  151[Configurat]---[N] Production Separator     |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  152[Configurat]-+D[Y] Vessel                   |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Vessel Code', 'Vessel Name', 'Vessel Type']|"Vessel"
+  153[Configurat]-+D[Y] Weather Site             |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Facility Name', 'Description']|"Weather Site"
+  154[Configurat]-+-[Y] Pipeline                 |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Pipeline"
+  155[Configurat]-+-[Y] Process Train            |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Process Train Code', 'Process Train Name', 'Start Date']|"Process Train"
+  156[Configurat]-+-[Y] Report Group             |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['Reporting Group Code', 'Reporting Group Name', 'Business Area']|"Report Group"
+  157[Configurat]---[Y] Process Train Event Profi|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Facility Class 1']|cols=[]|"Process Train Event Pr"
+  158[Configurat]---[Y] Report Group Connection  |NAVIGATOR+TABLE |dt=1|nav=['Date', 'Created by']|cols=['Reporting Group Code', 'Reporting Group Name', 'Business Area']|"Report Group Connectio"
+  159[Configurat]---[Y] Object Group Connection  |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Object Group Connectio"
+  160[Configurat]-+-[Y] Maintain System Reference|NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Daytime']|"Maintain System Refere"
+  ... checkpoint saved (151 screens)
+  161[Configurat]-+-[Y] Well Hookup              |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Well Hookup"
+  162[Configurat]-+-[Y] Shift                    |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Shift"
+  163[Configurat]-+-[Y] Stream - by Group Model  |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Stream - by Group Mode"
+  164[Configurat]-+-[Y] Manage Stream            |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Manage Stream"
+  165[Configurat]---[N] Maintain Streams         |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  166[Configurat]-+-[Y] Stream Set               |NAVIGATOR+TABLE |dt=1|nav=['Created by', 'Record status']|cols=['Stream Set Code', 'Stream Set Name']|"Stream Set"
+  167[Configurat]---[Y] Stream Set List          |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Stream Set List"
+  168[Configurat]---[Y] Stream Formula Editor    |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Stream Formula Editor"
+  169[Configurat]---[N] Stream Reference Values  |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  170[Configurat]---[Y] Stream Seasonal Values   |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Stream Seasonal Values"
+  171[Configurat]-+-[Y] Revenue Stream Category  |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Stream Category Code', 'Name', 'Start Date']|"Revenue Stream Categor"
+  172[Configurat]---[Y] Revenue Stream Category S|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Created by']|cols=[]|"Revenue Stream Categor"
+  173[Configurat]-+-[Y] Stream Item Category     |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Code', 'Name', 'Start Date']|"Stream Item Category"
+  174[Configurat]-+-[Y] Stream - All             |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Stream Code', 'Stream Name', 'Start Date']|"Stream - All"
+  175[Configurat]---[N] Stream Item              |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  176[Configurat]---[Y] Forecast Stream Item     |NAVIGATOR-ONLY  |dt=0|nav=['Code', 'Category']|cols=[]|"Forecast Stream Item"
+  177[Configurat]-+-[Y] Orifice Plate            |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Orifice Code', 'Orifice Name', 'Start Date']|"Orifice Plate"
+  178[Configurat]---[Y] Stream ORF Values        |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Stream ORF Values"
+  179[Configurat]-+-[Y] Meter Run                |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Meter Run Code', 'Meter Run Name', 'Start Date']|"Meter Run"
+  180[Configurat]---[Y] Meter Run and Orifice Pla|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Meter Run and Orifice "
+  ... checkpoint saved (171 screens)
+  181[Configurat]---[Y] Stream PT Conversion Valu|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Stream PT Conversion V"
+  182[Configurat]---[Y] Stream DPT Conversion Val|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Stream DPT Conversion "
+  183[Configurat]---[Y] Stream Profit Centre Conn|NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Stream Profit Centre C"
+  184[Configurat]---[Y] Stream Well Connection   |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Stream Well Connection"
+  185[Configurat]-+-[Y] Choke Model              |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Choke Model Code', 'Choke Model Name', 'Start Date']|"Choke Model"
+  186[Configurat]---[Y] Choke Model Reference Val|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Choke Model Reference "
+  187[Configurat]-+-[Y] Storage                  |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Storage"
+  188[Configurat]---[Y] Maintain Storages        |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Maintain Storages"
+  189[Configurat]-+-[Y] Tank                     |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Tank"
+  190[Configurat]-+-[Y] Manage Tank              |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Manage Tank"
+  191[Configurat]---[Y] Maintain Tanks           |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Maintain Tanks"
+  192[Configurat]---[N] Tank Usage               |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  193[Configurat]---[Y] Tank Strapping           |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Tank Strapping"
+  194[Configurat]---[Y] Tank Tap                 |NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Tank Tap"
+  195[Configurat]---[Y] Intermediate Storage Prod|NAVIGATOR-ONLY  |dt=0|nav=['Storage', 'Created by']|cols=[]|"Intermediate Storage P"
+  196[Configurat]---[Y] Storage Profit Centre Con|NAVIGATOR-ONLY  |dt=0|nav=['From Date', 'To Date']|cols=[]|"Storage Profit Centre "
+  197[Configurat]-+-[Y] Storage Flow             |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Storage Flow Code', 'Storage Flow Name', 'Start Date']|"Storage Flow"
+  198[Configurat]-+-[Y] Reservoir Block          |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Reservoir Block Code', 'Reservoir Block Name', 'Start Date']|"Reservoir Block"
+  199[Configurat]-+-[Y] Reservoir Formation      |NAVIGATOR+TABLE |dt=3|nav=['Date', 'Start Date']|cols=['Reservoir Formation Code', 'Reservoir Formation Name', 'Start Date']|"Reservoir Formation"
+  200[Configurat]---[N] Reservoir Block Formation|ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  ... checkpoint saved (191 screens)
+  201[Configurat]-+-[Y] Well Hole                |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Well Hole"
+  202[Configurat]---[N] Planned Well             |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""
+  203[Configurat]-+-[Y] Well                     |NAVIGATOR-ONLY  |dt=0|nav=['Date', 'Production Unit']|cols=[]|"Well"
+  204[Configurat]---[N] Manage Well              |ACTION/EMPTY    |dt=0|nav=[]|cols=[]|""

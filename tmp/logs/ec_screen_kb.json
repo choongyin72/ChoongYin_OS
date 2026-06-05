@@ -1,0 +1,4067 @@
+{
+  "?::Authentication Audit": {
+    "name": "Authentication Audit",
+    "section": "?",
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/authentication_audit?statusArea=false",
+    "screen_label": "Authentication Audit",
+    "has_navigator": false,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "ACTION/EMPTY",
+    "action_buttons": [],
+    "screenlet_ids": [],
+    "found": true
+  },
+  "?::Object Partition": {
+    "name": "Object Partition",
+    "section": "?",
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/maintain_access_partitions",
+    "screen_label": "Object Partition",
+    "has_navigator": true,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [],
+    "screenlet_ids": [
+      "classNameNav:form",
+      "button:form",
+      "classAccess:form",
+      "operator:form",
+      "partition:form",
+      "refreshButton:form"
+    ],
+    "found": true
+  },
+  "?::Analytics Object Access": {
+    "name": "Analytics Object Access",
+    "section": "?",
+    "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/analytics_object_access",
+    "screen_label": "Analytics Object Access",
+    "has_navigator": true,
+    "nav_labels": [],
+    "datatable_count": 0,
+    "datatables": [],
+    "save_enabled": false,
+    "insert_enabled": false,
+    "delete_enabled": false,
+    "screen_type": "NAVIGATOR-ONLY",
+    "action_buttons": [],
+    "screenlet_ids": [
+      "nav:form",
+      "button:form",
+      "table:form",
+      "syncGrantsSynonyms:form"
+    ],
+    "found": true
+  },
+  "Configuration::Account Settings": {
+    "name": "Account Settings",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::User Maintenance": {
+    "name": "User Maintenance",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Role Maintenance": {
+    "name": "Role Maintenance",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Group Maintenance": {
+    "name": "Group Maintenance",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Object Maintenance": {
+    "name": "Object Maintenance",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Role Users": {
+    "name": "Role Users",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Group Users": {
+    "name": "Group Users",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain System Settings": {
+    "name": "Maintain System Settings",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain User Settings": {
+    "name": "Maintain User Settings",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Personal Settings": {
+    "name": "Personal Settings",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Create Preference": {
+    "name": "Create Preference",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::EC Codes - All": {
+    "name": "EC Codes - All",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::EC Codes - Non-System Codes": {
+    "name": "EC Codes - Non-System Codes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::EC Codes - System Codes": {
+    "name": "EC Codes - System Codes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::EC Code Object": {
+    "name": "EC Code Object",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::System Attributes": {
+    "name": "System Attributes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::PKI Signature Verification": {
+    "name": "PKI Signature Verification",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Class Configuration": {
+    "name": "Class Configuration",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Class Attribute Configuration": {
+    "name": "Class Attribute Configuration",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Class Attribute Presentation Config": {
+    "name": "Class Attribute Presentation Config",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Class Property Codes": {
+    "name": "Class Property Codes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Group Model": {
+    "name": "Group Model",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Navigation Model": {
+    "name": "Navigation Model",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Business Function": {
+    "name": "Business Function",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Business Function Profiles": {
+    "name": "Business Function Profiles",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Treeview": {
+    "name": "Maintain Treeview",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Initiate Day": {
+    "name": "Initiate Day",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Integrity Status": {
+    "name": "Integrity Status",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Production Day Table": {
+    "name": "Production Day Table",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::User Exit Package Configuration": {
+    "name": "User Exit Package Configuration",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Scenario Definition": {
+    "name": "Scenario Definition",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::MIME Type Mapping": {
+    "name": "MIME Type Mapping",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Analytics Integration Workflow Configuration": {
+    "name": "Analytics Integration Workflow Configuration",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Analytics Manager": {
+    "name": "Analytics Manager",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Data purging": {
+    "name": "Data purging",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Flush Cache": {
+    "name": "Flush Cache",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Event Monitor": {
+    "name": "Event Monitor",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Versions": {
+    "name": "Versions",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Application Server Health": {
+    "name": "Application Server Health",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Application Server Performance": {
+    "name": "Application Server Performance",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Units": {
+    "name": "Units",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Unit Conversion": {
+    "name": "Unit Conversion",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Measurement Types": {
+    "name": "Measurement Types",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Conversion Group": {
+    "name": "Conversion Group",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Asset Unit Conversion": {
+    "name": "Asset Unit Conversion",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Inter-Group Conversion": {
+    "name": "Inter-Group Conversion",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::BOE Conversion": {
+    "name": "BOE Conversion",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Form Designer": {
+    "name": "Form Designer",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Extensions Manager": {
+    "name": "Extensions Manager",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Configuration Export": {
+    "name": "Configuration Export",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Configuration Type": {
+    "name": "Configuration Type",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Text Translation": {
+    "name": "Text Translation",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Language": {
+    "name": "Language",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Class Validation": {
+    "name": "Class Validation",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Hierarchical Object Validation": {
+    "name": "Hierarchical Object Validation",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Object Validation - Default": {
+    "name": "Object Validation - Default",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Check Group": {
+    "name": "Check Group",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Rule Group Combination": {
+    "name": "Rule Group Combination",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Validation Overview": {
+    "name": "Validation Overview",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Validation Overview by Facility": {
+    "name": "Validation Overview by Facility",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Mismeasurement Event": {
+    "name": "Mismeasurement Event",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Calculation Context": {
+    "name": "Calculation Context",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Database Object Types": {
+    "name": "Database Object Types",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Simple Object Types": {
+    "name": "Simple Object Types",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Variable Definitions": {
+    "name": "Variable Definitions",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Global Attributes": {
+    "name": "Global Attributes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Create Calculation": {
+    "name": "Create Calculation",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Calculation": {
+    "name": "Maintain Calculation",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Calculation Library": {
+    "name": "Calculation Library",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Create Library Calculation": {
+    "name": "Create Library Calculation",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Library Calculation": {
+    "name": "Maintain Library Calculation",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Calculation Log Profiles": {
+    "name": "Maintain Calculation Log Profiles",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Component Template": {
+    "name": "Component Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Component Report": {
+    "name": "Component Report",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Calculation Group Context": {
+    "name": "Calculation Group Context",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Calculation Group Setup": {
+    "name": "Calculation Group Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Alloc Job Status Process Conn": {
+    "name": "Alloc Job Status Process Conn",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Node": {
+    "name": "Node",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream Node Diagram": {
+    "name": "Stream Node Diagram",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::SND Production Data Menu": {
+    "name": "SND Production Data Menu",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Asset Calculation Attributes": {
+    "name": "Asset Calculation Attributes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Config Variable": {
+    "name": "Config Variable",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Config Variable Parameter": {
+    "name": "Config Variable Parameter",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Production Unit": {
+    "name": "Production Unit",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Business Unit": {
+    "name": "Business Unit",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Production Sub Unit": {
+    "name": "Production Sub Unit",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Country": {
+    "name": "Country",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::State": {
+    "name": "State",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::County": {
+    "name": "County",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Area": {
+    "name": "Area",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Sub Area": {
+    "name": "Sub Area",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Region": {
+    "name": "Region",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Regulatory Permits": {
+    "name": "Regulatory Permits",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Object List": {
+    "name": "Object List",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Object List Setup": {
+    "name": "Object List Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Functional Area": {
+    "name": "Functional Area",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well Mode Attributes": {
+    "name": "Well Mode Attributes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well Mode": {
+    "name": "Well Mode",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Hydrocarbon Component": {
+    "name": "Hydrocarbon Component",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Product": {
+    "name": "Product",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Blend": {
+    "name": "Blend",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Blend Content Split": {
+    "name": "Maintain Blend Content Split",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Disposition Type": {
+    "name": "Disposition Type",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Component Set": {
+    "name": "Component Set",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Component Set List": {
+    "name": "Component Set List",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Constant Standard": {
+    "name": "Constant Standard",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Component Constant": {
+    "name": "Component Constant",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Equation Of State": {
+    "name": "Equation Of State",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Licence": {
+    "name": "Licence",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::MMS Lease": {
+    "name": "MMS Lease",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::State Lease": {
+    "name": "State Lease",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Operator Lease": {
+    "name": "Operator Lease",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Company": {
+    "name": "Company",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Company Contact": {
+    "name": "Company Contact",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Customer": {
+    "name": "Customer",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Customer VAT Reg No": {
+    "name": "Customer VAT Reg No",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Restricted Customer Setup": {
+    "name": "Restricted Customer Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Vendor": {
+    "name": "Vendor",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Vendor VAT Reg No": {
+    "name": "Vendor VAT Reg No",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Restricted Vendor Setup": {
+    "name": "Restricted Vendor Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Field": {
+    "name": "Field",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Sub Field": {
+    "name": "Sub Field",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Field Group": {
+    "name": "Field Group",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Field Group Setup": {
+    "name": "Field Group Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Commercial Entity": {
+    "name": "Commercial Entity",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Equity Share": {
+    "name": "Maintain Equity Share",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Document Date Term": {
+    "name": "Document Date Term",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Document Received Term": {
+    "name": "Document Received Term",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Payment Term": {
+    "name": "Payment Term",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Calendar": {
+    "name": "Calendar",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Calendar Collection": {
+    "name": "Calendar Collection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Facility Class 1": {
+    "name": "Facility Class 1",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Manage Facility Class 1": {
+    "name": "Manage Facility Class 1",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Facility Class 2": {
+    "name": "Facility Class 2",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Facility Reference Values": {
+    "name": "Facility Reference Values",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Facility Analysis Items": {
+    "name": "Facility Analysis Items",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::External Location": {
+    "name": "External Location",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::External Location Reference Value": {
+    "name": "External Location Reference Value",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Facility - External Location Connection": {
+    "name": "Facility - External Location Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Operator Route": {
+    "name": "Operator Route",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Collection Point": {
+    "name": "Collection Point",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Collection Point Hierarchy Reorganization": {
+    "name": "Collection Point Hierarchy Reorganization",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Flowline": {
+    "name": "Flowline",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Area Codes": {
+    "name": "Area Codes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Test Separator": {
+    "name": "Test Separator",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Production Separator": {
+    "name": "Production Separator",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Vessel": {
+    "name": "Vessel",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Weather Site": {
+    "name": "Weather Site",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Pipeline": {
+    "name": "Pipeline",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Process Train": {
+    "name": "Process Train",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Report Group": {
+    "name": "Report Group",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Process Train Event Profiles": {
+    "name": "Process Train Event Profiles",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Report Group Connection": {
+    "name": "Report Group Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Object Group Connection": {
+    "name": "Object Group Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain System Reference Value": {
+    "name": "Maintain System Reference Value",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well Hookup": {
+    "name": "Well Hookup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Shift": {
+    "name": "Shift",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream - by Group Model": {
+    "name": "Stream - by Group Model",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Manage Stream": {
+    "name": "Manage Stream",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Streams": {
+    "name": "Maintain Streams",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream Set": {
+    "name": "Stream Set",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream Set List": {
+    "name": "Stream Set List",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream Formula Editor": {
+    "name": "Stream Formula Editor",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream Reference Values": {
+    "name": "Stream Reference Values",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream Seasonal Values": {
+    "name": "Stream Seasonal Values",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Revenue Stream Category": {
+    "name": "Revenue Stream Category",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Revenue Stream Category Setup": {
+    "name": "Revenue Stream Category Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream Item Category": {
+    "name": "Stream Item Category",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream - All": {
+    "name": "Stream - All",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream Item": {
+    "name": "Stream Item",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Forecast Stream Item": {
+    "name": "Forecast Stream Item",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Orifice Plate": {
+    "name": "Orifice Plate",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream ORF Values": {
+    "name": "Stream ORF Values",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Meter Run": {
+    "name": "Meter Run",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Meter Run and Orifice Plate Connection": {
+    "name": "Meter Run and Orifice Plate Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream PT Conversion Values": {
+    "name": "Stream PT Conversion Values",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream DPT Conversion Values": {
+    "name": "Stream DPT Conversion Values",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream Profit Centre Connection": {
+    "name": "Stream Profit Centre Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Stream Well Connection": {
+    "name": "Stream Well Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Choke Model": {
+    "name": "Choke Model",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Choke Model Reference Values": {
+    "name": "Choke Model Reference Values",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Storage": {
+    "name": "Storage",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Storages": {
+    "name": "Maintain Storages",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Tank": {
+    "name": "Tank",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Manage Tank": {
+    "name": "Manage Tank",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Tanks": {
+    "name": "Maintain Tanks",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Tank Usage": {
+    "name": "Tank Usage",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Tank Strapping": {
+    "name": "Tank Strapping",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Tank Tap": {
+    "name": "Tank Tap",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Intermediate Storage Products": {
+    "name": "Intermediate Storage Products",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Storage Profit Centre Connection": {
+    "name": "Storage Profit Centre Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Storage Flow": {
+    "name": "Storage Flow",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Reservoir Block": {
+    "name": "Reservoir Block",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Reservoir Formation": {
+    "name": "Reservoir Formation",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Reservoir Block Formation": {
+    "name": "Reservoir Block Formation",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well Hole": {
+    "name": "Well Hole",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Planned Well": {
+    "name": "Planned Well",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well": {
+    "name": "Well",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Manage Well": {
+    "name": "Manage Well",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Wells": {
+    "name": "Maintain Wells",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well Bore": {
+    "name": "Well Bore",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well Bore Split": {
+    "name": "Well Bore Split",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well Bore Interval": {
+    "name": "Well Bore Interval",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well Bore Interval Split": {
+    "name": "Well Bore Interval Split",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Perforation Interval": {
+    "name": "Perforation Interval",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Perforation Interval Split": {
+    "name": "Perforation Interval Split",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Flowline Well Connection": {
+    "name": "Flowline Well Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Swing Well Connection": {
+    "name": "Swing Well Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well Reference Value": {
+    "name": "Well Reference Value",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Well Seasonal Value": {
+    "name": "Well Seasonal Value",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Choke": {
+    "name": "Choke",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Choke Conversion": {
+    "name": "Choke Conversion",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Choke Gas Lift Conversion": {
+    "name": "Choke Gas Lift Conversion",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Equipment": {
+    "name": "Equipment",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Equipment": {
+    "name": "Maintain Equipment",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Equipment Connection": {
+    "name": "Equipment Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Equipment Reference Value": {
+    "name": "Equipment Reference Value",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Test Device": {
+    "name": "Test Device",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Test Device Reference Values": {
+    "name": "Test Device Reference Values",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Carrier": {
+    "name": "Carrier",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Cargo Activity": {
+    "name": "Cargo Activity",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Cargo Account": {
+    "name": "Cargo Account",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Analysis Point": {
+    "name": "Analysis Point",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Chemical Stream Hookup": {
+    "name": "Chemical Stream Hookup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Chemical Stream": {
+    "name": "Chemical Stream",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Chemical Tank": {
+    "name": "Chemical Tank",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Chemical Transport Tank": {
+    "name": "Chemical Transport Tank",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Chemical Product": {
+    "name": "Chemical Product",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Chemical Tank Product Combination": {
+    "name": "Chemical Tank Product Combination",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Chemical Injection Point": {
+    "name": "Chemical Injection Point",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract": {
+    "name": "Contract",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Parties": {
+    "name": "Contract Parties",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Template": {
+    "name": "Contract Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Attribute Dimension Type": {
+    "name": "Contract Attribute Dimension Type",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Transport Contract Attributes": {
+    "name": "Transport Contract Attributes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Transport Contract Attributes Dimension Matrix": {
+    "name": "Transport Contract Attributes Dimension Matrix",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Sale Contract Attributes": {
+    "name": "Sale Contract Attributes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Account List": {
+    "name": "Contract Account List",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Account Template": {
+    "name": "Contract Account Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Revenue Contract Attributes": {
+    "name": "Revenue Contract Attributes",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Seasonality": {
+    "name": "Contract Seasonality",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Account": {
+    "name": "Contract Account",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Copy Contract": {
+    "name": "Copy Contract",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Area": {
+    "name": "Contract Area",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Area Setup": {
+    "name": "Contract Area Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Capacity": {
+    "name": "Contract Capacity",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Capacity Location Connection": {
+    "name": "Contract Capacity Location Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Period Capacity": {
+    "name": "Contract Period Capacity",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Profit Centre List": {
+    "name": "Contract Profit Centre List",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Profit Centre Company List": {
+    "name": "Contract Profit Centre Company List",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Expenditure Code": {
+    "name": "Contract Expenditure Code",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Inventory": {
+    "name": "Contract Inventory",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Cargo Price Element Setup": {
+    "name": "Cargo Price Element Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract - End Date": {
+    "name": "Contract - End Date",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Shipper Pair": {
+    "name": "Maintain Shipper Pair",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Carrier Cooldown": {
+    "name": "Carrier Cooldown",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Truck": {
+    "name": "Truck",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Trailer": {
+    "name": "Trailer",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Driver": {
+    "name": "Driver",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Port": {
+    "name": "Port",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Lifting Account": {
+    "name": "Lifting Account",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Initialize Lifting Account": {
+    "name": "Initialize Lifting Account",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Lifting Activity Code": {
+    "name": "Lifting Activity Code",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Product Lifting Activity Code": {
+    "name": "Product Lifting Activity Code",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Lifting Delay Code": {
+    "name": "Lifting Delay Code",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Measurement Item": {
+    "name": "Measurement Item",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Product Measurement Setup": {
+    "name": "Product Measurement Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Lifting Account Measurement Setup": {
+    "name": "Lifting Account Measurement Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Analysis Item": {
+    "name": "Analysis Item",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Product Analysis Item": {
+    "name": "Product Analysis Item",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Lifting Account Analysis Item": {
+    "name": "Lifting Account Analysis Item",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Lifting Volume Tolerance": {
+    "name": "Lifting Volume Tolerance",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Laytime Limit": {
+    "name": "Laytime Limit",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Representative": {
+    "name": "Representative",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Cargo Status Mapping": {
+    "name": "Cargo Status Mapping",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Cargo Document Template": {
+    "name": "Cargo Document Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Lifting Account Document Receiver Template": {
+    "name": "Lifting Account Document Receiver Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Lifting Account Document Instructions Template": {
+    "name": "Lifting Account Document Instructions Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Company Document Receiver Template": {
+    "name": "Company Document Receiver Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Company Document Instructions Template": {
+    "name": "Company Document Instructions Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Berth": {
+    "name": "Berth",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Lifting Account Connection": {
+    "name": "Contract Lifting Account Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Letter of Protest Template": {
+    "name": "Letter of Protest Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Harbour Dues Setup": {
+    "name": "Harbour Dues Setup",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Lifting Account Split": {
+    "name": "Contract Lifting Account Split",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Carrier": {
+    "name": "Contract Carrier",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract Port": {
+    "name": "Contract Port",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Storage Port Resource Mapping": {
+    "name": "Storage Port Resource Mapping",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Process Train Storage Yield Factor": {
+    "name": "Process Train Storage Yield Factor",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Canal Transit": {
+    "name": "Canal Transit",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Canal": {
+    "name": "Canal",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Channel": {
+    "name": "Channel",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Loading Arm": {
+    "name": "Loading Arm",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Pilot": {
+    "name": "Pilot",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Pilot Boat": {
+    "name": "Pilot Boat",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Tug Boat": {
+    "name": "Tug Boat",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Opportunities": {
+    "name": "Maintain Opportunities",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Port Resource Usage Template": {
+    "name": "Port Resource Usage Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Voyage Template": {
+    "name": "Voyage Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Leg Distances": {
+    "name": "Leg Distances",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Carrier Port Acceptance and Clearance": {
+    "name": "Carrier Port Acceptance and Clearance",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Storage Flow Rates": {
+    "name": "Storage Flow Rates",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Carrier Speed Profile": {
+    "name": "Carrier Speed Profile",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Storage Operational Limits": {
+    "name": "Storage Operational Limits",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Charter Vessel Rates": {
+    "name": "Charter Vessel Rates",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Product Spot Price": {
+    "name": "Product Spot Price",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Cargo Forms": {
+    "name": "Cargo Forms",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Inventory Constraints": {
+    "name": "Inventory Constraints",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Transport System": {
+    "name": "Transport System",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Transport Zone": {
+    "name": "Transport Zone",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Pipeline Segment": {
+    "name": "Pipeline Segment",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Delivery Point": {
+    "name": "Delivery Point",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Delivery Stream": {
+    "name": "Delivery Stream",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Meter": {
+    "name": "Meter",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Nomination Cycle": {
+    "name": "Nomination Cycle",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Nomination Point": {
+    "name": "Nomination Point",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Nomination Point Connection": {
+    "name": "Nomination Point Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Nomination Point Profit Centre List": {
+    "name": "Nomination Point Profit Centre List",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Nomination Point Profit Centre Company List": {
+    "name": "Nomination Point Profit Centre Company List",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Meter Allocation Method": {
+    "name": "Meter Allocation Method",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Nomination Point - Code Connection": {
+    "name": "Nomination Point - Code Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Nomination Location Connection": {
+    "name": "Nomination Location Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Transport Zone Connection": {
+    "name": "Transport Zone Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Transport System Location Split Keys": {
+    "name": "Transport System Location Split Keys",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Service Account List": {
+    "name": "Service Account List",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Service": {
+    "name": "Service",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Service Template": {
+    "name": "Service Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Service Account Template": {
+    "name": "Service Account Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Service Account": {
+    "name": "Service Account",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Service Type": {
+    "name": "Service Type",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Capacity Type": {
+    "name": "Capacity Type",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract/Service Event Type": {
+    "name": "Contract/Service Event Type",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Service Attribute": {
+    "name": "Service Attribute",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Transport System Price Object": {
+    "name": "Transport System Price Object",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Contract/Service Management": {
+    "name": "Contract/Service Management",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Profit Centre Company Contract Priority": {
+    "name": "Profit Centre Company Contract Priority",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Profit Centre Company Nomination Point Priority": {
+    "name": "Profit Centre Company Nomination Point Priority",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Profit Centre Company Nomination Point Priority - Bulk Update": {
+    "name": "Profit Centre Company Nomination Point Priority - Bulk Update",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Price Index": {
+    "name": "Price Index",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Price Index Factor": {
+    "name": "Price Index Factor",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Price Concept/Element": {
+    "name": "Price Concept/Element",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Price Object": {
+    "name": "Price Object",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Product Price Object": {
+    "name": "Product Price Object",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Stream Mappings": {
+    "name": "Maintain Stream Mappings",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Processing Unit": {
+    "name": "Processing Unit",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Price Rate": {
+    "name": "Price Rate",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Adapter Configuration": {
+    "name": "Adapter Configuration",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Templates": {
+    "name": "Maintain Templates",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Event Route Configuration": {
+    "name": "Event Route Configuration",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Remote Endpoint Configuration": {
+    "name": "Remote Endpoint Configuration",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Mappings": {
+    "name": "Maintain Mappings",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Mappings Overview": {
+    "name": "Maintain Mappings Overview",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Generate Tag Mappings": {
+    "name": "Generate Tag Mappings",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Transform Tag Activity": {
+    "name": "Transform Tag Activity",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Transform Process Log": {
+    "name": "Transform Process Log",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::ECIS Agent Log": {
+    "name": "ECIS Agent Log",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Tag Event Status": {
+    "name": "Tag Event Status",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Dummy Tag Event Object": {
+    "name": "Dummy Tag Event Object",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Business Actions": {
+    "name": "Business Actions",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Schedules": {
+    "name": "Schedules",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Schedule History": {
+    "name": "Schedule History",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Manage Scheduler": {
+    "name": "Manage Scheduler",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Contact Group Set": {
+    "name": "Maintain Contact Group Set",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Maintain Message Type": {
+    "name": "Maintain Message Type",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Message Group": {
+    "name": "Message Group",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Message Format": {
+    "name": "Message Format",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Freetext Message Template": {
+    "name": "Freetext Message Template",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Actor Maintenance": {
+    "name": "Actor Maintenance",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Task Process": {
+    "name": "Task Process",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Task Process Item": {
+    "name": "Task Process Item",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Business Action": {
+    "name": "Business Action",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Action Trigger": {
+    "name": "Action Trigger",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Configuration::Action Trigger Connection": {
+    "name": "Action Trigger Connection",
+    "section": "Configuration",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Daily Dashboard": {
+    "name": "Daily Dashboard",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Deferment Dashboard": {
+    "name": "Deferment Dashboard",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Production Efficiency": {
+    "name": "Production Efficiency",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Well Finder": {
+    "name": "Well Finder",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Sub Surface Connection Information": {
+    "name": "Sub Surface Connection Information",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Equipment Finder": {
+    "name": "Equipment Finder",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Stream Finder": {
+    "name": "Stream Finder",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Tank Finder": {
+    "name": "Tank Finder",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Test Device Finder": {
+    "name": "Test Device Finder",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Well Performance Curves": {
+    "name": "Well Performance Curves",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Flowline Performance Curves": {
+    "name": "Flowline Performance Curves",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Trend and Validate Test Result": {
+    "name": "Trend and Validate Test Result",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Well Decline Curves": {
+    "name": "Well Decline Curves",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Automatic Deferment Raw Data": {
+    "name": "Automatic Deferment Raw Data",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Master Events": {
+    "name": "Master Events",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Deferment": {
+    "name": "Deferment",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Deferment - by Well": {
+    "name": "Deferment - by Well",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Period Deferment Calculations": {
+    "name": "Period Deferment Calculations",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Deferment Day": {
+    "name": "Deferment Day",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Deferment Summary": {
+    "name": "Deferment Summary",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Deferment Corrective Action": {
+    "name": "Deferment Corrective Action",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Equipment Downtime": {
+    "name": "Equipment Downtime",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Daily Data Status Processes": {
+    "name": "Daily Data Status Processes",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Daily Data Status Processes - by Facility": {
+    "name": "Daily Data Status Processes - by Facility",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Daily Data Status Processes - Single Date": {
+    "name": "Daily Data Status Processes - Single Date",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Monthly Data Status Processes": {
+    "name": "Monthly Data Status Processes",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Monthly Data Locking": {
+    "name": "Monthly Data Locking",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Monthly Local Data Locking": {
+    "name": "Monthly Local Data Locking",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Period Process Calculations": {
+    "name": "Period Process Calculations",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Cargo And Parcel Information": {
+    "name": "Cargo And Parcel Information",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Cargo Load and Analysis": {
+    "name": "Cargo Load and Analysis",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Port Log": {
+    "name": "Port Log",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Monthly Account Balance Calculation": {
+    "name": "Monthly Account Balance Calculation",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Production::Analysis And Measurements": {
+    "name": "Analysis And Measurements",
+    "section": "EC Production",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Chemistry::Sample Manager": {
+    "name": "Sample Manager",
+    "section": "EC Chemistry",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Chemistry::Sample Analysis": {
+    "name": "Sample Analysis",
+    "section": "EC Chemistry",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Chemistry::Daily Analysis And Measurements": {
+    "name": "Daily Analysis And Measurements",
+    "section": "EC Chemistry",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Tab Cargo Menu": {
+    "name": "Tab Cargo Menu",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Tab Cargo Planner": {
+    "name": "Tab Cargo Planner",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Lifting Program": {
+    "name": "Lifting Program",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Lifting Program - Month": {
+    "name": "Lifting Program - Month",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Nomination Entry": {
+    "name": "Nomination Entry",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Schedule Lifting Overview - RBS": {
+    "name": "Schedule Lifting Overview - RBS",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Schedule Lifting Overview": {
+    "name": "Schedule Lifting Overview",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Schedule Lifting Chart - RBS": {
+    "name": "Schedule Lifting Chart - RBS",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Schedule Lifting Chart": {
+    "name": "Schedule Lifting Chart",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Storage and Tank Chart": {
+    "name": "Storage and Tank Chart",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Cargo Information": {
+    "name": "Cargo Information",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Nomination Details": {
+    "name": "Nomination Details",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Nomination Split": {
+    "name": "Nomination Split",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Lifting Instruction": {
+    "name": "Lifting Instruction",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Document Instruction": {
+    "name": "Document Instruction",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Storage Forecast": {
+    "name": "Daily Storage Forecast",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Entitlement RBS": {
+    "name": "Daily Entitlement RBS",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Entitlement": {
+    "name": "Daily Entitlement",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Entitlement - Single Lifting Account RBS": {
+    "name": "Daily Entitlement - Single Lifting Account RBS",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Entitlement - Single Lifting Account": {
+    "name": "Daily Entitlement - Single Lifting Account",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Entitlement - Lifting Account RBS": {
+    "name": "Daily Entitlement - Lifting Account RBS",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Entitlement - Lifting Account": {
+    "name": "Daily Entitlement - Lifting Account",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Estimated Monthly Account Status": {
+    "name": "Estimated Monthly Account Status",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Monthly Schedule Overview": {
+    "name": "Monthly Schedule Overview",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Monthly Storage Profit Centre Forecast": {
+    "name": "Monthly Storage Profit Centre Forecast",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Storage Profit Centre Forecast": {
+    "name": "Daily Storage Profit Centre Forecast",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Official Daily Receipt": {
+    "name": "Official Daily Receipt",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Period Process Train Storage Yield": {
+    "name": "Period Process Train Storage Yield",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Process Train Event": {
+    "name": "Process Train Event",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Contract KPI Monitoring": {
+    "name": "Contract KPI Monitoring",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Carrier Availability": {
+    "name": "Carrier Availability",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Contract Delivery Tracking": {
+    "name": "Contract Delivery Tracking",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Rundown Actuals vs. Forecast": {
+    "name": "Daily Rundown Actuals vs. Forecast",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Rundown Total Actuals vs. Forecast": {
+    "name": "Daily Rundown Total Actuals vs. Forecast",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Monthly Reference Entitlement": {
+    "name": "Monthly Reference Entitlement",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Berth Slot Calendar": {
+    "name": "Berth Slot Calendar",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Lifting Account Entitlement Chart RBS": {
+    "name": "Lifting Account Entitlement Chart RBS",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Lifting Account Entitlement Chart": {
+    "name": "Lifting Account Entitlement Chart",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Carrier Maintenance": {
+    "name": "Carrier Maintenance",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Port Weather Information": {
+    "name": "Port Weather Information",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Parcel Nomination": {
+    "name": "Parcel Nomination",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Master Plan": {
+    "name": "Master Plan",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Tab Harbour Menu": {
+    "name": "Tab Harbour Menu",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Vehicle Log": {
+    "name": "Vehicle Log",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Tab Cargo Operations": {
+    "name": "Tab Cargo Operations",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Batch Quantity": {
+    "name": "Batch Quantity",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::BL/MR Info": {
+    "name": "BL/MR Info",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::BL/MR Light": {
+    "name": "BL/MR Light",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Cargo Analysis": {
+    "name": "Cargo Analysis",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Cargo Activity Timesheet": {
+    "name": "Cargo Activity Timesheet",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Terminal Operation Delays": {
+    "name": "Terminal Operation Delays",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Harbour Interruption": {
+    "name": "Harbour Interruption",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Harbour Dues": {
+    "name": "Harbour Dues",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Ship Info and Ullages": {
+    "name": "Ship Info and Ullages",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Demurrage": {
+    "name": "Demurrage",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Day End Not Lifted": {
+    "name": "Day End Not Lifted",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Month End Not Lifted": {
+    "name": "Month End Not Lifted",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Nomination Closing Balance": {
+    "name": "Nomination Closing Balance",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Letter of Protest": {
+    "name": "Letter of Protest",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Cargo Document": {
+    "name": "Cargo Document",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Cargo Document Parcel": {
+    "name": "Cargo Document Parcel",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Cargo Document Other": {
+    "name": "Cargo Document Other",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Sailing Advice": {
+    "name": "Sailing Advice",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Batch Quantity Unload": {
+    "name": "Batch Quantity Unload",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Unload Info": {
+    "name": "Unload Info",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Cargo Analysis Unload": {
+    "name": "Cargo Analysis Unload",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Cargo Activity Timesheet Unload": {
+    "name": "Cargo Activity Timesheet Unload",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Terminal Operation Unload Delays": {
+    "name": "Terminal Operation Unload Delays",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Demurrage Unload": {
+    "name": "Demurrage Unload",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Port Resource Usage": {
+    "name": "Port Resource Usage",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Port Resources Restriction": {
+    "name": "Port Resources Restriction",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Marine Notices": {
+    "name": "Marine Notices",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Capacity Adjustment": {
+    "name": "Daily Capacity Adjustment",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Contract Capacity Request": {
+    "name": "Daily Contract Capacity Request",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Sub Daily - Lifting Account Adjustment": {
+    "name": "Sub Daily - Lifting Account Adjustment",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Lifting Account Adjustment": {
+    "name": "Lifting Account Adjustment",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Monthly Account Status": {
+    "name": "Monthly Account Status",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast": {
+    "name": "Forecast",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Input Contract": {
+    "name": "Forecast Input Contract",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Input Delivery Point": {
+    "name": "Forecast Input Delivery Point",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Input Nomination Point": {
+    "name": "Forecast Input Nomination Point",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Input Nomination Location": {
+    "name": "Forecast Input Nomination Location",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Monthly Input Nomination Location": {
+    "name": "Forecast Monthly Input Nomination Location",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Analysis Contract": {
+    "name": "Forecast Analysis Contract",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Analysis Delivery Point": {
+    "name": "Forecast Analysis Delivery Point",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Analysis Nomination Point": {
+    "name": "Forecast Analysis Nomination Point",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Calculate Forecast": {
+    "name": "Calculate Forecast",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Daily Operational Restriction": {
+    "name": "Forecast Daily Operational Restriction",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Period Operational Restriction": {
+    "name": "Forecast Period Operational Restriction",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Period Component Recovery Factors": {
+    "name": "Forecast Period Component Recovery Factors",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Period Product Component Recovery Factors": {
+    "name": "Forecast Period Product Component Recovery Factors",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily AFS": {
+    "name": "Daily AFS",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Daily Nomination Point AFS": {
+    "name": "Daily Nomination Point AFS",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Monthly AFS Chart": {
+    "name": "Monthly AFS Chart",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Forecast Contract Capacity Factors": {
+    "name": "Forecast Contract Capacity Factors",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Contract Bundle Transfer": {
+    "name": "Contract Bundle Transfer",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Output Nomination": {
+    "name": "Output Nomination",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Input Nomination": {
+    "name": "Input Nomination",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Exit Point Matching": {
+    "name": "Exit Point Matching",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Aggregated Exit Point Matching": {
+    "name": "Aggregated Exit Point Matching",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Delivery Point Target": {
+    "name": "Delivery Point Target",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Monthly Transport Factors": {
+    "name": "Monthly Transport Factors",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Pipeline Trading Request": {
+    "name": "Pipeline Trading Request",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Pipeline Trading Confirmation": {
+    "name": "Pipeline Trading Confirmation",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Create Output Nomination Message": {
+    "name": "Create Output Nomination Message",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Sub Daily Delivery Calculations": {
+    "name": "Sub Daily Delivery Calculations",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Transport::Sub Daily Estimate Calculations": {
+    "name": "Sub Daily Estimate Calculations",
+    "section": "EC Transport",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Gas Sales Forecast": {
+    "name": "Daily Gas Sales Forecast",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Forecast": {
+    "name": "Monthly Forecast",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Nomination": {
+    "name": "Daily Nomination",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Re-Nomination": {
+    "name": "Daily Re-Nomination",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Delivery": {
+    "name": "Daily Delivery",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Delivery": {
+    "name": "Monthly Delivery",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Profit Centre Delivery": {
+    "name": "Daily Profit Centre Delivery",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Profit Centre Delivery": {
+    "name": "Monthly Profit Centre Delivery",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Gas Delivery Events": {
+    "name": "Gas Delivery Events",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Forecast Component Analysis": {
+    "name": "Forecast Component Analysis",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Delivery Component Analysis": {
+    "name": "Delivery Component Analysis",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Planned Delivery Restrictions": {
+    "name": "Planned Delivery Restrictions",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Wet Gas Export and Fuel": {
+    "name": "Wet Gas Export and Fuel",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::NGL Export": {
+    "name": "NGL Export",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Wet Gas Hourly Profile": {
+    "name": "Wet Gas Hourly Profile",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Availability": {
+    "name": "Daily Availability",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Nomination Overview": {
+    "name": "Daily Nomination Overview",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Before Day Target": {
+    "name": "Before Day Target",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Within Day Target": {
+    "name": "Within Day Target",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Dry Gas Flow Profile": {
+    "name": "Daily Dry Gas Flow Profile",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Unit Price": {
+    "name": "Unit Price",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Exchange Rates": {
+    "name": "Exchange Rates",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Product Price List": {
+    "name": "Product Price List",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Sub Daily Product Price List": {
+    "name": "Sub Daily Product Price List",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Contract Price List": {
+    "name": "Contract Price List",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Contract Price List - Dataset": {
+    "name": "Contract Price List - Dataset",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Contract Location Price List - Dataset": {
+    "name": "Contract Location Price List - Dataset",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Sub Daily Contract Price List": {
+    "name": "Sub Daily Contract Price List",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Cargo Price List": {
+    "name": "Cargo Price List",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Cargo/Parcel Price List": {
+    "name": "Cargo/Parcel Price List",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Cargo Price List - Dataset": {
+    "name": "Cargo Price List - Dataset",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Price Component": {
+    "name": "Price Component",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Price Index": {
+    "name": "Daily Price Index",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Price Index - Dataset": {
+    "name": "Daily Price Index - Dataset",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Price Index - Dataset and Price Object": {
+    "name": "Daily Price Index - Dataset and Price Object",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Sub Daily Price Index": {
+    "name": "Sub Daily Price Index",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Price Index": {
+    "name": "Monthly Price Index",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Product Price List - Dataset": {
+    "name": "Product Price List - Dataset",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Price Index - Dataset": {
+    "name": "Monthly Price Index - Dataset",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Price Index - Dataset and Price Object": {
+    "name": "Monthly Price Index - Dataset and Price Object",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Price Index Forecast": {
+    "name": "Monthly Price Index Forecast",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Yearly Price Index": {
+    "name": "Yearly Price Index",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Price Calculations": {
+    "name": "Price Calculations",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Price Calculations - by Price Object": {
+    "name": "Price Calculations - by Price Object",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Contract Cargo Elements": {
+    "name": "Contract Cargo Elements",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Price Rate": {
+    "name": "Daily Price Rate",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Price Rate - Dataset": {
+    "name": "Daily Price Rate - Dataset",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Price Rate - Dataset and Price Object": {
+    "name": "Daily Price Rate - Dataset and Price Object",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Price Rate": {
+    "name": "Monthly Price Rate",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Price Rate - Dataset": {
+    "name": "Monthly Price Rate - Dataset",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Price Rate - Dataset and Price Object": {
+    "name": "Monthly Price Rate - Dataset and Price Object",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Yearly Price Rate": {
+    "name": "Yearly Price Rate",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Matrix Price List": {
+    "name": "Matrix Price List",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Contract Calculation": {
+    "name": "Daily Contract Calculation",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Contract Calculation - by Contract": {
+    "name": "Daily Contract Calculation - by Contract",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Contract Calculation": {
+    "name": "Monthly Contract Calculation",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Contract Calculation - by Contract": {
+    "name": "Monthly Contract Calculation - by Contract",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Yearly Contract Calculation": {
+    "name": "Yearly Contract Calculation",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Yearly Contract Calculation - by Contract": {
+    "name": "Yearly Contract Calculation - by Contract",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Contract Allocation Adjustment": {
+    "name": "Monthly Contract Allocation Adjustment",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Sub Daily Contract Account Status": {
+    "name": "Sub Daily Contract Account Status",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Contract Account Company Status": {
+    "name": "Monthly Contract Account Company Status",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Contract Account Events": {
+    "name": "Daily Contract Account Events",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Contract Account Events": {
+    "name": "Monthly Contract Account Events",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Yearly Contract Account Events": {
+    "name": "Yearly Contract Account Events",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Expenditure Forecast": {
+    "name": "Monthly Expenditure Forecast",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Expenditure": {
+    "name": "Monthly Expenditure",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Cargo Contract Account Status": {
+    "name": "Cargo Contract Account Status",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Contractual Volume": {
+    "name": "Daily Contractual Volume",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Contractual Volume": {
+    "name": "Monthly Contractual Volume",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Period Contract Lifting": {
+    "name": "Period Contract Lifting",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Daily Contract Account Status": {
+    "name": "Daily Contract Account Status",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Monthly Contract Account Status": {
+    "name": "Monthly Contract Account Status",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Sales::Yearly Contract Account Status": {
+    "name": "Yearly Contract Account Status",
+    "section": "EC Sales",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Document Tracing": {
+    "name": "Document Tracing",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Visual Tracing": {
+    "name": "Visual Tracing",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Document Finder": {
+    "name": "Document Finder",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Period Document": {
+    "name": "Period Document",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::ERP Document": {
+    "name": "ERP Document",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Payment Tracking": {
+    "name": "Payment Tracking",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Interface Files": {
+    "name": "Interface Files",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Cargo Data": {
+    "name": "Cargo Data",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Data Entry Interface": {
+    "name": "Data Entry Interface",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Project Data Entry": {
+    "name": "Project Data Entry",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Data Entry Reconciliation": {
+    "name": "Data Entry Reconciliation",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Project Data Mapping": {
+    "name": "Project Data Mapping",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Project Data Mapping Accrual": {
+    "name": "Project Data Mapping Accrual",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Project Data Extract": {
+    "name": "Project Data Extract",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Project Data Extract Accrual": {
+    "name": "Project Data Extract Accrual",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Project Data Extract By Year": {
+    "name": "Project Data Extract By Year",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Project Data Extract For 10 Years": {
+    "name": "Project Data Extract For 10 Years",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Cost of Service": {
+    "name": "Cost of Service",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Revenue Lock Module": {
+    "name": "Revenue Lock Module",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Revenue Booking Period - Close": {
+    "name": "Revenue Booking Period - Close",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Revenue Reporting Period - Close": {
+    "name": "Revenue Reporting Period - Close",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Revenue Booking Period - Re-open": {
+    "name": "Revenue Booking Period - Re-open",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Revenue Reporting Period - Re-open": {
+    "name": "Revenue Reporting Period - Re-open",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Revenue Detailed Log": {
+    "name": "Revenue Detailed Log",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Calculation Log": {
+    "name": "Calculation Log",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Financial Item Definition": {
+    "name": "Financial Item Definition",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Financial Item Template": {
+    "name": "Financial Item Template",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Daily Financial Item": {
+    "name": "Daily Financial Item",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Daily Financial Item Calculation": {
+    "name": "Daily Financial Item Calculation",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Monthly Financial Item": {
+    "name": "Monthly Financial Item",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Monthly Financial Item Calculation": {
+    "name": "Monthly Financial Item Calculation",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Yearly Financial Item": {
+    "name": "Yearly Financial Item",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "EC Revenue::Yearly Financial Item Calculation": {
+    "name": "Yearly Financial Item Calculation",
+    "section": "EC Revenue",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Report Context": {
+    "name": "Report Context",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Excel Report Objects": {
+    "name": "Excel Report Objects",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Excel Report Sets": {
+    "name": "Excel Report Sets",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Report Area": {
+    "name": "Report Area",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Report and Analytics": {
+    "name": "Report and Analytics",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Report Template": {
+    "name": "Report Template",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Report Definition": {
+    "name": "Report Definition",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Report Administration": {
+    "name": "Report Administration",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Report Generation": {
+    "name": "Report Generation",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Report Set Administration": {
+    "name": "Report Set Administration",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Report Queue Status": {
+    "name": "Report Queue Status",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Export to Excel Express": {
+    "name": "Export to Excel Express",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Report Publishing": {
+    "name": "Report Publishing",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Reporting::Display Published Report": {
+    "name": "Display Published Report",
+    "section": "Reporting",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Project Management": {
+    "name": "Project Management",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Process Action": {
+    "name": "Process Action",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Process Template": {
+    "name": "Process Template",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Process Execution": {
+    "name": "Process Execution",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Process Overview": {
+    "name": "Process Overview",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Process Overview Configuration": {
+    "name": "Process Overview Configuration",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Process Overview Legacy": {
+    "name": "Process Overview Legacy",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Todo List": {
+    "name": "Todo List",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Task Management": {
+    "name": "Task Management",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Process Notifications": {
+    "name": "Process Notifications",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Process Monitor": {
+    "name": "Process Monitor",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Process Monitor Configuration": {
+    "name": "Process Monitor Configuration",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Process Automation::Viewer Tag": {
+    "name": "Viewer Tag",
+    "section": "Process Automation",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::EDI Address": {
+    "name": "EDI Address",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Value Mapping Maintenance": {
+    "name": "Value Mapping Maintenance",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Distribution List": {
+    "name": "Distribution List",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Send Freetext Message": {
+    "name": "Send Freetext Message",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Communication Status": {
+    "name": "Communication Status",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Message Alerts": {
+    "name": "Message Alerts",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Message Distribution": {
+    "name": "Message Distribution",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Message Group List": {
+    "name": "Message Group List",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Outgoing Messages": {
+    "name": "Outgoing Messages",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Incoming Messages": {
+    "name": "Incoming Messages",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Message Journal": {
+    "name": "Message Journal",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Message Workflow Overview": {
+    "name": "Message Workflow Overview",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Message Generation": {
+    "name": "Message Generation",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Messaging::Manage Outgoing Messages": {
+    "name": "Manage Outgoing Messages",
+    "section": "Messaging",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Task List::Four Eye Approval": {
+    "name": "Four Eye Approval",
+    "section": "Task List",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  },
+  "Task List::Logbook": {
+    "name": "Logbook",
+    "section": "Task List",
+    "found": false,
+    "screen_type": "NOT_FOUND"
+  }
+}

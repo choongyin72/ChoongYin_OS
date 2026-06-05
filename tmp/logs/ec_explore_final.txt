@@ -1,0 +1,50 @@
+Total screens to explore: 670
+
+Logged in
+
+  001[?         ]---[N] Authentication Audit     |ACTION/EMPTY      |dt=0|nav=[]|cols=[]|"Authentication Audit"
+  002[?         ]---[Y] Object Partition         |NAVIGATOR-ONLY    |dt=0|nav=[]|cols=[]|"Object Partition"
+  003[?         ]---[Y] Analytics Object Access  |NAVIGATOR-ONLY    |dt=0|nav=[]|cols=[]|"Analytics Object Acc"
+  004 SKIP  [Configuratio] Account Settings
+  005 SKIP  [Configuratio] User Maintenance
+  006 SKIP  [Configuratio] Role Maintenance
+  007 SKIP  [Configuratio] Group Maintenance
+  008 SKIP  [Configuratio] Object Maintenance
+  009 SKIP  [Configuratio] Role Users
+  010 SKIP  [Configuratio] Group Users
+  011 SKIP  [Configuratio] Maintain System Settings
+  012 SKIP  [Configuratio] Maintain User Settings
+  013 SKIP  [Configuratio] Personal Settings
+  014 SKIP  [Configuratio] Create Preference
+  015 SKIP  [Configuratio] EC Codes - All
+  016 SKIP  [Configuratio] EC Codes - Non-System Codes
+  017 SKIP  [Configuratio] EC Codes - System Codes
+  018 SKIP  [Configuratio] EC Code Object
+  019 SKIP  [Configuratio] System Attributes
+  020 SKIP  [Configuratio] PKI Signature Verification
+  021 SKIP  [Configuratio] Class Configuration
+  022 SKIP  [Configuratio] Class Attribute Configuration
+  023 SKIP  [Configuratio] Class Attribute Presentation Config
+  053 SKIP  [Configuratio] Configuration Export
+  103 SKIP  [Configuratio] Product
+  153 SKIP  [Configuratio] Process Train
+  203 SKIP  [Configuratio] Maintain Wells
+  253 SKIP  [Configuratio] Contract Profit Centre Company List
+  303 SKIP  [Configuratio] Leg Distances
+  353 SKIP  [Configuratio] Remote Endpoint Configuration
+  403 SKIP  [EC Productio] Monthly Data Locking
+  453 SKIP  [EC Transport] Port Weather Information
+  503 SKIP  [EC Transport] Forecast Period Component Recovery Factors
+  553 SKIP  [EC Sales] Daily Price Index
+  603 SKIP  [EC Revenue] Data Entry Interface
+  653 SKIP  [Process Auto] Process Monitor Configuration
+
+======================================================================
+COMPLETE: 3 navigated | 667 skipped | Total: 670
+
+--- ACTION/EMPTY (1) ---
+  -- [?           ] Authentication Audit           nav=[] cols=[]
+
+--- NAVIGATOR-ONLY (2) ---
+  -- [?           ] Object Partition               nav=[] cols=[]
+  -- [?           ] Analytics Object Access        nav=[] cols=[]
