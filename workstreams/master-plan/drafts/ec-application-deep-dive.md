@@ -963,13 +963,44 @@ BEGIN ecdp_generate.generate('ZWT_TABLE', EcDp_Generate.PACKAGES+EcDp_Generate.A
 
 ---
 
-## Session E — Business Domain (2026-06-05)
+## Session E — Business Domain (2026-06-05) [ENHANCED — all 5 sources]
+
+**Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
 
 **Items:** #22 Production Well/Stream/Tank | #23 Hydrocarbon Accounting | #24 Daily+Monthly Allocation BPM
 
 ---
 
 ### Item #22: Production Well/Stream/Tank (7→9) ✅
+
+**EC production object hierarchy:**
+```
+Field
+ └── Facility (Platform / Processing Plant)
+      ├── Well (physical wellbore — producer or injector)
+      ├── Stream (flow path — connects wells/facilities/tanks)
+      └── Tank (storage vessel — holds product before export)
+```
+
+**Polar Bear reference config (ECpedia — best practice pattern):**
+- 2 fields (North + South) → 1 platform → multiple wells by type:
+  - **OP** = Oil Producer, **GI** = Gas Injector, **WI** = Water Injector
+- Oil stored in tank (no export yet in sandbox); gas and water follow separate streams
+- Stream Node Diagram (SND) shows the full allocation network visually
+
+**EC Business Function codes for well/stream operations:**
+| Module | Code | Description |
+|---|---|---|
+| Production Operation | PO.0001 | Daily Oil Stream Status |
+| Production Operation | PO.0002 | Daily Gas Stream Status |
+| Production Operation | PO.0003 | Daily Water Stream Status |
+| Production Operation | PO.0059 | Daily Oil Stream Status by Stream |
+| Well & Reservoir | WR.0001 | Daily Production Well Status 1 |
+| Well & Reservoir | WR.0002 | Daily Gas Injection Well Status |
+| Well & Reservoir | WR.0003 | Daily Water Injection Well Status |
+| Well & Reservoir | WR.0088 | Maintain Well Status |
+| Production Testing | PT.0005 | Production Test Define |
+| Production Testing | PT.0021 | Automated Production Test |
 
 **Three core production object types in EC:**
 
@@ -1009,113 +1040,202 @@ zwt_prod_well_theoretical.getGasEnergyMonth(well_id, daytime)
 ```
 Unified evaluation pattern — same signature for well/stream/tank/facility objects.
 
-**Key insight:** Well → Stream → Facility is EC's production hierarchy. PVT-based back-allocation splits commingled stream volumes to source wells. Woodside adds theoretical calculation extensions on top.
+**Stream closing daytime pattern (`StreamDefaultValueHelper.java`):**
+```java
+// Calls Oracle PL/SQL function to get last stream closing event
+SELECT to_char(EcDp_Stream_Event.getLastClosingDaytime(
+    ?, ?, to_date(?,'yyyy-mm-dd"T"hh24:mi:ss')),
+    'yyyy-mm-dd"T"hh24:mi:ss') FROM dual
+-- Same pattern exists for Well: EcDp_Well_Event.getLastClosingDaytime()
+```
+Closing daytime = when a well/stream was last "closed" (i.e., a production period ended). Used as the default date on data entry screens.
+
+**Time scope codes (from XSD class model):**
+`1HR, 2HR, DAY, WEEK, MTH, QTR, YR, VERSIONED, EVENT, NONE, INVARIANT, SAMPLE`
+Every data class is assigned a time scope — determines how production data is bucketed.
+
+**Well PVT split calculation (`EcBsWellSplit.java`):**
+```sql
+SELECT OBJECT_ID, RESULT_NO,
+       THEOR_NET_OIL_RATE, THEOR_GAS_RATE,
+       THEOR_NET_COND_RATE, THEOR_WATER_RATE
+FROM TV_PVT_PT_THEOR_WELLS WHERE RESULT_NO = ?
+```
+Splits commingled stream volumes back to individual wells using PVT theoretical rates.
+
+**Tank export stream pattern:**
+Every tank has an export stream — `tank_version.export_stream_id`. TankDefaultValueHelper resolves this at runtime to link tank data entry to the correct outflow stream.
+
+**Stream Node Diagram (SND):**
+`StreamNodeDiagramModel.java` + `StreamNodeDiagramAction.java` — renders the production network as a directed graph. Nodes are wells/facilities/tanks; edges are streams. Filter transformers (`NetworkFilterTransformer`, `GroupTransformer`, `DynamicQueryTransformer`) allow different views of the same network.
+
+**Woodside extension functions (ZWT — unified evaluation):**
+```
+zwt_prod_stream_formula.evaluateMethod(p_object_type, p_object_id, p_method, p_daytime, p_to_date, p_stream_id)
+zwt_prod_well_theoretical.findGasOilRatio(well_id, daytime)   -- GOR at standard conditions
+zwt_prod_well_theoretical.findGCV(well_id, daytime)           -- Gross Calorific Value
+zwt_prod_well_theoretical.getGasEnergyMonth(well_id, daytime) -- energy content of gas (monthly)
+```
+GCV converts gas volumes to energy (GJ/MMBtu) — critical for LNG and sales accounting.
+
+**Industry context (web):**
+Best-in-class upstream systems model wells, meters, tanks as interconnected "objects" with date-effective records, run tickets, well tests, and flexible formulas — exactly EC's pattern. Central data warehouse approach ensures production volumes feed directly into financials without re-keying.
+
+**Key insight:** Well → Stream → Facility is EC's production hierarchy. Wells produce into streams; streams flow to facilities or tanks. PVT-based back-allocation splits commingled stream volumes to source wells. Stream Node Diagram provides the visual representation of the entire allocation network.
 
 ---
 
 ### Item #23: Hydrocarbon Accounting (5→9) ✅
 
-**HC accounting in EC is NOT a single module — it is distributed across three subsystems:**
+**What HC accounting covers (industry + EC context):**
+- Field operations: well tests, meter readings, tank dipping
+- Volumetric allocation: splitting commingled volumes to owners/wells
+- Contractual allocation: applying ownership percentages
+- Data lifecycle: Provisional → Verified → Approved
+- Revenue distribution, royalty management, regulatory reporting
+
+**EC business functions for HC accounting (HA.* module):**
+| Code | Description |
+|---|---|
+| HA.0001 | Daily Data Status Processes |
+| HA.0002 | Daily Allocation |
+| HA.0003 | Monthly Allocation |
+| HA.0010 | Daily Allocation — Single Date |
+| HA.0011 | Daily Data Status Processes — Single Date |
+
+**HC accounting in EC = three decoupled subsystems:**
 
 | Subsystem | Role |
 |---|---|
-| Allocation Network | Defines how volumes flow and split across the production network |
-| Calculation Engine | Computes daily/monthly volumes (oil, gas, condensate, water) |
-| Data Lifecycle (BPM) | Controls the Production → Verified → Approved workflow |
+| Allocation Network (`ALLOC_NETWORK`) | Network topology — which streams/wells contribute to which nodes |
+| Calculation Engine | Computes volumes: daily (`ZXIC_DAILY_VOLUME`) and monthly (`ZXIC_MONTHLY_VOLUME`) |
+| Data Lifecycle (BPM) | Controls Provisional → Verified → Approved state transitions |
 
-**Allocation Network (`ALLOC_NETWORK` table):**
-- Defines the network topology — which streams/wells contribute to which allocation nodes
-- Woodside Pluto uses network code: `AN_SHN` (Shenzi network)
-- Links to a calculation: `ZXIC_DAILY_VOLUME` (daily) or `ZXIC_MONTHLY_VOLUME` (monthly)
+**Allocation Network:**
+- `ALLOC_NETWORK` defines the production network graph for allocation
+- Each network links to a calculation object: the engine that runs the actual volume calculations
+- Woodside Pluto: network code `AN_SHN` (Shenzi network) → calc `ZXIC_DAILY_VOLUME` / `ZXIC_MONTHLY_VOLUME`
+- Network has `include_subgroups` flag — controls whether sub-group wells are included in allocation
 
-**HC phases tracked:**
-| Phase | Column |
-|---|---|
-| Oil | `THEOR_NET_OIL_RATE` |
-| Gas | `THEOR_GAS_RATE` |
-| Condensate | `THEOR_NET_COND_RATE` |
-| Water | `THEOR_WATER_RATE` |
+**HC phases tracked in EC:**
+| Phase | Attribute example | Notes |
+|---|---|---|
+| Oil | `THEOR_NET_OIL_RATE` | Net after water cut |
+| Gas | `THEOR_GAS_RATE` | Total gas rate |
+| Condensate | `THEOR_NET_COND_RATE` | NGL/condensate |
+| Water | `THEOR_WATER_RATE` | Tracked even though not HC — affects ratios |
 
-Water is tracked for production accounting even though it is not a hydrocarbon — it affects allocation ratios.
-
-**Data lifecycle state codes (Woodside Pluto):**
+**Data lifecycle state codes (Woodside Pluto — project-specific):**
 ```
-D_SHENZI_P_TO_V  — Production → Verified   (daily verification)
-D_SHENZI_V_TO_A  — Verified → Approved     (monthly approval)
+D_SHENZI_P_TO_V  — Provisional → Verified   (daily step, run by Daily Data Status Process HA.0001)
+D_SHENZI_V_TO_A  — Verified → Approved      (monthly step, run by approval in BPM)
 ```
-These are passed as parameters into the BPM process — allows project-specific state machines without changing the core EC BPM code.
+State codes are passed as BPM parameters — the core EC BPMN process does not change between projects.
+
+**"Work by Exception" principle (ECpedia + EC Tech Docs):**
+No manual user interaction required if everything is within expected range. Users only get tasks when:
+- Check rules fail (warning/error)
+- Reports need verification/approval
+- A step encounters an error
+
+**Ghost Data Cleanup (mentioned in both daily and monthly BPM docs):**
+Before running allocation, EC optionally removes "ghost" data — orphan records from previous cancelled or partial allocation runs. Prevents double-counting. A step in both daily and monthly BPM.
 
 **Woodside-specific HC calculations:**
 ```
-zwt_prod_well_theoretical.getGasEnergyMonth()  — energy content of gas (monthly)
+zwt_prod_well_theoretical.getGasEnergyMonth()  — energy content of gas (monthly, GJ/MMBtu)
 zwt_prod_well_theoretical.findGasOilRatio()    — GOR at standard conditions
 zwt_prod_well_theoretical.findGCV()            — Gross Calorific Value
 ```
-GCV is used to convert gas volumes to energy (GJ or MMBtu) — important for LNG and sales accounting.
 
-**Key insight:** HC accounting = Allocation Network topology + Calculation execution + BPM lifecycle. The three subsystems are decoupled — network topology is config, calculations are triggered by BPM, lifecycle states are project-specific parameters.
+**Key insight:** HC accounting = network topology config + calculation engine execution + BPM lifecycle control. These three are deliberately decoupled: you can change the allocation calculation without touching the BPM, and change the state workflow without touching the network. Woodside injects project-specific codes at the BPM parameter level.
 
 ---
 
 ### Item #24: Daily + Monthly Allocation BPM (5→9) ✅
 
+**EC BPM foundation:**
+- Introduced in **EC10** (jBPM engine), BPMN 2.0 support from **EC11**
+- Current engine: **jBPM 7.74.1.Final** (EC 14.2.1+)
+- Designed in Eclipse 2023-12 + BPMN2 Modeler plugin 1.5.4-202212
+- Deployed via "Project Management" business function (PA.0013)
+- Executed via "Process Execution" business function (PA.0003)
+- Core principle: **"Work by Exception"** — no manual steps unless something fails
+
+**Deployment steps (EC Tech Docs):**
+1. Download BPM artifacts from Nexus: `downloads/com/ec/prod/prod-bpm-building-blocks`
+2. In EC → Project Management (PA.0013) → Add record (GroupId=`com.ec.bpm`, ArtifactId=`prod-bpm-building-blocks`)
+3. Upload and Deploy → artifacts appear in Project Management
+4. Configure Process Template → execute from Process Execution (PA.0003)
+
 **Two core BPMN processes:**
 
-| Process | ID | Trigger | Calc |
+| Process | ID | Woodside Trigger | Calc |
 |---|---|---|---|
-| Daily Allocation | `ECProd_DailyProductionAllocation` | CRON `0 0 7 ? * * *` (7 AM CET) | `ZXIC_DAILY_VOLUME` |
-| Monthly Allocation | `ECProd_MonthlyProductionAllocation` | Manual / scheduled | `ZXIC_MONTHLY_VOLUME` |
+| Daily Allocation | `ECProd_DailyProductionAllocation` | CRON `0 0 7 ? * * *` (7 AM CET, runs for YESTERDAY) | `ZXIC_DAILY_VOLUME` |
+| Monthly Allocation | `ECProd_MonthlyProductionAllocation` | Manual / scheduled monthly | `ZXIC_MONTHLY_VOLUME` |
 
-**Daily Allocation process variables (key subset):**
-```
-alloc_net_code          = AN_SHN           (allocation network)
-calc_id                 = ZXIC_DAILY_VOLUME
-production_day          = YESTERDAY + MIDNIGHT (macro)
-run_pre_checks          = Y
-run_allocation          = Y
-run_reports             = Y
-send_email              = Y
-data_verification_status_process = D_SHENZI_P_TO_V
-include_subgroups       = N
-```
+**Daily BPM sub-steps (in order, all optional except input init/validation):**
+1. **Input data initialization** (mandatory)
+2. **Input validation** (mandatory) — checks concurrent runs, resolves network/dates
+3. Run data pre-checks — Check Rules + object/class validation
+4. Run data verification — Provisional → Verified (`D_SHENZI_P_TO_V`)
+5. Run allocation — executes `ZXIC_DAILY_VOLUME` calculation
+6. Ghost Data Cleanup — removes orphan records from cancelled prior runs
+7. Run report process — generates Daily Production Report
+8. Approve allocation process
 
-**Monthly Allocation adds over daily:**
-```
-data_approval_status_process = D_SHENZI_V_TO_A  (extra approval step)
-verify_reports          = Y
-role_verify_reports     = SYST.ADM
-role_approve_reports    = SYST.ADM
-```
+**Monthly BPM adds over daily:**
+- Run Data Approval — Verified → Approved (`D_SHENZI_V_TO_A`)
+- **Month Lock user task** — user confirms data is ready to lock
+- `perform_data_locking = Y` — locks the monthly period after approval
+- `ask_rerun_alloc_pre_data_approval = N` — skip rerun prompt by default
+- `data_approval_auto_run = Y` — auto-run approval without manual trigger
+- Screen link: `/com.ec.prod.ha.screens/mth_data_lock` (Monthly Data Lock screen)
 
-**Sub-processes (building blocks):**
-| Sub-process | Purpose |
+**All BPM building blocks (ECpedia):**
+| Building Block | Description |
 |---|---|
-| `ECProd_AllocInputValidation` | Validates inputs, initialises variables, checks for concurrent runs |
-| `ECProd_RunReports` | Executes configured report set |
-| `ECProd_VerifyApproveProcess` | Handles Production→Verified→Approved state transitions |
+| `ECProd_AllocInputValidation` | Input validation for allocation; resolves alloc_net_id, start/end dates, created_by |
+| `ECProd_RunReports` | Run report + optional Verify/Approve by stakeholders |
+| `ECProd_VerifyApproveProcess` | Data status transitions (Verified/Approved/Approve Allocation) |
+| `EC_CheckRuleWithErrorHandling` | Check rule run + user task routing for warning/error |
+| `EC_RunCalculation` | Run a calculation |
+| `EC_RunCalculationWithErrorHandling` | Run calculation + handle warning/error user tasks |
+| `EC_RunCheckRules` | Run check rules |
+| `EC_RunReport` | Run a single report |
+| `EC_CreateEmailNotification` | Send email to user/role/contact group |
 
-**`ECProd_AllocInputValidation` outputs:**
-- `alloc_net_id` (resolved from `alloc_net_code`)
-- `start_date`, `end_date` (resolved from `production_day`)
-- `created_by` (resolved from session)
-- Validates no concurrent allocation is running (`RunningProcesses` check)
-
-**Error handling — three levels:**
-| Level | Role variable | Action |
+**Error handling — three levels (configured via role parameters):**
+| Level | Woodside role | Behaviour |
 |---|---|---|
-| Fatal | `role_handle_alloc_fatal_error` | Stops process, assigns task to role |
-| Non-fatal | `role_handle_alloc_nonfatal_error` | Assigns task, process can continue |
-| Warning | `role_handle_alloc_warning` | Notifies role, no stop |
+| Fatal | `role_handle_alloc_fatal_error = SYST.ADM` | Stops process; assigns task to role |
+| Non-fatal | `role_handle_alloc_nonfatal_error = SYST.ADM` | Assigns task; process can continue |
+| Warning | `role_handle_alloc_warning = SYST.ADM` | Notifies role; no stop |
 
-All errors use EC's standard `ecbpm_action_error` error code — caught and routed by the BPMN error boundary events.
-
-**Woodside BPM deployment:**
-```
+**Woodside BPM configuration (from V1.0.0.1600 and V1.0.0.1700 SQL):**
+```sql
+-- Registered as TV_BUSINESS_ACTION_JBPM
 JBPM Deployment: com.ec.woodside:WSTEMPLATE:1.0
-Business Action class: com.ec.bpm.ext.ec.web.energyx.process_template.actions.StartProcessInstanceBusinessAction
-```
-Woodside wraps the EC standard BPM process via a Business Action — no BPMN changes, configuration-driven.
+Action class:    StartProcessInstanceBusinessAction
+Functional area: EC
 
-**Key insight:** EC BPM is configuration-driven — same BPMN process, different parameters per project. Woodside injects project-specific network codes, calc IDs, and state codes via Business Action parameters. The daily allocation BPM automatically runs at 7 AM CET and processes the previous day's production.
+-- Key daily params
+alloc_net_code = AN_SHN, calc_id = ZXIC_DAILY_VOLUME
+production_day: DATE (mandatory), include_subgroups = N
+calc_log_class = CALC_DAY_PROD_LOG, calc_context = EC_PROD
+data_verification_status_process = D_SHENZI_P_TO_V
+
+-- Key monthly extras
+run_data_approval = Y, data_approval_auto_run = Y
+data_approval_status_process = D_SHENZI_V_TO_A
+perform_data_locking = Y, role_confirm_data_lock = SYST.ADM
+calc_log_class = CALC_MTH_PROD_LOG
+```
+
+**Woodside also has its own BPMN overrides:**
+`/c/DEV/GIT/woodside_impl_pluto_12839/bpm/prod-bpm-building-blocks/` — Woodside carries its own customised copies of `ECProd_DailyProductionAllocation.bpmn2`, `ECProd_MonthlyProductionAllocation.bpmn2`, and `ECProd_AllocInputValidation.bpmn2`. This means Woodside's BPM behaviour may differ slightly from core EC — always check this folder for Pluto-specific changes.
+
+**Key insight:** EC BPM is fully configuration-driven — same BPMN structure, all behaviour controlled by parameters. The "Work by Exception" principle means operators don't touch the system on normal days; they only act when the system assigns them a task. Monthly adds Data Locking on top of daily — once locked, the period cannot be changed without unlocking. Woodside has its own BPM overrides stored in the project repo.
 
 
