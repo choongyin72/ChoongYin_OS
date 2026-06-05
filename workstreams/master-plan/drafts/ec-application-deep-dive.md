@@ -1112,6 +1112,155 @@ Woodside follows this pattern with ZWT/ZWP naming. Owner contexts above 1000 = c
 
 ---
 
+## Session H — PVT Fluid Properties (2026-06-05) [all 5 sources]
+
+**Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**Item:** #17 PVT Fluid Properties
+
+---
+
+### Item #17: PVT Fluid Properties (4→9) ✅
+
+**What PVT is and why it matters:**
+PVT (Pressure-Volume-Temperature) describes how oil, gas, condensate, and water volumes change as fluids travel from reservoir conditions (high P, high T) to surface standard conditions (atmospheric P, ambient T). **All upstream production reporting must be in standard conditions** — PVT is the conversion mechanism. Wrong PVT = wrong allocation = wrong revenue = wrong royalty payments.
+
+**The core PVT parameters:**
+
+| Parameter | Symbol | Definition | Typical range |
+|---|---|---|---|
+| Oil Formation Volume Factor | Bo | Reservoir volume (Rbbl) per 1 STB oil at surface | 1.0–2.0 Rbbl/STB |
+| Gas Formation Volume Factor | Bg | Reservoir volume per 1 SCF free gas | <1 at high pressure |
+| Water Formation Volume Factor | Bw | Reservoir volume per 1 STB water | ~1.0 |
+| Solution Gas-Oil Ratio | Rs | SCF of dissolved gas per 1 STB oil | 100–2000 SCF/STB |
+| Shrinkage Factor | 1/Bo | Inverse of Bo — fraction of reservoir volume remaining at surface | 0.5–1.0 |
+
+**Bo intuition:** Bo = 2.0 means reservoir oil is **twice** the volume of surface oil — when produced, the oil **shrinks by half** (dissolved gas flashes off + thermal contraction). Heavy oil Bo ≈ 1.0; volatile oil Bo up to 5.0.
+
+**Core conversion formula (from `EcBsPVTTable.java`):**
+```java
+// Convert flowing/reservoir volumes → standard conditions
+stdOilVolRate  = fromOilVolRate  / Bo          // oil shrinks
+stdGasVolRate  = fromGasVolRate  / Bg          // free gas expands to std
+               + stdOilVolRate   × Rs          // PLUS dissolved gas released from oil
+stdWatVolRate  = fromWatVolRate  / Bw          // water shrinks slightly
+stdCondVolRate = fromCondVolRate / Bo          // condensate treated like oil
+```
+
+**Six PVT calculation methods in EC — all implement `PvtCalculation` interface:**
+
+| Class | Method | When to use |
+|---|---|---|
+| `EcBsPVTTable` | FVF table lookup (Bo, Bg, Bw, Rs vs P/T) | Full laboratory PVT data available |
+| `EcBsPVTShrinkage` | Shrinkage factor + GOR approach | Simplified — fewer parameters needed |
+| `EcBsPVTCombinedTable` | Combined FVF table | Multiple separator stages |
+| `EcBsPVTCombinedShrinkage` | Combined shrinkage | Multiple stages, simplified |
+| `EcBsNoShrink` | No volume correction (1:1) | No PVT data available, or gas-only wells |
+| `EcBsUserExit` | Custom PVT user exit | Project-specific calculation |
+
+**`PvtCalculation` interface:**
+```java
+void PVTCalculation(String objectId, String className,
+                    String daytime, String resultNo, String userId)
+```
+All six methods implement this same signature — strategy pattern, selected per well/test device.
+
+**`EcDsPVT` — reads separator test data from DB:**
+```java
+void getRateData(String className, String objectId, String resultNo,
+    double[] pressure, double[] temperature,
+    double[] sepOilVolRate, double[] sepGasVolRate,
+    double[] sepConVolRate, double[] sepWatVolRate,
+    double[] sepOilMassRate, ... double[] sepOilDensity, ...)
+```
+Reads all measured rates (vol + mass + density) for each phase at separator P/T conditions.
+
+**`EcBsFluidRatio` — derives production ratios from standard volumes:**
+```java
+// Water cut — critical for reservoir management
+waterCut = stdWatVolRate / (stdWatVolRate + stdOilVolRate) × 100  // %
+
+// GOR — key for well productivity assessment
+GOR = stdGasVolRate / stdOilVolRate  // SCF/STB
+```
+
+**PVT DB classes (from EC class model XML):**
+
+| Class | DB Table/View | Purpose |
+|---|---|---|
+| `PVT_PT_EQPM_VALUES` | `TEST_DEVICE_RESULT` | Test device (separator) measured PVT results |
+| `PVT_PT_THEOR_WELLS` | `TV_PVT_PT_THEOR_WELLS` | Theoretical well rates for allocation split |
+| `PVT_SIM` | `V_PVT_SIM` | Results from PVTsim software (rigorous simulation) |
+
+**`PVT_PT_EQPM_VALUES` attributes — two measurement types:**
+```
+{PHASE}_{MEASUREMENT}_{TYPE}
+  PHASE:       GAS, NET_OIL, NET_COND, TOT_WATER
+  MEASUREMENT: RATE (vol), MASS_RATE, DENSITY
+  TYPE:        FLC (flowing conditions), ADJ (adjusted to standard)
+
+Examples:
+  GAS_RATE_FLC        — gas rate at separator conditions
+  NET_OIL_RATE_ADJ    — oil rate adjusted to stock tank
+  TOT_WATER_DENSITY_FLC — water density at separator
+```
+
+**`PVT_SIM` — results from rigorous PVT simulation software:**
+```
+SRF_KFACTORS_P01..P09  — K-factors (equilibrium ratios) per separator stage
+EXP_GAS_SHRINK_FACTOR  — export gas shrinkage factor
+EXP_PRESSURE/TEMPERATURE — export conditions
+MPM_GASFLOWRATE        — multiphase meter gas flow rate
+FIELDMODE              — field operation mode
+```
+K-factors (vapour-liquid equilibrium ratios) are used in rigorous equation-of-state calculations for gas condensate and volatile oil systems.
+
+**Well split for allocation (`EcBsWellSplit` + `TV_PVT_PT_THEOR_WELLS`):**
+```sql
+-- Theoretical rates per well — used to split commingled stream volumes
+SELECT OBJECT_ID, RESULT_NO,
+       THEOR_NET_OIL_RATE, THEOR_GAS_RATE, THEOR_NET_COND_RATE, THEOR_WATER_RATE
+FROM TV_PVT_PT_THEOR_WELLS WHERE RESULT_NO = ?
+-- wellOilPart[] = THEOR_NET_OIL_RATE / sum(all wells)
+-- wellGasPart[] = THEOR_GAS_RATE / sum(all wells)
+```
+PVT-based theoretical rates provide the split fractions for back-allocating commingled production to individual wells.
+
+**PVT data sources (industry + lab):**
+| Source | Method | Accuracy |
+|---|---|---|
+| Lab PVT report | CCE test + differential liberation | Best — from actual reservoir fluid sample |
+| PVTsim software | Equation-of-state (Peng-Robinson, SRK) | High — rigorous simulation |
+| Standing correlation | Empirical (bubble point, Bo, Rs) | ±3–5% — useful when no lab data |
+| Lee-Gonzalez-Eakin | Gas viscosity (100–8000 psi, 100–340°F) | Good for sweet gas |
+| Vasquez-Beggs | Bo and Rs | Widely used empirical correlation |
+
+**Unit conversion in EC (`ecdp_unit.convertValue()`):**
+```sql
+-- PVT_SIM uses unit conversion for export conditions
+ecdp_unit.convertValue(EXPORT_PRESS, 'BARA', 'BARA')   -- pressure in Bara
+ecdp_unit.convertValue(EXPORT_TEMP, 'C', 'C')           -- temperature in Celsius
+ecdp_unit.convertValue(MPM_GAS_MASS_RATE, 'KGPERHR', 'KGPERHR')
+```
+EC stores values in configurable units — `ecdp_unit.convertValue()` handles the conversion transparently in RV_ view definitions.
+
+**PVT workflow in EC production accounting:**
+```
+1. Well test performed → test device results stored in PVT_PT_EQPM_VALUES
+2. PVTsim simulation run → results stored in PVT_SIM (K-factors, shrinkage)
+3. PVT calculation method selected per well (Table / Shrinkage / NoShrink)
+4. During allocation:
+   a. EcDsPVT reads separator measurements
+   b. EcBsPVT* converts flowing volumes → standard volumes
+   c. EcBsWellSplit uses theoretical rates to back-allocate to wells
+   d. EcBsFluidRatio calculates WaterCut and GOR for reporting
+5. Standard volumes written to _ALLOC classes → used in HC accounting
+```
+
+**Key insight:** PVT is the bridge between the physical world (what flows in the pipe at reservoir conditions) and the commercial world (what is reported and sold at standard conditions). EC has six PVT methods to handle different data availability scenarios. The most important parameter is Bo — it directly impacts oil revenue. A systematic 5% error in Bo = systematic 5% error in all oil allocation results.
+
+---
+
 ## Session G — Calculation Engine (2026-06-05) [all 5 sources]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
