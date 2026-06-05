@@ -179,3 +179,53 @@ Key findings:
 | Phase 2 explore scripts | `C:\DEV\ROBOT\APPS\EC\14.2.4\AutomationTest\tests\validation\explore_*.py` | Reference only |
 | DOM screenshots | `.../screenshots/issue_1052/` | Reference |
 | EC Technical Docs raw | `ec_doc_p01-p10_*.txt` | In project root |
+
+---
+
+## Session F — Architecture and Database (2026-06-05, second run)
+
+**Status:** COMPLETE — 4 items, all 7→9/10
+
+### Items Covered
+
+| # | Item | Before | After | Sources |
+|---|---|---|---|---|
+| 9 | JSF/PrimeFaces rendering | 7/10 | 9/10 | EC source: frmw-pf-jsf module |
+| 10 | Screen template structure | 7/10 | 9/10 | EC source: ec-web/xhtml/screen/ |
+| 11 | Flyway migrations deep | 7/10 | 9/10 | EC Tech Docs + ec-db-migration-oc-0 source |
+| 12 | Journal tables _JN mechanics | 7/10 | 9/10 | EC source: ECDP_GENERATE + migration SQL |
+
+### Key Learnings
+
+**#9 JSF/PrimeFaces:**
+- `OnAjaxReqListener` tracks all 6 JSF lifecycle phases for every AJAX request
+- `EventDispatcher` is the central hub: `ECEvent → ECEventType → handler service`
+- Three notification channels: AJAX partial re-render (immediate), polling (periodic, `ECPoll`), WebSocket push (`RemoteScreenNotifierService` → `f:websocket`)
+- Dynamic `jsChannel` / `styleChannel` output panels allow server to push JS/CSS via AJAX
+
+**#10 Screen Templates:**
+- 5-file hierarchy: `screen_template.xhtml` → `screen.xhtml` → toolbar + notification + status_area
+- `statusarea_tab:tabPanel:_sa_revisionInfo:form:T:0:C13_in` = REV_TEXT field (confirmed for Issue_1052)
+- Confirmation dialog (modal `p:dialog`) is shared across all screens — reusable via `Confirmations` stack
+- `p:remoteCommand` handlers: `postServerSideEvent`, `ecFocus`, `hotKeyPressed` are standard across all screens
+
+**#11 Flyway:**
+- V prefix = versioned (runs once), R prefix = repeatable (runs on checksum change)
+- `owner_context_0` = core product; `flwy_schema_history_0` = migration audit table
+- Naming: `V<version>.<date>__<ticket>_<description>.sql`
+- `cleanDisabled=true` always — Flyway never drops production objects
+- Custom resolvers support XML class definitions and JSON migrations
+- PreUpgrade/PostUpgrade callbacks wrap every migration run
+
+**#12 Journal _JN Triggers:**
+- JN trigger fires ONLY when `rev_no` changes OR on DELETE (not every update)
+- Class IUD trigger decides when to increment rev_no (per class journal rule)
+- `ECDP_GENERATE.generate('TABLE', EcDp_Generate.JN_TRIGGERS)` auto-creates trigger
+- `JN_NOTES` session parameter carries REV_TEXT into journal — must be set before DML
+- EXT_JOIN extension tables must also have `_JN` table + trigger (often missed)
+
+### Practical Impact on Woodside Work
+- **Issue_1052 SQL**: When writing `REV_TEXT = 'ECPR-Issue1052'`, also set `JN_NOTES` via `EcDp_User_Session` for proper audit trail
+- **Robot Framework**: `statusarea_tab` REV_TEXT locator confirmed from both source code and screen template structure
+- **Flyway extensions**: Woodside's `R__XXXXX_CLASSNAME.xml` files follow standard EC Flyway repeatable pattern
+- **EC source navigation**: `ec-db-migration-oc-0` is the right place to read migration history and trigger generation code

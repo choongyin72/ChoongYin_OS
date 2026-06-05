@@ -2596,4 +2596,390 @@ calc_log_class: CALC_MTH_PROD_LOG
 
 **Key insight:** EC BPM is configuration-driven — same BPMN structure, behaviour controlled by parameters. The "Work by Exception" principle means operators don't touch the system on normal days; only act when the system assigns a task. Monthly adds Data Locking. Woodside has its own BPM overrides in the project repo and uses PLU_/SCA_ allocation network codes (not AN_SHN). Each allocation network maps to a specific calculation via `TV_ALLOC_NETWORK_JOB_CONN`.
 
+---
+
+## Session F — Architecture and Database (2026-06-05)
+
+**Sources:** EC source `C:\DEV\GIT\ec-application` + EC Tech Docs 14.2.5 (flyway.html, ec_flyway_developer_handbook.html, data_modelling_guideline.html)
+
+---
+
+### #9 — JSF/PrimeFaces Rendering (7→9)
+
+#### Core Phase Listener
+**`OnAjaxReqListener`** — `PhaseListener` for `PhaseId.ANY_PHASE`:
+- Logs all AJAX request lifecycle phases: RESTORE_VIEW → APPLY_REQUEST_VALUES → PROCESS_VALIDATIONS → UPDATE_MODEL_VALUES → INVOKE_APPLICATION → RENDER_RESPONSE
+- Captures `PartialViewContext.getExecuteIds()` (components to process) and `getRenderIds()` (components to re-render)
+- Performance timing of AJAX requests via `ScreenletDebugger`
+
+#### Event Flow — The Core AJAX Pattern
+**`EventDispatcher`** is the central hub:
+```
+User action (click/change)
+    → p:ajax / p:commandButton fires JSF lifecycle
+    → OnAjaxReqListener.beforePhase() — logs request
+    → PartialViewContext processes execute IDs
+    → OnContextMenuListener.processAction() fires
+    → Creates ECEvent → posts to EventDispatcher
+    → EventDispatcher finds handler via ECEventType
+    → Service handles event → returns ServiceResponse
+    → PrimeFaces partial re-render (only specified components)
+    → OnAjaxReqListener.afterPhase() — logs timing
+```
+
+**`EventDispatcher`** internals:
+- `LinkedHashMap<ECEventType, LinkedList<HandlerContainer>>` — event-to-handler map
+- Supports global events (`source = "screen"`) and component-scoped events
+- Handler invocation via reflection on `ECEventType.getEventHandlerMethod()`
+- Propagates: `ECEventAbortedException`, `ECEventConfirmationException`
+
+#### ECTrigger Types
+```
+ACTION          → commandButton action method
+ACTIONLISTENER  → ActionListener.processAction()
+SCREEN_ACTION   → screen-level business action
+AJAX_BEHAVIOUR  → f:ajax and p:ajax events
+COMMENT         → no-op placeholder
+MANAGED_BEAN    → EL managed bean call
+EVENT           → ECEvent dispatch
+```
+
+#### Custom PrimeFaces Components
+- `EcTabView` (`com.ec.frmw.jsf.screenlet.tab.EcTabView`) — custom TabView
+- `EcMenubarRenderer` (`com.ec.frmw.jsf.screenlet.toolbar.EcMenubarRenderer`) — custom Menubar renderer
+
+#### AbstractScreenlet — Screenlet Lifecycle
+- Maintains: `ECScreen theScreen`, `Screenlet parentScreenlet`, `List<Screenlet> childScreenlets`
+- Manages: `List<IECService> serviceList`, `Map<String, EcDataModel> ecDataModelMap`
+- Tracks: `previousSelectedRow`, `selectedRows`
+- Order: constructor → init services → preRender → postRender → preDestroy
+
+#### TableScreenlet — p:dataTable Internals
+- `TableScreenlet` → `AbstractTableScreenlet`
+- Manages PrimeFaces `p:dataTable` with: AJAX row selection, sorting, filtering, pagination, context menus
+- Row selection via `screenlet.getSelectedRows()` → comma-separated indices/keys passed to listeners
+
+#### Dynamic JS/CSS Channels
+```xml
+<!-- in screen_template.xhtml -->
+<p:outputPanel id="jsChannel">  <!-- server pushes JS via AJAX response -->
+<p:outputPanel id="styleChannel">  <!-- server pushes CSS via AJAX response -->
+```
+Server sets `ECScript.onCompleteScript` EL bean → client executes after each AJAX response.
+
+#### WebSocket / Push Notifications
+- `RemoteScreenNotifierService` listens: `postRetrieve`, `postSave`, `postInsert`, `postDelete`, `postButtonClicked`, `clear`
+- Uses Jakarta `PushContext` via `ECSession.getEcUserWebsocketChannel()`
+- Converts `ECEvent` → JSON → WebSocket to all screens for that user
+- `<f:websocket channel="ecUserWebsocketChannel" user="#{request.remoteUser}" onmessage="EC.websockets.userCallback"/>`
+
+#### Polling Mechanism
+**`ECPoll`** (`@Named`, `@ViewScoped`):
+- `registerScreenlet(int intervalSeconds, screenletId, pollId)` — register for periodic refresh
+- `deregisterScreenlet()` — stop polling
+- `onPoll()` — called by `p:poll`, posts `pollTriggered` event
+- `getPollInterval()` — returns lowest registered interval
+- `<p:poll rendered="#{ECPoll.enablePoll}" interval="#{ECPoll.pollInterval}" listener="#{ECPoll.onPoll}"/>`
+
+**Key insight:** AJAX is surgically targeted — only specified `renderIds` update. `ECRerender.ajaxReRenderString` calculates the dynamic update string at runtime. Three notification channels: AJAX partial re-render (immediate), polling (periodic), WebSocket (cross-screen push).
+
+---
+
+### #10 — Screen Template Structure (7→9)
+
+#### Template Hierarchy
+```
+screen_template.xhtml  (Root master — DOCTYPE HTML5)
+    └── screen.xhtml   (Content composition)
+            ├── ajaxArea.xhtml           (AJAX spinner)
+            ├── toolbar.xhtml            (Menubar with actions)
+            ├── notificationarea.xhtml   (Messages)
+            ├── [ecScreen UI insert]     (Actual screen content)
+            └── status_area.xhtml        (Revision/Approval tabs — lazy)
+```
+
+#### screen_template.xhtml — Root Layout
+- Conditional layout: mainframe (sidebar + content) OR popup screen (no sidebar)
+- `p:splitter` layout (vertical):
+  - `ec-menu-container` (13% size, collapsible) → `mainframe/menu.xhtml`
+  - `ec-screen-container` (87% size) → content area
+- Widget variable: `ec-app-splitter_wv`
+- Remote commands: `treeviewClicked`, `ecSessionLogout`, `openOnlineHelp`
+- Dynamic channels: `jsChannel` (JS), `styleChannel` (CSS)
+
+#### screen.xhtml — Content Layer
+Defines `screenContent` UI insert. Key remote command handlers:
+
+| Command | Action | Purpose |
+|---|---|---|
+| `onloadScript` | `ECScreen.onLoad()` | Initial screen load |
+| `postServerSideEvent` | `ClassicToJsfEventBridge.postEvent()` | AJAX event posting |
+| `postServerSideEventAsync` | Same | Async (no re-render) |
+| `externalConfirmationReturn` | `Confirmations.peek.externalConfirmationReturn()` | Confirmation return |
+| `ecFocus` | `ECScreen.onFocus()` | Component focus event |
+| `hotKeyPressed` | `ECScreen.onHotKeyPressed()` | Hotkey handling |
+
+Confirmation dialog: modal `p:dialog` with Yes/No/Cancel/Close/Ok buttons (reusable across all screens).
+
+#### toolbar.xhtml — Action Bar
+- `<ec:toolbarScreenlet id="screenToolbar">` — composite screenlet
+- Main menubar: `<p:menubar model="#{cc.attrs.screenlet.model}">` — model-driven from ToolbarService
+- Right-side extras: Min/max toggle, Favorites button, Settings submenu (System of Measurement, Clear personalization), Task bell icon
+- Screenlet debugger button (when debug enabled)
+
+#### notificationarea.xhtml — Messages
+- `ECNotificationArea`: Iterates `#{ECNotification.notifications}` and `#{ECNotification.groupedSystemMessages}`
+- Severity icons: ERROR / WARN / INFO
+- `p:autoUpdate` — refreshes automatically
+- `ECClientNotificationArea`: Client-side JS messages (hidden panels: JSWarningArea, JSErrorArea)
+- `p:ajaxExceptionHandler` for `ViewExpiredException` + generic exceptions → Reload button
+
+#### status_area.xhtml — Revision/Approval Panel
+- Tab panel screenlet (`<ec:tabPanelScreenlet id="statusarea_tab">`)
+- Three tabs: **Record Status** (form) | **Revision Info** (table, lazy) | **Approval Status** (form)
+- Lazy-loaded: conditional rendering on `ECScreen.getScreenlet(id).tabSelected`
+- Tab IDs used in automation: `statusarea_tab:tabPanel:_sa_revisionInfo:form:T:0:C13_in` (REV_TEXT)
+
+#### Key JavaScript API (screenFrmw.js)
+| Function | Purpose |
+|---|---|
+| `EC.treeview.onClick(event, tvId, newTab)` | Navigate by treeview ID |
+| `EC.forceChange()` | Flush uncommitted form data |
+| `EC.reloadPage()` | Reload current screen |
+| `EC.toggleMaxMinLayout()` | Toggle maximize/minimize |
+| `EC.logout(flushObjectAccess)` | Logout |
+
+Remote command pattern: `postServerSideEvent([{name: "param1", value: "v1"}]);`
+
+**Key insight:** Every EC screen inherits the same DOM skeleton — `ec-menu-container` + `ec-screen-container` with identical splitter IDs. Toolbar, notification, and status area are always present (conditionally rendered). The `statusarea_tab:tabPanel:_sa_revisionInfo` REV_TEXT field is where `ECPR-Issue1052` goes — confirmed by both screen template and DB data model.
+
+---
+
+### #11 — Flyway Migrations Deep (7→9)
+
+#### What is Flyway in EC
+Flyway = database version control. All DB changes are **migrations**. Applied automatically on EAR deploy, or manually via CLI.
+
+**7 Flyway commands:**
+| Command | Description |
+|---|---|
+| `migrate` | Apply pending migrations |
+| `info` | Show migration status |
+| `validate` | Check applied vs available |
+| `baseline` | Baseline existing DB |
+| `repair` | Fix schema history table |
+| `clean` | Drop all objects (disabled in EC: `cleanDisabled=true`) |
+
+#### Migration Types
+
+| Type | Prefix | When Runs | Example Name |
+|---|---|---|---|
+| Versioned | `V` | Once, in order | `V12.2.0.0.0.20191025010000__ECPD-70048_ecdp_generate_body.sql` |
+| Repeatable | `R` | Every time checksum changes | `R__0100_ecdp_generate_head.sql` |
+
+**Versioned format:** `V<version>.<date_seq>__<ticket>_<description>.sql`
+**Repeatable format:** `R__<sequence_no>_<description>.<ext>`
+
+**Execution order:** Pre-upgrade callbacks → Versioned (in version order) → Repeatable (in description order)
+
+#### Repository Structure
+```
+database/
+├── ec-db-tools/          Flyway common utilities + callbacks
+├── ec-db/                Product migrations (core)
+│   └── src/main/resources/db/migration/
+│       └── owner_context_0/
+│           ├── 12.2.0/          versioned release folder
+│           │   ├── FRMW/        framework scripts
+│           │   ├── PROD/        production scripts
+│           │   ├── REVN/        revenue scripts
+│           │   └── TRAN/        transaction scripts
+│           ├── 12.2.1/ ... 14.2.7/  (per-release)
+│           ├── common/          repeatable scripts (R prefix)
+│           │   ├── frmw/
+│           │   ├── prod/
+│           │   ├── revn/
+│           │   └── ...
+│           └── retired/         archived migrations
+└── ec-db-testdata/       Test data (owner_context_800)
+```
+
+#### Owner Context (OC) Concept
+| Context | Folder | Contains |
+|---|---|---|
+| OC-0 | `owner_context_0` | Core EC product (framework + all business domains) |
+| OC-800 | `owner_context_800` | Test data |
+| OC-rr-prodca-400 | `owner_context_rr-prodca_400` | RR PRODCA package |
+
+For Woodside extensions: their own `owner_context_X` in the project repo (e.g., `owner_context_zwp_100`).
+
+#### Flyway Configuration (flyway-0.conf)
+```properties
+flyway.table=flwy_schema_history_0        # tracks applied migrations
+flyway.url=jdbc:oracle:thin:@//host:1521/orcl
+flyway.user=ECKERNEL_EC
+flyway.sqlMigrationSuffixes=.sql,.SQL,.pck
+flyway.encoding=UTF-8
+flyway.placeholderReplacement=true
+flyway.placeholders.installMode=${project.version}
+flyway.resolvers=XmlMigrationResolver,JsonMigrationResolver  # custom for XML class defs
+flyway.cleanDisabled=true                 # NEVER drops objects in production
+flyway.baselineVersion=12.2.1.0.0
+flyway.callbacks=PreUpgrade,PostUpgrade,CheckUpgradePath,EnableInstallModeBefore
+flyway.ignoreMigrationPatterns=*:missing,*:ignored
+```
+
+**Placeholder gotcha:** If a script has `${...}` that is NOT a Flyway placeholder, split it:
+```sql
+'... $'||'{ not_a_placeholder } ...'
+```
+
+#### Flyway Execution Flow in EC
+```
+1. EAR deploy → EC auto-checks flwy_schema_history_0
+2. PreUpgrade callback runs (pre-upgrade checks, ASSIGN_ID update)
+3. CheckUpgradePath callback validates upgrade path is supported
+4. EnableInstallModeBefore sets INSTALL_MODE env variable
+5. Versioned migrations (V) run in version + filename order
+6. Repeatable migrations (R) run in description order (packages, views, triggers last)
+7. PostUpgrade callback runs
+```
+
+#### Repeatable Scripts — Key Insight
+Repeatable scripts are for **regeneratable objects**: PL/SQL packages, views, triggers. These are placed in `common/` and re-run any time their content changes (checksum-based). This replaces the old pattern of manually versioning hand-coded objects.
+
+For class XMLs: **no delta concept** — always placed in full. Versioned by release folder.
+
+**Maven commands:**
+```bash
+mvn clean install                              # build
+mvn flyway:baseline -Dflyway.configFiles=...   # baseline DB
+mvn flyway:info                                # check status
+mvn flyway:migrate                             # apply migrations
+```
+
+**Key insight:** Flyway is why Woodside's `R__XXXXX_CLASSNAME.xml` files use the R prefix — they are repeatable Flyway scripts. The `flwy_schema_history_0` table is the source of truth for what's been applied. In extensions, the same pattern applies but in the extension's own owner_context folder. Never manually edit the schema history table.
+
+---
+
+### #12 — Journal Tables _JN Mechanics (7→9)
+
+#### Purpose
+EC does hydrocarbon accounting — full audit trail is mandatory. Every data change must be traceable. The `_JN` table pattern provides this: every main table has a mirror `<TABLE_NAME>_JN` that records the old value before each change.
+
+#### JN Table Structure
+The `_JN` table = main table columns + 6 extra columns at the start:
+
+| Column | Type | Description |
+|---|---|---|
+| `JN_OPERATION` | CHAR(3) | `UPD` (Update) or `DEL` (Delete) |
+| `JN_ORACLE_USER` | VARCHAR2(30) | Oracle user who triggered the journal |
+| `JN_DATETIME` | DATE | When the journal entry was created |
+| `JN_NOTES` | VARCHAR2(240) | User-provided reason (via session parameter) |
+| `JN_APPLN` | VARCHAR2(35) | Application name (not in use) |
+| `JN_SESSION` | NUMBER(38) | Session ID (not in use) |
+
+`_JN` table has **no primary key** (not needed — append-only audit log).
+
+#### JN Trigger Pattern
+```sql
+CREATE OR REPLACE TRIGGER JN_<TABLE_NAME>
+AFTER UPDATE OR DELETE ON <TABLE_NAME>
+FOR EACH ROW
+DECLARE
+    lv2_operation     CHAR(3);
+    lv2_last_updated_by VARCHAR2(30);
+BEGIN
+    -- CRITICAL: Only fires when rev_no changes OR on DELETE
+    IF (Nvl(:new.rev_no, 0) <> :old.rev_no) OR (Deleting) THEN
+        IF Deleting THEN
+            lv2_operation := 'DEL';
+            lv2_last_updated_by := Nvl(EcDp_User_Session.getUserSessionParameter('USERNAME'), User);
+        ELSE
+            lv2_operation := 'UPD';
+            lv2_last_updated_by := :new.last_updated_by;
+        END IF;
+        INSERT INTO <TABLE_NAME>_JN
+        (jn_operation, jn_oracle_user, jn_datetime, jn_notes, <all_columns>)
+        VALUES
+        (lv2_operation, lv2_last_updated_by,
+         EcDp_Timestamp.getCurrentSysdate,
+         EcDp_User_Session.getUserSessionParameter('JN_NOTES'),
+         :old.<all_columns>);
+    END IF;
+END;
+```
+
+**Key condition:** `Nvl(:new.rev_no, 0) <> :old.rev_no` — the journal trigger only fires when `rev_no` is incremented. The class layer (IUD trigger) decides when to increment `rev_no` based on the **journal rule** configured on the class. Not every update creates a journal entry — only updates the class considers "significant."
+
+#### Responsibility Split
+```
+Class IUD trigger  → decides IF journaling needed → increments rev_no
+JN trigger         → detects rev_no change → copies OLD row to _JN table
+```
+Result: journal entries are at the **class level policy**, not raw table level.
+
+#### ECDP_GENERATE — Automated JN Trigger Creation
+The `ECDP_GENERATE` package auto-generates JN triggers. Never hand-code them.
+
+```sql
+-- Generate JN trigger for a table:
+EXECUTE EcDp_Generate.generate('TABLE_NAME', EcDp_Generate.JN_TRIGGERS);
+
+-- Generate everything (packages + all triggers):
+EXECUTE EcDp_Generate.generate('TABLE_NAME',
+    EcDp_Generate.PACKAGES + EcDp_Generate.ALL_TRIGGERS);
+```
+
+Bitmask constants in `ECDP_GENERATE`:
+```sql
+I_JN_MASK         CONSTANT INTEGER := Power(2, 3);   -- JN trigger bit
+I_JN_INDEX_MASK   CONSTANT INTEGER := Power(2, 7);   -- JN index bit
+```
+
+`buildJournalTrigger` procedure:
+1. Queries table columns from Oracle data dictionary
+2. Filters to columns that have JN equivalents (`hasJnColumn()`)
+3. Builds INSERT statement dynamically
+4. Creates trigger with the rev_no condition
+
+**When to regenerate:** Any time you add/remove columns from a main table, regenerate the JN trigger. The column list is dynamic — it queries the dictionary at trigger creation time.
+
+#### Extension Rule: EXT_JOIN Tables Need _JN Too
+If the main class has a journal table, any added `EXT_JOIN` table must also have:
+- Its own `<EXT_TABLE>_JN` journal table
+- Its own `JN_<EXT_TABLE>` trigger
+
+This is commonly missed in project extensions.
+
+#### Querying Audit History
+```sql
+-- See all changes to a row:
+SELECT jn_operation, jn_oracle_user, jn_datetime, jn_notes, rev_no
+FROM WELL_VERSION_JN
+WHERE object_id = 'some-guid'
+ORDER BY jn_datetime DESC;
+
+-- Check REV_TEXT history (Woodside ECPR entries):
+SELECT jn_datetime, jn_notes, rev_text
+FROM STRM_COMP_ANALYSIS_JN
+WHERE object_id = 'some-guid'
+ORDER BY jn_datetime DESC;
+```
+
+**Key insight:** The `JN_NOTES` session parameter is set via `EcDp_User_Session` before the DML — this is how the EC application passes user-entered REV_TEXT to the journal. When we set `REV_TEXT = 'ECPR-Issue1052'` via direct SQL, we should also set `JN_NOTES` in the session context to ensure it appears in the journal. ECDP_GENERATE is the only safe way to create JN triggers — never manually write them.
+
+---
+
+### Session F — Knowledge Rating Summary
+
+| Item | Before | After | Key Learning |
+|---|---|---|---|
+| #9 JSF/PrimeFaces rendering | 7/10 | 9/10 | AJAX event flow: EventDispatcher → ECEventType → handler. Three channels: AJAX re-render, polling, WebSocket push |
+| #10 Screen template structure | 7/10 | 9/10 | 5-file hierarchy. statusarea_tab IDs confirmed. REV_TEXT field: `statusarea_tab:tabPanel:_sa_revisionInfo:form:T:0:C13_in` |
+| #11 Flyway migrations | 7/10 | 9/10 | V vs R scripts. owner_context_0 = core. flwy_schema_history_0 = migration log. cleanDisabled=true always |
+| #12 Journal _JN mechanics | 7/10 | 9/10 | Fires only on rev_no change. Split responsibility: class (decides when) + JN trigger (does copy). ECDP_GENERATE auto-creates |
+
+**EC knowledge rating after Session F: 9/10** (Architecture and Database domain)
+
 
