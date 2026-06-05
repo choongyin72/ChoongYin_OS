@@ -801,3 +801,74 @@ DB_SQL_SYNTAX:
 - Regular trigger = standalone DDL, one per event, requires recompile
 
 **Woodside note:** Woodside extension custom logic (ZWP_ tables) should use CLASS_TRIGGER_ACTN_CNFG entries, NOT standalone Oracle triggers. Keeps code within EC framework lifecycle management.
+
+---
+
+## Session C — Deep Dive Results
+
+### Item #7: ECIS Source Functions Detail (7→9) ✅
+
+**12 source functions — key distinctions:**
+
+| Function | Type | Key Behaviour |
+|---|---|---|
+| SAMPLE | Pass-through | Raw timestamps, no aggregation, NEXT_READ = last_ts + 1s |
+| AVG | Time-weighted | Each value × its duration / total_duration. ≠ MEAN |
+| MEAN | Arithmetic | Simple sum/count, ignores time between samples |
+| SUM/MIN/MAX | Aggregated | Standard aggregations per interval |
+| VALUE_AT_END | ECIS-agg | Latest sample within/before interval → adjusted to interval start |
+| VALUE_AT_START | ECIS-agg | Latest sample at/before interval start |
+| COMPRESSED | PI only | Interpolated — PI REST adapter only |
+| LATEST_IN_INTERVAL | PI only | Latest per interval — PI REST only |
+| AVG_AT_END | ECIS-agg | Multiple samples → avg; single → use value before interval |
+
+**AVG time-weighted formula (SamplePeriod.java):**
+```
+For each consecutive pair: contribution = value × (next_ts - prev_ts in seconds)
+Final = sum(contributions) / total_seconds
+Last sample weighted from its timestamp to period end
+```
+
+**Adapter support:** JDBC requires user-written SQL for most functions. PI and IP21 support all except COMPRESSED/LATEST (PI REST only).
+
+**DST handling:** For time corrections > 3600s, auto-adjusts ±1hr at DST boundary via `getPeriodOffsetInInterval()`.
+
+**SHIFT_TIME_TO_PERIOD_ST:** START_INCLUDED (default) / END_INCLUDED — controls boundary alignment.
+
+**NEXT_READ update:**
+- SAMPLE: last_timestamp + 1 second
+- Aggregated: last_timestamp + 1 source_interval
+
+**Woodside note:** PHD daily data → use AVG (time-weighted) for analysis. Tank readings → VALUE_AT_END (latest reading). Wrong function = wrong aggregation = wrong EC data.
+
+---
+
+### Item #8: JMS Queue Capacity and Recovery (6→9) ✅
+
+**DTO (DataTransferObject):** Tag IDs + timestamps + values + meta (config_id, NEXT_READ, DTO_ID, recapture_range).
+
+**Queue capacity:** 800 MB baseline ≈ 1,600 DTOs. Each DTO ≈ 250-500 KB (5000 rows default).
+
+**Key config parameters:**
+- `maxrowsindto` (default 5000): Rows per DTO. Reduce if MDB timeout (>5 min processing) occurs.
+- `dtomergeenabled` (default true): Merges DTOs into 5000-row batches. Better throughput. Disable only for per-tag granularity.
+- `recapturerange` (default -1): -1=use LAST_TRANSFER; 0=reprocess all history; N=reprocess last N seconds.
+
+**Recovery guarantee chain:**
+```
+Extraction fails → adapter degraded → retry next scheduler run (data still in source)
+Queue full → JMSException → job fails → retry next run (data still in source)
+Transform fails → logged + continues other rows → LAST_TRANSFER NOT updated
+DB row fails → written to ERROR_FILE → continues → LAST_TRANSFER NOT updated
+```
+
+**LAST_TRANSFER = safety net:** Never updated until full success. Moving it backward = force re-read of history.
+
+**Monitoring SQL:**
+```sql
+-- Check stale transfers (stuck > 1 day)
+SELECT TAG_ID, LAST_TRANSFER FROM TRANS_SOURCE_TIME
+WHERE LAST_TRANSFER < sysdate - 1 AND ACTIVE = 'Y';
+```
+
+**Woodside Issue_1052 note:** PHD tags showing NULL → check TRANS_SOURCE_TIME.LAST_TRANSFER. If stuck, move it back to force re-read. This is the root cause diagnostic tool.
