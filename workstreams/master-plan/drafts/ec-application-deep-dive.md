@@ -1112,6 +1112,360 @@ Woodside follows this pattern with ZWT/ZWP naming. Owner contexts above 1000 = c
 
 ---
 
+## Session G — Calculation Engine (2026-06-05) [all 5 sources]
+
+**Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**Items:** #13 Calc framework | #14 Library calculations | #15 Execution engine | #16 AGA3/AGA8 | #18 jBPM-calc integration
+
+---
+
+### Item #13: Calculation Framework Architecture (5→9) ✅
+
+**Three-layer architecture:**
+```
+CONFIGURATION LAYER (DB)
+  CALCULATION + CALCULATION_VERSION
+  CALC_EQUATION, CALC_VARIABLE_LOCAL, CALC_PARAMETER
+  CALC_SET, CALC_SET_EQUATION, CALC_SET_COMBINATION
+  CALC_PROCESS_ELEMENT, CALC_PROCESS_TRANSITION
+       ↓
+EXECUTION LAYER (Java)
+  CalculationEngineImpl.run(ExecutionContext)
+  RecordCache (in-memory DB records)
+  VariableCache (in-memory variable values)
+  CalculationObject (in-memory EC objects)
+       ↓
+RESULTS LAYER (DB write-back)
+  DV_CALC_VAR_WRITE_MAPPING → class attributes
+  TV_CALCULATION_EVENT (event log)
+  CALC_DAY_PROD_LOG / CALC_MTH_PROD_LOG (output log)
+```
+
+**`CalculationEngine` interface — simplest possible API:**
+```java
+public interface CalculationEngine {
+    public void run(ExecutionContext ctx) throws RemoteException, CalculationException;
+}
+```
+Single method. All configuration, objects, and context passed via `ExecutionContext`.
+
+**`CalculationEngineImpl` — "Read meta data and configuration, and run the MAIN calculation":**
+- Reads all calc config from DB into memory at startup
+- `MAX_BATCH_SIZE = 50000` — writes results in batches of 50,000 rows
+- Built-in `Timer` class tracks milliseconds per execution step
+- Uses `EcDp_System_Key.assignNextNumber('RECORD_EVENT')` to generate sequential event numbers
+- Events stored in `TV_CALCULATION_EVENT(EVENT_NO, DESCRIPTION)` for audit trail
+
+**Variable read/write mapping — how calc variables bind to DB:**
+```sql
+-- DV_CALC_VAR_READ_MAPPING — how variables are READ from DB
+OBJECT_CODE          = 'EC_PROD'           (calc context)
+CALC_VAR_SIGNATURE   = 'ZWP_rCntrEnergyYTD[CONTRACT,ACCOUNT_LIST,MTH]'
+                       ← variable name + [index dimensions]
+CLS_NAME_MAPPING     = 'SCTR_ACC_MTH_STATUS'   (EC class to read from)
+SQL_SYNTAX           = 'ZWP_ENERGY_QTY_YTD'    (attribute name in class)
+CALC_DATE_HANDLING   = 'VALID_UNTIL_NEXT'
+VALID_FROM_ATTR_NAME = 'DAYTIME'
+SUB_DAILY_IND        = 'N'
+CALC_DATASET         = 'DEFAULT'
+```
+This mapping is the bridge between the EC calculation engine and the EC class model. Every variable in a calculation must have a read mapping (to get data in) and optionally a write mapping (to write results back).
+
+**Calc context (`EC_PROD`):** Scopes which DB object types, classes, and attributes are accessible. Woodside uses `EC_PROD` for all production calculations. Other contexts: `EC_CHEM`, `EC_REVN`.
+
+**Woodside calc structure (from `080_Calculations/` folder):**
+```
+00_DB_Object_types/   — object types available to calc (CALC_DB_OBJECT_TYPE, CALC_OBJECT_FILTER)
+01_Variables/         — variable definitions and read/write mappings
+02_Calculation/
+  01_Library/         — library calculations (ZWP_LIB_*, XEM_*)
+  02_Main/            — main allocation calculations (ZXIC_DAILY_VOLUME, ZXIC_MONTHLY_VOLUME)
+```
+
+**Key insight:** The EC calc framework is fully configuration-driven. No Java code is needed for custom calculations — only SQL config in DB tables. The engine reads the config, builds an execution graph, and runs it. Performance is controlled by batch size and logging level.
+
+---
+
+### Item #14: Library Calculations (5→9) ✅
+
+**Two distinct concepts (ECpedia — Library Calculation Basics):**
+
+| Concept | What it is | Impact on usage |
+|---|---|---|
+| **Library Calculation** | Reusable calculation rule with inherited variables/sets | Can be plugged into any calc in the same context |
+| **Calculation Library** | Organisational container | Groups library calcs — no impact on where they can be used |
+
+**Library Calculation = pseudo-function:**
+- Has a list of **inherited variables and sets** — these are its input/output parameters
+- The calling calculation MUST have all inherited variables/sets in scope when calling it
+- Must be in same **calculation context** (`EC_PROD`, `EC_CHEM`, etc.)
+- **No recursion** — calc engine checks at runtime (not design-time)
+
+**Object code naming convention:**
+```
+[EXT]_[GROUP]_[NAME]    max ~25 chars
+ZWP_LIB_DATA_LOG_DAY    ← ZWP extension, LIB group, DATA_LOG_DAY function
+ZWP_LIB_READ_CARGO      ← ZWP extension, reads cargo data
+XEM_CUSTOM_ACTIVITY     ← XEM extension, custom activity calc
+```
+
+**Calculation period:**
+- `empty` = can be used in any period (daily OR monthly)
+- `DAT` = daily only
+- `MTH` = monthly only
+- Update via SQL: `UPDATE ov_calculation SET CALC_PERIOD = 'MTH' WHERE CODE = 'LIB_COMM_CODE'`
+
+**Product Standard Library Calcs (PSLC) in EC 14.2.0:**
+- Upstream: **none**
+- Midstream: **none**
+- Environmental: has PSLCs (documented separately in ECCM space)
+- Do NOT modify PSLCs — copy and create project-specific version instead
+
+**Library calc versioning (ECpedia best practice):**
+```
+Version name format: LIB_CALC_NAME (2025-01-01)    ← start date appended
+Superseded version:  LIB_CALC_NAME (2024-01-01) S  ← 'S' suffix = superseded
+```
+Add `Log message` in calc equations to show which version is executing — removes uncertainty during testing.
+
+**Deployment: delete-then-redeploy (referential integrity constraint):**
+```sql
+-- Step 1: Remove references from parent calcs + delete lib calc
+FOR libcalcs IN (SELECT * FROM calculation WHERE OBJECT_CODE IN ('LIB_CALC_1', ...)) LOOP
+    UPDATE CALCULATION_VERSION SET IMPL_CALCULATION_ID = OBJECT_ID WHERE IMPL_CALCULATION_ID = libcalcs.OBJECT_ID;
+    Ecdp_Calculation.deleteCalculation(libcalcs.OBJECT_ID);
+END LOOP;
+
+-- Step 2: Deploy updated lib calc via ECCT export
+
+-- Step 3: Restore references in parent calcs
+UPDATE CALCULATION_VERSION SET IMPL_CALCULATION_ID = libcalcs.OBJECT_ID WHERE REV_TEXT = libcalcs.OBJECT_CODE;
+```
+
+**Bloat prevention (ECpedia):** When an existing library keeps growing, create a NEW library calculation instead. A library calc can call another library calc — use this to chain modular logic.
+
+**Key insight:** Library calculations are EC's equivalent of reusable functions. The "inherited variables/sets" declaration is the function signature. Context-specificity enforces separation between production, chemistry, and revenue domains. The delete-then-redeploy pattern is the only safe update method.
+
+---
+
+### Item #15: Execution Engine Internals (5→9) ✅
+
+**Value type hierarchy — how EC represents all calculation values:**
+```
+CalculationValue (base interface)
+├── RealValue       — double-precision floating point
+├── ECRealNumber    — BigDecimal with MAX_SCALE=15 (exact arithmetic)
+├── NullValue       — explicit null (different from missing!)
+├── MissingValue    — value not yet computed or out of scope
+├── SetValue        — ordered collection of objects (iteration set)
+├── IterationValue  — current value in a set iteration
+├── BooleanValue    — true/false
+└── DateValue       — date/time value
+```
+
+**`ECRealNumber` — EC's high-precision number type:**
+```java
+MAX_SCALE = 15              // 15 decimal places guaranteed precision
+ROUNDING_MODE = UNNECESSARY // no rounding unless explicitly requested
+ZERO_LIMIT = 1e-10         // values below this treated as 0 for division-by-zero protection
+```
+Uses `BigDecimal` internally — prevents floating-point rounding errors in financial calculations.
+
+**`CalculationObject` — in-memory EC object:**
+```java
+CalculationValue  getKey()         // object's primary key as CalculationValue
+Map<String,CalculationValue> getAttributes()  // all attributes in memory
+Timespan          getTimespan()    // validity period
+int               getCalcSeqNo()   // processing order
+String            getCalcRuleId()  // linked calculation rule
+String            getClassName()   // EC class name (null if not persistent)
+boolean           isPersistent()   // true = loaded from EC object class view
+```
+Objects are loaded into `RecordCache` keyed by object type + key. The engine iterates over objects in `calcSeqNo` order — network topology determines calculation sequence.
+
+**Equation block standards (ECpedia):**
+```
+Block name format: [index] Name (iterator=SetName)
+Example:          [20,20] Read Daily Stream Data (d=DaysInPeriod, s=StreamsMeasured)
+Max equations per block: ~50 (performance degrades above this)
+```
+
+**Logging levels and when to use each:**
+| Level | Purpose | Output |
+|---|---|---|
+| NODETAIL (default) | Minimum info — what customer agreed to see | Start/end, totals |
+| MEDIUM | Agreed details — key intermediate values | Per-object summaries |
+| FULL (debug) | All values for debugging | Semi-colon delimited for Excel paste |
+
+```
+Full log format: INFO = <block index> ; Node ; Stream ; PC ; Comp ; Var1 ; Val1 ; Var2 ; Val2
+```
+
+**Warning vs Error vs Fatal:**
+- **Warning** = continues execution, logged
+- **Error** = logged, counted in `ErrorCount`
+- **Fatal** = terminates immediately — use ONLY after reading all input data (not mid-execution)
+- Best practice: check `ErrorCount > 0` after reading input, then `Fatal` if errors found
+
+**Standard set naming (ECpedia):**
+| Set | Content |
+|---|---|
+| `StreamsAll` | All non-implicit streams |
+| `StreamsMeasured` | Streams with type='M' or 'D' |
+| `StreamsCalculated` | Streams with type='C' |
+| `NodesASC` / `NodesDESC` | Nodes sorted by CalcSeqNo |
+| `DaysInPeriod` | One day (daily) or all days in month (monthly) |
+| `DaysToIterate` | Determines loop count for monthly AGGR_DAYS vs LOOP_DAYS |
+| `ComponentsDB` | All components from tv_hydrocarbon_components |
+| `ProfitCentresDB` | All profit centres from iv_profit_centre |
+
+**Standard iterators:** `s`=streams, `n`=nodes, `d`=days (do NOT define `d` as a set), `p`=phase, `c`=components, `an`=allocation networks, `cntr`=contracts, `pc`=profit centres
+
+**Key insight:** The execution engine separates VALUE TYPES (exact arithmetic via BigDecimal) from EXECUTION MODEL (blocks + equations + sets). The `calcSeqNo` on nodes drives the allocation network traversal order. Keeping blocks under 50 equations and using standard set names ensures maintainability across projects.
+
+---
+
+### Item #16: AGA3/AGA8 Gas Volume Standards (4→9) ✅
+
+**What these standards are for:**
+- **AGA3** = Orifice Metering of Natural Gas — calculates gas FLOW RATE from differential pressure across an orifice plate
+- **AGA8** = Compressibility Factors of Natural Gas — calculates Z-factor to convert FLOWING volumes to STANDARD conditions
+- Together: AGA8 computes gas properties (Z-factor) → AGA3 uses them to compute custody-transfer volumes
+
+**Industry context:**
+- AGA3 = primary standard for custody transfer orifice measurement in North American pipelines
+- Also published as API Standard 2530 / API MPMS Chapter 14.3 / ANSI/API 2530
+- Accuracy requirement: **±0.5%** for custody transfer
+- Beta ratio (orifice/pipe diameter): valid range **0.20–0.75**
+- Reynolds number must be solved **iteratively** (discharge coefficient CD depends on flow which depends on CD)
+
+**EC implementation — JNI native library:**
+Both AGA3 and AGA8 are implemented via **Java Native Interface (JNI)** to a C/C++ shared library:
+```java
+// AGA3 — orifice flow calculation
+public class AGA3SA extends AGALIB {
+    public static synchronized native int ORIFICE(
+        int NTAPS,      // tap type (flange=1)
+        double PF,      // flowing pressure (psia)
+        double TF,      // flowing temperature (°R)
+        int MATORF,     // orifice material
+        double DO,      // orifice bore diameter (inches)
+        double TORF,    // orifice temperature (°F)
+        double DM,      // pipe internal diameter (inches)
+        double RHOTP,   // gas density at flowing conditions
+        double RHOS,    // gas density at standard conditions
+        double HW,      // differential pressure (inches H2O)
+        double VISC,    // gas viscosity (cP)
+        double KFAC,    // isentropic exponent
+        // ... outputs:
+        DoubleValue QV,   // volumetric flow rate (MCFH)
+        DoubleValue CD,   // discharge coefficient
+        DoubleValue RED,  // Reynolds number
+        DoubleValue BETA  // beta ratio
+    );
+}
+```
+
+```java
+// AGA8 — Z-factor / compressibility
+public class AGA8PLSG extends AGALIB {
+    public static synchronized native int CALCGS(
+        int Method,     // 1=Detail (custody transfer), 2=Gross (HV+RD), 3=Gross (RD+N2+CO2)
+        double GRGR,    // gas relative density (specific gravity)
+        double HV,      // heating value (BTU/SCF) — for Gross Method 1
+        double X[],     // gas composition mole fractions [N2, CO2, H2S, H2, CO]
+        double TF,      // flowing temperature (°R)
+        double PF,      // flowing pressure (psia)
+        // ... outputs:
+        DoubleValue ZF,    // Z-factor at flowing conditions
+        DoubleValue ZB,    // Z-factor at base conditions
+        DoubleValue ZS,    // Z-factor at standard conditions
+        DoubleValue RHOTP, // density at flowing conditions (lb/ft³)
+        DoubleValue MWGAS  // molecular weight of gas
+    );
+}
+```
+
+**`VolumeCalculation.AGA()` — the combined calculation:**
+Calls AGA8 first → feeds gas density (RHOTP, RHOS) and Z-factors into AGA3 → outputs final standard volume (QV in MCFH).
+
+**AGA8 method selection:**
+| Method | Inputs | Use case |
+|---|---|---|
+| 1 = Detail | Full gas composition (GC chromatograph) | Custody transfer (most accurate) |
+| 2 = Gross Method 1 | Heating value + relative density + CO₂ | Less accurate, no GC needed |
+| 3 = Gross Method 2 | Relative density + N₂ + CO₂ | Intermediate accuracy |
+
+**Related AGA standards:**
+| Standard | Measurement type |
+|---|---|
+| AGA3 | Orifice (differential pressure) |
+| AGA7 | Turbine meter |
+| AGA8 | Compressibility / Z-factor (= API 14.2) |
+| AGA9 | Ultrasonic multipath meter |
+| AGA10 | Speed of sound in gas |
+| AGA11 | Coriolis meter |
+
+**Key insight for Woodside:** EC's AGA implementation uses a C/C++ native DLL loaded via JNI (`synchronized native` = thread-safe). The fact that both methods are `synchronized` means they serialize AGA calculations across threads. AGA3 requires AGA8 output — they must always run together. Gas composition from the chromatograph drives AGA8 Method 1 accuracy; if no GC is available, use Method 2 (HV + relative density).
+
+---
+
+### Item #18: jBPM Integration with Calculation Engine (6→9) ✅
+
+**The bridge: `BpmCalcAction.java`**
+EC provides a dedicated class in `frmw-calc` that connects jBPM to the calculation engine:
+```
+jBPM process → BpmCalcAction → CalculationEngineEJB → CalculationEngineImpl.run()
+```
+
+**BPM building blocks for calculations (ECpedia):**
+
+| Building Block | Purpose |
+|---|---|
+| `EC_RunCalculation.bpmn2` | Run a calculation (no error handling) |
+| `EC_RunCalculationWithErrorHandling.bpmn2` | Run calculation + route warnings/errors to user tasks |
+| `AllocGroupCalcAction` | Runs calculation for an entire allocation group |
+
+**BPM parameters for calculations (from Woodside SQL):**
+```
+calc_id                  = ZXIC_DAILY_VOLUME    (EC calculation object code)
+calculation_process_action = EC_CalculationAction (Business Action class)
+calc_context             = EC_PROD              (calc domain)
+calc_log_class           = CALC_DAY_PROD_LOG    (log class: DAY or MTH)
+calc_log_level           = NODETAIL             (log verbosity)
+calc_simulate            = N                    (N=run, Y=simulate only)
+calc_dataset_ref         = (optional dataset reference)
+```
+
+**`calc_simulate = Y` — simulation mode:**
+Reads all data and executes calculation logic but does NOT write any results back to DB. Used for testing/validation runs without polluting production data. Key feature for pre-deployment testing.
+
+**Error handling flow from BPM to calc:**
+```
+Calc engine runs
+  ├── Warning logged → BPM continues → notifies role_handle_alloc_warning
+  ├── Error logged   → BPM continues → assigns task to role_handle_alloc_nonfatal_error
+  └── Fatal logged   → calc stops    → assigns task to role_handle_alloc_fatal_error
+```
+
+**`CalculationEngineEJB` — the EJB wrapper:**
+Exposes `CalculationEngineImpl` as an EJB for:
+- Remote invocation from jBPM
+- Transaction management (calc runs in its own transaction)
+- Async execution (BPM can fire-and-forget or wait for completion)
+
+**Calc log classes (where output goes):**
+| Class | Purpose | Screen |
+|---|---|---|
+| `CALC_DAY_PROD_LOG` | Daily production calc log | CO.0246 Calculation Group Setup |
+| `CALC_MTH_PROD_LOG` | Monthly production calc log | CO.0246 |
+| `CALC_LOG` | Generic calc log | |
+
+**Key insight:** The BPM-calc integration is entirely parameter-driven. The `EC_RunCalculation` building block handles all the plumbing — just configure `calc_id` and `calc_context`. Simulation mode (`calc_simulate=Y`) is a critical feature for pre-production testing. The three-level error handling (warning/error/fatal) maps directly to BPM role-based task routing.
+
+---
+
 ## Session F — Architecture + Database (2026-06-05) [all 5 sources]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
