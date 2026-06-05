@@ -1112,6 +1112,233 @@ Woodside follows this pattern with ZWT/ZWP naming. Owner contexts above 1000 = c
 
 ---
 
+## Session I — Business Domain: Revenue, Chemistry, Transport/Cargo (2026-06-05) [all 5 sources]
+
+**Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**Items:** #25 Revenue | #26 Chemistry | #27 Transport/Cargo
+
+---
+
+### Item #25: Revenue Domain (5→9) ✅
+
+**What Revenue covers in EC:**
+Revenue is the commercial settlement layer — it converts production volumes into financial values, manages contracts, calculates royalties and taxes, and generates invoices. It sits downstream of production allocation.
+
+**Revenue processing chain:**
+```
+Production Allocation (HC volumes)
+        ↓
+Contract Calculation (apply contract terms/prices)
+        ↓
+Royalty Calculation (apply fiscal terms)
+        ↓
+Taxation (apply tax rules)
+        ↓
+Invoice Generation
+        ↓
+Financial Posting (GL accounts)
+```
+
+**EC Revenue DB classes (from revn module):**
+| Class | Purpose |
+|---|---|
+| `BALANCE` | Contract balance tracking |
+| `BALANCE_SETUP` | Balance configuration |
+| `BANK` / `BANK_ACCOUNT` | Banking details for payments |
+| `BEARER` | Legal entity bearing the fiscal obligation |
+| `CALC_REF_ROY` | Royalty calculation reference |
+| `CALC_REF_TIN` | Taxation (TIN) calculation reference |
+| `CALC_REVN_LOG` | Revenue calculation log |
+| `CALC_REVN_ROY_LOG` | Royalty calculation log |
+| `CALC_REVN_TI_LOG` | Taxation item log |
+| `CALC_REVN_FIN_ITEM_LOG` | Financial item calculation log |
+
+**Industry context — oil & gas fiscal systems:**
+| System | Structure |
+|---|---|
+| **Royalty-Tax** (OECD) | Gross revenue → Royalty → Operating costs → Taxable income → Tax |
+| **Production Sharing (PSA/PSC)** | Gross → Royalty → Cost Oil (cost recovery) → Profit Oil (shared with government) |
+| **Concessionary** | Company pays royalty + income tax; government takes no production share |
+
+**Key revenue concepts in EC:**
+- **Royalty** = percentage of gross production paid to government/landowner irrespective of profit (typically 8–15%)
+- **Cost Oil** = production allocated to recover company's capital + operating costs before profit sharing
+- **Profit Oil** = remaining production shared between government and company per R-Factor or production tiers
+- **R-Factor** = cumulative revenues / cumulative costs — determines profit oil split ratio
+- **FOB** = Free On Board (buyer takes title at loading port — seller's risk ends at ship's rail)
+- **DES** = Delivered Ex-Ship (seller delivers to buyer's port — seller bears freight risk)
+
+**Journal mapping for financial posting:**
+`JournalMappingProcessIntegrationTest` confirms EC Revenue has a journal mapping layer that posts revenue transactions to GL accounts in external financial systems (SAP, Oracle Financials). The `CALC_REVN_FIN_ITEM_LOG` stores each financial item for reconciliation.
+
+**LNG Revenue integration (ECpedia — ZLC Extension):**
+- `zlc_p_revn_replicate_cargovalues` = moves BL (Bill of Lading) quantities from Transport to EC Revenue for invoicing
+- Two invoice types: **FOB** (buyer pays freight) and **DES** (seller pays freight)
+- LNG price calculation: `ZLC_LNG_SLOPE_AND_CONSTANT` = slope × oil price index + constant (standard LNG pricing formula linked to crude oil benchmarks like JCC)
+- `SCTR_ACC_MTH_STATUS` class used for Woodside monthly contract account quantities
+
+**Woodside Pluto revenue variables (from CALC_VAR_READ_MAPPING):**
+```sql
+ZWP_rCntrEnergyYTD[CONTRACT,ACCOUNT_LIST,MTH] → ZWP_ENERGY_QTY_YTD on SCTR_ACC_MTH_STATUS
+ZWP_rCntrMassTTD[CONTRACT,COMPANY,ACCOUNT_LIST,MTH] → ZWP_MASS_QTY_TTD
+ZWP_rCntrVolTTD[CONTRACT,COMPANY,ACCOUNT_LIST,MTH] → ZWP_VOL_QTY_TTD
+```
+TTD = Total-to-date (cumulative), YTD = Year-to-date — both tracked per contract/company/month.
+
+**Key insight:** Revenue in EC is fully calculation-driven — the same calc engine used for production allocation also handles royalty and revenue calculations. The `CALC_REF_ROY` and `CALC_REF_TIN` classes define the calc rules for royalties and taxes respectively. All results are logged for audit in `CALC_REVN_*_LOG` classes.
+
+---
+
+### Item #26: Chemistry Domain (4→9) ✅
+
+**What Chemistry covers in EC:**
+Chemistry manages fluid quality (composition analysis) and chemical management (injections, orders, consumption). It bridges production data (what is produced) with commercial data (what quality is delivered).
+
+**Two sub-domains:**
+
+| Sub-domain | Purpose |
+|---|---|
+| **Fluid Analysis (CM)** | Hydrocarbon composition: mole percentages, GCV, density, heating value |
+| **Chemical Management** | Chemical products: methanol, corrosion inhibitors, scale inhibitors — procurement, injection, inventory |
+
+**EC Chemistry Java classes (from `chem` module):**
+| Class | Purpose |
+|---|---|
+| `AddAnalysisFromTemplateNotificationBusinessAction` | Creates a fluid analysis record from a template — pre-populates mole fractions for known well compositions |
+| `AddToOrderChemicalProductAction` | Adds a chemical product to a procurement order |
+| `UpdateChemicalOrderFormAction` | Updates a chemical order form (quantity, delivery date) |
+| `UpdateVolumeNotificationBusinessAction` | Notifies relevant users when chemical volume changes |
+| `InsertChemTankStrapBusinessAction` | Inserts strapping table data for a chemical storage tank |
+
+**Fluid analysis — composition tracking:**
+EC tracks hydrocarbon composition per stream/well as mole fractions:
+- Components: N₂, CO₂, H₂S, C1 (methane), C2 (ethane), C3 (propane), iC4, nC4, iC5, nC5, C6, C7+
+- Properties derived from composition: **Molecular Weight**, **Gross Calorific Value (GCV)**, **Relative Density**, **Wobbe Index**
+- Used in: AGA8 Z-factor calculation, LNG BTU calculation, royalty calculation (energy-based)
+
+**Tank strap (`InsertChemTankStrapBusinessAction`):**
+A tank strap (strapping table) maps **tank ullage (height)** to **volume**. For chemistry tanks (methanol, inhibitors), strapping is required for accurate inventory measurement. EC has a standard pattern for inserting strapping data via Business Action.
+
+**Chemistry in LNG context (ECpedia — ZLC):**
+- `ZLC_LNG_BOL_CALC` = LNG BTU calculation based on:
+  - LNG composition (mole fractions from cargo analysis)
+  - Liquid volume (from ship ullages / metering)
+  - Heating value per component
+  - Result: **Total BTU content** of the cargo → basis for commercial invoice
+- `ZLC_T_CARGO_ANALYSIS` / `ZLC_T_CARGO_ANALYSIS_ITEM` = stores composition per LNG cargo
+- `CARGO_ANALYSIS_ITEM` / `ANALYSIS_ITEM` = EC class for cargo/production analysis items
+
+**Stream Component Analysis (Issue_1052 context):**
+`RV_STRM_COMP_ANALYSIS` = EC reporting view for stream component data. This is exactly what Issue_1052 check rules (TC01/TC02) validate — ensuring stream component analysis data is within valid ranges. Chemistry domain directly connects to check rules.
+
+**Key insight:** Chemistry in EC serves two purposes: (1) quality tracking — ensuring hydrocarbon composition is recorded for commercial accuracy (LNG BTU invoicing depends on exact composition); (2) chemical injection management — tracking what chemicals are injected into wells/pipelines for integrity management, with full inventory and procurement lifecycle.
+
+---
+
+### Item #27: Transport / Cargo (4→9) ✅
+
+**What Transport covers in EC:**
+Transport is EC's midstream/commercial operations module — it manages the physical movement of hydrocarbons from production point to buyer. For LNG, this means cargo scheduling, vessel management, terminal operations, and gas dispatching.
+
+**Three Transport sub-modules:**
+
+| Sub-module | Coverage |
+|---|---|
+| **Cargo Planning** | Lifting schedules, nominations, entitlements, storage forecasts, scenario management |
+| **Terminal Operations** | Physical cargo execution: BL/MR, timesheets, cargo analysis, demurrage |
+| **Gas Dispatching** | Pipeline nominations, delivery point management, meter allocation, contract balance |
+
+**Cargo Planning — the lifecycle of an LNG cargo:**
+```
+Annual Delivery Program (ADP) — 12-month lifting schedule per buyer/contract
+        ↓
+Short-term Delivery Schedule (SDS) — 30-day rolling schedule
+        ↓
+Nomination Entry — buyer nominates specific cargo (vessel, window, quantity)
+        ↓
+Cargo Planning Screen — schedule vis berth/storage/process train
+        ↓
+Lifting Program calculation (EC_LIFT_PROGRAM) — generates cargo records
+        ↓
+Cargo Transport records created (ZLC_T_CARGO_TRANSPORT)
+```
+
+**Key cargo planning concepts:**
+| Concept | Definition |
+|---|---|
+| **Lifting Account** | Tracks each buyer's cumulative entitlement to lift product (balance of produced vs lifted) |
+| **Entitlement** | Daily/sub-daily volume each buyer is entitled to lift based on ownership share |
+| **Berth** | Physical loading berth — capacity, availability calendar |
+| **Process Train** | LNG liquefaction unit — design capacity, reliability/temperature derating factors |
+| **Scenario Manager** | Creates alternate planning scenarios (ADP scenarios, SDS scenarios) for optimization |
+| **ADP** | Annual Delivery Program — official schedule of all LNG cargoes for the year |
+| **SDS** | Short-term Delivery Schedule — operationally actionable near-term schedule |
+
+**Terminal Operations — what happens at the berth:**
+| Activity | EC screen/class |
+|---|---|
+| Cargo Activity Timesheet | Tracks arrival, mooring, loading start/end, departure times |
+| BL/MR Info | Bill of Lading + Mate's Receipt — legal title transfer documents |
+| Cargo Analysis | LNG composition analysis per load (mole fractions from sampling) |
+| Cargo Documents | Generates official shipping documents from document instructions |
+| Ship Info & Ullages | Vessel tank measurements before/after loading |
+| Demurrage | Calculates time overruns at berth → compensation payable |
+| Harbour Dues | Port charges per vessel call |
+
+**Gas Dispatching — pipeline operations:**
+- Daily nominations: input (what enters pipeline), output (what exits pipeline), operational (constraints)
+- **Location matching** = confirms nominations at entry/exit points are balanced
+- **Meter allocation** = allocates measured gas volumes to contracts
+- **Operational restrictions** = physical constraints on dispatch (pressure limits, maintenance windows)
+- **Contract balance** = running balance of contractual quantity obligations
+
+**LNG BTU calculation (`ZLC_LNG_BOL_CALC`):**
+```
+BTU content = Σ(mole fraction × heating value) × liquid volume × density correction
+             = LNG composition × volume (from ullage) → energy (MMBtu or GJ)
+```
+This is the basis for the commercial invoice — buyer pays per unit of energy, not volume.
+
+**EC Transport module Java (from `tran` module):**
+- `DecodeNotiMailRecipient`, `DecodeNotiSmsRecipient`, `DecodeNotiSysMsgRecipient` — notification routing (email/SMS/system message)
+- `MonDataPopulator` — populates monitoring data for contract/nomination
+- `MonPopulatorIUD` — IUD-based monitoring data updates
+- `NotificationCommons` — common notification utilities
+
+Transport has a rich notification framework — automated alerts for vessel arrivals, nomination deadlines, BL completion, and deviation from schedule.
+
+**Woodside Pluto transport tables:**
+| Table | Purpose |
+|---|---|
+| `ZWP_T_CARGO_INFO_LIGHT` | Lightweight cargo info (vessel, dates, quantities) |
+| `ZWP_T_CARGO_TRANSPORT` | Full cargo transport record (contract, LA, volume, timing) |
+| `ZWP_T_STRM_SINGLE_TRANSFER` | Single stream transfer record for Pluto production |
+
+**LNG Extension architecture (ECpedia — ZLC):**
+- **44 custom tables**, **47 PL/SQL packages**, **~130 EC class definitions**, **14 calculations**
+- Key packages: `zlc_p_cargo_planning` (forecast/scenario), `zlc_p_cargo_transport` (lifting → transport), `zlc_p_demurrage`, `zlc_p_feed_gas`
+- `EC_LIFT_PROGRAM` = standard product calculation that generates cargo liftings from storage balance + lifting accounts
+- After `EC_LIFT_PROGRAM` runs: `zlc_p_cargo_planning` handles cargo numbering, `zlc_p_cargo_transport.insertFromLiftProg` creates transport records
+- Roles: `ZLC_PLANNER`, `ZLC_TERMINAL_OPERATOR`, `ZLC_REVENUE`, `ZLC_EXTERNAL` (portal), `ZLC_AUDIT`
+- EC Portal (EBB) = external web portal for buyers to view schedule, submit nominations, see BL info
+
+**Industry context — LNG value chain:**
+```
+Gas Field → Processing Plant → Liquefaction Train → LNG Storage Tank → Loading Berth
+                                                                              ↓
+                                                                    LNG Carrier (vessel)
+                                                                              ↓
+                                                                    Regasification Terminal
+                                                                              ↓
+                                                                    Gas Grid (buyer's country)
+```
+EC Transport manages the LOADING side (after liquefaction). Woodside Pluto is a major LNG export project — EC manages cargo scheduling from storage through vessel loading to invoice.
+
+**Key insight:** Transport is the most operationally intensive EC domain. For LNG, a single cargo mistake (wrong vessel, wrong berth, wrong BL quantity) can cost millions. EC's cargo planning, BL documentation, and BTU calculation are the commercial-legal system of record for LNG trade. The Woodside Pluto implementation is a live production LNG export operation using these exact modules.
+
+---
+
 ## Session H — PVT Fluid Properties (2026-06-05) [all 5 sources]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
