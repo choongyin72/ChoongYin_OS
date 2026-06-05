@@ -39,6 +39,8 @@
       "Bash(py -X utf8 *)",
       "Bash(py *)",
       "Bash(pip install *)",
+      "Bash(tail * C:\\Projects\\ChoongYin_OS\\tmp\\logs\\*)",
+      "Bash(tail *)",
       "Bash(ls -la *)",
       "Bash(ls * C:\\DEV\\*)",
       "Bash(powershell -command *)",

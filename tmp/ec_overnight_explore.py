@@ -15,9 +15,20 @@ from playwright.sync_api import sync_playwright
 import json, os, time
 
 EC_URL = 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/'
-SS_DIR = r'c:\Projects\ChoongYin_OS\docs\EC\screenshots\all_screens'
-KB_PATH = r'c:\tmp\ec_full_screen_kb.json'
+SS_DIR  = r'c:\Projects\ChoongYin_OS\docs\EC\screenshots\all_screens'
+KB_PATH = r'c:\Projects\ChoongYin_OS\tmp\logs\ec_full_screen_kb.json'
+LOG_PATH = r'c:\Projects\ChoongYin_OS\tmp\logs\ec_explore_log.txt'
 os.makedirs(SS_DIR, exist_ok=True)
+os.makedirs(r'c:\Projects\ChoongYin_OS\tmp\logs', exist_ok=True)
+
+import sys
+# Tee output to log file
+class Tee:
+    def __init__(self, *files): self.files = files
+    def write(self, obj): [f.write(obj) for f in self.files]; [f.flush() for f in self.files]
+    def flush(self): [f.flush() for f in self.files]
+_logfile = open(LOG_PATH, 'w', encoding='utf-8')
+sys.stdout = Tee(sys.__stdout__, _logfile)
 
 TOP_LEVEL = {
     'Dashboard','Configuration','EC Production','EC Chemistry','EC Transport',
@@ -224,14 +235,23 @@ with sync_playwright() as p:
             fail_count += 1
             continue
 
-        # Check if we're still on EC (not navigated to external)
-        if 'energycomponents' not in page.url and page.url.startswith('http'):
-            # Might have navigated away — go back
-            page.go_back()
-            page.wait_for_load_state('networkidle', timeout=10000)
+        # Wait for page to fully settle before analysis
+        page.wait_for_load_state('domcontentloaded', timeout=10000)
+        page.wait_for_timeout(300)
 
-        # Analyze
-        info = page.evaluate(ANALYZE_JS, [screen, section])
+        # Analyze — wrap in try/except for context-destroyed errors
+        try:
+            info = page.evaluate(ANALYZE_JS, [screen, section])
+        except Exception as eval_err:
+            # Context destroyed — wait and retry once
+            page.wait_for_load_state('networkidle', timeout=10000)
+            page.wait_for_timeout(500)
+            try:
+                info = page.evaluate(ANALYZE_JS, [screen, section])
+            except Exception:
+                print(f'  {i+1:03d} EVAL_ERR [{section[:10]}] {screen}')
+                fail_count += 1
+                continue
         info['found'] = True
         screen_db[f'{section}::{screen}'] = info
         success_count += 1
