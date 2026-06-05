@@ -882,3 +882,8 @@ WHERE LAST_TRANSFER < sysdate - 1 AND ACTIVE = 'Y';
 ### Item #20: Creating Extension Classes (5→9) ✅
 
 
+
+
+### Item #21: ZWP_/ZWT_ Woodside Extension Patterns (7→9) ✅
+
+
