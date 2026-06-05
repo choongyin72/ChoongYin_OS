@@ -1112,6 +1112,323 @@ Woodside follows this pattern with ZWT/ZWP naming. Owner contexts above 1000 = c
 
 ---
 
+## Session F — Architecture + Database (2026-06-05) [all 5 sources]
+
+**Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**Items:** #9 JSF/PrimeFaces rendering | #10 Screen templates | #11 Flyway core | #12 Journal tables
+
+---
+
+### Item #9: JSF/PrimeFaces Rendering Pipeline (6→9) ✅
+
+**JSF 6-phase lifecycle — what EC uses each phase for:**
+
+| Phase | Name | EC behaviour |
+|---|---|---|
+| 1 | Restore View | JSF rebuilds component tree from viewstate; screen beans loaded |
+| 2 | Apply Request Values | AJAX payload decoded; screenlet component values updated |
+| 3 | Process Validations | `ValidateMandatoryService` runs; custom validators execute |
+| 4 | Update Model | Data model values synced from UI component values |
+| 5 | Invoke Application | `EventDispatcher` fires; EC service chain executes in order |
+| 6 | Render Response | PrimeFaces PPR renders only requested component IDs |
+
+**For AJAX requests, phases 2-5 only run on components in the `process` set. Phase 6 only updates components in the `update` set.** EC exploits this to keep screen performance high — a data save only re-renders the affected table, not the whole page.
+
+**`AbstractECService` — base for all 70+ EC services:**
+```java
+public abstract class AbstractECService extends ScreenXmlObject implements IECService {
+    private Screenlet screenlet;           // the owning screenlet
+    protected EventDispatcher eventDispatcher;  // routes ECEvents through service chain
+    private Map<String,String> staticRetrieveArgs; // args declared in XHTML config
+}
+```
+Every service declares its args in the XHTML `<ect:screenletConfig>` block. The screenlet XML is parsed once at screen load; services share the parsed element tree.
+
+**`EventDispatcher` — EC's event bus:**
+- Dispatches `ECEvent` objects through the service chain
+- Services subscribe to event types (retrieve, save, navigate, etc.)
+- Each service can add results to the `ServiceResponse`
+- Error/warning/info messages collected → shown in notification area
+
+**`RerenderBean` (@RequestScoped, @Deprecated):**
+Was used to track component IDs for partial re-render. Now replaced by inline `update` lists in PrimeFaces components. Shows that EC is actively modernising its JSF patterns.
+
+**PrimeFaces rendering specifics:**
+- Client-side based on **jQuery** (not Mojarra/MyFaces client APIs)
+- Partial Page Rendering (PPR) = only `update` component IDs re-rendered
+- `process` = components that go through phases 2-5
+- `@form` shorthand = process entire enclosing form
+- `@this` = only the triggering component
+
+**Web — JSF lifecycle best practices applied in EC:**
+- Never use full-page submit for field changes — EC uses `f:ajax` everywhere
+- Group validation using `process` attribute — EC's `ValidateMandatoryService` follows this
+- Dependent dropdowns re-populated via PPR triggered by parent change
+
+**Key insight:** EC's JSF architecture is a layered event system. The XHTML declares WHAT (screenlet type, model, services). The services decide HOW (retrieve, validate, save). The EventDispatcher coordinates WHEN. PrimeFaces handles the AJAX transport and partial re-render.
+
+---
+
+### Item #10: Screen Templates and XHTML Patterns (6→9) ✅
+
+**All EC screens follow one template pattern:**
+```xml
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+  template="/xhtml/screen/screen.xhtml"
+  xmlns:ec="http://java.sun.com/jsf/composite/screenlet"
+  xmlns:ect="http://energycomponents.com/ectags"
+  xmlns:p="http://primefaces.org/ui">
+  <ui:define name="ecScreen">
+    <!-- screen content here -->
+  </ui:define>
+</ui:composition>
+```
+
+- `template="/xhtml/screen/screen.xhtml"` = master page (navigation bar, layout, CSS, JS)
+- `ui:define name="ecScreen"` = the only slot screens need to fill
+- All screens are identical in structure — only the screenlet config differs
+
+**Layout system — three tags:**
+```xml
+<ect:gridContainer>      ← outer grid wrapper
+  <ect:gridRow>          ← horizontal row
+    <ect:gridCell>       ← column within row
+      <ec:tableScreenlet .../>
+    </ect:gridCell>
+  </ect:gridRow>
+</ect:gridContainer>
+```
+
+**Screenlet config anatomy (from real `daily_data_status_process.xhtml`):**
+```xml
+<ec:formScreenlet id="nav" label="Navigator">
+  <ect:screenletConfig energyx-version="3">
+    <renderer>
+      <model class="GenericStaticModel">          ← static XML data (dropdowns)
+        <arg name="xmlResultUrl" value="/path/to/static/data.xml">
+          <arg name="$PARAM$" value="CONSTANT" valuetype="constant"/>
+        </arg>
+      </model>
+      <transformer class="JSFFormNavigatorTransformer"/>
+    </renderer>
+    <service class="InitialLoadService"/>
+    <service class="ValidateMandatoryService">
+      <arg name="buttonIDRef" value="navButtonID" datatype="string" valuetype="constant"/>
+    </service>
+    <service class="NavigatorHotkeyService">
+      <arg name="buttonName" value="button"/>
+    </service>
+    <service class="RetrieveService">
+      <arg name="eventSource" value="nav" datatype="object" valuetype="constant"/>
+    </service>
+    <service class="NavigatorButtonService">
+      <arg name="buttonIDRef" value="navButtonID" datatype="string"/>
+    </service>
+    <service class="LinkService"/>
+  </ect:screenletConfig>
+</ec:formScreenlet>
+```
+
+**`valuetype` options:**
+| valuetype | Meaning |
+|---|---|
+| `constant` | Hardcoded literal value |
+| `requestParam` | Read from JSF view scope / request (e.g., `RetrieveArgs.DAYTIME`) |
+| `function` | Call a Java static method |
+
+**`RetrieveArgs` prefix = inter-screenlet data passing:**
+```xml
+<arg name="Param1" value="RetrieveArgs.nav.OBJECT" valuetype="requestParam"/>
+```
+`RetrieveArgs.nav.OBJECT` = value the `nav` screenlet published under key `OBJECT`. `LinkService` wires parent/child screenlets so child refreshes when parent selection changes.
+
+**Model types and when to use each:**
+| Model class | Use case |
+|---|---|
+| `GenericDaoModel` | Query driven by XML definition file (most common) |
+| `GenericStaticModel` | Static XML data (dropdowns, navigator options) |
+| `GenericSqlModel` | Direct SQL with parameters |
+| `GenericStaticNavigatorModel` | Date range navigator model |
+
+**`energyx-version="3"` = current screenlet config format version.** Earlier versions (1, 2) are still present in old screens but v3 is the standard from EC 11 onwards.
+
+**Key insight:** Every EC screen is 30-60 lines of XML config. No custom Java needed for standard CRUD screens. The framework does all the work — model fetches data, services handle user actions, LinkService wires parent/child. Adding a new screen means writing the XHTML config + XML query file only.
+
+---
+
+### Item #11: Flyway Migration Patterns in Core EC (7→9) ✅
+
+**Core EC migration directory structure:**
+```
+database/ec-db-migration-oc-0/src/main/resources/db/migration/
+└── owner_context_0/
+    ├── {version}/                  ← e.g. 14.2.5/
+    │   ├── FRMW/                   ← framework changes
+    │   ├── PROD/                   ← production domain
+    │   ├── REVN/                   ← revenue domain
+    │   ├── TRAN/                   ← transport domain
+    │   └── CHEM/                   ← chemistry domain
+    └── common/                     ← PL/SQL packages (always repeatable)
+        ├── frmw/packages/
+        ├── prod/packages/
+        ├── revn/packages/
+        └── {domain}/onlinehelp/    ← online help text (repeatable)
+```
+
+**Versioned migration filename anatomy:**
+```
+V14.2.5.0.0.20260204100100__ECPD-113067_fitness_rest_api_role.sql
+│ │         │               │           │
+│ version   timestamp       ECPD ticket description
+│
+V = versioned (run once, checksum locked)
+```
+
+**Repeatable migration filename anatomy:**
+```
+R__0100_ecbp_chemical_stream_head.sql
+   │    │
+   │    package name
+   execution order (0100=head, 0200=body)
+R__ = repeatable (re-runs when checksum changes)
+```
+
+**Head/body pattern for PL/SQL packages:**
+```
+R__0100_ecdp_classjournalhelper_head.sql  ← package header (spec)
+R__0200_ecdp_classjournalhelper_body.sql  ← package body (impl)
+```
+EC always deploys head before body (0100 before 0200) — guaranteed by the numeric prefix. Both are repeatable so any code change triggers re-deploy.
+
+**Flyway schema history table (`flyway_schema_history`):**
+```sql
+-- Flyway records every applied script:
+installed_rank  -- sequential order applied
+version         -- NULL for repeatable, version string for versioned
+description     -- derived from filename
+type            -- SQL or JDBC
+script          -- relative path to script file
+checksum        -- CRC32 of script content
+installed_by    -- DB user (ECKERNEL_EC)
+installed_on    -- timestamp
+execution_time  -- ms
+success         -- 1=OK, 0=failed
+```
+If a versioned migration's checksum changes after deployment → Flyway throws `ERROR: Migration checksum mismatch` → cannot start EC. This protects production data integrity.
+
+**`ecdp_config_util` — EC's migration helper package:**
+```sql
+ecdp_config_util.mergeBasisRole(p_role_id, p_role_name)
+ecdp_config_util.mergeBasisObject(p_object_name, p_object_type, p_object_descr)
+ecdp_config_util.mergeBasisAccess(p_object_name, p_role_id, p_level_id)
+```
+All `merge*` procedures are idempotent — safe to run multiple times. This is the standard pattern for data inserts in versioned migrations.
+
+**Flyway best practices (web) applied in EC:**
+- Timestamp in version = prevents conflicts when two developers add migrations simultaneously
+- V__ for schema/data, R__ for PL/SQL = EC follows this exactly
+- One ECPD Jira ticket = one migration file = full traceability
+- Never edit a deployed versioned migration = EC enforces this via checksum
+
+**Key insight:** EC's Flyway structure is domain-separated and fully traceable. Every DB change maps to a Jira ticket. PL/SQL packages are always repeatable (code can be updated). Schema changes are always versioned (locked after deploy). The `common/` folder holds the entire PL/SQL library — hundreds of package head+body pairs.
+
+---
+
+### Item #12: Journal Tables and Audit Trail (5→9) ✅
+
+**EC audit trail — three layers:**
+
+| Layer | Mechanism | What it captures |
+|---|---|---|
+| REV_NO / REV_TEXT | Standard columns on every table | Revision number + reason for change |
+| JN_ trigger | After Update/Delete Oracle trigger | Full row snapshot before each change |
+| AP_ trigger | PINC/install trigger | Configuration change events |
+
+**Standard table template — 11 mandatory columns (from `create_table_template.sql`):**
+```sql
+record_status       VARCHAR2(1)   NULL        -- P=Provisional, V=Verified, A=Approved
+created_by          VARCHAR2(30)  NOT NULL
+created_date        DATE          NOT NULL
+last_updated_by     VARCHAR2(30)  NULL
+last_updated_date   DATE          NULL
+rev_no              NUMBER        NULL        -- starts 0, incremented on each update
+rev_text            VARCHAR2(240) NULL        -- reason for change (e.g. ECPR-Issue1052)
+approval_state      VARCHAR2(1)   NULL        -- N=New, O=Official, U=Updated, D=Deleted
+approval_by         VARCHAR2(30)  NULL
+approval_date       DATE          NULL
+rec_id              VARCHAR2(32)  NULL        -- Oracle GUID, FK for extension tables
+```
+
+**Journal trigger (`JN_` prefix) — After Update or Delete:**
+```sql
+-- Generated by ecdp_classjournalhelper for each auditable table
+CREATE OR REPLACE TRIGGER JN_WELL_VERSION
+  AFTER UPDATE OR DELETE ON WELL_VERSION
+  FOR EACH ROW
+BEGIN
+  IF UPDATING THEN
+    INSERT INTO WELL_VERSION_JN VALUES (
+      :OLD.*, 'U', SYSDATE, SYS_CONTEXT('ECKERNEL','EC_USER')
+    );
+  ELSIF DELETING THEN
+    INSERT INTO WELL_VERSION_JN VALUES (
+      :OLD.*, 'D', SYSDATE, SYS_CONTEXT('ECKERNEL','EC_USER')
+    );
+  END IF;
+END;
+```
+
+**Journal table structure (`{TABLE}_JN`):**
+- All columns from the base table
+- PLUS: `JN_OPERATION VARCHAR2(1)` — U=Update, D=Delete
+- PLUS: `JN_DATETIME DATE`
+- PLUS: `JN_USER VARCHAR2(30)`
+- No journal entry on INSERT — the base table row IS the record
+
+**`ecdp_classjournalhelper` package:**
+Generates journal triggers programmatically from class metadata. Called during `ecdp_generate()` — the same generator that creates IUD triggers and EC/ECC packages. One call generates all supporting DB objects for a class.
+
+**`IUR_` trigger — Sets REC_ID on Insert:**
+```sql
+CREATE OR REPLACE TRIGGER IUR_WELL_VERSION
+  BEFORE INSERT OR UPDATE ON WELL_VERSION
+  FOR EACH ROW
+BEGIN
+  IF :NEW.REC_ID IS NULL THEN
+    :NEW.REC_ID := SYS_GUID();
+  END IF;
+END;
+```
+REC_ID is the FK that extension tables use to link back to the base row — set via `IUR_` trigger, not by the application.
+
+**Trigger priority chain (one physical table):**
+```
+IUR_xxx  (Before Insert/Update — sets REC_ID)
+     ↓
+IUG_xxx / IUC_xxx / IU_xxx  (Before/After IUD — business logic)
+     ↓
+JN_xxx   (After Update/Delete — journal copy)
+     ↓
+AP_xxx   (PINC/install — config change tracking)
+```
+
+**REV_NO lifecycle:**
+```
+INSERT → REV_NO = 0, REV_TEXT = 'INITIAL'
+UPDATE → REV_NO = REV_NO + 1, REV_TEXT = reason (e.g. 'ECPR-Issue1052')
+DELETE → Journal entry written, base row removed
+```
+
+**REV_TEXT in practice (Issue_1052):**
+Every INSERT in the SQL script should set `REV_TEXT = 'ECPR-Issue1052'` — this makes every inserted row traceable in the journal to this change request.
+
+**Flyway integration:** Journal trigger creation is part of `ecdp_generate()` — called after table creation in Flyway migrations. This is why the Session D pattern says "always call `ecdp_generate()` after creating a new table."
+
+**Key insight:** EC's audit trail is zero-effort for developers — journal triggers are auto-generated, REV_NO is auto-incremented, and REV_TEXT is the only field developers need to populate (with their change reason). The `ecdp_classjournalhelper` package manages all journal infrastructure automatically.
+
+---
+
 ## Session E — Business Domain (2026-06-05) [ENHANCED — all 5 sources]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
