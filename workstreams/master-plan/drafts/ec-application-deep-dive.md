@@ -605,9 +605,45 @@ TARGET STAGE
 
 ---
 
-## Session A — Deep Dive Results [ENHANCED — all 5 sources]
+## Session A — Deep Dive Results [ENHANCED v2 — EC Tech Docs 14.2.5 added]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**EC Tech Docs 14.2.5 — New findings for Session A:**
+
+**Check Rule WHERE formula — full official keyword list (from `how_to_define_check_rules.html`):**
+```
+Keywords: AND, OR, IS NULL, IS NOT NULL, IN, LIKE, NULL, NOT, NVL, COALESCE,
+          SUBSTR, LENGTH, ROUND, TRUNC, COUNT, MAX, MIN, ABS, GREATEST, LEAST,
+          SYSDATE, DECODE, BETWEEN, CASE, WHEN, THEN, ELSE, END, EXISTS,
+          ADD_MONTHS, LAST_DAY
+Special: < <= = >= > <> != ( )
+Variables: ${variableName} — auto-created when formula saved, cannot be added manually
+```
+
+**Variable types (official):**
+- **Constant** — free text, cannot contain `;`. Bound as JDBC parameter (safe).
+- **Attribute** — column from the RV view
+- **Function call** — PL/SQL function call (restricted to approved packages)
+- **Sub query** — single view only (one-level subquery supported)
+
+**Function call allowed packages (official, from EC Tech Docs):**
+- EC packages of classes with "Include in Validation" = Y
+- `ECBP_WELL_THEORETICAL`, `ECBP_STREAM_FLUID`, `EC_WELL_REFERENCE_VALUE`, `EC_STRM_REFERENCE_VALUE`
+- Packages starting with `Z` (customer custom)
+- Packages in EC codes with Code Type `CHECK_RULE_PACKAGE`
+
+**Class configuration rules (hard-enforced in extensions, from `class_configuration_rule.html`):**
+| Rule | Applies to | Constraint |
+|---|---|---|
+| `AttributeLength` | All | Max 100 chars |
+| `DbMappingTypeIsValid` | Object/Data/Table | Must be one of: ATTRIBUTE, COLUMN, EXTENSION, FUNCTION, INNER_JOIN, LEFT_JOIN, EXT_JOIN |
+| `RequiredObjectClassAttributes` | Object | Must have: OBJECT_ID, CODE, OBJECT_START_DATE, OBJECT_END_DATE, DAYTIME, NAME, END_DATE |
+| `RequiredDataClassAttributes` | Data | Must have OBJECT_ID and OWNER class |
+| `ObjectIdIsOnlyKey` | Object/Data | Only OBJECT_ID can be key |
+| `NoAttributeMapping` | Table/Data | Cannot use ATTRIBUTE mapping type |
+
+These rules are **hard-enforced** — extension migration will fail if violated. Not just guidelines.
 
 ### Item #1: Class vs Object Validation (7→9) ✅
 
@@ -747,9 +783,36 @@ for (String group : groupAndChildren) {
 
 ---
 
-## Session B — Deep Dive Results [ENHANCED — all 5 sources]
+## Session B — Deep Dive Results [ENHANCED v2 — EC Tech Docs 14.2.5 added]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**EC Tech Docs 14.2.5 — New findings for Session B:**
+
+**Class Configuration Structure (from `class_configuration_structure.html`):**
+- **Domain model tables** define classes/attributes/relations — single entry per class per APP_SPACE_CNTX
+- **Property tables** extend the domain model with overridable features (customer can override product settings by adding higher-priority entries)
+- **Rule:** Never overwrite product APP_SPACE_CNTX entries (EC_FRMW, EC_PROD, EC_TRAN, etc.) — changes will NOT survive upgrade
+- **Correct pattern:** Always use your extension's APP_SPACE_CNTX (ZWT, ZWP, etc.) for all additions
+
+**EC View Generator and Class Model (from `ec_view_generator_and_class_model.html`):**
+- The view layer is called **EC Data Services** — generated automatically from class definitions
+- Goal: separate business logic from physical table structure — tables can change without breaking business layer
+- Generic functionality built into the database layer: audit triggers, ringfencing, row-level security, four-eye approval — all transparent to application code
+- **Flexibility rationale:** EC domain has seen "stable" structures become invalid (e.g. a well switching facilities) — the generic class model handles this without schema changes
+
+**Group Model — Why It Exists (from `group_model_configuration_in_ec.html`):**
+- Introduced ~20 years ago specifically to **improve Allocation read performance**
+- Object class relations are versioned → normal queries require expensive temporal joins
+- Group model pre-resolves hierarchy at master data change time → stores redundant data at lower levels → allocation queries are simpler and faster
+- **Named group models** — each group model has a name; object classes can belong to multiple group models
+- With Extensions: must use new group model mechanism (old implementation not compatible with Extension framework)
+
+**Configuration Overview (from `product_concept/configuration_overview.html`):**
+- EC is designed for **zero-downtime configuration changes** — no recompile, no system restart needed
+- Configurable areas: Tree View, Navigator, Units, Audit Tracking, Check Rules, Record Status, Screen Configuration
+- **Navigator** — reads Group Model Configuration dynamically — change the Group Model → Navigator changes immediately
+- **Units** — Display Unit (what shows on screen) vs Storage Unit (what's in DB) — fully configurable
 
 ### Item #4: Group Model Concept (6→9) ✅
 
@@ -881,9 +944,55 @@ Extension triggers cannot modify product triggers — they are additive only.
 
 ---
 
-## Session C — Deep Dive Results [ENHANCED — all 5 sources]
+## Session C — Deep Dive Results [ENHANCED v2 — EC Tech Docs 14.2.5 added]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**EC Tech Docs 14.2.5 — New findings for Session C:**
+
+**ECIS Architecture — Official Source Process Flow (from `ecis_technical_documentation.html`):**
+```
+1. EC Scheduler triggers SourceAction (parameters, configuration-id)
+2. SourceAction reads adapter configuration
+3. IF tag data:
+     SourceAction reads Source Tag Configuration
+     SourceAdapter reads tag data
+     SourceAction adjusts time intervals
+     SourceAction applies source mapping
+     SourceAction creates DTOs
+     SourceAction sends DTOs to message queue
+4. IF row data:
+     SourceAdapter reads row data
+     SourceAction creates DTOs → message queue
+```
+
+**Target Process Flow:**
+```
+1. Data picked up from message queue
+2. IF tag data: Aggregate DTOs (waits for incomplete periods)
+3. Map data to EC class attribute
+4. UOM conversion
+5. Insert/Update EC Data Storage
+```
+
+**TagService vs RowService:**
+- **TagService** — tag-based data from SCADA/historians. Tag = `{tag_id, timestamp, value, quality}`
+- **RowService** — arbitrary content rows. Processed by PackageService or ECClassService on target side
+
+**Source Adapter Configuration (from `source-adapter-configuration.html`):**
+```xml
+<!-- Key common parameters -->
+config name       — unique identifier, must be added to DT_SOURCE_ID EC codes
+class             — adapter implementation class path (mandatory)
+Sequential        — Yes/No — is data ordered by date/time from source?
+DEFAULT_RECORD_STATUS — P|V|A — status of incoming data (default: P)
+RetryTimeout      — seconds before trying next failover adapter
+DateValueFormat   — Java SimpleDateFormat for string-format date values
+```
+
+**Failover mechanism:** Multiple adapters with same `config name` → ECIS tries in order on failure. `RetryTimeout` controls how long before retrying first adapter again.
+
+**PI Adapter requirements:** Requires PI Web API OR PI OLEDB on server. PI Web API = REST-based. PI OLEDB = MS SQL Linked Server approach.
 
 ### Item #7: ECIS Source Functions Detail (7→9) ✅
 
@@ -978,9 +1087,50 @@ WHERE LAST_TRANSFER < sysdate - 1 AND ACTIVE = 'Y';
 
 ---
 
-## Session D — Deep Dive Results [ENHANCED — all 5 sources]
+## Session D — Deep Dive Results [ENHANCED v2 — EC Tech Docs 14.2.5 added]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**EC Tech Docs 14.2.5 — New findings for Session D:**
+
+**Extension Triggers (from `development_create_ec_extension_triggers.html`):**
+```sql
+-- Naming: {EXT_ID}_{trigger_type}_{table_name}
+-- Example: BIU_ZXCOE_CARGO_FCST_LEG (Before Insert/Update)
+-- Repeatable script: R__0600_{TRIGGER_NAME}.sql
+-- Folder: src/main/webapp/WEB-INF/db/migration/common/triggers
+
+CREATE OR REPLACE TRIGGER BIU_ZXCOE_CARGO_FCST_LEG
+BEFORE INSERT ON ZXCOE_CARGO_FCST_LEG
+FOR EACH ROW
+BEGIN
+  IF :new.CARGO_LEG_NO IS NULL THEN
+    EcDp_System_Key.assignNextNumber('ZXCOE_CARGO_LEG', :new.CARGO_LEG_NO);
+  END IF;
+END;
+/
+```
+Key rules: FORCE keyword if depends on auto-generated objects; repeatable (R__ prefix); all SQL blocks end with `;` then `/`
+
+**Extension Calculation Libraries (from `development_create_extension_calculation_libraries.html`):**
+```
+Naming: {extensionID}_{ObjectName}  e.g. zxcoe_MyCustomOilCalculation
+File:   V1.0.0.0.0.0100_COE_MyCustomOilCalculation.sql (versioned migration V__)
+Folder: src/main/webapp/WEB-INF/db/migration/1.0.0/{calc_folder}/
+```
+Calculation name starts with extension ID. Versioned migrations (V__) not repeatable (R__) for calc library data.
+
+**Extension Views (from `development_create_extension_views.html`):**
+```
+Naming: {EXT_ID}_V_{VIEW_NAME}  e.g. ZXCOE_V_CAP_STAT
+File:   R__400_ZXCOE_V_CAP_STAT.sql (repeatable R__ script)
+Folder: src/main/webapp/WEB-INF/db/migration/common/views
+
+CREATE OR REPLACE FORCE VIEW ZXCOE_V_CAP_STAT AS
+  SELECT ... FROM ...
+/
+```
+FORCE keyword mandatory when view depends on auto-generated EC objects (views, packages). Without FORCE, create will fail if dependency not yet generated.
 
 ### Item #19: Extension DB Migration (7→9) ✅
 
@@ -1112,9 +1262,35 @@ Woodside follows this pattern with ZWT/ZWP naming. Owner contexts above 1000 = c
 
 ---
 
-## Session I — Business Domain: Revenue, Chemistry, Transport/Cargo (2026-06-05) [all 5 sources]
+## Session I — Business Domain: Revenue, Chemistry, Transport/Cargo (2026-06-05) [ENHANCED v2 — EC Tech Docs 14.2.5 added]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**EC Tech Docs 14.2.5 — New findings for Session I:**
+
+**Transport — EC Contract Concept (from `ec_transport_the_ec_contract_concept.html`):**
+- EC uses a generic **Contract** object as the commercial agreement between parties
+- Contracts have: Nomination Points, Delivery Points, Lifting Accounts
+- **Nomination Point** = agreed location where gas/LNG changes hands
+- **Delivery Point** = physical location of delivery
+- Contract terms drive: entitlement calculations, invoice amounts, take-or-pay tracking
+
+**Transport Overview (from `ec_transport_overview.html`):**
+- Transport module covers: Cargo Planning, Terminal Operations, Gas Dispatching, Sales
+- **Annual Delivery Programme (ADP)** = 12-month forward-looking schedule owned by Planner
+- **Short-term Delivery Schedule (SDS)** = near-term actionable schedule
+- Transport integrates with Revenue: BL quantities move to EC Revenue for invoicing via dedicated interface
+
+**Revenue — Financial Item (from `EC_Revenue_Financial_Item.html`):**
+- Financial Item is the atomic unit of revenue accounting in EC
+- Each financial item has: Type (revenue/cost), Quantity, Price, Currency, Counterparty
+- Financial items link to contract accounts → rolled up into invoices
+- `CALC_REVN_FIN_ITEM_LOG` = log of all financial item calculations (audit trail)
+
+**Revenue — Stream Item Calculations (from `EC_Revenue_How_To_Configure_Stream_Item_Calculations.html`):**
+- Stream items link production volumes to commercial contracts
+- Configuration: identify stream → link to contract → define pricing method → calculation runs → financial items generated
+- Revenue calculations use the same EC calculation framework as production calculations (`EC_PROD` context)
 
 **Items:** #25 Revenue | #26 Chemistry | #27 Transport/Cargo
 
@@ -1339,9 +1515,51 @@ EC Transport manages the LOADING side (after liquefaction). Woodside Pluto is a 
 
 ---
 
-## Session H — PVT Fluid Properties (2026-06-05) [all 5 sources]
+## Session H — PVT Fluid Properties (2026-06-05) [ENHANCED v2 — EC Tech Docs 14.2.5 added]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**EC Tech Docs 14.2.5 — New findings for Session H:**
+
+**Production Test PreProcess and Calculate PVT (from `prod_prod_test_result_preprocessing_and_calculate_pvt.html`):**
+
+PreProcess performs **triangular conversions** — when 2 out of 3 values are known, the third is calculated:
+- **Triangle 1:** Start time + End time → Duration
+- **Triangle 2:** Test volume + Test volumetric rate + Duration  
+- **Triangle 3:** Volumetric rate + Mass rate + Density (key for PVT)
+
+**PreProcess error codes:**
+| Code | Meaning |
+|---|---|
+| A | ≥ 2 of volume/mass/density are null |
+| B | Volume = 0 but mass ≠ 0 (impossible physically) |
+| C | Density = 0 when mass and volume have values (impossible) |
+
+**Calculate PVT step (after PreProcess):**
+- Adds gas from residual saturation in oil phase to gas phase
+- Compensates for different fluid behaviour between test device and full process
+- Applies shrinkage/expansion corrections for T and P changes between test measurement and standard conditions
+
+**API Measurement Standards — GOV Calculation (from `prod_api_measurement_standards.html`):**
+```
+GOV = (TOV - FW) × CTSh + FRA (or FRC)
+Where:
+  GOV = Gross Observed Volume
+  TOV = Total Observed Volume (gross volume)
+  FW  = Free Water adjustment (always a deduction)
+  CTSh = Tank Shell Temperature Correction
+  FRA/FRC = Floating Roof Adjustment/Correction
+```
+
+**CTSh formula:**
+```
+CTSh = 1 + α × ΔT
+  α = linear expansion coefficient (material-dependent)
+  ΔT = TSh - TSh_REF (flowing - reference temperature)
+```
+Tank material expansion coefficients: Mild Steel α = 0.00001116/°C, Carbon Steel = 0.0000112/°C
+
+**Configured in:** CO.0252 Manage Tank — Tank Grs Vol Method, Free Water Vol Method, Tank Material
 
 **Item:** #17 PVT Fluid Properties
 
@@ -1488,9 +1706,46 @@ EC stores values in configurable units — `ecdp_unit.convertValue()` handles th
 
 ---
 
-## Session G — Calculation Engine (2026-06-05) [all 5 sources]
+## Session G — Calculation Engine (2026-06-05) [ENHANCED v2 — EC Tech Docs 14.2.5 added]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**EC Tech Docs 14.2.5 — New findings for Session G:**
+
+**Calculation Framework — Official Definition (from `product_concept/calculation_framework.html`):**
+- **Two main components:**
+  - **Calculation Definition Framework** — create and maintain process diagrams (the editor)
+  - **Calculation Execution Framework** — reads diagram from DB and executes it (the engine)
+- **Process diagrams** can contain: sub-process diagrams, equation processes, Excel workbook processes, library calculation processes
+- **No compiler needed** — changes in calc editor take effect immediately, no deployment required
+- **Test environment support** — framework allows testing changes before promoting to live
+- Applicable across: HC Accounting/Allocation, Sales/Contract calculations, Price calculations, Cargo Scheduling
+
+**New Direction in EC 14.2.x (from `prod/calc/prod_calculation_design.html`):**
+- Pre-14.2, product calculations used patterns from 20 years ago — still work but reflect outdated practices
+- New projects copied old calculations → inconsistent implementations across customers
+- **EC 14.2.x introduces:**
+  - **Library Calculations** — reusable, high-compatibility, designed for cross-project use
+  - **Well Volume Allocation** — simplified example demonstrating current best practices
+  - **Template Calculations** — ready-to-use starting points with pre-defined variables, global sets, iterators, local sets
+
+**Equation Editor (from calc_framework):**
+- Equations stored in EC database (not compiled code)
+- Basic building elements: **attributes** (DB values) and **variables** (user-defined)
+- Equations combine attributes + variables with arithmetic/logical operators and functions
+- **Sets** define which objects the equation applies to (streams, nodes, wells, etc.)
+
+**ECBPM Architecture (from `frmw/bpm/bpm-architecture.html`):**
+- **Two systems:** Energy Components (main app) + BPM Console (separate server group)
+- **EC** handles: Process Template, Process Action, Notification, Viewer Tag, EC Scheduler, UI
+- **BPM Console** handles: jBPM engine, Process definitions, Process instances, Task information
+- **`jbpmengine` user** — dedicated user that executes processes. Must be assigned roles for any data it accesses.
+- **Built-in schedules:** `BpmSchedulerEnv` (log config), `BpmEventInboundWatcher` (inbound events), `BpmProcessInstanceCleanUp` (cleanup)
+
+**BPM Standard Processes (from `frmw/bpm/bpm-standard-processes.html`):**
+- **Control Point process** — detects CP_ERROR/CP_WARNING control point tasks → generates human tasks in Todo List
+- **Four Eyes Approval process** — standard two-person approval workflow
+- Both configured via standard processes zip file from hub.energycomponents.com
 
 **Items:** #13 Calc framework | #14 Library calculations | #15 Execution engine | #16 AGA3/AGA8 | #18 jBPM-calc integration
 
@@ -1842,9 +2097,38 @@ Exposes `CalculationEngineImpl` as an EJB for:
 
 ---
 
-## Session F — Architecture + Database (2026-06-05) [all 5 sources]
+## Session F — Architecture + Database (2026-06-05) [ENHANCED v2 — EC Tech Docs 14.2.5 added]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
+
+**EC Tech Docs 14.2.5 — New findings for Session F:**
+
+**Flyway in EC (from `frmw/flyway/flyway.html` + `ec_flyway_developer_handbook.html`):**
+The Flyway handbook confirms the exact migration structure already documented in Session F — the naming convention, V__ vs R__ split, domain folders (FRMW/PROD/REVN/TRAN/CHEM), and timestamp-based versioning.
+
+**Key additional EC-specific Flyway rules from the developer handbook:**
+- All scripts in extensions must end SQL blocks with `;` followed by `/`
+- Remove all `SET DEFINE OFF`, `SPOOL`, `PROMPT` references from scripts — these are SQL*Plus commands not supported by Flyway
+- Remove all `&tablespace` parameter references — Flyway doesn't support SQL*Plus substitution variables
+- `ecdp_config_util.merge*` functions are the standard for idempotent data inserts in versioned migrations
+
+**EC Classes and Objects — Official Four Class Types (from `product_concept/classes_and_objects.html`):**
+| Type | Description | Examples |
+|---|---|---|
+| **Object** | Static physical objects | Facility, Tank, Well, Separator |
+| **Data** | Measurements/events owned by an object | Daily tank volumes, exported gas |
+| **Interface** | Abstraction over multiple object classes | Nodes in allocation network diagram |
+| **Table** | Like Data but less framework support | No object owner, no timestamp PK requirement |
+
+**What the class abstraction enables (official list):**
+- Common validation/integrity without mixing with business logic
+- Virtual (calculated) or stored attributes without table structure changes
+- Screen navigation model adjustable to operation size
+- Generic concepts as configurable options: ringfencing, data locking, four-eye approval, replication
+- Hide/show product attributes and add customer attributes via extensions
+
+**Data modelling guideline (from `databasedevelopment/data_modelling_guideline.html`):**
+Confirms the 11-column standard (already documented in Session F). Additional note: sub-daily tables use DAYTIME + SUMMER_TIME as composite PK to handle DST hour overlap.
 
 **Items:** #9 JSF/PrimeFaces rendering | #10 Screen templates | #11 Flyway core | #12 Journal tables
 
@@ -2159,11 +2443,35 @@ Every INSERT in the SQL script should set `REV_TEXT = 'ECPR-Issue1052'` — this
 
 ---
 
-## Session E — Business Domain (2026-06-05) [ENHANCED v2 — EC Tech Docs 14.2.5 + all 5 sources]
+## Session E — Business Domain (2026-06-05) [ENHANCED v3 — EC Tech Docs 14.2.5 added]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
 
 **Items:** #22 Production Well/Stream/Tank | #23 Hydrocarbon Accounting | #24 Daily+Monthly Allocation BPM
+
+**EC Tech Docs 14.2.5 — New findings for Session E:**
+
+**Well Object Hierarchy (from `prod/object_configuration/well.html`):**
+
+| # | Object | Required for | Business Function |
+|---|---|---|---|
+| 1 | Well | Allocation | CO.0250 |
+| 2 | Well Hole | Optional | CO.0051 |
+| 3 | Well Bore | Reservoir Allocation | CO.0054 |
+| 4 | Well Bore Interval | Reservoir Allocation | CO.0057 |
+| 5 | Reservoir Block | Reservoir Allocation | CO.0133 |
+| 6 | Reservoir Formation | Reservoir Allocation | CO.0135 |
+| 7 | Reservoir Block Formation | Reservoir Allocation | CO.0127 |
+| 8 | Perforation Interval | Reservoir Allocation | CO.0153 |
+| 9 | Well Bore Split | Reservoir Allocation | CO.0055 |
+| 10 | Well Bore Interval Split | Reservoir Allocation | CO.0058 |
+| 11 | Perforation Interval Split | Reservoir Allocation | CO.0154 |
+
+**Full hierarchy:** `Well → Well Bore → Well Bore Interval → Perforation Interval`
+
+**Key insight:** For production allocation (well volume split), only **Well** (CO.0250) is required. The full hierarchy down to Perforation Interval is only needed for **Reservoir Allocation** — which splits well volumes to individual reservoir zones. Woodside Pluto may use this for reservoir management reporting.
+
+**Commercial Entity** = many-to-many relationship between License and Field — represents ownership/equity positions.
 
 **v2 corrections:** Fixed incorrect AN_SHN/ZXIC_DAILY_VOLUME references (these don't exist in Woodside Pluto). Actual networks: PLU_EMISSION, PLU_OFFSHORE_ALLOC, PLU_ONSHORE_ALLOC, SCA_OFFSHORE_ALLOC, PLU_PRRT. Added complete Well type table, Stream phases/categories, Tank types/materials, and HC accounting algorithm details from EC Tech Docs 14.2.5.
 
