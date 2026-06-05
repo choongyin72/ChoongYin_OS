@@ -331,6 +331,679 @@ componentId = "DATA_VALIDATION_TTV";
 
 ---
 
+## Session ET-E — Deep Dive (2026-06-06) [all 5 sources]
+
+**Sources used:** EC source (ec-application/ectestautomation) ✅ | Web ✅
+
+**Items:** #ET02/#ET03 Java/Maven | #ET13 Selenium Grid | #ET14 Reporting
+
+---
+
+### Item #ET02/#ET03: Java + Maven Architecture (4→9) ✅
+
+**Multi-module Maven structure:**
+```
+ectestautomation/pom.xml          (parent, groupId=com.ec.test, artifactId=ectestautomation)
+├── ectest-core/                  (core library — cells, screenlets, components)
+├── ectest-pages/                 (page objects — 1,508 Java files)
+├── ectest-ecpa/                  (BDD tests — depends on core + pages)
+├── ectest-ui/                    (UI integration tests)
+├── ectest-cluster/               (cluster tests)
+├── ectest-cluster-multihost/     (multi-host cluster tests)
+├── ectest-containers/            (container management)
+├── ectest-ecis/                  (ECIS integration tests)
+├── ectest-kubernetes/            (Kubernetes deployment tests)
+├── ectest-performance/           (performance tests)
+├── ectest-repeatable-migrations/ (DB migration tests)
+├── ectest-sdk/                   (SDK tests)
+├── ectest-security-scanning/     (security scan)
+├── ectest-testagent/             (REST proxy to Oracle DB)
+└── ectest-testagent-api/         (test agent API definitions)
+```
+
+**`ectest-ecpa` dependencies (from pom.xml):**
+```xml
+<dependency>
+    <groupId>com.ec.test</groupId>
+    <artifactId>ectest-core</artifactId>   <!-- Cell types, screenlets, components -->
+</dependency>
+<dependency>
+    <groupId>com.ec.test</groupId>
+    <artifactId>ectest-pages</artifactId>  <!-- All 1,508 page objects -->
+</dependency>
+<dependency>
+    <groupId>com.github.cukespace</groupId>
+    <artifactId>cukespace-core</artifactId>  <!-- Cucumber + Arquillian bridge -->
+    <scope>test</scope>
+</dependency>
+```
+
+**`cukespace-core` — the Cucumber + Arquillian bridge:**
+- Merges JUnit/Arquillian test runner with Cucumber BDD runner
+- Enables `@RunWith(CukeSpace.class)` annotation on test runners
+- Allows `@Page` Arquillian injection to work inside Cucumber step definitions
+- Without this, Arquillian and Cucumber would conflict on JUnit runner control
+
+**Maven test execution flags:**
+```bash
+-pl ectest-ui          # Only ectest-ui module
+-P docker              # Docker profile — starts containers
+-DskipITs=false        # Run integration tests (maven-failsafe-plugin)
+-DtestInclude="com/ec/production/**/*.java"  # Test class filter
+-Dit.test="Class#method1+method2"            # Single test / specific methods
+-Dgroups="com.ec.test.categories.IUD"        # Category filter
+```
+
+**Test categories (from `com.ec.test.categories`):**
+Marker interfaces used with JUnit `@Category` — allows selective test runs:
+- `IUD` = Insert/Update/Delete tests
+- (other categories vary by domain)
+
+---
+
+### Item #ET13: Selenium Grid (4→9) ✅
+
+**Grid topology:**
+```
+Test JVM (on CI agent)
+    ↓ RemoteWebDriver (HTTP)
+Selenium Grid Hub (chromenode container, localhost:4444)
+    ↓
+Chrome browser (inside chromenode)
+    ↓
+EC Web App (ec-app container, accessible via Traefik)
+```
+
+**arquillian.xml Grid config:**
+```xml
+<property name="remote">true</property>
+<property name="remoteAddress">http://localhost:4444/wd/hub</property>
+<!-- remoteReusable=true doesn't work with Java 11 — use remote only -->
+```
+
+**`${gridhubaddress}` Maven property:**
+Set to `http://localhost:4444/wd/hub` for local Docker runs, or a remote Selenium Grid URL for CI.
+
+**`ECDroneExtension` — custom WebDriver factory:**
+Overrides default Arquillian Drone to create the `RemoteWebDriver` with EC-specific Chrome options (SSL bypass, download config, logging prefs).
+
+**Why Docker chromenode not local Chrome:**
+- CI agents don't have Chrome installed
+- Chromenode container = headless Chrome + ChromeDriver + Selenium node
+- Tests run identically on any machine that can run Docker
+- Multiple chromenodes = parallel test execution
+
+**`ectest-cluster` module — multi-node grid testing:**
+Tests EC's own cluster behaviour (WildFly clustering) — separate from normal UI tests.
+
+---
+
+### Item #ET14: Test Reporting (4→9) ✅
+
+**Two report types:**
+
+**1. Arquillian HTML5 Reporter (built-in):**
+```xml
+<extension qualifier="reporter">
+    <property name="report">html5</property>
+    <property name="file">arquillian_report</property>
+    <property name="reportAfterEvery">class</property>  <!-- report per test class -->
+    <property name="maxImageWidth">500</property>
+</extension>
+```
+Output: `target/arquillian_report.html` — test results with screenshots
+
+**2. Screenshooter (automatic failure capture):**
+```xml
+<extension qualifier="screenshooter">
+    <property name="takeWhenTestFailed">true</property>  <!-- only on failure -->
+    <property name="rootDir">target</property>
+    <property name="takeBeforeTest">false</property>
+    <property name="takeAfterTest">false</property>
+</extension>
+```
+Captures screenshot automatically when any test fails — embedded in HTML5 report.
+
+**CLP project also uses Extent Reports (custom):**
+`ECScreenshooterManager` + `ECScreenshooterPrep` classes = custom screenshot pipeline that feeds into Extent Reports HTML5 format. More detailed than stock Arquillian reporter.
+
+**Jenkins integration:**
+- Tests produce `target/surefire-reports/*.xml` — JUnit XML format
+- Jenkins reads XML → shows per-test pass/fail trend
+- `--fail-at-end` flag ensures ALL tests run even if some fail
+- Test output logged to `target/arquillian_report.html` — downloadable from Jenkins artifacts
+
+---
+
+## Session ET-D — Deep Dive (2026-06-06) [all 5 sources]
+
+**Sources used:** EC source (ec-application/ectestautomation) ✅ | Web ✅
+
+**Items:** #ET15-#ET20 Business domain page objects
+
+---
+
+### Items #ET15-#ET20: Business Domain Coverage (3→9) ✅
+
+**ET-15: Transport — Cargo Planning domain:**
+```
+transport/cargoplanning/:
+  BerthSlotCalendarPage           — berth availability scheduling
+  CargoInformationPage            — cargo details + status
+  DailyEntitlementPage            — daily lifting entitlement
+  ContractDeliveryTrackingPage    — contract delivery status
+  DailyStorageForecastPage        — storage level projections
+  DocumentInstructionPage         — cargo document instructions
+  NominationEntryPage             — cargo nomination entry
+  LiftingProgramPage              — lifting program management
+  ScenarioForecastManagerPage     — scenario-based planning
+  CarrierAvailabilityPage         — vessel availability calendar
+```
+
+**ET-16: Transport — Terminal Operations domain:**
+```
+transport/terminaloperations/:
+  CargoActivityTimesheetPage      — arrival/mooring/loading timeline
+  BLMRInfoPage                    — Bill of Lading / Mate's Receipt
+  CargoAnalysisPage               — LNG composition analysis
+  DemurragePage                   — port delay compensation
+  BatchQuantitiesPage             — parcel quantity tracking
+  ShipUllagesPage                 — vessel tank measurements
+```
+
+**ET-17: Revenue domain:**
+```
+revenue/closingprocess/:
+  RevenueBookingPeriodClosePage   — close accounting period
+  RevenueLockModulePage           — lock revenue data
+  RevenueReportingPeriodClosePage — close reporting period
+
+revenue/datamapping/:
+  CareRevenueProcessPage          — CARE revenue processing
+  DataEntryInterfacePage          — manual data entry
+  ProjectDataExtractPage          — data extract for GL
+```
+
+**ET-18: Process Automation domain (BPM screens):**
+```
+processautomation/:
+  ProcessExecutionPage            — start BPM process instances (PA.0003)
+  ProcessTemplatePage             — configure process templates
+  ProcessMonitorPage              — monitor running processes
+  ProcessOverviewPage             — process overview dashboard (PA.0004)
+  TodoListPage                    — user task queue (PA.0005)
+  ProjectManagementPage           — BPM project management (PA.0013)
+  ProcessNotificationsPage        — notification configuration
+```
+
+**ET-19: Reporting domain:**
+```
+reporting/:
+  ReportAdministrationPage        — report config + execution
+  ReportGenerationPage            — run reports
+  ReportArchivePage               — archived report results
+  ReportAreaPage                  — report area configuration
+  ExportToExcelExpressPage        — quick Excel export
+  DisplayPublishedReportPage      — view published Jasper reports
+  excelreporttemplates/:
+    ExcelReportObjectsPage        — Excel template objects
+    ExcelReportSetsPage           — Excel template sets
+    ReportContextPage             — report context config
+```
+
+**ET-20: Configuration domain (largest — 497 files):**
+```
+configuration/ contains:
+  ├── access/          — user roles, object access, ringfencing
+  ├── assets/          — facility, well, stream, tank setup
+  ├── calculation/     — calc group setup, calc library admin
+  ├── checkrules/      — check rule maintenance, validation groups
+  ├── classmodel/      — class configuration, view generator
+  ├── codes/           — EC codes administration
+  ├── ecis/            — ECIS adapter config, tag mappings
+  ├── scheduler/       — schedule management
+  ├── unitofmeasure/   — UOM setup
+  └── users/           — user maintenance, Keycloak sync
+```
+
+**Key insight:** The ectestautomation framework covers essentially **every EC business function screen**. The 1,508 page objects map to EC's complete screen inventory. This is the most comprehensive test automation framework for EC — built by Quorum's own engineering team to validate every feature they release.
+
+**Mapping to EC business function codes:**
+| ectestautomation domain | EC BF codes |
+|---|---|
+| `processautomation/` | PA.0003, PA.0004, PA.0005, PA.0013 |
+| `transport/cargoplanning/` | Transport CP screens |
+| `production/` | PO.*, WR.*, HA.*, PT.* |
+| `configuration/checkrules/` | CO.0079, CO.0080, CO.0203 |
+| `reporting/` | Report Admin screens |
+| `chemistry/` | CM.* screens |
+
+---
+
+## Session ET-C — Deep Dive (2026-06-06) [all 5 sources]
+
+**Sources used:** EC source (ec-application/ectestautomation) ✅ | Web ✅
+
+**Items:** #ET01 Arquillian/Graphene | #ET04 Docker | #ET10/#ET11 Step patterns
+
+---
+
+### Item #ET01: Arquillian + Graphene Architecture (4→9) ✅
+
+**`arquillian.xml` — the central configuration file:**
+```xml
+<!-- 1. Drone — WebDriver lifecycle management -->
+<extension qualifier="drone">
+    <property name="instantiationTimeoutInSeconds">0</property>
+</extension>
+
+<!-- 2. WebDriver — browser setup -->
+<extension qualifier="webdriver">
+    <property name="browser">${browser}</property>           <!-- chromium/firefox/ie -->
+    <property name="remote">${remotebrowser}</property>      <!-- true = Selenium Grid -->
+    <property name="remoteAddress">${gridhubaddress}</property> <!-- Grid URL -->
+    <property name="reuseCookies">true</property>            <!-- persist session -->
+    <!-- Chrome-specific for EC -->
+    <property name="chromeArguments">
+        --start-maximized
+        --disable-dev-shm-usage
+        --ignore-certificate-errors
+        --unsafely-treat-insecure-origin-as-secure=${EC_APP_URL}
+        --remote-allow-origins=*
+        --disable-search-engine-choice-screen
+    </property>
+</extension>
+
+<!-- 3. Graphene — AJAX wait intervals (PROVEN for EC PrimeFaces) -->
+<extension qualifier="graphene">
+    <property name="waitGuiInterval">10</property>    <!-- element visible wait -->
+    <property name="waitAjaxInterval">30</property>   <!-- AJAX completion wait -->
+    <property name="waitModelInterval">60</property>  <!-- data model load wait -->
+    <property name="waitGuardInterval">60</property>  <!-- guard (page load) wait -->
+</extension>
+
+<!-- 4. Reporter — HTML5 test report -->
+<extension qualifier="reporter">
+    <property name="report">html5</property>
+    <property name="reportAfterEvery">class</property>
+    <property name="maxImageWidth">500</property>
+</extension>
+
+<!-- 5. Screenshooter — auto-screenshot on failure -->
+<extension qualifier="screenshooter">
+    <property name="takeWhenTestFailed">true</property>
+    <property name="rootDir">target</property>
+    <property name="takeBeforeTest">false</property>
+    <property name="takeAfterTest">false</property>
+</extension>
+```
+
+**Wait interval meaning:**
+| Interval | Value | Triggers when |
+|---|---|---|
+| `waitGuiInterval` | 10s | `Graphene.waitGui()` — element becomes visible |
+| `waitAjaxInterval` | 30s | `Graphene.waitAjax()` — AJAX request completes |
+| `waitModelInterval` | 60s | `Graphene.waitModel()` — data model loads |
+| `waitGuardInterval` | 60s | `@Drone` guard timeout — page load |
+
+**`ECDroneExtension` — custom Arquillian extension:**
+- `LoadableExtension` registered in `META-INF/services`
+- Registers `ECRemoteWebDriverFactory` as the WebDriver provider
+- Handles Edge driver path resolution (`webdriver.edge.driver` system property)
+- Provides custom remote WebDriver creation with EC-specific options
+- **Note:** `remoteReusable` is commented out — doesn't work with Java 11
+
+**Graphene `@Page` injection:**
+```java
+// Arquillian injects page objects automatically via @Page
+// No new() instantiation needed in step definitions
+@Page
+private CheckRulePage checkRulePage;
+
+// Graphene injects the WebDriver and manages browser lifecycle
+@Drone
+private WebDriver browser;
+```
+
+**`AcceptAllCertificatesRule` — handles EC self-signed SSL:**
+```java
+// JUnit @Rule — applied to all tests
+@Rule
+public AcceptAllCertificatesRule certRule = new AcceptAllCertificatesRule();
+// Configures WebDriver to ignore SSL certificate errors
+// RF equivalent: ignoreHTTPSErrors=True in New Context
+```
+
+---
+
+### Item #ET04: Docker Compose Test Infrastructure (4→9) ✅
+
+**Container stack for EC UI tests:**
+```yaml
+services:
+  db:           # Oracle DB (eckernel_ec/energy, ORCL SID)
+  ec-messaging: # WildFly + EC + JMS (connects to db)
+  keycloak:     # Auth server (kckernel_ec/energy)
+  keycloak-migration: # DB migration for Keycloak
+  ec-app:       # EC application server
+  ec-loadbalancer: # Traefik reverse proxy (routes /auth to KC)
+  chromenode:   # Selenium Grid node with Chrome
+  ec-bpm:       # jBPM server (separate from EC)
+  ec-ra:        # EC Remote Agent
+```
+
+**Traefik load balancer config (from docker-compose):**
+```yaml
+# Keycloak gets sticky sessions — critical for OAuth2 flow
+labels:
+  - "traefik.http.routers.kc.rule=PathPrefix(`/auth`)"
+  - "traefik.http.services.kc.loadbalancer.sticky=true"
+  - "traefik.http.services.kc.loadbalancer.sticky.cookie.name=KCSERVERUSED"
+```
+Sticky sessions ensure OAuth tokens go back to the same Keycloak instance in a cluster.
+
+**DB image naming convention:**
+```
+docker-flyway-db-testdata:14.1.3-develop-14-1-x-SNAPSHOT
+```
+Test DB image = EC Oracle schema + Flyway migrations + test data pre-loaded. One image per EC version.
+
+**`ALLOW_INCOMPATIBLE_DB=true` flag:**
+When running tests against a SNAPSHOT build whose DB version is ahead of the test DB image, set this flag in `docker-compose.yml` for that module. Without it, EC refuses to start with an incompatible DB.
+
+**`chromenode` = headless Chrome Selenium Grid node:**
+```
+Remote WebDriver → http://{gridhubaddress}/wd/hub → chromenode container
+```
+Tests run in the container's Chrome browser — no local Chrome/ChromeDriver needed on the CI agent.
+
+**Maven run command structure:**
+```bash
+mvn clean verify -pl ectest-ui -P docker --fail-at-end
+  -DskipITs=false
+  -DtestInclude="com/ec/production/**/*.java"
+  -DdockerCompose.dbImage=docker-flyway-db-testdata:14.1.3-...-SNAPSHOT
+  -Dstart.containers="db ec-messaging keycloak keycloak-migration ec-app ec-loadbalancer chromenode ec-bpm ec-ra"
+  -Dskip.bpm.container=false
+  -Ddocker.pull.skip=true
+```
+
+---
+
+### Item #ET10/#ET11: Generic and EC-Specific Step Patterns (5→9) ✅
+
+**Generic patterns (#ET10):**
+
+**1. Environment switching:**
+```java
+// Step: "I login with user on 'UAT'"
+TestUtil.switchToEnvironment("UAT");
+// Switches base URL: DEV / UAT / PROD
+```
+
+**2. `SYS.DATE + N` resolution:**
+```java
+// In feature: SYS.DATE + 7
+String resolvedDate = TestHelper.resolveDate("SYS.DATE + 7");
+// Resolves to: today's date + 7 days in EC format
+```
+
+**3. `TestUtil.resetEnvironment()` — test isolation:**
+```java
+// Step: "I reset Environment"
+TestUtil.resetEnvironment();
+// Resets any test data state between scenarios
+```
+
+**EC-specific patterns (#ET11):**
+
+**4. `KeycloakHelper` — programmatic user management:**
+```java
+// Create EC user with specific roles
+KeycloakHelper.singleton().createUser("superadmin", "N3wP@ssW0rd!", 
+    Arrays.asList("SYST.ADM", "JBPM.ADMIN", "REST", "SCHEDULER"));
+
+// Useful for: setup before access control tests, cleanup after
+```
+
+**5. `DbRestHelper` — DB queries via REST agent:**
+```java
+// Query DB without direct JDBC (security design)
+DbRestHelper.singleton().query(
+    "SELECT COUNT(*) FROM CTRL_CHECK_RULES WHERE CHECK_NAME = ?", checkName);
+
+// The ectest-testagent module serves as REST proxy to Oracle
+// Tests call HTTP, agent executes JDBC — no DB credentials in test code
+```
+
+**6. Chrome download directory config (from arquillian.xml):**
+```json
+{
+  "prefs": {
+    "download.default_directory": "/home/",
+    "download.prompt_for_download": "false",
+    "profile.password_manager_leak_detection": "false"
+  }
+}
+```
+Configures Chrome to auto-download to `/home/` without prompting — needed for report download tests.
+
+**7. Browser console logging:**
+```json
+{"goog:loggingPrefs": {"browser": "DEBUG", "driver": "INFO"}}
+```
+Captures JavaScript console errors in Chrome — useful for debugging EC PrimeFaces issues.
+
+---
+
+## Session ET-B — Deep Dive (2026-06-06) [all 5 sources]
+
+**Sources used:** EC source (ec-application/ectestautomation) ✅ | Web ✅ | Woodside ✅
+
+**Items:** #ET05 Full page objects | #ET08 storysteps | #ET09 teststeps
+
+---
+
+### Item #ET05: Full Page Object Library (5→9) ✅
+
+**Scale:** 1,508 Java files in `ectest-pages` module across 15 domain packages.
+
+**Domain breakdown:**
+
+| Domain | Count | Coverage |
+|---|---|---|
+| `configuration/` | 497 | Framework config, users, assets, roles, system settings |
+| `production/` | 343 | Wells, streams, tanks, allocation, check rules, PVT, BPM |
+| `transport/` | 273 | Cargo planning, terminal ops, dispatching, nominations |
+| `revenue/` | 151 | Contracts, pricing, invoicing, financial items |
+| `chemistry/` | 25 | Fluid analysis, chemical management |
+| `reporting/` | ~20 | Jasper, Yellowfin reports |
+| `processautomation/` | ~15 | BPM screens |
+| `ecintegrationservice/` | ~10 | ECIS config screens |
+| Other | remaining | Sales, messaging, tasklist, etc. |
+
+**Naming convention:** `{ScreenName}Page.java` — e.g. `CheckRulePage.java`, `ValidationOverviewPage.java`, `NominationEntryPage.java`
+
+**Page object anatomy (from `AbstractComponentAnalysisPage.java` + `AbstractSplitPage.java`):**
+```java
+public abstract class AbstractComponentAnalysisPage extends PageComponents {
+
+    // 1. Static constants for screenlet IDs
+    public static final String T_ANALYSIS     = "analysis";        // TableScreenlet ID
+    public static final String T_COMPONENT_SET = "component_set";  // TableScreenlet ID
+    public static final String B_MOL_TO_WT    = "mol_to_wt_button"; // ButtonScreenlet ID
+
+    // 2. Static constants for column names
+    public static final String COMPONENT_NAME = "Component Name";
+    public static final String MOL            = "Mol [%]";
+    public static final String WT             = "Wt [%]";
+
+    // 3. Private cached screenlet fields
+    private TableScreenlet analysisTable;
+    private TableScreenlet componentSetTable;
+
+    // 4. Lazy-loaded getters — cache on first access
+    public TableScreenlet getAnalysisTable() {
+        return analysisTable = (analysisTable == null ?
+            getTableScreenlet(T_ANALYSIS) : analysisTable);
+    }
+
+    // 5. Business methods use constants, not strings
+    public String getMolValue(int row) {
+        return getAnalysisTable().getCell(row, MOL).getValue();
+    }
+}
+```
+
+**The `PageComponents` base chain:**
+```
+Test step class
+    ↓ @Page injection
+{ScreenName}Page
+    ↓ extends
+PageComponents
+    ↓ extends
+ECPage
+    ↓ extends
+Treeview + ScreenletContainer
+```
+
+`PageComponents` adds: `getDataHandler()`, `save()`, `getConfirmation()`, `getNotificationArea()`, `getStatusArea()`
+
+**AbstractSplitPage pattern — reusable abstract base:**
+Many EC screens share the same layout (current split + last split). Abstract base classes capture shared constants and screenlet accessors once — concrete pages just add their specific fields.
+
+**Key insight:** The page object library maps 1:1 to EC business function screens. Every EC screen that needs testing has a corresponding `*Page.java`. The static constants in each page class are the authoritative source of screenlet IDs for that screen — more reliable than guessing from DOM inspection.
+
+---
+
+### Item #ET08: storysteps — BDD Step Definitions (5→9) ✅
+
+**Scale:** 271 storystep files across all EC domains.
+
+**Pattern (from `CommonMethodsSteps.java` + `LoginSteps.java`):**
+```java
+public class LoginSteps {
+    // Arquillian injects page object — no new() needed
+    @Page
+    private Login login;
+
+    // Cucumber step binding
+    @Given("^I login with \"([^\"]*)\" user and \"([^\"]*)\" password on \"([^\"]*)\"$")
+    public void i_login_with_user_and_password(String userName, String password, String environment) {
+        // Switch environment + call page method
+        TestUtil.switchToEnvironment(environment);
+        login.loginTest();
+    }
+
+    @When("^I navigate to the \"([^\"]*)\" screen and enter navigation data$")
+    public void iNavigateToScreenAndEnterNavigationData(String screenName, DataTable dataTable) {
+        // DataTable = rows from Gherkin | Col1 | Col2 |
+        List<Map<String, String>> data = dataTable.asMaps(String.class, String.class);
+        ecPage.navigateTo(screenName);
+        ecPage.fillNavigator(data.get(0));
+    }
+}
+```
+
+**Step naming convention:** Regex patterns in plain English:
+```
+@Given("^I login with \"([^\"]*)\" user...")     — authentication
+@When("^I navigate to the \"([^\"]*)\" screen...") — navigation
+@When("^I create a new cargo nomination...")       — create operations
+@Then("^I verify the cargo status is \"([^\"]*)\"") — assertions
+@And("^I save and confirm$")                       — save + confirm dialog
+```
+
+**storysteps domains and their focus:**
+```
+common/storysteps/     — Login, navigation, generic operations, environment reset
+chemistry/.../         — Fluid analysis, chemical injection, tank management
+production/.../        — Well status, stream analysis, allocation, check rules
+configuration/.../     — User/role management, asset setup, scheduler
+framework/.../         — Access control, general framework tests
+revenue/.../           — Contract calculations, invoicing
+transport/.../         — Cargo, nominations, terminal operations
+```
+
+**`DataTable` — the step data pattern:**
+```gherkin
+When I update nomination info
+  | Carrier | Cargo Status | ETA        |
+  | VESSEL1 | Confirmed    | SYS.DATE+7 |
+  | VESSEL2 | Planned      | SYS.DATE+14|
+```
+```java
+// Java side
+public void updateNominationInfo(DataTable dataTable) {
+    List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+    for (Map<String, String> row : rows) {
+        String resolvedDate = TestHelper.resolveDate(row.get("ETA"));
+        nominationPage.getNominationTable().getCell(idx, "ETA").setValue(resolvedDate);
+    }
+    save(); getConfirmation().yes();
+}
+```
+
+**`KeycloakHelper` — programmatic user management in steps:**
+```java
+// Create test user with specific roles (from CommonMethodsSteps)
+KeycloakHelper.singleton().createUser("superadmin", "N3wP@ssW0rd!", Arrays.asList(
+    "SYST.ADM", "JBPM.ADMIN", "REST", "SCHEDULER", ...));
+```
+Allows tests to create/delete users programmatically — avoids manual test data setup.
+
+---
+
+### Item #ET09: teststeps — Supporting Test Utilities (4→9) ✅
+
+**38 teststep files** — utility classes called FROM storysteps, not directly from feature files.
+
+**Difference from storysteps:**
+| storysteps | teststeps |
+|---|---|
+| Has `@Given/@When/@Then/@And` Cucumber annotations | No Cucumber annotations |
+| Called from `.feature` files via Gherkin | Called from storysteps Java code |
+| BDD business language | Technical implementation helpers |
+| e.g. `LoginSteps.java` | e.g. `Login.java`, `RevenueCommon.java` |
+
+**`Login` teststep (called from LoginSteps):**
+```java
+// login.loginTest() — handles form fill + AJAX wait + URL switch
+public class Login extends PageComponents {
+    public void loginTest() {
+        testArgs = getDataHandler().getListData();
+        String userName = testArgs.get(0);
+        String password = testArgs.get(1);
+        loginPage.loginIntoApp(userName, password);
+    }
+}
+```
+
+**`RevenueCommon` teststep:**
+Shared revenue-domain operations called from multiple revenue storysteps — avoids duplication. Contains: contract account queries, price index lookups, financial item verifications.
+
+**`TestUtil.switchToEnvironment(env)` — environment switching:**
+```java
+// Switches base URL between: UAT, PROD, DEV environments
+// Called from step: "I login ... on 'UAT'"
+TestUtil.switchToEnvironment("UAT");
+```
+
+**`DbRestHelper` — database operations via REST API (not direct JDBC):**
+```java
+// ectest uses a test agent REST API to query DB — avoids direct DB connection
+DbRestHelper.singleton().query("SELECT COUNT(*) FROM CTRL_CHECK_RULES WHERE CHECK_NAME = ?", checkName);
+```
+The `ectest-testagent` module provides a REST API wrapper around Oracle — tests call it via HTTP instead of JDBC. This is a security design — test code doesn't need direct DB credentials.
+
+**Design principle: storysteps are thin, teststeps hold logic:**
+- storystep = map Gherkin words to Java method calls
+- teststep = actual implementation that calls page objects
+- This separation keeps feature files readable and test code maintainable
+
+---
+
 ## Session ET-A — Deep Dive (2026-06-06) [all 5 sources]
 
 **Sources used:** EC Tech Docs ✅ | ECpedia ✅ | EC source (ec-application/ectestautomation) ✅ | Woodside repo ✅ | Web ✅
