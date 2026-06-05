@@ -2159,11 +2159,13 @@ Every INSERT in the SQL script should set `REV_TEXT = 'ECPR-Issue1052'` — this
 
 ---
 
-## Session E — Business Domain (2026-06-05) [ENHANCED — all 5 sources]
+## Session E — Business Domain (2026-06-05) [ENHANCED v2 — EC Tech Docs 14.2.5 + all 5 sources]
 
 **Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
 
 **Items:** #22 Production Well/Stream/Tank | #23 Hydrocarbon Accounting | #24 Daily+Monthly Allocation BPM
+
+**v2 corrections:** Fixed incorrect AN_SHN/ZXIC_DAILY_VOLUME references (these don't exist in Woodside Pluto). Actual networks: PLU_EMISSION, PLU_OFFSHORE_ALLOC, PLU_ONSHORE_ALLOC, SCA_OFFSHORE_ALLOC, PLU_PRRT. Added complete Well type table, Stream phases/categories, Tank types/materials, and HC accounting algorithm details from EC Tech Docs 14.2.5.
 
 ---
 
@@ -2173,117 +2175,211 @@ Every INSERT in the SQL script should set `REV_TEXT = 'ECPR-Issue1052'` — this
 ```
 Field
  └── Facility (Platform / Processing Plant)
-      ├── Well (physical wellbore — producer or injector)
+      ├── Well → Well Hole → Well Bore → Well Bore Interval → Perforation Interval
       ├── Stream (flow path — connects wells/facilities/tanks)
       └── Tank (storage vessel — holds product before export)
 ```
 
-**Polar Bear reference config (ECpedia — best practice pattern):**
-- 2 fields (North + South) → 1 platform → multiple wells by type:
-  - **OP** = Oil Producer, **GI** = Gas Injector, **WI** = Water Injector
-- Oil stored in tank (no export yet in sandbox); gas and water follow separate streams
-- Stream Node Diagram (SND) shows the full allocation network visually
+**Well object hierarchy (EC Tech Docs 14.2.5):**
 
-**EC Business Function codes for well/stream operations:**
-| Module | Code | Description |
-|---|---|---|
-| Production Operation | PO.0001 | Daily Oil Stream Status |
-| Production Operation | PO.0002 | Daily Gas Stream Status |
-| Production Operation | PO.0003 | Daily Water Stream Status |
-| Production Operation | PO.0059 | Daily Oil Stream Status by Stream |
-| Well & Reservoir | WR.0001 | Daily Production Well Status 1 |
-| Well & Reservoir | WR.0002 | Daily Gas Injection Well Status |
-| Well & Reservoir | WR.0003 | Daily Water Injection Well Status |
-| Well & Reservoir | WR.0088 | Maintain Well Status |
-| Production Testing | PT.0005 | Production Test Define |
-| Production Testing | PT.0021 | Automated Production Test |
+All sub-objects below Well are required only for reservoir allocation. For surface allocation only, Well is sufficient.
 
-**Three core production object types in EC:**
+| # | Object | Required for | BF |
+|---|---|---|---|
+| 1 | Well | Allocation | CO.0250 |
+| 2 | Well Hole | Optional (skip if not needed) | CO.0051 |
+| 3 | Well Bore | Reservoir Allocation | CO.0054 |
+| 4 | Well Bore Interval | Reservoir Allocation | CO.0057 |
+| 5 | Reservoir Block | Reservoir Allocation | CO.0133 |
+| 6 | Reservoir Formation | Reservoir Allocation | CO.0135 |
+| 7 | Reservoir Block Formation | Reservoir Allocation | CO.0127 |
+| 8 | Perforation Interval | Reservoir Allocation | CO.0153 |
+| 9 | Well Bore Split | Reservoir Allocation | CO.0055 |
+| 10 | Well Bore Interval Split | Reservoir Allocation | CO.0058 |
+| 11 | Perforation Interval Split | Reservoir Allocation | CO.0154 |
+
+**Initiate Day (CO.0077):** Creates the daily production well status record — the basis for theoretical volume and mass calculations. When set to first day of month, also creates the monthly status record. Same pattern applies for Stream and Tank.
+
+**20 Well Types supported in EC (cannot add new types — fixed set):**
+
+| Code | Type | Phases | Key BF |
+|---|---|---|---|
+| OP | Oil Producer | Oil, Gas, Water | WR.0001/0027/0028 |
+| GP | Gas Producer | Gas, Cond, Water | WR.0001/0027/0028 |
+| GP2 | Gas Producer (oil) | Gas, Oil, Water | WR.0001/0027/0028 |
+| CP | Condensate Producer | Cond only | WR.0001/0027/0028 |
+| GI | Gas Injector | Gas Injection | WR.0002 |
+| WI | Water Injector | Water Injection | WR.0003 |
+| WS | Water Source | Water | WR.0013 |
+| WG | Water and Gas Injector | Water + Gas Inj | WR.0002 + WR.0003 |
+| WSI | Water and Steam Injector | Water + Steam Inj | WR.0003 + WR.0029 |
+| SI | Steam Injector | Steam Inj | WR.0029 |
+| WA | Waste Injector | Waste Inj | WR.0040 |
+| OB | Observation | — (not instantiated daily) | WR.0014 |
+| AI | Air Injector | Air Injection | WR.0051 |
+| OPGI | Oil Producer + Gas Injector | Oil/Gas/Water + GI | WR.0001 + WR.0002 |
+| GPI | Gas Producer + Gas Injector | Gas/Cond/Water + GI | WR.0001 + WR.0002 |
+| OPSI | Oil Producer + Steam Injector | Oil/Gas/Water + SI | WR.0001 + WR.0029 |
+| SOPSI | Sim. Oil Producer + Steam Injector | Oil/Gas/Water + SI simultaneously | WR.0001 + WR.0029 |
+| SWG | Sim. Water + Gas Injector | Water + Gas simultaneously | WR.0002 + WR.0003 |
+| WID | Water Injection for Disposal | Water Inj | WR.0003 |
+| CI | CO2 Injector | CO2 Inj | — |
+
+**Introducing new well types is not supported** — it would break numerous system dependencies.
+
+**Well production methods (for OP/GP/OPGI etc.):**
+- Natural Flow, Gas Lift, Gas-Assisted Plunger Lift, Pumped (diluted/undiluted)
+- Injection types: Hydrocarbon/Non-HC Gas Injector, Gas Disposal, Cold/Hot Water Injector
+
+**Commercial/equity linkage:**
+- Commercial Entity = many-to-many between License and Field
+- Equity Share = many-to-many between Commercial Entity and Company
+- Reservoir Block Formation must belong to one Commercial Entity
+
+**Three core production object types:**
 
 | Object | Role | Key Table | Default Helper |
 |---|---|---|---|
 | Well | Source of production — physical wellbore | `WELL`, `WELL_VERSION` | `WellDefaultValueHelper` → `EcDp_Well_Event.getLastClosingDaytime()` |
-| Stream | Flow path between nodes — connects wells/facilities | `STREAM`, `STREAM_VERSION` | `StreamDefaultValueHelper` → `EcDp_Stream_Event.getLastClosingDaytime()` |
-| Tank | Storage vessel — holds product volumes | `TANK`, `TANK_VERSION` | `TankDefaultValueHelper` → queries `tank_version.export_stream_id` |
+| Stream | Flow path between nodes | `STREAM`, `STREAM_VERSION` | `StreamDefaultValueHelper` → `EcDp_Stream_Event.getLastClosingDaytime()` |
+| Tank | Storage vessel — holds product volumes | `TANK`, `TANK_VERSION` | `TankDefaultValueHelper` → `tank_version.export_stream_id` |
 
-**Time scope codes (from XSD class model):**
-`1HR, 2HR, DAY, WEEK, MTH, QTR, YR, VERSIONED, EVENT, NONE, INVARIANT, SAMPLE`
-Every data class in EC is assigned a time scope — this determines how production data is bucketed (hourly, daily, monthly etc).
+---
 
-**Well PVT split calculation (`EcBsWellSplit.java`):**
-```sql
--- Theoretical rates per well from PVT model
-SELECT OBJECT_ID, RESULT_NO,
-       THEOR_NET_OIL_RATE, THEOR_GAS_RATE,
-       THEOR_NET_COND_RATE, THEOR_WATER_RATE
-FROM TV_PVT_PT_THEOR_WELLS
-WHERE RESULT_NO = ?
-```
-Outputs: `wellOilPart[]`, `wellGasPart[]`, `wellConPart[]`, `wellWatPart[]` — used to split commingled stream volumes back to individual wells.
+**STREAM — EC Tech Docs 14.2.5:**
 
-**Stream node diagram (`StreamNodeDiagramModel.java`):**
-Visual network of streams between production nodes — merge/split logic rendered as a directed graph in the EC UI.
+A Stream object represents the logical or physical flow of hydrocarbons through production, processing, storage, and sales. Streams have metering functionality (flow rate, pressure, temperature). They also act as virtual/calculated meters.
 
-**Tank export stream pattern:**
-Every tank has an export stream — `tank_version.export_stream_id` links the tank to its outflow stream. TankDefaultValueHelper resolves this at runtime.
+**15 Stream Phases:**
 
-**Woodside extension functions (ZWT):**
-```
-zwt_prod_stream_formula.evaluateMethod(p_object_type, p_object_id, p_method, p_daytime, p_to_date, p_stream_id)
-zwt_prod_well_theoretical.findGasOilRatio(well_id, daytime)
-zwt_prod_well_theoretical.findGCV(well_id, daytime)
-zwt_prod_well_theoretical.getGasEnergyMonth(well_id, daytime)
-```
-Unified evaluation pattern — same signature for well/stream/tank/facility objects.
+| Phase | Notes |
+|---|---|
+| Oil | |
+| Gas | |
+| Water | |
+| Condensate | |
+| Reservoir Fluid | Composition analysis |
+| NGL | Natural Gas Liquids |
+| Solid | |
+| Steam | |
+| Electrical | |
+| CO2 | |
+| LNG | Liquefied Natural Gas |
+| Dry Gas | |
+| LPG | Liquefied Petroleum Gas |
+| Sulfur | |
+| Chemical | |
 
-**Stream closing daytime pattern (`StreamDefaultValueHelper.java`):**
-```java
-// Calls Oracle PL/SQL function to get last stream closing event
-SELECT to_char(EcDp_Stream_Event.getLastClosingDaytime(
-    ?, ?, to_date(?,'yyyy-mm-dd"T"hh24:mi:ss')),
-    'yyyy-mm-dd"T"hh24:mi:ss') FROM dual
--- Same pattern exists for Well: EcDp_Well_Event.getLastClosingDaytime()
-```
-Closing daytime = when a well/stream was last "closed" (i.e., a production period ended). Used as the default date on data entry screens.
+**20 Stream Categories:**
+Oil Production, Condensate Production, Gas Production, Oil Export, Oil Import, Gas Export, Gas Import, Oil Fuel, Gas Fuel, Gas Flare, Gas Vent, Gas Lift, Gas Injection, Water Disposal, Water Injection, Water Production, Oil Loss, Steam Injection, Diluent, Gas Lost
 
-**Time scope codes (from XSD class model):**
-`1HR, 2HR, DAY, WEEK, MTH, QTR, YR, VERSIONED, EVENT, NONE, INVARIANT, SAMPLE`
-Every data class is assigned a time scope — determines how production data is bucketed.
+**5 Stream Types:**
+| Type | Meaning |
+|---|---|
+| Measured | Has a physical meter — actual reading |
+| Reference | Reference value (not measured directly) |
+| Calculated | Computed by the allocation program |
+| Quality | Quality reference stream |
+| Derived | Calculated using functions |
 
-**Well PVT split calculation (`EcBsWellSplit.java`):**
+**Stream Meter Frequency:** Regular Intervals — Year / Month / Day / 1 Hour / One Minute. Aggregate flag: Yes/No.
+
+**Stream Sets:** CO.0029 (Stream Set) groups streams for display together in a BF screen (e.g., PO.0001 Daily Oil Stream Status). CO.0030 (Stream Set List) adds/removes streams from a set.
+
+**Alloc Period attribute** on stream — controls which allocation the stream participates in:
+- Daily Allocation | Monthly Allocation | Daily and Monthly | Not included
+
+**Alloc Fixed** — Fixed or Adjustable. Fixed streams are not modified by allocation (fiscal meters, master injection). Adjustable = modified by allocation. **Allocation fails if no adjustable incoming streams exist for a production node.**
+
+---
+
+**TANK — EC Tech Docs 14.2.5:**
+
+Four interconnected concepts:
+1. **Tank** — physical vessel (crude oil, condensate, refined products)
+2. **Storage** — accounting value (changes with fills, withdrawals, transfers, losses)
+3. **Tank Strapping** — calibration table: height → volume. Used to convert level measurements (dip tape/sensor) to volume. Essential for accurate HC accounting.
+4. **Tank Tap** — physical connection point (valve/nozzle) for sampling, transfer, or gauging
+
+**Tank Types:**
+| Type | Description |
+|---|---|
+| Export tank | |
+| Settling tank | |
+| Pipeline inventory as virtual tank | |
+| Other tank types | Terminal tanks |
+| Import tank | |
+
+**Tank Materials:** Mild Steel, Carbon Steel, Monel (nickel-copper, corrosive HC), Type 316 SS, Type 304 SS
+
+**Initiate Day:** Creates daily tank status record (BSW, density, tank volume, mass). Last day of month → monthly tank status record.
+
+**Tank = member of Allocation Node** — tanks participate in the allocation network as nodes.
+
+**Tank BF screens:**
+- PO.0005 — Daily Tank Status
+- PO.0006 — Monthly Tank Status
+- PO.0023 — Batch Oil Tank Export (Tank Dip)
+
+**Analysis Stream attribute** on Tank — used for BSW/density from stream sample analysis. Functions:
+| Function | Retrieves | Used in |
+|---|---|---|
+| `findBSWVol` | BSW volume fraction | Calc Tank BSW at PO.0005 |
+| `findBSWWt` | BSW weight fraction | Net Oil Mass at PO.0023 |
+| `findStdDens` | Density at standard conditions | Calc Tank Density at PO.0005 |
+| `findObsDens` | Observed density | Gross Oil Mass at PO.0023 |
+
+**Woodside Pluto tanks:**
+- PLU_COND_TANK_1, PLU_COND_TANK_2, PLU_COND_TANK_3 (condensate storage)
+- Report: `DPR_SUB8_STORAGE_TANK.jasper`
+
+---
+
+**Common patterns across all three objects:**
+- Time scope codes: `1HR, 2HR, DAY, WEEK, MTH, QTR, YR, VERSIONED, EVENT, NONE, INVARIANT, SAMPLE`
+- Every data class is assigned a time scope — determines production data bucketing
+- All three require Initiate Day (CO.0077) to create status records
+- All three use closing daytime: `EcDp_Well_Event.getLastClosingDaytime()`, `EcDp_Stream_Event.getLastClosingDaytime()`
+
+**Well PVT split (`EcBsWellSplit.java`):**
 ```sql
 SELECT OBJECT_ID, RESULT_NO,
        THEOR_NET_OIL_RATE, THEOR_GAS_RATE,
        THEOR_NET_COND_RATE, THEOR_WATER_RATE
 FROM TV_PVT_PT_THEOR_WELLS WHERE RESULT_NO = ?
 ```
-Splits commingled stream volumes back to individual wells using PVT theoretical rates.
-
-**Tank export stream pattern:**
-Every tank has an export stream — `tank_version.export_stream_id`. TankDefaultValueHelper resolves this at runtime to link tank data entry to the correct outflow stream.
+Outputs: `wellOilPart[]`, `wellGasPart[]`, `wellConPart[]`, `wellWatPart[]` — splits commingled volumes back to individual wells.
 
 **Stream Node Diagram (SND):**
-`StreamNodeDiagramModel.java` + `StreamNodeDiagramAction.java` — renders the production network as a directed graph. Nodes are wells/facilities/tanks; edges are streams. Filter transformers (`NetworkFilterTransformer`, `GroupTransformer`, `DynamicQueryTransformer`) allow different views of the same network.
+`StreamNodeDiagramModel.java` + `StreamNodeDiagramAction.java` renders the production network as a directed graph. Nodes = wells/facilities/tanks; edges = streams. Phase colours configurable in CO.1006 (Maintain System Settings). Filter transformers: `NetworkFilterTransformer`, `GroupTransformer`, `DynamicQueryTransformer`.
 
-**Woodside extension functions (ZWT — unified evaluation):**
+**Woodside ZWT extension functions:**
 ```
 zwt_prod_stream_formula.evaluateMethod(p_object_type, p_object_id, p_method, p_daytime, p_to_date, p_stream_id)
 zwt_prod_well_theoretical.findGasOilRatio(well_id, daytime)   -- GOR at standard conditions
-zwt_prod_well_theoretical.findGCV(well_id, daytime)           -- Gross Calorific Value
-zwt_prod_well_theoretical.getGasEnergyMonth(well_id, daytime) -- energy content of gas (monthly)
+zwt_prod_well_theoretical.findGCV(well_id, daytime)           -- Gross Calorific Value (gas → energy)
+zwt_prod_well_theoretical.getGasEnergyMonth(well_id, daytime) -- monthly gas energy content (GJ/MMBtu)
 ```
-GCV converts gas volumes to energy (GJ/MMBtu) — critical for LNG and sales accounting.
+GCV converts gas volumes to energy — critical for LNG and sales accounting.
 
-**Industry context (web):**
-Best-in-class upstream systems model wells, meters, tanks as interconnected "objects" with date-effective records, run tickets, well tests, and flexible formulas — exactly EC's pattern. Central data warehouse approach ensures production volumes feed directly into financials without re-keying.
+**Woodside production views:**
+- OFM well views: `ZWP_V_OFM_WELL_DAY`, `ZWP_V_OFM_WELL_MTH`
+- NOPTA regulatory views: `ZWP_V_NOPTA_WELL`, `ZWP_V_NOPTA_WELL_SEC2`, `ZWP_V_NOPTA_WELL_TEST`
+- Allocation reporting: `ZWP_V_REP_PWEL_MTH_ALLOC`, `ZWP_V_REP_STRM_DAY_ALLOC`, `ZWP_V_REP_STRM_MTH_ALLOC`
+- Report: `DPR_SUB12_WELLS.jasper` (well report)
 
-**Key insight:** Well → Stream → Facility is EC's production hierarchy. Wells produce into streams; streams flow to facilities or tanks. PVT-based back-allocation splits commingled stream volumes to source wells. Stream Node Diagram provides the visual representation of the entire allocation network.
+**ECpedia Polar Bear reference pattern:**
+- 2 fields (North + South) → 1 platform → multiple wells: OP = Oil Producer, GI = Gas Injector, WI = Water Injector
+- Oil stored in tank (no export yet in sandbox); gas and water follow separate streams
+- Stream Node Diagram (SND) shows the full allocation network visually
+
+**Key insight:** Well → Stream → Facility is EC's production hierarchy. 20 well types are fixed by EC (cannot extend). Initiate Day (CO.0077) is the trigger that creates status records for all three object types. Tank strapping converts physical level measurements to volumes. Streams can be Measured, Derived, or Calculated — the allocation engine only adjusts "Adjustable" streams.
 
 ---
 
 ### Item #23: Hydrocarbon Accounting (5→9) ✅
 
-**What HC accounting covers (industry + EC context):**
+**What HC accounting covers:**
 - Field operations: well tests, meter readings, tank dipping
 - Volumetric allocation: splitting commingled volumes to owners/wells
 - Contractual allocation: applying ownership percentages
@@ -2304,47 +2400,104 @@ Best-in-class upstream systems model wells, meters, tanks as interconnected "obj
 | Subsystem | Role |
 |---|---|
 | Allocation Network (`ALLOC_NETWORK`) | Network topology — which streams/wells contribute to which nodes |
-| Calculation Engine | Computes volumes: daily (`ZXIC_DAILY_VOLUME`) and monthly (`ZXIC_MONTHLY_VOLUME`) |
+| Calculation Engine | Computes volumes: allocation calculations per network |
 | Data Lifecycle (BPM) | Controls Provisional → Verified → Approved state transitions |
 
-**Allocation Network:**
-- `ALLOC_NETWORK` defines the production network graph for allocation
-- Each network links to a calculation object: the engine that runs the actual volume calculations
-- Woodside Pluto: network code `AN_SHN` (Shenzi network) → calc `ZXIC_DAILY_VOLUME` / `ZXIC_MONTHLY_VOLUME`
-- Network has `include_subgroups` flag — controls whether sub-group wells are included in allocation
-
-**HC phases tracked in EC:**
-| Phase | Attribute example | Notes |
+**Three calculation types in EC (EC Tech Docs 14.2.5):**
+| Type | Description | When to use |
 |---|---|---|
-| Oil | `THEOR_NET_OIL_RATE` | Net after water cut |
-| Gas | `THEOR_GAS_RATE` | Total gas rate |
-| Condensate | `THEOR_NET_COND_RATE` | NGL/condensate |
-| Water | `THEOR_WATER_RATE` | Tracked even though not HC — affects ratios |
+| Equation-based | EC-specific math syntax; compact and dynamic | Complex multi-phase volume calculations |
+| Excel workbook | Maps data between EC and Excel | When users prefer Excel-based design |
+| Calculation Processes | Flowchart breaking calc into sub-calcs | Complex workflow with mixed sub-calc types |
+
+Library calculations (CO.1061/CO.1062) can be sub-steps in Calculation Processes.
+
+**Allocation Network — how it works:**
+- `ALLOC_NETWORK` defines the production network graph for allocation
+- Each network links to a calculation via `TV_ALLOC_NETWORK_JOB_CONN`
+- Multiple networks can be defined per installation
+- Node types: Well, Well Hookup (manifold/subsea template), Facility Class 1/2, Node (generic)
+
+**Well allocation configuration flags (affect standard calculation):**
+| Flag | Effect |
+|---|---|
+| Include in allocation | Must be checked for well to participate |
+| Allocate all Phases Fixed | Well not modified by allocation — all phases fixed |
+| Allocate using Fixed GOR | GOR not changed by allocation |
+| Allocate using Fixed WC | Water cut not changed by allocation |
+
+**Stream allocation configuration flags:**
+| Attribute | Options | Effect |
+|---|---|---|
+| Stream type | Measured / Derived / Calculated | Measured/Derived = initial value from DB; Calculated = computed in calc |
+| Alloc Period | Daily / Monthly / Both / Not included | Which allocation runs include this stream |
+| Alloc Data Frequency | Daily / Monthly | Whether daily or monthly data feeds allocation |
+| Alloc Fixed | Fixed / Adjustable | Fixed = not modified; Adjustable = modified by allocation |
+
+**Well Hookup configuration:**
+- Include in allocation checkbox
+- Calculation Sequence Number — order in which nodes are reconciled
+- Can process phases — which fluid types
+- Allocation Reconciliation Method — factor calculated per day or as monthly average
+
+**Calculation algorithm (from EC Tech Docs HC Accounting section):**
+- All nodes except wells have a calc sequence number
+- Wells are FIXED at calc sequence 99
+- Values decrease as you move UP the network (facility = low sequence, wells = 99)
+- Initial values come from DB (measurements/estimates)
+- Well flows start with theoretical volumes (PVT-based), then are adjusted by allocation
+- Fixed streams receive allocated volume identical to measured volume (no adjustment)
+- Reconciliation: each node adjusts its well contributions so that sum(in) = sum(out) per phase
+
+**Woodside Pluto allocation networks (from actual git repo — CORRECTED):**
+
+| Network Code | Name | Period | Linked Calculation |
+|---|---|---|---|
+| PLU_EMISSION | Pluto Emissions | DAY | ZWPC_EMISSION_DISCHARGE |
+| PLU_OFFSHORE_ALLOC | Pluto Offshore Allocation | MONTH | C_ALLOC_OFFSHORE_MTH |
+| PLU_ONSHORE_ALLOC | Pluto Onshore Allocation | DAY_MONTH | (C_MASS_BALANCE_MTH — commented out) |
+| SCA_OFFSHORE_ALLOC | Scarborough Offshore Allocation | DAY_MONTH | — |
+| SCA_EMISSION | Scarborough Emissions | DAY | ZWPC_SCA_EMISSION_DISCHARGE |
+| PLU_PRRT | PRRT | MONTH | C_PRRT |
+
+**Note:** AN_SHN and ZXIC_DAILY/MONTHLY_VOLUME do NOT exist in Woodside Pluto. These were from a different project. Pluto uses PLU_/SCA_ prefixed networks and calculation codes.
+
+**Woodside allocation tables:**
+| Table | Period | Content |
+|---|---|---|
+| ZWP_T_PWEL_DAY_ALLOC | Daily | `ZWP_ALLOC_HC_GAS_VOL`, `ZWP_ALLOC_HC_GAS_MASS`, `ZWP_THEOR_HC_GAS_RATE`, `ZWP_HC_GAS_VOL_FACTOR` |
+| ZWP_T_STRM_DAY_ALLOC | Daily | `ZWP_EMIS_ALLOC_MASS`, `ZWP_EMIS_ALLOC_VOL`, `ZWP_EMIS_ALLOC_ENERGY`, `ZWP_EMIS_RUN_NO` |
+| ZWP_PWEL_MTH_ALLOC | Monthly | Production well monthly allocation |
+| ZWP_STRM_MTH_ALLOC | Monthly | Stream monthly allocation + emissions |
 
 **Data lifecycle state codes (Woodside Pluto — project-specific):**
 ```
-D_SHENZI_P_TO_V  — Provisional → Verified   (daily step, run by Daily Data Status Process HA.0001)
-D_SHENZI_V_TO_A  — Verified → Approved      (monthly step, run by approval in BPM)
-```
-State codes are passed as BPM parameters — the core EC BPMN process does not change between projects.
-
-**"Work by Exception" principle (ECpedia + EC Tech Docs):**
-No manual user interaction required if everything is within expected range. Users only get tasks when:
-- Check rules fail (warning/error)
-- Reports need verification/approval
-- A step encounters an error
-
-**Ghost Data Cleanup (mentioned in both daily and monthly BPM docs):**
-Before running allocation, EC optionally removes "ghost" data — orphan records from previous cancelled or partial allocation runs. Prevents double-counting. A step in both daily and monthly BPM.
-
-**Woodside-specific HC calculations:**
-```
-zwt_prod_well_theoretical.getGasEnergyMonth()  — energy content of gas (monthly, GJ/MMBtu)
-zwt_prod_well_theoretical.findGasOilRatio()    — GOR at standard conditions
-zwt_prod_well_theoretical.findGCV()            — Gross Calorific Value
+D_SHENZI_P_TO_V  — Provisional → Verified   (daily step, run by HA.0001 Daily Data Status Process)
+D_SHENZI_V_TO_A  — Verified → Approved      (monthly step, run by approval BPM)
 ```
 
-**Key insight:** HC accounting = network topology config + calculation engine execution + BPM lifecycle control. These three are deliberately decoupled: you can change the allocation calculation without touching the BPM, and change the state workflow without touching the network. Woodside injects project-specific codes at the BPM parameter level.
+**"Work by Exception" principle:**
+No manual user interaction required unless something fails. Users get tasks only when check rules fail, reports need verification, or a step errors. On normal days, the BPM runs fully automated.
+
+**HC phases tracked:**
+| Phase | Attribute example |
+|---|---|
+| Oil | `THEOR_NET_OIL_RATE` |
+| Gas | `THEOR_GAS_RATE` |
+| Condensate | `THEOR_NET_COND_RATE` |
+| Water | `THEOR_WATER_RATE` |
+
+**Woodside-specific HC calculations (ZWP_P_PROD_WELL_THEORETICAL):**
+```
+getCondStdRateDay()    -- condensate at standard conditions (from fluid analysis + density)
+getGasStdRateDay()     -- gas at standard conditions
+getFlowlineConHrs()    -- flowing condensate hours
+findGasOilRatio()      -- GOR at standard conditions
+findGCV()              -- Gross Calorific Value (gas → energy)
+getGasEnergyMonth()    -- monthly gas energy content (GJ/MMBtu)
+```
+
+**Key insight:** HC accounting = network config (PLU_/SCA_ codes) + calc engine (equation/Excel/flowchart) + BPM lifecycle. The three are deliberately decoupled. Woodside uses separate daily emissions networks (PLU_EMISSION, SCA_EMISSION) and monthly offshore allocation networks (PLU_OFFSHORE_ALLOC) — not a single unified allocation network. Fixed streams are not touched by allocation; adjustable streams are reconciled.
 
 ---
 
@@ -2358,25 +2511,26 @@ zwt_prod_well_theoretical.findGCV()            — Gross Calorific Value
 - Executed via "Process Execution" business function (PA.0003)
 - Core principle: **"Work by Exception"** — no manual steps unless something fails
 
-**Deployment steps (EC Tech Docs):**
+**Deployment steps:**
 1. Download BPM artifacts from Nexus: `downloads/com/ec/prod/prod-bpm-building-blocks`
 2. In EC → Project Management (PA.0013) → Add record (GroupId=`com.ec.bpm`, ArtifactId=`prod-bpm-building-blocks`)
-3. Upload and Deploy → artifacts appear in Project Management
-4. Configure Process Template → execute from Process Execution (PA.0003)
+3. Upload and Deploy → Configure Process Template → execute from PA.0003
 
 **Two core BPMN processes:**
 
-| Process | ID | Woodside Trigger | Calc |
-|---|---|---|---|
-| Daily Allocation | `ECProd_DailyProductionAllocation` | CRON `0 0 7 ? * * *` (7 AM CET, runs for YESTERDAY) | `ZXIC_DAILY_VOLUME` |
-| Monthly Allocation | `ECProd_MonthlyProductionAllocation` | Manual / scheduled monthly | `ZXIC_MONTHLY_VOLUME` |
+| Process | ID | Woodside config |
+|---|---|---|
+| Daily Allocation | `ECProd_DailyProductionAllocation` | V1.0.0.1600__BPM_D_01.sql |
+| Monthly Allocation | `ECProd_MonthlyProductionAllocation` | V1.0.0.1700__BPM_M_01.sql |
 
-**Daily BPM sub-steps (in order, all optional except input init/validation):**
+Both are overridden in Woodside repo: `/bpm/prod-bpm-building-blocks/src/main/resources/building-blocks/allocation/` — always check this folder for Pluto-specific changes.
+
+**Daily BPM sub-steps (in order):**
 1. **Input data initialization** (mandatory)
 2. **Input validation** (mandatory) — checks concurrent runs, resolves network/dates
 3. Run data pre-checks — Check Rules + object/class validation
 4. Run data verification — Provisional → Verified (`D_SHENZI_P_TO_V`)
-5. Run allocation — executes `ZXIC_DAILY_VOLUME` calculation
+5. Run allocation — executes the configured allocation calculation
 6. Ghost Data Cleanup — removes orphan records from cancelled prior runs
 7. Run report process — generates Daily Production Report
 8. Approve allocation process
@@ -2385,14 +2539,37 @@ zwt_prod_well_theoretical.findGCV()            — Gross Calorific Value
 - Run Data Approval — Verified → Approved (`D_SHENZI_V_TO_A`)
 - **Month Lock user task** — user confirms data is ready to lock
 - `perform_data_locking = Y` — locks the monthly period after approval
-- `ask_rerun_alloc_pre_data_approval = N` — skip rerun prompt by default
+- `ask_rerun_alloc_pre_data_approval = N` — skip rerun prompt
 - `data_approval_auto_run = Y` — auto-run approval without manual trigger
-- Screen link: `/com.ec.prod.ha.screens/mth_data_lock` (Monthly Data Lock screen)
 
-**All BPM building blocks (ECpedia):**
+**Key BPM parameters (CORRECTED from actual Woodside BPM SQL):**
+```sql
+-- Registered as TV_BUSINESS_ACTION_JBPM
+JBPM Deployment: com.ec.woodside:WSTEMPLATE:1.0
+Action class:    StartProcessInstanceBusinessAction
+Functional area: EC
+
+-- Common daily params
+production_day: DATE (mandatory)
+include_subgroups: N
+calc_log_class: CALC_DAY_PROD_LOG
+calc_context: EC_PROD
+data_verification_status_process: D_SHENZI_P_TO_V
+-- (alloc_net_code and calc_id are set per network — PLU_OFFSHORE_ALLOC, C_ALLOC_OFFSHORE_MTH etc.)
+
+-- Monthly extras
+run_data_approval: Y
+data_approval_auto_run: Y
+data_approval_status_process: D_SHENZI_V_TO_A
+perform_data_locking: Y
+role_confirm_data_lock: SYST.ADM
+calc_log_class: CALC_MTH_PROD_LOG
+```
+
+**All BPM building blocks:**
 | Building Block | Description |
 |---|---|
-| `ECProd_AllocInputValidation` | Input validation for allocation; resolves alloc_net_id, start/end dates, created_by |
+| `ECProd_AllocInputValidation` | Input validation; resolves alloc_net_id, start/end dates, created_by |
 | `ECProd_RunReports` | Run report + optional Verify/Approve by stakeholders |
 | `ECProd_VerifyApproveProcess` | Data status transitions (Verified/Approved/Approve Allocation) |
 | `EC_CheckRuleWithErrorHandling` | Check rule run + user task routing for warning/error |
@@ -2402,36 +2579,21 @@ zwt_prod_well_theoretical.findGCV()            — Gross Calorific Value
 | `EC_RunReport` | Run a single report |
 | `EC_CreateEmailNotification` | Send email to user/role/contact group |
 
-**Error handling — three levels (configured via role parameters):**
+**Error handling — three levels:**
 | Level | Woodside role | Behaviour |
 |---|---|---|
 | Fatal | `role_handle_alloc_fatal_error = SYST.ADM` | Stops process; assigns task to role |
 | Non-fatal | `role_handle_alloc_nonfatal_error = SYST.ADM` | Assigns task; process can continue |
 | Warning | `role_handle_alloc_warning = SYST.ADM` | Notifies role; no stop |
 
-**Woodside BPM configuration (from V1.0.0.1600 and V1.0.0.1700 SQL):**
-```sql
--- Registered as TV_BUSINESS_ACTION_JBPM
-JBPM Deployment: com.ec.woodside:WSTEMPLATE:1.0
-Action class:    StartProcessInstanceBusinessAction
-Functional area: EC
+**Woodside BPM supporting components:**
+- `ECProd_AllocInputValidation.bpmn2` — input validation
+- `ECProd_VerifyApproveProcess.bpmn2` — approval workflows
+- `ECProd_RunReports.bpmn2` — report generation
+- `EC_RunCalculation.bpmn2` — calculation execution
+- `EC_CheckRuleWithErrorHandling.bpmn2` — validation rules
+- Allocation reports: `R_BLP_DAILY_PROD_ALLOC_PLUTO.sql`, `R_BLP_DAILY_PROD_ALLOC_SCA.sql`, `R_BLP_MONTHLY_ALLOC_PLUTO.sql`
 
--- Key daily params
-alloc_net_code = AN_SHN, calc_id = ZXIC_DAILY_VOLUME
-production_day: DATE (mandatory), include_subgroups = N
-calc_log_class = CALC_DAY_PROD_LOG, calc_context = EC_PROD
-data_verification_status_process = D_SHENZI_P_TO_V
-
--- Key monthly extras
-run_data_approval = Y, data_approval_auto_run = Y
-data_approval_status_process = D_SHENZI_V_TO_A
-perform_data_locking = Y, role_confirm_data_lock = SYST.ADM
-calc_log_class = CALC_MTH_PROD_LOG
-```
-
-**Woodside also has its own BPMN overrides:**
-`/c/DEV/GIT/woodside_impl_pluto_12839/bpm/prod-bpm-building-blocks/` — Woodside carries its own customised copies of `ECProd_DailyProductionAllocation.bpmn2`, `ECProd_MonthlyProductionAllocation.bpmn2`, and `ECProd_AllocInputValidation.bpmn2`. This means Woodside's BPM behaviour may differ slightly from core EC — always check this folder for Pluto-specific changes.
-
-**Key insight:** EC BPM is fully configuration-driven — same BPMN structure, all behaviour controlled by parameters. The "Work by Exception" principle means operators don't touch the system on normal days; they only act when the system assigns them a task. Monthly adds Data Locking on top of daily — once locked, the period cannot be changed without unlocking. Woodside has its own BPM overrides stored in the project repo.
+**Key insight:** EC BPM is configuration-driven — same BPMN structure, behaviour controlled by parameters. The "Work by Exception" principle means operators don't touch the system on normal days; only act when the system assigns a task. Monthly adds Data Locking. Woodside has its own BPM overrides in the project repo and uses PLU_/SCA_ allocation network codes (not AN_SHN). Each allocation network maps to a specific calculation via `TV_ALLOC_NETWORK_JOB_CONN`.
 
 
