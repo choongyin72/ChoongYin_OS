@@ -605,7 +605,9 @@ TARGET STAGE
 
 ---
 
-## Session A — Deep Dive Results
+## Session A — Deep Dive Results [ENHANCED — all 5 sources]
+
+**Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
 
 ### Item #1: Class vs Object Validation (7→9) ✅
 
@@ -642,6 +644,27 @@ OBJECT_ATTR_VALIDATION: same + OBJECT_ID + EXT_VALIDATION_IND
 - `newVersionObject()` / `deleteVersionObject()` — object version management
 - `copyValidation(from_obj, to_obj, from_dt, to_dt)` — copy config between objects
 - `addMissingAttrClass()` / `addMissingAttrObject()` — add new attributes after class change
+
+**`DefaultClassValConfigDao.java` — how EC loads validation config (JPA queries):**
+```java
+// Class validation query — excludes DISABLED_IND='Y' attributes
+SELECT c FROM ClassAttrValidationEntity WHERE class_name = :className
+  AND NOT EXISTS (... DISABLED_IND='Y' ...)
+  AND (warn_min IS NOT NULL OR warn_max IS NOT NULL OR err_min IS NOT NULL
+       OR err_max IS NOT NULL OR err_mandatory_ind IS NOT NULL OR ...)
+-- Also loads: ClassAttrEditableEntity (NOT_EDITABLE), ObjAttrCopyFwdLogEntity (STALE_DAYS)
+```
+
+**NEW: Stale Days concept** (`ObjAttrCopyFwdLogEntity`):
+Each object attribute can have `staleDays` — the number of days after which a copied-forward value is considered stale. Used for forward-filled production data that becomes outdated.
+
+**Validation service is pluggable:**
+`@ServiceProvider(priority = 0)` annotation on `DefaultClassValConfigDao` — the validation DAO can be overridden by extensions at higher priority. Allows project-specific validation logic injection.
+
+**Industry context:** Oil & gas data quality best practices align exactly with EC's check rule design:
+- Range checks (WARN_MIN/MAX, ERR_MIN/MAX) → prevent physically impossible values
+- Completeness checks (ERR_MANDATORY_IND) → catch missing timestamps/values
+- Mass balance reconciliation is a higher-level outcome of passing all check rules
 
 **Woodside Pluto note:** Issue_1052 check rules have `CLASS_OBJ_VALIDATION_IND = N` — SQL-based, correct. For per-stream range checks (different limits per stream) → use CO.1032.01.
 
@@ -683,6 +706,9 @@ New groups needed:
 - V_PHD_TANK_DIP_STATUS → TANK_DAY_DIP_STATUS screen (TC05-TC08)
 Parent: V_DAILY_PHD_VALIDATION
 
+**Check group → BPM integration (ECpedia BPM page):**
+Check rule failures surface as jBPM user tasks — `EC_CheckRuleWithErrorHandling.bpmn2` building block routes violations to role-based task queues. This is why check groups must be configured before going live: without a group, violations never become BPM tasks, and the "Work by Exception" principle cannot work.
+
 **Action: Add Check Group + Rule Group Combination INSERT to Issue_1052 SQL script. Raise to Grant.**
 
 ---
@@ -721,7 +747,9 @@ for (String group : groupAndChildren) {
 
 ---
 
-## Session B — Deep Dive Results
+## Session B — Deep Dive Results [ENHANCED — all 5 sources]
+
+**Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
 
 ### Item #4: Group Model Concept (6→9) ✅
 
@@ -745,6 +773,9 @@ NOT the same as Check Group:
 
 **Key tables:** `GROUP_MODEL` (config), `GROUPS` (runtime with temporal validity DAYTIME/END_DATE),
 `CLASS_REL_CNFG` (relationships), `DAO_CLASS_DEPENDENCY` (parent/child)
+
+**EC Sandbox reference (ECpedia):**
+EC Sandbox uses Group Model for the Polar Bear upstream operation — `Polar Bear Platform A` as facility → wells (OP, GI, WI) as children. This is the exact Group Model pattern in practice: facility at top, well types below, each navigable from the Allocation Network view.
 
 ---
 
@@ -774,6 +805,40 @@ e.g. Interface expects `CODE`, ALLOC_NETWORK has `NETWORK_CODE` → set `INTERFA
 - Interface CANNOT reference attributes some implementers don't have (UNION ALL fails)
 - `CLASS_DEPENDENCY_CNFG`: DEPENDENCY_TYPE=IMPLEMENTS records which classes implement the interface
 
+**ECpedia — Calculation Data Model Best Practices: `_DATA` and `_ALLOC` class naming (CRITICAL):**
+
+This is a CRITICAL pattern for anyone writing EC calculations or extensions:
+
+| Class type | Suffix | Purpose | Example |
+|---|---|---|---|
+| Read (allocation input) | `_DATA` | Read-only; based on DB views; safe for calc reads | `PWEL_DAY_DATA`, `STRM_DAY_STREAM_DATA` |
+| Write (allocation output) | `_ALLOC` | Writes back calc results; separate base tables | `PWEL_DAY_ALLOC`, `STRM_DAY_ALLOC` |
+| Screen class | (none) | UI display; DO NOT read/write from calc | `PWEL_DAY_STATUS`, `STRM_DAY_STATUS` |
+
+**Why this matters:**
+- Reading from screen classes in calculations = performance degradation (screen classes have extra UI logic)
+- Writing to screen classes = even worse performance issues
+- Always use `_DATA` for reads, `_ALLOC` for writes
+
+**Key `_DATA` classes:**
+```
+PWEL_DAY_DATA      — Daily Production Well
+IWEL_DAY_DATA      — Daily Injection Well
+STRM_DAY_STREAM_DATA   — Daily Streams
+STRM_MTH_STREAM_DATA   — Monthly Streams
+STRM_DAY_COMP_DATA     — Daily Stream Component Analysis
+```
+
+**Key `_ALLOC` classes:**
+```
+PWEL_DAY_ALLOC, PWEL_MTH_ALLOC     — Production Well daily/monthly
+STRM_DAY_ALLOC, STRM_MTH_ALLOC     — Stream daily/monthly
+STRM_DAY_COMP_ALLOC                 — Stream Component Analysis results
+STRM_DAY_PC_ALLOC                   — Stream Profit Centre results
+```
+
+**Best practice:** Extend existing `_DATA`/`_ALLOC` classes via extensions rather than creating new ones. New write classes MUST have new base tables (not screen tables).
+
 ---
 
 ### Item #6: Class Trigger Actions CLASS_TRIGGER_ACTN_CNFG (7→9) ✅
@@ -802,9 +867,23 @@ DB_SQL_SYNTAX:
 
 **Woodside note:** Woodside extension custom logic (ZWP_ tables) should use CLASS_TRIGGER_ACTN_CNFG entries, NOT standalone Oracle triggers. Keeps code within EC framework lifecycle management.
 
+**EC Tech Docs — extension trigger naming (from DB migration doc):**
+```
+Extension trigger naming: {EXTENSION_ID}_IU_{trigger_name}   e.g. ZWP_IU_WELL_VERSION
+                          {EXTENSION_ID}_AP_{trigger_name}   for PINC/install triggers
+Create with FORCE keyword when dependent on auto-generated objects:
+  CREATE OR REPLACE FORCE TRIGGER ZWP_IU_WELL_VERSION ...
+```
+Extension triggers cannot modify product triggers — they are additive only.
+
+**`IGNORE_IND` property** (from EC Tech Docs, new finding):
+`DISABLED_IND = Y` truly removes an attribute from all processing. `IGNORE_IND = Y` hides it from screens and REST API only — the attribute still exists in DB and can be queried. Use `IGNORE_IND` when you want to suppress a product attribute from the UI without breaking DB-level processing.
+
 ---
 
-## Session C — Deep Dive Results
+## Session C — Deep Dive Results [ENHANCED — all 5 sources]
+
+**Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
 
 ### Item #7: ECIS Source Functions Detail (7→9) ✅
 
@@ -839,6 +918,24 @@ Last sample weighted from its timestamp to period end
 - SAMPLE: last_timestamp + 1 second
 - Aggregated: last_timestamp + 1 source_interval
 
+**PI Historian context (web — AVEVA/OSIsoft):**
+PI Historian stores tag values as time-series events. Key concepts:
+- **Compression**: PI compresses data — not every timestamp is stored, only "significant" changes. EC's `COMPRESSED` source function uses PI's compressed storage directly.
+- **Time-weighted average in PI**: PI calculates the integral under the flow rate curve / total time. This is what ECIS `AVG` replicates — not a simple mean.
+- **PI Totalizer**: For rate tags (flow in units/day), PI calculates volume by integration. ECIS `SUM` achieves the same result at the EC level.
+- **PI AF (Asset Framework)**: Provides descriptive attribute names mapped to cryptic tag names (e.g. `WellA.OilRate` → `1C1401_TO_E1405AB.FI1234.PV`). Woodside uses PI AF — EC maps to PI AF attribute paths, not raw tag names.
+
+**AVG vs MEAN — why it matters for Woodside:**
+```
+AVG (time-weighted): 
+  Reading: 100 bbl/d for 20 hours + 50 bbl/d for 4 hours
+  → (100×20 + 50×4) / 24 = 91.67 bbl/d  ← CORRECT for production accounting
+
+MEAN (arithmetic):
+  (100 + 50) / 2 = 75 bbl/d  ← WRONG — ignores time duration
+```
+Always use `AVG` for flow rates (oil/gas/water), `VALUE_AT_END` for instantaneous readings (temperature, pressure, density).
+
 **Woodside note:** PHD daily data → use AVG (time-weighted) for analysis. Tank readings → VALUE_AT_END (latest reading). Wrong function = wrong aggregation = wrong EC data.
 
 ---
@@ -871,11 +968,19 @@ SELECT TAG_ID, LAST_TRANSFER FROM TRANS_SOURCE_TIME
 WHERE LAST_TRANSFER < sysdate - 1 AND ACTIVE = 'Y';
 ```
 
+**ECIS integration patterns (web + EC Tech Docs):**
+- SCADA/PI historian is the source system for real-time sensor data — EC is the downstream consumer
+- All EC API operations respect the journaling/auditing layer — ECIS writes are auditable
+- ECIS two-stage pipeline separates extraction (Source Stage) from loading (Target Stage) via JMS — allows retry without re-extraction
+- `OVERWRITE_STATUS` parameter controls what record status ECIS can overwrite: if data is already Verified, ECIS cannot overwrite unless set to V or A
+
 **Woodside Issue_1052 note:** PHD tags showing NULL → check TRANS_SOURCE_TIME.LAST_TRANSFER. If stuck, move it back to force re-read. This is the root cause diagnostic tool.
 
 ---
 
-## Session D — Deep Dive Results (Option A — Python gathered, Claude analysed)
+## Session D — Deep Dive Results [ENHANCED — all 5 sources]
+
+**Sources used:** EC Tech Docs 14.2.5 ✅ | ECpedia BPR ✅ | EC source code ✅ | Woodside repo ✅ | Web ✅
 
 ### Item #19: Extension DB Migration (7→9) ✅
 
@@ -889,6 +994,17 @@ WHERE LAST_TRANSFER < sysdate - 1 AND ACTIVE = 'Y';
 - Declared via: `<Extension-MigrationLocation>db/migration</Extension-MigrationLocation>`
 
 **vs Core EC migration:** Core uses `owner_context_X/FRMW/PROD/` with timestamps. Extensions use version-based functional grouping.
+
+**EC Tech Docs — strict DB migration rules for extensions:**
+
+| Object type | Rule |
+|---|---|
+| Tables | Must start with Extension ID prefix. No modifying product tables. Versioned migrations (V__). |
+| Packages | Must contain Extension ID (e.g., `ZWP_pkg`, `UEI_ZWP_pkg`). Repeatable migrations (R__). |
+| Views | Must start with Extension ID. Create with `FORCE` keyword. Repeatable migrations (R__). |
+| Triggers | Must start with Extension ID (e.g., `ZWP_IU_WELL_VERSION`). Create with `FORCE`. Repeatable. |
+
+**EC Sandbox deviation (ECpedia):** The EC Upstream Sandbox uses ONLY `R__` (Repeatable) scripts — no `V__` scripts at all. This simplifies re-deployment but deviates from best practice. Real projects should use `V__` for table creates and `R__` for packages/views/triggers.
 
 **After creating a table, always run:**
 ```sql
@@ -916,6 +1032,31 @@ BEGIN ecdp_generate.generate('ZWT_TABLE', EcDp_Generate.PACKAGES+EcDp_Generate.A
 
 **`db-mapping-type="EXT_JOIN"`** = stored in separate extension table joined to base object. ZWT_ attributes extend WELL without touching core WELL table.
 
+**EC Tech Docs — three DB mapping types for extension attributes:**
+
+| `db-mapping-type` | Storage | When to use |
+|---|---|---|
+| `EXT_JOIN` | Separate extension table (joined via REC_ID) | Many new attributes — create a dedicated table with REC_ID as PK |
+| `EXTENSION` | Generic `EXTENSION_ATTRIBUTE_VALUE` table | One or a few new attributes — no new table needed |
+| `LEFT_JOIN` / `INNER_JOIN` | Lookup join — read-only | Lookup/calculated values from another table |
+
+**NEW: `EXTENSION_ATTRIBUTE_VALUE` table:** When `DB_MAPPING_TYPE = EXTENSION`, EC stores the value in this generic table. No new table needed. Good for simple project-specific attributes.
+
+**Additional EXT_JOIN parameters:**
+```xml
+DB_JOIN_ALIAS  — alias for extension table in WHERE clause
+DB_JOIN_SORT_ORDER — order when multiple joins on same table
+DB_JOIN_WHERE  — custom join condition (if blank, system auto-joins via rec_id)
+```
+
+**`IGNORE_IND` vs `DISABLED_IND` (from EC Tech Docs):**
+- `DISABLED_IND = Y` — truly removes attribute from ALL processing (DB + UI + API). Use only for group model class attributes.
+- `IGNORE_IND = Y` — hides from screens and REST API only. Attribute still exists in DB. Use to suppress product attributes from UI without breaking DB-level logic.
+- **Rule:** Never use `DISABLED_IND = Y` on product attributes except for group model class attributes.
+
+**From EC 12.2 onwards — TEXT_xx/VALUE_xx/DATE_xx columns:**
+Before EC 12.2, projects could add attributes directly to product classes using generic columns (TEXT_01, VALUE_01, etc.). From 12.2, this is no longer allowed — all new attributes must go through extensions with their own tables.
+
 **Data types:** BOOLEAN (checkbox), STRING, NUMBER, DATE, DECIMAL
 
 ---
@@ -941,25 +1082,33 @@ BEGIN ecdp_generate.generate('ZWT_TABLE', EcDp_Generate.PACKAGES+EcDp_Generate.A
 - Owner context isolates data partitions (1001=ZWT, 3000=ZWP)
 - `app_space_cntx` initialised first via 100_pre_product_overrides
 
+**EC Upstream Sandbox extension naming pattern (ECpedia — standard reference architecture):**
+
+| App Space | Owner Context | Role | Purpose |
+|---|---|---|---|
+| ZX | 3000 | Configuration | Tables, views, triggers, packages, class config (from CME) |
+| ZD | 4000 | Master Data | Scripts generated from ECCT |
+| ZC | 5000 | Calculations | Custom calculations not in EC product |
+| ZA | 6000 | Application | Business actions, business functions, custom Java |
+| ZR | 8000 | Reports | DB config + Jasper report files |
+| ZT | 10000 | Test Data | Test data generation functionality |
+
+Woodside follows this pattern with ZWT/ZWP naming. Owner contexts above 1000 = customer space (never < 1000 for extension classes).
+
+**EC tools for extension development:**
+- **Class Model Editor (CME)** — generates class XML configuration files
+- **EC Configuration Tool (ECCT)** — generates master data SQL scripts
+- **Maven Archetype for Extensions** — scaffolds a new extension skeleton project
+- **EC SDK** — examples at `energycomponents-sdk/examples/extensions/`
+
+**EC container registry:** `registry.energycomponents.com` — same credentials as EC Hub.
+
 **Separation of concerns:**
 - Base = data model (tables, classes)
 - Config = codes, lookups, rules
 - App = business logic, user exits
 - Reports = report definitions
 - Testdata = test data loading
-
-
-### Item #19: Extension DB Migration (7→9) ✅
-
-*(Content in Item #19 section above — Session D)*
-
-### Item #20: Creating Extension Classes (5→9) ✅
-
-*(Content in Item #20 section above — Session D)*
-
-### Item #21: ZWP_/ZWT_ Woodside Extension Patterns (7→9) ✅
-
-*(Content in Item #21 section above — Session D)*
 
 ---
 
