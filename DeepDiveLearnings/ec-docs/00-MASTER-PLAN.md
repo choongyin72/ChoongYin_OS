@@ -23,7 +23,7 @@ Each session → one KB summary doc `DOC-NN-<name>.md` (key concepts, config, go
 | **DOC-04** | **Production** | prod | 22 | 🔴 Woodside | ✅ `DOC-04-production.md` |
 | **DOC-05** | **Revenue + Sales** | revn + sale | 18 | 🟠 Woodside | ✅ `DOC-05-revenue-sales.md` |
 | **DOC-06** | **Transport** | transport | 12 | 🟠 Woodside | ✅ `DOC-06-transport.md` |
-| **DOC-07** | **ECIS + Events** | frmw/ecis + frmw/event | 25 | 🔴 integration | ☐ |
+| **DOC-07** | **ECIS + Events** | frmw/ecis + frmw/event | 25 | 🔴 integration | ✅ `DOC-07-ecis-events.md` |
 | **DOC-08** | **BPM (workflows)** | frmw/bpm | 24 | 🟠 | ☐ |
 | **DOC-09** | **EC Extensions / Dev** | ec-extensions + appdev + rest-api + expression | 21 | 🟡 | ☐ |
 | **DOC-10** | **GraphQL + Reporting + eDAC** | graphql + reporting-and-analytics + edac | 19 | 🟡 | ☐ |
@@ -50,3 +50,5 @@ Each session → one KB summary doc `DOC-NN-<name>.md` (key concepts, config, go
 | 2026-06-06 | DOC-04 | ✅ Production (Woodside core): status processes P→V→A, Deferment PD.0020, Hydrocarbon Accounting/Allocation (networks, reconciliation, PWEL/IWEL/STRM/PERF alloc tables, ghost data), Allocation BPM (work-by-exception), Stream Node Diagram, well testing PT.*, system attributes, API tank GOV, operation mode |
 | 2026-06-06 | DOC-05 | ✅ Sales (GS/SD/PR/SA/TR/GP/OS, Contract Concept, Sales Allocation, Price Determination) + Revenue (doc lifecycle OPEN→BOOKED, Sales→Revenue IFAC_SALES_QTY, Stream Items/Quantity module, CSDV validation zones, Financial Item, Calendar, Visual Tracing, PDG/CDG, Inventory) |
 | 2026-06-06 | DOC-06 | ✅ Transport: CA/CP/TO/LA/OD/GD/FC areas, Cargo Status T→R→C→A→D (drives record status V/A), EC Contract Concept (shared w/ Sales), Revenue interface (LOAD/UNLOAD), demurrage layout, Gantt transformers, contract end-dating (CO.2086), Berth Slot Calendar, new cargo data model (commercial vs physical) |
+
+| 2026-06-06 | DOC-07 | Events (pub-sub Camel/ActiveMQ, DomainObjectChanged on IUD, subscriptions CO.0130/CO.1081, WebHooks/AWS-SNS/Firebase, CTRL_EVENT_TYPE/HISTORY) + ECIS (SCADA/Tag + File capture, source/target+queue, ECIS Agent, Advanced File Import, adapters OPC/Tag/Row, DEFAULT_RECORD_STATUS, Remote Endpoint secret storage) |
