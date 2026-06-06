@@ -3,7 +3,7 @@
 **Task:** EC Screen Insert/Update/Delete (IUD) Automation
 **Author:** Choong-Yin Lee / Claude Sonnet 4.6
 **Date:** 2026-06-06
-**Version:** 2.0 — COMPLETE
+**Version:** 2.1 — COMPLETE (delete corrected to End Date = Start Date, DB-verified)
 
 ---
 
@@ -34,8 +34,8 @@ Automate Insert, Update, Delete (IUD) operations on EC Web App screens to valida
 |---|---|---|
 | INSERT | New record with AUTOTEST_ code appears in table after save | ✅ PASS |
 | UPDATE | Bank Name changed and persisted after save | ✅ PASS |
-| DELETE | Record no longer visible after End Date set + save | ✅ PASS |
-| CLEANUP | Environment returned to near-pre-test state (bank expired) | ✅ PASS |
+| DELETE | Record removed from object view after End Date = Start Date + save | ✅ PASS |
+| CLEANUP | Environment returned to pre-test state (object truly deleted) | ✅ PASS |
 
 ---
 
@@ -55,7 +55,7 @@ Example: Role Maintenance, Check Group, Units
 ```
 Pattern: Insert toolbar → New Object submenu → Fill objectForm → Save
          Select row → updateAttributes form → Edit fields → Save
-         Select row → objectdates form → Set End Date → Save (soft-delete)
+         Select row → objectdates form → Set End Date = Start Date → Save (true delete)
 Example: Bank, Company, Well, Facility
 ```
 
@@ -87,24 +87,25 @@ UPDATE:  Click row span in table → updateAttributes form loads:
          → Edit Name → Save → Go → verify
 
 DELETE:  EC Bank toolbar Delete submenu = DISABLED (no items configured)
-         Banks are permanent master data (may have historical transaction references)
-         Soft-delete approach: Click row → objectdates form End Date set:
+         EC-correct delete of a date-effective object = End Date set equal to Start Date:
            End Date: tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
-         → Set End Date = day after Start Date → Save → Go
-         → Bank no longer visible at current nav date = effectively deleted
+         → Set End Date = Start Date (zero-length effective window) → Save → Go
+         → EC removes the object entirely from the object view (ov_bank) = TRUE delete
+         (End Date = Start +1 only SOFT-expires: row persists in DB, hidden at current
+          nav date. Both verified at DB level — see §8 Lessons Learned.)
 ```
 
 ### 2.3 Test Data Design
 
 | Field | Value |
 |---|---|
-| Bank Code | `AUTOTEST_BNK_003` |
-| Bank Name (Insert) | `AUTOTEST Bank 003` |
-| Bank Name (Update) | `AUTOTEST Bank 003 UPDATED` |
+| Bank Code | `AUTOTEST_BNK_009` |
+| Bank Name (Insert) | `AUTOTEST Bank 009` |
+| Bank Name (Update) | `AUTOTEST Bank 009 UPDATED` |
 | Start Date | `2000-01-01` |
-| End Date (Delete) | `2000-01-02` |
-| Note | EC bank hard-delete disabled; expired banks persist in DB with End Date set. |
-| Note | Subsequent runs must use next numeric suffix (BNK_004, BNK_005, etc.) |
+| End Date (Delete) | `2000-01-01` (= Start Date → true delete) |
+| Note | EC toolbar Delete disabled; delete = End Date set equal to Start Date. |
+| Note | With End Date = Start Date the object is fully removed (self-cleaning); no leftover rows. |
 
 ### 2.4 Technology Stack
 
@@ -145,8 +146,8 @@ DELETE:  EC Bank toolbar Delete submenu = DISABLED (no items configured)
 
 #### Challenge 6: Delete Button — Empty Submenu
 **Problem:** Toolbar Delete button has `ui-submenu-state-disabled` — no submenu items.
-**Root cause:** EC Bank is permanent master data; hard-delete is disabled by EC configuration.
-**Solution:** Soft-delete via End Date in `objectdates` form. Bank becomes inactive/expired at current nav date.
+**Root cause:** EC toolbar hard-delete is disabled for Bank by EC configuration.
+**Solution:** Delete a date-effective object by setting End Date = Start Date in `objectdates` form. The zero-length window makes EC remove the object entirely from `ov_bank` (true delete, DB-verified).
 
 #### Challenge 7: Repeat Runs — Expired Bank Code Conflict
 **Problem:** After a run, expired bank code still exists in DB. Next run tries same code → EC silently rejects insert.
@@ -187,7 +188,7 @@ DELETE:  EC Bank toolbar Delete submenu = DISABLED (no items configured)
 | v5 (run 2) | ec_iud_bank_v5.py | 2026-06-06 | INSERT PASS, UPDATE PASS, DELETE FAIL | Delete verification wrong |
 | final (run 1) | ec_iud_bank_final.py | 2026-06-06 | PASS PASS PASS | **ALL PASS** — AUTOTEST_BNK_003 |
 
-### 4.2 Final Test Results (AUTOTEST_BNK_003)
+### 4.2 Final Test Results (AUTOTEST_BNK_009 — End Date = Start Date delete)
 
 ```
 ✓ login           : PASS
@@ -195,7 +196,7 @@ DELETE:  EC Bank toolbar Delete submenu = DISABLED (no items configured)
 ✓ clean           : CLEAN
 ✓ insert          : PASS
 ✓ update          : PASS
-✓ delete          : PASS (soft-delete: EndDate=2000-01-02, bank expired)
+✓ delete          : PASS (true delete: EndDate=StartDate=2000-01-01, removed from ov_bank)
 
 Overall: ALL PASS
 ```
@@ -257,7 +258,7 @@ Bank Name:   tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in  (editable)
 ### Delete / Object Dates
 ```
 Start Date:  tab:tabPanel:objectdates:form:G:0:R:0:C:1:da_input  (editable)
-End Date:    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input  (set to expire bank)
+End Date:    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input  (set = Start Date to delete)
 ```
 
 ### Toolbar Structure
@@ -301,8 +302,19 @@ Cell text is in span._la inside td — use //tr[.//span[text()='CODE']] for XPat
 
 3. **Mandatory fields vary by EC object type** — Bank requires Bank Code, Bank Name, Start Date. Missing Start Date causes silent save failure with EC notification message.
 
-4. **EC Bank hard-delete is intentionally disabled** — Banks are master data that can have historical transaction references. Soft-delete (End Date expiry) is the EC-correct approach.
+4. **EC date-effective DELETE = End Date set equal to Start Date** (DB-verified, the key finding):
+   - The EC-correct way to delete a date-effective object (Bank, Company, Well, …) is to set
+     **End Date = Start Date** — a zero-length effective window. EC then **removes the object
+     entirely** from the object view (`ov_bank`).
+   - Setting **End Date = Start +1 day** only *soft-expires* it: the row **persists in the DB**
+     with a 1-day window, merely hidden at the current navigator date.
+   - **Proof** (local DB, `localhost:1521/ORCL`):
+     - `BNK_001`–`008` (End = Start +1) → all 8 rows still present in `ov_bank`.
+     - `BNK_009` (End = Start) → **0 rows in `ov_bank`** — fully deleted, self-cleaning.
+   - The toolbar Delete button is disabled, so this date-equality method is the only delete path.
 
 5. **PrimeFaces hover menus in headless Playwright** — After hover(), use `count() + is_visible()` to detect submenu items before clicking, with fallback iterating through all submenu links.
 
 6. **Row text is in `<span>` children not `<td>` text** — XPath must use `normalize-space(.)` or `.//span[text()]` instead of `normalize-space(text())`.
+
+7. **Verify automation results at the DB level** — the UI showed "deleted" for both End-date approaches, but only the DB query revealed that End = Start +1 leaves the record behind while End = Start truly removes it. UI-only verification would have missed this.

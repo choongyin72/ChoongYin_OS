@@ -4,14 +4,16 @@ Documentation    EC IUD Test — Bank (Configuration > Finance Objects > Bank)
 ...    Screen Type: Manage Object (EC14+ pattern)
 ...    Insert pattern: Insert toolbar → New Object submenu → fill objectForm → Save
 ...    Update pattern: Select row (span click) → updateAttributes form → edit Name → Save
-...    Delete pattern: Select row → objectdates form → set End Date → Save (soft-delete)
+...    Delete pattern: Select row → objectdates form → set End Date = Start Date → Save
 ...
-...    NOTE: EC Bank hard-delete is DISABLED by design (banks are permanent master data).
-...    Soft-delete is implemented by setting End Date = day after Start Date, making the bank
-...    inactive/expired. The bank is no longer visible at the current navigator date.
+...    NOTE: EC Bank toolbar Delete is DISABLED by design. The EC-correct way to DELETE a
+...    date-effective object is to set End Date = Start Date (a zero-length effective window).
+...    EC then removes the object entirely from the object view (ov_bank) — a TRUE delete,
+...    verified at the DB level. (Setting End Date = Start +1 only soft-expires it: the row
+...    persists in the DB with a 1-day window, hidden at the current navigator date.)
 ...
 ...    Test Data: AUTOTEST_BNK_XXX prefix. NEVER use existing bank codes.
-...    Each run must use a fresh incrementing code (expired banks persist in DB).
+...    With End Date = Start Date the object is fully deleted, so codes are self-cleaning.
 ...
 ...    Author:       Choong-Yin Lee / Claude Sonnet 4.6
 ...    Date:         2026-06-06
@@ -21,7 +23,7 @@ Documentation    EC IUD Test — Bank (Configuration > Finance Objects > Bank)
 Library           Browser
 Library           Collections
 Suite Setup       Open EC And Navigate To Bank
-Suite Teardown    Close Browser
+Suite Teardown    Run Keywords    Sleep    ${HOLD}    AND    Close Browser
 
 *** Variables ***
 ${EC_URL}              https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/
@@ -31,8 +33,10 @@ ${TEST_CODE}           AUTOTEST_BNK_005
 ${TEST_NAME}           AUTOTEST Bank 005
 ${TEST_NAME_UPD}       AUTOTEST Bank 005 UPDATED
 ${START_DATE}          2000-01-01
-${END_DATE}            2000-01-02
+${END_DATE}            2000-01-01    # = Start Date -> true delete (zero-length window)
 ${HEADLESS}            ${TRUE}
+${SLOWMO}              ${0}
+${HOLD}                0s
 
 # objectForm field IDs (Insert — new object)
 ${INS_CODE}            tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
@@ -100,27 +104,28 @@ TC03 Update Bank Name
     Take Screenshot    filename=${OUTPUT_DIR}/rf_tc03c_update_verified
     Log    UPDATE PASS: name → ${TEST_NAME_UPD}
 
-TC04 Soft-Delete Bank (Set End Date)
-    [Documentation]    Select row → objectdates form → set End Date → Save → bank expires
+TC04 Delete Bank (End Date = Start Date)
+    [Documentation]    Select row → objectdates form → set End Date = Start Date → Save.
+    ...    Zero-length effective window = EC true delete (object removed from ov_bank).
     [Tags]    iud    bank    delete    cleanup
     EC Select Row    ${TEST_CODE}
     Take Screenshot    filename=${OUTPUT_DIR}/rf_tc04a_row_for_delete
-    # Set End Date (expire the bank)
+    # Set End Date = Start Date → zero-length window → true delete
     EC Fill Date    ${DEL_ENDDATE}    ${END_DATE}
     Take Screenshot    filename=${OUTPUT_DIR}/rf_tc04b_end_date_set
     EC Save
     EC Go
-    # Verify bank no longer visible (expired at current nav date)
+    # Verify bank fully removed (gone from the object view)
     ${still}=    EC Row Exists    ${TEST_CODE}
-    Should Be Equal    ${still}    ${FALSE}    msg=DELETE FAILED: ${TEST_CODE} still visible
+    Should Be Equal    ${still}    ${FALSE}    msg=DELETE FAILED: ${TEST_CODE} still present
     Take Screenshot    filename=${OUTPUT_DIR}/rf_tc04c_delete_verified
-    Log    DELETE PASS: ${TEST_CODE} expired (EndDate=${END_DATE})
+    Log    DELETE PASS: ${TEST_CODE} deleted (EndDate=StartDate=${END_DATE}, removed from ov_bank)
 
 *** Keywords ***
 
 Open EC And Navigate To Bank
     [Documentation]    Login to EC and navigate to the Bank screen (Suite Setup)
-    New Browser    chromium    headless=${HEADLESS}
+    New Browser    chromium    headless=${HEADLESS}    slowMo=${SLOWMO}
     New Context    ignoreHTTPSErrors=${TRUE}    viewport={'width': 1920, 'height': 1080}
     Set Browser Timeout    30s
     # EC renders some links twice (search list + favorites); first-match like Playwright .first

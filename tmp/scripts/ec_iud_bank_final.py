@@ -3,9 +3,10 @@ EC IUD Bank — FINAL.
 Correct field IDs from deep DOM inspection:
   INSERT  : objectForm:form G:0:R:0=Code, R:1=Name, R:2:da_input=StartDate
   UPDATE  : updateAttributes:form G:0:R:1=Name  (Code is read-only after creation)
-  DELETE  : objectdates:form G:0:R:0:C:3:da_input = EndDate (EC restricts hard-delete for banks;
-            soft-delete by setting End Date = makes bank inactive/expired)
-NEVER TOUCH EXISTING DATA. Test data: AUTOTEST_BNK_001 only.
+  DELETE  : objectdates:form G:0:R:0:C:3:da_input = EndDate. EC toolbar Delete is disabled;
+            the EC-correct delete is End Date = Start Date (zero-length window) which removes
+            the object entirely from ov_bank (verified at DB level). End=Start+1 only soft-expires.
+NEVER TOUCH EXISTING DATA. Test data: AUTOTEST_BNK_* only.
 """
 from playwright.sync_api import sync_playwright
 import json, os
@@ -13,11 +14,17 @@ import json, os
 EC_URL        = 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/'
 SS_DIR        = r'c:\Projects\ChoongYin_OS\docs\EC\screenshots\iud_bank'
 LOG_PATH      = r'c:\Projects\ChoongYin_OS\tmp\logs\ec_iud_bank_final.json'
-TEST_CODE     = 'AUTOTEST_BNK_004'
-TEST_NAME     = 'AUTOTEST Bank 004'
-TEST_NAME_UPD = 'AUTOTEST Bank 004 UPDATED'
+
+# Env-controlled for live demo:  EC_HEADED=1 shows the browser, EC_CODE overrides test code
+HEADED        = os.environ.get('EC_HEADED', '0') == '1'
+SLOW_MO       = int(os.environ.get('EC_SLOWMO', '700')) if HEADED else 0
+_CODE         = os.environ.get('EC_CODE', 'AUTOTEST_BNK_004')
+_NUM          = _CODE.split('_')[-1]
+TEST_CODE     = _CODE
+TEST_NAME     = f'AUTOTEST Bank {_NUM}'
+TEST_NAME_UPD = f'AUTOTEST Bank {_NUM} UPDATED'
 START_DATE    = '2000-01-01'
-END_DATE      = '2000-01-02'   # Soft-delete: expire next day
+END_DATE      = '2000-01-01'   # EC DELETE: End Date = Start Date (zero-length window = true delete)
 
 # Field IDs (from DOM deep dive)
 INS_CODE_ID   = 'tab:tabPanel:objectForm:form:G:0:R:0:C:1:in'
@@ -155,7 +162,8 @@ def get_field_val(page, fid):
 
 
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=True, args=['--ignore-certificate-errors'])
+    browser = p.chromium.launch(headless=not HEADED, slow_mo=SLOW_MO, args=['--ignore-certificate-errors'])
+    print(f'  [MODE] headed={HEADED}, slow_mo={SLOW_MO}ms, code={TEST_CODE}')
     ctx = browser.new_context(ignore_https_errors=True, viewport={'width': 1920, 'height': 1080})
     page = ctx.new_page()
 
@@ -320,10 +328,10 @@ with sync_playwright() as p:
         results['update'] = 'SKIP'
     ss(page, 'update_result')
 
-    # ── DELETE (soft-delete via End Date) ────────────────────────────────────
-    print('\n=== DELETE (soft-delete via End Date) ===')
-    print('  NOTE: EC Bank toolbar Delete is disabled by design (banks are permanent master data).')
-    print(f'  Soft-delete: set End Date={END_DATE} on AUTOTEST bank to expire it.')
+    # ── DELETE (End Date = Start Date → true delete) ─────────────────────────
+    print('\n=== DELETE (End Date = Start Date → true delete) ===')
+    print('  NOTE: EC Bank toolbar Delete is disabled. EC-correct delete = End Date = Start Date.')
+    print(f'  Set End Date={END_DATE} (= Start Date) → zero-length window → object removed from ov_bank.')
     if results.get('insert') == 'PASS':
         ok = select_row(page, TEST_CODE)
         if ok:
@@ -333,7 +341,7 @@ with sync_playwright() as p:
             enddate_val = get_field_val(page, DEL_ENDDATE_ID)
             print(f'  objectdates: StartDate={start}, EndDate={enddate_val}')
 
-            # Set End Date = one day after Start Date (expires the bank)
+            # Set End Date = Start Date (zero-length window = EC true delete)
             ok_end = fill_date(page, DEL_ENDDATE_ID, END_DATE)
             print(f'  EndDate set: {END_DATE} (ok={ok_end})')
             ss(page, 'delete_end_date_set')
@@ -345,13 +353,12 @@ with sync_playwright() as p:
 
             click_go(page)
 
-            # Verify: after expiry, bank should NOT appear in table at current nav date
-            # (End Date < current nav date = bank is expired/inactive = soft-delete success)
+            # Verify: with End Date = Start Date the object is fully deleted (gone from table/view)
             still_visible = check_row(page, TEST_CODE)
-            print(f'  Bank still in table after expiry: {still_visible}')
+            print(f'  Bank still in table after delete: {still_visible}')
             if not still_visible:
-                print(f'  DELETE PASS: bank expired (EndDate={END_DATE}), no longer visible at current date')
-                results['delete'] = f'PASS (soft-delete: EndDate={END_DATE}, bank expired)'
+                print(f'  DELETE PASS: bank deleted (EndDate=StartDate={END_DATE}), removed from ov_bank')
+                results['delete'] = f'PASS (true delete: EndDate=StartDate={END_DATE})'
             else:
                 print(f'  DELETE FAIL: bank still visible after End Date set')
                 results['delete'] = f'FAIL — still visible err={err_d or "none"}'
@@ -363,6 +370,9 @@ with sync_playwright() as p:
     print(f'  DELETE: {results["delete"]}')
 
     ss(page, 'final_state')
+    if HEADED:
+        print('  [DEMO] Holding browser open 6s so you can see the final state...')
+        page.wait_for_timeout(6000)
     ctx.close()
     browser.close()
 
