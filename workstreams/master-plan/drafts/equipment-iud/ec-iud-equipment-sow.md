@@ -3,7 +3,7 @@
 **Task:** EC Equipment screen Insert/Update/Delete (IUD) Automation
 **Author:** Choong-Yin Lee / Claude Opus 4.8
 **Date:** 2026-06-06
-**Version:** 1.0 — PLANNING (pre-execution)
+**Version:** 2.0 — COMPLETE (all IUD ops DB-verified in OV_EQPM)
 **Pattern:** Manage Object — **screen 2 of 2** (confirms/generalises the Bank pattern)
 
 ---
@@ -114,24 +114,62 @@ is disabled or only soft-deletes. DB query confirms whether the row is physicall
 ---
 
 ## 4. TEST EXECUTION
-*(to be completed during execution)*
 
-| Run | Date | Result | Notes |
+### 4.1 Phase 0 — DOM scan findings
+- Navigator = 5 `ui-autocomplete-dd` dropdowns (`nav:form:G:0..4`). **All empty on load** — the
+  screenshot values are selections, not defaults. Driven via **`…:dd_button` chevron → click exact
+  option in `…:dd_panel`** (typing fires re-render AJAX and drops characters — 5 nav iterations to learn this).
+- Result table id = **`manageObject:form:T_data`** (NOT Bank's `manage_object_nav_nav`).
+- Equipment Type is **read-only, auto-set from the navigator** (= Compressor). Mandatory editable: Code, Name, Start Date.
+- Toolbar `−` button parent `<li>` has `ui-submenu-state-disabled` → **delete = End Date = Start Date** (same as Bank).
+- Object view = **`OV_EQPM`** (found by probing 585 OV_ views for `OFF_FLASH_GAS_COMP`).
+
+### 4.2 Test runs
+| Run | Tool | Code | Result |
 |---|---|---|---|
-| — | — | pending | Phase 0 scan not yet run |
+| 1 | Playwright | AUTOTEST_EQP_001 | full IUD — **ALL PASS** (2 iterations: nav crack + `.trim()` typo) |
+| 2 | Playwright (skip-delete) | AUTOTEST_EQP_002 | insert+update — PASS |
+| 3 | Playwright (delete-only) | AUTOTEST_EQP_002 | delete — PASS |
+| 4 | Robot Framework | AUTOTEST_EQP_003 | 4/4 tests PASS |
+
+### 4.3 DB verification (OV_EQPM, localhost:1521/ORCL)
+| Check | Operation | DB result |
+|---|---|---|
+| 1 | EQP_001 full IUD | **gone** — true delete |
+| 2 | EQP_002 insert+update | **present, name "AUTOTEST Equipment 002 UPDATED"** (rows 238→239) |
+| 3 | EQP_002 delete | **gone** (239→238) |
+| 4 | EQP_003 (RF run) | **gone** |
+| — | 17 `OFF_` equipment | **all untouched** (`end=None`) |
+
+All three operations proven at the DB level — not just the green UI.
 
 ---
 
 ## 5. COMPLETION CRITERIA
 | Deliverable | Status |
 |---|---|
-| Playwright script (`ec_iud_equipment.py`) | ☐ |
-| Robot Framework suite (`ec_iud_equipment.robot`) | ☐ |
-| DB verification scripts + findings | ☐ |
-| Screenshots evidence | ☐ |
-| SOW updated with final results + Lessons Learned | ☐ |
-| `equipment-iud/` folder (README, requirements.txt, repo-relative paths) | ☐ |
-| Committed + pushed | ☐ |
+| Playwright script (`ec_iud_equipment.py`) | ✅ ALL PASS |
+| Robot Framework suite (`ec_iud_equipment.robot`) | ✅ 4/4 PASS |
+| DB verification scripts + findings | ✅ OV_EQPM, all ops verified |
+| Screenshots evidence | ✅ `docs/EC/screenshots/iud_equipment/` |
+| SOW updated with final results + Lessons Learned | ✅ this doc (v2.0) |
+| `equipment-iud/` folder (README, requirements.txt, repo-relative paths) | ✅ |
+| Committed + pushed | ☐ (in progress) |
+
+## 8. LESSONS LEARNED
+1. **The Manage Object pattern generalised from Bank** — objectForm (insert) / updateAttributes
+   (update) / objectdates (delete), End=Start true-delete, disabled `−` button. Screen 2 confirmed
+   the pattern is real, not Bank-specific. Took **2 build iterations** vs Bank's 6.
+2. **The new variable was the cascading navigator** — `ui-autocomplete-dd` fields must be driven by
+   clicking the `dd_button` chevron and selecting the exact `dd_panel` option. **Typing is unreliable**
+   (each keystroke fires re-render AJAX that drops characters — "pressor" residue). This cost 5 scan
+   iterations; now captured as a reusable technique.
+3. **Object view names are not "ov_<screen>"** — Equipment is `OV_EQPM`, not `ov_equipment`. Find the
+   real view by probing OV_ views for a known code rather than guessing.
+4. **Exact filter values matter** — "Production Unit" ≠ "Production Unit 1"; both are valid configured
+   values. I wrongly substituted "Production Unit 1" and was corrected — always confirm exact spec values.
+5. **DB verification remains essential** — used skip-delete / delete-only modes to prove insert+update
+   persist *before* deleting, so each op is independently confirmed in OV_EQPM.
 
 ---
 
