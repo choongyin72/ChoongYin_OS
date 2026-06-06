@@ -2,8 +2,8 @@
   "login": "PASS",
   "navigate": "PASS",
   "navigator": "PASS",
-  "clean": "PRE-EXISTS",
-  "insert": "SKIP (delete-only)",
-  "update": "SKIP (delete-only)",
+  "clean": "CLEAN",
+  "insert": "PASS",
+  "update": "PASS",
   "delete": "PASS (end=start)"
 }
