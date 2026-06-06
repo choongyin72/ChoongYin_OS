@@ -18,7 +18,7 @@ Each session → one KB summary doc `DOC-NN-<name>.md` (key concepts, config, go
 | # | Session | Modules | ~Pages | Priority | Status |
 |---|---|---|---|---|---|
 | **DOC-01** | **Foundations / Core Concepts** | product_concept + user_guide + overview | 11 | 🔴 read first | ✅ `DOC-01-foundations.md` |
-| **DOC-02** | **General Configuration A** | frmw/general-config (1st half) | 25 | 🔴 core | ☐ |
+| **DOC-02** | **General Configuration A** | frmw/general-config (1st half) | 25 | 🔴 core | ✅ `DOC-02-general-config-A.md` |
 | **DOC-03** | **General Configuration B** | frmw/general-config (2nd half) | 25 | 🔴 core | ☐ |
 | **DOC-04** | **Production** | prod | 22 | 🔴 Woodside | ☐ |
 | **DOC-05** | **Revenue + Sales** | revn + sale | 18 | 🟠 Woodside | ☐ |
@@ -45,3 +45,4 @@ Each session → one KB summary doc `DOC-NN-<name>.md` (key concepts, config, go
 |---|---|---|
 | 2026-06-06 | planning | Tree mapped (230 tech pages), split into 11 sessions |
 | 2026-06-06 | DOC-01 | ✅ Foundations: 5 business areas, screen anatomy, cell colours, record status P/V/A, classes (Object/Data/Interface/Table), Group Model, Calc Framework, Users/Roles/Access, Reporting |
+| 2026-06-06 | DOC-02 | ✅ Class model & View Generator (explains OV_BANK/OV_EQPM = generated views + INSTEAD OF triggers); required versioned attrs (why End=Start deletes); owner-context overrides; group model config; ENFORCE_DATE_CHECK; general relations; CODE_REF popups; smart journaling |

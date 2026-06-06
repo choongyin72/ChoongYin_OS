@@ -23,27 +23,34 @@ RAW = KB / '_raw'; RAW.mkdir(parents=True, exist_ok=True)
 
 LABEL = sys.argv[1] if len(sys.argv) > 1 else 'DOC-01'
 MODULES = (sys.argv[2].split(',') if len(sys.argv) > 2 else ['product_concept', 'user_guide', '(top)'])
+START = int(sys.argv[3]) if len(sys.argv) > 3 else 0          # slice start index
+COUNT = int(sys.argv[4]) if len(sys.argv) > 4 else 10000      # slice count
+PAGE_CAP = int(sys.argv[5]) if len(sys.argv) > 5 else 9000    # per-page char cap
 
 idx = json.loads((KB / 'ec_doc_index_bucketed.json').read_text(encoding='utf-8'))
 tech = idx.get('technical-documentation', [])
 
 
-def module_of(abs_url):
+def matches(abs_url):
     m = '/technical-documentation/'
-    if m not in abs_url:
-        return '(other)'
-    tail = abs_url.split(m, 1)[1]
-    seg = tail.split('/')
-    return seg[0] if len(seg) > 1 else '(top)'
+    tail = abs_url.split(m, 1)[1] if m in abs_url else abs_url
+    for mod in MODULES:
+        if mod == '(top)':
+            if '/' not in tail:   # page directly under technical-documentation/
+                return True
+        elif f'/{mod}/' in abs_url or tail.startswith(mod + '/'):
+            return True
+    return False
 
 
-pages = [e for e in tech if module_of(e['abs']) in MODULES]
+pages = [e for e in tech if matches(e['abs'])]
 # dedupe + keep order
 seen = set(); sel = []
 for e in pages:
     if e['abs'] not in seen:
         seen.add(e['abs']); sel.append(e)
-print(f'{LABEL}: {len(sel)} pages from modules {MODULES}')
+sel = sel[START:START + COUNT]
+print(f'{LABEL}: {len(sel)} pages from modules {MODULES} (slice {START}:{START+COUNT})')
 
 out = [f'# Raw content — {LABEL}\nModules: {MODULES}\nPages: {len(sel)}\n']
 
@@ -69,8 +76,8 @@ with sync_playwright() as p:
                 return {title: title.trim(), text: (pick.innerText||'').trim()};
             }""")
             txt = data['text']
-            if len(txt) > 9000:
-                txt = txt[:9000] + '\n…[truncated]'
+            if len(txt) > PAGE_CAP:
+                txt = txt[:PAGE_CAP] + '\n…[truncated]'
             out.append(f'\n\n{"="*90}\n## [{i}/{len(sel)}] {data["title"] or e["text"]}\nURL: {url}\n{"="*90}\n{txt}')
             print(f'  [{i}/{len(sel)}] {data["title"][:55]}  ({len(txt)} chars)')
         except Exception as ex:
