@@ -25,7 +25,7 @@ Each session → one KB summary doc `DOC-NN-<name>.md` (key concepts, config, go
 | **DOC-06** | **Transport** | transport | 12 | 🟠 Woodside | ✅ `DOC-06-transport.md` |
 | **DOC-07** | **ECIS + Events** | frmw/ecis + frmw/event | 25 | 🔴 integration | ✅ `DOC-07-ecis-events.md` |
 | **DOC-08** | **BPM (workflows)** | frmw/bpm | 24 | 🟠 | ✅ `DOC-08-bpm.md` |
-| **DOC-09** | **EC Extensions / Dev** | ec-extensions + appdev + rest-api + expression | 21 | 🟡 | ☐ |
+| **DOC-09** | **EC Extensions / Dev** | ec-extensions + appdev + rest-api + expression | 21 | 🟡 | ✅ `DOC-09-extensions-dev.md` |
 | **DOC-10** | **GraphQL + Reporting + eDAC** | graphql + reporting-and-analytics + edac | 19 | 🟡 | ☐ |
 | **DOC-11** | **IAM + DB Dev + Containers** | iam + databasedevelopment + containers + flyway/blob/tools | 28 | 🟡 | ☐ |
 
@@ -53,3 +53,4 @@ Each session → one KB summary doc `DOC-NN-<name>.md` (key concepts, config, go
 
 | 2026-06-06 | DOC-07 | Events (pub-sub Camel/ActiveMQ, DomainObjectChanged on IUD, subscriptions CO.0130/CO.1081, WebHooks/AWS-SNS/Firebase, CTRL_EVENT_TYPE/HISTORY) + ECIS (SCADA/Tag + File capture, source/target+queue, ECIS Agent, Advanced File Import, adapters OPC/Tag/Row, DEFAULT_RECORD_STATUS, Remote Endpoint secret storage) |
 | 2026-06-06 | DOC-08 | BPM: jBPM engine + BPM Console, jbpmengine user, Project Management (JBPM.ADMIN, Maven), Process Template (EC alias, schedulable), Process Overview + viewer-tag node colors, Process Action handlers (chained), User Tasks->To-do List, process inbound/outbound events (DatasetUpdated) |
+| 2026-06-06 | DOC-09 | Extensions/Dev: REST API (domain model IUD, OpenAPI 3.0.3, frmw-core-api SDK), EC Extensions (WAR, Extensions Manager lifecycle, Maven archetype, 4 install options), strict DB-change rules (prefix by ext-id, OWNER_CNTX>=1000, APP_SPACE_CNTX, IGNORE_IND, DB_MAPPING_TYPE=EXTENSION, Flyway), dev env + EC Hub Nexus, DomainEntityMgr, expression scripting |
