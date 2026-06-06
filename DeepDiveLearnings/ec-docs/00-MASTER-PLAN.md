@@ -21,7 +21,7 @@ Each session → one KB summary doc `DOC-NN-<name>.md` (key concepts, config, go
 | **DOC-02** | **General Configuration A** | frmw/general-config (1st half) | 25 | 🔴 core | ✅ `DOC-02-general-config-A.md` |
 | **DOC-03** | **General Configuration B** | frmw/general-config (2nd half) | 25 | 🔴 core | ✅ `DOC-03-general-config-B.md` |
 | **DOC-04** | **Production** | prod | 22 | 🔴 Woodside | ✅ `DOC-04-production.md` |
-| **DOC-05** | **Revenue + Sales** | revn + sale | 18 | 🟠 Woodside | ☐ |
+| **DOC-05** | **Revenue + Sales** | revn + sale | 18 | 🟠 Woodside | ✅ `DOC-05-revenue-sales.md` |
 | **DOC-06** | **Transport** | transport | 12 | 🟠 Woodside | ☐ |
 | **DOC-07** | **ECIS + Events** | frmw/ecis + frmw/event | 25 | 🔴 integration | ☐ |
 | **DOC-08** | **BPM (workflows)** | frmw/bpm | 24 | 🟠 | ☐ |
@@ -48,3 +48,4 @@ Each session → one KB summary doc `DOC-NN-<name>.md` (key concepts, config, go
 | 2026-06-06 | DOC-02 | ✅ Class model & View Generator (explains OV_BANK/OV_EQPM = generated views + INSTEAD OF triggers); required versioned attrs (why End=Start deletes); owner-context overrides; group model config; ENFORCE_DATE_CHECK; general relations; CODE_REF popups; smart journaling |
 | 2026-06-06 | DOC-03 | ✅ System config + how-tos: Oracle users (ECKERNEL/ENERGYX/REPORTING/TRANSFER), Check Rules (CTRL_CHECK_LOG, WHERE formula), DAYTIME/Production Day/time zones, calc library, business-action SQL, date macros, blocked-schedule recovery, dashboards/title-bar/column-sets/language, Messaging (MHM), navigator defaults |
 | 2026-06-06 | DOC-04 | ✅ Production (Woodside core): status processes P→V→A, Deferment PD.0020, Hydrocarbon Accounting/Allocation (networks, reconciliation, PWEL/IWEL/STRM/PERF alloc tables, ghost data), Allocation BPM (work-by-exception), Stream Node Diagram, well testing PT.*, system attributes, API tank GOV, operation mode |
+| 2026-06-06 | DOC-05 | ✅ Sales (GS/SD/PR/SA/TR/GP/OS, Contract Concept, Sales Allocation, Price Determination) + Revenue (doc lifecycle OPEN→BOOKED, Sales→Revenue IFAC_SALES_QTY, Stream Items/Quantity module, CSDV validation zones, Financial Item, Calendar, Visual Tracing, PDG/CDG, Inventory) |
