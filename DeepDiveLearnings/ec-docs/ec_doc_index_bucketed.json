@@ -1,0 +1,1720 @@
+{
+ "(root)": [
+  {
+   "text": "// documentation",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/ecindex.html"
+  },
+  {
+   "text": "Documentation",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/index.html"
+  },
+  {
+   "text": "How To Get Started",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/how_to_get_started.html"
+  },
+  {
+   "text": "I am looking for\u2026\u200b",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/ecindex.html#_i_am_looking_for"
+  },
+  {
+   "text": "Planned improvements",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/ecindex.html#_planned_improvements"
+  },
+  {
+   "text": "Feedback",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/ecindex.html#_feedback"
+  }
+ ],
+ "release-notes": [
+  {
+   "text": "EC 14.2.4 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.2.4/EC-14.2.4_release-notes.html"
+  },
+  {
+   "text": "EC 14.2.4 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.2.4/EC-14.2.4_release-details.html"
+  },
+  {
+   "text": "Upgrade Impact",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/upgrade-impact/upgrade_impact.html"
+  },
+  {
+   "text": "Deprecation",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/deprecation/deprecation.html"
+  },
+  {
+   "text": "Availability of Fixes in Higher Release Versions",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/overview-release-versions/overview-release-versions.html"
+  },
+  {
+   "text": "EC 14.2.3 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.2.3/EC-14.2.3_release-notes.html"
+  },
+  {
+   "text": "EC 14.2.3 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.2.3/EC-14.2.3_release-details.html"
+  },
+  {
+   "text": "EC 14.2.2 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.2.2/EC-14.2.2_release-notes.html"
+  },
+  {
+   "text": "EC 14.2.2 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.2.2/EC-14.2.2_release-details.html"
+  },
+  {
+   "text": "EC 14.2.1 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.2.1/EC-14.2.1_release-notes.html"
+  },
+  {
+   "text": "EC 14.2.1 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.2.1/EC-14.2.1_release-details.html"
+  },
+  {
+   "text": "EC 14.2.0 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.2.0/EC-14.2.0_release-notes.html"
+  },
+  {
+   "text": "EC 14.2.0 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.2.0/EC-14.2.0_release-details.html"
+  },
+  {
+   "text": "EC 14.1.7 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.7/EC-14.1.7_release-notes.html"
+  },
+  {
+   "text": "EC 14.1.7 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.7/EC-14.1.7_release-details.html"
+  },
+  {
+   "text": "EC 14.1.6 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.6/EC-14.1.6_release-notes.html"
+  },
+  {
+   "text": "EC 14.1.6 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.6/EC-14.1.6_release-details.html"
+  },
+  {
+   "text": "EC 14.1.5 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.5/EC-14.1.5_release-notes.html"
+  },
+  {
+   "text": "EC 14.1.5 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.5/EC-14.1.5_release-details.html"
+  },
+  {
+   "text": "EC 14.1.4 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.4/EC-14.1.4_release-notes.html"
+  },
+  {
+   "text": "EC 14.1.4 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.4/EC-14.1.4_release-details.html"
+  },
+  {
+   "text": "EC 14.1.3 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.3/EC-14.1.3_release-notes.html"
+  },
+  {
+   "text": "EC 14.1.3 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.3/EC-14.1.3_release-details.html"
+  },
+  {
+   "text": "EC 14.1.2 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.2/EC-14.1.2_release-notes.html"
+  },
+  {
+   "text": "EC 14.1.2 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.2/EC-14.1.2_release-details.html"
+  },
+  {
+   "text": "EC 14.1.1 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.1/EC-14.1.1_release-notes.html"
+  },
+  {
+   "text": "EC 14.1.1 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.1/EC-14.1.1_release-details.html"
+  },
+  {
+   "text": "EC 14.1.0 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.0/EC-14.1.0_release-notes.html"
+  },
+  {
+   "text": "EC 14.1.0 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.1.0/EC-14.1.0_release-details.html"
+  },
+  {
+   "text": "EC 14.0.12 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.12/EC-14.0.12_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.12 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.12/EC-14.0.12_release-details.html"
+  },
+  {
+   "text": "EC 14.0.11 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.11/EC-14.0.11_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.11 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.11/EC-14.0.11_release-details.html"
+  },
+  {
+   "text": "EC 14.0.10 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.10/EC-14.0.10_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.10 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.10/EC-14.0.10_release-details.html"
+  },
+  {
+   "text": "EC 14.0.9 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.9/EC-14.0.9_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.9 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.9/EC-14.0.9_release-details.html"
+  },
+  {
+   "text": "EC 14.0.8 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.8/EC-14.0.8_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.8 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.8/EC-14.0.8_release-details.html"
+  },
+  {
+   "text": "EC 14.0.7 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.7/EC-14.0.7_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.7 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.7/EC-14.0.7_release-details.html"
+  },
+  {
+   "text": "EC 14.0.6 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.6/EC-14.0.6_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.6 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.6/EC-14.0.6_release-details.html"
+  },
+  {
+   "text": "EC 14.0.5 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.5/EC-14.0.5_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.5 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.5/EC-14.0.5_release-details.html"
+  },
+  {
+   "text": "EC 14.0.4 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.4/EC-14.0.4_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.4 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.4/EC-14.0.4_release-details.html"
+  },
+  {
+   "text": "EC 14.0.3 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.3/EC-14.0.3_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.3 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.3/EC-14.0.3_release-details.html"
+  },
+  {
+   "text": "EC 14.0.2 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.2/EC-14.0.2_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.2 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.2/EC-14.0.2_release-details.html"
+  },
+  {
+   "text": "EC 14.0.1 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.1/EC-14.0.1_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.1 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.1/EC-14.0.1_release-details.html"
+  },
+  {
+   "text": "EC 14.0.0 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.0/EC-14.0.0_release-notes.html"
+  },
+  {
+   "text": "EC 14.0.0 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-14.0.0/EC-14.0.0_release-details.html"
+  },
+  {
+   "text": "EC 13.2.19 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.19/EC-13.2.19_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.19 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.19/EC-13.2.19_release-details.html"
+  },
+  {
+   "text": "EC 13.2.18 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.18/EC-13.2.18_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.18 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.18/EC-13.2.18_release-details.html"
+  },
+  {
+   "text": "EC 13.2.17 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.17/EC-13.2.17_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.17 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.17/EC-13.2.17_release-details.html"
+  },
+  {
+   "text": "EC 13.2.16 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.16/EC-13.2.16_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.16 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.16/EC-13.2.16_release-details.html"
+  },
+  {
+   "text": "EC 13.2.15 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.15/EC-13.2.15_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.15 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.15/EC-13.2.15_release-details.html"
+  },
+  {
+   "text": "EC 13.2.14 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.14/EC-13.2.14_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.14 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.14/EC-13.2.14_release-details.html"
+  },
+  {
+   "text": "EC 13.2.13 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.13/EC-13.2.13_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.13 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.13/EC-13.2.13_release-details.html"
+  },
+  {
+   "text": "EC 13.2.12 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.12/EC-13.2.12_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.12 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.12/EC-13.2.12_release-details.html"
+  },
+  {
+   "text": "EC 13.2.11 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.11/EC-13.2.11_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.11 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.11/EC-13.2.11_release-details.html"
+  },
+  {
+   "text": "EC 13.2.10 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.10/EC-13.2.10_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.10 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.10/EC-13.2.10_release-details.html"
+  },
+  {
+   "text": "EC 13.2.9 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.9/EC-13.2.9_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.9 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.9/EC-13.2.9_release-details.html"
+  },
+  {
+   "text": "EC 13.2.8 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.8/EC-13.2.8_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.8 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.8/EC-13.2.8_release-details.html"
+  },
+  {
+   "text": "EC 13.2.7 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.7/EC-13.2.7_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.7 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.7/EC-13.2.7_release-details.html"
+  },
+  {
+   "text": "EC 13.2.6 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.6/EC-13.2.6_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.6 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.6/EC-13.2.6_release-details.html"
+  },
+  {
+   "text": "EC 13.2.5 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.5/EC-13.2.5_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.5 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.5/EC-13.2.5_release-details.html"
+  },
+  {
+   "text": "EC 13.2.4 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.4/EC-13.2.4_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.4 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.4/EC-13.2.4_release-details.html"
+  },
+  {
+   "text": "EC 13.2.3 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.3/EC-13.2.3_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.3 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.3/EC-13.2.3_release-details.html"
+  },
+  {
+   "text": "EC 13.2.2 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.2/EC-13.2.2_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.2 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.2/EC-13.2.2_release-details.html"
+  },
+  {
+   "text": "EC 13.2.1 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.1/EC-13.2.1_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.1 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.1/EC-13.2.1_release-details.html"
+  },
+  {
+   "text": "EC 13.2.0 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.0/EC-13.2.0_release-notes.html"
+  },
+  {
+   "text": "EC 13.2.0 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.2.0/EC-13.2.0_release-details.html"
+  },
+  {
+   "text": "EC 13.1.14 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.14/EC-13.1.14_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.14 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.14/EC-13.1.14_release-details.html"
+  },
+  {
+   "text": "EC 13.1.13 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.13/EC-13.1.13_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.13 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.13/EC-13.1.13_release-details.html"
+  },
+  {
+   "text": "EC 13.1.12 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.12/EC-13.1.12_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.12 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.12/EC-13.1.12_release-details.html"
+  },
+  {
+   "text": "EC 13.1.11 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.11/EC-13.1.11_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.11 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.11/EC-13.1.11_release-details.html"
+  },
+  {
+   "text": "EC 13.1.10 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.10/EC-13.1.10_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.10 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.10/EC-13.1.10_release-details.html"
+  },
+  {
+   "text": "EC 13.1.9 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.9/EC-13.1.9_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.9 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.9/EC-13.1.9_release-details.html"
+  },
+  {
+   "text": "EC 13.1.8 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.8/EC-13.1.8_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.8 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.8/EC-13.1.8_release-details.html"
+  },
+  {
+   "text": "EC 13.1.7 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.7/EC-13.1.7_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.7 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.7/EC-13.1.7_release-details.html"
+  },
+  {
+   "text": "EC 13.1.6 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.6/EC-13.1.6_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.6 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.6/EC-13.1.6_release-details.html"
+  },
+  {
+   "text": "EC 13.1.5 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.5/EC-13.1.5_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.5 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.5/EC-13.1.5_release-details.html"
+  },
+  {
+   "text": "EC 13.1.4 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.4/EC-13.1.4_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.4 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.4/EC-13.1.4_release-details.html"
+  },
+  {
+   "text": "EC 13.1.3 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.3/EC-13.1.3_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.3 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.3/EC-13.1.3_release-details.html"
+  },
+  {
+   "text": "EC 13.1.2 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.2/EC-13.1.2_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.2 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.2/EC-13.1.2_release-details.html"
+  },
+  {
+   "text": "EC 13.1.1 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.1/EC-13.1.1_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.1 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.1/EC-13.1.1_release-details.html"
+  },
+  {
+   "text": "EC 13.1.0 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.0/EC-13.1.0_release-notes.html"
+  },
+  {
+   "text": "EC 13.1.0 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.1.0/EC-13.1.0_release-details.html"
+  },
+  {
+   "text": "EC 13.0.22 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.22/EC-13.0.22_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.22 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.22/EC-13.0.22_release-details.html"
+  },
+  {
+   "text": "EC 13.0.21 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.21/EC-13.0.21_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.21 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.21/EC-13.0.21_release-details.html"
+  },
+  {
+   "text": "EC 13.0.20 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.20/EC-13.0.20_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.20 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.20/EC-13.0.20_release-details.html"
+  },
+  {
+   "text": "EC 13.0.19 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.19/EC-13.0.19_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.19 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.19/EC-13.0.19_release-details.html"
+  },
+  {
+   "text": "EC 13.0.18 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.18/EC-13.0.18_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.18 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.18/EC-13.0.18_release-details.html"
+  },
+  {
+   "text": "EC 13.0.17 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.17/EC-13.0.17_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.17 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.17/EC-13.0.17_release-details.html"
+  },
+  {
+   "text": "EC 13.0.16 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.16/EC-13.0.16_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.16 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.16/EC-13.0.16_release-details.html"
+  },
+  {
+   "text": "EC 13.0.15 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.15/EC-13.0.15_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.15 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.15/EC-13.0.15_release-details.html"
+  },
+  {
+   "text": "EC 13.0.14 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.14/EC-13.0.14_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.14 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.14/EC-13.0.14_release-details.html"
+  },
+  {
+   "text": "EC 13.0.13 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.13/EC-13.0.13_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.13 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.13/EC-13.0.13_release-details.html"
+  },
+  {
+   "text": "EC 13.0.12 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.12/EC-13.0.12_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.12 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.12/EC-13.0.12_release-details.html"
+  },
+  {
+   "text": "EC 13.0.11 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.11/EC-13.0.11_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.11 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.11/EC-13.0.11_release-details.html"
+  },
+  {
+   "text": "EC 13.0.10 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.10/EC-13.0.10_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.10 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.10/EC-13.0.10_release-details.html"
+  },
+  {
+   "text": "EC 13.0.9 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.9/EC-13.0.9_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.9 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.9/EC-13.0.9_release-details.html"
+  },
+  {
+   "text": "EC 13.0.8 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.8/EC-13.0.8_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.8 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.8/EC-13.0.8_release-details.html"
+  },
+  {
+   "text": "EC 13.0.7 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.7/EC-13.0.7_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.7 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.7/EC-13.0.7_release-details.html"
+  },
+  {
+   "text": "EC 13.0.6 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.6/EC-13.0.6_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.6 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.6/EC-13.0.6_release-details.html"
+  },
+  {
+   "text": "EC 13.0.5 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.5/EC-13.0.5_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.5 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.5/EC-13.0.5_release-details.html"
+  },
+  {
+   "text": "EC 13.0.4 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.4/EC-13.0.4_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.4 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.4/EC-13.0.4_release-details.html"
+  },
+  {
+   "text": "EC 13.0.3 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.3/EC-13.0.3_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.3 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.3/EC-13.0.3_release-details.html"
+  },
+  {
+   "text": "EC 13.0.2 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.2/EC-13.0.2_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.2 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.2/EC-13.0.2_release-details.html"
+  },
+  {
+   "text": "EC 13.0.1 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.1/EC-13.0.1_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.1 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.1/EC-13.0.1_release-details.html"
+  },
+  {
+   "text": "EC 13.0.0 Release Notes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.0/EC-13.0.0_release-notes.html"
+  },
+  {
+   "text": "EC 13.0.0 Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.0/EC-13.0.0_release-details.html"
+  },
+  {
+   "text": "EC Framework Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.0/frmw-details.html"
+  },
+  {
+   "text": "EC Production Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.0/prod-details.html"
+  },
+  {
+   "text": "EC Transport Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.0/tran-details.html"
+  },
+  {
+   "text": "EC Revenue Release Details",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.0/revn-details.html"
+  },
+  {
+   "text": "User Exit Packages",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/release-notes/EC-13.0.0/userexit.html"
+  }
+ ],
+ "installation": [
+  {
+   "text": "Installation Overview",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/installation/installation_guide_overview.html"
+  },
+  {
+   "text": "System  Requirements",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/installation/installation_guide_system_requirements.html"
+  },
+  {
+   "text": "EC Database Installation",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/installation/installation_guide_db.html"
+  },
+  {
+   "text": "EC Identity Manager - Database Installation",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/installation/installation_guide_kc.html"
+  },
+  {
+   "text": "EC Reporting and Analytics - Database Installation",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/installation/installation_guide_ra.html"
+  },
+  {
+   "text": "EC Online Help Uploader",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/installation/installation_guide_online_help.html"
+  },
+  {
+   "text": "Upgrade/Redeploy ECBPM",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/installation/installation_guide_bpm.html"
+  },
+  {
+   "text": "Post Install Configuration",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/installation/installation_guide_post.html"
+  },
+  {
+   "text": "Installing EC on Docker Swarm",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/installation/installation_guide_swarm.html"
+  }
+ ],
+ "upgrade": [
+  {
+   "text": "How to upgrade to EC 14.2.4",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/upgrade/upgrade_how_to.html"
+  }
+ ],
+ "configuration": [
+  {
+   "text": "Energy Components Configuration",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/configuration/configuration_overview.html"
+  }
+ ],
+ "technical-documentation": [
+  {
+   "text": "Technical Documentation Overview",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/overview.html"
+  },
+  {
+   "text": "Energy Components Business Areas",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/ec_business_area.html"
+  },
+  {
+   "text": "Energy Components: Getting Started",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/user_guide/ec_getting_started.html"
+  },
+  {
+   "text": "The Energy Components Screen",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/user_guide/ec_screen.html"
+  },
+  {
+   "text": "Help",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/user_guide/help.html"
+  },
+  {
+   "text": "Configuration Overview",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/product_concept/configuration_overview.html"
+  },
+  {
+   "text": "Calculation Framework",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/product_concept/calculation_framework.html"
+  },
+  {
+   "text": "Classes and Objects",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/product_concept/classes_and_objects.html"
+  },
+  {
+   "text": "Group model concept",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/product_concept/group_model_concept.html"
+  },
+  {
+   "text": "Users, Roles, Groups and Access Rights",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/product_concept/user_role_and_access_rights.html"
+  },
+  {
+   "text": "Reporting concept",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/product_concept/reporting_concept.html"
+  },
+  {
+   "text": "Energy Components Docker Images",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/containers/index.html"
+  },
+  {
+   "text": "Energy Components - Application",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/containers/ec-ec-app.html"
+  },
+  {
+   "text": "Energy Components - BPM",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/containers/ec-ecbpm.html"
+  },
+  {
+   "text": "Energy Components - Identity manager",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/containers/ec-keycloak.html"
+  },
+  {
+   "text": "Energy Components - Identity Manager Configuration",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/containers/ec-keycloak-migration.html"
+  },
+  {
+   "text": "Energy Components - Reporting and Analytics",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/containers/ec-ra.html"
+  },
+  {
+   "text": "Energy Components - Messaging broker",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/containers/ec-messaging.html"
+  },
+  {
+   "text": "Energy Components - Antivirus",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/containers/ec-antivirus.html"
+  },
+  {
+   "text": "Energy Components - Analytics Manager",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/containers/ec-analytics-manager.html"
+  },
+  {
+   "text": "Energy Components - Analytics Manager Runner",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/containers/ec-analytics-manager-runner.html"
+  },
+  {
+   "text": "Identity & Access Management",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/iam/iam-overview.html"
+  },
+  {
+   "text": "How to configure the User session timeout",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/iam/how_to_configure_session_timeout.html"
+  },
+  {
+   "text": "User Federation, Identity brokering and Single sign-on",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/iam/userfederation_idp_sso.html"
+  },
+  {
+   "text": "User account settings",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/iam/keycloak/keycloak-account-setting.html"
+  },
+  {
+   "text": "How to configure audit logging",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/iam/keycloak/keycloak-audit-logging.html"
+  },
+  {
+   "text": "How to configure Brute Force Protection",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/iam/keycloak/keycloak_brute-force.html"
+  },
+  {
+   "text": "How to configure Password Policy",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/iam/keycloak/keycloak-password-policy.html"
+  },
+  {
+   "text": "How to assign roles to jbpmengine user",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/iam/keycloak/keycloak_jbpmengine_roles.html"
+  },
+  {
+   "text": "How to create Service Account for external integration access",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/iam/how_to_create_service_account.html"
+  },
+  {
+   "text": "EC Event Architecture",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/event-architecture.html"
+  },
+  {
+   "text": "EC Event API",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/event-api.html"
+  },
+  {
+   "text": "Publish Events",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/event-publish.html"
+  },
+  {
+   "text": "Subscribe to Events \u2014 and execute jobs and business logic",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/event-subscriber-configuration.html"
+  },
+  {
+   "text": "Bridge Events from external systems",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/inbound/event-external-in.html"
+  },
+  {
+   "text": "Bridge Events to external systems",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/outbound/event-external-out.html"
+  },
+  {
+   "text": "Forward Events using WebHooks",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/outbound/event_route_webhooks.html"
+  },
+  {
+   "text": "Forward Events to the AWS Simple Notification Service",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/outbound/event_route_aws_sns.html"
+  },
+  {
+   "text": "Forward Events to Firebase Cloud Messaging",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/outbound/event_route_firebase.html"
+  },
+  {
+   "text": "Event Types",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/event-types.html"
+  },
+  {
+   "text": "Event Types \u2014 Custom",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/event-types-custom.html"
+  },
+  {
+   "text": "Subscriber Execution modes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/event-subscriber-execution.html"
+  },
+  {
+   "text": "Event history",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/event-history.html"
+  },
+  {
+   "text": "Event - FAQ",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/event-faq.html"
+  },
+  {
+   "text": "EC Rest API",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/rest-api/rest-api.html"
+  },
+  {
+   "text": "EC GraphQL Overview",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/graphql/graphql-overview.html"
+  },
+  {
+   "text": "EC GraphQL Type System",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/graphql/graphql-ec-domain-model-schema.html"
+  },
+  {
+   "text": "EC GraphQL Queries",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/graphql/graphql-queries.html"
+  },
+  {
+   "text": "EC GraphQL Mutations",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/graphql/graphql-mutations.html"
+  },
+  {
+   "text": "EC GraphQL Directives",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/graphql/graphql-directives.html"
+  },
+  {
+   "text": "EC GraphQL Transformations",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/graphql/graphql-transformations.html"
+  },
+  {
+   "text": "EC GraphQL Operations",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/graphql/graphql-operations.html"
+  },
+  {
+   "text": "EC GraphQL Schema Extensions",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/graphql/graphql-schema-extensions.html"
+  },
+  {
+   "text": "EC Integration Services (ECIS) Technical Documentation",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ecis/ecis_technical_documentation.html"
+  },
+  {
+   "text": "ECIS - Configuration Guide",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ecis/ecis_configuration_quide.html"
+  },
+  {
+   "text": "ECIS Agent",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ecis/ecis-agent.html"
+  },
+  {
+   "text": "ECIS - Advanced File Import",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ecis/ecis_advanced_file_import.html"
+  },
+  {
+   "text": "ECIS - Staging Table Extension",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ecis/ecis_staging_table_extension.html"
+  },
+  {
+   "text": "ECIS - Source Adapter Configuration",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ecis/source-adapter-configuration.html"
+  },
+  {
+   "text": "ECIS - Example adapter configurations",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ecis/ecis_example_adapter_configuration.html"
+  },
+  {
+   "text": "ECIS - Sample Periods explained",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ecis/ecis_sample_period_explained.html"
+  },
+  {
+   "text": "Remote endpoint configuration",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ecis/remote_endpoint_configuration.html"
+  },
+  {
+   "text": "Architecture",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/bpm-architecture.html"
+  },
+  {
+   "text": "Project Management",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/bpm-project-management.html"
+  },
+  {
+   "text": "Process Template and Execution",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/bpm-process-template-and-execution.html"
+  },
+  {
+   "text": "Process Instance Management",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/bpm-process-instance-management.html"
+  },
+  {
+   "text": "Process Action Invocations",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/bpm-process-action-invocations.html"
+  },
+  {
+   "text": "User Tasks and Task Management",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/bpm-user-tasks-and-task-management.html"
+  },
+  {
+   "text": "EC Inbound Events (Deprecated)",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_events/deprecated-bpm-ec-inbound-events.html"
+  },
+  {
+   "text": "Process Inbound Events",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_events/bpm-process-inbound-events.html"
+  },
+  {
+   "text": "Process Outbound Events",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_events/bpm-process-outbound-events.html"
+  },
+  {
+   "text": "API",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/bpm-api.html"
+  },
+  {
+   "text": "Standard Processes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/bpm-standard-processes.html"
+  },
+  {
+   "text": "How-to Configure default process instance list columns",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_overview/bpm_how_to_config_process_list_columns.html"
+  },
+  {
+   "text": "How-to Configure process instance list columns for a specific process",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_overview/bpm_how_to_config_process_list_columns_specific_process.html"
+  },
+  {
+   "text": "How-to Display a button when a Process Action node is selected",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_overview/bpm_how_to_display_button_process_action.html"
+  },
+  {
+   "text": "How-to Show process action specific data from a query file in External Data view",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_overview/bpm_how_to_show_process_action_data_query_file.html"
+  },
+  {
+   "text": "How-to Show result from a query XML in the External Data view",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_overview/bpm_how_to_show_result_xml_file.html"
+  },
+  {
+   "text": "How-to Show variables in the Variables tab",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_overview/bpm_how_to_show_variable.html"
+  },
+  {
+   "text": "How-to Show generated calculation log and report as data holder in Variables tab",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_overview/bpm_how_to_show_calc_log.html"
+  },
+  {
+   "text": "How-to Populate Process Overview Legacy",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_overview/bpm_how_to_populate_process_overview_legacy.html"
+  },
+  {
+   "text": "Process Monitor Cache",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_monitor/bpm_pm_monitor_cache.html"
+  },
+  {
+   "text": "How-to Apply a customized viewer tag to node instance in business action",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_monitor/bpm_pm_customised_viewer_tag.html"
+  },
+  {
+   "text": "How-to Apply production day offset to sub-daily process monitor",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_monitor/bpm_pm_production_day_offset.html"
+  },
+  {
+   "text": "How-to Customize texts and background colors in Process Monitor view",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_monitor/bpm_pm_background_colors.html"
+  },
+  {
+   "text": "How-to View execution status of monthly process within a year",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/bpm/process_monitor/bpm_pm_monthly_process.html"
+  },
+  {
+   "text": "EC Extensions Overview",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/ec-extensions-overview.html"
+  },
+  {
+   "text": "How to create EC Extension",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/how_to_create_extension.html"
+  },
+  {
+   "text": "How to install an EC Extension",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/how_to_install_ec_extensions.html"
+  },
+  {
+   "text": "Database migration in Extensions",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/db-migration.html"
+  },
+  {
+   "text": "Starting an EC Extension Maven Project",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_starting_an_ec_extension_maven_project.html"
+  },
+  {
+   "text": "Simplified Developer Environment Set-up in EC 14.x",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_simplified_developer_environment_set_up_in_ec.html"
+  },
+  {
+   "text": "Compile and Deploy and Extensions",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_compile_and_deploy_extensions.html"
+  },
+  {
+   "text": "Create EC Extension Classes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_create_ec_extension_classes.html"
+  },
+  {
+   "text": "Create EC Extension Java",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_create_ec_extension_java.html"
+  },
+  {
+   "text": "Create EC Extension Screens",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_create_ec_extension_screens.html"
+  },
+  {
+   "text": "Create EC Extension Online Help",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_create_ec_extension_online_help.html"
+  },
+  {
+   "text": "Create EC Extension Reports",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_create_ec_extension_reports.html"
+  },
+  {
+   "text": "Create EC Extension Datamodel",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_create_extension_datamodel.html"
+  },
+  {
+   "text": "Create EC Extension PL/SQL Package",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_create_extension_package.html"
+  },
+  {
+   "text": "Create EC Extension Views",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_create_extension_views.html"
+  },
+  {
+   "text": "Create EC Extension Triggers",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_create_ec_extension_triggers.html"
+  },
+  {
+   "text": "Create EC Extension Calculation Libraries",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ec-extensions/development/development_create_extension_calculation_libraries.html"
+  },
+  {
+   "text": "Class configuration rules",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/class_configuration_rule.html"
+  },
+  {
+   "text": "Class Configuration Structure",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/class_configuration_structure.html"
+  },
+  {
+   "text": "Class model presentation syntax guidelines",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/class_model_presentation_syntax_guidelines.html"
+  },
+  {
+   "text": "Group model configuration in Energy Components",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/group_model_configuration_in_ec.html"
+  },
+  {
+   "text": "How to Correct Object Class IUD Triggers",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/how_to_correct_object_class_IUD_triggers.html"
+  },
+  {
+   "text": "Class General Relations",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/class_general_relation.html"
+  },
+  {
+   "text": "Date integrity check for object relation",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/class_relation_date_integrity.html"
+  },
+  {
+   "text": "EC View Generator and Class Model",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/ec_view_generator_and_class_model.html"
+  },
+  {
+   "text": "Simplified configuration for EC Codes and other popup attributes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/simplified_configuration_for_ec_codes.html"
+  },
+  {
+   "text": "Configuring Tooltip functionality in EC",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/configuring_tooltip_functionality_in_ec.html"
+  },
+  {
+   "text": "How to configure Smart Journaling",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/how_to_configure_smart_journaling.html"
+  },
+  {
+   "text": "How to use Icons from Font Awesome",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/how_to_use_icons_from_font_awesome.html"
+  },
+  {
+   "text": "How to use verificationStatus to color cells",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/how_to_use_verification_status_to_color_cells.html"
+  },
+  {
+   "text": "Property IGNORE_IND",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/ignore-ind.html"
+  },
+  {
+   "text": "Property INTERFACE_ALIAS",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/property-code-interface-alias.html"
+  },
+  {
+   "text": "Application layer data sourcing and processing with custom Java processors",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/applayer_source_and_processing.html"
+  },
+  {
+   "text": "Expressions and Scripting in the EC Domain Model",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/class_configuration/expression-domain-config.html"
+  },
+  {
+   "text": "How to configure Screen Treeview Menu",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/treeview_configuration.html"
+  },
+  {
+   "text": "Unit of Measure Support in Energy Components",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/unit_of_measure_support_in_ec.html"
+  },
+  {
+   "text": "System of Measurement",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/measurement-system.html"
+  },
+  {
+   "text": "How to get Users and User\u2019s roles",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_get_user_and_userrole.html"
+  },
+  {
+   "text": "System Property Exclude Synonyms",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/exclude-synonyms.html"
+  },
+  {
+   "text": "Four Eyes Approval",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/four_eyes_approval.html"
+  },
+  {
+   "text": "How to manage User Exit packages",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_manage_user_exit_package.html"
+  },
+  {
+   "text": "Calculation Group configuration",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/calculation_group_configuration.html"
+  },
+  {
+   "text": "Calculation Library",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/calculation_library.html"
+  },
+  {
+   "text": "Database Users and Logging",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/database_users_and_logging.html"
+  },
+  {
+   "text": "How to change table content PINC logging in install mode",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_pinc_logging.html"
+  },
+  {
+   "text": "How to configure a Business Action to call SQL procedure",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_config_business_action_sql_procedure.html"
+  },
+  {
+   "text": "How to use Date Macro Parameter",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_use_date_macro.html"
+  },
+  {
+   "text": "How to resolve blocked schedules automatically",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_resolve_blocked_schedule.html"
+  },
+  {
+   "text": "How to re-pin scheduled jobs",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_re_pin_scheduled_job.html"
+  },
+  {
+   "text": "How to define check rules",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_define_check_rules.html"
+  },
+  {
+   "text": "How to configure Tab Label in EC Screens",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_configure_tab_label.html"
+  },
+  {
+   "text": "How to configure Context Menu",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_configure_context_menu.html"
+  },
+  {
+   "text": "How to configure EC Dashboards",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_configure_dashboard.html"
+  },
+  {
+   "text": "How to Configure the Application Title Bar",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_configure_title_bar.html"
+  },
+  {
+   "text": "How to Configure Table Column Sets",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_configure_table_column_sets.html"
+  },
+  {
+   "text": "Time Zone Support in Energy Components",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/timezone_support_in_ec.html"
+  },
+  {
+   "text": "Deprecating Ecdp_ProductionDay",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/deprecated_Ecdp_ProductionDay.html"
+  },
+  {
+   "text": "How to configure language translation in EC",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_configure_language_translation.html"
+  },
+  {
+   "text": "How to configure Messaging",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_configure_messaging.html"
+  },
+  {
+   "text": "Navigator default values",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/navigator_default_values.html"
+  },
+  {
+   "text": "How to send messages from EC",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_send_messages_from_ec.html"
+  },
+  {
+   "text": "How to disable navigator cache",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/how_to_disable_navigator_cache.html"
+  },
+  {
+   "text": "EC Dataloader",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/configuration-and-data-loading.html"
+  },
+  {
+   "text": "Data Purging",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/data-purging.html"
+  },
+  {
+   "text": "Expression and Scripting support",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/expression/expression-overview.html"
+  },
+  {
+   "text": "Migration utility functions",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/migration_utility_functions.html"
+  },
+  {
+   "text": "REC ID utility",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/rec_id_utility.html"
+  },
+  {
+   "text": "Pendo",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/general-config/pendo.html"
+  },
+  {
+   "text": "EC Data Access Control (eDAC) Functional Guide",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/edac/edac-functional-guide.html"
+  },
+  {
+   "text": "EC Data Access Control (eDAC) DB Upgrade Guide",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/edac/edac-upgrade-guide.html"
+  },
+  {
+   "text": "How to configure EC Data Access Control (eDAC)",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/edac/edac-how-to-configure.html"
+  },
+  {
+   "text": "How to configure EC Data Access Control for external database user",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/edac/edac_external_db_user.html"
+  },
+  {
+   "text": "Introduction to Reporting in EC",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/reporting-and-analytics/reporting_in_ec.html"
+  },
+  {
+   "text": "How to use EC\u2019s Reporting and Analytics",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/reporting-and-analytics/ec_reporting_and_analytics.html"
+  },
+  {
+   "text": "Database Reporting Layer",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/reporting-and-analytics/database_reporting_layer.html"
+  },
+  {
+   "text": "How to create, install and configure a Jasper Report",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/reporting-and-analytics/how_to_create_jasper_reports.html"
+  },
+  {
+   "text": "How to configure EC Standard Reports",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/reporting-and-analytics/how_to_config_ec_standard_reports.html"
+  },
+  {
+   "text": "How to generate an XML-report based on a PL/SQL function",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/reporting-and-analytics/how_to_gen_plsql_xml_reports.html"
+  },
+  {
+   "text": "How to Configure Report Access",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/reporting-and-analytics/how_to_config_report_access.html"
+  },
+  {
+   "text": "How to Update Online Help",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/tools/how_to_update_online_help.html"
+  },
+  {
+   "text": "PKI - Public Key Infrastructure",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/tools/pki.html"
+  },
+  {
+   "text": "Password Encryption Tool",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/tools/password_encryption_tool.html"
+  },
+  {
+   "text": "Overview",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/appdev/appdev-overview.html"
+  },
+  {
+   "text": "DomainEntityMgr",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/appdev/appdev-domain-entity-mgr.html"
+  },
+  {
+   "text": "EventMgr",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/event/event-api.html#_event_api_java"
+  },
+  {
+   "text": "ClientConfigurationMgr",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/ecis/remote_endpoint_configuration.html#_java_api_and_usage"
+  },
+  {
+   "text": "Blobstorage",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/blobstorage/blobstorage.html"
+  },
+  {
+   "text": "Data Modelling Guideline",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/databasedevelopment/data_modelling_guideline.html"
+  },
+  {
+   "text": "EC Flyway Developer Handbook",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/databasedevelopment/ec_flyway_developer_handbook.html"
+  },
+  {
+   "text": "PL/SQL - Coding Standard And Style",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/databasedevelopment/pl_sql_coding_standard_and_style.html"
+  },
+  {
+   "text": "Custom Oracle Error Messages",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/databasedevelopment/custom_oracle_error_messages.html"
+  },
+  {
+   "text": "Flyway in Energy Components",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/frmw/flyway/flyway.html"
+  },
+  {
+   "text": "Dashboard",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_dashboard.html"
+  },
+  {
+   "text": "System Attributes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_system_attribute.html"
+  },
+  {
+   "text": "How To Define Status Processes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_status_processes.html"
+  },
+  {
+   "text": "Deferment (PD.0020)",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_deferment_pd.0020.html"
+  },
+  {
+   "text": "Operation Mode",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_operation_mode.html"
+  },
+  {
+   "text": "Default Client Value",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_default_client_value.html"
+  },
+  {
+   "text": "API Measurement Standards in Energy Components",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_api_measurement_standards.html"
+  },
+  {
+   "text": "Daily Allocation BPM Workflow",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/bpm/prod_daily_allocation_bpm_workflow.html"
+  },
+  {
+   "text": "Monthly Allocation BPM Workflow",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/bpm/prod_monthly_allocation_bpm_workflow.html"
+  },
+  {
+   "text": "Analytics Integration BPM Workflow",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/bpm/prod_analytics_integration_bpm_workflow.html"
+  },
+  {
+   "text": "Analysis Data Management BPM Workflow",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/bpm/prod_analysis_data_management_bpm_workflow.html"
+  },
+  {
+   "text": "Hydrocarbon Accounting",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_hydrocarbon_accounting.html"
+  },
+  {
+   "text": "Stream Node Diagram",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_stream_node_diagram.html"
+  },
+  {
+   "text": "Removing Ghost Data in Production Allocation tables/classes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_removing_ghost_data_from_product_calculations.html"
+  },
+  {
+   "text": "Multi Well Testing",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_multi_well_testing.html"
+  },
+  {
+   "text": "Production Test Result - PreProcessing and Calculate PVT",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_prod_test_result_preprocessing_and_calculate_pvt.html"
+  },
+  {
+   "text": "Single Production Well Test Result (PT.0013)",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_single_production_well_test_result.html"
+  },
+  {
+   "text": "Well Performance Curve",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_well_performance_curve.html"
+  },
+  {
+   "text": "Well Decline Curve",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_well_decline_curve.html"
+  },
+  {
+   "text": "Production Forecasting",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_production_forecast.html"
+  },
+  {
+   "text": "Forecasting Upgrade Guide",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_production_forecasting_upgrade_guide.html"
+  },
+  {
+   "text": "EC Chemistry",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/prod/prod_ec_chemistry.html"
+  },
+  {
+   "text": "Overview",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_overview.html"
+  },
+  {
+   "text": "Dashboard",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_dashboard.html"
+  },
+  {
+   "text": "System Properties",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_system_properties.html"
+  },
+  {
+   "text": "Cargo Status Rules",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_cargo_status_rules.html"
+  },
+  {
+   "text": "EC Revenue Interface",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_ec_revenue_interface.html"
+  },
+  {
+   "text": "The EC Contract Concept",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_the_ec_contract_concept.html"
+  },
+  {
+   "text": "Screen Configurability",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_screen_configurability.html"
+  },
+  {
+   "text": "How to Configure Form Layout in Demurrage Screen",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_how_to_configure_form_layout_in_demurrage_screen.html"
+  },
+  {
+   "text": "GanttChartTooltipTransformer, GanttChartConflictDetector and DataModelFilterTran",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_ganttcharttooltiptransformer_ganttchartconflictdetector_and_datamodelfiltertransformer_in_gantt_charts.html"
+  },
+  {
+   "text": "End Dating of Contracts",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_end_dating_of_contracts.html"
+  },
+  {
+   "text": "Berth Slot Calendar",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_berth_slot_calendar.html"
+  },
+  {
+   "text": "New Cargo Planning And Terminal Operations Data Model",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/transport/ec_transport_new_cargo_planning_and_terminal_operations_data_model.html"
+  },
+  {
+   "text": "Overview",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/sale/ec_sales_overview.html"
+  },
+  {
+   "text": "Sales Allocation (SA)",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/sale/sa/ec_sales_sales_allocation(sa).html"
+  },
+  {
+   "text": "Price Determination (PR)",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/sale/pr/ec_sales_price_determination(pr).html"
+  },
+  {
+   "text": "System Properties",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/sale/ec_sales_system_properties.html"
+  },
+  {
+   "text": "System Attributes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/sale/ec_sales_system_attributes.html"
+  },
+  {
+   "text": "System Attributes",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_System_Attributes.html"
+  },
+  {
+   "text": "Interface with EC Sales",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_Interface_with_EC_Sales.html"
+  },
+  {
+   "text": "Dashboards",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_Dashboards.html"
+  },
+  {
+   "text": "Visual Tracing",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_Visual_Tracing.html"
+  },
+  {
+   "text": "Interfacing of 'Other' Line Items",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_Interfacing_Other_Line_Items.html"
+  },
+  {
+   "text": "Financial Item",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_Financial_Item.html"
+  },
+  {
+   "text": "Calendar / Calendar Collection",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_Calendar.html"
+  },
+  {
+   "text": "How-To configure LOCALE in EC",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_How_To_Configure_LOCALE_in_EC.html"
+  },
+  {
+   "text": "How to configure Stream Item Calculations",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_How_To_Configure_Stream_Item_Calculations.html"
+  },
+  {
+   "text": "Consolidation of Financial Transactions / Process screens",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_Consolidation_of_Financial_Transactions_Process_Screens.html"
+  },
+  {
+   "text": "Consolidation of Inventory screens",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_Consolidation_of_Inventory_Screens.html"
+  },
+  {
+   "text": "Quantity Module Enhancements",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_Quantity_Module_Enhancements.html"
+  },
+  {
+   "text": "Client Side Data Validation for Stream Items",
+   "abs": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/doc/Energy-Components/current/technical-documentation/revn/EC_Revenue_Client_Side_Data_Validation_for_Stream_Items.html"
+  }
+ ],
+ "(other)": [
+  {
+   "text": "Edit this Page",
+   "abs": "file:///ec-application//documentation/src/external-docs/modules/ROOT/pages/ecindex.adoc"
+  },
+  {
+   "text": "EC Software Development Kit",
+   "abs": "https://hub.energycomponents.com/repository/downloads/com/ec/sdk/energycomponents-sdk/14.2.4/energycomponents-sdk-14.2.4.zip"
+  },
+  {
+   "text": "Salesforce",
+   "abs": "https://community.quorumsoftware.com/"
+  }
+ ]
+}
