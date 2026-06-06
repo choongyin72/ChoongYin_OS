@@ -1,0 +1,17 @@
+# EC Bank IUD Test — Python dependencies
+# Install:  py -m pip install -r requirements.txt
+# Verified versions as of 2026-06-06 (Python 3.14, win32)
+
+# --- Playwright implementation (ec_iud_bank_final.py) ---
+playwright==1.60.0
+# After install, fetch the browser binary:  playwright install chromium
+
+# --- Robot Framework implementation (ec_iud_bank.robot) ---
+robotframework==7.4.2
+robotframework-browser==19.15.1
+# After install, initialise Node + Chromium:  py -m Browser.entry init
+# (Collections library is built into Robot Framework — no install needed)
+
+# --- DB verification scripts (investigation/db_*.py) ---
+oracledb==4.0.1
+# Thin mode — no Oracle Instant Client required
