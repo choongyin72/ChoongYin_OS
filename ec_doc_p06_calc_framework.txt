@@ -1,0 +1,97 @@
+TITLE: Calculation Framework
+URL: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/technical-documentation/product_concept/calculation_framework.html
+STATUS: 200
+
+Calculation Framework
+Introduction
+The Calculation Framework in Energy Components is used to deploy client
+defined business logic applicable (in the form of process diagrams) for
+the business processes. The client can create process diagrams which may
+contain sub process diagrams, equation processes, Excel workbook
+processes and/or implemented calculation library processes, as they
+require. This unique feature allows specific process diagrams to be
+defined for each operation and applied in a consistent and controlled
+manner without the need for a compiler program. Each of the calculations
+are configurable - any changes can be added to the calculation process
+diagram which will then be applied consistently across the system.
+The framework allows the user to build up and/or modify complex process
+diagrams containing sub process diagrams, equation processes, Excel
+workbook processes and/or implemented calculation library processes
+which influence the existing calculations. This is particularly useful
+when new assets are being added onto the system, enabling the user to
+manage varying calculations and scenarios. The framework has
+functionality allowing the user to make complex changes in a test
+environment before being launched in the live system - removing the risk
+of incorrect calculations entering the live system.
+The framework can be used across most business functions including:
+Hydrocarbon Accounting / Allocation calculations
+Sales / Contract calculations
+Price calculations
+Cargo Scheduling
+The Calculation Framework consists of two main components: the
+Calculation Definition Framework and the Calculation Execution
+Framework. The Calculation Definition Framework is used to create new
+and maintain existing calculation process diagrams. The Calculation
+Execution Framework reads and understands the calculation, which is
+created from the calculation editor and stored inside the database, and
+then executes it in the system.
+The basic building elements for calculation process diagrams are
+attributes and variables. They refer directly to values already stored
+in the Energy Components database. Equations, sets and conditions
+combine attributes and variables with arithmetic and logical operators
+and functions. The equations then arithmetically deploy the calculation
+process diagram, and the sets define the group of objects that the
+equation relates to.
+Figure 1.
+Calculation Framework Overview
+Equation Editor
+Equations are stored in the Energy Components database in MATHML format.
+MATHML is a form of XML (Extensible Mark-Up Language) designed for
+mathematic expressions. As illustrated below, MATHML comprises an
+editor, an interpreter and a MHT export function.
+Calculations (process diagrams) are created using the Flowchart Editor
+found in the Maintain Calculation screen (as shown below). In the top
+half of the screen the user selects the date, calculation context and
+calculation.
+Figure 2.
+Maintain Calculation - Process Diagram
+The user can build iterations, conditions and equations using the
+Equation Editor.
+Figure 3. Maintain Calculation - Equation Process
+Calculations can be changed and are available immediately for execution
+without the need for programming or compiling code. The Equation Editor
+is a visual editor which provides tools for creating and editing
+equations conforming to the EC Calculation Syntax. A basic equation in
+the EC Calculation Syntax would have the variable or object components
+on the left hand side, and the arithmetic expression on the right hand
+side, as shown in the example given below in Equation Syntax 1:
+An equation can also have an associated condition in the form of a
+logical expression, as shown in the example given below in Equation
+Syntax 2:
+The equation given below sets the allocated daily net volume for all
+incoming oil streams (that are not fixed), equal to the measured daily
+stream volume, times the daily oil reconciliation factor:
+The Stream Node Diagram
+Within Energy Components, a Stream represents a flow from one point to
+another. An example would be a pipeline transporting gas. The points
+connecting a Stream are called Nodes. Examples of Nodes would be well,
+gathering station, platform, terminal. The main purpose of the Stream /
+Node concept is to model infrastructure and hydrocarbon flow. Further,
+to have a structure for applying quantities and calculations. The
+quantities are related to the Streams, e.g. a gas stream holding a
+quantity for the mass flowing for a certain period. The calculations are
+related to the Nodes, e.g. a calculation summarizing the quantities for
+two incoming gas streams and putting the result on the outgoing gas
+stream.
+The Stream Node Diagram is used to show the structure of the production
+of oil and gas through pipelines and terminals. The visual
+representation is useful in situations where there is a large network,
+incorporating many streams and nodes (or network points and delivery
+points). The Stream Node Diagram is configurable using the Visualization
+Tool that’s provided alongside Energy Components. This means that any
+changes to the diagram can be made using the configuration screens and
+can be implemented immediately without the need for programming or
+system downtime. There are many functions that can be chosen from the
+context menu of the Stream Node Diagram: Auto layout, Edit Object, etc.
+Figure 4. Stream Node Diagram Editor - Context Menu
+Figure 5. Example of a Stream Node Diagram

@@ -1,0 +1,14 @@
+{
+  "tasks": [
+    {
+      "id": "a3de22f9",
+      "cron": "3 9 * * 1-5",
+      "prompt": "Good morning! Producing your daily 9AM status update.\n\nPull today's information from all sources and produce the standard morning briefing format:\n1. Search today's emails (outlook_email_search after today 00:00)\n2. Search today's calendar (outlook_calendar_search for today)\n3. Search today's Teams messages (chat_message_search after today 00:00)\n\nThen present in the standard daily briefing format:\n- 📅 Meetings Today (with times in MY +8, cancelled flagged)\n- 📧 Emails (subject, sender, key points)\n- 💬 Teams Highlights (key discussions, action items)\n- 🚨 Action Items / Pending Tasks needing attention today\n\nAlso flag any pending tasks from the todo list that are overdue or due today.",
+      "createdAt": 1780613382015,
+      "recurring": true,
+      "createdBySessionId": "9c7df211-3ff6-489c-a2e7-b257430d39cf",
+      "createdByPid": 19440,
+      "createdByProcStart": "639161664627431880"
+    }
+  ]
+}

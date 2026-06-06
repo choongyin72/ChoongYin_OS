@@ -1,0 +1,35 @@
+TITLE: Classes and Objects
+URL: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/technical-documentation/product_concept/classes_and_objects.html
+STATUS: 200
+
+Classes and Objects
+The EC system provides a large degree of flexibility to cater for
+different business scenarios. To be able to do this, the system has been
+designed with an abstraction view layer in the database that separates
+the business logic from the actual table structure used to store the
+data. This abstraction is defined as a set of what we call classes -
+very similar to the class concept used in object oriented design and
+programming languages.
+This concept allows us to:
+Have common functionality for data validation and integrity constraint without mixing it with the business logic
+Choose to make some class attributes virtual (so that they are calculated when needed), or physically store them if needed without changing the table structure
+Hide or show product attributes and also add customer class attributes if needed
+Adjust and define the screen navigation model to be suitable for both small and larger operations
+Control the properties of classes on several levels like packages, templates and project level. See section "Class Configuration Structure".
+Enforce data protection with ringfencing and data locking
+Support workflow operations, such as four eye approval and control point validation, as generic concepts that can be added to any class
+Replicate some data for performance reasons without having the business layer writing special code for it
+Change the table structure without interfering with the business logic
+The class concept distinguishes between four different class types:
+Object classes
+Object classes are usually something static such as a physical object.
+Typical Object classes are for example: Facility, Tank, Separator and Well.
+Data classes
+Data classes are typically owned by an object class, and represent a set of measurements or events linked to the owner object.
+Daily tank volume readings and exported oil and gas volumes are very often part of a Data class.
+Interface classes
+Interface classes are abstractions over several object classes with a common subset of attributes.
+They are used, among other things, for representing specific physical objects as nodes in a diagram showing how the hydrocarbons are passing through the system.
+Table classes
+Table classes are similar to data classes, but have less support for validation, row level security, etc.
+A table class typically does not have an object owner or a timestamp as a part of the primary key.

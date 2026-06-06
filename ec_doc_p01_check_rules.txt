@@ -1,0 +1,87 @@
+TITLE: How to define check rules
+URL: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/technical-documentation/frmw/general-config/how_to_define_check_rules.html
+STATUS: 200
+
+How to define check rules
+Introduction
+This document describes how to set up Check Rules. Check rules can be
+used to validate data in the EC database. The check rules are run as a
+database job and the results are stored in a log table
+(CTRL_CHECK_LOG).  The check rules can be run from the Validation
+Overview (CO.0203), Validation Overview by Facility (CO.0204), from the
+Validation tab to the screens or as a scheduled job. The result can be
+viewed in the Validation tab on the screens.
+When defining a check rule, the goal is to create a SELECT statements
+with a WHERE condition that return a row when the validation
+fails. Check rules can either use a WHERE formula to specify the
+validation, or use the validation rules configured in Class Validation
+(CO.1031) and Hierarchical Object Validation (CO.0253) or Object Validation - Default
+(CO.1032.01). Class and Object validation can be used for simpler
+validation like checking for missing values and checking if values are
+between min and max boundaries.
+Access to the Check Rules screen could be disabled.
+To get access to the screen, open the Object Maintenance screen and give proper access level to the relevant roles.
+Object Name:
+/com.ec.frmw.co.screens/maintain_check_rules
+Description:
+Check Rule
+Check rule - Where formula
+The WHERE condition to the check rule is specified as a formula. The
+formula can use:
+Keywords (AND, OR, IS NULL, IS NOT NULL, IN, LIKE, NULL, NOT, NVL, COALESCE,
+SUBSTR, LENGTH, ROUND, TRUNC, COUNT, MAX, MIN, ABS, GREATEST, LEAST,
+SYSDATE, DECODE, BETWEEN, CASE, WHEN, THEN, ELSE, END, EXISTS, ADD_MONTHS, LAST_DAY)
+Special characters  (<, ⇐, =, ⇒, >, <>, !=, ( ,) )
+Numbers
+Variables defined as $\{variable name}
+A variable can be:
+Constant (free text, can not contain ";"). Constant will be bind parameter to the query.
+Attribute from the RV view
+Function call (call to a function in a package)
+Sub query (only sub query from one view is supported)
+Variables are automatically created when the WHERE formula is stored in
+the database. It is not possible to manually add variables.
+Function call
+A function call can be used to get the previous value, a reference
+value, call a customised validation function, etc. It is only possible
+to call a function from:
+EC packages of classes that are included in validation (i.e. classes with "Include in Validation" = Y).
+EC packages of the following classes: ECBP_WELL_THEORETICAL, ECBP_STREAM_FLUID, EC_WELL_REFERENCE_VALUE, EC_STRM_REFERENCE_VALUE.
+Packages starting with Z (custom defined packages).
+Packages configured in EC codes with Code Type 'CHECK_RULE_PACKAGE'. Use the Code attribute to specify package name in all uppercase.
+First is the package selected and then the function. When the function
+is selected and stored in the database, the parameter list to the
+function is created and the user can fill out the values. The parameter
+can be a constant or an attribute from the RV view. For Date parameters
+a date and hour offset can be specified.
+Example
+: Get the measured oil rate to the previous day to the
+well:  ec_pwel_day_status.avg_oil_rate(object_id, (daytime - 1), '=')
+Sub query
+A sub query can be used to check the number of records for sub daily
+data, calculate average values, get a list of objects to validate, etc.
+Only sub queries from one view is supported. It is only possible to use
+views of classes that are included in the validation.
+First is the view selected, then the function and/or attribute is
+selected, and finally the WHERE formula is entered. The WHERE formula of
+the sub query is similar to the WHERE formula of the check rule. It can
+use keywords, special characters, numbers and variables. The variable
+can be a constant, an attribute from the RV view of the check rule, or
+an attribute of the sub query view. Function calls and sub queries are
+not supported here.
+Example
+: Get a list of wells belonging to facility FCTY1:
+SELECT OBJECT_ID FROM OV_WELL WHERE OP_FCTY_1_CODE = 'FCTY1'
+Check rule - Class and Object Validation
+When the Class/Object Validation checkbox of the check rule is checked,
+the validation rules configured in Class Validation (CO.1031) and Hierarchical Object Validation (CO.0253) or Object Validation - Default (CO.1032.01) are
+used to validate the data. Where Formula, Check Message, and Severity
+Level will not be used and should be empty.
+Connect check rules to screens
+Check Group (CO.0079) and Rule Group Combination (CO.0080) is used to
+connect check rules to screens. A Check Group is connected to a screen.
+Rule Group Combination is used to connect check rules to the check
+group.
+This information is used to list the check rule log records in the
+Validation tab of the screens and to identify which check rules to run
+when clicking the Run All button in the Validation tab.

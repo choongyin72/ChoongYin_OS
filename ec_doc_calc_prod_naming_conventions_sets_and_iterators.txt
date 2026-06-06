@@ -1,0 +1,1468 @@
+Naming Conventions Sets and Iterators :: Energy Components // Documentation 
+
+ // documentation 
+
+ Documentation 
+
+ Release Documentation 
+
+ EC 14.2.5 Release Notes 
+
+ EC 14.2.5 Release Details 
+
+ Upgrade Impact 
+
+ Deprecation 
+
+ Availability of Fixes in Higher Release Versions 
+
+ Previous Release Documentation 
+
+ EC 14.2.4 Release Notes 
+
+ EC 14.2.4 Release Details 
+
+ EC 14.2.3 Release Notes 
+
+ EC 14.2.3 Release Details 
+
+ EC 14.2.2 Release Notes 
+
+ EC 14.2.2 Release Details 
+
+ EC 14.2.1 Release Notes 
+
+ EC 14.2.1 Release Details 
+
+ EC 14.2.0 Release Notes 
+
+ EC 14.2.0 Release Details 
+
+ EC 14.1.7 Release Notes 
+
+ EC 14.1.7 Release Details 
+
+ EC 14.1.6 Release Notes 
+
+ EC 14.1.6 Release Details 
+
+ EC 14.1.5 Release Notes 
+
+ EC 14.1.5 Release Details 
+
+ EC 14.1.4 Release Notes 
+
+ EC 14.1.4 Release Details 
+
+ EC 14.1.3 Release Notes 
+
+ EC 14.1.3 Release Details 
+
+ EC 14.1.2 Release Notes 
+
+ EC 14.1.2 Release Details 
+
+ EC 14.1.1 Release Notes 
+
+ EC 14.1.1 Release Details 
+
+ EC 14.1.0 Release Notes 
+
+ EC 14.1.0 Release Details 
+
+ EC 14.0.12 Release Notes 
+
+ EC 14.0.12 Release Details 
+
+ EC 14.0.11 Release Notes 
+
+ EC 14.0.11 Release Details 
+
+ EC 14.0.10 Release Notes 
+
+ EC 14.0.10 Release Details 
+
+ EC 14.0.9 Release Notes 
+
+ EC 14.0.9 Release Details 
+
+ EC 14.0.8 Release Notes 
+
+ EC 14.0.8 Release Details 
+
+ EC 14.0.7 Release Notes 
+
+ EC 14.0.7 Release Details 
+
+ EC 14.0.6 Release Notes 
+
+ EC 14.0.6 Release Details 
+
+ EC 14.0.5 Release Notes 
+
+ EC 14.0.5 Release Details 
+
+ EC 14.0.4 Release Notes 
+
+ EC 14.0.4 Release Details 
+
+ EC 14.0.3 Release Notes 
+
+ EC 14.0.3 Release Details 
+
+ EC 14.0.2 Release Notes 
+
+ EC 14.0.2 Release Details 
+
+ EC 14.0.1 Release Notes 
+
+ EC 14.0.1 Release Details 
+
+ EC 14.0.0 Release Notes 
+
+ EC 14.0.0 Release Details 
+
+ EC 13.2.19 Release Notes 
+
+ EC 13.2.19 Release Details 
+
+ EC 13.2.18 Release Notes 
+
+ EC 13.2.18 Release Details 
+
+ EC 13.2.17 Release Notes 
+
+ EC 13.2.17 Release Details 
+
+ EC 13.2.16 Release Notes 
+
+ EC 13.2.16 Release Details 
+
+ EC 13.2.15 Release Notes 
+
+ EC 13.2.15 Release Details 
+
+ EC 13.2.14 Release Notes 
+
+ EC 13.2.14 Release Details 
+
+ EC 13.2.13 Release Notes 
+
+ EC 13.2.13 Release Details 
+
+ EC 13.2.12 Release Notes 
+
+ EC 13.2.12 Release Details 
+
+ EC 13.2.11 Release Notes 
+
+ EC 13.2.11 Release Details 
+
+ EC 13.2.10 Release Notes 
+
+ EC 13.2.10 Release Details 
+
+ EC 13.2.9 Release Notes 
+
+ EC 13.2.9 Release Details 
+
+ EC 13.2.8 Release Notes 
+
+ EC 13.2.8 Release Details 
+
+ EC 13.2.7 Release Notes 
+
+ EC 13.2.7 Release Details 
+
+ EC 13.2.6 Release Notes 
+
+ EC 13.2.6 Release Details 
+
+ EC 13.2.5 Release Notes 
+
+ EC 13.2.5 Release Details 
+
+ EC 13.2.4 Release Notes 
+
+ EC 13.2.4 Release Details 
+
+ EC 13.2.3 Release Notes 
+
+ EC 13.2.3 Release Details 
+
+ EC 13.2.2 Release Notes 
+
+ EC 13.2.2 Release Details 
+
+ EC 13.2.1 Release Notes 
+
+ EC 13.2.1 Release Details 
+
+ EC 13.2.0 Release Notes 
+
+ EC 13.2.0 Release Details 
+
+ EC 13.1.14 Release Notes 
+
+ EC 13.1.14 Release Details 
+
+ EC 13.1.13 Release Notes 
+
+ EC 13.1.13 Release Details 
+
+ EC 13.1.12 Release Notes 
+
+ EC 13.1.12 Release Details 
+
+ EC 13.1.11 Release Notes 
+
+ EC 13.1.11 Release Details 
+
+ EC 13.1.10 Release Notes 
+
+ EC 13.1.10 Release Details 
+
+ EC 13.1.9 Release Notes 
+
+ EC 13.1.9 Release Details 
+
+ EC 13.1.8 Release Notes 
+
+ EC 13.1.8 Release Details 
+
+ EC 13.1.7 Release Notes 
+
+ EC 13.1.7 Release Details 
+
+ EC 13.1.6 Release Notes 
+
+ EC 13.1.6 Release Details 
+
+ EC 13.1.5 Release Notes 
+
+ EC 13.1.5 Release Details 
+
+ EC 13.1.4 Release Notes 
+
+ EC 13.1.4 Release Details 
+
+ EC 13.1.3 Release Notes 
+
+ EC 13.1.3 Release Details 
+
+ EC 13.1.2 Release Notes 
+
+ EC 13.1.2 Release Details 
+
+ EC 13.1.1 Release Notes 
+
+ EC 13.1.1 Release Details 
+
+ EC 13.1.0 Release Notes 
+
+ EC 13.1.0 Release Details 
+
+ EC 13.0.22 Release Notes 
+
+ EC 13.0.22 Release Details 
+
+ EC 13.0.21 Release Notes 
+
+ EC 13.0.21 Release Details 
+
+ EC 13.0.20 Release Notes 
+
+ EC 13.0.20 Release Details 
+
+ EC 13.0.19 Release Notes 
+
+ EC 13.0.19 Release Details 
+
+ EC 13.0.18 Release Notes 
+
+ EC 13.0.18 Release Details 
+
+ EC 13.0.17 Release Notes 
+
+ EC 13.0.17 Release Details 
+
+ EC 13.0.16 Release Notes 
+
+ EC 13.0.16 Release Details 
+
+ EC 13.0.15 Release Notes 
+
+ EC 13.0.15 Release Details 
+
+ EC 13.0.14 Release Notes 
+
+ EC 13.0.14 Release Details 
+
+ EC 13.0.13 Release Notes 
+
+ EC 13.0.13 Release Details 
+
+ EC 13.0.12 Release Notes 
+
+ EC 13.0.12 Release Details 
+
+ EC 13.0.11 Release Notes 
+
+ EC 13.0.11 Release Details 
+
+ EC 13.0.10 Release Notes 
+
+ EC 13.0.10 Release Details 
+
+ EC 13.0.9 Release Notes 
+
+ EC 13.0.9 Release Details 
+
+ EC 13.0.8 Release Notes 
+
+ EC 13.0.8 Release Details 
+
+ EC 13.0.7 Release Notes 
+
+ EC 13.0.7 Release Details 
+
+ EC 13.0.6 Release Notes 
+
+ EC 13.0.6 Release Details 
+
+ EC 13.0.5 Release Notes 
+
+ EC 13.0.5 Release Details 
+
+ EC 13.0.4 Release Notes 
+
+ EC 13.0.4 Release Details 
+
+ EC 13.0.3 Release Notes 
+
+ EC 13.0.3 Release Details 
+
+ EC 13.0.2 Release Notes 
+
+ EC 13.0.2 Release Details 
+
+ EC 13.0.1 Release Notes 
+
+ EC 13.0.1 Release Details 
+
+ EC 13.0.0 Release Notes 
+
+ EC 13.0.0 Release Details 
+
+ EC Framework Release Details 
+
+ EC Production Release Details 
+
+ EC Transport Release Details 
+
+ EC Revenue Release Details 
+
+ User Exit Packages 
+
+ Installation Guide 
+
+ Installation Overview 
+
+ System Requirements 
+
+ Database Installation 
+
+ EC Database Installation 
+
+ EC Identity Manager - Database Installation 
+
+ EC Reporting and Analytics - Database Installation 
+
+ EC Online Help Uploader 
+
+ Upgrade/Redeploy ECBPM 
+
+ Post Install Configuration 
+
+ Installing EC on Docker Swarm 
+
+ Upgrade Guide 
+
+ How to upgrade to EC 14.2.5 
+
+ Configuration 
+
+ Energy Components Configuration 
+
+ Technical Documentation 
+
+ Technical Documentation Overview 
+
+ Energy Components Business Areas 
+
+ Energy Components Basic User Guide 
+
+ Energy Components: Getting Started 
+
+ The Energy Components Screen 
+
+ Help 
+
+ Energy Components Product Concepts 
+
+ Configuration Overview 
+
+ Calculation Framework 
+
+ Classes and Objects 
+
+ Group model concept 
+
+ Users, Roles, Groups and Access Rights 
+
+ Reporting concept 
+
+ EC Framework 
+
+ Docker Images 
+
+ Energy Components Docker Images 
+
+ Energy Components - Application 
+
+ Energy Components - BPM 
+
+ Energy Components - Identity manager 
+
+ Energy Components - Identity Manager Configuration 
+
+ Energy Components - Reporting and Analytics 
+
+ Energy Components - Messaging broker 
+
+ Energy Components - Antivirus 
+
+ Energy Components - Analytics Manager 
+
+ Energy Components - Analytics Manager Runner 
+
+ Identity &amp; Access Management 
+
+ Identity &amp; Access Management 
+
+ How to configure the User session timeout 
+
+ User Federation, Identity brokering and Single sign-on 
+
+ Keycloak 
+
+ User account settings 
+
+ How to configure audit logging 
+
+ How to configure Brute Force Protection 
+
+ How to configure Password Policy 
+
+ How to assign roles to jbpmengine user 
+
+ How to create Service Account for external integration access 
+
+ Event 
+
+ EC Event Architecture 
+
+ EC Event API 
+
+ Publish Events 
+
+ Subscribe to Events &#8212; and execute jobs and business logic 
+
+ Inbound 
+
+ Bridge Events from external systems 
+
+ Outbound 
+
+ Bridge Events to external systems 
+
+ Forward Events using WebHooks 
+
+ Forward Events to the AWS Simple Notification Service 
+
+ Forward Events to Firebase Cloud Messaging 
+
+ Advanced configuration and monitoring 
+
+ Event Types 
+
+ Event Types &#8212; Custom 
+
+ Subscriber Execution modes 
+
+ Event history 
+
+ Event - FAQ 
+
+ Rest API 
+
+ EC Rest API 
+
+ GraphQL API 
+
+ EC GraphQL Overview 
+
+ EC GraphQL Type System 
+
+ EC GraphQL Queries 
+
+ EC GraphQL Mutations 
+
+ EC GraphQL Directives 
+
+ EC GraphQL Transformations 
+
+ EC GraphQL Operations 
+
+ EC GraphQL Schema Extensions 
+
+ EC Integration Services 
+
+ EC Integration Services (ECIS) Technical Documentation 
+
+ ECIS - Configuration Guide 
+
+ ECIS Agent 
+
+ ECIS - Advanced File Import 
+
+ ECIS - Staging Table Extension 
+
+ ECIS - Source Adapter Configuration 
+
+ ECIS - Example adapter configurations 
+
+ ECIS - Sample Periods explained 
+
+ Remote endpoint configuration 
+
+ EC BPM - Business Process Modelling 
+
+ Architecture 
+
+ Project Management 
+
+ Process Template and Execution 
+
+ Process Instance Management 
+
+ Process Action Invocations 
+
+ User Tasks and Task Management 
+
+ EC Inbound Events (Deprecated) 
+
+ Process Inbound Events 
+
+ Process Outbound Events 
+
+ API 
+
+ Standard Processes 
+
+ Guides 
+
+ Process Overview 
+
+ How-to Configure default process instance list columns 
+
+ How-to Configure process instance list columns for a specific process 
+
+ How-to Display a button when a Process Action node is selected 
+
+ How-to Show process action specific data from a query file in External Data view 
+
+ How-to Show result from a query XML in the External Data view 
+
+ How-to Show variables in the Variables tab 
+
+ How-to Show generated calculation log and report as data holder in Variables tab 
+
+ How-to Populate Process Overview Legacy 
+
+ Process Monitor 
+
+ Process Monitor Cache 
+
+ How-to Apply a customized viewer tag to node instance in business action 
+
+ How-to Apply production day offset to sub-daily process monitor 
+
+ How-to Customize texts and background colors in Process Monitor view 
+
+ How-to View execution status of monthly process within a year 
+
+ Extensions 
+
+ EC Extensions Overview 
+
+ How to create EC Extension 
+
+ How to install an EC Extension 
+
+ Database migration in Extensions 
+
+ Development 
+
+ Starting an EC Extension Maven Project 
+
+ Simplified Developer Environment Set-up in EC 14.x 
+
+ Compile and Deploy and Extensions 
+
+ Create EC Extension Classes 
+
+ Create EC Extension Java 
+
+ Create EC Extension Screens 
+
+ Create EC Extension Online Help 
+
+ Create EC Extension Reports 
+
+ Create EC Extension Datamodel 
+
+ Create EC Extension PL/SQL Package 
+
+ Create EC Extension Views 
+
+ Create EC Extension Triggers 
+
+ Create EC Extension Calculation Libraries 
+
+ General Configuration and Guidelines 
+
+ Class Configuration 
+
+ Class configuration rules 
+
+ Class Configuration Structure 
+
+ Class model presentation syntax guidelines 
+
+ Group model configuration in Energy Components 
+
+ How to Correct Object Class IUD Triggers 
+
+ Class General Relations 
+
+ Date integrity check for object relation 
+
+ EC View Generator and Class Model 
+
+ Simplified configuration for EC Codes and other popup attributes 
+
+ Configuring Tooltip functionality in EC 
+
+ How to configure Smart Journaling 
+
+ How to use Icons from Font Awesome 
+
+ How to use verificationStatus to color cells 
+
+ Property IGNORE_IND 
+
+ Property INTERFACE_ALIAS 
+
+ Application layer data sourcing and processing with custom Java processors 
+
+ Expressions and Scripting in the EC Domain Model 
+
+ How to configure Screen Treeview Menu 
+
+ Unit of Measure Support in Energy Components 
+
+ System of Measurement 
+
+ How to get Users and User&#8217;s roles 
+
+ System Property Exclude Synonyms 
+
+ Four Eyes Approval 
+
+ How to manage User Exit packages 
+
+ Calculation Group configuration 
+
+ Calculation Library 
+
+ Database Users and Logging 
+
+ How to change table content PINC logging in install mode 
+
+ How to configure a Business Action to call SQL procedure 
+
+ How to use Date Macro Parameter 
+
+ How to resolve blocked schedules automatically 
+
+ How to re-pin scheduled jobs 
+
+ How to define check rules 
+
+ How to configure Tab Label in EC Screens 
+
+ How to configure Context Menu 
+
+ How to configure EC Dashboards 
+
+ How to Configure the Application Title Bar 
+
+ How to Configure Table Column Sets 
+
+ Time Zone Support in Energy Components 
+
+ Deprecating Ecdp_ProductionDay 
+
+ How to configure language translation in EC 
+
+ How to configure Messaging 
+
+ Navigator default values 
+
+ How to send messages from EC 
+
+ How to disable navigator cache 
+
+ DataTransfer Configuration 
+
+ EC Dataloader 
+
+ Data Purging 
+
+ Expression and Scripting support 
+
+ Migration utility functions 
+
+ REC ID utility 
+
+ Pendo 
+
+ EC Data Access Control (eDAC) 
+
+ EC Data Access Control (eDAC) Functional Guide 
+
+ EC Data Access Control (eDAC) DB Upgrade Guide 
+
+ How to configure EC Data Access Control (eDAC) 
+
+ How to configure EC Data Access Control for external database user 
+
+ Reporting and Analytics 
+
+ Introduction to Reporting in EC 
+
+ How to use EC&#8217;s Reporting and Analytics 
+
+ Database Reporting Layer 
+
+ How to create, install and configure a Jasper Report 
+
+ How to configure EC Standard Reports 
+
+ How to generate an XML-report based on a PL/SQL function 
+
+ How to Configure Report Access 
+
+ EC Tools 
+
+ How to Update Online Help 
+
+ PKI - Public Key Infrastructure 
+
+ Password Encryption Tool 
+
+ Fitness Functions 
+
+ EC Fitness Functions 
+
+ Fitness Function API 
+
+ Application Development 
+
+ Overview 
+
+ DomainEntityMgr 
+
+ EventMgr 
+
+ ClientConfigurationMgr 
+
+ Fitness Function API 
+
+ Blobstorage 
+
+ Database Development 
+
+ Data Modelling Guideline 
+
+ EC Flyway Developer Handbook 
+
+ PL/SQL - Coding Standard And Style 
+
+ Custom Oracle Error Messages 
+
+ Flyway 
+
+ Flyway in Energy Components 
+
+ EC Production 
+
+ Production Object Configuration 
+
+ Well 
+
+ Stream 
+
+ Tank 
+
+ Dashboard 
+
+ System Attributes 
+
+ How To Define Status Processes 
+
+ Deferment (PD.0020) 
+
+ Operation Mode 
+
+ Default Client Value 
+
+ API Measurement Standards in Energy Components 
+
+ EC BPM - Business Process Modelling 
+
+ Daily Allocation BPM Workflow 
+
+ Monthly Allocation BPM Workflow 
+
+ Analytics Integration BPM Workflow 
+
+ Analysis Data Management BPM Workflow 
+
+ Production Allocation 
+
+ Hydrocarbon Accounting 
+
+ Stream Node Diagram 
+
+ Removing Ghost Data in Production Allocation tables/classes 
+
+ Calculation Design Standards 
+
+ Calculation Design 
+
+ Naming Conventions Generic 
+
+ Naming Conventions Generic 
+
+ Naming Conventions Sets and Iterators 
+
+ Naming Conventions Variables 
+
+ Equation Blocks, Equation Standards, and Logging 
+
+ Calculation Data Model Best Practices 
+
+ Library Calculations 
+
+ Overview 
+
+ Sets, Variables and Iterators for Library Calculations 
+
+ Library Calculation Design 
+
+ Creating a New Library Calculation 
+
+ Library Calculation Basics 
+
+ Working with Library Calculations 
+
+ Overview 
+
+ Working with Product Standard Library Calculations 
+
+ Production Testing 
+
+ Multi Well Testing 
+
+ Production Test Result - PreProcessing and Calculate PVT 
+
+ Single Production Well Test Result (PT.0013) 
+
+ Well Performance Curve 
+
+ Well Decline Curve 
+
+ Production Forecast 
+
+ Production Forecasting 
+
+ Forecasting Upgrade Guide 
+
+ EC Chemistry 
+
+ EC Chemistry 
+
+ EC Transport 
+
+ Overview 
+
+ Dashboard 
+
+ System Properties 
+
+ Cargo Status Rules 
+
+ EC Revenue Interface 
+
+ The EC Contract Concept 
+
+ Screen Configurability 
+
+ How to Configure Form Layout in Demurrage Screen 
+
+ GanttChartTooltipTransformer, GanttChartConflictDetector and DataModelFilterTransformer in Gantt Charts 
+
+ End Dating of Contracts 
+
+ Berth Slot Calendar 
+
+ New Cargo Planning And Terminal Operations Data Model 
+
+ EC Sales 
+
+ Overview 
+
+ Sales Allocation (SA) 
+
+ Price Determination (PR) 
+
+ System Properties 
+
+ System Attributes 
+
+ EC Revenue 
+
+ System Attributes 
+
+ Interface with EC Sales 
+
+ Dashboards 
+
+ Visual Tracing 
+
+ Interfacing of 'Other' Line Items 
+
+ Financial Item 
+
+ Calendar / Calendar Collection 
+
+ How-To configure LOCALE in EC 
+
+ How to configure Stream Item Calculations 
+
+ Consolidation of Financial Transactions / Process screens 
+
+ Consolidation of Inventory screens 
+
+ Quantity Module Enhancements 
+
+ Client Side Data Validation for Stream Items 
+
+ How To Get Started 
+
+ Documentation 
+ 14.2.5 
+
+ Documentation 
+
+ 14.2.5 
+
+ 14.2.4 
+
+ 14.2.3 
+
+ 14.2.2 
+
+ 14.2.1 
+
+ 14.2.0 
+
+ 14.1.7 
+
+ 14.1.6 
+
+ 14.1.5 
+
+ 14.1.4 
+
+ 14.1.3 
+
+ 14.1.2 
+
+ 14.1.1 
+
+ Documentation 
+ Technical Documentation 
+ EC Production 
+ Production Allocation 
+ Calculation Design Standards 
+ Naming Conventions Generic 
+ Naming Conventions Sets and Iterators 
+
+ 14.2.5 
+
+ 14.2.5 
+ 14.2.4 
+ 14.2.3 
+ 14.2.2 
+ 14.2.1 
+ 14.2.0 
+ 14.1.7 
+ 14.1.6 
+ 14.1.5 
+ 14.1.4 
+ 14.1.3 
+ 14.1.2 
+ 14.1.1 
+
+ Naming Conventions Sets and Iterators 
+
+ Sets and iterators require specific naming conventions. These are discussed in the following sections. It is advised to follow these best practices as closely as possible. 
+
+ Sets 
+
+ EC calculations are heavily using sets to iterate over instead of hardcoding which objects to use. To make it intuitive and easy to read, we must agree on a standard naming convention. By looking at a set, we should know immediately if it is a local set or global set, if it is holding streams, nodes or other assets, if it is a single set only (one row, can be used directly as index without iteration, such as a single component like Methane) and of course how objects in that set are filtered. 
+
+ Many sets can have the same definition across project and customers. To save implementation time and enforce a standardization, we will create template calculations which contains commonly used global set and local sets. Each project can add to the list to cover that project requirements, but should adapt the bellow naming convention. 
+
+ Hierarchical Structure of sets and names 
+
+ Where sets are based on set definitions rather than variables, a hierarchy should be built in order to not repeat the same logic in more than one set definition. 
+
+ Start with a 'base' set at the root of the calculation containing the default set of all objects. 
+
+ Name this base set using the term 'All', such as StreamsAll 
+
+ Create subsets of this set using set operators as required, follow the naming examples and definitions provided further. 
+
+ Global sets 
+
+ Global sets are all sets used in multiple levels of a calculations, which are carried forward between calculation blocks. It is advised to declare these sets on a level as high as possible in the calculation. 
+
+ Global sets are recognizable by their names: 
+
+ Starting with the object(s) held in the set, written fully. Streams, Components, Days etc. 
+
+ Using CamelCase 
+
+ Examples: StreamsAll, ComponentsEmission, DaysInPeriod 
+
+ Date specific sets 
+
+ A number of date specific sets is provided here. It is strongly advised to use these sets as-is. Allowing re-use of calculations. 
+
+ Day &amp; Month Sets 
+ Description 
+
+ DaysInPeriod 
+
+ Instead of having a set holding one day and another set holding all days in a month, we create the set DaysInPeriod which is one day if it is daily allocation and all days in the month if it is a monthly allocation. This will be used to read data over DaysInPeriod into non date index variables like gnInitialNStdVol(s). 
+
+ Do not define “d” as a set, “d” is reserved to be used as an iterator. 
+
+ DaysToIterate 
+
+ This will be used to determine if we need to process the network one time or for each day in the month. 
+
+ When it&#8217;s Daily allocation OR Monthly allocation using method 'AGGR_DAYS' then the DaysToIterate is only one day. 
+
+ When it&#8217;s Monthly allocation using mehtod 'LOOP_DAYS' this set will hold all days in the month. 
+
+ Hence, the difference is when we have a monthly allocation using method 'AGGR_DAYS', then DaysInPeriod is all days in the month, while DaysToIterate is only one day. 
+
+ Month 
+
+ This is the toMonth(PeriodStartDate(global)). 
+
+ Do not define “m” as a set which has been done historically, “m” is reserved to be used as an iterator over several months if that is applicable to a calculation. 
+
+ Do not define “d”, “m“, “h“ as a sets, these are reserved to be used as iterators. 
+
+ Sets by specific EC Objects 
+
+ The following sets are object specific sets as they are proposed in the best practices. This list is not the complete list, but provides examples of how sets are to be named. It is strongly advised that the sets named in the following tables are implemented as-is. 
+
+ Stream sets 
+
+ Streams&lt;type&gt;&lt;phase&gt; 
+
+ Description 
+
+ StreamsDB 
+ This is all streams from IV_ALLOC_STREAM including implicit well streams! 
+
+ StreamsAll 
+ All streams in StreamsDB which is not in WellStreams 
+
+ StreamsGas/Oil/Wat/HC/etc 
+ All streams having the phase GAS/OIL/WAT/HC etc 
+
+ StreamsMeasured 
+ All streams having type='M' or 'D'. For the database the 'D' streams looks like they are measured since they return data 
+
+ StreamsCalculated 
+ All streams having type='C'. These do not have data from the database, will be calculated by the allocation 
+
+ StreamsMeasuredGas/Oil/Wat etc 
+ All StreamsMeasured where phase=GAS/OIL/WAT. Important when we read data, need to know its a measured stream (M or D) and which phase it has. 
+
+ WellStream sets 
+
+ WellStreams&lt;well_type&gt; 
+
+ Description 
+
+ WellStreams 
+ All implicit well streams 
+
+ WellStreamsGP/OP/WP/WI/GI etc 
+ All implicit well streams for the different category (OP/GP/WP/WI/GI etc) 
+
+ Node sets 
+
+ Nodes&lt;class&gt;&lt;sorting&gt; 
+
+ Description 
+
+ NodesDB 
+ All nodes from IV_ALLOC_NODE 
+
+ WellNodes 
+ All nodes where class_name='WELL' 
+
+ NodesAll 
+ NodesDB minus WellNodes 
+
+ NodesASC 
+ Nodes in NodeAll sorted by CalcSeqNo ASC 
+
+ NodesDESC 
+ Nodes in NodeAll sorted by CalcSeqNo DESC 
+
+ NodesWH/Storage/etc 
+ Nodes where class = WELL_HOOKUP / STORAGE / etc 
+
+ Component sets 
+
+ Comp&lt;comp no&gt; if only one 
+
+ Description 
+
+ ComponentsDB 
+ All components from tv_hydrocarbon_components 
+
+ CompC1/C2/etc 
+ Only Component C1/C2/etc 
+
+ ComponentsUsed 
+ The set of compC1/C2 etc which will be used. Typical N2-C6&#43; 
+
+ ComponentsStreamEmission 
+ The set of components used for emission calculations 
+
+ ProfitCentre sets 
+
+ PC&lt;pc code&gt; if only one 
+
+ Description 
+
+ ProfitCentresDB 
+ All profit centres from iv_profit_centre 
+
+ Phase sets 
+ Description 
+
+ PhaseGas/Oil/Wat/HC 
+ The phase GAS/OIL/WAT/HC etc 
+
+ PhasesUsed 
+ The phases that will be used in this allocation. Typcial a union of PhaseOIL, PhaseGAS, PhaseWAT 
+
+ Local sets 
+
+ Local sets are defined on a lower level, like an equation block and serve no purpose outside that block. Using distinct naming conventions and lowerCamelCase. 
+
+ A local set will often use one or more iterators to filter the sets. Examples are p=PhasesUsed or n=NodesASC. Try not to define a local set which is in principle global. E.g. do not add a new set CompC7&#43;, rather make it global. 
+
+ Common local set will be defined in the template to save time and avoid different naming convention. 
+
+ Naming convention 
+
+ start with &lt;four char lowercase object type&gt; 
+
+ Local Stream sets 
+ Description 
+
+ strmIn 
+ Set StreamsAll where to_node=n 
+
+ strmOut 
+ Set StreamsAll where from_node=n 
+
+ strmInPhase 
+ Set strmIn where phase=p 
+
+ strmOutPhase 
+ Set strmOut where phase=p 
+
+ strmInFixed 
+ Set strmIn where alloc_fixed='Y' 
+
+ strmInNonFixed 
+ Set strmIn minus strmInFixed 
+
+ strmInFixedPhase etc 
+ Set strmInFixed where phase=p 
+
+ strmInNonFixedPhase etc 
+ Set strmInNonFixed where phase=p 
+
+ strmInCalc 
+ Set strmIn where type='C' 
+
+ strmOutCalc 
+ Set strmOut where type='C' 
+
+ strmInCalcPhase 
+ Set strmInCalc where phase=p 
+
+ strmOutCalcPhase 
+ Set strmOutCalc where phase=p 
+
+ Dynamic Sets 
+
+ To increase performance and avoid writing 0 to all dimensions on a variable, we can create dynamic sets on-the-fly based on a variable. Create a local variable lsProfitCentresUsed (ls = local set). Then write the equation: lsProfitCentresUsed = args(gnNMass(s, pc in * ), pc) 
+
+ Then, you can later make an iterator pc in lsProfitCentreUsed and you know that only includes those profit centers for that stream which has data. For the next iteration, s, this will be a new list of profit centres for the next stream. 
+
+ Efficient sets are often those based on the underlying data. 
+
+ Use the Args() function in both set definition equations and standard equations to populate a set with those objects that actually exist in the data 
+
+ Only use Args() when you are sure the data has been read from the DB already as Args() will not trigger the reading of out-of-period data 
+
+ Redundant Sets 
+
+ Like local variables, unused sets should be cleaned up from the calculation rules. 
+
+ Object specific sets 
+
+ Object specific sets are sets which are defined to contain a specific (group) of objects, such as streams or nodes.
+In general, in order to promote re-usability of calculations, this should be used carefully.
+However in specific cases, the use of object specific sets is smart. Such as to prevent unnecessary iterations of large sets. 
+
+ Example: Object specific sets reduce unrequired iterations. 
+
+ Bad practice 
+The below equation iterates over large stream sets: 
+
+ The calculation specifies the required streams in the equation condition: 
+
+ And iterates over all streams multiple times: 
+
+ Best practice 
+Object specific sets are added as local sets. (notice: sets in screenshot to not follow naming convention best practice). 
+
+ Iteration with conditions are no longer required on the specific equation. Performance is improved significantly. 
+
+ Which Set Type to Use? 
+
+ Often you have a choice of defining a set either via a set Equation or via the simpler Object Type set combinations. 
+
+ Always prefer the simpler Object Type set combinations rather than an equation in this situation, These are easier to understand for others 
+
+ Remember to utilize the ability to reference sets and iterators as well as fixed constant values. 
+
+ For complex sets you have no choice but to use an equation. In this case remember to enter a description override where appropriate. 
+
+ Beware of Inconsistent Behavior 
+
+ Be aware that calculation engine version idiosyncrasies may mean using a set filter { | } in an equation to populate an indexed set into a local variable sometimes might not work correctly, or may yield a different result from the same syntax used in an explicit set equation. 
+
+ The following such scenario was experienced when populating a set of nomination points: 
+
+ Where the Set Filter is Used 
+ How Filter is Used 
+ Result 
+
+ Explicit Set Equation 
+ Assign the filtered results to a set 
+ Correct 
+
+ Regular Equation 
+ Assign directly to an indexed Set 
+ Incomplete set of points 
+
+ Iteration in Regular Equation 
+ Testing by iteration 
+ Correct 
+
+ Conclusion: Be aware that evaluation of a set filter in an equation may not be fully supported and may result in incorrect result set 
+
+ Should I always create a set? 
+
+ Only create a set of the collection of elements (such as a subset of delivery points) is used two or more times. 
+
+ If the collection is only used once, then do not create a set. 
+
+ Iterations 
+
+ Iterations are used many times and at many levels. Also iterations must follow a standard to avoid misunderstanding. Many calculations in the past has a set “d” which IS NOT the same as an iterator “d”. This is NOT visible in the editor, so we therefore strongly advice NOT TO define set “d”. (rather use daysInPeriod) 
+
+ You can iterate over a calculation block at multiple levels, you can inside the block iterate over equations and of course you can iterate inside the equation itself. It&#8217;s important to not reuse the same iterator, but inside an equation it is allowed to use the same iterator if it is isolated from the other. 
+
+ This is allowed since the first iterator c3 is only valid inside the brackets and doesn&#8217;t affect the second part. 
+
+ Good Practice 
+
+ Abbreviations for EC assets, such as 'cntr' for 'contracts', should conform to: 
+
+ Between two and four characters long 
+
+ Lowercase 
+
+ Same values are used across both set names and iterators 
+
+ Consistently applied across all contexts and calculations 
+
+ Iterators that should be used 
+ Objects/Set 
+
+ an 
+ Allocation Networks 
+
+ ce 
+ Commercial Entities 
+
+ cpy 
+ Companies 
+
+ acc 
+ Contract Account 
+
+ attr 
+ Contract Attribute 
+
+ ci, cinv 
+ Contract Inventory 
+
+ cntr 
+ Contracts 
+
+ cust 
+ Customer 
+
+ dp 
+ Delivery Point 
+
+ ds 
+ Delivery Stream 
+
+ ep 
+ Emission Pollutants 
+
+ es 
+ Emission Scenario 
+
+ f 
+ Fields 
+
+ hr 
+ Hour 
+
+ c 
+ Hydrocarbon Components 
+
+ la 
+ Lifting Account 
+
+ mtr 
+ Meter 
+
+ n 
+ Nodes 
+
+ nloc 
+ Nomination Location 
+
+ np 
+ Nomination Points 
+
+ pint 
+ Perforation Interval 
+
+ p 
+ Phase 
+
+ pl 
+ Pipeline 
+
+ ps, seg 
+ Pipeline Segment 
+
+ pi 
+ Price Index 
+
+ po 
+ Price Object 
+
+ pgrp, pg 
+ Product Group 
+
+ psgrp 
+ Product Stream Group 
+
+ prod 
+ Products 
+
+ pc 
+ Profit Centres 
+
+ stor 
+ Storages 
+
+ s 
+ Streams 
+
+ sd 
+ Sub-Day 
+
+ If you iterate multiple times over the same object, like s for stream. Then, let the first iterator be s, the second s2 and so on. 
+
+ Be aware that an iterator used in a set equation will remain in scope for any equation within the block (sub-calculation) in which the set is declared. 
+
+ The value of the iterator will be the last value in the iteration used in the set equation. 
+
+ This could cause problems if you were to accidentally have a reference to the iterator within your equations 
+
+ Note that reusing it within the iteration declaration does 'overwrite' it. 
+
+ function footerFormatDate(variable) {
+ var date = new Date(variable);
+ var currentYear = date.getFullYear();
+ document.write(currentYear);
+ }
+
+ Energy Components &copy; footerFormatDate('2026-04-30T13:55:42+0000')

@@ -1,3 +1,10 @@
-Current KB: 670 entries | 404 already found
-Total screens: 670 | Not yet found: 266
+Current KB: 670 entries | 670 already found
+Total screens: 670 | Not yet found: 0
 
+Logged in
+Tree expanded: 236 togglers
+
+
+======================================================================
+DONE: 670/670 total found | +0 this run | 0 skipped
+Saved to: c:\Projects\ChoongYin_OS\tmp\logs\ec_screen_kb_final.json

@@ -1,0 +1,2702 @@
+TITLE: EC View Generator and Class Model
+URL: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/technical-documentation/frmw/general-config/class_configuration/ec_view_generator_and_class_model.html
+STATUS: 200
+
+EC View Generator and Class Model
+Introduction
+This section introduces the Energy Components (EC) Data Services View
+Generator â what it is, what it does and how it relates to the EC Class
+Model. The fundamentals of the EC Class Model are also covered.
+Disclaimer
+This document is meant to give an overview of the EC Class Model, and
+illustrate the main way the concepts work. References have been updated
+to the adjusted class model that came in EC 11.2, but it is not given
+that all code examples are kept in sync with the live generated code.
+There are also details and possibilities in the class concept that are
+not described in this document.
+Flexibility
+The traditional Entity-Relation design approach to modelling data tends
+to require that everything about those data is known prior to modelling
+a concept, and once modeled, it becomes very difficult to change.
+Experience in the Energy Components domain shows that a more generic and
+flexible modelling approach enables us to better reflect our business
+knowledge as we learn more and as the business changes over time. We
+have seen that the need for data model changes continues to be high. We
+have experienced structures that we thought would be stable, turn out
+not to be valid anymore, e.g. that a well is part of a facility, whereas
+in reality, a well could switch facility.
+In light of these insights, our approach is to move away from explicit
+structures to more generic data structures, termed the EC Class Model.
+Abstraction
+Currently, database tables are exposed directly to the various
+application parts. This makes it very difficult to build in common
+functionality to be shared by all parts of the application, e.g. EC
+provides a mechanism for creating an audit trail (the journal tables) by
+using database triggers. This is an example of functionality which is
+"hidden" from the application developer. In the same way, there are many
+areas where such functionality can be offered from the database, fully
+transparent to the application. In this way, we can simplify application
+development and ensure consistency, independent of front-end technology.
+The approach is to offer, from the database, an access layer above the
+actual tables. This layer is referred to as EC Data Services. The
+definition of this access layer follows the object class definition (it
+is generated from the object class definition). The approach is to have
+the object classes (and hence the access layer) grouped according to
+product context, referred to as an EC App_Space_Cntx, e.g. EC Production
+could represent one App_Space_cntx.
+The access layer takes the form of a set of views, generated
+automatically from the object class definitions.
+Generic components
+Experience has shown that parts of the EC application can be developed
+in a generic way so that configuration parameters control system
+behaviour. Examples of this are the allocation engine, configuration
+application, visual configurations, formula editors, generic
+check/validation rules etc. When developing generic components, we need
+to have a more generic way to access data as we have learned that using
+natural keys (the normal approach in ER / Relational databases),
+severely prevents us from making good generic code. The approach is to
+define a generic access layer, the GenAppSpace (which cannot "see" any
+of the other AppSpaces). As part of this approach, all objects in EC
+shall have a unique global identifier.
+The EC Data Services Class Model
+This section sets out the fundamentals of the Object Class Model, in
+order that these can be referred to in the subsequent description of how
+the View Generator works.
+The principle elements of interest are Classes, Objects, and Attributes.
+A Class is a high level definition of something, but does not include
+any data referring to an actual example of that Class, e.g. a car could
+be defined as a Class.
+Attributes of a Class are the characteristics or properties of the
+Class, e.g. make, model, engine size, color, number of seats, and body
+style could all be attributes of the Car Class.
+Classes, together with their attributes, can be thought of as
+templates which provide a complete description of an item in isolation
+(relationships, dependencies etc. are described later) and which can
+give rise to many completed copies.
+An Object is an instance of a Class, i.e. a specific version of the
+Class with instance-specific data associated with it. A Saab 95 could be
+an Object of the Car Class, as could an Audi A6. Each of these
+instances, or Objects, would have all the corresponding attributes of
+the Car Class, but hold these for each vehicle, e.g. the Saab may be
+silver, and the Audi black.
+In an Energy Components implementation, typical Classes would include
+Wells, Fields, Pipelines, Streams, Tanks, Nodes, and Terminals.
+Part of the power of the Class Model comes from the way in which new
+classes and attributes can be defined without having to alter the
+physical structure of the database. This approach requires that, from a
+user’s perspective, data are held in virtual tables. Although the
+virtual tables are linked to physical tables, this is transparent to the
+user, but of prime importance to the developer responsible for
+configuring the classes.
+Classes and their attributes are defined in the Class Data Model as
+metadata held in a series of tables. These tables also hold information
+on where the data are actually stored, i.e. mapping the virtual to the
+real. Similarly, there are metadata entries for defining relationships
+between objects as well as dependencies. The tables used are as follows:
+Table
+Description
+CLASS_CNFG
+What is the class called and where is it stored?
+CLASS_PROPERTY_CNFG
+Properties with the class that can be overridden on different levels (packages, templates, or project)
+CLASS_ATTRIBUTE_CNFG
+What attributes does it have and where are these stored
+CLASS_ATTR_PROPERTY_CNFG
+Properties with the class attribute that can be overridden on different levels (packages, templates, or project)
+CLASS_REL_CNFG
+Relationships between two classes can be defined here
+CLASS_REL_PROP_CNFG
+Properties with the class relation that can be overridden on different levels (packages, templates, or project)
+CLASS_REL_ATTR_MAP_CNFG
+Attribute mapping for the class relation
+CLASS_TRIGGER_ACTN_CNFG
+Class specific code, will be merged into the
+generated Instead of trigger BEFORE or AFTER Insert, update, delete on the class view
+CLASS_TRA_PROPERTY_CNFG
+Properties with the class trigger actions that can be overridden on different levels (packages, templates, or project)
+CLASS_DEPENDENCY_CNFG
+Records which classes implement which
+interfaces, or which object class that controls the row based access control.
+CLASS_PROPERTY_CODE
+Defines the valid property codes for the different class property tables.
+The property codes can be viewed in screen Class Property Codes (CO.1093).
+The instances, or objects, of the classes defined above, are stored in
+separate tables, as are the data associated with objects. Example of
+tables used for WELL class are as follows:
+Table
+Description
+WELL
+Holds the details of each instance (well object) of a well class.
+Holds details that are common for all versions of the well object.
+WELL_VERSION
+Holds the versionable details of each attribute for each instance of a well class.
+PWEL_DAY_STATUS
+Holds the data associated with an instance of a well class.
+The Need for a View Generator
+As discussed earlier, the Class Model requires that there is a set of
+views provided at a higher level in order that interaction with data is
+possible. These views are, in effect, virtual tables, hence the need for
+the views to have associated functionality that allow operations to be
+performed on the virtual tables in the same way that inserts, updates,
+and deletes are carried out against 'real' tables. Triggers, also
+generated by the View Generator, provide this functionality.
+All access to underlying data in the database is through these views.
+The View Generator works by reading class model information from the
+metadata tables and creating views and triggers from these data
+according to a set of rules. The views and triggers automatically
+include the required mappings from the virtual tables to the actual
+underlying tables.
+View Types
+Object views are used to manage Objects and their attributes, i.e.
+create new instances of Classes defined by metadata, update values, e.g.
+modify the period of operation of an Object (and thereby 'delete' an
+Object if necessary by setting its end date equal to its start date) and
+for selecting Object records from the database.
+Data views are used to manage the data associated with Objects and allow
+for the insertion, modification, deletion, and selection of data.
+Interface views are built on top of object views and provide a mechanism
+for connecting two classes for the selection of data from each of these
+classes from a single, common, view.
+Table views are simpler than Object, Data, and Interface views because
+it is usually a 1:1 mapping to the underlying table or view, but with
+the possibility of defining virtual attributes.
+Reporting views are generated for each object, data, table, interface, and report class.
+Reporting views can be divided into four different types:
+Reporting views for object and data classes
+Reporting views for table classes
+Reporting views for interface classes
+Reporting views for report classes
+Report Class and View
+The REPORT class is a class introduced to support customer specified
+report views. This document emphasizes on the creation of report views
+based on a REPORT class.
+A Report class will have one Object or Interface class as the owner and
+linked with many data classes. If more than one data class is included,
+they will probably share attributes having the same name. The report
+CLASS will be responsible to handle this issue.
+Report views are generated for each type of class: OBJECT, INTERFACE,
+DATA, TABLE, and REPORT. The report builder will generate a technically
+different view for each type of class.
+Even if using one or more Report Views in combination to extract
+data for a report, it is not necessarily the most efficient way to
+produce an optimal query. Sometimes it is much better for performance to
+write a dedicated hand coded view and put a table class on top of that
+to avoid joining in big tables many times and a lot of function calls.
+Object-Oriented Data Storage
+It is important to state that while many of the terms used in this
+document may be shared with Object-Oriented approaches to design, the EC
+Class Model is not an attempt to implement an Object-Oriented database.
+Some object-oriented concepts have been partially implemented, while
+others are missing, e.g. polymorphism and inheritance.
+The View Generator
+There are two key aspects to the View Generator. The first is the
+correct generation of the required views and triggers in accordance with
+the metadata supplied. The second is the correct behaviour of those
+views. View functionality is implemented in triggers associated with
+each view where appropriate.
+Generating views & triggers
+This section illustrates through description and example how the View
+Generator turns metadata into views & triggers. Not all Classes have
+triggers, so the following table lists the permutations of what is
+generated.
+Generated
+Class
+View
+Trigger
+Object
+Yes
+Yes
+Interface
+Yes
+Yes
+Data
+Yes
+Yes
+Table
+Yes
+Yes
+Report
+Yes
+No
+Naming of items
+In the following, xxx is the class name
+Object views are called OV_xxx, e.g. OV_COMPANY.
+Interface views are called IV_xxx, e.g IV_FACILITY.
+Data views are called DV_xxx, e.g. DV_COMP_CONT_YR_SALES.
+Table views are called TV_xxx, e.g. TV_GROUP_MODEL.
+Triggers are called IUD_xxx e.g. IUD_COMPANY.
+For reports, the naming shall be as follows:
+Report views for Objects or Interface views are called RV_xxx, e.g. RV_STREAM.
+Report views for Data views are called RV_xxx, e.g. RV_PWEL_SUB_DAY_STATUS.
+Report views for Table views are called RV_xxx, e.g. RV_STREAM_SET.
+Report views for Report classes are called RV_ xxx, e.g. RV_REPORT_STREAM.
+The xxx value for report refers to CLASS_CNFG.CLASS_NAME attribute.
+Running the View Generator
+Calling the stored procedure EcDp_Viewlayer.BuildViewLayer runs the View
+Generator for all classes defined in the Class-table. The generator will
+write its output to the database and if there are any problems
+encountered during the generation process, details will be written to
+the T_TEMPTEXT table.
+To build the view for a single class, run the BuildViewLayer with the
+class name as an argument.
+E.g. EcDp_Viewlayer.BuildViewLayer('WELL') will generate view and
+trigger for the well class.
+In the same way ECDP_ViewLayer.BuildReportLayer without parameters can
+be used to build all report views, adding a class as a parameter will
+limit the generation to that specific Report View.
+Note that both these procedures by default will only rebuild views for
+classes that are marked as "dirty". You can override this by setting the
+p_force attribute to 'Y'.
+For more details on the parameters, please see the API definition for
+EcDP_Viewlayer at the end of this document.
+When checking T_TEMPTEXT for generation errors, it is important to limit
+the selection to messages related to the View Generator, since this
+table is also used to record other information, e.g. the generation of
+EC packages. The following code will select the messages of interest
+from T_TEMPTEXT.
+select text from t_temptext
+where id in('GENCODEERROR','GENCODEWARING')
+order by line_number;
+Generating an Object View
+The following are the "rules" by which metadata are converted into
+object views.
+No.
+Description
+1
+The view will be called OV_xxx, where xxx is the CLASS_NAME entry in
+table CLASS_CNFG.
+2
+The columns of the view will be the non-disabled (DISABLED_IND
+property) ATTRIBUTE_NAME entries in table CLASS_ATTRIBUTE_CNFG. They
+will be marked as NOT NULL if IS_MANDATORY  property is set to 'Y' and
+will have the data types defined in the DATA_TYPE column.
+3
+The following columns are always added by default and should
+therefore not be defined in CLASS_ATTRIBUTE_CNFG: CLASS_NAME,
+RECORD_STATUS, CREATED_BY, CREATED_DATE, LAST_UPDATED_BY,
+LAST_UPDATED_DATE, REV_NO, REV_TEXT, APPROVAL_STATE, APPROVAL_BY,
+APPROVAL_DATE, REC_ID.
+All object classes must at least have the following attributes defined
+in CLASS_ATTRIBUTE_CNFG in order to be able to generate the object view:
+OBJECT_ID, OBJECT_START_DATE, OBJECT_END_DATE, CODE, DAYTIME, END_DATE
+and NAME.
+4
+The view columns will be mapped to the physical locations defined in
+CLASS_ATTRIBUTE_CNFG, as either column references or SQL extracts such
+as function calls.
+5
+CLASS_CNFG is used to specify where objects data are stored.
+CLASS_CNFG.DB_OBJECT_NAME holds the table where the object is stored.
+CLASS_CNFG.DB_OBJECT_ATTRIBUTE holds the table where versionable object
+attributes are stored.
+It should be noted that even though the View Generator is helpful in
+generating missing information automatically, it is a matter of good
+practice that it should not have to, i.e. the developer should seek to
+always provide a complete definition within the metadata. One reason for
+this is that other elements of Energy Components implementations also
+use this information.
+Object View Example
+The following is an example of an object view generated from metadata.
+There are two ways to look at the view, by describing it in SQL*Plus and
+by examining the source code. Both methods are used to illustrate the
+points of interest.
+The example used is for a class called GENERATOR.
+Metadata
+The following are the metadata used in this example. Note that this is a
+simplified example that does not cover all the complexity in the model,
+but is meant to illustrate the main principle of the concept.
+Table : CLASS_CNFG
+CLASS_NAME
+CLASS_TYPE
+APP_SPACE_CNTX
+TIME_SCOPE_CODE
+DB_OBJECT_NAME
+DB_OBJECT_ATTRIBUTE
+DB_WHERE_CONDITION
+GENERATOR
+OBJECT
+EC_PROD
+VERSIONED
+EQUIPMENT
+EQPM_VERSION
+o.CLASS_NAME = 'GENERATOR'
+Table : CLASS_ATTRIBUTE_CNFG
+CLASS_NAME
+ATTRIBUTE_NAME
+IS_KEY
+APP_SPACE_CNTX
+DATA_TYPE
+DB_MAPPING_TYPE
+DB_SQL_SYNTAX
+GENERATOR
+OBJECT_ID
+Y
+EC_PROD
+STRING
+COLUMN
+OBJECT_ID
+GENERATOR
+CODE
+N
+EC_PROD
+STRING
+COLUMN
+OBJECT_CODE
+GENERATOR
+NAME
+N
+EC_PROD
+STRING
+ATTRIBUTE
+NAME
+GENERATOR
+OBJECT_START_DATE
+N
+EC_PROD
+DATE
+COLUMN
+START_DATE
+GENERATOR
+OBJECT_END_DATE
+N
+EC_PROD
+DATE
+COLUMN
+END_DATE
+GENERATOR
+DAYTIME
+N
+EC_PROD
+DATE
+ATTRIBUTE
+DAYTIME
+GENERATOR
+END_DATE
+N
+EC_PROD
+DATE
+ATTRIBUTE
+END_DATE
+GENERATOR
+SCREEN_STATUS
+N
+EC_PROD
+STRING
+ATTRIBUTE
+EQPM_STATUS_SCR
+GENERATOR
+OP_FCTY_1_ID
+N
+EC_PROD
+DATE
+ATTRIBUTE
+OP_FCTY_CLASS_1_ID
+GENERATOR
+OP_FCTY_1_CODE
+N
+EC_PROD
+DATE
+ATTRIBUTE
+OP_FCTY_CLASS_1_CODE
+Table : CLASS_REL_CNFG
+CLASS_NAME
+RELATION_NAME
+REF_CLASS_NAME
+RELATION_TYPE
+GROUP_TYPE
+GENERATOR
+OP_FCTY_1
+FCTY_CLASS_1
+OBJECT
+operational
+Table : CLASS_REL_ATTR_MAP_CNFG
+CLASS_NAME
+RELATION_NAME
+ATTRIBUTE_NAME
+REF_ATTRIBUTE_NAME
+IS_MAIN
+GENERATOR
+OP_FCTY_1
+OP_FCTY_1_ID
+OBJECT_ID
+Y
+GENERATOR
+OP_FCTY_1
+OP_FCTY_1_CODE
+CODE
+Y
+Generator has an operational group connection to facility class 1. If
+CLASS_REL_CNFG.GROUP_TYPE contains a value it indicates that the
+relation is a group relation.
+Description
+The following is the output of a DESC command applied to OV_GENERATOR.
+SQL> desc ov_generator;
+Name                      Type          Nullable Default Comments
+------------------------- ------------- -------- ------- --------
+1  CLASS_NAME             CHAR(9)           Y
+2  OBJECT_ID              VARCHAR2(32)
+3  CODE                   VARCHAR2(32)
+4  NAME                   VARCHAR2(240)     Y
+5  OBJECT_START_DATE      DATE              Y
+6  OBJECT_END_DATE        DATE              Y
+7  DAYTIME                DATE
+8  END_DATE               DATE              Y
+9  SCREEN_STATUS          VARCHAR2(1)       Y
+10 DESCRIPTION            VARCHAR2(240)     Y
+11 OP_AREA_CODE           VARCHAR2(32)      Y
+12 OP_AREA_ID             VARCHAR2(32)      Y
+13 OP_FCTY_1_CODE         VARCHAR2(32)      Y
+14 OP_FCTY_1_ID           VARCHAR2(32)      Y
+15 OP_PRODUCTIONUNIT_CODE VARCHAR2(32)      Y
+16 OP_PRODUCTIONUNIT_ID   VARCHAR2(32)      Y
+17 RECORD_STATUS          VARCHAR2(1)       Y
+18 CREATED_BY             VARCHAR2(30)
+19 CREATED_DATE           DATE
+20 LAST_UPDATED_BY        VARCHAR2(30)      Y
+21 LAST_UPDATED_DATE      DATE              Y
+22 REV_NO                 VARCHAR2(81)      Y
+23 REV_TEXT               VARCHAR2(240)     Y
+24 APPROVAL_STATE         VARCHAR2(1)       Y
+25 APPROVAL_BY            VARCHAR2(30)      Y
+26 APPROVAL_DATE          DATE              Y
+27 REC_ID                 VARCHAR2(32)      Y
+Points of interest
+The NOT NULL characteristic of columns shown as a result of describing a
+view comes from the underlying table structure. Even if CLASS_NAME has
+"soft" constraints ensuring that it cannot be NULL, this is not
+reflected when the view is described in Oracle.
+All levels in the group hierarchy are being added as columns in the
+generated view.
+The GENERATOR has the following operational group connection:
+Production Unit\Area\Fcty_Class_1\Generator
+The columns are shown in lines 11â 16 are therefore included. Note that
+only the group level on the parent level is editable, thus production
+unit and area cannot be changed using the ov_generator view.
+The following refers to the definitions in CLASS_ATTRIBUTE_CNFG.
+There are many more columns than attributes defined because the
+generator automatically adds any standard columns not included in the
+class definition.
+The data types in the columns are as per those in the table.
+Source code
+The following is the source code generated by the View Generator from
+the example metadata.
+1 CREATE OR REPLACE VIEW OV_GENERATOR AS
+2 SELECT
+3 -- Generated by EcDp_GenClassCode
+4 'GENERATOR' AS CLASS_NAME
+5 ,o.OBJECT_ID AS OBJECT_ID
+6 ,o.OBJECT_CODE AS CODE
+7 ,oa.NAME AS NAME
+8 ,o.START_DATE AS OBJECT_START_DATE
+9 ,o.END_DATE AS OBJECT_END_DATE
+10 ,oa.DAYTIME AS DAYTIME
+11 ,oa.END_DATE AS END_DATE
+12 ,oa.EQPM_STATUS_SCR AS SCREEN_STATUS
+13 ,o.DESCRIPTION AS DESCRIPTION
+14 ,oa.OP_AREA_CODE AS OP_AREA_CODE
+15 ,oa.OP_AREA_ID AS OP_AREA_ID
+16 ,oa.OP_FCTY_CLASS_1_CODE AS OP_FCTY_1_CODE
+17 ,oa.OP_FCTY_CLASS_1_ID AS OP_FCTY_1_ID
+18 ,oa.OP_PU_CODE AS OP_PRODUCTIONUNIT_CODE
+19 ,oa.OP_PU_ID AS OP_PRODUCTIONUNIT_ID
+20 ,oa.record_status AS RECORD_STATUS
+21 ,oa.created_by AS CREATED_BY
+22 ,oa.created_date AS CREATED_DATE
+23 ,decode(sign(nvl(o.last_updated_date,o.created_date)-nvl(oa.last_updated_date,oa.created_date)),1,o.last_updated_by,oa.last_updated_by) AS LAST_UPDATED_BY
+24 ,decode(sign(nvl(o.last_updated_date,o.created_date)-nvl(oa.last_updated_date,oa.created_date)),1,o.last_updated_date,oa.last_updated_date) AS LAST_UPDATED_DATE
+25 ,o.rev_no||'.'||oa.rev_no AS REV_NO
+26 ,decode(sign(nvl(o.last_updated_date,o.created_date)-nvl(oa.last_updated_date,oa.created_date)),1,o.rev_text,oa.rev_text) AS REV_TEXT
+27 ,oa.approval_state AS APPROVAL_STATE
+28 ,oa.approval_by AS APPROVAL_BY
+29 ,oa.approval_date AS APPROVAL_DATE
+30 ,oa.rec_id AS REC_ID
+31 FROM EQPM_VERSION oa
+32 INNER JOIN EQUIPMENT o ON o.object_id = oa.object_id
+33 WHERE o.CLASS_NAME='GENERATOR'
+Points of interest
+Line(s)
+Comment
+4
+Standard class name column added automatically
+5-13
+16,17
+Columns defined as attributes from CLASS_ATTRIBUTE_CNFG
+14,15
+18,19
+"Read Only" columns added automatically since GENERATOR is
+operationally connected to FCTY_CLASS_1. These columns are added based on the relations defined in
+CLASS_REL_CNFG as part of the operational group connection.
+20-30
+Standard columns added automatically.
+31-32
+Object and version table join
+33
+Where-clause defined in CLASS_CNFG.DB_WHERE_CONDITION.
+Generating an Interface View
+The following are the "rules" by which metadata are converted into
+interface views. Since an interface is built upon other Object classes,
+the columns mapping to physical storage structure should not be
+filled in. The relation between Interface classes and physical
+implementation classes is defined in table CLASS_DEPENDENCY_CNFG.
+No.
+Description
+1
+The view will be called IV_xxx, where xxx is the CLASS_NAME entry in table CLASS_CNFG.
+2
+One or more Object Classes must exist to provide the underlying information for the Interface.
+3
+The attribute names in all classes associated with the Interface
+must be the same, otherwise, they will not be matched, i.e. if the
+interface has an attribute called EXAMPLE_TEXT, all of the underlying
+Classes must have an attribute of the same name.
+It is possible to use property INTERFACE_ALIAS to map an attribute with a different name to an interface attribute.
+See
+Property INTERFACE_ALIAS
+Note, however, that while the attribute names must be the same, their
+locations need not be, i.e. the EXAMPLE_TEXT attribute may be mapped to
+WELL_VERSION.TEXT_1 in the first of the underlying Objects, but it may
+be mapped to WELL_VERSION.TEXT_11 for the second Object.
+4
+Only non-disabled attributes in the Interface view and in each
+underlying Object will be included as columns in the view.
+Interface View Example
+The following is an example of an interface view generated from
+metadata. There are two ways to look at the view, by describing it in
+SQL*Plus and by examining the source code. Both methods are used to
+illustrate the points of interest. The example used is for a class
+called EQUIPMENT.
+Metadata
+The following are the metadata used in this example. Note that this is a
+simplified example that does not cover all the complexity in the model,
+but is meant to illustrate the main principle of the concept.
+Table : CLASS_CNFG
+CLASS_NAME
+CLASS_TYPE
+APP_SPACE_CNTX
+TIME_SCOPE_CODE
+DB_OBJECT_NAME
+DB_OBJECT_ATTRIBUTE
+DB_WHERE_CONDITION
+EQUIPMENT
+INTERFACE
+EC_PROD
+VERSIONED
+Table : CLASS_ATTRIBUTE_CNFG
+CLASS_NAME
+ATTRIBUTE_NAME
+IS_KEY
+APP_SPACE_CNTX
+DATA_TYPE
+DB_MAPPING_TYPE
+DB_SQL_SYNTAX
+EQUIPMENT
+OBJECT_ID
+Y
+EC_PROD
+STRING
+EQUIPMENT
+CODE
+N
+EC_PROD
+STRING
+EQUIPMENT
+NAME
+N
+EC_PROD
+STRING
+EQUIPMENT
+OBJECT_START_DATE
+N
+EC_PROD
+DATE
+EQUIPMENT
+OBJECT_END_DATE
+N
+EC_PROD
+DATE
+EQUIPMENT
+DAYTIME
+N
+EC_PROD
+DATE
+EQUIPMENT
+END_DATE
+N
+EC_PROD
+DATE
+EQUIPMENT
+SCREEN_STATUS
+N
+EC_PROD
+STRING
+Table : CLASS_DEPENDENCY
+PARENT_CLASS
+CHILD_CLASS
+DEPENDENCY_TYPE
+EQUIPMENT
+GENERATOR
+IMPLEMENTS
+EQUIPMENT
+PUMP
+IMPLEMENTS
+Description
+The following is the output of a DESC command applied to IV_EQUIPMENT.
+SQL> descr iv_equipment;
+Name              Type           Nullable Default Comments
+----------------- -------------- -------- ------- --------
+1  CLASS_NAME        CHAR(4)        Y
+2  CODE              VARCHAR2(32)
+3  DAYTIME           DATE
+4  DESCRIPTION       VARCHAR2(240)  Y
+5  END_DATE          DATE           Y
+6  NAME              VARCHAR2(240)  Y
+7  OBJECT_END_DATE   DATE           Y
+8  OBJECT_ID         VARCHAR2(32)
+9  OBJECT_START_DATE DATE
+10 SCREEN_STATUS     VARCHAR2(100)  Y
+11 RECORD_STATUS     VARCHAR2(1)    Y
+12 CREATED_BY        VARCHAR2(30)
+13 CREATED_DATE      DATE
+14 LAST_UPDATED_BY   VARCHAR2(30)   Y
+15 LAST_UPDATED_DATE DATE           Y
+16 REV_NO            VARCHAR2(81)   Y
+17 REV_TEXT          VARCHAR2(2000) Y
+18 APPROVAL_STATE    VARCHAR2(1)    Y
+19 APPROVAL_BY       VARCHAR2(30)   Y
+20 APPROVAL_DATE     DATE           Y
+21 REC_ID            VARCHAR2(32)   Y
+Points of interest
+The NOT NULL characteristic of columns shown as a result of describing a
+view comes from the underlying table structure. Even if CLASS_NAME has
+"soft" constraints ensuring that it cannot be NULL, this is not
+reflected when the view is described in Oracle.
+Each of the underlying Objects have more attributes than are required
+by this view, but they are ignored in favor of those defined for the
+Interface in CLASS_ATTRIBUTE_CNFG.
+For completeness, the descriptions of the underlying Objects are shown below.
+SQL> descr ov_generator;
+Name                     Type          Nullable Default Comments
+------------------------ ------------- -------- ------- --------
+1  CLASS_NAME             CHAR(9)        Y
+2  OBJECT_ID              VARCHAR2(32)
+3  CODE                   VARCHAR2(32)
+4  NAME                   VARCHAR2(240)  Y
+5  OBJECT_START_DATE      DATE           Y
+6  OBJECT_END_DATE        DATE           Y
+7  DAYTIME                DATE
+8  END_DATE               DATE           Y
+9  SCREEN_STATUS          VARCHAR2(1)    Y
+10 DESCRIPTION            VARCHAR2(240)  Y
+11 OP_AREA_CODE           VARCHAR2(32)   Y
+12 OP_AREA_ID             VARCHAR2(32)   Y
+13 OP_FCTY_1_CODE         VARCHAR2(32)   Y
+14 OP_FCTY_1_ID           VARCHAR2(32)   Y
+15 OP_PRODUCTIONUNIT_CODE VARCHAR2(32)   Y
+16 OP_PRODUCTIONUNIT_ID   VARCHAR2(32)   Y
+17 RECORD_STATUS          VARCHAR2(1)    Y
+18 CREATED_BY             VARCHAR2(30)
+19 CREATED_DATE           DATE
+20 LAST_UPDATED_BY        VARCHAR2(30)   Y
+21 LAST_UPDATED_DATE      DATE           Y
+22 REV_NO                 VARCHAR2(81)   Y
+23 REV_TEXT               VARCHAR2(240)  Y
+24 APPROVAL_STATE         VARCHAR2(1)    Y
+25 APPROVAL_BY            VARCHAR2(30)   Y
+26 APPROVAL_DATE          DATE           Y
+27 REC_ID                 VARCHAR2(32)   Y
+
+SQL> descr ov_pump;
+Name                      Type           Nullable Default Comments
+------------------------- -------------- -------- ------- --------
+1  CLASS_NAME             CHAR(4)        Y
+2  OBJECT_ID              VARCHAR2(32)
+3  CODE                   VARCHAR2(32)
+4  NAME                   VARCHAR2(240)  Y
+5  OBJECT_START_DATE      DATE           Y
+6  OBJECT_END_DATE        DATE           Y
+7  DAYTIME                DATE
+8  END_DATE               DATE           Y
+9  SCREEN_STATUS          VARCHAR2(1)    Y
+10 DESCRIPTION            VARCHAR2(240)  Y
+11 OP_AREA_CODE           VARCHAR2(32)   Y
+12 OP_AREA_ID             VARCHAR2(32)   Y
+13 OP_FCTY_1_CODE         VARCHAR2(32)   Y
+14 OP_FCTY_1_ID           VARCHAR2(32)   Y
+15 OP_PRODUCTIONUNIT_CODE VARCHAR2(32)   Y
+16 OP_PRODUCTIONUNIT_ID   VARCHAR2(32)   Y
+17 DEF_FCTY_1_ID          VARCHAR2(32)   Y
+18 DEF_FCTY_1_CODE        VARCHAR2(4000) Y
+19 RECORD_STATUS          VARCHAR2(1)    Y
+20 CREATED_BY             VARCHAR2(30)
+21 CREATED_DATE           DATE
+22 LAST_UPDATED_BY        VARCHAR2(30)   Y
+23 LAST_UPDATED_DATE      DATE           Y
+24 REV_NO                 VARCHAR2(81)   Y
+25 REV_TEXT               VARCHAR2(240)  Y
+26 APPROVAL_STATE         VARCHAR2(1)    Y
+27 APPROVAL_BY            VARCHAR2(30)   Y
+28 APPROVAL_DATE          DATE           Y
+29 REC_ID                 VARCHAR2(32)   Y
+Source code
+The following is the source code generated by the View Generator from
+the example metadata. Line numbers have been added for reference.
+1	CREATE OR REPLACE VIEW IV_EQUIPMENT AS
+2	SELECT -- Generated by ecdp_viewlayer
+3	CLASS_NAME
+4	,OBJECT_ID
+5	,CODE
+6	,NAME
+7	,OBJECT_START_DATE
+8	,OBJECT_END_DATE
+9	,DAYTIME
+10	,END_DATE
+11	,DESCRIPTION
+12	,SCREEN_STATUS
+13	,RECORD_STATUS
+14	,CREATED_BY
+15	,CREATED_DATE
+16	,LAST_UPDATED_BY
+17	,LAST_UPDATED_DATE
+18	,REV_NO
+19	,REV_TEXT
+20	,APPROVAL_STATE
+21	,APPROVAL_BY
+22	,APPROVAL_DATE
+23	,REC_ID FROM
+24	( -- sub query with implementing classes
+25	 SELECT 'EQPM' as CLASS_NAME
+26	,OBJECT_ID
+27	,CODE
+28	,NAME
+29	,OBJECT_START_DATE
+30	,OBJECT_END_DATE
+31	,DAYTIME
+32	,END_DATE
+33	,DESCRIPTION
+34	,SCREEN_STATUS
+35	,RECORD_STATUS
+36	,CREATED_BY
+37	,CREATED_DATE
+38	,LAST_UPDATED_BY
+39	,LAST_UPDATED_DATE
+40	,REV_NO
+41	,REV_TEXT
+42	,APPROVAL_STATE
+43	,APPROVAL_BY
+44	,APPROVAL_DATE
+45	,REC_ID
+46	 FROM OV_GENERATOR
+47	UNION ALL
+48	 SELECT 'PUMP' as CLASS_NAME
+49	,OBJECT_ID
+50	,CODE
+51	,NAME
+52	,OBJECT_START_DATE
+53	,OBJECT_END_DATE
+54	,DAYTIME
+55	,END_DATE
+56	,DESCRIPTION
+57	,SCREEN_STATUS
+58	,RECORD_STATUS
+59	,CREATED_BY
+60	,CREATED_DATE
+61	,LAST_UPDATED_BY
+62	,LAST_UPDATED_DATE
+63	,REV_NO
+64	,REV_TEXT
+65	,APPROVAL_STATE
+66	,APPROVAL_BY
+67	,APPROVAL_DATE
+68	,REC_ID
+69	 FROM OV_PUMP
+70	) o
+Points of interest
+Line(s)
+Comment
+4 - 12
+Columns defined as attributes in CLASS_ATTRIBUTE_CNFG for interface class EQUIPMENT
+13 â 23
+Standard columns added automatically
+24
+Start of sub query with implementing classes.
+26 â 34
+49 - 57
+Columns defined as attributes in CLASS_ATTRIBUTE_CNFG for the implementing classes, but which match the names of the attributes defined for the EQUIPMENT Class
+35 - 45
+58 â 68
+Standard columns added automatically for the implementing classes
+79
+End of sub query with implementing classes. Any WHERE condition to the inteface class will be added after this line.
+Generating a Data View
+The following are the "rules" by which metadata are converted into Data views.
+No.
+Description
+1
+The view will be called DV_xxx, where xxx is the CLASS_NAME entry in table CLASS_CNFG.
+2
+Data Classes are 'owned' by an Object Class or an Interface class.
+This is defined as a class relation with relation_type=OWNER in CLASS_REL_CNFG.
+It is not allowed to have data classes without an owner class.
+3
+The columns of the view will be the non-disabled (DISABLED_IND
+property) ATTRIBUTE_NAME entries in table CLASS_ATTRIBUTE_CNFG. They
+will be marked as NOT NULL if IS_MANDATORY property is set to 'Y' and
+will have the data types defined in the DATA_TYPE column.
+4
+If there is only a CLASS_ATTRIBUTE_CNFG.CLASS_NAME entry for the
+class, then by default, the view will be generated with the following
+columns, even if they have not been explicitly defined: CLASS_NAME,
+OBJECT_ID, OBJECT_CODE, RECORD_STATUS, CREATED_BY, CREATED_DATE,
+LAST_UPDATED_BY, LAST_UPDATED_DATE, REV_NO, REV_TEXT, APPROVAL_STATE,
+APPROVAL_BY, APPROVAL_DATE, REC_ID.
+5
+The view’s columns will then be mapped to the physical locations
+defined in CLASS_ATTRIBUTE_CNFG.DB_SQL_SYNTAX as either column
+references or function calls.
+6
+Attributes in CLASS_ATTRIBUTE_CNFG with DB_MAPPING_TYPE = RELATION uses the
+relationships between data classes and other classes
+defined in CLASS_REL_CNFG and CLASS_REL_ATTR_MAP_CNFG to define what the attribute is mapped to.
+7
+It is allowed to have data classes without daytime as a part of the
+primary key. If the class has relations to other classes, it needs a
+date in a code from the object_id lookup. This has normally been
+daytime, but for classes without daytime it will use
+EcDp_object.getObjStartDate, to get the first object code from the
+referred object.
+It should be noted that even though the View Generator is helpful in
+generating missing information automatically, it is a matter of good
+practice that it should not have to, i.e. the developer should seek to
+always provide a complete definition within the metadata. One reason for
+this is that other elements of Energy Components implementations also
+use this information.
+Data View Example
+The following is an example of a Data view generated from metadata.
+There are two ways to look at the view, by describing it in SQL*Plus and
+by examining the source code. Both methods are used to illustrate the
+points of interest. The example used is for a data class called
+PWEL_DAY_STATUS_OW which is owned by object class WELL.
+Metadata
+The following are the metadata used in this example. Note that this is a
+simplified example that does not cover all the complexity in the model,
+but is meant to illustrate the main principle of the concept.
+Table : CLASS_CNFG
+CLASS_NAME
+CLASS_TYPE
+APP_SPACE_CNTX
+TIME_SCOPE_CODE
+DB_OBJECT_NAME
+DB_OBJECT_ATTRIBUTE
+DB_WHERE_CONDITION
+PWEL_DAY_STATUS_OW
+DATA
+EC_PROD
+DAY
+PWEL_DAY_STATUS
+PWEL_DAY_STATUS.DATA_CLASS_NAME = 'PWEL_DAY_STATUS_OW'
+Table : CLASS_ATTRIBUTE_CNFG
+CLASS_NAME
+ATTRIBUTE_NAME
+IS_KEY
+APP_SPACE_CNTX
+DATA_TYPE
+DB_MAPPING_TYPE
+DB_SQL_SYNTAX
+PWEL_DAY_STATUS_OW
+OBJECT_ID
+Y
+EC_PROD
+STRING
+COLUMN
+OBJECT_ID
+PWEL_DAY_STATUS_OW
+DAYTIME
+Y
+EC_PROD
+DATE
+COLUMN
+DAYTIME
+PWEL_DAY_STATUS_OW
+AVG_BH_PRESS
+N
+EC_PROD
+NUMBER
+COLUMN
+AVG_BH_PRESS
+PWEL_DAY_STATUS_OW
+AVG_BH_TEMP
+N
+EC_PROD
+NUMBER
+COLUMN
+AVG_BH_TEMP_ID
+Table : CLASS_REL_CNFG
+CLASS_NAME
+RELATION_NAME
+REF_CLASS_NAME
+RELATION_TYPE
+PWEL_DAY_STATUS_OW
+OWNER_WELL
+WELL
+OWNER
+Table : CLASS_REL_ATTR_MAP_CNFG
+CLASS_NAME
+RELATION_NAME
+ATTRIBUTE_NAME
+REF_ATTRIBUTE_NAME
+IS_MAIN
+PWEL_DAY_STATUS_OW
+OWNER_WELL
+OBJECT_ID
+OBJECT_ID
+Y
+PWEL_DAY_STATUS_OW
+OWNER_WELL
+OBJECT_CODE
+CODE
+Y
+Description
+The following is the output of a DESC command applied to DV_PWEL_DAY_STATUS_OW.
+SQL> desc DV_PWEL_DAY_STATUS_OW;
+Name                  Type           Nullable Default Comments
+--------------------- -------------- -------- ------- --------
+1  CLASS_NAME         CHAR(18)       Y
+2  OBJECT_ID          VARCHAR2(32)
+3  OBJECT_CODE        VARCHAR2(4000) Y
+4  DAYTIME            DATE
+5  AVG_BH_PRESS       NUMBER         Y
+6  AVG_BH_TEMP        NUMBER         Y
+7  RECORD_STATUS      VARCHAR2(1)    Y
+8  CREATED_BY         VARCHAR2(30)
+9  CREATED_DATE       DATE
+10 LAST_UPDATED_BY    VARCHAR2(30)   Y
+11 LAST_UPDATED_DATE  DATE           Y
+12 REV_NO             NUMBER         Y
+13 REV_TEXT           VARCHAR2(240)  Y
+14 APPROVAL_STATE     VARCHAR2(1)    Y
+15 APPROVAL_BY        VARCHAR2(30)   Y
+16 APPROVAL_DATE      DATE           Y
+17 REC_ID             VARCHAR2(32)   Y
+Points of interest
+The NOT NULL characteristic of columns shown as a result of describing a
+view comes from the underlying table structure. Even if CLASS_NAME has
+"soft" constraints ensuring that it cannot be NULL, this is not
+reflected when the view is described.
+The main owner of a data class is not represented in CLASS_CNFG,
+but in the column REF_CLASS_NAME in table CLASS_REL_CNFG where RELATION_TYPE=OWNER.
+It will always be represented by OBJECT_ID and OBJECT_CODE in the Data class view.
+The following refers to the definitions in CLASS_ATTRIBUTE_CNFG.
+There are many more columns than attributes defined because the
+generator automatically adds any standard columns not listed.
+The data types in the columns are as per those in the table.
+Source code
+The following is the source code generated by the View Generator from
+the example metadata. Line numbers have been added for reference.
+1 CREATE OR REPLACE VIEW DV_PWEL_DAY_STATUS_OW AS
+2 SELECT
+3 -- Generated by EcDp_GenClassCode
+4 'PWEL_DAY_STATUS_OW' AS CLASS_NAME
+5 , object_id AS OBJECT_ID
+6 ,EC_WELL.object_code(object_id) AS OBJECT_CODE
+7 , DAYTIME AS DAYTIME
+8 , AVG_BH_PRESS AS AVG_BH_PRESS
+9 , AVG_BH_TEMP AS AVG_BH_TEMP
+10 , RECORD_STATUS AS RECORD_STATUS
+11, CREATED_BY AS CREATED_BY
+12 , CREATED_DATE AS CREATED_DATE
+13 , LAST_UPDATED_BY AS LAST_UPDATED_BY
+14 , LAST_UPDATED_DATE AS LAST_UPDATED_DATE
+15 , REV_NO AS REV_NO
+16 , REV_TEXT AS REV_TEXT
+17 , APPROVAL_STATE AS APPROVAL_STATE,
+18 , APPROVAL_BY AS APPROVAL_BY,
+19 , APPROVAL_DATE AS APPROVAL_DATE,
+20 , REC_ID AS REC_ID
+21 FROM PWEL_DAY_STATUS
+22 INNER JOIN WELL_VERSION oa ON oa.object_id = PWEL_DAY_STATUS.object_id AND PWEL_DAY_STATUS.daytime >= oa.daytime AND (oa.end_date is NULL OR PWEL_DAY_STATUS.daytime < oa.end_date)
+23 INNER JOIN WELL o ON o.object_id = oa.object_id
+24 WHERE PWEL_DAY_STATUS.DATA_CLASS_NAME='PWEL_DAY_STATUS_OW'
+Points of interest
+Line(s)
+Comment
+4 & 6
+Standard columns added automatically if not defined. Note that
+the location of the data is as defined in CLASS_ATTRIBUTE_CNFG, i.e.
+OBJECT_ID is simply a column, whereas OBJECT_CODE is a call to a
+database function.
+7 - 9
+Columns defined as attributes in CLASS_ATTRIBUTE_CNFG.
+10 - 20
+Standard columns added automatically.
+21
+The data location, as per CLASS_CNFG.DB_OBJECT_NAME.
+22 - 24
+Where conditions defined in CLASS_CNFG.DB_WHERE_CONDITION.
+Generating a Report View
+To build the report view layer for a class, it is sufficient to call the
+view generator function specific to building report views,
+EcDp_ViewLayer.BuildReportLayer( '<CLASS_NAME>').
+These are the rules by which object classes (OBJECT, INTERFACE, DATA,
+TABLE) are converted into a set of report views.
+No.
+Description
+1
+The view will be called RV_xxx, where xxx is the CLASS_NAME entry in table CLASS_CNFG.
+2
+The report views depend on the class meta data.
+3
+If the class type is OBJECT and TIME_SCOPE_CODE <> INVARIANT, the generated view consists of the
+version table and object table (e.g WELL_VERSION and WELL) joined with SYSTEM_DAYS.
+Report view is not generated for INVARIANT object classes.
+4
+If the class type is DATA, the generated view will consist of class
+attributes from the owner in addition to the data class attributes. This
+requires that the data class have a date attribute that is relevant to
+use in join with the owner class.
+Additional columns showing the unit conversion are also included in the view.
+Note that to get a join with system day the class must have
+TIME_SCOPE_CODE = 'EVENT_CONTINUES', and have an END_DATE attribute.
+5
+If the class type is TABLE, the generated view is only a copy of the table view (TV_xxx).
+6
+If the class type is REPORT, the generated view consists of the
+union of all linked report data class views.
+Report View Example
+The case listed here is a typical example of a report view based on a
+data class that is owned by an object class. The configuration of the
+object class and data class follows the same pattern as we have seen
+over, so the focus here is on how the generated RV view looks. We have
+here selected the data class PWEL_DAY_STATUS, where there is generated a
+view called RV_PWEL_DAY_STATUS. Note we have only included a subset of
+the columns to illustrate the points of interest. Execute
+EcDp_viewlayer.BuildReportLayer('PWEL_DAY_STATUS'), and the following
+view will be generated:
+1 CREATE OR REPLACE VIEW RV_PWEL_DAY_STATUS AS
+ 2 SELECT
+ 3 -- Generated by ecdp_viewlayer
+ 4 DATA_CLASS_NAME AS DATA_CLASS_NAME
+ 5 ,'WELL' AS OWNER_CLASS_NAME
+ 6 ,pwel_day_status.DAYTIME AS PRODUCTION_DAY
+ 7 ,pwel_day_status.OBJECT_ID AS OBJECT_ID
+ 8 ,o.object_code AS CODE
+ 9 ,oa.name AS NAME
+10 ,oa.well_class AS WELL_CLASS
+11 ,oa.well_type AS WELL_TYPE
+12 ,oa.prod_method AS PROD_METHOD
+13 ,oa.detailed_prod_method AS DETAILED_PROD_METHOD
+14 ,oa.pump_type AS PUMP_TYPE
+   ...
+15 ,oa.depth_meas_ref AS DEPTH_MEAS_REF_M
+16 ,EcDp_Unit.convertValue(oa.DEPTH_MEAS_REF,'M','FT',oa.daytime,NULL) AS DEPTH_MEAS_REF_FT
+17 ,oa.bh_press_gauge_md AS BH_PRESS_GAUGE_MD_M
+18 ,EcDp_Unit.convertValue(oa.BH_PRESS_GAUGE_MD,'M','FT',oa.daytime,NULL) AS BH_PRESS_GAUGE_MD_FT
+19 ,pwel_day_status.DAYTIME AS DAYTIME
+20 ,pwel_day_status.ON_STREAM_HRS AS ON_STREAM_HRS_HRS
+21 ,pwel_day_status.AVG_CHOKE_SIZE AS AVG_CHOKE_SIZE
+22 ,EcBp_Well_Choke.convertToMilliMeter(pwel_day_status.object_id, pwel_day_status.daytime, pwel_day_status.avg_choke_size) AS CHOKE_MM_MM
+23 ,pwel_day_status.AVG_WH_TEMP AS AVG_WH_TEMP_C
+24 ,EcDp_Unit.convertValue( pwel_day_status.AVG_WH_TEMP,'C','F',pwel_day_status.DAYTIME,NULL,NULL,NULL,pwel_day_status.OBJECT_ID) AS AVG_WH_TEMP_F
+   ...
+25 ,pwel_day_status.RECORD_STATUS
+26 ,pwel_day_status.CREATED_BY
+27 ,pwel_day_status.CREATED_DATE
+28 ,pwel_day_status.LAST_UPDATED_BY
+29 ,pwel_day_status.LAST_UPDATED_DATE
+30 ,pwel_day_status.REV_NO
+31 ,pwel_day_status.REV_TEXT
+32 ,pwel_day_status.APPROVAL_STATE AS APPROVAL_STATE
+33 ,pwel_day_status.APPROVAL_BY AS APPROVAL_BY
+34 ,pwel_day_status.APPROVAL_DATE AS APPROVAL_DATE
+35 ,pwel_day_status.REC_ID AS REC_ID
+   ...
+36 FROM WELL_VERSION oa
+37 INNER JOIN WELL o ON o.object_id = oa.object_id
+38 INNER JOIN pwel_day_status ON pwel_day_status.object_id = oa.object_id AND pwel_day_status.object_id = o.object_id AND pwel_day_status.DAYTIME >= oa.daytime AND pwel_day_status.DAYTIME     nvl(oa.end_date,pwel_day_status.DAYTIME + 1)
+39 WHERE PWEL_DAY_STATUS.DATA_CLASS_NAME='PWEL_DAY_STATUS';
+Points of interest
+Line(s)
+Comment
+1 - 14
+Include attributes/columns from the data class table, and object class main and version tables.
+15 - 24
+Numeric columns with unit conversions are converted and presented with several units.
+25 â 35
+Record metadata is from the main data table.
+37 - 39
+Report views use tables directly and use ANSI join.
+Generating an Object Trigger
+The following are the "rules" by which metadata are converted into
+Object triggers. Every Object view should have an associated instead-of
+trigger unless it is being defined as a "read-only" class. The trigger
+provides the functionality which allows the insertion and updating of
+data in the virtual table represented by the view. Note that it is not
+possible to delete Objects through the view. If this is required, the
+Object’s end date should be set equal to its start date instead.
+A trigger code is generated in blocks, or groups of lines, related to
+common topics such as Insert Check, Insert Relation, Create Object, Date
+Check, Update Relation, Update Attribute and Record Revision. To aid the
+testing and debugging of triggers, block headings are written into the
+code to indicate the start and end point of each block. In general, in
+the following table, the "rules" are considered in the context of the
+block of code they relate to.
+No.
+Description
+1
+The trigger will be called IUD_xxx, where xxx is the CLASS_NAME entry in table CLASS.
+2
+The trigger will contain at least one variable for each non-disabled
+attribute defined in CLASS_ATTRIBUTE_CNFG.ATTRIBUTE_NAME. For some
+attributes (e.g daytime) there will exist two variables, one holding the
+new value and one holding the old value. All variables are being
+initialized at the beginning of the trigger.
+3
+The variables are being initialized with values from the row with
+daytime closest to the updating version.
+4
+The trigger will add lookups and validating for all relations defined
+in CLASS_REL_CNFG and CLASS_REL_ATTR_MAP_CNFG.
+5
+Trigger actions defined in CLASS_TRIGGER_ACTN_CNFG may appear both
+at the beginning and at the end of the trigger. Depending on whether the
+action is defined as a before/after insert/update action.
+6
+Many aspects of code generation within triggers are automatic and do
+not rely on metadata. Examples of this include date validation. Several
+checks are required in respect of dates to ensure, for example, that
+attributes do not exist before the objects they belong to and that end
+times are after start times.
+Another example is the handling of missing items (but which are allowed
+to be null on calling the view) such as created by, last updated, etc.
+Object Trigger Example
+The following is an example of an object trigger generated from
+metadata. The example used is for the object class called AREA.
+Metadata
+The following are the metadata used in this example. Note that this is a
+simplified example that does not cover all the complexity in the model,
+but is meant to illustrate the main principle of the concept.
+CLASS_NAME
+CLASS_TYPE
+APP_SPACE_CNTX
+TIME_SCOPE_CODE
+DB_OBJECT_NAME
+DB_OBJECT_ATTRIBUTE
+DB_WHERE_CONDITION
+AREA
+OBJECT
+EC_PROD
+VERSIONED
+GEOGRAPHICAL_AREA
+GEOGR_AREA_VERSION
+o.CLASS_NAME='AREA'
+Table : CLASS_ATTRIBUTE_CNFG
+CLASS_NAME
+ATTRIBUTE_NAME
+IS_KEY
+APP_SPACE_CNTX
+DATA_TYPE
+DB_MAPPING_TYPE
+DB_SQL_SYNTAX
+AREA
+OBJECT_ID
+Y
+EC_PROD
+STRING
+COLUMN
+OBJECT_ID
+AREA
+CODE
+N
+EC_PROD
+STRING
+COLUMN
+OBJECT_CODE
+AREA
+NAME
+N
+EC_PROD
+STRING
+ATTRIBUTE
+NAME
+AREA
+OBJECT_START_DATE
+N
+EC_PROD
+DATE
+COLUMN
+START_DATE
+AREA
+OBJECT_END_DATE
+N
+EC_PROD
+DATE
+COLUMN
+END_DATE
+AREA
+DAYTIME
+N
+EC_PROD
+DATE
+ATTRIBUTE
+DAYTIME
+AREA
+END_DATE
+N
+EC_PROD
+DATE
+ATTRIBUTE
+END_DATE
+AREA
+MASTER_SYS_CODE
+N
+EC_PROD
+STRING
+COLUMN
+MASTER_SYS_CODE
+AREA
+MASTER_SYS_NAME
+N
+EC_PROD
+STRING
+ATTRIBUTE
+MASTER_SYS_NAME
+AREA
+COMMENTS
+N
+EC_PROD
+STRING
+ATTRIBUTE
+COMMENTS
+AREA
+DUMMY
+N
+EC_TRAN
+STRING
+FUNCTION
+NULL
+AREA
+OP_PRODUCTIONUNIT_ID
+N
+EC_PROD
+STRING
+ATTRIBUTE
+OP_PU_ID
+AREA
+OP_PRODUCTIONUNIT_CODE
+N
+EC_PROD
+STRING
+ATTRIBUTE
+OP_PU_CODE
+AREA
+OP_PROD_SUB_UNIT_ID
+N
+EC_PROD
+STRING
+ATTRIBUTE
+OP_SUB_PU_ID
+AREA
+OP_PROD_SUB_UNIT_CODE
+N
+EC_PROD
+STRING
+ATTRIBUTE
+OP_SUB_PU_CODE
+AREA
+BUSINESS_UNIT_ID
+N
+EC_PROD
+STRING
+ATTRIBUTE
+BUSINESS_UNIT_ID
+AREA
+BUSINESS_UNIT_CODE
+N
+EC_PROD
+STRING
+RELATION
+AREA
+COUNTY_ID
+N
+EC_PROD
+STRING
+ATTRIBUTE
+COUNTY_ID
+AREA
+COUNTY_CODE
+N
+EC_PROD
+STRING
+RELATION
+AREA
+UNIT_CONTEXT_ID
+N
+EC_PROD
+STRING
+ATTRIBUTE
+UNIT_CONTEXT_ID
+AREA
+UNIT_CONTEXT_CODE
+N
+EC_PROD
+STRING
+RELATION
+AREA
+TIME_ZONE_ID
+N
+EC_PROD
+STRING
+ATTRIBUTE
+REF_OBJECT_ID_1
+AREA
+TIME_ZONE_CODE
+N
+EC_PROD
+STRING
+RELATION
+AREA
+CONVERSION_CONTEXT_ID
+N
+EC_PROD
+STRING
+ATTRIBUTE
+REF_OBJECT_ID_3
+AREA
+CONVERSION_CONTEXT_CODE
+N
+EC_PROD
+STRING
+RELATION
+Table : CLASS_REL_CNFG
+CLASS_NAME
+RELATION_NAME
+REF_CLASS_NAME
+RELATION_TYPE
+GROUP_TYPE
+AREA
+OP_PRODUCTIONUNIT
+PRODUCTIONUNIT
+OBJECT
+operational
+AREA
+CP_PRODUCTIONUNIT
+PRODUCTIONUNIT
+OBJECT
+collection_point
+AREA
+OP_PROD_SUB_UNIT
+PROD_SUB_UNIT
+OBJECT
+operational
+AREA
+BUSINESS_UNIT
+BUSINESS_UNIT
+OBJECT
+AREA
+COUNTY
+COUNTY
+OBJECT
+AREA
+UNIT_CONTEXT
+UNIT_CONTEXT
+OBJECT
+AREA
+TIME_ZONE
+TIME_ZONE_REGION
+OBJECT
+AREA
+CONVERSION_CONTEXT
+CONVERSION_CONTEXT
+OBJECT
+Table : CLASS_REL_ATTR_MAP_CNFG
+CLASS_NAME
+RELATION_NAME
+ATTRIBUTE_NAME
+REF_ATTRIBUTE_NAME
+IS_MAIN
+AREA
+OP_PRODUCTIONUNIT
+OP_PRODUCTIONUNIT_ID
+OBJECT_ID
+Y
+AREA
+OP_PRODUCTIONUNIT
+OP_PRODUCTIONUNIT_CODE
+CODE
+Y
+AREA
+CP_PRODUCTIONUNIT
+CP_PRODUCTIONUNIT_ID
+OBJECT_ID
+Y
+AREA
+CP_PRODUCTIONUNIT
+CP_PRODUCTIONUNIT_CODE
+CODE
+Y
+AREA
+OP_PROD_SUB_UNIT
+OP_PROD_SUB_UNIT_ID
+OBJECT_ID
+Y
+AREA
+OP_PROD_SUB_UNIT
+OP_PROD_SUB_UNIT_CODE
+CODE
+Y
+AREA
+BUSINESS_UNIT
+BUSINESS_UNIT_ID
+OBJECT_ID
+Y
+AREA
+BUSINESS_UNIT
+BUSINESS_UNIT_CODE
+CODE
+Y
+AREA
+COUNTY
+COUNTY_ID
+OBJECT_ID
+Y
+AREA
+COUNTY
+COUNTY_CODE
+CODE
+Y
+AREA
+UNIT_CONTEXT
+UNIT_CONTEXT_ID
+OBJECT_ID
+Y
+AREA
+UNIT_CONTEXT
+UNIT_CONTEXT_CODE
+CODE
+Y
+AREA
+TIME_ZONE
+TIME_ZONE_ID
+OBJECT_ID
+Y
+AREA
+TIME_ZONE
+TIME_ZONE_CODE
+CODE
+Y
+AREA
+CONVERSION_CONTEXT
+CONVERSION_CONTEXT_ID
+OBJECT_ID
+Y
+AREA
+CONVERSION_CONTEXT
+CONVERSION_CONTEXT_CODE
+CODE
+Y
+Source code
+The following is the source code of the trigger.
+1  CREATE OR REPLACE TRIGGER IUD_AREA
+2   INSTEAD OF INSERT OR UPDATE OR DELETE ON OV_AREA
+3  FOR EACH ROW
+4  -- Generated by ecdp_viewlayer
+5  DECLARE
+6     nct    ECC_AREA.class_tab_type := ECC_AREA.class_tab_type();
+7     oct    ECC_AREA.class_tab_type := ECC_AREA.class_tab_type();
+8
+9  BEGIN
+10
+11   ----------------------------------------------------------------------------
+12   -- Start Before trigger action block
+13   -- Need to find object_id to foreign references given by code so this is available to trigger actions
+14
+15   IF DELETING THEN
+16     Raise_Application_Error(-20102,'Object delete is not allowed, set object end date. ');
+17   END IF;
+18
+19   nct := ECC_AREA.AssignRowValues(:new.CLASS_NAME, :new.OBJECT_ID, :new.CODE, :new.NAME, :new.MASTER_SYS_CODE, :new.MASTER_SYS_NAME, :new.OBJECT_START_DATE, :new.OBJECT_END_DATE
+20                                   , :new.DAYTIME, :new.END_DATE, :new.UNIT_CONTEXT_ID, :new.UNIT_CONTEXT_CODE, :new.CP_PRODUCTIONUNIT_CODE, :new.CP_PRODUCTIONUNIT_ID, :new.OP_PRODUCTIONUNIT_CODE, :new.OP_PRODUCTIONUNIT_ID
+21                                   , :new.BUSINESS_UNIT_ID, :new.BUSINESS_UNIT_CODE, :new.CONVERSION_CONTEXT_ID, :new.CONVERSION_CONTEXT_CODE, :new.TIME_ZONE_ID, :new.TIME_ZONE_CODE, :new.RECORD_STATUS, :new.CREATED_BY
+22                                   , :new.CREATED_DATE, :new.LAST_UPDATED_BY, :new.LAST_UPDATED_DATE, :new.REV_NO, :new.REV_TEXT, :new.APPROVAL_STATE, :new.APPROVAL_BY, :new.APPROVAL_DATE
+23                                   , :new.REC_ID);
+24
+25   oct := ECC_AREA.AssignRowValues(:old.CLASS_NAME, :old.OBJECT_ID, :old.CODE, :old.NAME, :old.MASTER_SYS_CODE, :old.MASTER_SYS_NAME, :old.OBJECT_START_DATE, :old.OBJECT_END_DATE
+26                                   , :old.DAYTIME, :old.END_DATE, :old.UNIT_CONTEXT_ID, :old.UNIT_CONTEXT_CODE, :old.CP_PRODUCTIONUNIT_CODE, :old.CP_PRODUCTIONUNIT_ID, :old.OP_PRODUCTIONUNIT_CODE, :old.OP_PRODUCTIONUNIT_ID
+27                                   , :old.BUSINESS_UNIT_ID, :old.BUSINESS_UNIT_CODE, :old.CONVERSION_CONTEXT_ID, :old.CONVERSION_CONTEXT_CODE, :old.TIME_ZONE_ID, :old.TIME_ZONE_CODE, :old.RECORD_STATUS, :old.CREATED_BY
+28                                   , :old.CREATED_DATE, :old.LAST_UPDATED_BY, :old.LAST_UPDATED_DATE, :old.REV_NO, :old.REV_TEXT, :old.APPROVAL_STATE, :old.APPROVAL_BY, :old.APPROVAL_DATE
+29                                   , :old.REC_ID);
+30
+31   IF :New.OBJECT_END_DATE is null or :New.OBJECT_END_DATE <> nvl(:New.OBJECT_START_DATE,:New.daytime) THEN
+32
+33     ECC_AREA.IntegrityComplete(nct,oct); -- Include also relations, can be the same both for INSERT and UPDATE
+34     ECC_AREA.AlignParentVersions(nct,oct);
+35     ECC_AREA.CheckAgainstLockedMonths(nct,oct);-- Will raise application error if trying to update afecting locked month
+36
+37   END IF; --
+38
+39   --**********************************************************************************
+40   -- Start Trigger Action block
+41   -- Any code block defined as a BEFORE trigger-type in table CLASS_TRIGGER_ACTION will be put here
+42   -- end Trigger Action block Class_trigger_actions before
+43   --**********************************************************************************
+44
+45   IF UPDATING AND (:New.OBJECT_END_DATE is null OR :New.OBJECT_END_DATE <> nvl(:New.OBJECT_START_DATE,:New.daytime)) THEN
+46
+47     ECC_AREA.CheckObjectDateReferences(nct,oct);-- Will raise application error if referenced outside object life span
+48
+49   END IF; --
+50
+51   IF INSERTING THEN
+52
+53     ECC_AREA.InsertObject(nct);
+54   ELSE
+55     ECC_AREA.UpdateObject(nct,oct);
+56     ECC_AREA.SynchronizeChildren(nct,oct);
+57   END IF; --
+58
+59   --**********************************************************************************
+60   -- Start Trigger Action block
+61   -- Any code block defined as a AFTER trigger-type in table CLASS_TRIGGER_ACTION will be put here
+62   -- end Trigger Action block Class_trigger_actions after
+63   --**********************************************************************************
+64
+65     ECC_AREA.synchronize(nct,oct);
+66 END;
+Points of interest
+Lines
+Description
+Comments
+6-7
+nct - New Class Table
+oct - Old Class Table
+Contains all the active attributes and relations in the class
+independent of where they are stored. These structures are populated
+using the ECC_AREA.AssignRowValues
+33
+ECC_AREA.IntegrityComplete
+This procedure is doing much of the
+integrity control and lookups of id’s based on code. This involves
+checking for consistency on dates in related classes and can be fairly
+complex. It will fail if it discovers any errors, and populate missing
+values that can be deducted in the logic.
+34
+ECC_AREA.AlignParentVersions
+This procedure is checking the object
+version dates against parents in the group models, and will create new
+versions if needed to be aligned with parents in the group models, it
+will also populate all the replicated columns for the parent levels. In
+the trigger, after this procedure call, the nct variable can contain
+several rows. Note that this procedure is also used inside the
+syncronizeChildren procedure.
+35
+ECC_AREA.CheckAgainstLockedMonths
+This is replacing the code from
+the IUD trigger, that populated and called the configured locking rule
+for the class.
+39-43
+Class Trigger Actions (BEFORE)
+The IUD trigger in this example
+does not have any Class Trigger action code injected. But for existing
+classes, there is in many cases a need to adjust the references to
+reflect that the n (new) and o (old) variables are replaced by the nct
+and oct variable structures representing the naming in the generated view.
+47
+CheckObjectDateReferences
+If the lifespan of the object is
+changed, this procedure will check all references defined on class level
+(owner calls, class relations) to prevent moving the date if child
+records have data outside the new object life span.
+53
+ECC_AREA.InsertObject
+This is the procedure that does the actual
+Insert of a new object. The nct table will always only contain one
+Object (object_id), but it can contain several versions if the object is
+part of a group model and have parents with several versions in the new
+objects lifespan. This procedure will sort out the physical storage
+depending on DB_MAPPING_TYPE and DB_JOIN_TABLE.
+55
+ECC_AREA.UpdateObject
+This is probably the procedure that has the
+most challenging task of handling all the special cases that can occur
+when a user updates an object class. It includes creating of new version
+by updating daytime, deleting the object by setting object_end_date =
+object_start_date, and deal with revision numbering and journaling rules
+in potentially many tables.
+56
+ECC_AREA.SyncronizeChildren
+When you change something on a parent
+level in a group model, there is often a need to update the replicated
+data or the versioning on a child level. This procedure takes care of
+that by alerting the child classes and let them align with the updated
+parents. This procedure is using recursion to handle these several
+layers down in the group model.
+59-63
+Class Trigger Actions (AFTER)
+The IUD trigger in this example
+does not have any Class Trigger action code injected. But for existing
+classes, there is in many cases a need to adjust the references to
+reflect that the n (new) and o (old) variables are replaced by the nct
+and oct variable structures representing the naming in the generated
+view.
+65
+ECC_AREA.Syncronize
+This procedure takes care of another part of
+the bookkeeping for object classes, this includes maintaining the
+objects-, objects version- and the groups tables.
+Object Class End Date Changes
+With the release of 13.1.0, we have changed the logic around setting object end date on object classes. There has always been checks that verify a new object end date does not invalidate versions or data of related classes. For example, it was never possible to set the object end date of a parent to something earlier than a related object end date.
+There has been an exception to this rule though. Child (group model) or related object classes with no end date set was not considered when setting object end date on parent. This has changed. Now, if the end date on a child object class is not set, i.e. it is null, it will be treated as a "future date", as in infinitely into the future. This means that setting object end date on objects has become stricter when dealing with other object classes, in favour of making the data more consistent. The problem we had with the old approach was that it would leave "orphan versions". This was either when a child still had references to a parent, but the parent had ended even though the child had not, or when the child was given a new version without the reference to original parent class.
+In addition, we have also changed it so updates to object end date will no longer be checked against end date on related data class records, only daytime. This is because the end date on a data class refers to the validity of the data recording, and has nothing to do with the lifespan of the object it belongs to.
+Generating a Data Trigger
+The following are the "rules" by which metadata are converted into Data
+triggers. Every Data view should have an associated instead-of trigger.
+The trigger provides the functionality which allows the insertion,
+updating, and deletion of records in the virtual table represented by
+the view.
+A trigger code is generated in blocks, or groups of lines, related to
+common topics such as Insert Check, Insert Relation, Create Object, Date
+Check, Update Relation, Update Attribute and Record Revision. To aid the
+testing and debugging of triggers, block headings are written into the
+code to indicate the start and end point of each block. In general, in
+the following table, the "rules" are considered in the context of the
+block of code they relate to.
+No.
+Description
+1
+The trigger will be called IUD_xxx, where xxx is the CLASS_NAME entry in table CLASS_CNFG.
+2
+Non-disabled, standard, mandatory attributes defined in
+CLASS_ATTRIBUTE_CNFG.ATTRIBUTE_NAME is written to a block of code which
+tests that they are present, i.e. enforces the NOT NULL constraint. If
+the standard attributes CODE and DAYTIME are not defined in
+CLASS_ATTRIBUTE_CNFG, they will be written to the trigger anyway.
+3
+Non-disabled, non-standard, mandatory attributes defined in
+CLASS_ATTRIBUTE_CNFG.ATTRIBUTE_NAME is written to a block of code which
+tests that they are present, i.e. enforces the NOT NULL constraint.
+4
+Relations defined in CLASS_REL_CNFG and CLASS_REL_ATTR_MAP_CNFG will add code for lookup values and validation.
+E.g. get ID from CODE, check that ID/CODE belongs to right object class, check the object is valid for given date etc.
+5
+Many aspects of code generation within triggers are automatic and do
+not rely on metadata. Examples of this include date validation. Several
+checks are required in respect of dates to ensure, for example, that
+attributes do not exist before the objects they belong to and that end
+times are after start times.
+Another example is the handling of missing items (but which are allowed
+to be null on calling the view) such as created by, last updated, etc.
+Data Trigger Example
+The following is an example of a data trigger generated from metadata.
+The example used is for the data class called PWEL_DAY_STATUS.
+Metadata
+Table: CLASS_CNFG
+CLASS_NAME
+CLASS_TYPE
+APP_SPACE_CNTX
+TIME_SCOPE_CODE
+DB_OBJECT_NAME
+DB_OBJECT_ATTRIBUTE
+DB_WHERE_CONDITION
+PWEL_DAY_STATUS
+DATA
+EC_PROD
+DAY
+PWEL_DAY_STATUS
+Table: CLASS_ATTRIBUTE_CNFG
+CLASS_NAME
+ATTRIBUTE_NAME
+IS_KEY
+APP_SPACE_CNTX
+DATA_TYPE
+DB_MAPPING_TYPE
+DB_SQL_SYNTAX
+PWEL_DAY_STATUS
+OBJECT_ID
+Y
+EC_PROD
+STRING
+COLUMN
+OBJECT_ID
+PWEL_DAY_STATUS
+DAYTIME
+Y
+EC_PROD
+DATE
+COLUMN
+DAYTIME
+PWEL_DAY_STATUS
+ON_STREAM_HRS
+N
+EC_PROD
+NUMBER
+COLUMN
+ON_STREAM_HRS
+Table : CLASS_REL_CNFG
+CLASS_NAME
+RELATION_NAME
+REF_CLASS_NAME
+RELATION_TYPE
+PWEL_DAY_STATUS
+OWNER_WELL
+WELL
+OWNER
+Table : CLASS_REL_ATTR_MAP_CNFG
+CLASS_NAME
+RELATION_NAME
+ATTRIBUTE_NAME
+REF_ATTRIBUTE_NAME
+IS_MAIN
+PWEL_DAY_STATUS
+OWNER_WELL
+OBJECT_ID
+OBJECT_ID
+Y
+PWEL_DAY_STATUS
+OWNER_WELL
+OBJECT_CODE
+CODE
+Y
+Source code
+The following is the source code of the trigger. Line numbers have been added for reference.
+001 CREATE OR REPLACE TRIGGER IUD_PWEL_DAY_STATUS
+002  INSTEAD OF INSERT OR UPDATE OR DELETE ON DV_PWEL_DAY_STATUS
+003 FOR EACH ROW
+004 -- Generated by ecdp_viewlayer
+005 DECLARE
+006   n_class_name         VARCHAR2(30) := EcDB_Utils.ConditionNVL(NOT Updating('CLASS_NAME'),:NEW.CLASS_NAME,:OLD.CLASS_NAME);
+007   n_record_status      VARCHAR2(1) := EcDB_Utils.ConditionNVL(NOT Updating('RECORD_STATUS'),:NEW.record_status,:OLD.record_status);
+008   n_rev_no             NUMBER := NVL(:OLD.rev_no,0);
+009   n_rev_text           VARCHAR2(4000):= EcDB_Utils.ConditionNVL(NOT Updating('REV_TEXT'),:NEW.rev_text,:OLD.rev_text);
+010   n_created_by         VARCHAR2(30):= EcDB_Utils.ConditionNVL(NOT Updating('CREATED_BY'),to_char(:NEW.created_by),to_char(:OLD.created_by));
+011   n_created_date       DATE := EcDB_Utils.ConditionNVL(NOT Updating('CREATED_DATE'),:NEW.created_date,:OLD.created_date);
+012   n_last_updated_by    VARCHAR2(30):= EcDB_Utils.ConditionNVL(NOT Updating('LAST_UPDATED_BY'),to_char(:NEW.last_updated_by),to_char(:OLD.last_updated_by));
+013   n_last_updated_date  DATE := EcDB_Utils.ConditionNVL(NOT Updating('LAST_UPDATED_DATE'),:NEW.last_updated_date,:OLD.last_updated_date);
+014   o_created_by         VARCHAR2(30):= :OLD.created_by;
+015   o_last_updated_by    VARCHAR2(30):= :OLD.last_updated_by;
+016   n_lock_columns       EcDp_Month_lock.column_list;
+017   o_lock_columns       EcDp_Month_lock.column_list;
+018   n_rev_event          NUMBER:= EcDB_Utils.ConditionNVL(NOT Updating('REV_EVENT'),:NEW.rev_event,:OLD.rev_event);
+019   n_OBJECT_ID OBJECTS_TABLE.OBJECT_ID%TYPE := EcDB_Utils.ConditionNVL(NOT Updating('OBJECT_ID'),:NEW.OBJECT_ID,:OLD.OBJECT_ID);
+020   o_OBJECT_ID OBJECTS_TABLE.OBJECT_ID%TYPE := :OLD.OBJECT_ID;
+021   n_OBJECT_CODE OBJECTS_TABLE.CODE%TYPE := EcDB_Utils.ConditionNVL(NOT Updating('OBJECT_CODE'),:NEW.OBJECT_CODE,:OLD.OBJECT_CODE);
+022   o_OBJECT_CODE OBJECTS_TABLE.CODE%TYPE := :OLD.OBJECT_CODE;
+023   n_ON_STREAM_HRS NUMBER  := EcDB_Utils.ConditionNVL(NOT Updating('ON_STREAM_HRS'),:NEW.ON_STREAM_HRS,:OLD.ON_STREAM_HRS);
+024   n_AVG_CHOKE_SIZE NUMBER  := EcDB_Utils.ConditionNVL(NOT Updating('AVG_CHOKE_SIZE'),:NEW.AVG_CHOKE_SIZE,:OLD.AVG_CHOKE_SIZE);
+025   n_AVG_WH_TEMP NUMBER  := EcDB_Utils.ConditionNVL(NOT Updating('AVG_WH_TEMP'),:NEW.AVG_WH_TEMP,:OLD.AVG_WH_TEMP);
+026   n_AVG_WH_PRESS NUMBER  := EcDB_Utils.ConditionNVL(NOT Updating('AVG_WH_PRESS'),:NEW.AVG_WH_PRESS,:OLD.AVG_WH_PRESS);
+027   n_AVG_BH_PRESS NUMBER  := EcDB_Utils.ConditionNVL(NOT Updating('AVG_BH_PRESS'),:NEW.AVG_BH_PRESS,:OLD.AVG_BH_PRESS);
+028   o_rec_id             VARCHAR2(32) := :OLD.rec_id;
+029   n_rec_id             VARCHAR2(32) := Nvl(:NEW.rec_id, SYS_GUID());
+030   n_rel_check_counter        NUMBER;
+031   n_daytime  DATE := EcDB_Utils.ConditionNVL(NOT Updating('DAYTIME'),:NEW.DAYTIME,:OLD.DAYTIME);
+032   o_daytime  DATE := :OLD.DAYTIME;
+033
+034 BEGIN
+035
+036  --------------------------------------------------------------------------
+037  -- Start Before Trigger action block
+038  -- Need to find object_ids for foreign references given by code before we leave the control to user exit
+039  -- Also set record status columns in this section to allow user exits to overule them later
+040
+041  IF INSERTING THEN -- set any default values from CLASS_ATTRIBUTE.DEFAULT_VALUE
+042
+043     NULL; -- In case there are no default values
+044    IF  n_ON_STREAM_HRS IS NULL  THEN n_ON_STREAM_HRS := to_number('0.5'); END IF;
+045
+046  END IF;  -- set any default values
+047
+048  IF INSERTING OR UPDATING THEN
+049
+050    IF n_class_name IS NOT NULL AND rtrim(upper(n_class_name)) <> rtrim(upper('PWEL_DAY_STATUS')) THEN Raise_Application_Error(-20104,'Given class_name do not correspond to view class name.'); END IF;
+051
+052    -- Checking owner object WELL
+053    IF n_OBJECT_ID IS NULL AND n_OBJECT_CODE IS NOT NULL THEN
+054         SELECT MIN(OBJECT_ID), count(*) INTO n_OBJECT_ID, n_rel_check_counter FROM OBJECTS_TABLE WHERE CLASS_NAME = 'WELL' AND CODE = n_OBJECT_CODE;
+055         IF n_rel_check_counter = 0 THEN Raise_Application_Error(-20106,'Object lookup error: value for OBJECT_CODE does not exist in class WELL.' ); END IF;
+056    ELSIF (INSERTING AND n_OBJECT_ID IS NOT NULL AND n_OBJECT_CODE IS NOT NULL)
+057       OR (UPDATING AND EcDB_Utils.isUpdating(UPDATING('OBJECT_CODE'), n_OBJECT_CODE, o_OBJECT_CODE )) THEN
+058      SELECT count(*) INTO n_rel_check_counter FROM OBJECTS_TABLE WHERE OBJECT_ID = n_OBJECT_ID AND CODE = n_OBJECT_CODE;
+059      IF n_rel_check_counter = 0 THEN Raise_Application_Error(-20106,'Object lookup error: OBJECT_ID and OBJECT_CODE does not matched for class WELL.' ); END IF;
+060    END IF;
+061
+062
+063    IF INSERTING THEN
+064      n_created_by :=  Nvl(n_created_by,user);
+065      n_created_date := Nvl(n_created_date,Ecdp_Timestamp.getCurrentSysdate);
+066      n_RECORD_STATUS := Nvl(n_RECORD_STATUS,'P');
+067    ELSE  -- UPDATING
+068      IF  NOT UPDATING('LAST_UPDATED_BY') OR n_last_updated_by IS NULL THEN  n_last_updated_by := USER;  END IF;
+069      IF  NOT UPDATING('LAST_UPDATED_DATE') OR n_last_updated_date IS NULL THEN  n_last_updated_date := Ecdp_Timestamp.getCurrentSysdate;  END IF;
+070    END IF;  -- IF INSERTING
+071
+072  END IF;  -- INSERTING OR UPDATING
+073
+074  IF UPDATING AND NOT UPDATING('ON_STREAM_HRS') THEN
+075    n_ON_STREAM_HRS := EC_PWEL_DAY_STATUS.ON_STREAM_HRS(o_OBJECT_ID, o_DAYTIME);
+076  END IF;
+077
+078  -- End Before Trigger Action block -------------------------------------------------
+079  -------------------------------------------------------------------------------
+080
+081    --*************************************************************************************
+082    -- Start Trigger Action block
+083    -- Any code block defined as a BEFORE trigger-type in table CLASS_TRIGGER_ACTN_CNFG will be put here
+084    --
+085    -- end Trigger Action block Class_trigger_actions BEFORE
+086    --*************************************************************************************
+087
+088    EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'CLASS_NAME','PWEL_DAY_STATUS','STRING',NULL,NULL,NULL,NULL);
+089    EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'TABLE_NAME','PWEL_DAY_STATUS','STRING',NULL,NULL,NULL,NULL);
+090   EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'OBJECT_ID','OBJECT_ID','STRING','Y',EcDp_month_lock.isUpdating(UPDATING('OBJECT_ID')),anydata.ConvertVarChar2(n_OBJECT_ID),anydata.ConvertVarChar2(:OLD.OBJECT_ID));
+091   EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'OBJECT_CODE','OBJECT_CODE','VARCHAR2','Y',EcDp_month_lock.isUpdating(UPDATING('OBJECT_ID')),anydata.ConvertVarChar2(n_OBJECT_CODE),anydata.ConvertVarChar2(:OLD.OBJECT_CODE));
+092   EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'DAYTIME','DAYTIME','DATE','Y',EcDp_month_lock.isUpdating(UPDATING('DAYTIME')),anydata.Convertdate(n_DAYTIME),anydata.Convertdate(:OLD.DAYTIME));
+093   EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'ON_STREAM_HRS','ON_STREAM_HRS','NUMBER','N',EcDp_month_lock.isUpdating(UPDATING('ON_STREAM_HRS')),anydata.ConvertNumber(n_ON_STREAM_HRS),anydata.ConvertNumber(:OLD.ON_STREAM_HRS));
+094   EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'AVG_CHOKE_SIZE','AVG_CHOKE_SIZE','NUMBER','N',EcDp_month_lock.isUpdating(UPDATING('AVG_CHOKE_SIZE')),anydata.ConvertNumber(n_AVG_CHOKE_SIZE),anydata.ConvertNumber(:OLD.AVG_CHOKE_SIZE));
+095   EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'AVG_WH_TEMP','AVG_WH_TEMP','NUMBER','N',EcDp_month_lock.isUpdating(UPDATING('AVG_WH_TEMP')),anydata.ConvertNumber(n_AVG_WH_TEMP),anydata.ConvertNumber(:OLD.AVG_WH_TEMP));
+096   EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'AVG_WH_PRESS','AVG_WH_PRESS','NUMBER','N',EcDp_month_lock.isUpdating(UPDATING('AVG_WH_PRESS')),anydata.ConvertNumber(n_AVG_WH_PRESS),anydata.ConvertNumber(:OLD.AVG_WH_PRESS));
+097   EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'AVG_BH_TEMP','AVG_BH_TEMP','NUMBER','N',EcDp_month_lock.isUpdating(UPDATING('AVG_BH_TEMP')),anydata.ConvertNumber(n_AVG_BH_TEMP),anydata.ConvertNumber(:OLD.AVG_BH_TEMP));
+098   EcDp_month_lock.AddParameterToList(n_lock_columns,o_lock_columns,'AVG_BH_PRESS','AVG_BH_PRESS','NUMBER','N',EcDp_month_lock.isUpdating(UPDATING('AVG_BH_PRESS')),anydata.ConvertNumber(n_AVG_BH_PRESS),anydata.ConvertNumber(:OLD.AVG_BH_PRESS));
+099
+100
+101    IF INSERTING THEN
+102       EcDp_Production_lock.CheckDirectLock('INSERTING',n_lock_columns,o_lock_columns);
+103    ELSIF UPDATING THEN
+104       EcDp_Production_lock.CheckDirectLock('UPDATING',n_lock_columns,o_lock_columns);
+105    ELSIF DELETING THEN
+106       EcDp_Production_lock.CheckDirectLock('DELETING',n_lock_columns,o_lock_columns);
+107    END IF;
+108
+109  IF INSERTING THEN
+110
+111     -- Start Insert check block ---------------------------------------
+112     IF n_Object_id IS NULL THEN Raise_Application_Error(-20103,'Missing value for object_id/object code'); END IF;
+113   IF n_DAYTIME IS NULL THEN Raise_Application_Error(-20103,'Missing value for DAYTIME'); END IF;
+114   IF n_DAYTIME < EcDp_System_Constants.Earliest_date THEN  Raise_Application_Error(-20104,'Cannot set DAYTIME before system earliest date: 01.01.1900'); END IF;
+115     -- End Insert check block ---------------------------------------
+116
+117     -- Start Insert relation block ---------------------------------------
+118     IF ecdp_objects.isValidOwnerReference('PWEL_DAY_STATUS',n_OBJECT_ID) = 'N'  THEN
+119       Raise_Application_Error(-20106,'Given object id is not of the same class as the owner class for this data class.');
+120     END IF;
+121     IF TRUNC(EcDp_Objects.getOBjStartDate(n_OBJECT_ID)) > n_daytime THEN
+122        RAISE_APPLICATION_ERROR(-20128,'Daytime is less than owner object start date.');
+123     END IF;
+124     IF n_Daytime >= nvl(EcDp_Objects.getObjEndDate(n_OBJECT_ID),n_Daytime + 1) THEN
+125        Raise_Application_Error(-20129,'Daytime must be less than owner object end date.');
+126     END IF;
+127
+128     -- End Insert relation block ---------------------------------------
+129     INSERT INTO PWEL_DAY_STATUS(DATA_CLASS_NAME, OBJECT_ID, DAYTIME, ON_STREAM_HRS, AVG_CHOKE_SIZE, AVG_WH_TEMP, AVG_WH_PRESS, AVG_BH_PRESS,  CREATED_BY, CREATED_DATE, LAST_UPDATED_BY, LAST_UPDATED_DATE, REV_NO, REV_TEXT, RECORD_STATUS, REC_ID)
+130     VALUES('PWEL_DAY_STATUS', n_OBJECT_ID, n_DAYTIME, n_ON_STREAM_HRS, n_AVG_CHOKE_SIZE, n_AVG_WH_TEMP, n_AVG_WH_PRESS, n_AVG_BH_PRESS,  n_CREATED_BY,n_CREATED_DATE, n_LAST_UPDATED_BY, n_LAST_UPDATED_DATE, n_REV_NO, n_REV_TEXT, n_RECORD_STATUS, n_rec_id)
+131     RETURNING OBJECT_ID,DAYTIME,rev_no, rec_id INTO n_OBJECT_ID,n_DAYTIME,n_rev_no, n_rec_id ;
+132
+133   ELSIF UPDATING THEN
+134
+135    IF TRUE
+136    THEN
+137       n_rev_no := n_rev_no + 1;
+138    END IF;
+139
+140
+141     -- Start Update check block ---------------------------------------
+142   IF n_DAYTIME IS NULL THEN Raise_Application_Error(-20103,'Missing value for DAYTIME'); END IF;
+143   IF n_DAYTIME < EcDp_System_Constants.Earliest_date THEN  Raise_Application_Error(-20104,'Cannot set DAYTIME before system earliest date: 01.01.1900'); END IF;
+144     -- Start Update relation block
+145     IF Updating('OBJECT_ID') THEN
+146        IF NOT (Nvl(:NEW.object_id,'NULL') = :OLD.object_id) THEN
+147           Raise_Application_Error(-20101,'Cannot update object_id ');
+148        END IF;
+149     END IF;
+150
+151     IF Updating('DAYTIME') THEN
+152
+153        IF TRUNC(EcDp_Objects.getOBjStartDate(n_object_id)) > n_daytime THEN
+154           RAISE_APPLICATION_ERROR(-20128,'Daytime is less than owner object start date.');
+155        END IF;
+156
+157        IF n_Daytime >= nvl(EcDp_Objects.getObjEndDate(n_object_id),n_Daytime + 1) THEN
+158           Raise_Application_Error(-20129,'Daytime must be less than owner object end date.');
+159        END IF;
+160
+161     END IF;
+162
+163     -- End Update relation block
+164     UPDATE PWEL_DAY_STATUS SET OBJECT_ID = n_OBJECT_ID, DAYTIME = n_DAYTIME, ON_STREAM_HRS = n_ON_STREAM_HRS, AVG_CHOKE_SIZE = n_AVG_CHOKE_SIZE, AVG_WH_TEMP = n_AVG_WH_TEMP, AVG_WH_PRESS = n_AVG_WH_PRESS, AVG_BH_PRESS = n_AVG_BH_PRESS, CREATED_BY = n_CREATED_BY, CREATED_DATE = n_CREATED_DATE , LAST_UPDATED_BY = n_LAST_UPDATED_BY,LAST_UPDATED_DATE = n_LAST_UPDATED_DATE ,REV_NO = n_rev_no, REV_TEXT = n_REV_TEXT, RECORD_STATUS = n_RECORD_STATUS, REC_ID = n_rec_id
+165     WHERE DATA_CLASS_NAME='PWEL_DAY_STATUS' AND OBJECT_ID = o_OBJECT_ID AND DAYTIME = o_DAYTIME;
+166
+167     EcDp_Trigger_Utils.revisionEvent(n_rev_event, n_rec_id, :OLD.rec_id, n_rev_no, :OLD.rev_no,'DV_PWEL_DAY_STATUS', 'N');
+168
+169   ELSE -- Deleting
+170
+171      EcDp_Trigger_Utils.revisionEvent(n_rev_event, n_rec_id, :OLD.rec_id, n_rev_no, :OLD.rev_no, 'DV_PWEL_DAY_STATUS', 'Y');
+172
+173      DELETE FROM PWEL_DAY_STATUS
+174      WHERE DATA_CLASS_NAME='PWEL_DAY_STATUS' AND OBJECT_ID = o_OBJECT_ID AND DAYTIME = o_DAYTIME;
+175
+176   END IF; -- IF INSERTING
+177
+178    --*************************************************************************************
+179    -- Start Trigger Action block
+180    -- Any code block defined as a AFTER trigger-type in table CLASS_TRIGGER_ACTN_CNFG will be put here
+181    --
+182    -- end Trigger Action block Class_trigger_actions AFTER
+183    --*************************************************************************************
+184
+185 END; -- TRIGGER IUD_PWEL_DAY_STATUS
+Points of interest
+Line(s)
+Comment
+41-46
+Setting default values. On Insert, the trigger picks up any
+default value statements defined in table CLASS_ATTR_PROPERTY_CNFG for property code DEFAULT_VALUE.
+This can be constants or function calls.
+48-72
+Before trigger action block. Picking up object_ids when row
+referenced by code, setting record status information.
+Set created by / created date or last updated by and last updated date.
+NOTE: If you are updating both the OBJECT_ID and the OBJECT_CODE, the
+value must refer to the same object.
+74-76
+Look up old values for attributes with properties WR_FUNCTION.
+WR_FUNCTION is used for attributes that can be both a measured or calculated value.
+E.g. On stream hrs can either be calculated based on well status or measured (manual input).
+81-86
+178-183
+Trigger Action block: Any code from CLASS_TRIGGER_ACTN_CNFG defined
+as TRIGGER_TYPE = BEFORE/AFTER, for this class will be put here. This
+class has no trigger actions, so you only see the placeholders.
+88-107
+Lock check, populating parameter structure, and calling given LOCK_RULE.
+109-132
+Insert block â Check that we have values for mandatory columns,
+that relations are of correct class type, and do not
+violate start/end-date settings. If these checks are OK, then do the
+physical insert using the declared n-variables that can be manipulated
+by trigger actions.
+133-168
+Update block â update revision number and much of the same logic as for insert.
+169-176
+Deletion handling.
+View behavior
+The following covers the functionality of views, i.e. the behavior of
+views as provided by their associated triggers. The four standard
+operations of Insert, Update, Delete and Select are considered for each
+type of view where appropriate.
+The valid permutations are as follows.
+View Type
+Object
+Interface
+Data
+Operations
+Select
+Select
+Select
+Insert
+Insert
+Insert
+Update
+Update
+Update
+Delete
+Object View - Select Operation
+What happens when a Select operation is performed on an Object view is
+described here.
+Step
+Description
+1
+If the Object being selected does not have any relations, then the
+select is a simple query using the mappings between the attributes and their locations.
+2
+If the Object has one or more relations, then, before displaying the
+query results, xxx_CODE attribute with DB_MAPPING_TYPE=RELATION is derived from the object ID of the
+corresponding relation attribute mapping. Although the only xxx_ID is
+stored, both it and xxx_CODE are displayed on Select.
+Object View â Insert Operation
+What happens when an Insert operation is performed on an Object view is described here.
+Step
+Description
+1
+A check is made to see if all mandatory attributes are in the
+parameter list of the insert statement. If not, an exception is raised.
+2
+If the inserted Object has a relation defined, then if xxx_ID is
+null (where xxx is the attribute mapped to the CLASS_REL_ATTR_MAP_CNFG.ATTRIBUTE_NAME for the key),
+but the xxx_CODE value is not null (where xxx_CODE is the attribute mapped to the CLASS_REL_ATTR_MAP_CNFG.ATTRIBUTE_NAME for the logical key),
+then the code looks up the object ID
+of xxx. If this object ID does not exist, a "Foreign key not found"
+exception is raised. If it does exist, the object ID is returned and
+written to the database.
+Note that this also happens if, in the calling line, the referred object
+has a start date > daytime. As an example: If country Norway has a start
+date 01-Jan-1030, and is referred by the company "Stone Age Inc." where
+OBJECT_START_DATE and DAYTIME are 01-Jan-0600, then a "Foreign key not
+found" error is raised because the country was undefined before
+01-Jan-1030.
+Note that for "ordinary relations" only xxx_ID is stored, not xxx_CODE.
+For group relations both xxx_ID and xxx_CODE are stored, group relations
+are always stored in version tables.
+If both the ID and code is given for a relation, and there is an
+inconsistency between the 2, there will be raised an exception on this.
+3
+Step 2 is repeated for all relations.
+4
+If an OBJECT_ID is included in the insert statement then this is
+used when writing to the database. If it’s not included, one is
+generated automatically.
+5
+Checks that the Object’s end date is after its start date, or NULL.
+If not, an exception is raised.
+6
+Checks that the start time for attributes is not before the start
+time of the object itself, i.e. the attribute cannot exist before the
+object. If not, an exception is raised.
+7
+If CREATED_BY & CREATED_DATE are null, the Oracle user account and
+sysdate are used. If not null, the values passed in the insert statement
+are used. In the case of customers having cryptic user ids, a user exit
+can be invoked in order to resolve the user id to a more readable name.
+In order to enable this feature, the attribute_text for the
+attribute_type 'USE_UE_USER' should be set as 'Y' in
+'CTRL_SYSTEM_ATTRIBUTE' table. The user exit package function that would
+be invoked is UE_USER.getUserName.
+NOTE: the code does not check to see whether the date is sensible, i.e.
+in relation to the life of the object and attributes.
+8
+The record status is set to P if left blank (NULL) on insert.
+9
+Rev_no will always be controlled by the system, any given revision
+number will be ignored.
+Object View â Update Operation
+What happens when an Update operation is performed on an Object view is
+described here.
+Step
+Description
+1
+Checks that the Object’s end date is after its start date. If not, an exception is raised.
+2
+Checks that the start time for attributes is not before the start
+time of the object itself, i.e. the attribute cannot exist before the
+object. If not, an exception is raised.
+3
+If the object has one or more relations and the update statement
+attempts to update xxx_CODE (but not xxx_ID) then xxx_ID is derived from
+the object ID of xxx. If this object ID does not exist, a "Foreign key
+not found" exception is raised. If it does exist, the object ID is
+returned and used in the update.
+4
+If attempting to update an attribute’s daytime, a new version (copy)
+of the record is created in the version table, even if only the
+attribute’s daytime is updated, and not any other attributes. This will
+not result in a journal entry since old data will not be overwritten.
+5
+If updating attributes, but not daytime, then a copy of the record
+is not created in the version table, but a copy is made in the journal
+table.
+6
+If an attempt is made to update OBJECT_ID an exception is raised as this is not allowed.
+7
+If an attempt is made to update END_DATE, i.e. the end date of the
+entry in the version table, an exception is raised as this is not
+allowed. Updates to this end date are handled automatically by system
+triggers to ensure against the creation of overlapping versions of the
+Object.
+8
+If an attempt is made to update CLASS_NAME an exception is raised as
+this is not allowed.
+Note, however, that it is possible to update the name to be the same as it already was.
+9
+If LAST_UPDATED_BY & LAST_UPDATED_DATE are null, Oracle user account
+details are used. If not null, the values passed in the update statement
+are used. In the case of customers having cryptic user id’s, a user exit
+can be invoked in order to resolve the user id to a more readable name.
+In order to enable this feature, the attribute_text for the
+attribute_type 'USE_UE_USER' should be set as 'Y' in
+'CTRL_SYSTEM_ATTRIBUTE' table. The user exit package function that would
+be invoked is UE_USER.getUserName.
+NOTE: the code does not check to see whether the dates are sensible,
+i.e. in relation to the life of the object and attributes.
+Object View â Delete Operation
+What happens when a Delete operation is performed on an Object view is
+described here.
+Step
+Description
+1
+If an attempt is made to delete an object an exception is raised as
+this is not allowed. If an object is not required, OBJECT_END_DATE
+should be set equal to OBJECT_START_DATE instead. This will prevent the
+object from appearing in views.
+Interface View â Select Operation
+What happens when a Select operation is performed on an Interface view
+is described here.
+Step
+Description
+1
+The select is a simple query built on the underlying Objects, so
+should return an aggregation of all the data from each of those Objects
+where the class name matches the interface class.
+Interface View â Insert, Update and Delete Operations
+For Insert operation this is done by an INSERT on the underlying
+OV-view, so the same checks and rules as for OV-views apply. For
+updates, the trigger builds up a dynamic update list, and run an update
+on the underlying tables.
+Data View â Select Operation
+What happens when a Select operation is performed on a Data view is
+described here.
+Step
+Description
+1
+If the Data is selected does not have any relations, then the select
+is a simple query using the mappings between the attributes and their
+locations.
+2
+If the Data have one or more relations, then, before displaying the
+query results, xxx_CODE attribute with DB_MAPPING_TYPE=RELATION is derived from the object ID of the
+corresponding relation attribute mapping. Although the only xxx_ID is
+stored, both it and xxx_CODE are displayed on Select.
+Data View â Insert Operation
+What happens when an Insert operation is performed on a Data view is
+described here.
+Step
+Description
+1
+A check is made to see if all mandatory attributes are in the
+parameter list of the insert statement. If not, an exception is raised.
+2
+If the inserted Object has a relation defined, then if xxx_ID is
+null (where xxx is the attribute mapped to the CLASS_REL_ATTR_MAP_CNFG.ATTRIBUTE_NAME for the key),
+but the xxx_CODE value is not null (where xxx_CODE is the attribute mapped to the CLASS_REL_ATTR_MAP_CNFG.ATTRIBUTE_NAME for the logical key),
+then the code looks up the object ID  of xxx. If this object ID does not exist, a "Foreign key not found"
+exception is raised. If it does exist, the object ID is returned and
+written to the database.
+Note that only xxx_ID is stored, not xxx_CODE.
+3
+Step 2 is repeated for all relations.
+4
+If an OBJECT_ID is included in the insert statement, then this is
+used when writing to the database. If it’s not included, one is provided
+automatically.
+5
+If CREATED_BY & CREATED_DATE are null, Oracle user account details
+are used. If not null, the values passed in the insert statement are
+used. In the case of customers having cryptic user ids, a user exit can
+be invoked in order to resolve the user id to a more readable name. In
+order to enable this feature, the attribute_text for the attribute_type
+'USE_UE_USER' should be set as 'Y' in 'CTRL_SYSTEM_ATTRIBUTE' table. The
+user exit package function that would be invoked is
+UE_USER.getUserName.
+NOTE: the code does not check to see whether the date is sensible, i.e.
+in relation to the life of the parent object and attributes.
+6
+The record status is set to P if left blank (NULL).
+7
+Rev_no will always be controlled by the system; any given value will
+be ignored.
+Notes
+There is a unique key on the combination of CLASS_NAME, OBJECT CODE,
+and DAYTIME, so an exception will occur if an attempt is made to insert
+the same row twice, even if the OBJECT_ID for each is different.
+An insert operation does not become an update operation if a primary
+key violation occurs.
+Data View â Update Operation
+What happens when an Update operation is performed on a Data view is
+described here.
+Step
+Description
+1
+If the object has one or more relations and the update statement
+attempts to update xxx_CODE (but not xxx_ID) then xxx_ID is derived from
+the object ID of xxx. If this object ID does not exist, a "Foreign key
+not found" exception is raised. If it does exist, the object ID is
+returned and used in the update.
+2
+If an attempt is made to update OBJECT_ID, an exception is raised as
+this is not allowed.
+3
+If an attempt is made to update CLASS_NAME an exception is raised as
+this is not allowed.
+Note, however, that it is possible to update the name to be the same as
+it already was.
+4
+If LAST_UPDATED_BY & LAST_UPDATED_DATE are null, Oracle user account
+details are used. If not null, the values passed in the update statement
+are used. In the case of customers having cryptic user ids, a user exit
+can be invoked in order to resolve the user id to a more readable name.
+In order to enable this feature, the attribute_text for the
+attribute_type 'USE_UE_USER' should be set as 'Y' in
+'CTRL_SYSTEM_ATTRIBUTE' table. The user exit package function that would
+be invoked is UE_USER.getUserName.
+Data View â Delete Operation
+What happens when a Delete operation is performed on an Object view is
+described here.
+Step
+Description
+1
+A data record will be deleted based on the key values passed to the view
+Note that it is assumed that there are not any dependencies between data
+classes as the code does not prevent the deletion of a parent before the
+deletion of any child data.
+Journaling
+In an Energy Components database, all stored data which may change
+during production operations can be selected for journaling. Identifying
+when journaling will occur is configured during the initial database
+setup.
+In the generated view layer, all Objects and Data classes each have a
+generated journal view (ending in _JN). Journal rules are set on the
+class level, but the actual logging is handled at a physical table
+level. The journal views present old versions of the entries in the main
+view, in the same way as if the view was a physical table with an
+associated journal table.
+For data classes, all updates result in an increment on the revision
+number, and a journal entry made for the old row.
+For object views, changes to attributes will result in journaling if it
+is an update to the same version of the object (daytime not changed).
+Locking
+It is possible to lock both master- and transactional- data classes. The
+view generator plays an important role in enforcing this locking. The
+Locking is enforced on class level based on the class attributes
+LOCK_IND and LOCK_RULE. The details are described in the documentation
+for CO.1013 Create and maintain class [com.ec.frmw.co.screens] and
+HA.0007 Monthly Data locking [com.ec.prod.ha.screens].
+General Notes
+The following are notes which are pertinent to all metadata, regardless
+of Class type.
+Reserved words
+If any of the standard revision column names are used as attribute
+names, the view generation will fail. At present, there is not a test
+for this in the application, so the user will not receive a meaningful
+error message. Names to avoid include are CREATED_BY, CREATED_DATE,
+LAST_UPDATED_BY, LAST_UPDATED_DATE, REV_NO, and REV_TEXT.
+Language
+English is the official language used throughout the Energy Components
+product set. It is important, particularly for long-term support
+purposes, that this is carried through to Class names, attribute names,
+etc. Developers are reminded that all metadata should be defined in
+English.
+Relationship Diagram
+Figure 1. Class relation data model
+The diagram above gives an overview of the most important tables in the
+object class model.
+Detailed Table Descriptions
+This section contains more detailed descriptions of the tables referred
+to in this document.
+CLASS_CNFG
+Class definitions for the model are stored here.
+COLUMN
+TYPE
+DESCRIPTION
+CLASS_NAME
+varchar2(24)
+Name of class in object class model (Primary Key).
+CLASS_TYPE
+varchar2(32)
+Class type (DATA, OBJECT, INTERFACE, TABLE,REPORT).
+APP_SPACE_CNTX
+varchar2(32)
+Defines who owns the Class, the product
+uses codes like EC_FRMW, EC_PROD, etc. Customer-defined classes should
+use their own codes here.
+TIME_SCOPE_CODE
+varchar2(32)
+Time-dependent data classes can be
+periodic, such as 30min, hourly, daily, weekly monthly, quarterly and
+annual, or they could be event driven where each timestamp represents a
+new (normally changed) value set. Values (DAY, YR, WEEK, MTH, 1HR, 2HR,
+30MIN, SAMPLE, EVENT, VERSIONED, EVENT_CONTINUES).
+DB_OBJECT_TYPE
+varchar2(32)
+Specifies if the underlying storage is a TABLE or VIEW.
+DB_OBJECT_NAME
+varchar2(32)
+Name of the main storage table or View.
+DB_OBJECT_ATTRIBUTE
+varchar2(32)
+Name of the version table for object
+classes, for other classes this will be <Null>.
+DB_WHERE_CONDITION
+varchar2(32)
+Where the condition added to the
+generated view. A typical example is a filter on class_name if several
+classes share the same physical table.
+DATA Class Type
+Although transactional data could be considered as being a property of
+an object, e.g. at 22:30 on 30-Dec-2002, the value of the bottom hole
+pressure of well A-10 was 94.14, this could be thought of as a property
+(that changes frequently), we have chosen not to represent such data as
+properties, but rather as a dependent class, called a data class. In the
+example, this reading may be part of the Data Class PWEL_30MIN_STATUS
+and be part of a record containing many meter readings (as defined in
+the data class) at 22:30 for the same object A-10 (meaning that we
+maintain a record structure for this type of data).
+Data classes are always dependent on one parent object class, and its
+instances are always linked implicitly to an object instance of the
+class.
+In Energy Components many data are time-dependent, but we also have many
+examples of transactional data not being time dependent. For example,
+when we invoice a sale, the invoice is modeled in Energy Components with
+the DOCUMENT, TRANSACTION, and LINE_ITEM data classes all referring to
+their parent CONTRACT object class. Each of the data classes has the
+combination of object_id and its own id, e.g. document_id,
+transaction_id, and line_item_id, where the combination of object_id and
+own id must be unique.
+Data classes can be linked to other object classes than their parent,
+e.g. the LINE_ITEM data class is also linked to the PRICE_ELEMENT object
+class from which it can get its price data. Such links are always
+foreign key links and do not use the object class relation structure
+defined above.
+Most EC Data classes will be of the form object_id, daytime, and some
+more properties. However, there will also be situations where multiple
+dimensions must be modeled in a class, e.g. the stream’s shipper
+component allocated mass requires the stream_id, shipper_id, and
+component_id in order to identify the record.
+OBJECT Class Type
+This specifies that the class will be used to instantiate objects used
+for system configuration.
+INTERFACE Class Type
+This specifies that the class is an interface that will be implemented
+by other classes. See the description under CLASS_DEPENDENCY.
+TABLE Class Type
+The TABLE Class type is used for system tables such as user access
+tables, verification tables, etc. It is needed because generic screens
+based on EnergyX must retrieve values through the DAO, and there they
+have to be defined as Classes.
+The view layer for these is simpler than Object, Data and Interface
+classes because it is usually only a 1:1 mapping to the underlying table
+or view, but with the possibility of also defining virtual attributes
+for these classes.
+These views/columns will be updateable if the underlying table/view is
+updateable, virtual attributes are not updateable.
+Class Naming
+EC class names are used to generate Oracle objects which currently
+cannot have more than 30 characters. This means that EC class names
+shall be a maximum of 24 characters to allow for prefixing the various
+types of Oracle objects being generated.
+Each object class that owns one or more data classes shall have a
+4-letter abbreviation which is used to prefix the data class name, e.g.
+STRM_1HR_DATA.
+CLASS_ATTRIBUTE_CNFG
+Properties associated with a class (class type OBJECT, INTERFACE, or
+DATA) are stored here.
+COLUMN
+TYPE
+DESCRIPTION
+CLASS_NAME
+VARCHAR2(24)
+Class to which this property belongs.
+ATTRIBUTE_NAME
+VARCHAR2(24)
+Name of class property (will become a view attribute).
+APP_SPACE_CNTX
+VARCHAR2(1)
+Defines who owns the Class Attribute, the
+product uses codes like EC_FRMW, EC_PROD, etc. Customer-defined classes
+should use their own codes here.
+IS_KEY
+VARCHAR2(1)
+Is this property part of the primary key within a class (Y, N).
+IS_LOGICAL_KEY
+VARCHAR2(1)
+Is this property part of the logical key within a class (Y, N).
+DATA_TYPE
+VARCHAR2(32)
+The data type of this property (STRING, DATE, NUMBER).
+DB_MAPPING_TYPE
+VARCHAR2(32)
+The context for SQL code (COLUMN, FUNCTION, ATTRIBUTE, EXTENSION, EXT_JOIN, LEFT_JOIN, INNER_JOIN).
+DB_SQL_SYNTAX
+VARCHAR2(4000)
+Column for which the attribute is
+mapped. Function calls can be defined here.
+DB_JOIN_TABLE
+VARCHAR2(32)
+Table name if the attribute is joined in
+from other tables. Should be filled out when DB_MAPPING_SYNTAX is LEFT_JOIN or INNER_JOIN.
+DB_JOIN_WHERE
+VARCHAR2(1)
+Where condition (join) if the attribute is
+joined in from other tables. Requires good SQL understanding to use this feature.
+DB_JOIN_ALIAS
+VARCHAR2(255)
+Alias to the DB_JOIN_TALBE. This can be used in the DB_JOIN_WHERE.
+DB_SORT_ORDER
+NUMBER
+The sort order tables are joined (if more than one )
+CLASS_xxxx_PROPERTY_CNFG
+There are 4 main property tables associated with the 4 tables:
+class_cnfg, class_attribute_cnfg, class_rel_cnfg, class_trigger_actn_cnfg.
+These tables hold properties that control behavior both in the generated
+view layer, which is the main focus of this document. But it also
+controls how the class data is presented in the applications running on
+top. The valid combinations of these are defined in a table called
+Class_Property_Codes and enforced by trigger logic on the property tables.
+The selected example illustrates the main principles of the property
+tables and is the same for all the 4 tables Class_Property_cnfg,
+class_attr_property_cnfg, class_rel_prop_cnfg, class_tra_property_cnfg.
+COLUMN
+TYPE
+DESCRIPTION
+CLASS_NAME
+VARCHAR2(24)
+Class to which this property information belongs.
+ATTRIBUTE_NAME
+VARCHAR2(24)
+Class Attribute to which this property information belongs.
+PROPERTY_CODE
+VARCHAR2(100)
+Code for the property associated with the Class Attribute.
+OWNER_CNTX
+NUMBER
+Used to override more general property values. The
+EC product uses 0, but packages, templates, and projects can override
+this by adding their own rows with their own OWNER_CNTX, the row with
+the highest number will be used. The range from 0-999 is reserved for
+Quorum Software. Customers should set their OWNER_CNTX > 1000.
+PRESENTATION_CNTX
+VARCHAR2(240)
+The other defined dimension for
+presenting attributes differently in different applications and
+settings. The main EC application uses the default value '/EC' for now.
+Properties only relevant for the Viewlayer that can’t be overridden in
+this dimension will have the value '/'.
+PROPERTY_TYPE
+VARCHAR2(24)
+Can be VIEWLAYER, APPLICATION,
+STATIC_PRESENTATION etc (Valid combinations are defined in Class_Property_Codes).
+PROPERTY_VALUE
+VARCHAR2(32)
+The value of the property.
+CLASS_REL_CNFG
+Class relationships in the class model are stored here. In the EC class
+model, links, relations, and group connection (relation) can exist
+between classes.
+Any one relation can only link 2 classes.
+Relations can be of type:
+OBJECT - relation to an object class
+OWNER - relation to an object class that is the owner of the data class
+CODE_REF - relation to codes (EC codes, Units, etc)
+GENERAL - relation to table or data classes
+OBJECT relation
+A relation has a direction which follows cardinality (from parent to
+child), or in the case of a 1:1 relation, the dependency rule says that
+the object being the more independent of the two takes precedence and
+becomes the "from object", the other the "to object". A relationship has
+cardinality 1:1 or 1:N.
+Note that 'relation' between object classes has a different meaning in
+this context than in a relationship in a traditional ER model. In EC, a
+relation is a concept on its own (in an ER model, one would represent
+this with a connection entity), and we can refer to properties of a
+relation.
+In the EC Object Class model, M:N (many to many) relationships are not
+supported in the view generation. The two classes must instead both be
+created as supporting a 1:N multiplicity relationship.
+A 1:1 or 1:N relation can also be thought of as a property of an object,
+e.g. COUNTRY of registration for a COMPANY is a relation between COUNTRY
+and COMPANY, but seen from the COMPANY object it is just a property. In
+EC, we, therefore, want to expose such relations as properties.
+A group relation is a different kind of relations, it can only exist
+group relations between objects. The column
+CLASS_REL_CNFG.GROUP_TYPE indicates that this relation is a group
+relation.
+COLUMN
+TYPE
+DESCRIPTION
+CLASS_NAME
+VARCHAR2(24)
+Class to which this relation belongs to.
+RELATION_NAME
+VARCHAR2(32)
+Name of relation (there could be many relationships between two classes)
+REF_CLASS_NAME
+VARCHAR2(24)
+Class to which this relation has a relation to
+APP_SPACE_CNTX
+VARCHAR2(1)
+Defines who owns the Class Attribute, the
+product uses codes like EC_FRMW, EC_PROD, etc. Customer-defined classes
+should use their own codes here.
+GROUP_TYPE
+VARCHAR2(32)
+It contains the name of the group type. If
+this field <> null it indicates that the relation should be treated as a
+group relation.
+FILTER_KEY
+VARCHAR2(32)
+Defines the attributes used for filtering for a REF_CODE relation
+FILTER_VALUE
+VARCHAR2(2000)
+Defines the filter value for the relation.
+CLASS_DEPENDENCY_CNFG
+This table records which classes implement which interfaces.
+COLUMN
+TYPE
+DESCRIPTION
+PARENT_CLASS
+VARCHAR2(24)
+Name of the parent class, for an interface
+that means the Interface class.
+CHILD_CLASS
+VARCHAR2(24)
+Name of the child class, for interfaces that
+mean the class that implements parts of the interface.
+DEPENDENCY_TYPE
+VARCHAR2(24)
+Typically IMPLEMENTS or
+ACCESS_CONTROLLED_BY.
+APP_SPACE_CNTX
+VARCHAR2(32)
+Defines who owns the Class Dependency,
+the product uses codes like EC_FRMW, EC_PROD, etc. Customer dependencies
+should use their own codes here.
+Example:
+Define two classes, Primary Pipeline User (PPU) and Secondary Pipeline
+User (SPU), which implement the Interface Class NODE.
+NODE is defined as a Class of type Interface and will have some of the
+same (common) attributes as PPU and SPU, but NODE will be a read-only
+view, and data are not stored with CLASS_NAME = NODE.
+The link between NODE and PPU / SPU is reflected in table
+CLASS_DEPENDENCY_CNFG as shown below:
+PARENT CHILD DEPENDENCY
+CLASS CLASS TYPE
+------------------------------------
+NODE PRIMARY_USER IMPLEMENTS
+NODE SECONDARY_USER IMPLEMENTS
+The limitation of this concept is that an Interface class has to build
+on one or more Object classes; interfaces cannot be built on top of
+other Interfaces.
+The attribute names in all classes associated with an Interface must be
+the same, otherwise, they will not be matched, i.e. if the interface has
+an attribute called EXAMPLE_TEXT, all of the underlying Classes must
+have an attribute of the same name.
+Note, however, that while the attribute names must be the same, their
+locations need not be, i.e. the EXAMPLE_TEXT attribute may be mapped to
+OBJECTS_ATTRIBUTE_ROW.TEXT_1 in the first of the underlying Objects, but
+it may be mapped to OBJECTS_ATTRIBUTE_ROW.TEXT_11 for the second Object.
+It is assumed that there are not any dependencies between data classes
+as the trigger code does not prevent the deletion of a parent before the
+deletion of any child data.
+CLASS_TRIGGER_ACTN_CNFG
+This extension makes it possible to link in user code before and after
+the update on physical tables. This code will be linked to the generated
+code and must be a valid Oracle PL/SQL code only using available
+functions and variables. The user code is held in a Table called
+CLASS_TRIGGER_ACTN_CNFG where the View generator picks it up when it
+generates the Instead of Triggers. This means that any changes to the
+trigger action code will only be picked up after the Instead of the
+trigger has been generated.
+COLUMN
+DATA TYPE
+KEY
+DESCRIPTION
+CLASS_NAME
+VARCHAR2(24)
+Y
+TRIGGERING_EVENT
+VARCHAR2(250)
+Y
+INSERTING OR UPDATING OR DELETING
+(Must be a valid IF criteria in Oracle).
+TRIGGER_TYPE
+VARCHAR2(30)
+Y
+BEFORE / AFTER.
+APP_SPACE_CNTX
+VARCHAR2(32)
+Defines who owns the Class Trigger
+action, the product uses codes like EC_FRMW, EC_PROD, etc.
+Customer-defined classes should use their own codes here. Note that if a
+project wants to override a project trigger action, they should make
+their own row here, and disable the product trigger action with their
+own owner_cntx.
+DB_SQL_SYNTAX
+VARCHAR2(4000)
+VALID PL/SQL code in the given trigger context.
+Integration of Trigger actions
+When the view is generated these trigger action will be pasted into
+predefined areas within the trigger,
+The "Instead of trigger" will first do a lookup of any missing
+object_id based on code, and set record status information.
+Then it leaves the control to any defined trigger action of type
+'BEFORE'. The trigger action can then operate on a set of defined
+variables corresponding to the columns of the view.
+After that, the Instead of trigger takes over check mandatory columns
+and does the operation on the physical tables.
+Finally, it leaves the control to any defined trigger action of type
+'AFTER'. The trigger action can then use the set of defined variables
+corresponding to the columns of the view.
+Note: The same rule applies to this code as to any trigger code, this is
+not the place to put your main business logic, it is only intended for
+smaller maintenance operations.
+Appendix 1
+API for package ecdp_viewlayer
+Method Summary
+BuildReportLayer(p_class_name     IN VARCHAR2 DEFAULT NULL,
+                 p_app_space_cntx IN VARCHAR2 DEFAULT NULL,
+                 p_force          IN VARCHAR2 DEFAULT 'N')
+Build reporting views for all classes that match the given search criterion.
+BuildViewLayer(p_class_name       IN VARCHAR2 DEFAULT NULL,
+               p_app_space_cntx   IN VARCHAR2 DEFAULT NULL,
+               p_ignore_error_ind IN VARCHAR2 DEFAULT 'N',
+               p_force            IN VARCHAR2 DEFAULT 'N',
+               p_incl_report      IN VARCHAR2 DEFAULT 'N')
+Build class views, triggers, and packages for all classes that match the given search criterion.
+RecompileInvalidViewLayer()
+Re-compiles all invalid generated class objects
+Method Detail
+BuildReportLayer
+BuildReportLayer(p_class_name     IN VARCHAR2 DEFAULT NULL,
+                 p_app_space_cntx IN VARCHAR2 DEFAULT NULL,
+                 p_force          IN VARCHAR2 DEFAULT 'N')
+Build reporting views for all classes that match the given search criterion.
+Examples:
+SQL> -- All "dirty" classes
+SQL> execute ecdp_viewlayer.BuildReportLayer();
+
+SQL> -- All EC_PROD classes regardless of whether they are "dirty"
+SQL> execute ecdp_viewlayer.BuildReportLayer(p_app_space_cntx => 'EC_PROD', p_force => 'Y');
+
+SQL> -- WELL class if it is "dirty"
+SQL> execute ecdp_viewlayer.BuildReportLayer('WELL');
+
+SQL> -- WELL class regardless of whether it is "dirty"
+SQL> execute ecdp_viewlayer.BuildReportLayer('WELL', p_force => 'Y');
+Parameters
+Description
+p_class_name
+Name of class, or null for all classes
+p_app_space_cntx
+App space context, or null for all contexts
+p_force
+Set to 'Y' to force re-build of non-dirty classes
+BuildViewLayer
+BuildViewLayer(p_class_name       IN VARCHAR2 DEFAULT NULL,
+               p_app_space_cntx   IN VARCHAR2 DEFAULT NULL,
+               p_ignore_error_ind IN VARCHAR2 DEFAULT 'N',
+               p_force            IN VARCHAR2 DEFAULT 'N',
+               p_incl_report      IN VARCHAR2 DEFAULT 'N')
+Build class views, triggers, and packages for all classes that match the given search criterion.
+Examples:
+SQL> -- All "dirty" classes
+SQL> execute ecdp_viewlayer.BuildViewLayer();
+
+SQL> -- All EC_PROD classes regardless of whether they are "dirty"
+SQL> execute ecdp_viewlayer.BuildViewLayer(p_app_space_cntx => 'EC_PROD', p_force => 'Y');
+
+SQL> -- WELL class if it is "dirty"
+SQL> execute ecdp_viewlayer.BuildViewLayer('WELL');
+
+SQL> -- WELL class regardless of whether it is "dirty"
+SQL> execute ecdp_viewlayer.BuildViewLayer('WELL', p_force => 'Y');
+Parameters
+Description
+p_class_name
+Name of class, or null for all classes
+p_app_space_cntx
+App space context, or null for all contexts
+p_ignore_error_ind
+Indicates whether errors should be ignored or not
+p_force
+Set to 'Y' to force re-build of non-dirty classes
+p_incl_report
+Set to 'Y' to generate related report classes
+RecompileInvalidViewLayer
+RecompileInvalidViewLayer()
+Re-compiles all invalid generated class objects (i.e. views, triggers,
+and packages). The procedure currently used by the ec-db-installer.

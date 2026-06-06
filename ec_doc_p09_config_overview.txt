@@ -1,0 +1,141 @@
+TITLE: Configuration Overview
+URL: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/technical-documentation/product_concept/configuration_overview.html
+STATUS: 200
+
+Configuration Overview
+Introduction
+The major concept behind Energy Components is that it is configurable
+without the need for programming expertise or system downtime. Both the
+back end functionality and the user interface can be configured. A
+unique feature of Energy Components is the ability to allow clients to
+reconfigure the system without the need for high level programming
+skills. The configuration changes are quick to make and take effect
+immediately. New configurations can be added while the system is in use
+â avoiding the need for system or user downtime. This makes system
+changes financially efficient as well as time efficient. Configurable
+areas include:
+User interface, screens, and navigation features (referred to as 'Business Functions' in Energy Components)
+The methods the system uses to react, calculate and process data (referred to as 'Business Processes' in Energy Components)
+With the configuration capability, Energy Components can:
+Include or hide new columns
+Configure calculated numbers in the reporting layer that can then be displayed as and when required
+Be configured for multiple languages
+Be configured by role or record status
+As illustrated in the screen shown below, the following areas within
+Energy Components can be configured by Quorum Software prior to
+roll-out, or by the client after roll-out:
+Tree View
+Navigator
+Access to Objects
+Units
+Audit Tracking
+Check Rules
+Record Status
+Screen Configuration
+Tree View menu can be configured
+Navigator can be configured
+Access to Objects can be configured
+Units can be configured
+Configuration Options
+Tree View
+The Tree View can be tailored to meet the requirements of each customer.
+Energy Components comes with a standard menu layout where business
+functions are grouped together. These can easily be changed to reflect
+the customers' workflow and processes. The Tree View will contain
+different functions for different users depending on their business area
+and the users' level of access rights. When a user does not have access
+to a given screen or business function, the screen will not be visible
+on the Tree View.
+For ease of use, there is also a search field, which allows you to
+search for the Energy Components screen or business function you are
+searching for. You can also drag and drop your favorite screens into the
+Favorites section for easy access.
+Navigator
+The Navigator can be configured for each screen. Most screens in Energy
+Components use a dynamic Group Model Navigator which reads the Group
+Model Configuration and populates the columns dynamically. If the Group
+Model Configuration is changed, the Navigator (and subsequently what is
+shown on the screen) will change to reflect the new model and hierarchy.
+Units
+The Units used in the application can be changed. There are two types of
+Units used in Energy Components, these are:
+Display Unit -
+Indicates what unit type should be displayed in the screens
+Storage Unit -
+Indicates what unit type should be stored in the database
+Each Unit is configurable for each measurement type. For instance, once
+pressure measurements have been configured they will be stored using the same unit measurement throughout the system.
+The display unit will be the view unit to the default system of measurement.
+System of measurement can be configured per assets for objects in the group model.
+This will override the default system of measurement.
+Refer to
+System of Measurement
+.
+Although it is possible to change Units within the system, careful
+consideration should be given before changing storage units e.g. kg to
+tonnes. Changing the storage unit will NOT trigger a recalculation and
+conversion of stored data.
+Object Access
+Object Access components can be configured to limit user access to
+specific assets such as network points. This feature prevents users from
+seeing specific objects anywhere in the system either in screens or on
+any dropdown menus. Object Access can be set up to filter any object
+types. This way the system can be configured to meet the needs of
+specific users or groups of users (i.e. roles).
+Columns
+The columns in the screens can be configured. New columns can be added
+and existing columns can be hidden from view. Screen labels and column
+sort orders can also be changed to meet your requirements.
+Calculated Numbers
+Columns containing calculated values are configurable and new ones can
+be added. These can be hidden in certain screens, yet still made visible
+and available in reporting views for use in reports.
+Screen and Data Access
+Screen and data access can be configured for each individual screen. The
+screen access is set up according to user roles, so that users can only
+see the screens that are relevant to their roles function. You can also
+control the type of access the user has within a screen.
+The access levels defined in Energy Components are:
+No access
+Screen will be invisible for the users with this role
+Read
+Screen will be read only
+Change
+Only the 'Save' button will be activated in the screen where applicable
+New
+The 'Save' and 'New' buttons will be activated in the screen where applicable
+Delete
+The 'Save', 'New' and 'Delete' buttons will be activated in the screens where applicable
+Edit on VERIFIED data
+Access to change data with status VERIFIED
+Edit on APPROVED data
+Access to change data with status APPROVED
+New Objects
+New objects can quickly be added to the application using the
+configuration screens. As soon as the new object has been saved to
+Energy Components it is immediately available in the appropriate screens
+with no requirement for additional programming.
+Audit Tracking
+Energy Components automatically keeps a tracking journal of all data
+with a record status of 'VERIFIED' or higher. Again, this feature is
+configurable and can be changed to keep full information on all records
+with status of 'PROVISIONAL' or higher.
+Check Rules
+Each screen can have one or more Check Rules or validation hints applied
+to it. The Check Rules can be configured to automatically monitor the
+system for the correctness of data and can prompt the user to correct
+data and rerun processes if necessary.
+Record Status Processes
+System processes can be configured to run and update the record status
+automatically, or by manual intervention. These processes can be
+tailored to contain specific rules for each implementation project and
+customer. Access to these processes can be setup to prevent users from
+running unauthorized approval jobs, for example from V (Verified) to A
+(Approved), and thereby prevent data from being accidentally changed by
+users.
+Language
+The default language in Energy Components is English. However, the
+entire application can be configured to use the language of your choice.
+The language template is applied globally to Energy Components, but can
+also be configured and tailored for individual users so the system
+appears in their native language.

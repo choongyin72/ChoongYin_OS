@@ -1,0 +1,556 @@
+TITLE: Data Modelling Guideline
+URL: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/technical-documentation/frmw/databasedevelopment/data_modelling_guideline.html
+STATUS: 200
+
+Data Modelling Guideline
+Introduction
+The main objective of this document is to provide guidelines for the
+developer and data model checkers on code standards, best practices and special considerations for an EC system.
+EC has a logical data model mainly represented by the class concept with key concepts like Object-, Data- and
+Table- classes to represent business objects, data series and configuration. Please read the class documentation
+for details in the class model. The rest of these guidelines is focusing on the physical table structure
+in the database, but there will be references to the class model. It is important to have the class concept in mind also when designing the physical data model.
+General Standards and Concepts
+The main approach of data modelling in EC is to create table- and relationship- structures on at least
+3NF. There is however exceptions where data have been replicated for performance reasons.
+The physical EC data model is semantically rich with broad table structures.
+Until recently the tables had a combination of named columns used by the owner, and a set of generic
+columns for project additions.
+With the introduction of the extension concept, we are gradually phasing out the use of generic columns. Additions should be stored in separate tables linked in the class model as EXTENSION or EXT_JOIN.
+Additions with mapping_type=EXTENSION are stored in a narrow table. If there are several/many attributes or relations to be added to a class, these should be gathered in one table. This table should have named columns using EXT_JOIN to link to the main class table. The reason for this recommendation is:
+performance to limit the number of joins in the view/report layer.
+be aligned with the wide table structure, and the semantics concepts of the existing model.
+There can be several reasons why an alternative narrow table and more generic structure could be tempting to consider. But this is a different approach, and the 2 models does not necessarily mix well,
+so as a general rule new table structures should follow the wide and semantically rich model.
+Code standards
+Earlier table and column names in EC should not exceed 24
+characters. This was based on Oracles 30 character name limit. Since we often add 3 letter prefix/postfix to the given name, the 24-character rule was important. Even if Oracle no longer have the 30-character limit,
+there might be variables in product/project code declared as VARCHAR2(30), so it is still recommended adhering to the 24 character rule. The rule is no longer as absolute as it used to be.
+Table and column names must only have uppercase letters with an underscore
+separating multiple words. One of the most important tasks in creating tables is to define a good
+name for it. This outlines in fact the semantics of the table.
+Table name syntax: <subject>_<scope>_<purpose>
+When a name is decided, a short documentation of the table must be
+provided. The documentation will be implemented as a one-liner using the
+COMMENTS command that assigns the text to the table in the database. The
+table documentation can be retrieved by the view 'user_tab_columns'. Template for tables can be found in the appendix to this document.
+Note the following:
+All tables should have the 11 standard columns:
+Column Name
+Data Type
+Nullable
+Description
+RECORD_STATUS
+VARCHAR2(1)
+Y
+P (Provisional), V (Verified) or A (Approved), default value should be P.
+CREATED_BY
+VARCHAR2(30)
+N
+User who created the row, usually given by application.
+CREATED_DATE
+DATE
+N
+Timestamp when record was created, currently in system default time zone.
+LAST_UPDATED_BY
+VARCHAR2(30)
+Y
+User who did the last update of the row.
+LAST_UPDATED_DATE
+DATE
+Y
+Timestamp when record was created, currently in system default time zone.
+REV_NO
+NUMBER
+Y
+Starts at 0, is increased in accordance with class journal rule.Journal trigger will copy old row to journal table when this number is increased.
+REV_TEXT
+VARCHAR2(240)
+Y
+Can hold reason for changing a record and creating a new revision.
+APPROVAL_STATE
+VARCHAR2(1)
+Y
+Used for 4 eyes approval (4EA). Should have a check constraint. Valid values are N (New), O (Official, U (Updated) or D (Deleted). Can also be Null if the data don’t use 4EA.
+APPROVAL_BY
+VARCHAR2(30)
+Y
+User who have approval (4EA) the row.
+APPROVAL_DATE
+DATE
+Y
+Timestamp when record was approved (4EA).
+REC_ID
+VARCHAR2(30)
+Y
+Unique identifier (Oracle GUID) introduced to be used by 4EA. But is now used for several purposes, especially as FK for extension tables.
+Some existing tables still contain generic columns named TEXT_n, VALUE_n,
+DATE_n, REF_OBJECT_ID_n, GROUP_REF_ID_n, GROUP_REF_CODE. This is NOT
+something we recommend for new tables. Project specific stored
+attributes and relations should be kept in separate tables and use
+mapping type EXTENSION or EXT_JOIN to link to the class main table based
+on rec_id.
+Size of new table should be indicated either by Storage clause, or
+Size indicator comment (S, M, L, XL).
+It is sometimes hard to set the right storage parameters when defining a table,
+so this is often something that should be tuned in a project setting where you know more.
+All tables should have a Primary Key (PK) defined. See separate section for what to consider when creating a new primary key.
+Unique key and foreign key should be added when applicable.
+Basic triggers should be generated using ECDP_GENERATE package.
+All tables should have the following check constraint
+CHECK (APPROVAL_STATE IS NULL OR APPROVAL_STATE IN
+('N','O','U','D'));
+Creating primary keys and unique keys in an EC table
+EC has evolved over many years with different best practices for how to define keys on the physical table structures, so there are tables with different patterns in the key structure. In addition, EC has often had tables where the origin and ownership of a row of configuration data could be unclear, this also impact the choice of primary key.
+We basically have the following cases in an EC database:
+Key type
+Example
+*Description
+Logical
+PROSTY_CODES (CODE, CODE_TYPE)
+This is the classical case where the PK is the minimum set of data columns that identifies a row. There will in most cases not be a need for an additional Unique key.
+Surrogate Global Unique Identifier (GUID)
+WELL (OBJECT_ID)
+Surrogate keys can sometimes be useful when the minimum set of data columns that identifies a row is complex, or if values in the logical key is likely to change. EC is using this as the PK for object class "singleton" tables. You can probably question if this isolated set is necessary, but it is useful to have a uniform pattern and common code for all object classes. Within each class there is in addition a unique key on code. However, code might not be unique within the physical database table, if several object classes are sharing the same table.
+Numeric Surrogate key
+SCHEDULE(SCHEDULE_NO)
+Before "guaranteed unique" surrogate keys was introduced, it was common to use sequences(counters) to create database unique surrogate keys. EC has several cases of this, typically controlled by a table called ASSIGN_ID. These can give collisions and challenges especially in an upgrade setting, when the same logical record might exist with different surrogate keys, or hard coded sequence numbers don’t match in different databases.
+ The recommendation now is to avoid this kind of primary keys, rather use logical keys or GUID’s if special circumstances makes it hard to use logical PK.
+Note that almost all EC tables now have a unique REC_ID (GUID), this was introduced in EC 9.4. It might be tempting to use this also as PK, but given the design patterns in EC and especially the upgrade challenges described over, in most cases a logical PK or a combination of object_id and timestamp is preferable.
+Consideration around data types
+The dominating data types used in EC are:
+VARCHAR2
+NUMBER
+DATE
+There are no absolute rules that you should not use other data types, but be careful with Oracle specific
+data types and avoid timestamps with time zone. Earlier we have been careful with using binary/large object
+data types because they required special handling. This has been improved in newer versions of Oracle, and CLOB/NCLOB
+might be good alternatives in some tables.
+Date/Timestamp challenge
+In EC a lot of our data is linked to date or timestamps. There has been and still are limitations in our support
+for several time zones with the same EC database/schema. Please see Time Zone handling in EC (white paper) for a more elaborate discussion
+of the challenge. But in a data model setting it is important to know the following:
+The column DAYTIME is frequently used (naming standard), but it is not always clear if it represents a date
+(production day), or a sub-daily timestamp. It depends on the context, and is especially hard to decide for event based data.
+With only supporting one time zone within an ECKERNEL schema this has not been a big problem. But going forward and
+wanting to support several time zones, we have to be aware and clearly define if a date column is representing a date or a timestamp.
+In tables that stores sub daily data, and where the timestamp is a part of the primary key, the current standard is:
+owner reference PK (Typically OBJECT_ID)
+DAYTIME      DATE  PK (Timestamp in local time)
+SUMMER_TIME  VARCHAR2(1)  PK  (Y/N Need to make current PK Unique for the overlapping hour)
+UTC_DAYTIME  DATE (Timestamp in UTC time, currently kept in sync by trigger logic)
+PRODUCTION_DAY DATE (The production date the sample belongs to, set by trigger, not necessarily trunc(DAYTIME) )
+For now, it is still the local timestamp and summer_time flag that is part of the PK, there is a plan in the future to switch so that UTC_DAYTIME will be used in the PK. Then we can get rid of the SUMMER_TIME flag, and maybe also remove the DAYTIME column, but this requires that report queries and other selects filter first on PRODUCTION_DAY.
+There are some open questions on the sequence of the next steps around this. The first step is probably
+to make support in the application layer for reading the UTC_DAYTIME column, presenting it in a users local time zone
+and writing it back as UTC timestamps to the database. The existing trigger logic should support this already, but
+we need to support both types of timestamp references in PK for a while. There is a job to do sorting out the classes where
+the definition of what the DAYTIME column represent is unclear. If it is a DATE (production Day), it should not be stored
+in UTC and converted on read/write.
+Journaling tables
+The EC system is doing hydrocarbon accounting, and like all accounting system, traceability and audit login is important.
+So when creating new tables, the main rule is that there should also be a corresponding table with the same name + '_JN'.
+The exceptions are cases where there is no need for record history, and where the classes on top can not be a part of an interface that would need journaling.
+The journal table should have the same columns as the main table, but without the primary key constraint from the main table.
+In addition, the journal table should have the following six columns in the start:
+Column Name
+Data Type
+Nullable
+Description
+JN_OPERATION
+CHAR(3)
+N
+UPD(Update) or  DEL (Delete)
+JN_ORACLE_USER
+VARCHAR2(30)
+N
+Oracle user who created the journal entry
+JN_DATETIME
+DATE
+N
+Timestamp when journal record was created, currently in system default time zone.
+JN_NOTES
+VARCHAR2(240)
+Y
+Currently, used by object classes to distinguish between INDEPENDENT and COMMON operation on
+object singleton table and object version table.
+JN_APPLN
+VARCHAR2(35)
+Y
+Application name, not in use at the moment.
+JN_SESSION
+NUMBER(38)
+Y
+Session ID of triggering connection, not in use at the moment.
+Note that the responsibility for creating journal entries is shared between the class (journal rule) and the physical layer
+with JN_<table_name> triggers.  The Journal rules on class determines if journaling is needed. The JN-trigger does the actual
+copying for the physical tables. With extensions, it is important that any added EXT_JOIN table have a corresponding
+journal table if the main class table has journal table.
+How to do data modelling
+EC has some design patterns for organizing the physical data model. This section tries to describe the main principles in the model.
+The example tables under refers to the generic terms. When adding new tables and columns in accordance with these patterns, the tables
+should be given semantically specific names to make the model easy to understand and relate to.
+Object Classes
+Description
+Contains the configuration of important subject entities where each
+object is an instance of its class and has additional properties as time
+dependent attributes assigned to it. The attributes describe the
+properties of the related object only. An object may be standalone
+meaning it may be created without any dependencies to other
+entities. An object may also be a child object meaning it cannot
+exist without a parent object relation.
+Long-lasting vessel, but not cargo.
+All objects have a singleton record in an object table (separate or shared with class_name part of UK)
+Most object classes are versioned where attributes and relations that can change over time, are stored in an object_version table.
+Note that in EC the object versioning can not be sub-daily!
+Extension Attributes and relations added to a class owned by others should be stored in an extension table linked to the object_version table based on rec_id.
+If there are multiple extension attributes/relations for the same class it is best to define your own table and use EXT_JOIN, if not the extension values can be stored in the common extension_attribute_value. See more details around this in the class/extension documentation.
+When To Use
+Any entity that performs as a key object, or a subject in charge may be a
+candidate for object classification.
+OBJECT TABLE
+Attribute Name
+Nullable
+Data Type
+Description
+OBJECT_ID
+N
+VARCHAR2(32)
+Internal id used as a primary key
+CLASS_NAME
+N
+VARCHAR2(200)
+Refers to the classification the given
+object is an instance of.
+START_DATE
+N
+DATE
+The start date indicates when this object may be
+active from.
+END_DATE
+Y
+DATE
+The end date attribute indicates the end boundary
+of the period this object is active.
+Constraint Type
+Constraint Name
+Column Name
+Ref Table
+Ref
+Column
+PRIMARY
+PK_OBJECTS
+OBJECT_ID
+FOREIGN
+FK_OBJECTS_1
+CLASS_NAME
+CLASS_CNFG
+CLASS_NAME
+Object_version
+Attribute Name
+Nullable
+Data Type
+Description
+OBJECT_ID
+N
+VARCHAR2(32)
+Foreign key attribute that references the
+object. Part of the primary key.
+DAYTIME
+N
+DATE
+Start boundary for the period this attribute value is
+valid. Part of the primary key. Note this is a date, EC does not support sub-daily versioning for object classes.
+END_DATE
+Y
+DATE
+End date which indicates the end boundary of the
+period for this object version. Replicated value representing start of next version or end of object life span.
+(kept in sync by system, should not be set manually)
+ATTRIBUTE column name
+Y
+Any data type
+Attribute values are stored
+here.
+<CLASS_REF>_ID
+Y
+VARCHAR2(32)
+Foreign key to other object class
+<GROUP_MODEL_REF>_ID
+Y
+VARCHAR2(32)
+Object ID for group model references,
+based on predefined group model.
+<GROUP_MODEL_REF>_CODE
+Y
+VARCHAR2(32)
+Object code for group model
+references, base on a predefined group model.
+Constraint Type
+Constraint Name
+Column Name
+Ref Table
+Ref
+Column
+PRIMARY
+PK_OBJECTS_VERSION
+OBJECT_ID
+PRIMARY
+PK_OBJECTS_VERSION
+DAYTIME
+FOREIGN
+FK_OBJECTS_1..n
+<CLASS_REF>_ID, <GROUP_MODEL_REF>_ID
+Object
+OBJECT_ID
+Data Classes
+Description
+Transactional data related to an owner object. The data classes are
+divided into the following categories:
+Transactional data instances appearing on a regularly time stamped
+basis.
+Event data instances appearing on a variable or irregular time stamped
+basis.
+Sequence numbered data instances created on a sequential and
+time-independent basis.
+As described in the Date/Timestamp section, EC has not always been deterministic on what columns with data type DATE
+represents. This is especially true for tables used by classes that are defined as event (TIME_SCOPE_CODE='EVENT').
+When we now are trying to go towards EC systems that fully support multiple time zones, we need to make sure we
+don’t introduce new ambivalent data columns in new tables.
+At the same time we are bound by existing naming conventions where certain column name have special meaning and are used in validation, integrity checks etc. Based on this the following guidelines can be given:
+When To Use
+Data classes are intended as the main storage for transactional data in EC. It requires that the data is owned by an object class and have a date column as part of the primary key. The class model have generic support for row level access, 4 eyes approval etc. related to data classes.
+Date columns used in data classes
+Column_name
+Data Type
+Description
+DAYTIME
+DATE
+Can mean Day or Timestamp. Determined by other columns in table, ref under.
+If it is a timestamp, it represents the local time of the object it belongs to (owner object)
+UTC_DAYTIME
+DATE
+This is the Coordinated Universal Time (UTC) representation of a timestamp.
+If the table contains a DAYTIME column that represents a timestamp, then it should also have a UTC_DAYTIME column.
+Note: This does not hold truth for all existing EC tables where the usage is at the moment undefined.
+SUMMER_TIME
+VARCHAR2(1)
+Flag to make Primary Key unique where Daytime is a timestamp and frequency of time series
+are once an hour or higher. This flag is at the moment still needed. It can be removed when our application framework
+will support presenting local time to clients, but read/write from UTC_DAYTIME on the database side.
+PRODUCTION_DAY
+DATE
+The production date that the record belongs to. Only needed when the Daytime
+column represents a timestamp. Notice that the production day is not always the date part of the local timestamp.
+There can be an offset defined for a set of objects.
+EVENT_DAY
+DATE
+Same logic as for production date, represents the date the record belongs to. Only needed when the Daytime
+column represents a timestamp. Notice that the Event day is not always the date part of the local timestamp.
+There can be an offset defined for a set of objects.
+START_DATE
+DATE
+For transactional data that has a time span. As with the Daytime column, it is not always in existing tables given if this represents a date or a timestamp. For new tables this can be deducted if there is a corresponding UTC column in the table.
+END_DATE
+DATE
+For transactional data that has a time span, in data classes the end date is different from object version end date. It is typically manually controlled and does not necessarily represent the start of a following transaction/event. It is not also well-defined if this is a data or a timestamp, but it can sometimes be deducted from the other columns in the table.
+UTC_END_DATE
+DATE
+If transactional is sub-daily and have an END_DATE holding the local time end date, there should for now in addition be a UTC representation of this timestamp stored in this column. As for daytime in the future the END_DATE column might be deprecated, and we will only store the UTC representation, but that remains to be seen.
+There are other named date columns also frequently used in the EC data model that will not be mentioned explicitly here, but an important distinction for future tables is to separate between dates and timestamps. Timestamps should always have a UTC representation stored.
+Table Classes
+Description
+Table classes was original intended to reflect necessary system tables, typically configuration , access control and entities that did not belong as object classes or data classes.
+Through time, it has also been used to hold transactional data that does not fit within the rules for data classes (owner, daytime reference). This has lead to a bit blurry border here, but from a physical data model perspective there are not much to say except that the general guidelines for tables still applies.
+There cas also be 3-rd party tables placed inside the ECKERNEL schema that can have table classes put on top of them. Sometimes it might be required with a view in between to meet the class generator requirements.
+Constraints and Indexes
+All product owned tables in EC should have defined a primary key with an associated index. Usually this index will be named PK_<TABLE_NAME> if it is defined based on the "create table template" further down in this guideline. Note that sometimes after an export/import these indexes can be given a generated index name, and in those cases dropping the primary key can result in a "left behind" unique index. It is important to take this into account when making migration script to change primary keys, otherwise the recreation of a primary key might fail.
+Ideally, all foreign keys relations should also be explicitly declared and enforced in the database, but it is not always that easy, since it puts limits on loading sequence for configuration data. An example is class relations where it is hard to have foreign keys because of the way we load class by class alphabetically. It would require restructuring the whole class loading if we need to load all entries in class_cnfg first.
+It is important to be aware that the EC product does not attempt to create a complete set of indexes. It is not always given that many indexes gives better performance. There is an overhead in maintaining indexes, and the benefits for queries depends on several factors like number of rows to fetch, selectivity of column values etc. So EC is also depending on project specific analyses and indexes to tune specific systems.
+Triggers
+An EC system have database triggers on 3 different levels:
+On Class level there are what we have called Class Trigger Actions (CTA)
+Both generated and hand coded views can have triggers. Typically, these will be "INSTEAD OF TRIGGERS", meaning code that overrides the default DML operation. The EC class layer uses this to a large extent to provide general functionality like row level access, 4 eyes approval and data locking. In addition, the Class trigger action code is included in this kind of triggers.
+But in this document we will focus on triggers on the physical tables. This includes different types of table triggers, both generated and hand coded, naming conventions, sharing of responsibility between different layers of trigger etc.
+Here is an overview of most common trigger types in an EC database
+Trigger naming conventions
+Trigger_name
+Type
+Description
+IUG_<table_name>
+Before Insert or Update
+System generated trigger by Ecdp_generate, setting record metadata, and potentially surrogate key (object_id)
+IUC_<table_name>
+Before Insert or Update
+Hand coded trigger by table owner, typically a copy of the IUG trigger with special additions/handling. If an IUC trigger exists for a table, then ecdp_generate will not create a IUG trigger.
+IU_<table_name>
+Before Insert or Update
+Hand coded trigger by project, typically an extended version of the IUG or IUC trigger with special additions/handling. If an IU trigger exists for a table, then ecdp_generate will not create a IUG trigger. Try to avoid having project specific triggers of this type on tables owned by others, for now rather use Class trigger Actions in project owner context. In the future there might come better mechanisms for cascade action in a layered application structure.
+AP_<table_name>
+After Insert, Update or Delete
+System generated trigger by Ecdp_generate, recording configuration changes during install or system upgrade. This is intended for configuration tables only, but by definition all tables are defined as configuration unless they have been white-listed by setting a flag in the ctrl_object table (PINC_TRIGGER_IND). Hint, if you want to avoid logging changes for a given table, set this flag, notice that if the trigger already exists, it needs to be deleted manually.
+IUR_<table_name>
+Before Insert or Update
+System generated trigger by Ecdp_generate, setting the column REC_ID if it has not already been set by caller. The REC_ID column was introduced to support 4 eyes approval, but is now also used for other purposes including linking to extension tables. In the future we might consider restructuring the trigger logic for setting the record metadata.
+JN_<table_name>
+After Update or Delete
+Journaling is EC’s way of taking copies of old records for audit purpose. The journal trigger copies the old record to the journal table when the revision number is increased, typically controlled by the class journaling rule.
+AUT_<table_name>
+After Update
+These triggers are deprecated and was it used related for ec package caching that we abandoned. At the moment they are generated to do nothing! It will be removed from the DB and from ecdp_generate in future EC versions.
+AIUDT_<table_name>
+After Insert, Update or Delete
+Used to update Objects_table and objects version table when object classes are changing. The Objects_table and objects_version table is a replicated register of all entries for object classes. It contains codes, time zone, production day and Unit of measure links denormalized to simplify queries and speed up performance.
+Under is more details for some of these trigger types.
+Insert and update triggers
+As described in previous sections of this document, tables in EC contains a set of meta-data columns. Several of these are set in table triggers (or have fallback logic if they are not set by caller application). Here is an example of a generated trigger, notice the naming convention starting with IUG.
+CREATE OR REPLACE TRIGGER "IUG_ACCOUNT"
+ BEFORE INSERT OR UPDATE ON ACCOUNT
+ FOR EACH ROW
+ BEGIN
+ -- Basis
+ IF Inserting THEN
+   :new.record_status := nvl(:new.record_status, 'P');
+   IF :new.created_by IS NULL THEN
+         :new.created_by := COALESCE(SYS_CONTEXT('USERENV'CLIENT_IDENTIFIER'),USER);
+      END IF;
+      IF :new.created_date IS NULL THEN
+         :new.created_date := EcDp_Timestamp.getCurrentSysdate;
+      END IF;
+      IF :new.rev_no IS NULL THEN
+         :new.rev_no := 0;
+      END IF;
+    ELSE
+      IF Nvl(:new.record_status,'P') = Nvl(:old.record_status,'P') THEN
+         IF NOT UPDATING('LAST_UPDATED_BY') THEN
+            :new.last_updated_by := COALESCE(sys_context('CLIENTCONTEXT', 'USER'),USER);
+         END IF;
+         IF NOT UPDATING('LAST_UPDATED_DATE') THEN
+           :new.last_updated_date := EcDp_Timestamp.getCurrentSysdate;
+         END IF;
+      END IF;
+    END IF;
+END;
+The generation logic held in PL/SQL package ECDP_GENERATE can create triggers covering the common responsibilities of the Insert and Update operations on a table. Sometimes there is a wish to put more logic into the physical table trigger. Ideally, we would have liked to put the additional logic into separate triggers. Oracle support having several triggers on the same operation, but unfortunately there has been no way to control the sequence of such triggers. Since we often need to control the sequence of steps for a given operation, EC as a general rule only have one Insert/Update trigger for each physical database table.
+Until EC 12.2.3, this was done with overwriting the generated trigger that was then named IU_<table_name>. There are basically 3 levels of the IU triggers:
+Generated, now named IUG_<table_name>
+Common, product owned hand coded, now named IUC_<table_name>
+Project specific override, still named IU_<table_name>
+The driver behind the change is related to the introduction of Flyway in EC. Since the hand coded triggers are repeatable scripts in Flyway, overrides with the same name does not work well.
+Differentiation on name also prevents overriding hand coded triggers in the database by accident when generating new triggers.
+In the future we should as much as possible avoid putting project specific trigger code on product owned tables. To achieve this we need to come up with alternative ways to trigger project code, preferable through well-defined API or subscriptions to events.
+Generated Product Integrity Control Triggers (PINC triggers)
+During Installation of the system or upgrades, the system there is an environment variable called INSTALL_MODE set. In this setting we want to record all configuration changes made to the system. For this purpose there is a set of triggers named AP_<table_name>  (AP=After Pinc). Since it is a bit wage to define what is configuration in EC, the default assumption is that all new tables added to the system is potentially configuration data.
+At the same time it is important both for the upgrade performance and to limit the size of the CTRL_PINC table that we don’t log updates on transactional data even when INSTALL_MODE is set.
+To control this there is a flag in a table called CTRL_OBJECT that can be used to turn off the generation of AP triggers for tables where it is not needed.
+When adding new tables to the EC data model, you need to  decide if you need to make an entry in CTRL_OBJECT and set the PINC_TRIGGER_IND='N'. Be aware that if the table already have an AP-trigger you probably have to remove that trigger manually. The flag only prevents generation of new triggers.
+Generated Journal triggers (JN triggers)
+The concept of journal tables are described over, but the job of actually copying the rows are done by journal triggers. It is the Class IUD trigger that decides if journaling should take place or not, and increases the rev_no if needed. This is where Journal trigger comes into the picture. For each table where journaling is relevant there is a journal table (<table_name>_JN) and a journal trigger JN_<table_name> that does the actual copying. Notice therefore that if you make changes to a table by adding or removing columns, you need to regenerate the journal trigger. This is done with the package ECDP_GENERATE. You should never manually update the journal trigger.
+Packages
+The EC systems have a lot of code both system technical and business logic represented in database stored procedures (Oracle PL/SQL). Much of this is organized into PL/SQL packages. Here is an overview of the most common types of packages based on naming conventions.
+PL/SQL package naming conventions
+Package_name
+Description
+EC_<table_name>
+Generated packages based on physical table. Typically, used to lookup single values or get entire row based on the primary key.  Will be generated when the EC_PACKAGE flag is set in CTRL_OBJECT. There is also a MATH-flag in this table determining if the package will be generated with mathematical functions. It is the Ecdp_generate package that generate these packages.
+ECDP_<description>
+Hand coded data package, this should in theory be functions focusing on data technical operations related to the physical storage in the database, but this is not consequently implemented in all these packages. In the future this distinction might be more important compared to the ECBP packages.
+ECBP_<description>
+Hand coded business package, this should in theory be functions focusing on business logic. At the moment this is not consequently implemented in all these packages, and most of these are still tied to the physical storage structure. It is an open question if these packages in the future should be lifted on top of the generated viewlayer. But that will force changes in build sequence, and an alternative is a new public package API.
+ECC_<object class>
+Generated support package for object classes, mainly used by the generated class IUD-trigger to encapsulate storage operations, do integrity checks and do group model synchronization. In the future these packages will probably also be use for data and table classes. Replaces the EC Trigger packages (ECTP) that was used for group synchronization prior to EC 13.0.0
+UE_<description>
+User Exit package. Note the package header is hand coded by the owner, while the package body is generated with calls to the function implementation. The mapping from the header to the implementation is defined in the table CTRL_USER_EXIT, the default implementation can be overridden with entries in this table with a higher owner_cntx.
+UEI_<description>
+User Exit Implementation package. This is typically the product default user exit implementation. When extensions or projects implements their version this should be in packages prefixed in accordance with extension and project naming conventions.
+Life cycle management
+In a system like EC, database upgrades is one of the main challenges. We are using the tool Flyway that support migration driven database development. Please see the Flyway documentation, and the PL/SQL coding standard for how to write scripts and code, and be aware of the Safe upgrade principle.
+An important part here when we do data model changing is migration when the storage structure changes. The guidelines for how this should be done including deprecation management is still work in progress, so please be aware and follow the updates coming in the associated reference material.
+Reference material
+PL/SQL - Coding Standard and style (ECpedia version needs to be updated and moved)
+EC View Generator and Class Model (ECpedia version needs to be updated and moved)
+Time Zone Support in Energy Components (ECpedia version needs to be moved to this repository)
+Unit of Measure support in Energy Components (needs to be aligned with FlexUnit changes or maybe be taken out of the documentation?)
+Extension rules and naming conventions  (ECpedia: SK/Development%3A+Extensions where is the master for this now?)
+Safe upgrade - Analysis Criteria  (ECpedia:Safe+Upgrade+-+Analysis+Criteria)
+EC Flyway Developer Handbook (ECpedia: EC+Flyway+Developer+Handbook)
+Appendix: Create table templates
+PROMPT Creating Table
+
+ CREATE TABLE  (
+ record_status              VARCHAR2(1)          NULL,
+ created_by                 VARCHAR2(30)         NOT NULL,
+ created_date               DATE                 NOT NULL,
+ last_updated_by            VARCHAR2(30)         NULL,
+ last_updated_date          DATE                 NULL,
+ rev_no                     NUMBER               NULL,
+ rev_text                   VARCHAR2(2000)       NULL,
+ approval_state             VARCHAR2(1)          NULL,
+ approval_by                VARCHAR2(30)         NULL,
+ approval_date              DATE                 NULL,
+ rec_id                     VARCHAR2(32)         NULL
+)
+/
+-- Please indicate excpected table size (S,M,L or XL) :
+COMMENT ON TABLE  IS '-';
+COMMENT ON COLUMN . IS '-';
+
+ -- Primary Key ---
+ ALTER TABLE  ADD (
+ CONSTRAINT PK_
+ PRIMARY KEY ()
+)
+/
+
+ ALTER TABLE   ADD (
+ CONSTRAINT UK__1
+ UNIQUE ( )
+ )
+ /
+
+ -- Foreign Key ---
+ -- Must add Index as well --
+ ALTER TABLE  ADD (
+ CONSTRAINT FK__1
+ FOREIGN KEY ( )
+ REFERENCES
+ ( )
+ )
+ /
+
+ CREATE INDEX I__1 ON
+ ()
+ /
+
+ ALTER TABLE  ADD CONSTRAINT CHK__1 CHECK
+ (APPROVAL_STATE IS NULL OR APPROVAL_STATE IN ('N','O','U','D'))
+ /
+
+
+ CREATE TABLE _jn  (
+ JN_OPERATION                  CHAR(3)       NOT NULL,
+ JN_ORACLE_USER                VARCHAR2(30)  NOT NULL,
+ JN_DATETIME                   DATE          NOT NULL,
+ JN_NOTES                      VARCHAR2(240),
+ JN_APPLN                      VARCHAR2(35),
+ JN_SESSION                    NUMBER(38),
+ ...
+ record_status                 VARCHAR2(1),
+ created_by                    VARCHAR2(30),
+ created_date                  DATE,
+ last_updated_by               VARCHAR2(30),
+ last_updated_date             DATE,
+ rev_no                        NUMBER,
+ rev_text                      VARCHAR2(240),
+ approval_state                VARCHAR2(1),
+ approval_by                   VARCHAR2(30),
+ approval_date                 DATE,
+ rec_id                        VARCHAR2(32)
+)
+PCTFREE 0
+/
+Table creation should be done in following steps:
+Create a table with required attributes.
+Create constraints on created table
+Execute following commands to get EC packages and triggers:
+EXECUTE EcDp_Generate.generate('TABLE_NAME', EcDp_Generate.PACKAGES + EcDp_Generate.ALL_TRIGGERS);

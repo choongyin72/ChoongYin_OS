@@ -1,0 +1,36 @@
+TITLE: EC Extensions Overview
+URL: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/technical-documentation/frmw/ec-extensions/ec-extensions-overview.html
+STATUS: 200
+
+EC Extensions Overview
+Introduction
+Energy Components has introduced EC Extensions to easily extend and build solutions on top of the core EC product.
+These extensions will be managed by EC so that you will have control over which extensions are active and
+what modifications they have done to the system. You will also have full control over the extension lifecycle,
+including functions (web pages and APIs) to control start, stop, disable, update, database migrate and more.
+Extensions are software projects with source code that are built into a binary executable, that can then
+be deployed on top of an EC system.
+Quorum Software is shipping a number of extensions that can be used on top of EC.
+Talk to your Quorum Software representative to get more information about the current status of the available extensions.
+Custom extensions
+Quorum Software has enable anyone to develop their own extensions, that may be deployed and managed on
+top of their EC system.
+Manage extensions
+Extensions are delivered as binary software components. These binaries can be uploaded into your EC system
+and managed from there, see
+How to install an EC Extension
+.
+Use the Extensions Manager screen to manage the lifecycle of extensions.
+When the
+Run on startup
+checkbox is checked in the Extensions Manager, the extension starts when EC boot.
+EC downloads the extension from the database and extracts it, verifying that there is no pending database migration
+and starts the extension.
+When the database migration fails with
+Unable to calculate checksum for …​
+, the reason could be the file encoding.
+The database migration script files should have UTF-8 encoding.
+If the extension contains only database migration scripts and the database migration has been run,
+the
+Run on startup
+could be unchecked to prevent EC from downloading and verifying the extension every time EC boot.

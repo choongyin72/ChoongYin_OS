@@ -1,0 +1,21 @@
+TITLE: ECIS - Sample Periods explained
+URL: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/technical-documentation/frmw/ecis/ecis_sample_period_explained.html
+STATUS: 200
+
+ECIS - Sample Periods explained
+This section contains a number of cases with different target interval
+and time zones to show how ECIS will create the sample periods during
+aggregation.
+Samples: Interval 30 minutes (1800 secs)
+Sample: Interval 1 hour (3600 secs)
+Samples: Interval 2 hours (7200 secs)
+Samples: Interval 1 day (86400 secs)
+Samples: Interval 30 minutes, Central Time
+Samples: Interval 1 hour, Central Time
+image::frmw/ecis/sample-period/sample_period_1hr_CET.png
+Samples: Interval 2 hours, Central Time
+Samples: Interval 1 day, Central Time
+Samples: Interval 30 minutes, BrasÃ­lia Time
+Samples: Interval 1 hour, BrasÃ­lia Time
+Samples: Interval 2 hours, BrasÃ­lia Time
+Samples: Interval 1 day, BrasÃ­lia Time

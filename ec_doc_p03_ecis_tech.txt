@@ -1,0 +1,1032 @@
+TITLE: EC Integration Services (ECIS) Technical Documentation
+URL: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/technical-documentation/frmw/ecis/ecis_technical_documentation.html
+STATUS: 200
+
+EC Integration Services (ECIS) Technical Documentation
+Introduction
+This section is the technical documentation of the EC Integration
+Services (EC IS). It is supplemented by:
+ECIS - Configuration Guide
+- describing common data capture scenarios
+ECIS Agent
+ECIS - Advanced File Import
+ECIS - Staging Table Extension
+ECIS - Source Adapter Configuration
+ECIS - Example adapter configurations
+ECIS - Sample Periods explained
+EC Integration Services (EC IS) is the module that handles the
+integration of EC with external parties including:
+SCADA
+/ Tag Based Integration Service:* Tailored for integration with metering/tag-based solutions.
+File Integration Service:
+Exchanging row-based files.
+The appendices include configuration examples.
+*) SCADA - Supervisory Control And Data Acquisition
+Overview
+The individual integration services are designed as modularized,
+configurable components. As an example, the SCADA / Tag-Based
+Integration Service is segmented into components dealing with:
+Connection to the source system (adapter).
+Aggregating / transforming data.
+Mapping data.
+Inserting data in the database.
+This approach makes it easier to adapt the system to the customer’s
+environment.
+ECIS Components
+Overall Process Flow
+ECIS is comprised of two main parts that are isolated from each other by a message queue:
+Source - Reading data from various external data sources and writing them to the message queue.
+Target - Reading data from the message queue and transform it before storing it in the EC data storage.
+Source Process Flow
+EC Scheduler triggers the SourceAction (parameters, configuration-id)
+SourceAction reads the adapter configuration.
+This determines if we are reading the tag or row data.
+If reading tag data:
+SourceAction reads Source Tag Configuration.
+SourceAdapter reads tag data.
+SourceAction adjusts time intervals.
+SourceAction applies source mapping.
+SoureAction creates DataTransferObjects (DTOs).
+SourceAction sends DTOs to the message queue.
+If reading row data:
+SourceAdapter reads row data.
+SourceAction creates DTOs.
+SourceAction sends DTOs to the message queue.
+The
+TagService
+handles tag-based data from various sources, e.g. SCADA
+systems, files, or databases. A tag is a data structure that contains:
+A tag id (typically identifying a specific metering device).
+A date/time value (timestamp).
+A data value.
+A quality.
+The
+RowService
+reads data with arbitrary content. The content is
+processed on the target side with a corresponding PackageService or
+ECClassService before being stored in the EC Data Storage.
+The DataTransferObject (DTO) on the message queue contains also the
+username and configuration id so that the data can be processed with the
+same security context and configuration on the target side.
+Target Process Flow
+The data is picked up from the message queue.
+If processing Tag data:
+Aggregate data packages (DTOs). If data for a sample period is incomplete, it will be stored temporarily until the missing data arrives.
+Map data to an attribute of an EC Class.
+Insert data into EC Data Storage.
+If processing Row data:
+If the data should be processed by the PackageService (configured in the adapter configuration and depending on the configuration id in the DTO):
+Send the data to a DB package that stores the data in the EC Data Storage.
+If the data should be processed by the ECClassService (configured in the adapter configuration and depending on the configuration id in the DTO):
+Send the data to the ECClassService that stores it in the EC Data Storage.
+Components Details
+Source Adapter
+The source adapter is responsible for reading the data from the data
+source. A SourceAdapter can only deliver either tag data or row data.
+The following adapters are provided by EC:
+TagAdapters - delivering tag data:
+PI Web API Adapter
+(com.ec.frmw.is.engine.adapter.pi.rest.PiRestAdapter), for OSISoft’s PI server using REST API.
+PI MS SQL Adapter
+(com.ec.frmw.is.engine.adapter.pi.jdbc.PiJdbcAdapter), for OSISoft’s PI server using MS SQL Linked Server.
+Tag File Adapter
+(com.ec.frmw.is.engine.adapter.file), reads tag data from CSV or Excel files.
+OPC UA Adapter
+(com.ec.frmw.is.engine.adapter.opc.ua.OpcUaAdapter), for data sources compliant with the OPC Foundation’s OPC Unified Architecture specification.
+OPC Classic Adapter
+(com.ec.frmw.is.engine.adapter.opc.classic.OPCAdapter), for data sources compliant with the OPC Foundation’s OPC Historical Data Access specification, working on both Windows and Linux.
+IP21 JDBC Adapter
+(com.ec.frmw.is.engine.adapter.ip21.IP21JdbcAdapter) for Aspentech’s InfoPlus.21, only available in Windows.
+RowAdapters - delivering row data:
+Source Row JDBC Adapter
+(com.ec.frmw.is.engine.adapter.jdbc.SourceRowJdbcAdapter), for reading data from RDBMs, requires corresponding JDBC driver.
+Source JDBC Adapter Collection
+(com.ec.frmw.is.engine.adapter.jdbc.SourceJdbcAdapterCollection), for reading from multiple RDBMs.
+Row File Adapter
+(com.ec.frmw.is.engine.adapter.file.RowFileAdpater), for reading CSV and Excel files.
+The Source Adapter is configured in adapter configuration (see below).
+Tag Aggregation Service
+The Tag Aggregation Service transforms tag data into values prepared for
+the EC class model. It takes tag data containing a tag name, timestamp,
+and value, and checks it against the configured mapping rules. The main
+task is to handle data according to the fixed EC time resolutions. This
+assumes the Tag Aggregation Service to be aware of changes in daylight
+saving time, time shifts, and to handle time weighting between periods.
+The aggregation configuration calculates the expected number of samples
+for each period. To complete a specific value, it has to be built up by
+that number of samples. If a value cannot be released due to the
+completion rules, it will wait for a period of a timeout to occur. It
+will be further checked if it satisfies the minimum rules. The timeout
+can span over several runs, which also means that data will be persisted
+in the system for a specific time.
+The output from the Tag Aggregation Service is:
+Mapping identifier
+Timestamp aligned to EC class specification
+Aggregated value
+Tag Mapping Service
+The Tag Mapping Service is responsible for mapping aggregated values
+into EC class rows. Each value from the Tag Aggregation Service will be
+mapped to an attribute in a particular EC class. The basis for this
+service is a row buffer which groups the incoming values into its right
+place. When a specific number of values have been processed, the row
+buffer will be flushed. A row does not need to be 100% completed when it
+is flushed. The remaining attributes may come later, either in the next
+flush or in a later run. The only difference between a full and
+uncompleted row is that the resulting number of database updates will differ.
+The output from the Tag Mapping Service is:
+Mapping identifier
+Data Class
+<Class attribute 1 value>
+<Class attribute 2 value>
+â¦
+<Class attribute n value>
+The attribute values will also be provided with UOM: Unit of Measure.
+Timestamps will be converted from the internal UTC time zone to the time
+zone given by the EC system.
+EC Class Service
+The EC Class Service is responsible for inserting or updating rows
+towards EC specific classes. It receives data from the tag mapping
+service about which data class and attributes to update. It has to be
+aware of the Unit of Measure (UOM), so that data is converted to the
+right class attribute unit.
+This service will always look for existing data in the database. Hence,
+it tries to update data before it is inserted. Groups of rows will be
+processed together to obtain optimized performance.
+It is also possible to configure ECIS to send row-based data directly to
+the Class Service. ECIS will then, based on the configuration, write the
+data directly to EC classes.
+Package Service
+The Package Service is used to write row-based data. If you configure
+ECIS to use this service, you have to specify which package ECIS should
+send the rows to. It will then send the rows to this package for further
+processing.
+Configuration
+The configuration of EC Integration Services can be split into 4 stages:
+Source Adapter configuration: Use the Adapter Configuration screen.
+Source Tags configuration: Maintain Templates/Maintain Mappings screens in EC (applies also to a certain degree to row data)
+Class Mapping configuration: Maintain Mappings screen in EC
+Scheduler configuration
+Source Adapter Configuration
+Adapter configuration is specified using the Adapter Configuration
+screen introduced in EC-12.2.8. Here it is possible to either configure
+using a form in the screen, or importing a traditional ecisconfig.xml.
+Configuration added via the Adapter Configuration screen is stored in
+the EC database, eliminating the need to maintain XML files on the
+Wildfly server nodes. XML files on the appserver is no longer supported.
+Configuration IDs
+An adapter configuration is identified by its configuration ID, which is
+referred to by the Source Tags configuration.
+Configuration IDs must be added as EC codes with the type DT_SOURCE_ID.
+The configuration ID corresponds to the Source Id in the Maintain
+Mapping screen.
+Adapter Configuration Screen
+The Adapter Configuration screen can be used to add and update adapter
+configuration via the EC user interface. It supports the same
+functionality as the XML file.
+The screen consists of three or four sections, depending on the adapter
+type.
+The Adapter Section
+This section defines the main adapter setup. An adapter has a unique
+name, a type, a source id, and an optional failover adapter.
+The adapter name can be anything as long as it is unique.
+The adapter type defines which of the available ECIS adapters is used
+when running an import job. Adapter types are defined as EC codes of type ECIS_ADAPTER.
+The source id is the DT_SOURCE_ID EC code defined previously. It links
+tag mappings and scheduler jobs to the adapter config.
+The failover field can be used to set up a failover chain of adapters.
+A failover chain ensures that if the first adapter fails, the following
+adapter in the chain will be executed next time the same job runs.
+An adapter config can be disabled by ticking its Disable checkbox. A
+disabled adapter and all its parameters are excluded when loading the
+adapter config from the database.
+The Adapter Parameters Section
+This section defines the parameters required by the adapter. A parameter
+has a name, a value can optionally be in encrypted form, and, depending
+on the adapter type, can have subparameters.
+The table is sorted hierarchically. For those adapters that support
+subparameters, the subparameters are listed directly below their parent
+parameters.
+The parameter name is chosen from a list of parameters supported by
+the adapter type. Parameter types are defined in EC codes of type
+ECIS_ADAPTER_PARAM and linked via EC code dependencies to supporting
+adapters of EC code type ECIS_ADAPTER.
+The value is free text and naturally depends on what parameter it is.
+See
+ECIS - Source Adapter Configuration
+for more information on valid values.
+The encryption checkbox must be ticked if the value is in encrypted
+form. Note that ticking this checkbox does not perform any encryption,
+you must encrypt the value yourself (using the password-encryption-tool.jar, see
+Password Encryption Tool
+for more information).
+If a parameter requires subparameters, the parent column links a
+subparameter to its parent parameter. Only the row-based adapters use
+subparameters, so the column is only enabled for those adapter types.
+A parameter can be disabled by ticking its Disable checkbox. A disabled
+parameter and all its subparameters are excluded when loading adapter
+config from the database.
+The Parameter Dependencies Section
+This section defines a parameter’s dependencies. This is only used by
+the "Row JDBC Adapter Collection" adapter. The section is hidden for all
+other adapter types.
+The "Row JDBC Adapter Collection" adapter can pull data from a database
+by using multiple queries. The queries are defined in a subparameter of
+a top-level parameter. Only top-level parameters can be added as
+dependencies. A dependency states that the query defined within this
+parameter will only be executed if the query of its dependency has
+returned results. See
+ECIS - Source Adapter Configuration
+for details on
+this adapter.
+The Import & Export Section
+This section is used to import configuration from ecisconfig.xml into
+the screen, or export screen config back to XML. XML configuration that
+is commented out will not be imported. Likewise, disabled adapters or
+parameters will not be exported.
+On import, the config names in the XML are matched against EC codes of
+type DT_SOURCE_ID. An adapter config will not be imported unless there
+is already a DT_SOURCE_ID that matches the name. The adapter name in the
+screen is generated from the source id and can be changed after import.
+A few adapters have customizable parameter names that cannot be
+predefined by EC. When this kind of parameter is encountered, the
+parameter type is automatically added to the ECIS_ADAPTER_PARAMETER EC
+codes along with an EC code dependency to the ECIS_ADAPTER EC code of
+the adapter type. When adding parameters through the screen UI, these
+types of parameters must be manually predefined in EC codes before they
+are available for selection in the screen.
+ecisconfig.xml
+It is no longer possible to specify the adapter configuration in
+ecisconfig.xml on the application server. You can however make the
+configuration in a file like this and import it in the adapter
+configuration screen.
+Configuration ids don’t have to be unique. Duplicate configuration ids
+can be used for failover configurations, see below.
+Configuration ids have to be declared as EC codes, see below.
+A configuration can only have one Source Adapter configuration. A Source
+Adapter configuration must at least have a class parameter. The list of
+required and supported parameters for a Source Adapter depends on the
+adapter class. For details, see
+ECIS - Source Adapter Configuration
+.
+In both cases, the XML files have the same structure. Here is an
+example:
+<configurations>
+    <config name="CONFIGURATION_ID_1">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.pi.jdbc.PiAdapter</class>
+            <parameters>
+                <parameter name="dbdriver">com.osisoft.jdbc.Driver</parameter>
+                <parameter name="connecturl">jdbc:pisql://10.0.0.5;/Data Source=pi-server;Integrated Security=SSPI;</parameter>
+                <parameter name="username">piadmin</parameter>
+                <parameter name="pwd" encrypted="true">46f74ebd1bc9294c</parameter>
+                <parameter name="timezone">Asia/Singapore</parameter>
+                <parameter name="avg_calcbasis">EventWeighted</parameter>
+            </parameters>
+        </sourceadapter>
+        <srcmapper>com.ec.frmw.is.engine.source.mapper.impl.PiMapperDigitalValuesYorN</srcmapper>
+    </config>
+    <config name="CONFIGURATION_ID_1">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.file.TagFileAdapter</class>
+            <parameters>
+                <parameter name="DropFolder">c:\\temp</parameter>
+                <parameter name="CompletedFolder">c:\\temp\\completed</parameter>
+                <parameter name="ErrorFolder">c:\\temp\\error</parameter>
+                <parameter name="BadFolder">c:\\temp\\bad</parameter>
+                <parameter name="DateFormat">dd.MM.yyyy HH:mm:ss</parameter>
+                <parameter name="FileFilter"></parameter>
+                <parameter name="QualityColumnIndex">0</parameter>
+                <parameter name="TagColumnIndex">1</parameter>
+                <parameter name="TimeColumnIndex">2</parameter>
+                <parameter name="ValueColumnIndex">3</parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+</configurations>
+Password encryption
+The parameter pwd (denoting the password) can be encrypted. See
+Password Encryption Tool
+for more information.
+Source System Failover Configuration
+In order to obtain a high availability of adapters, it’s possible to
+configure several adapters using the same configuration name. The first
+adapter in the file will always have the highest priority. If it’s not
+available, e.g. the adapter cannot connect or fails during tag read, it
+will be degraded and the next schedule will use the next adapter in the
+sequence.
+Source Tags Configuration
+Maintain Templates
+The
+Maintain Templates
+configuration screen is used as a primary
+description of how data will be captured. As an example, the source
+interval is used to calculate how many samples to expect for a given
+period in EC, and the target interval is used to specify the length of a
+period resolution represented by a resulting class.
+Below is a table of the configuration parameters available in the
+Maintain template screen, and a short explanation of the use in ECIS.
+Source interval will in most cases be set equal to TARGET_INTERVAL. Note
+that the SOURCE_INTERVAL will be used together with SOURCE_DELAY to find
+the end of a request, in a request to the source system (see next
+section for more details).
+For Tags with source function=SAMPLE, the current implementation still
+requires a SOURCE_INTERVAL <= TARGET_INTERVAL.
+Configuration parameter
+Comments
+TEMPLATE_CODE
+Logical name for template.
+SOURCE_DATATYPE
+Defines expected data type in the source system.
+SOURCE_FUNCTION
+The function used when fetching data from the source system.
+SOURCE_INTERVAL
+Interval used in request from the source system.
+SOURCE_DELAY
+Time to wait before requesting a given time from the source system.
+MINIMUM_SAMPLES
+Minimum samples needed in the target period before completing the period.
+TARGET_INTERVAL
+Defines resolution (Frequency) for values written to the EC database.
+TARGET_FUNCTION
+The function used to aggregate values within ECIS.
+TARGET_DATETIME
+Name of Date column in EC where the timestamp of Target row will be written. Uppercase.
+USE_SUMMERTIME
+Indicates if the EC data class needs a Daylight saving flag as part of PK.
+TARGET_TRUNCATE
+This should only be used if you are reading daily data
+in a timezone which changes DST at 00.00 local time, like Brazil. (If so, set to DD).
+OVERWRITE_USER
+Flag indicating if Rows changed by non-system users can be updated by ECIS.
+OVERWRITE_STATUS
+Highest Record status can be changed by ECIS.
+PROD_DAY_START
+Production day offset in hours.
+Used to calculate target time correction. Target time correction has two
+purposes:
+It is used when deciding for which periods to ask the SCADA-system for data.
+It is used to move the timestamps coming in from the SCADA-system back
+in time. If PROD_DAY_START is set to 6, you want all samples coming from
+00:00 to 05:59 to be written to yesterdays date, thus by shifting all
+samples 6 hours back in time, they will end up in the correct period.
+A side-effect of the above is that this can be used to shift the samples
+x number of hours back in time if needed.
+ACTIVE
+Defines if the template is active or not. Cannot deactivate a template that has any tag mappings connected to it.
+Maintain mappings
+To configure the actual mappings against the classes, the
+Maintain
+Mappings
+screen is used. Each mapping is based on a data class
+attribute and associated with a template.
+The Source Id corresponds to the configuration id in the Adapter
+Configuration.
+Under is a table of the configuration parameters available in the
+Maintain Mappings screen, and a short explanation of the use in ECIS.
+The screens here are based on the established "DT-classes". Note that
+even if ECIS is not using the DT classes directly, they are still needed
+if the mappings are maintained with the Maintain Mappings screen. The
+navigator here will select the target EC Class and the object the rest
+of the configuration parameters applies for. Classes that shouldn’t be
+included in the navigator can be excluded by adding the
+INCLUDE_IN_MAPPING_IND class property with a value set to N to the
+DT-class. Remember to rebuild the class after the change.
+Configuration parameter
+Comments
+ATTRIBUTE
+Name of the EC Class attribute the value will be mapped to.
+SOURCE_ID
+Logical name of the source system. Corresponds to the source id in the adapter configuration.
+TAG_ID
+Name of the tag from the source system. Note the TC "-COPY-" postfix convention for mapping the same source tag to several EC Class attributes.
+TEMPLATE_CODE
+Transaction template that will be used for this tag in the transfer.
+FROM_UNIT
+For unit conversion (see under). Defines the UOM of the incoming value.
+TO_UNIT
+For unit conversion. Defines the UOM to convert to for the incoming value.
+Not needed if the Class attribute has a defined UOM.
+LAST_TRANSFER
+Shows the timestamp of the latest value written to the EC database.
+When a user moves LAST_TRANSFER, the next period to read will also be updated.
+LAST_TRANSFER_WRITE
+Not used by ECIS.
+ACTIVE
+Turn Mapping on/off.
+ATTRIBUTE PRIMARY KEY N
+Class dependent, set additional PK columns.
+VALUE OF PRIMARY KEY N
+Class dependent, set additional PK columns.
+The screen also gives an option to do bulk updates to the Last Transfer,
+From Time, To Time, and Active fields. You can select one or more
+records and click on the BULK UPDATE button after setting the parameters.
+If the PK_ATTR_2 attribute is set to "DATA_CLASS_NAME", the attribute
+and value should be removed (it is implicitly retrieved from the
+DATA_CLASS attribute of the mapping table in ECIS). This attribute is
+for some classes mandatory. To ensure expected behavior, the mandatory
+flag should be turned off on class level.
+Maintain Mapping Overview
+The
+CO.1019: Maintain Mappings Overview
+screen is used to view the
+various tags according to the different criteria.  It can be used to
+display all tags, all tags with specific source id, only active tags for
+all classes, or any combination of these values. In addition, the
+business function provides a way to do the bulk updates for a number of
+selected tags.
+Unit Conversion under ECIS
+The following rules apply for unit conversion under ECIS:
+If "From Unit" and "To Unit" are missing (NULL) then there is no conversion done and no warnings or errors logged.
+If "From Unit" and "To Unit" are defined and the UOM for the class
+attribute is also defined then the value will be converted "From Unit→
+To Unit" and also "To Unit → Class Attribute UOM".
+If the "From Unit" and the "Class Attribute UOM" are defined but not
+the "To Unit", then the value will be converted "From Unit→ Class Attribute UOM".
+For 2 and 3, any mismatches or missing conversion factors will result in
+warnings or errors logged.
+Algorithm for when and what to request from the source system
+A typical request to the source-system in ECIS would be:
+source_function
+(TAG_ID, FROM_TIME, TO_TIME, SOURCE_INTERVAL)
+The function will return a list of samples.
+The parameters for the source function are calculated in the following manner:
+FROM_TIME = TRANS_SOURCE_TIME.NEXT_READ (this is again calculated from the previous read for the tag)
+TO_TIME = <System time> - SOURCE_DELAY, shifted back to end of completed intervals based on SOURCE_INTERVAL
+INTERVAL_RESOLUTION = SOURCE_INTERVAL
+After the result set has been received and processed, NEXT_READ will be updated. This can happen in two ways:
+If SOURCE_FUNCTION is SAMPLE: NEXT_READ will be set to the timestamp of the sample with the latest timestamp + 1 second.
+If SOURCE_FUNCTION is an aggregated function, NEXT_READ will be set to
+the timestamp of the sample with the latest timestamp + 1
+source_interval (thus the beginning of the next source_interval).
+For source function SAMPLE, the SOURCE_INTERVAL will not be passed to
+the source system. But it will still be used in the calculation of the
+TO_TIME. NEXT_READ will still be set to TO_TIME.
+As a more technical detail, ECIS will always divide a request into
+RequestIntervals. This is to avoid problems with daylight savings time.
+For SOURCE_FUNCTION SAMPLE, ECIS will create one long request interval
+from FROM_TIME to TO_TIME. If you have aggregated functions, and your
+request passes a DST change, ECIS will divide your request into 3. One
+request before the DST-change, one request of 1 source_interval over the
+DST change, and 1 request after and until TO_TIME. It is also possible
+to specify that a request against the source_system can only contain a
+given number of source_intervals. This is typically used if you have a
+source_system which does not handle too large requests. For more
+information about this, see section
+Max number of sourceintervals in one request
+.
+Example:
+Input:
+TAG_ID = 14-PT-0345
+SOURCE_INTERVAL = 1800 sec
+SOURCE_DELAY= 900 sec
+NEXT_READ = 2008-09-01 06:00
+System clock = 2008-09-01 09:05
+Calculate to_time:
+<System clock> - SOURCE_DELAY = 2008-09-01 08:50
+Shifted back to complete period: To_time = = 2008-09-01 08:30
+Call: AVG('14-PT-0345', 2008-09-01 00 06:00, 2008-09-01 00 08:30, 1800)
+Result:
+Tag Timestamp Value
+-------------------------------------------------------
+'14-PT-0345' , 2008-09-01 00 06:00, 52,3
+'14-PT-0345' , 2008-09-01 00 06:30, 50,5
+'14-PT-0345' , 2008-09-01 00 07:00, 51,3
+'14-PT-0345' , 2008-09-01 00 07:30, 51,8
+'14-PT-0345' , 2008-09-01 00 08:00, 52,1
+'14-PT-0345' , 2008-09-01 00 08:30, 52,4
+
+NEXT_READ will then be set to 2008-09-01 09:00 (last retrieved timestamp + 1 source_interval)
+ECIS Source functions
+ECIS supports a number of source functions listed in the table below. Be
+aware of the following when setting up source functions:
+For a period defined by the from- and to-timestamps the aggregation
+function will return one value for all the complete intervals within the
+period.
+All aggregated values delivered from the source adapter should be
+timestamped at the beginning of the period.
+If a source system delivers aggregated values timestamped at the end
+of intervals, the source adapter should be configured to convert the
+timestamps to the beginning of the intervals.
+Source Function
+Parameters
+Notes
+SUM
+(from, to, source_interval)
+Dependent on source system implementation
+MIN
+(from, to, source _interval)
+MAX
+(from, to, source_interval)
+MEAN
+(from, to, source_interval)
+Dependent on source system implementation.
+AVG
+(from, to, source_interval)
+Time-weighted, dependent on source system implementation
+SAMPLE
+(from, to)
+Returns all samples with a given period.
+VALUE_AT_START
+(from, to, source_interval)
+For each interval, take
+the latest sample at or before the interval start time. Timestamp to
+start of the interval.
+VALUE_AT_END
+(from, to, source_interval)
+For each interval, take the
+latest sample within or before the interval. Timestamp to start of the interval.
+COMPRESSED
+(from, to, source_interval)
+Will give interpolated values. Only available for PI-adapter.
+AVG_AT_END
+(from, to, source_interval)
+For each interval, if there is
+more than one value, take the average sample within the interval; else
+take the value before the interval. Timestamp to start of the interval.
+LATEST_IN_INTERVAL
+(from, to, source_interval)
+Return the latest sample for each interval within a given period.
+Source functions supported by the adapter
+JDBC-adapter
+PI-adapter
+OPC-adapter
+CSV-adapter
+IP21-Adapter
+SAMPLE
+X
+X
+X
+X
+X
+AVG
+X*
+X
+X
+X**
+X
+SUM
+X*
+X
+X*****
+X**
+X
+MAX
+X*
+X
+X
+X**
+X
+MIN
+X*
+X
+X
+X**
+X
+MEAN
+X*
+X
+X*****
+X**
+VALUE_AT_START
+X***
+X***
+X***
+X***
+X
+VALUE_AT_END
+X***
+X***
+X***
+X***
+X
+COMPRESSED
+X
+AVG_AT_END
+X***
+X***
+X***
+X***
+X***
+LATEST_IN_INTERVAL
+X****
+*) User must specify a SQL query against the database which gives the aggregated values.
+**) Aggregation done in the adapter.
+***) Aggregation is done in ECIS, except AVG, which is done in the SCADA system.
+****) Only available for the PI REST adapter.
+*****) User must specify a custom mapping to an OPC aggregate function using adapter parameters.
+ECIS Target functions
+If aggregation is not possible on the source side, it may be necessary
+to aggregate in ECIS. To do this, ECIS supports a list of target
+functions. All target functions operate on samples within a given
+target_interval. For function SAMPLE the target_interval is not
+applicable.
+SUM
+Sum of values within target_interval
+MIN
+The minimum value within target_interval
+MAX
+Maximum value within target_interval
+MEAN
+Mean value within target_interval
+AVG
+Time-weighted average values within target_interval
+SAMPLE
+Sent through as is
+LATEST
+Returns the latest values within target_interval*
+*If you use SAMPLE as source function while using LATEST as target
+function, make sure Source Interval = Target Interval.
+Overwrite rules
+ECIS can overwrite data on import that was created by certain users.
+These users can be set in the System Attribute DT_OVERWRITE as a
+comma-separated list.
+Scheduling data capture
+The execution schedule for the tag
+Extraction
+step has to be defined
+in the EC Scheduler. It is recommended to align the execution schedule
+with the target interval defined for the
+Transform
+and
+Load
+steps.
+The configuration of the execution schedule is described below.
+Make sure that a business action is available (ref.
+CO.0127: Business Actions
+).
+The business action has to be linked to the following class:
+com.ec.frmw.is.engine.source.action.SourceAction.
+It must have two
+mandatory parameters with names:
+configurationid (EC Code Type DT_SOURCE_ID)
+jobid (String type)
+Make a schedule of the business action (
+CO.0130: Schedules
+)
+To schedule the business action, insert a new schedule, and apply the
+business action. The two parameters have to be specified. The
+configurationid
+must match one of the source id’s in the adapter
+configuration. The
+jobid
+is only an arbitrary name that identifies the
+job when it runs.
+Merging DTOs BEFORE putting on queue
+Per default, ECIS will merge DTOs before putting them on the JMS-queue.
+If you require ECIS to handle one tag at a time, you can use
+dtomergeenabled
+. The
+dtomergeenabled
+value is set to
+true
+by
+default. Set it to
+false
+and ECIS will send one DTO per tag. When set
+to
+true
+, the business function will fill all DTO’s put on the JMS
+queue with 5000 samples (if there are enough samples in the schedule)
+instead of sending one sample for every 1000 samples or each tag. If you
+do not have any good reason for setting this to
+false
+, leave it
+enabled. An example config using this parameter will look like this
+(notice that the XML tag is put under the config tag, not as an adapter
+parameter):
+<config name="TAGADAPTER">
+    <dtomergeenabled>false</dtomergeenabled>
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.TagFileAdapter</class>
+        <parameters>
+            <parameter name="BadFolder">C:\\temp\\jboss\\fileadapter\\bad</parameter>
+            <parameter name="CompletedFolder">C:\\temp\\jboss\\fileadapter\\completed</parameter>
+            <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DateValueFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DropFolder">C:\\temp\\jboss\\fileadapter</parameter>
+            <parameter name="ErrorFolder">C:\\temp\\jboss\\fileadapter\\error</parameter>
+            <parameter name="FileFilter">merge</parameter>
+            <parameter name="QualityColumnIndex">1</parameter>
+            <parameter name="TagColumnIndex">4</parameter>
+            <parameter name="TimeColumnIndex">0</parameter>
+            <parameter name="ValueColumnIndex">2</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Rounding Values from the source system
+It is possible to round the values from the source system into a
+specific number of decimals. This is done by setting a parameter in the
+configuration called
+maxnumberofdecimals
+. This specifies the maximum
+number of decimals the decimal-values retrieved using that configuration
+should have. It is using the roundingmode BigDecimal.ROUND_HALF_UP,
+described in the javadoc for BigDecimal.
+<config name="TAGADAPTER">
+    <dtomergeenabled>true</dtomergeenabled>
+    <maxnumberofdecimals>4</maxnumberofdecimals>
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.TagFileAdapter</class>
+        <parameters>
+            <parameter name="BadFolder">C:\\temp\\jboss\\fileadapter\\bad</parameter>
+            <parameter name="CompletedFolder">C:\\temp\\jboss\\fileadapter\\completed</parameter>
+            <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DateValueFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DropFolder">C:\\temp\\jboss\\fileadapter</parameter>
+            <parameter name="ErrorFolder">C:\\temp\\jboss\\fileadapter\\error</parameter>
+            <parameter name="FileFilter">merge</parameter>
+            <parameter name="HaltOnMissingData">SAMPLE</parameter>
+            <parameter name="QualityColumnIndex">1</parameter>
+            <parameter name="TagColumnIndex">4</parameter>
+            <parameter name="TimeColumnIndex">0</parameter>
+            <parameter name="ValueColumnIndex">2</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Max number of sourceintervals in one request
+Sometimes it might be desirable to reduce the size of the interval
+requested from the SCADA-system. This can be because the system cannot
+deliver more than a certain amount, or if it handles small amounts of
+data better. To use this functionality, set the parameter
+maxsourceintervalinrequest
+to the number of source intervals you want
+to request in one go. Be aware that this functionality can lead to
+performance degradation if the intervals become small and many.
+<config name="TAGADAPTER">
+    <dtomergeenabled>true</dtomergeenabled>
+    <maxnumberofdecimals>4</maxnumberofdecimals>
+    <maxsourceintervalinrequest>1</maxsourceintervalinrequest>
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.TagFileAdapter</class>
+        <parameters>
+            <parameter name="BadFolder">C:\\temp\\jboss\\fileadapter\\bad</parameter>
+            <parameter name="CompletedFolder">C:\\temp\\jboss\\fileadapter\\completed</parameter>
+            <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DateValueFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DropFolder">C:\\temp\\jboss\\fileadapter</parameter>
+            <parameter name="ErrorFolder">C:\\temp\\jboss\\fileadapter\\error</parameter>
+            <parameter name="FileFilter">merge</parameter>
+            <parameter name="HaltOnMissingData">AVG</parameter>
+            <parameter name="QualityColumnIndex">1</parameter>
+            <parameter name="TagColumnIndex">4</parameter>
+            <parameter name="TimeColumnIndex">0</parameter>
+            <parameter name="ValueColumnIndex">2</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Max number of rows/samples per DTO
+The Message Driven Bean used in ECIS has a transaction timeout of 5
+minutes. This means that if a DTO uses more than 5 minutes to complete,
+Wildfly will do a rollback and retry the DTO. To avoid this, you can
+reduce the size of the DTO so that processing it will take less than 5
+minutes. To do this, use the parameter
+maxrowsindto
+. Set the parameter
+to the number of rows/samples you want per DTO, see example below:
+<config name="TAGADAPTER">
+    <dtomergeenabled>true</dtomergeenabled>
+    <maxnumberofdecimals>4</maxnumberofdecimals>
+    <maxsourceintervalinrequest>1</maxsourceintervalinrequest>
+    <maxrowsindto>10</maxrowsindto>
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.TagFileAdapter</class>
+        <parameters>
+            <parameter name="BadFolder">C:\\temp\\jboss\\fileadapter\\bad</parameter>
+            <parameter name="CompletedFolder">C:\\temp\\jboss\\fileadapter\\completed</parameter>
+            <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DateValueFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DropFolder">C:\\temp\\jboss\\fileadapter</parameter>
+            <parameter name="ErrorFolder">C:\\temp\\jboss\\fileadapter\\error</parameter>
+            <parameter name="FileFilter">merge</parameter>
+            <parameter name="HaltOnMissingData">AVG</parameter>
+            <parameter name="QualityColumnIndex">1</parameter>
+            <parameter name="TagColumnIndex">4</parameter>
+            <parameter name="TimeColumnIndex">0</parameter>
+            <parameter name="ValueColumnIndex">2</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Recapture range
+In a standard ECIS run, next_read will be moved to after the last
+retrieved sample so that you do not get the same data over and over
+again. However, sometimes it is useful to recapture the same data. This
+is special for cases where you do not know when the data will arrive. To
+do this, use the parameter
+recapturerange
+. If you set
+recapturerange
+to 0, ECIS will set next_read to the same timestamp as the latest
+timestamp in the request. If you set
+recapturerange
+to a number higher
+than 0, ECIS will set next_read to the latest timestamp in the request
+minus (source_interval *
+recapturerange
+). In this way, you can specify
+that I want to recapture x number of source_intervals each time I run to
+make sure I get all my data. See the example below for how to use:
+<config name="ECISTESTSCENARIO_1">
+    <dtomergeenabled>true</dtomergeenabled>
+    <recapturerange>90</recapturerange>
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.TagFileAdapter</class>
+        <parameters>
+            <parameter name="BadFolder">C:\\temp\\jboss\\fileadapter\\bad</parameter>
+            <parameter name="CompletedFolder">C:\\temp\\jboss\\fileadapter\\completed</parameter>
+            <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DateValueFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DropFolder">C:\\temp\\jboss\\fileadapter</parameter>
+            <parameter name="ErrorFolder">C:\\temp\\jboss\\fileadapter\\error</parameter>
+            <parameter name="FileFilter" encrypted="true">3790abdb6b90a044f27ed80111697a510501354c9b33821b</parameter>
+            <parameter name="QualityColumnIndex">2</parameter>
+            <parameter name="TagColumnIndex">4</parameter>
+            <parameter name="TimeColumnIndex">0</parameter>
+            <parameter name="ValueColumnIndex">1</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Shift Time To Period Start
+When ECIS gathers aggregated data, it assumes that the SCADA-system
+timestamps the sample at the beginning of the period. Some SCADA-systems
+will, however, timestamp the sample either somewhere in the middle, or
+at the end of the period. To address this problem, there is an attribute
+in TRANS_TEMPLATE called SHIFT_TIME_TO_PERIOD_ST. This attribute can
+have 3 values: END_INCLUDED, START_INCLUDED or NO_SHIFT. NO_SHIFT is
+equivalent to the null-value and is the default value. ECIS will then
+assume that the timestamp of the sample is at the beginning of the
+period. The other values are explained here:
+END_INCLUDED: When this value is used, ECIS will assume that the
+timestamp of the sample is either in the middle of the sample-period, or
+at the end of the sample period, and all timestamps will be moved to the
+beginning of the period. If the timestamp is moved back in time so that
+it passes a DST-change, the offset will be used to correct the timestamp
+accordingly.
+START_INCLUDED: When this value is used, ECIS will assume that the
+timestamp of the sample is either at the beginning of the sample-period
+or in the middle. All timestamps which are not at the beginning of a
+sample-period will be moved so that they are.
+ECIS will use the last_transfer and next_read values together with
+source_interval to determine if a value is in the middle of a period or
+at the beginning/end. This will not have any effect if source_function
+is SAMPLE.
+Move next read if empty values
+When ECIS reads tagdata, some SCADA-systems might return samples
+containing date and tagid but no value. Per default, ECIS will not move
+the next read for these values. However in some cases, one might want to
+update the next read for these values as well to avoid them being read
+over and over again, which might cause a performance penalty. To do
+this, set the parameter
+movenextreadonempty
+to
+true
+, like in the
+example below.
+<config name="ECISTESTSCENARIO_1">
+    <dtomergeenabled>true</dtomergeenabled>
+    <movenextreadonempty>true</movenextreadonempty>
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.TagFileAdapter</class>
+        <parameters>
+            <parameter name="BadFolder">C:\\temp\\jboss\\fileadapter\\bad</parameter>
+            <parameter name="CompletedFolder">C:\\temp\\jboss\\fileadapter\\completed</parameter>
+            <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DateValueFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="DropFolder">C:\\temp\\jboss\\fileadapter</parameter>
+            <parameter name="ErrorFolder">C:\\temp\\jboss\\fileadapter\\error</parameter>
+            <parameter name="FileFilter" encrypted="true">3790abdb6b90a044f27ed80111697a510501354c9b33821b</parameter>
+            <parameter name="QualityColumnIndex">2</parameter>
+            <parameter name="TagColumnIndex">4</parameter>
+            <parameter name="TimeColumnIndex">0</parameter>
+            <parameter name="ValueColumnIndex">1</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Using sourcemapper to modify values
+It is possible to apply one or several mappers to a config. The mapper
+must implement the interface
+com.ec.frmw.is.engine.source.mapper.I_SrcMapper which has the
+method public List<I_Sample> convert(List<I_Sample> samples);
+Inside this method, the different implementations can modify the samples
+as they want. To apply these mappers to the config, add the parameter
+srcmapper
+as shown in the example below. This should contain a list of
+mappers separated by a semicolon.
+<config name="PI_SOURCE_1">
+    <srcmapper>com.ec.frmw.is.engine.source.mapper.impl.PiMapperDigitalValuesYorN</srcmapper>
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.pi.jinterop.PiAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="authdomain">MyDomain</parameter>
+            <parameter name="domainuser">auser</parameter>
+            <parameter name="domainpwd">password</parameter>
+            <parameter name="dsn">127.0.0.1</parameter>
+            <parameter name="username">piadmin</parameter>
+            <parameter name="pwd"></parameter>
+            <parameter name="timeout">180</parameter>
+            <parameter name="logfile">c:\temp\logfile2.log</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Retrieve digital values from PI
+It is not possible to retrieve digital values directly through ECIS.
+However, there are two sourcemappers which lets you convert the incoming
+values from a digital tag to either Y/N or 0/1:
+com.ec.frmw.is.engine.source.mapper.impl.PiMapperDigitalValuesYorN
+com.ec.frmw.is.engine.source.mapper.impl.PiMapperDigitalValues1or0
+To use one of these, apply them as described in the section about
+sourcemappers. If you are using the one with Y/N, set source datatype to
+STRING. If you are using 1/0, set source datatype to DECIMAL. ECIS will
+then retrieve the values from PI, and the mapper will convert them to
+the appropriate format.
+Operation
+Monitoring the jobs
+As shown in previous sections, ECIS separates the source and target
+systems. The two main components can run asynchronously from each other.
+The source system can run in parallel at the same time the target system
+is processing messages from another schedule. Hence, the two processes
+are monitored in two contexts. Since the source system is started from
+the scheduler, monitoring this process can be done by the scheduler’s
+own mechanisms. The target system is triggered by the DataTransferMDB
+and can be monitored by its own screens.
+Monitoring extraction by the Scheduler
+Scheduling an extraction through the source system may involve different
+process settings. One of the settings relates to Log Level. Depending on
+the log level, the extraction will produce the information requested.
+Each time a schedule starts, a process instance is produced in the
+Scheduler History Log. All available information about the specific
+extraction can be found here. If an extraction process fails, a log will
+show the problems which have arisen.
+Monitoring transform and load by an error log
+The first monitoring screen for the target system, is a common log,
+trans_process_log which will show all errors from the ECIS target
+system.
+In addition, there is a tag data capture monitoring screen that will
+show a list of the latest 100 rows which have been inserted/updated by
+the data capture process.
+The intention is to provide a good picture of the status for ongoing
+data capture and to help detect if there is a stop in the data flow. It
+will also give an indication of the performance in a catch-up situation.
+There are future plans for extending ECIS with complementary monitoring
+screens, including status on auto-recovery and recapture for limited
+periods back in time. Today recapture is handled by setting back the
+last_transfer
+parameter.
+Since ECIS is asynchronous and uses a JMS-queue as middle storage, it
+can be useful to know if JMS is done processing all incoming data. This
+can be done by setting the log level for the category
+"org.apache.activemq" to for example DEBUG. Note that this setting is
+not permanent and will be reverted if the ec-app container is rebooted.
+Recovery principles
+ECIS will try to recover from different failure scenarios. The
+mechanisms behind this are the persistence of data and states between
+the internal services.
+If extraction fails it will try to extract the data again at the next execution.
+If the transformation fails to start, extracted data is still present
+waiting for the transformation to start processing.
+If the transformation stops (system crash, system shutdown, lost
+computer power), aggregated data is still persisted, so the
+transformation can continue with the extracted data when it’s up and running again.
+If a database update fails for a specific row, it will write an error
+log instance and continue updating the other rows.
+In some failure scenarios, it will be necessary to get input from the
+user to specify the recapture of tag data explicitly. If the mapping
+rules in ECIS don’t match the EC class configuration, it will produce an
+error log specifying what to fix. It will also cause the last transfer
+date for the specific mapping to remain unchanged. The extraction
+processes may still continue reading new samples. To repair the mapping
+and synchronize the data extraction, the user can use the
+CO.1017:
+Maintain Templates
+and
+CO.1018: Maintain Mappings
+to repair mappings
+and to adjust the last transfer date for the specific mapping.
+Note that if you are setting back the last transfer date, this must be
+done in a period when the scheduled data extraction is not running,
+otherwise you risk that your adjustment will be ignored. If you are
+running with tight intervals on the scheduled job, it is probably safest
+to stop the job before you adjust the last transfer date.
+JMS queue
+The ECIS JMS queue is managed by the
+Energy Components - Messaging broker
+.
+The ECIS JMS queue capacity depends on the memory allocated to the message broker.
+For example: 800 MB memory allows processing of approximately 2,400 DTOs (about 11.5-12 million samples).
+Each additional 100 MB supports around 400 more DTOs (about 2 million samples).
+1 GB memory enables about 3,200 DTOs (about 16 million samples). 2 GB memory enables about 7,200 messages (about 36 million samples).
+Memory requirements for the message broker can be calculated as following:
+Total samples = tags * number of samples per tag
+If total samples < 12,000,000: 800 MB
+If total samples > 12,000,000: 800 MB + ((total samples - 12,000,000)/2,000,000) * 100 MB
+Example:
+For 500 tags, capturing 1 minute data for a month
+Total samples = 500 * 60 * 24 * 31 = 22,320,000
+Required memory = 800 MB + ((22,320,000 - 12,000,000)/2,000,000) * 100 MB = 1,316 MB
+The message broker also handles other processes (MHM, EC Events, BPM, etc.), so additional memory may be needed if there are many non-DTO messages.
+Insufficient memory will cause the  message broker to become unhealthy.
+For large data volumes, JMS Queue Paging can be enabled (see
+JMS Queue Paging
+).
+It is recommended to split data capture into multiple ECIS jobs (i.e. have several templates) rather than one large job.
+Even with JMS queue paging, out-of-memory errors may occur if too many samples are capture in a single transaction.

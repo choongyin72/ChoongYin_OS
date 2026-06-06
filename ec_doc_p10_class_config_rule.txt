@@ -1,0 +1,202 @@
+TITLE: Class configuration rules
+URL: https://hub.energycomponents.com/repository/site-hub/ec-application/14.2.5/documentation/Energy-Components/14.2.5/technical-documentation/frmw/general-config/class_configuration/class_configuration_rule.html
+STATUS: 200
+
+Class configuration rules
+This document describes the class configuration rules that should be
+enforced when developing for EC. When creating or modifying classes
+through EC extensions, these rules are hard enforced and will fail the
+migration if not adhered to.
+Common rules
+Rule name
+Valid for classtype
+Description
+OBJECT
+INTERFACE
+DATA
+TABLE
+AttributeLength
+X
+X
+X
+X
+Max length for attribute names is 100
+ClassDependencyValues
+X
+X
+X
+Class dependency type must be one of [IMPLEMENTS,  ACCESS_CONTROLLED_BY]
+ClassRelationValues
+X
+X
+X
+Class relation: relation type must be one of [OBJECT, OWNER, REF_CODE, GENERAL]
+Class relation attribute mapping: is_main must be one of [Y, N]
+DbMappingTypeIsNull
+X
+Interface classes cannot have dbMappingType
+DbMappingTypeIsValid
+X
+X
+X
+DBMappingType must be one of
+[ATTRIBUTE, COLUMN, EXTENSION, FUNCTION, INNER_JOIN, LEFT_JOIN, EXT_JOIN]
+DbObjectAttributeIsNotNull
+X
+Versioned object classes must have dbObjectAttribute (Attribute table)
+DbObjectAttributeIsNull
+X
+X
+X
+Class can not have dbObjectAttribute (Attribute table)
+DbObjectNameIsNotNull
+X
+X
+X
+Class must have must have Db Object Name (Main table)
+DbObjectNameIsNull
+X
+Interface classes cannot have Db Object Name (Main table)
+DbObjectTypeIsNull
+X
+DbObjectTypeIsNull
+DbObjectTypeMappedCorrectlyToDb
+X
+X
+X
+DbObjectType must correspond to actual table or view in db
+DbSqlSyntaxIsNull
+X
+Interface classes cannot have dbSqlSyntax
+ExtAttrDbSqlSyntaxIsNull
+X
+X
+X
+X
+Attribute with mapping type EXTENSION  cannot have dbSqlSyntax
+InvalidObjectClassAttributes
+X
+OBJECT_CODE and START_DATE cannot have mappingType COLUMN
+NoAttributeMapping
+X
+X
+TABLE and DATA classes cannot have attributes with ATTRIBUTE mappingtype
+ObjectIdIsOnlyKey
+X
+X
+Only OBJECT_ID can be key
+OwnerClass
+X
+Data classes must have OWNER class
+RequiredDataClassAttributes
+X
+Data classes  must have OBJECT_ID
+RequiredObjectClassAttributes
+X
+Versioned objectclasses must have these attributes and corresponding
+datatypes and mappings :
+OBJECT_ID, STRING, [COLUMN,FUNCTION]
+CODE, STRING, COLUMN
+OBJECT_START_DATE, DATE, COLUMN
+OBJECT_END_DATE, DATE, COLUMN
+DAYTIME, DATE, ATTRIBUTE
+NAME, STRING, [ATTRIBUTE,FUNCTION]
+END_DATE, DATE, ATTRIBUTE
+Invariant objectclasses must have these attributes and corresponding
+datatypes and mappings :
+OBJECT_ID, STRING, [COLUMN,FUNCTION]
+CODE, STRING, COLUMN
+OBJECT_START_DATE, DATE, COLUMN
+OBJECT_END_DATE, DATE, COLUMN
+NAME, STRING, [COLUMN,FUNCTION]
+RowSortOrderIsValid
+X
+X
+X
+ROW_SORT_ORDER property must have property-type="APPLICATION" and  must be a positive integer.
+RowSortPriorityIsValid
+X
+X
+X
+ROW_SORT_PRIORITY property must have property-type="APPLICATION" and  must be one of : [ ASC, ASC_NULLS_FIRST, DESC, DESC_NULLS_LAST ]
+TimeScopeCodes
+X
+TimescopeCode must be one of : [ VERSIONED, INVARIANT ]
+TimeScopeCodes
+X
+TimescopeCode must be one of : [ VERSIONED, INVARIANT, NONE ]
+TimeScopeCodes
+X
+X
+TimescopeCode must be one of : [ NONE, EVENT, DAY, WEEK, MTH, QTR, YR, HR_1, HR_2, SAMPLE ]
+ValidClassType
+X
+X
+X
+X
+Classtype must be one of :   [ OBJECT, DATA, TABLE, INTERFACE, REPORT, META ]
+ViewLayerPresentationContext
+X
+X
+X
+X
+VIEWLAYER properties must have presentationContext=/
+Extension rules
+Additional rules that only apply to extensions.
+Rule name
+Valid for classtype
+Description
+OBJECT
+INTERFACE
+DATA
+TABLE
+INTERFACE
+REPORT
+AttributePrefix
+X
+X
+X
+X
+X
+X
+Attribute names must be prefixed with extension id
+DbObjectAttributePrefixAndLength
+X
+dbObjectattribute must
+be prefixed with extension id if table belongs to extension, max length is 100 characters
+DisabledIndicator
+X
+X
+X
+X
+X
+X
+Its not allowed to disable attributes belonging to a different app space context. Does not apply to groupmodel relations.
+DbObjectNamePrefixAndLength
+X
+X
+X
+dbObjectName must be
+prefixed with extension id if table belongs to extension, max length is 100 characters
+ObjectClassNameLength
+X
+Max classname length is 100
+Oracle database object names
+All oracle database objects
+created or altered by an extension has to be prefixed with the extension id
+RelationIsMainForOtherAppSpaceCntx
+X
+X
+X
+X
+X
+X
+It is not allowed to have a relation attribute-mapping with is-main="Y" on attribute belonging to a different app space context
+RelationRoleNamePrefix
+X
+X
+X
+X
+X
+X
+Relation names must be prefixed with extension id

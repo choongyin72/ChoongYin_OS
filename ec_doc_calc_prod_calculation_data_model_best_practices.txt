@@ -1,0 +1,1187 @@
+Calculation Data Model Best Practices :: Energy Components // Documentation 
+
+ // documentation 
+
+ Documentation 
+
+ Release Documentation 
+
+ EC 14.2.5 Release Notes 
+
+ EC 14.2.5 Release Details 
+
+ Upgrade Impact 
+
+ Deprecation 
+
+ Availability of Fixes in Higher Release Versions 
+
+ Previous Release Documentation 
+
+ EC 14.2.4 Release Notes 
+
+ EC 14.2.4 Release Details 
+
+ EC 14.2.3 Release Notes 
+
+ EC 14.2.3 Release Details 
+
+ EC 14.2.2 Release Notes 
+
+ EC 14.2.2 Release Details 
+
+ EC 14.2.1 Release Notes 
+
+ EC 14.2.1 Release Details 
+
+ EC 14.2.0 Release Notes 
+
+ EC 14.2.0 Release Details 
+
+ EC 14.1.7 Release Notes 
+
+ EC 14.1.7 Release Details 
+
+ EC 14.1.6 Release Notes 
+
+ EC 14.1.6 Release Details 
+
+ EC 14.1.5 Release Notes 
+
+ EC 14.1.5 Release Details 
+
+ EC 14.1.4 Release Notes 
+
+ EC 14.1.4 Release Details 
+
+ EC 14.1.3 Release Notes 
+
+ EC 14.1.3 Release Details 
+
+ EC 14.1.2 Release Notes 
+
+ EC 14.1.2 Release Details 
+
+ EC 14.1.1 Release Notes 
+
+ EC 14.1.1 Release Details 
+
+ EC 14.1.0 Release Notes 
+
+ EC 14.1.0 Release Details 
+
+ EC 14.0.12 Release Notes 
+
+ EC 14.0.12 Release Details 
+
+ EC 14.0.11 Release Notes 
+
+ EC 14.0.11 Release Details 
+
+ EC 14.0.10 Release Notes 
+
+ EC 14.0.10 Release Details 
+
+ EC 14.0.9 Release Notes 
+
+ EC 14.0.9 Release Details 
+
+ EC 14.0.8 Release Notes 
+
+ EC 14.0.8 Release Details 
+
+ EC 14.0.7 Release Notes 
+
+ EC 14.0.7 Release Details 
+
+ EC 14.0.6 Release Notes 
+
+ EC 14.0.6 Release Details 
+
+ EC 14.0.5 Release Notes 
+
+ EC 14.0.5 Release Details 
+
+ EC 14.0.4 Release Notes 
+
+ EC 14.0.4 Release Details 
+
+ EC 14.0.3 Release Notes 
+
+ EC 14.0.3 Release Details 
+
+ EC 14.0.2 Release Notes 
+
+ EC 14.0.2 Release Details 
+
+ EC 14.0.1 Release Notes 
+
+ EC 14.0.1 Release Details 
+
+ EC 14.0.0 Release Notes 
+
+ EC 14.0.0 Release Details 
+
+ EC 13.2.19 Release Notes 
+
+ EC 13.2.19 Release Details 
+
+ EC 13.2.18 Release Notes 
+
+ EC 13.2.18 Release Details 
+
+ EC 13.2.17 Release Notes 
+
+ EC 13.2.17 Release Details 
+
+ EC 13.2.16 Release Notes 
+
+ EC 13.2.16 Release Details 
+
+ EC 13.2.15 Release Notes 
+
+ EC 13.2.15 Release Details 
+
+ EC 13.2.14 Release Notes 
+
+ EC 13.2.14 Release Details 
+
+ EC 13.2.13 Release Notes 
+
+ EC 13.2.13 Release Details 
+
+ EC 13.2.12 Release Notes 
+
+ EC 13.2.12 Release Details 
+
+ EC 13.2.11 Release Notes 
+
+ EC 13.2.11 Release Details 
+
+ EC 13.2.10 Release Notes 
+
+ EC 13.2.10 Release Details 
+
+ EC 13.2.9 Release Notes 
+
+ EC 13.2.9 Release Details 
+
+ EC 13.2.8 Release Notes 
+
+ EC 13.2.8 Release Details 
+
+ EC 13.2.7 Release Notes 
+
+ EC 13.2.7 Release Details 
+
+ EC 13.2.6 Release Notes 
+
+ EC 13.2.6 Release Details 
+
+ EC 13.2.5 Release Notes 
+
+ EC 13.2.5 Release Details 
+
+ EC 13.2.4 Release Notes 
+
+ EC 13.2.4 Release Details 
+
+ EC 13.2.3 Release Notes 
+
+ EC 13.2.3 Release Details 
+
+ EC 13.2.2 Release Notes 
+
+ EC 13.2.2 Release Details 
+
+ EC 13.2.1 Release Notes 
+
+ EC 13.2.1 Release Details 
+
+ EC 13.2.0 Release Notes 
+
+ EC 13.2.0 Release Details 
+
+ EC 13.1.14 Release Notes 
+
+ EC 13.1.14 Release Details 
+
+ EC 13.1.13 Release Notes 
+
+ EC 13.1.13 Release Details 
+
+ EC 13.1.12 Release Notes 
+
+ EC 13.1.12 Release Details 
+
+ EC 13.1.11 Release Notes 
+
+ EC 13.1.11 Release Details 
+
+ EC 13.1.10 Release Notes 
+
+ EC 13.1.10 Release Details 
+
+ EC 13.1.9 Release Notes 
+
+ EC 13.1.9 Release Details 
+
+ EC 13.1.8 Release Notes 
+
+ EC 13.1.8 Release Details 
+
+ EC 13.1.7 Release Notes 
+
+ EC 13.1.7 Release Details 
+
+ EC 13.1.6 Release Notes 
+
+ EC 13.1.6 Release Details 
+
+ EC 13.1.5 Release Notes 
+
+ EC 13.1.5 Release Details 
+
+ EC 13.1.4 Release Notes 
+
+ EC 13.1.4 Release Details 
+
+ EC 13.1.3 Release Notes 
+
+ EC 13.1.3 Release Details 
+
+ EC 13.1.2 Release Notes 
+
+ EC 13.1.2 Release Details 
+
+ EC 13.1.1 Release Notes 
+
+ EC 13.1.1 Release Details 
+
+ EC 13.1.0 Release Notes 
+
+ EC 13.1.0 Release Details 
+
+ EC 13.0.22 Release Notes 
+
+ EC 13.0.22 Release Details 
+
+ EC 13.0.21 Release Notes 
+
+ EC 13.0.21 Release Details 
+
+ EC 13.0.20 Release Notes 
+
+ EC 13.0.20 Release Details 
+
+ EC 13.0.19 Release Notes 
+
+ EC 13.0.19 Release Details 
+
+ EC 13.0.18 Release Notes 
+
+ EC 13.0.18 Release Details 
+
+ EC 13.0.17 Release Notes 
+
+ EC 13.0.17 Release Details 
+
+ EC 13.0.16 Release Notes 
+
+ EC 13.0.16 Release Details 
+
+ EC 13.0.15 Release Notes 
+
+ EC 13.0.15 Release Details 
+
+ EC 13.0.14 Release Notes 
+
+ EC 13.0.14 Release Details 
+
+ EC 13.0.13 Release Notes 
+
+ EC 13.0.13 Release Details 
+
+ EC 13.0.12 Release Notes 
+
+ EC 13.0.12 Release Details 
+
+ EC 13.0.11 Release Notes 
+
+ EC 13.0.11 Release Details 
+
+ EC 13.0.10 Release Notes 
+
+ EC 13.0.10 Release Details 
+
+ EC 13.0.9 Release Notes 
+
+ EC 13.0.9 Release Details 
+
+ EC 13.0.8 Release Notes 
+
+ EC 13.0.8 Release Details 
+
+ EC 13.0.7 Release Notes 
+
+ EC 13.0.7 Release Details 
+
+ EC 13.0.6 Release Notes 
+
+ EC 13.0.6 Release Details 
+
+ EC 13.0.5 Release Notes 
+
+ EC 13.0.5 Release Details 
+
+ EC 13.0.4 Release Notes 
+
+ EC 13.0.4 Release Details 
+
+ EC 13.0.3 Release Notes 
+
+ EC 13.0.3 Release Details 
+
+ EC 13.0.2 Release Notes 
+
+ EC 13.0.2 Release Details 
+
+ EC 13.0.1 Release Notes 
+
+ EC 13.0.1 Release Details 
+
+ EC 13.0.0 Release Notes 
+
+ EC 13.0.0 Release Details 
+
+ EC Framework Release Details 
+
+ EC Production Release Details 
+
+ EC Transport Release Details 
+
+ EC Revenue Release Details 
+
+ User Exit Packages 
+
+ Installation Guide 
+
+ Installation Overview 
+
+ System Requirements 
+
+ Database Installation 
+
+ EC Database Installation 
+
+ EC Identity Manager - Database Installation 
+
+ EC Reporting and Analytics - Database Installation 
+
+ EC Online Help Uploader 
+
+ Upgrade/Redeploy ECBPM 
+
+ Post Install Configuration 
+
+ Installing EC on Docker Swarm 
+
+ Upgrade Guide 
+
+ How to upgrade to EC 14.2.5 
+
+ Configuration 
+
+ Energy Components Configuration 
+
+ Technical Documentation 
+
+ Technical Documentation Overview 
+
+ Energy Components Business Areas 
+
+ Energy Components Basic User Guide 
+
+ Energy Components: Getting Started 
+
+ The Energy Components Screen 
+
+ Help 
+
+ Energy Components Product Concepts 
+
+ Configuration Overview 
+
+ Calculation Framework 
+
+ Classes and Objects 
+
+ Group model concept 
+
+ Users, Roles, Groups and Access Rights 
+
+ Reporting concept 
+
+ EC Framework 
+
+ Docker Images 
+
+ Energy Components Docker Images 
+
+ Energy Components - Application 
+
+ Energy Components - BPM 
+
+ Energy Components - Identity manager 
+
+ Energy Components - Identity Manager Configuration 
+
+ Energy Components - Reporting and Analytics 
+
+ Energy Components - Messaging broker 
+
+ Energy Components - Antivirus 
+
+ Energy Components - Analytics Manager 
+
+ Energy Components - Analytics Manager Runner 
+
+ Identity &amp; Access Management 
+
+ Identity &amp; Access Management 
+
+ How to configure the User session timeout 
+
+ User Federation, Identity brokering and Single sign-on 
+
+ Keycloak 
+
+ User account settings 
+
+ How to configure audit logging 
+
+ How to configure Brute Force Protection 
+
+ How to configure Password Policy 
+
+ How to assign roles to jbpmengine user 
+
+ How to create Service Account for external integration access 
+
+ Event 
+
+ EC Event Architecture 
+
+ EC Event API 
+
+ Publish Events 
+
+ Subscribe to Events &#8212; and execute jobs and business logic 
+
+ Inbound 
+
+ Bridge Events from external systems 
+
+ Outbound 
+
+ Bridge Events to external systems 
+
+ Forward Events using WebHooks 
+
+ Forward Events to the AWS Simple Notification Service 
+
+ Forward Events to Firebase Cloud Messaging 
+
+ Advanced configuration and monitoring 
+
+ Event Types 
+
+ Event Types &#8212; Custom 
+
+ Subscriber Execution modes 
+
+ Event history 
+
+ Event - FAQ 
+
+ Rest API 
+
+ EC Rest API 
+
+ GraphQL API 
+
+ EC GraphQL Overview 
+
+ EC GraphQL Type System 
+
+ EC GraphQL Queries 
+
+ EC GraphQL Mutations 
+
+ EC GraphQL Directives 
+
+ EC GraphQL Transformations 
+
+ EC GraphQL Operations 
+
+ EC GraphQL Schema Extensions 
+
+ EC Integration Services 
+
+ EC Integration Services (ECIS) Technical Documentation 
+
+ ECIS - Configuration Guide 
+
+ ECIS Agent 
+
+ ECIS - Advanced File Import 
+
+ ECIS - Staging Table Extension 
+
+ ECIS - Source Adapter Configuration 
+
+ ECIS - Example adapter configurations 
+
+ ECIS - Sample Periods explained 
+
+ Remote endpoint configuration 
+
+ EC BPM - Business Process Modelling 
+
+ Architecture 
+
+ Project Management 
+
+ Process Template and Execution 
+
+ Process Instance Management 
+
+ Process Action Invocations 
+
+ User Tasks and Task Management 
+
+ EC Inbound Events (Deprecated) 
+
+ Process Inbound Events 
+
+ Process Outbound Events 
+
+ API 
+
+ Standard Processes 
+
+ Guides 
+
+ Process Overview 
+
+ How-to Configure default process instance list columns 
+
+ How-to Configure process instance list columns for a specific process 
+
+ How-to Display a button when a Process Action node is selected 
+
+ How-to Show process action specific data from a query file in External Data view 
+
+ How-to Show result from a query XML in the External Data view 
+
+ How-to Show variables in the Variables tab 
+
+ How-to Show generated calculation log and report as data holder in Variables tab 
+
+ How-to Populate Process Overview Legacy 
+
+ Process Monitor 
+
+ Process Monitor Cache 
+
+ How-to Apply a customized viewer tag to node instance in business action 
+
+ How-to Apply production day offset to sub-daily process monitor 
+
+ How-to Customize texts and background colors in Process Monitor view 
+
+ How-to View execution status of monthly process within a year 
+
+ Extensions 
+
+ EC Extensions Overview 
+
+ How to create EC Extension 
+
+ How to install an EC Extension 
+
+ Database migration in Extensions 
+
+ Development 
+
+ Starting an EC Extension Maven Project 
+
+ Simplified Developer Environment Set-up in EC 14.x 
+
+ Compile and Deploy and Extensions 
+
+ Create EC Extension Classes 
+
+ Create EC Extension Java 
+
+ Create EC Extension Screens 
+
+ Create EC Extension Online Help 
+
+ Create EC Extension Reports 
+
+ Create EC Extension Datamodel 
+
+ Create EC Extension PL/SQL Package 
+
+ Create EC Extension Views 
+
+ Create EC Extension Triggers 
+
+ Create EC Extension Calculation Libraries 
+
+ General Configuration and Guidelines 
+
+ Class Configuration 
+
+ Class configuration rules 
+
+ Class Configuration Structure 
+
+ Class model presentation syntax guidelines 
+
+ Group model configuration in Energy Components 
+
+ How to Correct Object Class IUD Triggers 
+
+ Class General Relations 
+
+ Date integrity check for object relation 
+
+ EC View Generator and Class Model 
+
+ Simplified configuration for EC Codes and other popup attributes 
+
+ Configuring Tooltip functionality in EC 
+
+ How to configure Smart Journaling 
+
+ How to use Icons from Font Awesome 
+
+ How to use verificationStatus to color cells 
+
+ Property IGNORE_IND 
+
+ Property INTERFACE_ALIAS 
+
+ Application layer data sourcing and processing with custom Java processors 
+
+ Expressions and Scripting in the EC Domain Model 
+
+ How to configure Screen Treeview Menu 
+
+ Unit of Measure Support in Energy Components 
+
+ System of Measurement 
+
+ How to get Users and User&#8217;s roles 
+
+ System Property Exclude Synonyms 
+
+ Four Eyes Approval 
+
+ How to manage User Exit packages 
+
+ Calculation Group configuration 
+
+ Calculation Library 
+
+ Database Users and Logging 
+
+ How to change table content PINC logging in install mode 
+
+ How to configure a Business Action to call SQL procedure 
+
+ How to use Date Macro Parameter 
+
+ How to resolve blocked schedules automatically 
+
+ How to re-pin scheduled jobs 
+
+ How to define check rules 
+
+ How to configure Tab Label in EC Screens 
+
+ How to configure Context Menu 
+
+ How to configure EC Dashboards 
+
+ How to Configure the Application Title Bar 
+
+ How to Configure Table Column Sets 
+
+ Time Zone Support in Energy Components 
+
+ Deprecating Ecdp_ProductionDay 
+
+ How to configure language translation in EC 
+
+ How to configure Messaging 
+
+ Navigator default values 
+
+ How to send messages from EC 
+
+ How to disable navigator cache 
+
+ DataTransfer Configuration 
+
+ EC Dataloader 
+
+ Data Purging 
+
+ Expression and Scripting support 
+
+ Migration utility functions 
+
+ REC ID utility 
+
+ Pendo 
+
+ EC Data Access Control (eDAC) 
+
+ EC Data Access Control (eDAC) Functional Guide 
+
+ EC Data Access Control (eDAC) DB Upgrade Guide 
+
+ How to configure EC Data Access Control (eDAC) 
+
+ How to configure EC Data Access Control for external database user 
+
+ Reporting and Analytics 
+
+ Introduction to Reporting in EC 
+
+ How to use EC&#8217;s Reporting and Analytics 
+
+ Database Reporting Layer 
+
+ How to create, install and configure a Jasper Report 
+
+ How to configure EC Standard Reports 
+
+ How to generate an XML-report based on a PL/SQL function 
+
+ How to Configure Report Access 
+
+ EC Tools 
+
+ How to Update Online Help 
+
+ PKI - Public Key Infrastructure 
+
+ Password Encryption Tool 
+
+ Fitness Functions 
+
+ EC Fitness Functions 
+
+ Fitness Function API 
+
+ Application Development 
+
+ Overview 
+
+ DomainEntityMgr 
+
+ EventMgr 
+
+ ClientConfigurationMgr 
+
+ Fitness Function API 
+
+ Blobstorage 
+
+ Database Development 
+
+ Data Modelling Guideline 
+
+ EC Flyway Developer Handbook 
+
+ PL/SQL - Coding Standard And Style 
+
+ Custom Oracle Error Messages 
+
+ Flyway 
+
+ Flyway in Energy Components 
+
+ EC Production 
+
+ Production Object Configuration 
+
+ Well 
+
+ Stream 
+
+ Tank 
+
+ Dashboard 
+
+ System Attributes 
+
+ How To Define Status Processes 
+
+ Deferment (PD.0020) 
+
+ Operation Mode 
+
+ Default Client Value 
+
+ API Measurement Standards in Energy Components 
+
+ EC BPM - Business Process Modelling 
+
+ Daily Allocation BPM Workflow 
+
+ Monthly Allocation BPM Workflow 
+
+ Analytics Integration BPM Workflow 
+
+ Analysis Data Management BPM Workflow 
+
+ Production Allocation 
+
+ Hydrocarbon Accounting 
+
+ Stream Node Diagram 
+
+ Removing Ghost Data in Production Allocation tables/classes 
+
+ Calculation Design Standards 
+
+ Calculation Design 
+
+ Naming Conventions Generic 
+
+ Naming Conventions Generic 
+
+ Naming Conventions Sets and Iterators 
+
+ Naming Conventions Variables 
+
+ Equation Blocks, Equation Standards, and Logging 
+
+ Calculation Data Model Best Practices 
+
+ Library Calculations 
+
+ Overview 
+
+ Sets, Variables and Iterators for Library Calculations 
+
+ Library Calculation Design 
+
+ Creating a New Library Calculation 
+
+ Library Calculation Basics 
+
+ Working with Library Calculations 
+
+ Overview 
+
+ Working with Product Standard Library Calculations 
+
+ Production Testing 
+
+ Multi Well Testing 
+
+ Production Test Result - PreProcessing and Calculate PVT 
+
+ Single Production Well Test Result (PT.0013) 
+
+ Well Performance Curve 
+
+ Well Decline Curve 
+
+ Production Forecast 
+
+ Production Forecasting 
+
+ Forecasting Upgrade Guide 
+
+ EC Chemistry 
+
+ EC Chemistry 
+
+ EC Transport 
+
+ Overview 
+
+ Dashboard 
+
+ System Properties 
+
+ Cargo Status Rules 
+
+ EC Revenue Interface 
+
+ The EC Contract Concept 
+
+ Screen Configurability 
+
+ How to Configure Form Layout in Demurrage Screen 
+
+ GanttChartTooltipTransformer, GanttChartConflictDetector and DataModelFilterTransformer in Gantt Charts 
+
+ End Dating of Contracts 
+
+ Berth Slot Calendar 
+
+ New Cargo Planning And Terminal Operations Data Model 
+
+ EC Sales 
+
+ Overview 
+
+ Sales Allocation (SA) 
+
+ Price Determination (PR) 
+
+ System Properties 
+
+ System Attributes 
+
+ EC Revenue 
+
+ System Attributes 
+
+ Interface with EC Sales 
+
+ Dashboards 
+
+ Visual Tracing 
+
+ Interfacing of 'Other' Line Items 
+
+ Financial Item 
+
+ Calendar / Calendar Collection 
+
+ How-To configure LOCALE in EC 
+
+ How to configure Stream Item Calculations 
+
+ Consolidation of Financial Transactions / Process screens 
+
+ Consolidation of Inventory screens 
+
+ Quantity Module Enhancements 
+
+ Client Side Data Validation for Stream Items 
+
+ How To Get Started 
+
+ Documentation 
+ 14.2.5 
+
+ Documentation 
+
+ 14.2.5 
+
+ 14.2.4 
+
+ 14.2.3 
+
+ 14.2.2 
+
+ 14.2.1 
+
+ 14.2.0 
+
+ 14.1.7 
+
+ 14.1.6 
+
+ 14.1.5 
+
+ 14.1.4 
+
+ 14.1.3 
+
+ 14.1.2 
+
+ 14.1.1 
+
+ Documentation 
+ Technical Documentation 
+ EC Production 
+ Production Allocation 
+ Calculation Design Standards 
+ Calculation Data Model Best Practices 
+
+ 14.2.5 
+
+ 14.2.5 
+ 14.2.4 
+ 14.2.3 
+ 14.2.2 
+ 14.2.1 
+ 14.2.0 
+ 14.1.7 
+ 14.1.6 
+ 14.1.5 
+ 14.1.4 
+ 14.1.3 
+ 14.1.2 
+ 14.1.1 
+
+ Calculation Data Model Best Practices 
+
+ Introduction 
+
+ The data model forms the foundation of how calculations interact with the Energy Components system. Proper data model design directly impacts calculation performance, maintainability, and reliability. This page establishes best practices for reading from and writing to the EC database, ensuring your calculations follow patterns that optimize performance and align with product architecture. 
+
+ Key Principle 
+
+ Calculations in EC rely on the underlying data model to read and write values to the system. When using calculations, always follow this critical principle: 
+
+ Never read from or write to screen classes directly. Always use dedicated allocation data classes (suffixed with _DATA for reads and _ALLOC for writes) to avoid performance issues. 
+
+ Allocation Read Data Model 
+
+ To read allocation input data from EC, we encourage users to either use existing product classes or create new ones.Reading directly from screen classes can cause significant performance degradation. 
+
+ Recommended guidelines for creating allocation read data model are listed below - 
+
+ 1. Using Existing EC Data Model 
+
+ EC provides read data model (read-only EC classes) for most basic functions. Use these classes when reading values for existing attributes. 
+
+ These classes are read-only, based on database views, and suffixed with _DATA . A few examples of prominent allocation read data classes are: 
+
+ Well Data 
+
+ PWEL_DAY_DATA (Daily Data - Production Well) 
+
+ IWEL_DAY_DATA (Daily Data - Injection Well) 
+
+ PWEL_DAY_COMP_DATA_GAS (Daily Data - Well Gas Component Analysis) 
+
+ PWEL_DAY_COMP_DATA_OIL (Daily Data - Well Oil Component Analysis) 
+
+ RBF_DAY_DATA (Reservoir block formation data) 
+
+ Stream Data 
+
+ STRM_DAY_STREAM_DATA (Daily Data - Streams) 
+
+ STRM_MTH_STREAM_DATA (Monthly Data - Streams) 
+
+ STRM_DAY_COMP_DATA (Daily Data - Stream Component Analysis) 
+
+ 2. Enhance Existing Data Model 
+
+ Enhance existing data models to add support for new project-specific values or attributes rather than creating new classes. 
+
+ Extend existing allocation read classes by following extension guidelines. 
+
+ Example: If a project has added a new attribute on the daily stream class which they also want as allocation input data, extend the existing STRM_DAY_STREAM_DATA class and add the attribute using extensions. 
+
+ No new class should be created solely for handling project-specific attributes. 
+
+ Existing classes should be extended wherever possible, and new attributes should be incorporated through extensions. 
+
+ 3. Add New Data Model 
+
+ Add a new data model when the project needs to read data from new tables or classes that are not yet supported by the product&#8217;s allocation read classes. 
+
+ Requirements for new read classes: 
+
+ The new class should be read-only. 
+
+ Preferably base it on a database view instead of referring directly to screen tables to avoid performance issues. 
+
+ The class name should be suffixed with _DATA . 
+
+ Follow extension guidelines for new class creation. 
+
+ Allocation Write Data Model 
+
+ To write allocation output data back to EC, use existing product classes or create new ones following the guidelines below. Writing directly to screen classes can cause significant performance degradation. 
+
+ Recommended guidelines for creating allocation read data model are listed below - 
+
+ 1. Using Existing EC Data Model 
+
+ EC provides write data model classes for most basic functions. Use these classes when writing allocation results back to EC. 
+
+ These classes use allocation data write tables as a base instead of using the same tables as respective screens, and are suffixed with _ALLOC . A few examples of prominent allocation write data classes are: 
+
+ Well Data 
+
+ PWEL_DAY_ALLOC (Daily Data - Production Well) 
+
+ PWEL_MTH_ALLOC (Monthly Data - Production Well) 
+
+ IWEL_DAY_ALLOC (Daily Data - Injection Well) 
+
+ IWEL_MTH_ALLOC (Monthly Data - Injection Well) 
+
+ PWEL_DAY_COMP_ALLOC (Daily Data - Well Component Analysis) 
+
+ PWEL_MTH_COMP_ALLOC (Monthly Data - Well Component Analysis) 
+
+ Stream Data 
+
+ STRM_DAY_ALLOC (Daily Streams Results) 
+
+ STRM_MTH_ALLOC (Monthly Streams Results) 
+
+ STRM_DAY_PC_ALLOC (Daily Streams Profit Centre Results) 
+
+ STRM_MTH_PC_ALLOC (Monthly Streams Profit Centre Results) 
+
+ STRM_DAY_COMP_ALLOC (Daily Stream Component Results) 
+
+ STRM_MTH_COMP_ALLOC (Monthly Stream Component Results) 
+
+ STRM_DAY_PC_CP_ALLOC (Daily Stream Profit Centre Component Results) 
+
+ STRM_MTH_PC_CP_ALLOC (Monthly Stream Profit Centre Component Results) 
+
+ Additional classes for Product and Dispositions 
+
+ 2. Enhance Existing Data Model 
+
+ Enhance existing data models to add support for new project-specific values or attributes rather than creating new classes. 
+
+ Extend existing allocation write classes by following extension guidelines. 
+
+ Example: If a project has added a new attribute on the daily stream class which they want to write back from allocation, extend the existing STRM_DAY_ALLOC class and base table to add the attribute using extensions. 
+
+ No new class should be created solely for handling project-specific attributes. 
+
+ Existing classes should be extended wherever possible, and new attributes should be incorporated through extensions. 
+
+ 3. Add New Data Model 
+
+ Add a new data model when the project needs to write data to new tables or classes that are not yet supported by the product&#8217;s allocation write classes. 
+
+ Requirements for new write classes: 
+
+ The new class should always be based on a new base table. 
+
+ Must not use screen classes to write back data, as doing so can lead to performance issues. 
+
+ The class name should be suffixed with _ALLOC . 
+
+ Follow extension guidelines for new class creation. 
+
+ function footerFormatDate(variable) {
+ var date = new Date(variable);
+ var currentYear = date.getFullYear();
+ document.write(currentYear);
+ }
+
+ Energy Components &copy; footerFormatDate('2026-04-30T13:55:42+0000')
