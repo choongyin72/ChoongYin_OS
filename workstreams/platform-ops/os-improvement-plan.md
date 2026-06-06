@@ -9,7 +9,7 @@ Each item has a clear **Definition of Done (DoD)**. Work top-to-bottom; check of
 ## P1 — Restore the OS operational heartbeat  🔴 highest
 *The OS's own job (keeping you briefed) has gone 4 days stale; briefing automation paused on OAuth.*
 
-- [ ] **A1.1 Diagnose the briefing/status blocker** — confirm whether OAuth is the only blocker and exactly what's pending (IT admin? scope?). DoD: short written diagnosis + decision: *unblock* vs *local workaround*.
+- [x] **A1.1 Diagnose the briefing/status blocker** ✅ 2026-06-06. **Finding:** 3 separate issues, NOT one. (1) `ClaudeOS-AutoAttach` scheduled task fails every run (last_result `-2147024629`) → approved tasks like `daily-status-reconcile` never get armed → **this is why STATUS is stale, and it needs no OAuth.** (2) `DailyMorningBriefing` task has never run (`SCHED_S_TASK_HAS_NOT_RUN`). (3) MS Graph OAuth consent (Mail/Calendar, app `060468f7…`, Quorum tenant) — only blocks *live-email/calendar content*; no `token_cache.json` = never authed. **Decision:** STATUS → local workaround (A1.2), no OAuth. OAuth/live-briefing **deferred to next week** (user routing via IT help desk).
 - [ ] **A1.2 Build a no-OAuth local STATUS generator** — a `py` tool that reads local sources (git log, recent commits, workstreams mtimes, `gh pr list` if available) and regenerates `STATUS.md`. DoD: `tools/status-refresh/` script that produces a current STATUS.md without OAuth.
 - [ ] **A1.3 Refresh STATUS.md to today** — run A1.2; reconcile the stale Woodside items (ECPR-31034 PCI rework, 2 UAT blockers, PRs #603–606). DoD: STATUS.md dated today, reflects real current state.
 
@@ -45,4 +45,4 @@ P5 items reuse P2, so doing P2 before A5.1 pays off.
 ### Progress log
 | Date | Item | Result |
 |---|---|---|
-| — | — | (start here) |
+| 2026-06-06 | A1.1 | ✅ Diagnosed. STATUS staleness = AutoAttach failing (not OAuth). Decision: local STATUS generator (A1.2). OAuth/live-briefing deferred to next week (IT help desk). |
