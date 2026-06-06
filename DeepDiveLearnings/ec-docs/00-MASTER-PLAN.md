@@ -27,7 +27,7 @@ Each session → one KB summary doc `DOC-NN-<name>.md` (key concepts, config, go
 | **DOC-08** | **BPM (workflows)** | frmw/bpm | 24 | 🟠 | ✅ `DOC-08-bpm.md` |
 | **DOC-09** | **EC Extensions / Dev** | ec-extensions + appdev + rest-api + expression | 21 | 🟡 | ✅ `DOC-09-extensions-dev.md` |
 | **DOC-10** | **GraphQL + Reporting + eDAC** | graphql + reporting-and-analytics + edac | 19 | 🟡 | ✅ `DOC-10-graphql-reporting-edac.md` |
-| **DOC-11** | **IAM + DB Dev + Containers** | iam + databasedevelopment + containers + flyway/blob/tools | 28 | 🟡 | ☐ |
+| **DOC-11** | **IAM + DB Dev + Containers** | iam + databasedevelopment + containers + flyway/blob/tools | 28 | 🟡 | ✅ `DOC-11-iam-dbdev-containers.md` |
 
 **Total: 230 pages across 11 sessions.**
 
@@ -55,3 +55,5 @@ Each session → one KB summary doc `DOC-NN-<name>.md` (key concepts, config, go
 | 2026-06-06 | DOC-08 | BPM: jBPM engine + BPM Console, jbpmengine user, Project Management (JBPM.ADMIN, Maven), Process Template (EC alias, schedulable), Process Overview + viewer-tag node colors, Process Action handlers (chained), User Tasks->To-do List, process inbound/outbound events (DatasetUpdated) |
 | 2026-06-06 | DOC-09 | Extensions/Dev: REST API (domain model IUD, OpenAPI 3.0.3, frmw-core-api SDK), EC Extensions (WAR, Extensions Manager lifecycle, Maven archetype, 4 install options), strict DB-change rules (prefix by ext-id, OWNER_CNTX>=1000, APP_SPACE_CNTX, IGNORE_IND, DB_MAPPING_TYPE=EXTENSION, Flyway), dev env + EC Hub Nexus, DomainEntityMgr, expression scripting |
 | 2026-06-06 | DOC-10 | GraphQL (auto type system from classes, REL__/REF__ fields, qc/qs filters, mutations insert/update/merge/delete = 4th IUD path, directives, JSONata transforms, schema SPI) + eDAC (where-clause predicate in generated views, direct/relational/reference, ACCESS_CONTROL_IND, ext-DB-user logon trigger + ue_ringfencing) + Reporting (template/definition/runnable, internal vs external engine, Jasper/Yellowfin, RV_ layer) |
+| 2026-06-06 | DOC-11 | IAM (Keycloak master, T_BASIS_USER->META, identity brokering OIDC/SAML, session timeout, service accounts + client-credential flow for integrations, jbpmengine) + DB Dev (Flyway versioned/repeatable, PL/SQL standard) + Containers (ec-app/bpm/keycloak/ra/messaging/clam-av/analytics, DB users) + PKI signing, Password Encryption Tool, Blob Storage (S3/Azure/Local) |
+| 2026-06-06 | DONE | ALL 11 sessions complete (230 pages). README.md index + cross-cutting threads written. |
