@@ -13,9 +13,9 @@ import json, os
 EC_URL        = 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/'
 SS_DIR        = r'c:\Projects\ChoongYin_OS\docs\EC\screenshots\iud_bank'
 LOG_PATH      = r'c:\Projects\ChoongYin_OS\tmp\logs\ec_iud_bank_final.json'
-TEST_CODE     = 'AUTOTEST_BNK_003'
-TEST_NAME     = 'AUTOTEST Bank 003'
-TEST_NAME_UPD = 'AUTOTEST Bank 003 UPDATED'
+TEST_CODE     = 'AUTOTEST_BNK_004'
+TEST_NAME     = 'AUTOTEST Bank 004'
+TEST_NAME_UPD = 'AUTOTEST Bank 004 UPDATED'
 START_DATE    = '2000-01-01'
 END_DATE      = '2000-01-02'   # Soft-delete: expire next day
 

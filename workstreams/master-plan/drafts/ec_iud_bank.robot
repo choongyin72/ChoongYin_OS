@@ -11,227 +11,183 @@ Documentation    EC IUD Test — Bank (Configuration > Finance Objects > Bank)
 ...    inactive/expired. The bank is no longer visible at the current navigator date.
 ...
 ...    Test Data: AUTOTEST_BNK_XXX prefix. NEVER use existing bank codes.
-...    Proven working with: AUTOTEST_BNK_003 (2026-06-06)
+...    Each run must use a fresh incrementing code (expired banks persist in DB).
 ...
 ...    Author:       Choong-Yin Lee / Claude Sonnet 4.6
 ...    Date:         2026-06-06
 ...    Environment:  Local EC (ap-f0a7g341jn6d.corp.quorumsoftware.com:8443)
+...    Requires:     robotframework-browser (rfbrowser init)
 
 Library           Browser
-Library           String
 Library           Collections
+Suite Setup       Open EC And Navigate To Bank
+Suite Teardown    Close Browser
 
 *** Variables ***
 ${EC_URL}              https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/
 ${EC_USER}             sysadmin
 ${EC_PASS}             sysadmin
-${TEST_CODE}           AUTOTEST_BNK_003
-${TEST_NAME}           AUTOTEST Bank 003
-${TEST_NAME_UPD}       AUTOTEST Bank 003 UPDATED
+${TEST_CODE}           AUTOTEST_BNK_005
+${TEST_NAME}           AUTOTEST Bank 005
+${TEST_NAME_UPD}       AUTOTEST Bank 005 UPDATED
 ${START_DATE}          2000-01-01
 ${END_DATE}            2000-01-02
 ${HEADLESS}            ${TRUE}
-${NAV_TABLE}           manage_object_nav_nav:form:T_data
-${SS_DIR}              ${CURDIR}${/}..${/}..${/}docs${/}EC${/}screenshots${/}iud_bank${/}rf
+
+# objectForm field IDs (Insert — new object)
+${INS_CODE}            tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${INS_NAME}            tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
+${INS_DATE}            tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+# updateAttributes field IDs (Update — existing object)
+${UPD_CODE}            tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${UPD_NAME}            tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+# objectdates field IDs (Delete — soft-delete via End Date)
+${DEL_ENDDATE}         tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 *** Test Cases ***
 
-TC01 Navigate To Bank Screen
-    [Documentation]    Open EC, login, navigate to Bank screen via sidebar search
-    [Tags]    iud    bank    navigation
-    New Browser    chromium    headless=${HEADLESS}    args=["--ignore-certificate-errors"]
-    New Context    ignoreHTTPSErrors=${TRUE}    viewport={'width': 1920, 'height': 1080}
-    New Page    ${EC_URL}
-    Fill Text    id=username    ${EC_USER}
-    Fill Text    id=password    ${EC_PASS}
-    Click    id=kc-login
-    Wait For URL    **/dashboard**    timeout=60s
-    Wait For Load State    networkidle    timeout=30s
-    # Navigate to Bank via sidebar search
-    Fill Text    id=menu:searchForm:searchTxt    Bank
-    Wait For Load State    networkidle    timeout=8s
-    Sleep    0.4s
-    Click    xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Bank']
-    Wait For Load State    networkidle    timeout=15s
-    Sleep    1.5s
-    ${label}=    Get Text    id=screenToolbar:form:screenLabel
-    Should Contain    ${label}    Bank
-    Take Screenshot    ${SS_DIR}${/}rf_tc01_bank_screen.png
-
-TC02 Verify Clean State
-    [Documentation]    Confirm AUTOTEST_BNK_003 does not exist before inserting
+TC01 Verify Clean State
+    [Documentation]    Confirm AUTOTEST_BNK_005 does not exist before inserting
     [Tags]    iud    bank    clean-state
     ${rows}=    EC Get Table Rows
     Log    Current banks: ${rows}
     ${exists}=    EC Row Exists    ${TEST_CODE}
     Should Be Equal    ${exists}    ${FALSE}
-    ...    msg=AUTOTEST_BNK_003 already exists — cannot run INSERT test
-    Take Screenshot    ${SS_DIR}${/}rf_tc02_clean_state.png
+    ...    msg=${TEST_CODE} already exists — cannot run INSERT test (use next code)
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc01_clean_state
 
-TC03 Insert New Bank Record
-    [Documentation]    Insert AUTOTEST_BNK_003 via Insert → New Object → fill 3 mandatory fields
-    ...
-    ...    Mandatory fields: Bank Code, Bank Name, Start Date
-    ...    objectForm field IDs:
-    ...      Code:       tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-    ...      Name:       tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
-    ...      Start Date: tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+TC02 Insert New Bank Record
+    [Documentation]    Insert via Insert toolbar → New Object → fill 3 mandatory fields (Code, Name, Start Date)
     [Tags]    iud    bank    insert
     # Hover Insert toolbar button → submenu appears
     Hover    xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]
     Sleep    1s
-    # Click New Object submenu item
-    ${sub_links}=    Get Element Count    xpath=//ul[contains(@class,'ui-menu-child')]//li//a
-    Should Be True    ${sub_links} > 0    msg=Insert submenu not visible after hover
-    Click    xpath=//ul[contains(@class,'ui-menu-child')]//li//a    # clicks first item = New Object
+    # Click "New Object" (first submenu item under the insert menu)
+    Click    xpath=(//ul[contains(@class,'ui-menu-child')]//li//a)[1]
     Wait For Load State    networkidle    timeout=15s
     Sleep    1.2s
-    Take Screenshot    ${SS_DIR}${/}rf_tc03a_new_object_form.png
-    # Fill Bank Code
-    Fill Text    id=tab:tabPanel:objectForm:form:G:0:R:0:C:1:in    ${TEST_CODE}
-    Evaluate JavaScript    None    () => {
-    ...    const e = document.getElementById('tab:tabPanel:objectForm:form:G:0:R:0:C:1:in');
-    ...    if (e) { e.dispatchEvent(new Event('change', {bubbles:true})); e.dispatchEvent(new Event('blur', {bubbles:true})); }
-    ... }
-    Sleep    0.4s
-    # Fill Bank Name
-    Fill Text    id=tab:tabPanel:objectForm:form:G:0:R:1:C:1:in    ${TEST_NAME}
-    Evaluate JavaScript    None    () => {
-    ...    const e = document.getElementById('tab:tabPanel:objectForm:form:G:0:R:1:C:1:in');
-    ...    if (e) { e.dispatchEvent(new Event('change', {bubbles:true})); e.dispatchEvent(new Event('blur', {bubbles:true})); }
-    ... }
-    Sleep    0.4s
-    # Fill Start Date (da_input calendar widget — fill + Tab to trigger calendar validation)
-    Fill Text    id=tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input    ${START_DATE}
-    Keyboard Key    Tab
-    Sleep    0.6s
-    Evaluate JavaScript    None    () => {
-    ...    const e = document.getElementById('tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input');
-    ...    if (e) { e.dispatchEvent(new Event('change', {bubbles:true})); e.dispatchEvent(new Event('blur', {bubbles:true})); }
-    ... }
-    Sleep    0.4s
-    Take Screenshot    ${SS_DIR}${/}rf_tc03b_insert_fields_filled.png
-    # Save
-    Click    xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]
-    Wait For Load State    networkidle    timeout=15s
-    Sleep    1.2s
-    Take Screenshot    ${SS_DIR}${/}rf_tc03c_after_save.png
-    # Refresh table via Go button
-    Click    id=button:form:B
-    Wait For Load State    networkidle    timeout=15s
-    Sleep    1.2s
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc02a_new_object_form
+    # Fill the 3 mandatory fields
+    EC Fill Field      ${INS_CODE}    ${TEST_CODE}
+    EC Fill Field      ${INS_NAME}    ${TEST_NAME}
+    EC Fill Date       ${INS_DATE}    ${START_DATE}
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc02b_insert_filled
+    # Save + refresh
+    EC Save
+    EC Go
     # Verify
     ${exists}=    EC Row Exists    ${TEST_CODE}
-    Should Be True    ${exists}    msg=INSERT FAILED: ${TEST_CODE} not found in table after save
-    Take Screenshot    ${SS_DIR}${/}rf_tc03d_insert_verified.png
-    Log    INSERT PASS: ${TEST_CODE} found in Bank table
+    Should Be True    ${exists}    msg=INSERT FAILED: ${TEST_CODE} not in table after save
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc02c_insert_verified
+    Log    INSERT PASS: ${TEST_CODE} created
 
-TC04 Update Bank Name
-    [Documentation]    Select AUTOTEST_BNK_003 → update Bank Name in updateAttributes form
-    ...
-    ...    After row selection, bank data loads in tabs:
-    ...      updateAttributes form Name field: tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+TC03 Update Bank Name
+    [Documentation]    Select row → updateAttributes form → edit Bank Name → Save
     [Tags]    iud    bank    update
-    # Click the bank row (click on the Bank Code span in the table)
-    Click    css=#manage_object_nav_nav\:form\:T_data span >> text="${TEST_CODE}"
-    Wait For Load State    networkidle    timeout=15s
-    Sleep    1.2s
-    Take Screenshot    ${SS_DIR}${/}rf_tc04a_row_selected.png
+    EC Select Row    ${TEST_CODE}
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc03a_row_selected
     # Verify updateAttributes loaded
-    ${code_val}=    Get Property    id=tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in    value
-    Should Be Equal    ${code_val}    ${TEST_CODE}    msg=Row selection failed — code field not loaded
-    # Update Bank Name
-    Fill Text    id=tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in    ${TEST_NAME_UPD}
-    Evaluate JavaScript    None    () => {
-    ...    const e = document.getElementById('tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in');
-    ...    if (e) { e.dispatchEvent(new Event('change', {bubbles:true})); e.dispatchEvent(new Event('blur', {bubbles:true})); }
-    ... }
-    Sleep    0.4s
-    Take Screenshot    ${SS_DIR}${/}rf_tc04b_name_updated.png
-    # Save
-    Click    xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]
-    Wait For Load State    networkidle    timeout=15s
-    Sleep    1.2s
-    # Refresh and verify
-    Click    id=button:form:B
-    Wait For Load State    networkidle    timeout=15s
-    Sleep    1.2s
-    Take Screenshot    ${SS_DIR}${/}rf_tc04c_after_update_save.png
-    # Check the row shows the updated name
+    ${code_val}=    Get Property    css=[id="${UPD_CODE}"]    value
+    Should Be Equal    ${code_val}    ${TEST_CODE}    msg=Row select failed — code not loaded
+    # Edit name + save
+    EC Fill Field    ${UPD_NAME}    ${TEST_NAME_UPD}
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc03b_name_updated
+    EC Save
+    EC Go
+    # Verify row shows updated name
     ${row_text}=    Get Text    xpath=//tbody[@id='manage_object_nav_nav:form:T_data']//tr[.//span[normalize-space(text())='${TEST_CODE}']]
-    Should Contain    ${row_text}    ${TEST_NAME_UPD}
-    ...    msg=UPDATE FAILED: updated name not found in row
-    Take Screenshot    ${SS_DIR}${/}rf_tc04d_update_verified.png
-    Log    UPDATE PASS: Bank Name updated to ${TEST_NAME_UPD}
+    Should Contain    ${row_text}    ${TEST_NAME_UPD}    msg=UPDATE FAILED: name not updated
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc03c_update_verified
+    Log    UPDATE PASS: name → ${TEST_NAME_UPD}
 
-TC05 Soft-Delete Bank (Set End Date)
-    [Documentation]    Soft-delete AUTOTEST_BNK_003 by setting End Date = day after Start Date
-    ...
-    ...    EC Bank hard-delete is DISABLED by design. Soft-delete pattern:
-    ...    Select row → objectdates form End Date field → set expiry date → Save
-    ...    After save, bank disappears from table (expired at current nav date) = delete confirmed.
-    ...
-    ...    objectdates End Date field: tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+TC04 Soft-Delete Bank (Set End Date)
+    [Documentation]    Select row → objectdates form → set End Date → Save → bank expires
     [Tags]    iud    bank    delete    cleanup
-    # Click the bank row
-    Click    css=#manage_object_nav_nav\:form\:T_data span >> text="${TEST_CODE}"
-    Wait For Load State    networkidle    timeout=15s
-    Sleep    1.2s
-    Take Screenshot    ${SS_DIR}${/}rf_tc05a_row_for_delete.png
-    # Verify objectdates loaded
-    ${start_val}=    Get Property    id=tab:tabPanel:objectdates:form:G:0:R:0:C:1:da_input    value
-    Log    Bank Start Date: ${start_val}
-    # Set End Date
-    Fill Text    id=tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input    ${END_DATE}
-    Keyboard Key    Tab
-    Sleep    0.6s
-    Evaluate JavaScript    None    () => {
-    ...    const e = document.getElementById('tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input');
-    ...    if (e) { e.dispatchEvent(new Event('change', {bubbles:true})); e.dispatchEvent(new Event('blur', {bubbles:true})); }
-    ... }
-    Sleep    0.4s
-    Take Screenshot    ${SS_DIR}${/}rf_tc05b_end_date_set.png
-    # Save
-    Click    xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]
-    Wait For Load State    networkidle    timeout=15s
-    Sleep    1.2s
-    # Refresh table
-    Click    id=button:form:B
-    Wait For Load State    networkidle    timeout=15s
-    Sleep    1.2s
-    Take Screenshot    ${SS_DIR}${/}rf_tc05c_after_delete_save.png
+    EC Select Row    ${TEST_CODE}
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc04a_row_for_delete
+    # Set End Date (expire the bank)
+    EC Fill Date    ${DEL_ENDDATE}    ${END_DATE}
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc04b_end_date_set
+    EC Save
+    EC Go
     # Verify bank no longer visible (expired at current nav date)
-    ${still_exists}=    EC Row Exists    ${TEST_CODE}
-    Should Be Equal    ${still_exists}    ${FALSE}
-    ...    msg=DELETE FAILED: ${TEST_CODE} still visible after End Date set
-    Take Screenshot    ${SS_DIR}${/}rf_tc05d_delete_verified.png
-    Log    DELETE PASS: ${TEST_CODE} expired (EndDate=${END_DATE}), no longer visible
+    ${still}=    EC Row Exists    ${TEST_CODE}
+    Should Be Equal    ${still}    ${FALSE}    msg=DELETE FAILED: ${TEST_CODE} still visible
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc04c_delete_verified
+    Log    DELETE PASS: ${TEST_CODE} expired (EndDate=${END_DATE})
 
 *** Keywords ***
 
+Open EC And Navigate To Bank
+    [Documentation]    Login to EC and navigate to the Bank screen (Suite Setup)
+    New Browser    chromium    headless=${HEADLESS}
+    New Context    ignoreHTTPSErrors=${TRUE}    viewport={'width': 1920, 'height': 1080}
+    Set Browser Timeout    30s
+    # EC renders some links twice (search list + favorites); first-match like Playwright .first
+    Set Strict Mode    False
+    New Page    ${EC_URL}
+    Fill Text    css=[id="username"]    ${EC_USER}
+    Fill Text    css=[id="password"]    ${EC_PASS}
+    Click    css=[id="kc-login"]
+    Wait For Elements State    css=[id="menu:searchForm:searchTxt"]    visible    timeout=60s
+    Wait For Load State    networkidle    timeout=30s
+    # Navigate to Bank via sidebar search (Type Text triggers PrimeFaces keyup AJAX)
+    Type Text    css=[id="menu:searchForm:searchTxt"]    Bank    delay=60ms    clear=Yes
+    Wait For Load State    networkidle    timeout=8s
+    Sleep    0.5s
+    Click    xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Bank']
+    Wait For Load State    networkidle    timeout=15s
+    Sleep    1.5s
+    ${label}=    Get Text    css=[id="screenToolbar:form:screenLabel"]
+    Should Contain    ${label}    Bank    msg=Failed to navigate to Bank screen
+    Take Screenshot    filename=${OUTPUT_DIR}/rf_tc00_bank_loaded
+
+EC Fill Field
+    [Documentation]    Fill a text input by EC id and dispatch change/blur for EC validation
+    [Arguments]    ${field_id}    ${value}
+    Fill Text    css=[id="${field_id}"]    ${value}
+    Evaluate JavaScript    ${None}    () => { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }
+    Sleep    0.4s
+
+EC Fill Date
+    [Documentation]    Fill a da_input calendar field (Tab out triggers PrimeFaces calendar validation)
+    [Arguments]    ${field_id}    ${value}
+    Fill Text    css=[id="${field_id}"]    ${value}
+    Keyboard Key    press    Tab
+    Sleep    0.6s
+    Evaluate JavaScript    ${None}    () => { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }
+    Sleep    0.4s
+
+EC Save
+    [Documentation]    Click the Save toolbar button (waits for it to be enabled)
+    Click    xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]
+    Wait For Load State    networkidle    timeout=15s
+    Sleep    1.2s
+
+EC Go
+    [Documentation]    Click the Go button to refresh the Bank list
+    Click    css=[id="button:form:B"]
+    Wait For Load State    networkidle    timeout=15s
+    Sleep    1.2s
+
+EC Select Row
+    [Documentation]    Click the table row for a given Bank Code (text is in a span child)
+    [Arguments]    ${code}
+    Click    xpath=//tbody[@id='manage_object_nav_nav:form:T_data']//span[normalize-space(text())='${code}']
+    Wait For Load State    networkidle    timeout=15s
+    Sleep    1.2s
+
 EC Get Table Rows
-    [Documentation]    Return list of [Bank Code, Bank Name, Date, ...] rows from the Bank table
-    ${rows}=    Evaluate JavaScript    None    () => {
-    ...    const tbody = document.getElementById('manage_object_nav_nav:form:T_data');
-    ...    if (!tbody) return [];
-    ...    const out = [];
-    ...    tbody.querySelectorAll('tr').forEach(tr => {
-    ...        const cells = [];
-    ...        tr.querySelectorAll('td').forEach(td => cells.push(td.textContent.trim()));
-    ...        if (cells.some(c => c)) out.push(cells);
-    ...    });
-    ...    return out;
-    ... }
+    [Documentation]    Return list of row-cell-lists from the Bank navigator table
+    ${rows}=    Evaluate JavaScript    ${None}    () => { const t=document.getElementById('manage_object_nav_nav:form:T_data'); if(!t) return []; const o=[]; t.querySelectorAll('tr').forEach(tr=>{const c=[];tr.querySelectorAll('td').forEach(td=>c.push(td.textContent.trim()));if(c.some(x=>x))o.push(c);}); return o; }
     RETURN    ${rows}
 
 EC Row Exists
-    [Documentation]    Return True if a row with the given Bank Code exists in the table
+    [Documentation]    Return True if a row with the given Bank Code exists
     [Arguments]    ${code}
     ${rows}=    EC Get Table Rows
     FOR    ${row}    IN    @{rows}
-        ${first_cell}=    Get From List    ${row}    0
-        IF    '${first_cell}' == '${code}'
-            RETURN    ${TRUE}
-        END
+        ${first}=    Get From List    ${row}    0
+        IF    '${first}' == '${code}'    RETURN    ${TRUE}
     END
     RETURN    ${FALSE}
