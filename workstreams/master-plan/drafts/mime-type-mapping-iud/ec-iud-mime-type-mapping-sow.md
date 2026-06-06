@@ -134,10 +134,10 @@ Playwright (Python sync) + Robot Framework (Browser lib) + oracledb (DB verify).
 | Playwright script (`ec_iud_mime.py`) | ✅ ALL PASS |
 | Robot Framework suite (`ec_iud_mime.robot`) | ✅ 4/4 PASS |
 | DB verification (TV + base table; true delete confirmed) | ✅ physical delete confirmed |
-| Screenshots evidence | ✅ `docs/EC/screenshots/iud_mime/` + RF `tmp/rf_mime/` |
+| Screenshots evidence | ✅ committed: `docs/EC/screenshots/iud_mime/` (14) + `recon_mime_type_mapping/` (1). RF reports in `tmp/rf_mime/` are scratch (not backed up). |
 | SOW updated with final results + Lessons Learned | ✅ this doc (v2.0) |
 | `mime-type-mapping-iud/` folder (README, requirements, repo-relative paths) | ✅ packaged |
-| Committed + pushed | ⏳ task 7 |
+| Committed + pushed | ✅ 8be581a (deliverable) + ddae059 (evidence), pushed to master |
 
 ---
 
