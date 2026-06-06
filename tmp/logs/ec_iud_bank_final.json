@@ -1,0 +1,8 @@
+{
+  "login": "PASS",
+  "navigate": "PASS",
+  "clean": "CLEAN",
+  "insert": "PASS",
+  "update": "PASS",
+  "delete": "PASS (soft-delete: EndDate=2000-01-02, bank expired)"
+}
