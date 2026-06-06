@@ -74,9 +74,14 @@ EC_HEADED=1 EC_SLOWMO=700 EC_CODE=AUTOTEST_BNK_020 py -X utf8 ec_iud_bank_final.
 | `EC_HEADED` | `0` | `1` = show the browser |
 | `EC_SLOWMO` | `700` | ms slow-motion per action (only when headed) |
 | `EC_CODE`   | `AUTOTEST_BNK_004` | test bank code (use a fresh one each run) |
+| `EC_URL`    | sandbox URL | override the EC web app URL |
+| `REPO_ROOT` | auto-detected | override the repo root (see below) |
 
-Writes screenshots to `docs/EC/screenshots/iud_bank/` and a result JSON to
-`tmp/logs/ec_iud_bank_final.json`.
+**Paths are portable** — output locations are resolved relative to the repo root
+(found by walking up to the `.git` folder), not hardcoded. Screenshots go to
+`<repo>/docs/EC/screenshots/iud_bank/` and the result JSON to
+`<repo>/tmp/logs/ec_iud_bank_final.json`. Set `REPO_ROOT` only if running the
+script from outside the repo tree.
 
 ### B) Robot Framework
 ```bash

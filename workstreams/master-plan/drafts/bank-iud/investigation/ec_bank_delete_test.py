@@ -3,10 +3,23 @@ Test Playwright native row click + delete hover for Bank Manage Object screen.
 Determines the exact delete pattern for AUTOTEST_BNK_001.
 """
 from playwright.sync_api import sync_playwright
+from pathlib import Path
 import os
 
-EC_URL    = 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/'
-SS_DIR    = r'c:\Projects\ChoongYin_OS\docs\EC\screenshots\iud_bank'
+
+def _repo_root() -> Path:
+    env = os.environ.get('REPO_ROOT')
+    if env:
+        return Path(env)
+    here = Path(__file__).resolve()
+    for parent in [here, *here.parents]:
+        if (parent / '.git').exists():
+            return parent
+    return here.parents[5]
+
+
+EC_URL    = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
+SS_DIR    = str(_repo_root() / 'docs' / 'EC' / 'screenshots' / 'iud_bank')
 TEST_CODE = 'AUTOTEST_BNK_001'
 os.makedirs(SS_DIR, exist_ok=True)
 

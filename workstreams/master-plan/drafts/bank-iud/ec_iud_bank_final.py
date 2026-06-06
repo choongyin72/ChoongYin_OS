@@ -9,11 +9,27 @@ Correct field IDs from deep DOM inspection:
 NEVER TOUCH EXISTING DATA. Test data: AUTOTEST_BNK_* only.
 """
 from playwright.sync_api import sync_playwright
+from pathlib import Path
 import json, os
 
-EC_URL        = 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/'
-SS_DIR        = r'c:\Projects\ChoongYin_OS\docs\EC\screenshots\iud_bank'
-LOG_PATH      = r'c:\Projects\ChoongYin_OS\tmp\logs\ec_iud_bank_final.json'
+
+def _repo_root() -> Path:
+    """Resolve repo root by walking up to the .git folder (portable across machines).
+    Honours env REPO_ROOT; falls back to the script's 4th-level parent."""
+    env = os.environ.get('REPO_ROOT')
+    if env:
+        return Path(env)
+    here = Path(__file__).resolve()
+    for parent in [here, *here.parents]:
+        if (parent / '.git').exists():
+            return parent
+    return here.parents[4]  # <root>/workstreams/master-plan/drafts/bank-iud/<file>
+
+
+ROOT          = _repo_root()
+EC_URL        = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
+SS_DIR        = str(ROOT / 'docs' / 'EC' / 'screenshots' / 'iud_bank')
+LOG_PATH      = str(ROOT / 'tmp' / 'logs' / 'ec_iud_bank_final.json')
 
 # Env-controlled for live demo:  EC_HEADED=1 shows the browser, EC_CODE overrides test code
 HEADED        = os.environ.get('EC_HEADED', '0') == '1'

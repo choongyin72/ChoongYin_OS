@@ -2,10 +2,23 @@
 Deep DOM inspection of Bank screen to understand exact insert pattern.
 """
 from playwright.sync_api import sync_playwright
+from pathlib import Path
 import json, os, sys
 
-EC_URL = 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/'
-SS_DIR = r'c:\Projects\ChoongYin_OS\docs\EC\screenshots\iud_bank'
+
+def _repo_root() -> Path:
+    env = os.environ.get('REPO_ROOT')
+    if env:
+        return Path(env)
+    here = Path(__file__).resolve()
+    for parent in [here, *here.parents]:
+        if (parent / '.git').exists():
+            return parent
+    return here.parents[5]  # investigation/ is one level deeper than the deliverables
+
+
+EC_URL = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
+SS_DIR = str(_repo_root() / 'docs' / 'EC' / 'screenshots' / 'iud_bank')
 os.makedirs(SS_DIR, exist_ok=True)
 
 with sync_playwright() as p:
