@@ -2,7 +2,7 @@
 Documentation       T1 area — Browser session lifecycle: open, login, close.
 
 Library             Browser
-Resource            environment.resource
+Variables           environment.py
 
 
 *** Keywords ***
