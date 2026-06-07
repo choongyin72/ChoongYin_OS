@@ -55,3 +55,41 @@ Row Should Not Exist
     [Arguments]    ${table_id}    ${code}
     ${exists}=    Row Exists    ${table_id}    ${code}
     Should Be Equal    ${exists}    ${FALSE}    msg=Row ${code} should NOT exist in ${table_id}
+
+Type Cell By Id
+    [Documentation]    Commit an inline grid cell: real keystrokes + Tab so the cell's
+    ...    onchange -> PrimeFaces.ab partial submit fires (fill()/synthetic events do NOT
+    ...    stage the value). Use this for inline grids; Fill EC Field is for object forms.
+    [Arguments]    ${cell_id}    ${value}
+    Click    css=[id="${cell_id}"]
+    Type Text    css=[id="${cell_id}"]    ${value}    clear=Yes
+    Keyboard Key    press    Tab
+    Wait For Load State    networkidle    timeout=12s
+    Sleep    0.6s
+
+Get Cell Value By Id
+    [Documentation]    Return the current value of an inline grid cell input by id.
+    [Arguments]    ${cell_id}
+    ${v}=    Get Property    css=[id="${cell_id}"]    value
+    RETURN    ${v}
+
+Go To First Page
+    [Documentation]    Click the paginator First button if it is enabled (no-op otherwise).
+    ${n}=    Get Element Count    css=.ui-paginator-first:not(.ui-state-disabled)
+    IF    ${n} > 0
+        Click    css=.ui-paginator-first
+        Wait For Load State    networkidle    timeout=10s
+        Sleep    0.5s
+    END
+
+Current Page Has Next
+    [Documentation]    True if the paginator Next button is enabled.
+    ${n}=    Get Element Count    css=.ui-paginator-next:not(.ui-state-disabled)
+    ${has}=    Evaluate    ${n} > 0
+    RETURN    ${has}
+
+Go To Next Page
+    [Documentation]    Click the paginator Next button.
+    Click    css=.ui-paginator-next
+    Wait For Load State    networkidle    timeout=10s
+    Sleep    0.5s
