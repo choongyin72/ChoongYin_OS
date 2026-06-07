@@ -9,6 +9,7 @@ Documentation       T3 (screen) — MIME Type Mapping page object.
 Library             Browser
 Library             ../../../libraries/DbVerify.py
 Resource            ../../../resources/common.resource
+Resource            ../../../resources/table_class.resource
 
 
 *** Variables ***
@@ -78,27 +79,6 @@ MIME Should Not Exist In DB
     [Arguments]    ${mime}
     Code Should Be Absent In View    ctrl_mime_type_mapping    ${mime}
 
-Insert New Grid Row
-    [Documentation]    Insert toolbar -> first submenu item -> a blank editable row appears.
-    Hover    xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]
-    Wait For Elements State    xpath=(//ul[contains(@class,'ui-menu-child')]//li//a)[1]    visible    timeout=10s
-    Click    xpath=(//ul[contains(@class,'ui-menu-child')]//li//a)[1]
-    Wait For Load State    networkidle    timeout=12s
-    Sleep    1s
-
-Delete Selected Grid Row
-    [Documentation]    Delete toolbar -> the "MIME Type Mapping" item, scoped to the DELETE
-    ...    menu-parent (the Insert submenu has an identically named item).
-    Hover    xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-delete')]]
-    Wait For Elements State
-    ...    xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-delete')]]//ul[contains(@class,'ui-menu-child')]//a[normalize-space(.)='MIME Type Mapping']
-    ...    visible
-    ...    timeout=10s
-    Click
-    ...    xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-delete')]]//ul[contains(@class,'ui-menu-child')]//a[normalize-space(.)='MIME Type Mapping']
-    Wait For Load State    networkidle    timeout=12s
-    Sleep    1s
-
 Insert MIME Mapping
     [Documentation]    Add a blank row, type MIME type + extensions (Tab-commit), Save, reload.
     [Arguments]    ${mime}    ${ext}
@@ -141,6 +121,6 @@ Delete MIME Mapping
     Sleep    0.4s
     ${active}=    Get Cell Value By Id    ${c0}
     Should Be Equal    ${active}    ${mime}    msg=SAFETY: active row is not the test row
-    Delete Selected Grid Row
+    Delete Selected Grid Row    MIME Type Mapping
     Save
     Refresh Screen
