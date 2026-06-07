@@ -29,12 +29,6 @@ Select Object Row
     Wait For Load State    networkidle    timeout=15s
     Sleep    1.2s
 
-Click Go
-    [Documentation]    Click the navigator Go button to (re)load the object list.
-    Click    css=[id="button:form:B"]
-    Wait For Load State    networkidle    timeout=15s
-    Sleep    1.2s
-
 Delete Object By Zero-Length Window
     [Documentation]    Set End Date = Start Date -> zero-length window -> EC true delete.
     [Arguments]    ${enddate_id}    ${date}

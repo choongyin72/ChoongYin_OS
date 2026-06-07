@@ -67,7 +67,7 @@ Insert Bank Record
     Fill EC Field    ${BANK_INS_NAME}    ${name}
     Fill EC Date    ${BANK_INS_DATE}    ${start_date}
     Save
-    Click Go
+    Apply Navigator
 
 Update Bank Name
     [Documentation]    Select the bank, confirm it loaded, edit Name, Save.
@@ -77,7 +77,7 @@ Update Bank Name
     Should Be Equal    ${loaded}    ${code}    msg=Row select failed - code not loaded
     Fill EC Field    ${BANK_UPD_NAME}    ${new_name}
     Save
-    Click Go
+    Apply Navigator
 
 Delete Bank
     [Documentation]    Select the bank, set End Date = Start Date (true delete), Save.
@@ -85,4 +85,4 @@ Delete Bank
     Select Object Row    ${BANK_TABLE}    ${code}
     Delete Object By Zero-Length Window    ${BANK_DEL_ENDDATE}    ${date}
     Save
-    Click Go
+    Apply Navigator

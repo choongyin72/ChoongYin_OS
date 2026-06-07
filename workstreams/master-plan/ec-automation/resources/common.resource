@@ -5,6 +5,7 @@ Documentation       T1 (universal) aggregator — imports every shared EC keywor
 
 Resource            browser.resource
 Resource            screen.resource
+Resource            navigator.resource
 Resource            toolbar.resource
 Resource            table.resource
 Resource            utils.resource
