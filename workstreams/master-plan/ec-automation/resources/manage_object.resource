@@ -13,8 +13,11 @@ Resource            common.resource
 *** Keywords ***
 Open New Object Form
     [Documentation]    Hover the Insert toolbar menu and choose "New Object".
+    ...    Wait for the submenu item to be visible before clicking (robust vs a fixed sleep).
     Hover    xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]
-    Sleep    1s
+    Wait For Elements State
+    ...    xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']
+    ...    visible    timeout=10s
     Click    xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']
     Wait For Load State    networkidle    timeout=15s
     Sleep    1.2s

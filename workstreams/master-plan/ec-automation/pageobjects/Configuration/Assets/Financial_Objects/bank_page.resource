@@ -5,6 +5,7 @@ Documentation       T3 (screen) — Bank page object.
 ...                 wrappers that delegate to T2 (manage_object) and T1 (common).
 
 Library             Browser
+Library             ../../../../libraries/DbVerify.py
 Resource            ../../../../resources/common.resource
 Resource            ../../../../resources/manage_object.resource
 
@@ -41,6 +42,16 @@ Bank Row Should Not Exist
     [Documentation]    Assert a bank with ${code} is absent from the list.
     [Arguments]    ${code}
     Row Should Not Exist    ${BANK_TABLE}    ${code}
+
+Bank Should Exist In DB
+    [Documentation]    DB ground-truth: assert ${code} really persisted in ov_bank.
+    [Arguments]    ${code}
+    Code Should Be Present In View    ov_bank    ${code}
+
+Bank Should Not Exist In DB
+    [Documentation]    DB ground-truth: assert ${code} was truly deleted from ov_bank.
+    [Arguments]    ${code}
+    Code Should Be Absent In View    ov_bank    ${code}
 
 Bank Row Should Show Name
     [Documentation]    Assert the Bank row for ${code} displays ${name}.

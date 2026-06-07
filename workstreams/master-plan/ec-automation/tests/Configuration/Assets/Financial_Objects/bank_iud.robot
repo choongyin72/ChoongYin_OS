@@ -33,6 +33,7 @@ TC02 Insert New Bank
     [Tags]    insert
     Insert Bank Record    ${TEST_CODE}    ${BANK_NAME}    ${START_DATE}
     Bank Row Should Exist    ${TEST_CODE}
+    Bank Should Exist In DB    ${TEST_CODE}
     Capture Step    bank_tc02_inserted
 
 TC03 Update Bank Name
@@ -47,6 +48,7 @@ TC04 Delete Bank
     [Tags]    delete    cleanup
     Delete Bank    ${TEST_CODE}    ${END_DATE}
     Bank Row Should Not Exist    ${TEST_CODE}
+    Bank Should Not Exist In DB    ${TEST_CODE}
     Capture Step    bank_tc04_deleted
 
 
