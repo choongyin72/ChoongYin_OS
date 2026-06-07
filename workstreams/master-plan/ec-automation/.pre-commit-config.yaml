@@ -1,0 +1,10 @@
+# Pre-commit hooks — auto lint + format Robot Framework files on commit.
+# Setup:  py -m pip install pre-commit && pre-commit install
+# Pin `rev` to the installed Robocop version (see: robocop --version).
+
+repos:
+  - repo: https://github.com/MarketSquare/robotframework-robocop
+    rev: v8.2.10
+    hooks:
+      - id: robocop          # lint
+      - id: robocop-format   # format

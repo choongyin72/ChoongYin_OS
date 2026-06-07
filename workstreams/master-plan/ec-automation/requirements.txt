@@ -1,0 +1,13 @@
+# EC Automation (Robot Framework) — team-ready suite dependencies
+# Install:  py -m pip install -r requirements.txt
+# Verified for Python 3.14 (win32). Requires Python >= 3.10, Robot Framework >= 5.0.
+
+robotframework==7.4.2
+robotframework-browser==19.15.1
+# After install, initialise Node + Chromium:  py -m Browser.entry init
+
+# Linter + formatter (Robotidy is merged into Robocop 6+)
+robotframework-robocop
+
+# DB verification (thin mode — no Oracle Instant Client required)
+oracledb==4.0.1

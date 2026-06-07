@@ -1,0 +1,18 @@
+# Robocop 6+ config (linter + formatter unified). Docs: https://robocop.dev
+# Run:  robocop check .        (lint)
+#       robocop format .       (auto-format to the Style Guide)
+
+[tool.robocop]
+exclude = ["results"]
+
+[tool.robocop.lint]
+# Inline Evaluate JavaScript blocks legitimately exceed the default 120 chars.
+# Raised here; a future refactor can hoist that JS into a Python keyword library.
+configure = ["line-too-long.line_length=300"]
+# VAR05 (suite-scope) disabled by design: IUD suites generate one unique test
+# record in Suite Setup and share it across insert -> update -> delete cases.
+# That shared lifecycle fixture is intentional, not a smell.
+ignore = ["VAR05"]
+
+[tool.robocop.format]
+# Use the default Style-Guide formatters (separators, section order, spacing).
