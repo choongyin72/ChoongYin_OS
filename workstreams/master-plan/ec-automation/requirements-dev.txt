@@ -1,0 +1,6 @@
+# Optional dev / reference tooling — for the Playwright implementations and recon
+# scripts under screens/. The runtime Robot Framework deps are in requirements.txt
+# (oracledb is shared from there for the DB recon/verify scripts).
+# Install:  py -m pip install -r requirements-dev.txt   &&   playwright install chromium
+
+playwright==1.60.0

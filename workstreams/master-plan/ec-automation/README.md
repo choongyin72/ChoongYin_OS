@@ -111,6 +111,24 @@ commit with `pre-commit install`.
 - Credentials default in `environment.py` are for the **local sandbox only**;
   for real CI inject `EC_USER`/`EC_PASS` as secret **environment variables**.
 
+## `screens/` — per-screen reference bundles (non-RF)
+
+Alongside the runnable RF suite, each screen has a reference bundle under `screens/`,
+mirroring the same EC menu path. These are **not** part of the RF run — they're the
+preserved Playwright implementation + the discovery trail + a spec, per screen:
+
+```
+screens/<menu path>/
+├── README.md          # Playwright run guide for this screen
+├── <screen>_sow.md    # statement of work / spec
+├── playwright/        # standalone Playwright (Python) implementation
+├── investigation/     # recon scripts (DOM scans + DB queries) used to learn the screen
+└── evidence/          # screenshots from a full IUD run
+```
+
+Playwright/recon tooling installs from `requirements-dev.txt` (`playwright`); the RF suite
+itself only needs `requirements.txt`.
+
 ## Roadmap / deferred
 
 | Item | Status |
