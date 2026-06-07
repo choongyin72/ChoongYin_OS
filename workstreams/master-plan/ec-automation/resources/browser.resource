@@ -14,10 +14,12 @@ Open EC Browser
     Set Strict Mode    False
 
 Login To EC
-    [Documentation]    Open the app and authenticate; wait for the sidebar search box.
+    [Documentation]    Open the app and authenticate as ${user} (defaults to the
+    ...    env-configured user); wait for the sidebar search box.
+    [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
     New Page    ${EC_URL}
-    Fill Text    css=[id="username"]    ${EC_USER}
-    Fill Text    css=[id="password"]    ${EC_PASS}
+    Fill Text    css=[id="username"]    ${user}
+    Fill Text    css=[id="password"]    ${pass}
     Click    css=[id="kc-login"]
     Wait For Elements State    css=[id="menu:searchForm:searchTxt"]    visible    timeout=60s
     Wait For Load State    networkidle    timeout=30s

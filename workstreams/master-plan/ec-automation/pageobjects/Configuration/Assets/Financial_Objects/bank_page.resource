@@ -25,9 +25,11 @@ ${BANK_DEL_ENDDATE}     tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 *** Keywords ***
 Open Bank Screen
-    [Documentation]    Suite Setup: launch, login, navigate to the Bank screen.
+    [Documentation]    Suite Setup: launch, login as ${user} (defaults to the env
+    ...    user), navigate to the Bank screen. Pass a different user for role tests.
+    [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
     Open EC Browser
-    Login To EC
+    Login To EC    ${user}    ${pass}
     Navigate To Screen    ${BANK_SCREEN}
 
 Bank Row Should Exist
