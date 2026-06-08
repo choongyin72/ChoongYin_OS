@@ -5,6 +5,8 @@ Documentation       EC PHD Check Group validation — front-end run via Validati
 ...                 matches an INDEPENDENT per-object oracle computed from the source views
 ...                 using each rule's own deployed WHERE_FORMULA. EC logs one violation per
 ...                 object (e.g. per stream), so the oracle counts DISTINCT OBJECT_ID.
+...                 Tank GRS_VOL & AVG_TEMP are clean (0) on 2026-05-26, so they are also run
+...                 on a 2nd date (2026-06-07) where they DO fire, to positively exercise them.
 ...                 Layered: this test -> validation_overview_pluto_scarborough (T3) ->
 ...                 common (T1) + DbVerify. The run writes to CTRL_CHECK_LOG (EC's output),
 ...                 which EC overwrites per group/day, so the suite is re-runnable.
@@ -19,6 +21,9 @@ Test Tags           validation_overview_pluto_scarborough    phd    issue_1052
 
 *** Variables ***
 ${TEST_DATE}            2026-05-26
+# 2nd date: Tank GRS_VOL & AVG_TEMP are clean (0) on TEST_DATE; they DO fire on this date,
+# so we positively exercise them here (5 tanks each).
+${TANK_DATE2}           2026-06-07
 ${GROUP_COMP}           Stream Gas Component Analysis (Composition) - PHD Validations
 ${GROUP_ANALYSIS}       Stream Gas Component Analysis (Analysis) - PHD Validations
 ${GROUP_TANK}           Daily Tank Status - VCF Calc - PHD Validations
@@ -71,25 +76,45 @@ TC_UI_08 Tank STD_DENSITY — EC Matches DB Oracle
 TC_UI_09 Composition UI Summary Matches DB Total
     [Tags]    tc_ui_09    stream_comp    ui-summary
     ${total}=    Group Oracle Total    ${TEST_DATE}    ${MOL_PCT}    ${WT_PCT}
-    Group Summary Errors Should Be    ${GROUP_COMP}    ${total}
+    Group Summary Errors Should Be On Date    ${TEST_DATE}    ${GROUP_COMP}    ${total}
 
 TC_UI_10 Analysis UI Summary Matches DB Total
     [Tags]    tc_ui_10    stream_analysis    ui-summary
     ${total}=    Group Oracle Total    ${TEST_DATE}    ${DENSITY}    ${GCV}
-    Group Summary Errors Should Be    ${GROUP_ANALYSIS}    ${total}
+    Group Summary Errors Should Be On Date    ${TEST_DATE}    ${GROUP_ANALYSIS}    ${total}
 
 TC_UI_11 Tank UI Summary Matches DB Total
     [Tags]    tc_ui_11    tank_dip    ui-summary
     ${total}=    Group Oracle Total    ${TEST_DATE}    ${GRS_VOL}    ${GRS_MASS}    ${AVG_TEMP}    ${STD_DENSITY}
-    Group Summary Errors Should Be    ${GROUP_TANK}    ${total}
+    Group Summary Errors Should Be On Date    ${TEST_DATE}    ${GROUP_TANK}    ${total}
+
+TC_UI_12 Tank GRS_VOL Positively Fires (2nd date)
+    [Documentation]    On TEST_DATE this rule is clean (0); on TANK_DATE2 it has real
+    ...    violations. Assert oracle > 0 AND EC's log matches it.
+    [Tags]    tc_ui_12    tank_dip    second-date
+    Rule Should Positively Fire    ${GRS_VOL}    ${TANK_DATE2}
+
+TC_UI_13 Tank AVG_TEMP Positively Fires (2nd date)
+    [Documentation]    On TEST_DATE this rule is clean (0); on TANK_DATE2 it has real
+    ...    violations. Assert oracle > 0 AND EC's log matches it.
+    [Tags]    tc_ui_13    tank_dip    second-date
+    Rule Should Positively Fire    ${AVG_TEMP}    ${TANK_DATE2}
+
+TC_UI_14 Tank UI Summary Matches DB Total (2nd date)
+    [Tags]    tc_ui_14    tank_dip    ui-summary    second-date
+    ${total}=    Group Oracle Total    ${TANK_DATE2}    ${GRS_VOL}    ${GRS_MASS}    ${AVG_TEMP}    ${STD_DENSITY}
+    Group Summary Errors Should Be On Date    ${TANK_DATE2}    ${GROUP_TANK}    ${total}
 
 
 *** Keywords ***
 Set Up And Run PHD Groups
-    [Documentation]    Open the screen, set the date window + GO, run the 3 PHD groups
-    ...    (each: select -> Run Selected Groups -> GO to refresh).
+    [Documentation]    Open the screen; run the 3 PHD groups on TEST_DATE, then run the Tank
+    ...    group again on TANK_DATE2 (so GRS_VOL & AVG_TEMP are positively exercised).
+    ...    Each run: set date + GO -> select group -> Run Selected Groups -> GO to refresh.
     Open Validation Overview Screen
     Set Validation Date Range And Go    ${TEST_DATE}    ${TEST_DATE}
     Run Check Group    ${GROUP_COMP}
     Run Check Group    ${GROUP_ANALYSIS}
+    Run Check Group    ${GROUP_TANK}
+    Set Validation Date Range And Go    ${TANK_DATE2}    ${TANK_DATE2}
     Run Check Group    ${GROUP_TANK}

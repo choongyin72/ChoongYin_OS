@@ -120,3 +120,20 @@ Group Oracle Total
         ${total}=    Evaluate    ${total} + ${n}
     END
     RETURN    ${total}
+
+Rule Should Positively Fire
+    [Documentation]    Stronger than Rule Log Matches Oracle: assert the rule has REAL
+    ...    violations on ${daytime} (oracle > 0) AND that EC's CTRL_CHECK_LOG matches that
+    ...    oracle. Use to positively exercise a rule (not just assert "no false positives").
+    [Arguments]    ${check_id}    ${daytime}
+    ${oracle}=    Distinct Violation Objects For Rule    ${check_id}    ${daytime}
+    Should Be True    ${oracle} > 0
+    ...    msg=No violations on ${daytime} - cannot positively exercise rule ${check_id}
+    Check Log Count Should Be    ${check_id}    ${daytime}    ${oracle}
+
+Group Summary Errors Should Be On Date
+    [Documentation]    Set the date window + GO (so the Summary reflects THAT date), then assert
+    ...    the group's UI Summary "Errors". Self-contained, so multiple test dates don't interfere.
+    [Arguments]    ${daytime}    ${group_desc}    ${expected}
+    Set Validation Date Range And Go    ${daytime}    ${daytime}
+    Group Summary Errors Should Be    ${group_desc}    ${expected}
