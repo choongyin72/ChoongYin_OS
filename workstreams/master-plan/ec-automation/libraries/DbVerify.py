@@ -73,6 +73,78 @@ def view_row_count(view):
         conn.close()
 
 
+def check_log_count(check_id, daytime):
+    """Count CTRL_CHECK_LOG rows for a check rule (CHECK_ID) on a DAYTIME (YYYY-MM-DD).
+
+    This is EC's validation OUTPUT table — a row per rule violation produced when a
+    check group is run. Used to assert a UI-triggered validation matches DB ground truth.
+    """
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            "SELECT COUNT(*) FROM CTRL_CHECK_LOG "
+            "WHERE CHECK_ID = :id AND DAYTIME = TO_DATE(:d, 'YYYY-MM-DD')",
+            id=int(check_id), d=str(daytime),
+        )
+        return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def check_log_count_should_be(check_id, daytime, expected):
+    """Fail unless CTRL_CHECK_LOG has exactly ``expected`` rows for CHECK_ID on DAYTIME."""
+    actual = check_log_count(check_id, daytime)
+    if int(actual) != int(expected):
+        raise AssertionError(
+            f"DB check FAILED: CTRL_CHECK_LOG CHECK_ID={check_id} on {daytime} "
+            f"= {actual} rows, expected {expected}"
+        )
+
+
+def distinct_violation_objects_for_rule(check_id, daytime):
+    """Independent oracle, computed from SOURCE data using the rule's OWN deployed logic.
+
+    Reads the check rule's TABLE_ID + WHERE_FORMULA from CTRL_CHECK_RULES (and its
+    ${variable} -> column mapping from CTRL_CHECK_RULE_VARIABLE), substitutes the real
+    columns, and returns COUNT(DISTINCT OBJECT_ID) of violating objects on ``daytime``.
+
+    EC logs ONE row per violating object (e.g. a stream is flagged once even if many of
+    its component rows are bad), so this distinct-object count is the correct yardstick to
+    compare against CTRL_CHECK_LOG and the UI Summary. Using the rule's own WHERE_FORMULA
+    keeps the oracle faithful to what was deployed (it can't drift from the rule).
+    """
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            "SELECT TABLE_ID, WHERE_FORMULA FROM CTRL_CHECK_RULES WHERE CHECK_ID = :i",
+            i=int(check_id),
+        )
+        row = cur.fetchone()
+        if not row:
+            raise AssertionError(f"Check rule CHECK_ID={check_id} not found")
+        table_id, where_formula = row
+        _safe(table_id)
+        cur.execute(
+            "SELECT VARIABLE_NAME, VARIABLE_VALUE FROM CTRL_CHECK_RULE_VARIABLE WHERE CHECK_ID = :i",
+            i=int(check_id),
+        )
+        pred = where_formula
+        for var_name, var_col in cur.fetchall():
+            pred = pred.replace("${" + var_name + "}", var_col)
+        cur.execute(
+            f"SELECT COUNT(DISTINCT OBJECT_ID) FROM {table_id} "
+            f"WHERE DAYTIME = TO_DATE(:d,'YYYY-MM-DD') AND ({pred})",
+            d=str(daytime),
+        )
+        return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
 def code_should_be_present_in_view(view, code):
     """Fail unless ``code`` appears in any string column of ``view`` (DB ground truth)."""
     if not _code_present(view, code):
