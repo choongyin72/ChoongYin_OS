@@ -16,10 +16,12 @@
 --        to its proper EC screen (EC_USER_OBJECT).
 --     2. Links each rule to its group via CTRL_CHECK_COMBINATION.
 --
---   GROUP                 SCREEN (EC_USER_OBJECT)                                  RULES
---   V_PHD_STREAM_COMP     /com.ec.prod.po.screens/stream_gas_component_analysis    MOL_PCT, WT_PCT
---   V_PHD_STREAM_ANALYSIS /com.ec.prod.po.screens/stream_gas_component_analysis    DENSITY, GCV
---   V_PHD_TANK_DIP        /com.ec.prod.po.screens/daily_tank_dip_status            GRS_VOL, GRS_MASS, AVG_TEMP, STD_DENSITY
+--   GROUP                 SCREEN (EC_USER_OBJECT)                                          RULES
+--   V_PHD_STREAM_COMP     stream_gas_component_analysis (qualified: STRM_SET/COMP_SET)      MOL_PCT, WT_PCT
+--   V_PHD_STREAM_ANALYSIS stream_gas_component_analysis (qualified: STRM_SET/COMP_SET)      DENSITY, GCV
+--   V_PHD_TANK_DIP        /com.ec.prod.po.screens/daily_tank_dip_status                    GRS_VOL, GRS_MASS, AVG_TEMP, STD_DENSITY
+--   (stream screen needs the STRM_SET/COMP_SET qualifier to resolve in the Check Group screen;
+--    the bare template root renders a blank Screen column — fixed 2026-06-08.)
 --
 -- PREREQUISITE: run Issue1052_PHD_Check_Rules.sql first (creates the 8 rules).
 -- =============================================================================
@@ -94,12 +96,12 @@ BEGIN
     -- =========================================================================
     upsert_check_group(
         p_group  => 'V_PHD_STREAM_COMP',
-        p_screen => '/com.ec.prod.po.screens/stream_gas_component_analysis',
+        p_screen => '/com.ec.prod.po.screens/stream_gas_component_analysis/STRM_SET/PO.0020/COMP_SET/STRM_GAS_COMP?screentemplate=/com.ec.prod.po.screens/stream_gas_component_analysis',
         p_desc   => 'Stream Gas Component Analysis (Composition) - PHD Validations');
 
     upsert_check_group(
         p_group  => 'V_PHD_STREAM_ANALYSIS',
-        p_screen => '/com.ec.prod.po.screens/stream_gas_component_analysis',
+        p_screen => '/com.ec.prod.po.screens/stream_gas_component_analysis/STRM_SET/PO.0020/COMP_SET/STRM_GAS_COMP?screentemplate=/com.ec.prod.po.screens/stream_gas_component_analysis',
         p_desc   => 'Stream Gas Component Analysis (Analysis) - PHD Validations');
 
     upsert_check_group(
