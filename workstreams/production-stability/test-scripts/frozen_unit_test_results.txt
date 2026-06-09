@@ -1,0 +1,82 @@
+Issue_1052 FROZEN Unit Test  |  2026-06-09 23:57:45.865646  |  COPS DEV
+==========================================================================================
+[PASS        ] F1150  | RULE_EXISTS                    | CHECK_ID=1150 TABLE=RV_STRM_COMP_ANALYSIS
+[PASS        ] F1150  | TABLE_ID                       | RV_STRM_COMP_ANALYSIS
+[PASS        ] F1150  | SEVERITY                       | sev=WARNING
+[PASS        ] F1150  | WHERE_FORMULA                  | (${FunctionFrozenValue}  = ${ConstBOOLEAN})
+[PASS        ] F1150  | ZWP_SCREEN_VAL                 | screen_val=N
+[PASS        ] F1150  | VAR_FunctionFrozenValue        | type=FUNCTION value=ZWP_P_TOOLTIP func=getValFrozenValue
+[PASS        ] F1150  | VAR_ConstBOOLEAN               | 
+[PASS        ] F1150  | FUNC_PARAMS                    | P_CLASS_NAME=DATA_CLASS_NAME,P_OBJECT_ID=OBJECT_ID,P_DAYTIME=DAYTIME,P_VALUE=MOL_PCT,P_ATTRIBUTE=MOL_PCT
+[PASS        ] F1150  | GROUP_LINK                     | 
+[KNOWN_DEFECT] F1150  | GRAIN_per_obj_day              | 10 rows/object/day (expected 1 for frozen fn) -> SUMs across components
+[KNOWN_DEFECT] F1150  | COMPOSITION_FROZEN             | function cannot do per-component frozen (grain mismatch) - escalate to Grant
+[PASS        ] F1151  | RULE_EXISTS                    | CHECK_ID=1151 TABLE=RV_STRM_COMP_ANALYSIS
+[PASS        ] F1151  | TABLE_ID                       | RV_STRM_COMP_ANALYSIS
+[PASS        ] F1151  | SEVERITY                       | sev=WARNING
+[PASS        ] F1151  | WHERE_FORMULA                  | (${FunctionFrozenValue}  = ${ConstBOOLEAN})
+[PASS        ] F1151  | ZWP_SCREEN_VAL                 | screen_val=N
+[PASS        ] F1151  | VAR_FunctionFrozenValue        | type=FUNCTION value=ZWP_P_TOOLTIP func=getValFrozenValue
+[PASS        ] F1151  | VAR_ConstBOOLEAN               | 
+[PASS        ] F1151  | FUNC_PARAMS                    | P_CLASS_NAME=DATA_CLASS_NAME,P_OBJECT_ID=OBJECT_ID,P_DAYTIME=DAYTIME,P_VALUE=WT_PCT,P_ATTRIBUTE=WT_PCT
+[PASS        ] F1151  | GROUP_LINK                     | 
+[KNOWN_DEFECT] F1151  | GRAIN_per_obj_day              | 10 rows/object/day (expected 1 for frozen fn) -> SUMs across components
+[KNOWN_DEFECT] F1151  | COMPOSITION_FROZEN             | function cannot do per-component frozen (grain mismatch) - escalate to Grant
+[PASS        ] F1152  | RULE_EXISTS                    | CHECK_ID=1152 TABLE=RV_STRM_ANALYSIS
+[PASS        ] F1152  | TABLE_ID                       | RV_STRM_ANALYSIS
+[PASS        ] F1152  | SEVERITY                       | sev=WARNING
+[PASS        ] F1152  | WHERE_FORMULA                  | (${FunctionFrozenValue}  = ${ConstBOOLEAN})
+[PASS        ] F1152  | ZWP_SCREEN_VAL                 | screen_val=N
+[PASS        ] F1152  | VAR_FunctionFrozenValue        | type=FUNCTION value=ZWP_P_TOOLTIP func=getValFrozenValue
+[PASS        ] F1152  | VAR_ConstBOOLEAN               | 
+[PASS        ] F1152  | FUNC_PARAMS                    | P_CLASS_NAME=DATA_CLASS_NAME,P_OBJECT_ID=OBJECT_ID,P_DAYTIME=DAYTIME,P_VALUE=DENSITY,P_ATTRIBUTE=DENSITY
+[PASS        ] F1152  | GROUP_LINK                     | 
+[PASS        ] F1152  | BEHAV_POSITIVE(frozen)         | obj=45A9A31E 2025-12-13 val=0.7513200044631958==prev
+[PASS        ] F1152  | BEHAV_NEGATIVE(changed)        | obj=45A9A31E 2025-12-18 val=0.7426726222038269!=prev=0.7513200044631958
+[PASS        ] F1153  | RULE_EXISTS                    | CHECK_ID=1153 TABLE=RV_STRM_ANALYSIS
+[PASS        ] F1153  | TABLE_ID                       | RV_STRM_ANALYSIS
+[PASS        ] F1153  | SEVERITY                       | sev=WARNING
+[PASS        ] F1153  | WHERE_FORMULA                  | (${FunctionFrozenValue}  = ${ConstBOOLEAN})
+[PASS        ] F1153  | ZWP_SCREEN_VAL                 | screen_val=N
+[PASS        ] F1153  | VAR_FunctionFrozenValue        | type=FUNCTION value=ZWP_P_TOOLTIP func=getValFrozenValue
+[PASS        ] F1153  | VAR_ConstBOOLEAN               | 
+[PASS        ] F1153  | FUNC_PARAMS                    | P_CLASS_NAME=DATA_CLASS_NAME,P_OBJECT_ID=OBJECT_ID,P_DAYTIME=DAYTIME,P_VALUE=GCV_MJPERSM3,P_ATTRIBUTE=GCV_MJPERSM3
+[PASS        ] F1153  | GROUP_LINK                     | 
+[PASS        ] F1153  | BEHAV_POSITIVE(frozen)         | obj=45A9A31E 2025-12-12 val=1000==prev
+[PASS        ] F1153  | BEHAV_NEGATIVE(changed)        | obj=45A9A31E 2026-01-07 val=1000!=prev=0
+[PASS        ] F1154  | RULE_EXISTS                    | CHECK_ID=1154 TABLE=RV_STRM_DAY_STREAM_MEAS_WAT
+[PASS        ] F1154  | TABLE_ID                       | RV_STRM_DAY_STREAM_MEAS_WAT
+[PASS        ] F1154  | SEVERITY                       | sev=WARNING
+[PASS        ] F1154  | WHERE_FORMULA                  | (${FunctionFrozenValue}  = ${ConstBOOLEAN})
+[PASS        ] F1154  | ZWP_SCREEN_VAL                 | screen_val=N
+[PASS        ] F1154  | VAR_FunctionFrozenValue        | type=FUNCTION value=ZWP_P_TOOLTIP func=getValFrozenValue
+[PASS        ] F1154  | VAR_ConstBOOLEAN               | 
+[PASS        ] F1154  | FUNC_PARAMS                    | P_CLASS_NAME=DATA_CLASS_NAME,P_OBJECT_ID=OBJECT_ID,P_DAYTIME=DAYTIME,P_VALUE=ZWT_OILINWAT_MGPERLITER,P_ATTRIBUTE=ZWT_OILINWAT_MGPERLITER
+[PASS        ] F1154  | GROUP_LINK                     | 
+[PASS        ] F1154  | BEHAV_POSITIVE(frozen)         | obj=45A9A31E 2026-05-24 val=0==prev
+[PENDING     ] F1154  | BEHAV_NEGATIVE(changed)        | no natural changed row - seeding deferred
+[PASS        ] F1155  | RULE_EXISTS                    | CHECK_ID=1155 TABLE=RV_PWEL_DAY_STATUS
+[PASS        ] F1155  | TABLE_ID                       | RV_PWEL_DAY_STATUS
+[PASS        ] F1155  | SEVERITY                       | sev=WARNING
+[PASS        ] F1155  | WHERE_FORMULA                  | (${FunctionFrozenValue}  = ${ConstBOOLEAN})
+[PASS        ] F1155  | ZWP_SCREEN_VAL                 | screen_val=Y
+[PASS        ] F1155  | VAR_FunctionFrozenValue        | type=FUNCTION value=ZWP_P_TOOLTIP func=getValFrozenValue
+[PASS        ] F1155  | VAR_ConstBOOLEAN               | 
+[PASS        ] F1155  | FUNC_PARAMS                    | P_CLASS_NAME=DATA_CLASS_NAME,P_OBJECT_ID=OBJECT_ID,P_DAYTIME=DAYTIME,P_VALUE=AVG_GAS_RATE_SM3,P_ATTRIBUTE=AVG_GAS_RATE_SM3
+[PASS        ] F1155  | GROUP_LINK                     | 
+[PENDING     ] F1155  | BEHAV_POSITIVE(frozen)         | no natural frozen row - seeding deferred
+[PENDING     ] F1155  | BEHAV_NEGATIVE(changed)        | no natural changed row - seeding deferred
+[PASS        ] IDEM   | COUNT_BEFORE                   | rules=6
+[PASS        ] IDEM   | COUNT_AFTER_RERUN              | rules=6 (no dupes)
+[PASS        ] RBK    | RULES_DELETED                  | remaining=0
+[PASS        ] RBK    | RULES_RESTORED                 | restored=6
+==========================================================================================
+PASS=63 FAIL=0 PENDING=3 KNOWN_DEFECT=4 total=70
+
+==========================================================================================
+SEEDED BEHAVIOURAL (verified live then reverted)  2026-06-10 00:13:39.342105
+==========================================================================================
+[PASS] F1155 | BEHAV_POSITIVE(frozen)  | seeded T=100,Y=100 -> FROZEN ; reverted to NULL
+[PASS] F1155 | BEHAV_NEGATIVE(changed) | seeded T=200,Y=100 -> NOT_FROZEN ; reverted to NULL
+[PASS] F1154 | BEHAV_NEGATIVE(changed) | seeded today=5(prior 0) -> NOT_FROZEN ; reverted to 0
+Data-rollback script: Issue1052_Frozen_TestData_ROLLBACK.sql (originals captured; restore verified)
