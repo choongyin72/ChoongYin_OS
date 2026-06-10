@@ -1,0 +1,351 @@
+
+======================================================================
+1. CALC% TABLE INVENTORY (row counts)
+======================================================================
+  CALCULATION                            1652
+  CALCULATION_JN                         2147
+  CALCULATION_VERSION                    1652
+  CALCULATION_VERSION_JN                 2215
+  CALC_COLLECTION                        6
+  CALC_COLLECTION_ELEMENT                46
+  CALC_COLLECTION_VERSION                6
+  CALC_COLLECTION_VERSION_JN             3
+  CALC_CONTEXT                           14
+  CALC_CONTEXT_VERSION                   14
+  CALC_EQUATION                          10092
+  CALC_EQUATION_JN                       22369
+  CALC_GRP_CONTEXT                       6
+  CALC_GRP_CONTEXT_VERSION               6
+  CALC_LIBRARY                           5
+  CALC_LIBRARY_VERSION                   5
+  CALC_LOG_PROFILE                       3
+  CALC_LOG_PROFILE_PARAM                 27
+  CALC_OBJECT_ATTRIBUTE                  421
+  CALC_OBJECT_ATTRIBUTE_JN               77
+  CALC_OBJECT_FILTER                     38
+  CALC_OBJECT_TYPE                       236
+  CALC_OBJECT_TYPE_JN                    10
+  CALC_OBJ_ATTR_DB_MAPPING               435
+  CALC_OBJ_ATTR_DB_MAPPING_JN            86
+  CALC_PARAMETER                         2
+  CALC_PROCESS_ELEMENT                   2332
+  CALC_PROCESS_ELEMENT_JN                3274
+  CALC_PROCESS_ELM_VERSION               2332
+  CALC_PROCESS_ELM_VERSION_JN            3274
+  CALC_PROCESS_TRANSITION                2344
+  CALC_PROCESS_TRANSITION_JN             2851
+  CALC_PROC_ELM_ITERATION                333
+  CALC_PROC_ELM_ITERATION_JN             670
+  CALC_PROC_TRAN_VERSION                 2344
+  CALC_PROC_TRAN_VERSION_JN              2851
+  CALC_SET                               1713
+  CALC_SET_COMBINATION                   78
+  CALC_SET_COMBINATION_JN                292
+  CALC_SET_CONDITION                     777
+  CALC_SET_CONDITION_JN                  5244
+  CALC_SET_EQUATION                      946
+  CALC_SET_EQUATION_JN                   3375
+  CALC_SET_JN                            6884
+  CALC_VARIABLE                          1373
+  CALC_VARIABLE_JN                       200
+  CALC_VARIABLE_LOCAL                    3328
+  CALC_VARIABLE_LOCAL_JN                 5748
+  CALC_VAR_KEY_READ_MAPPING              2462
+  CALC_VAR_KEY_READ_MAPPING_JN           342
+  CALC_VAR_KEY_WRITE_MAPPING             2487
+  CALC_VAR_READ_MAPPING                  699
+  CALC_VAR_READ_MAPPING_JN               119
+  CALC_VAR_WRITE_MAPPING                 661
+
+======================================================================
+2. CALCULATIONS (CALCULATION joined to version names)
+======================================================================
+  total: 1652
+   SET VALUE TO PRORATE                          period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+   Write Component Emission                      period=None type=PROCESS    scope=PRIVATE_SUB
+   Write Component Emission                      period=None type=PROCESS    scope=PRIVATE_SUB
+  01.0 Revn Trans Inv                            period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  01.1 Revn Trans Inv Set Line                   period=MTH  type=EQUATIONS  scope=PUBLIC_SUB
+  01.2  Revn Trans Inv Set Product               period=MTH  type=EQUATIONS  scope=PUBLIC_SUB
+  01.3 Revn Trans Inv Read Calc Trans Values     period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  01.4 Revn Trans Inv Read Calc Bal Values       period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  01.5 Revn Trans Inv Process Qty Line           period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  01.6 Revn Trans Inv Process Val Line           period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  02.0 Revn Trans Inv Get Values                 period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  02.1 Revn Trans Inv Read Qty                   period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  02.2 Revn Trans Inv Read Value                 period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  02.3. Revn Trans Inv Read Qty From Extract     period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  02.4. Revn Trans Inv Read Value From Extract   period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  03.0 Revn Trans Inv Product Variables          period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  03.1. Revn Trans Inv Customize Read Variable Values period=MTH  type=EQUATIONS  scope=PUBLIC_SUB
+  03.2 Revn Trans Inv Variables Preperation      period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  03.3 Revn Trans Inv Varialbles from db         period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  04. Revenue Transaction Inventory Summary      period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  04.1 Revn Trans Inv Pool Qty                   period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  07. Revn Trans Inv Usage                       period=None type=PROCESS    scope=PUBLIC_SUB
+  07.1 Revn Trans Inv QTY Usage                  period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  07.2 Revn Trans Inv Val Usage                  period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  07.3. Revn Trans Inv Dimension Usage           period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  07.4 Revn Trans Inv Multiline Usage            period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  08. Revn Trans Inv Progressive Rounding        period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  09.0 Revn Trans Inv Messages                   period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  09.1 Revn Trans Inv Caclulation Reference      period=None type=PROCESS    scope=PUBLIC_SUB
+  09.2 Message Preperation                       period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  09.2 Revn Trans Inv Summary Preparation        period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  09.4 Revn Trans Inv Post Processing Flag       period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  09.5 Revn Trans Inv Post Processing            period=None type=PROCESS    scope=PUBLIC_SUB
+  09.6 Revn Trans Inv Postings                   period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  10. Revn Trans Inv Balance Validation          period=MTH  type=PROCESS    scope=PUBLIC_SUB
+  10.1 Revn Trans Inv Write Transactions         period=MTH  type=EQUATIONS  scope=PUBLIC_SUB
+  10.2 Revn Trans Inv Write Balances             period=MTH  type=EQUATIONS  scope=PUBLIC_SUB
+  99. Revenue TI Reports                         period=MTH  type=EQUATIONS  scope=PUBLIC_SUB
+  AGGREGATE VALUES BY DIM1 AND / OR DIM2 (INVENTORY) period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  AGGREGATE VALUES BY DIM1 AND / OR DIM2 (LINE)  period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  AGGREGATE VALUES BY DIMENSION DATE AND SET TO CURRENT (INVENTORY) period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  AGGREGATE VALUES BY DIMENSION DATE AND SET TO CURRENT (LINE) period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  ALLOCATE?                                      period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  APPLY OVERLIFT                                 period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  APPLY OVERLIFT                                 period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  APPLY PRICE FROM OTHER LINE                    period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  APPLY TO CURRENT MONTH                         period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  APPLY USAGE                                    period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  APPLY USAGE                                    period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  APPLY USAGE                                    period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  APPLY USAGE                                    period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  APPLY USAGE                                    period=MTH  type=PROCESS    scope=PRIVATE_SUB
+  APPLY USAGE                                    period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  APPLY USAGE                                    period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  APPLY USAGE                                    period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  APPLY USAGE - VALUE                            period=MTH  type=PROCESS    scope=PRIVATE_SUB
+  APPLY USAGE OVER MULTIPLE                      period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  APPLY USAGE OVER MULTIPLE                      period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  Activity Value, Unit and Attribute Name        period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Activity Value, Unit and Attribute Name        period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Activity Value, Unit and Attribute Name        period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Activity Value, Unit and Attribute Name        period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Activity by Class and Attribute                period=None type=PROCESS    scope=PUBLIC_SUB
+  Aggregate Stream Volumes to Month              period=None type=EQUATIONS  scope=PUBLIC_SUB
+  Aggregate Well Volumes to Month                period=None type=EQUATIONS  scope=PUBLIC_SUB
+  Allocate adjustable streams from mass balance of each node period=DAY  type=PROCESS    scope=PRIVATE_SUB
+  Allocate all injection phases to PI and RBF    period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Allocate all injection phases to PI and RBF    period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Allocate all production phases to PI and RBF   period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Allocate all production phases to PI and RBF   period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Allocate fixed streams                         period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  Apply Usage                                    period=MTH  type=PROCESS    scope=PRIVATE_SUB
+  Apply Usage                                    period=MTH  type=PROCESS    scope=PRIVATE_SUB
+  Assign Activiity                               period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Activiity                               period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Activiity                               period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Activiity using Stream configuration    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Activity                                period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Activity Value, Unit and Attribute Name period=None type=PROCESS    scope=PRIVATE_SUB
+  Assign Alloc Network                           period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Alloc Network                           period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Alloc Network                           period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Calc Job                                period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Calc Job                                period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Calc Job                                period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Run No                                  period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Run No                                  period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Run No                                  period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Run No                                  period=DAY  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Run No                                  period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  Assign Run No, Alloc Network and Calc Job      period=MTH  type=PROCESS    scope=PRIVATE_SUB
+  Assign Run No, Alloc Network and Calc Job      period=DAY  type=PROCESS    scope=PRIVATE_SUB
+  Assign implicit  well streams to database variables for well. period=MTH  type=PROCESS    scope=PRIVATE_SUB
+  BALANCE LINES                                  period=MTH  type=PROCESS    scope=PRIVATE_SUB
+  CASCADE NET ZERO PRODUCTS                      period=MTH  type=PROCESS    scope=PRIVATE_SUB
+  CHECK CONFIG                                   period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  CHECK IF REDIST                                period=MTH  type=PROCESS    scope=PRIVATE_SUB
+  CHECK IF REDIST NEW                            period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  CHECK PROD BALANCE                             period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  CHECK PROD BALANCE                             period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  CHECK PROD BALANCE                             period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  CLOSING                                        period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  CLOSING LINES                                  period=MTH  type=PROCESS    scope=PRIVATE_SUB
+  CO2 Combustion By Composition                  period=None type=LIBRARY    scope=PRIVATE_SUB
+  CO2 EF In Liquid Fuel                          period=None type=LIBRARY    scope=PRIVATE_SUB
+  CO2 Emission (PE.007)                          period=None type=PROCESS    scope=PRIVATE_SUB
+  CO2 Liq Fuel EF by MVC                         period=None type=LIBRARY    scope=PRIVATE_SUB
+  CO2 StC EF By Calorific value                  period=None type=LIBRARY    scope=PRIVATE_SUB
+  CONFIG CHECK                                   period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  CONFIG CHECK                                   period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  CONFIG CHECK                                   period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  CONFIG CHECK                                   period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  CORRECT LEVEL?                                 period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  COSTS TOO?                                     period=MTH  type=EQUATIONS  scope=PRIVATE_SUB
+  CalP EM.001 Component EF                       period=None type=PROCESS    scope=PUBLIC_SUB
+  CalP EM.002 CO2e Vol EF                        period=None type=PROCESS    scope=PUBLIC_SUB
+  Calc Component 
+Emission Intensity             period=None type=PROCESS    scope=PRIVATE_SUB
+  Calc Component 
+Emission Intensity             period=None type=PROCESS    scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calc Type                                      period=None type=EQUATIONS  scope=PRIVATE_SUB
+  CalcReference                                  period=MTH  type=LIBRARY    scope=PRIVATE_SUB
+  Calculate
+Uncertainty                          period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate
+Uncertainty                          period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate
+Uncertainty                          period=None type=PROCESS    scope=PRIVATE_SUB
+  Calculate
+Uncertainty                          period=None type=PROCESS    scope=PRIVATE_SUB
+  Calculate
+Uncertainty                          period=None type=PROCESS    scope=PRIVATE_SUB
+  Calculate
+Uncertainty                          period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate
+Uncertainty                          period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate
+Uncertainty                          period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate
+Uncertainty                          period=None type=PROCESS    scope=PRIVATE_SUB
+  Calculate
+Uncertainty                          period=None type=PROCESS    scope=PRIVATE_SUB
+  Calculate 
+Emission Intensity                  period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate ?                                    period=None type=EQUATIONS  scope=PRIVATE_SUB
+  Calculate Activity value                       period=None type=EQUATIONS  scope=PRIVATE_SUB
+  ERROR: 'charmap' codec can't encode character '\u200b' in position 35: character maps to <undefined>
+
+======================================================================
+3. VARIABLES (DV_CALC_VARIABLE) by prefix
+======================================================================
+  XEM_* (emissions)      371
+  other/product          819
+  ZWP_* (Woodside)       183
+  TOTAL: 1373
+
+======================================================================
+4. READ MAPPINGS — top 15 source classes
+======================================================================
+  TRANS_INVENTORY_TRANS                    83
+  XEM_STRM_EMIS_COMP_CONF                  32
+  XEM_STRM_ANALYSIS_DATA                   24
+  TRANS_INV_LI_PR_CNTRACC                  19
+  RBF_DAY_DATA                             18
+  PERF_DAY_DATA                            18
+  TRANS_INV_LINE_OVERRIDE                  17
+  XEM_STRM_EMIS_CONF                       17
+  TRANS_INV_LI_PR_OVER                     15
+  STRM_DAY_STREAM_DATA                     15
+  SCTR_ACC_MTH_STATUS                      14
+  STRM_DAY_STREAM_MEAS_GAS                 13
+  PWEL_DAY_DATA                            13
+  TRANS_INV_LINE                           13
+  SCTR_ACC_MTH_CPY_STATUS                  12
+
+======================================================================
+5. WRITE MAPPINGS — top 15 target classes
+======================================================================
+  TRANS_INVENTORY_TRANS                    87
+  TRANS_INVENTORY_BALANCE                  83
+  PWEL_MTH_ALLOC                           54
+  PWEL_DAY_ALLOC                           54
+  XEM_STRM_EMIS_DAILY_COMP                 23
+  STRM_MTH_ALLOC                           23
+  XEM_STRM_EMIS_SUBDL_COMP                 23
+  XEM_STRM_MTH_COMP_EMIS                   22
+  SCTR_ACC_MTH_STATUS                      17
+  STRM_DAY_ALLOC                           17
+  XEM_STRM_EMIS_DAILY                      16
+  XEM_STRM_EMIS_SUBDL                      16
+  PERF_DAY_ALLOC                           14
+  RBF_DAY_ALLOC                            14
+  RBF_MTH_ALLOC                            14
+
+======================================================================
+6. ALLOC NETWORK JOB CONNECTIONS
+======================================================================
+  ERROR (trying simpler): ORA-00942: table or view does not exist
+Help: https://docs.oracle.com/error-help/db/ora-00942/
+  45A9A31E8B6F4198E0630100007F1329 -> 45A9A31E6EAA4198E0630100007F1329
+  45A9A31E8B764198E0630100007F1329 -> 45A9A31E8B304198E0630100007F1329
+  45A9A31E8B7D4198E0630100007F1329 -> 45A9A31E8B394198E0630100007F1329
+  45A9A31E8B7D4198E0630100007F1329 -> 45A9A31E8B424198E0630100007F1329
+  45A9A31E8B7D4198E0630100007F1329 -> 45A9A31E8B4B4198E0630100007F1329
+  45A9A31E8B844198E0630100007F1329 -> 45A9A31E8B544198E0630100007F1329
+  45A9A31E8B8B4198E0630100007F1329 -> 45A9A31E8B5D4198E0630100007F1329
+  45A9A31E8B8B4198E0630100007F1329 -> 45A9A31E8B664198E0630100007F1329
+  45A9A31E8B924198E0630100007F1329 -> 45A9A31E6F234198E0630100007F1329
+
+======================================================================
+7. RECENT CALC ACTIVITY (log/run tables)
+======================================================================
+
+Done (read-only).

@@ -1,0 +1,120 @@
+column,group,in_DV_1,in_DV_2,type_DV_1,type_DV_2,source_DV_1,source_DV_2,expr_DV_1,expr_DV_2
+AC_FREQUENCY,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AC_FREQUENCY,
+ALLOC_COND_FACTOR,ONLY DV_1,Y,,NUMBER,,OTHER,,pwelDayAlloc.cond_vol_factor,
+ALLOC_COND_MASS,ONLY DV_1,Y,,NUMBER,,OTHER,,pwelDayAlloc.alloc_cond_mass,
+ALLOC_COND_VOL,ONLY DV_1,Y,,NUMBER,,OTHER,,pwelDayAlloc.alloc_cond_vol,
+ALLOC_GAS_ENERGY,ONLY DV_1,Y,,NUMBER,,BASE,,pwelDayAlloc.alloc_gas_energy,
+ALLOC_GAS_FACTOR,ONLY DV_1,Y,,NUMBER,,OTHER,,pwelDayAlloc.gas_vol_factor,
+ALLOC_GAS_MASS,SHARED,Y,Y,NUMBER,NUMBER,OTHER,OTHER,pwelDayAlloc.alloc_gas_mass,pwelDayAlloc.alloc_gas_mass
+ALLOC_GAS_VOL,SHARED,Y,Y,NUMBER,NUMBER,OTHER,OTHER,pwelDayAlloc.alloc_gas_vol,pwelDayAlloc.alloc_gas_vol
+ALLOC_GL_VOL,ONLY DV_1,Y,,NUMBER,,OTHER,,pwelDayAlloc.alloc_gl_vol,
+ALLOC_OIL_FACTOR,ONLY DV_1,Y,,NUMBER,,OTHER,,pwelDayAlloc.net_oil_vol_factor,
+ALLOC_OIL_VOL,ONLY DV_1,Y,,NUMBER,,OTHER,,pwelDayAlloc.alloc_net_oil_vol,
+ALLOC_WATER_FACTOR,ONLY DV_1,Y,,NUMBER,,OTHER,,pwelDayAlloc.water_vol_factor,
+ALLOC_WATER_VOL,ONLY DV_1,Y,,NUMBER,,OTHER,,pwelDayAlloc.alloc_water_vol,
+ANNULUS_PRESS,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.ANNULUS_PRESS,
+ANNULUS_PRESS_2,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.ANNULUS_PRESS_2,
+APPROVAL_BY,SHARED,Y,Y,VARCHAR2(256),VARCHAR2(256),BASE,BASE,PWEL_DAY_STATUS.APPROVAL_BY,PWEL_DAY_STATUS.APPROVAL_BY
+APPROVAL_DATE,SHARED,Y,Y,DATE,DATE,BASE,BASE,PWEL_DAY_STATUS.APPROVAL_DATE,PWEL_DAY_STATUS.APPROVAL_DATE
+APPROVAL_STATE,SHARED,Y,Y,VARCHAR2(1),VARCHAR2(1),BASE,BASE,PWEL_DAY_STATUS.APPROVAL_STATE,PWEL_DAY_STATUS.APPROVAL_STATE
+AVG_BH_PRESS,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.AVG_BH_PRESS,PWEL_DAY_STATUS.AVG_BH_PRESS
+AVG_BH_PRESS_2,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_BH_PRESS_2,
+AVG_BH_TEMP,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.AVG_BH_TEMP,PWEL_DAY_STATUS.AVG_BH_TEMP
+AVG_BH_TEMP_2,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_BH_TEMP_2,
+AVG_CHOKE_SIZE,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.AVG_CHOKE_SIZE,PWEL_DAY_STATUS.AVG_CHOKE_SIZE
+AVG_COND_MASS,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_COND_MASS,
+AVG_DH_PUMP_POWER,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_DH_PUMP_POWER,
+AVG_DH_PUMP_SPEED,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_DH_PUMP_SPEED,
+AVG_FLOW_MASS,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_FLOW_MASS,
+AVG_FLOW_RATE,ONLY DV_2,,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_FLOW_RATE
+AVG_GAS_ENERGY,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_GAS_ENERGY,
+AVG_GAS_GCV,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_GAS_GCV,
+AVG_GAS_MASS,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.AVG_GAS_MASS,PWEL_DAY_STATUS.AVG_GAS_MASS
+AVG_GAS_RATE,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.AVG_GAS_RATE,PWEL_DAY_STATUS.AVG_GAS_RATE
+AVG_GL_CHOKE_SIZE,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_GL_CHOKE,
+AVG_GL_MF_PRESS,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.AVG_GL_MF_PRESS,PWEL_DAY_STATUS.AVG_GL_MF_PRESS
+AVG_GL_PRESS,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.AVG_GL_PRESS,PWEL_DAY_STATUS.AVG_GL_PRESS
+AVG_GL_RATE,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_GL_RATE,
+AVG_LIQ_VOL,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_LIQUID_RATE_M3,
+AVG_MPM_DIFF_PRESS,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_MPM_DIFF_PRESS,
+AVG_MPM_GAS_MASS_RATE,ONLY DV_2,,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_MPM_GAS_MASS_RATE
+AVG_MPM_GAS_RATE,ONLY DV_2,,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_MPM_GAS_RATE
+AVG_OIL_RATE,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_OIL_RATE,
+AVG_WATER_MASS,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_WATER_MASS,
+AVG_WATER_RATE,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_WATER_RATE,
+AVG_WH_DSC_PRESS,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_WH_DSC_PRESS,
+AVG_WH_DSC_TEMP,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_WH_DSC_TEMP,
+AVG_WH_PRESS,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.AVG_WH_PRESS,PWEL_DAY_STATUS.AVG_WH_PRESS
+AVG_WH_TEMP,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.AVG_WH_TEMP,PWEL_DAY_STATUS.AVG_WH_TEMP
+AVG_WH_USC_PRESS,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_WH_USC_PRESS,
+BS_W,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.BS_W,
+CALC_ON_STREAM_HRS,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"EcDp_Well.getPwelOnStreamHrs(pwel_day_status.object_id, pwel_day_status.daytime)",
+CHOKE_MM,SHARED,Y,Y,NUMBER,NUMBER,FUNCTION,FUNCTION,"EcBp_Well_Choke.convertToMilliMeter(pwel_day_status.object_id, pwel_day_status.daytime, pwel_day_status.avg_choke_size)","EcBp_Well_Choke.convertToMilliMeter(pwel_day_status.object_id, pwel_day_status.daytime, pwel_day_status.avg_choke_size)"
+CHOKE_PROD,SHARED,Y,Y,VARCHAR2(4000),VARCHAR2(4000),FUNCTION,FUNCTION,"ec_choke_version.name(ec_well_version.choke_id(pwel_day_status.object_id, pwel_day_status.daytime, '<='),pwel_day_status.daytime, '<=')","ec_choke_version.name(ec_well_version.choke_id(pwel_day_status.object_id, pwel_day_status.daytime, '<='),pwel_day_status.daytime, '<=')"
+CHOKE_PROD_DATE,SHARED,Y,Y,DATE,DATE,OTHER,OTHER,oa.choke_date,oa.choke_date
+CHOKE_UOM,SHARED,Y,Y,VARCHAR2(4000),VARCHAR2(4000),FUNCTION,FUNCTION,"ec_prosty_codes.code_text(OA.CHOKE_UOM,'CHOKE_UOM')","ec_prosty_codes.code_text(ec_well_version.CHOKE_UOM(pwel_day_status.object_id,pwel_day_status.daytime, '<='),'CHOKE_UOM')"
+CLASS_NAME,SHARED,Y,Y,CHAR(15),CHAR(17),OTHER,OTHER,-- Generated by ecdp_viewlayer 'PWEL_DAY_STATUS',-- Generated by ecdp_viewlayer 'PWEL_DAY_STATUS_2'
+COMMENTS,SHARED,Y,Y,VARCHAR2(2000),VARCHAR2(2000),BASE,BASE,PWEL_DAY_STATUS.COMMENTS,PWEL_DAY_STATUS.COMMENTS
+CREATED_BY,SHARED,Y,Y,VARCHAR2(256),VARCHAR2(256),BASE,BASE,PWEL_DAY_STATUS.CREATED_BY,PWEL_DAY_STATUS.CREATED_BY
+CREATED_DATE,SHARED,Y,Y,DATE,DATE,BASE,BASE,PWEL_DAY_STATUS.CREATED_DATE,PWEL_DAY_STATUS.CREATED_DATE
+DATA_CLASS_NAME,SHARED,Y,Y,VARCHAR2(100),VARCHAR2(100),BASE,BASE,PWEL_DAY_STATUS.DATA_CLASS_NAME,PWEL_DAY_STATUS.DATA_CLASS_NAME
+DAYTIME,SHARED,Y,Y,DATE,DATE,BASE,BASE,PWEL_DAY_STATUS.DAYTIME,PWEL_DAY_STATUS.DAYTIME
+DRIVE_CURRENT,ONLY DV_2,,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.DRIVE_CURRENT
+DRIVE_FREQUENCY,ONLY DV_2,,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.DRIVE_FREQUENCY
+FLOWLINE,ONLY DV_1,Y,,VARCHAR2(4000),,FUNCTION,,"EcDp_Flowline_Sub_Well_Conn.FlowlinesForWellProdDay(pwel_day_status.object_id,pwel_day_status.daytime)",
+ICON,SHARED,Y,Y,VARCHAR2(4000),VARCHAR2(4000),FUNCTION,FUNCTION,EcBp_Data_Validation.getFaIcon(),EcBp_Data_Validation.getFaIcon()
+INTAKE_PRESS,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.INTAKE_PRESS,
+INTAKE_TEMP,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.INTAKE_TEMP,
+LAST_UPDATED_BY,SHARED,Y,Y,VARCHAR2(256),VARCHAR2(256),BASE,BASE,PWEL_DAY_STATUS.LAST_UPDATED_BY,PWEL_DAY_STATUS.LAST_UPDATED_BY
+LAST_UPDATED_DATE,SHARED,Y,Y,DATE,DATE,BASE,BASE,PWEL_DAY_STATUS.LAST_UPDATED_DATE,PWEL_DAY_STATUS.LAST_UPDATED_DATE
+MODE_ID,SHARED,Y,Y,VARCHAR2(32),VARCHAR2(32),BASE,BASE,PWEL_DAY_STATUS.MODE_ID,PWEL_DAY_STATUS.MODE_ID
+MPM_GOR,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"DECODE( pwel_day_status.AVG_MPM_OIL_RATE , 0, to_number(null), pwel_day_status.AVG_MPM_GAS_RATE/pwel_day_status.AVG_MPM_OIL_RATE)",
+MPM_HC_MASS_RATE,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.MPM_HC_MASS_RATE,
+MPM_TOT_MASS_RATE,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.MPM_TOT_MASS_RATE,
+OBJECT_CODE,SHARED,Y,Y,VARCHAR2(32),VARCHAR2(32),OTHER,OTHER,o.OBJECT_CODE,o.OBJECT_CODE
+OBJECT_ID,SHARED,Y,Y,VARCHAR2(32),VARCHAR2(32),BASE,BASE,PWEL_DAY_STATUS.OBJECT_ID,PWEL_DAY_STATUS.OBJECT_ID
+ON_STREAM_HRS,SHARED,Y,Y,NUMBER,NUMBER,FUNCTION,FUNCTION,"EcDp_Well.getPwelOnStreamHrs(pwel_day_status.object_id, pwel_day_status.daytime)","EcDp_Well.getPwelOnStreamHrs(pwel_day_status.object_id, pwel_day_status.daytime)"
+OUTLET_PRESS,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.OUTLET_PRESS,
+OUTLET_TEMP,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.OUTLET_TEMP,
+OVERRIDE_THEOR_COND,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.OVERRIDE_THEOR_COND,PWEL_DAY_STATUS.OVERRIDE_THEOR_COND
+OVERRIDE_THEOR_GAS,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.OVERRIDE_THEOR_GAS,PWEL_DAY_STATUS.OVERRIDE_THEOR_GAS
+OVERRIDE_THEOR_OIL,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.OVERRIDE_THEOR_OIL,PWEL_DAY_STATUS.OVERRIDE_THEOR_OIL
+OVERRIDE_THEOR_WAT,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.OVERRIDE_THEOR_WAT,PWEL_DAY_STATUS.OVERRIDE_THEOR_WAT
+PHASE_CURRENT,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.PHASE_CURRENT,
+PHASE_VOLTAGE,ONLY DV_1,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.PHASE_VOLTAGE,
+PUMP_DISCHARGE_PRESS,ONLY DV_2,,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.PUMP_DISCHARGE_PRESS
+PUMP_PRESSURE,ONLY DV_2,,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.PUMP_PRESSURE
+RECORD_STATUS,SHARED,Y,Y,VARCHAR2(1),VARCHAR2(1),BASE,BASE,PWEL_DAY_STATUS.RECORD_STATUS,PWEL_DAY_STATUS.RECORD_STATUS
+REC_ID,SHARED,Y,Y,VARCHAR2(32),VARCHAR2(32),BASE,BASE,PWEL_DAY_STATUS.REC_ID,PWEL_DAY_STATUS.REC_ID
+REV_EVENT,SHARED,Y,Y,NUMBER,NUMBER,OTHER,OTHER,etdc.EVENT_NO,etdc.EVENT_NO
+REV_NO,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.REV_NO,PWEL_DAY_STATUS.REV_NO
+REV_TEXT,SHARED,Y,Y,VARCHAR2(2000),VARCHAR2(2000),BASE,BASE,PWEL_DAY_STATUS.REV_TEXT,PWEL_DAY_STATUS.REV_TEXT
+SCALE_INJ_RATE,SHARED,Y,Y,NUMBER,NUMBER,BASE,BASE,PWEL_DAY_STATUS.SCALE_INJ_RATE,PWEL_DAY_STATUS.SCALE_INJ_RATE
+SORT_ORDER,ONLY DV_1,Y,,NUMBER,,OTHER,,oa.sort_order,
+THEOR_COND_MASS,SHARED,Y,Y,NUMBER,NUMBER,FUNCTION,FUNCTION,"EcBp_Well_Theoretical.findCondMassDay(pwel_day_status.object_id, pwel_day_status.daytime)","EcBp_Well_Theoretical.findCondMassDay(pwel_day_status.object_id, pwel_day_status.daytime)"
+THEOR_COND_VOL,SHARED,Y,Y,NUMBER,NUMBER,FUNCTION,FUNCTION,"EcBp_Well_Theoretical.getCondStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime)","EcBp_Well_Theoretical.getCondStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime)"
+THEOR_GAS_ENERGY,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"EcBp_Well_Theoretical.getGasEnergyDay(pwel_day_status.object_id, pwel_day_status.daytime)",
+THEOR_GAS_MASS,SHARED,Y,Y,NUMBER,NUMBER,FUNCTION,FUNCTION,"EcBp_Well_Theoretical.findGasMassDay(pwel_day_status.object_id, pwel_day_status.daytime)","EcBp_Well_Theoretical.findGasMassDay(pwel_day_status.object_id, pwel_day_status.daytime)"
+THEOR_GAS_VOL,SHARED,Y,Y,NUMBER,NUMBER,FUNCTION,FUNCTION,"EcBp_Well_Theoretical.getGasStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime)","EcBp_Well_Theoretical.getGasStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime)"
+THEOR_OIL_VOL,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"EcBp_Well_Theoretical.getOilStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime)",
+THEOR_WATER_MASS,SHARED,Y,Y,NUMBER,NUMBER,FUNCTION,FUNCTION,"EcBp_Well_Theoretical.findWaterMassDay(pwel_day_status.object_id, pwel_day_status.daytime)","EcBp_Well_Theoretical.findWaterMassDay(pwel_day_status.object_id, pwel_day_status.daytime)"
+THEOR_WATER_VOL,SHARED,Y,Y,NUMBER,NUMBER,FUNCTION,FUNCTION,"EcBp_Well_Theoretical.getWatStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime)","EcBp_Well_Theoretical.getWatStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime)"
+WELL_STATUS,SHARED,Y,Y,VARCHAR2(4000),VARCHAR2(4000),FUNCTION,FUNCTION,"ec_prosty_codes.code_text(EcDp_Well.getWellStatus(pwel_day_status.object_id,pwel_day_status.daytime, 'NA','EVENT','PWEL_DAY_STATUS'), 'WELL_STATUS')","ec_prosty_codes.code_text(ec_well_period_status.well_status(pwel_day_status.object_id, Ecdp_Timestamp_Local.getProductionDayStart(pwel_day_status.object_id, pwel_day_status.daytime ), 'NA' , 'EVENT', '<='), 'WELL_STATUS')"
+ZWP_ACTR_REF,ONLY DV_1,Y,,VARCHAR2(2000),,EXT (ZWP_T),,zwpTPwelDayStatus1.ZWP_ACTR_REF,
+ZWP_ALLOC_GAS_ENERGY,ONLY DV_2,,Y,,NUMBER,,BASE,,pwelDayAlloc.alloc_gas_energy
+ZWP_ALLOC_HC_GAS_MASS,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"ec_zwp_pwel_day_alloc.zwp_alloc_hc_gas_mass(ec_pwel_day_alloc.rec_id(pwel_day_status.object_id, pwel_day_status.daytime,'='))",
+ZWP_ALLOC_HC_GAS_VOL,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"ec_zwp_pwel_day_alloc.zwp_alloc_hc_gas_vol(ec_pwel_day_alloc.rec_id(pwel_day_status.object_id, pwel_day_status.daytime,'='))",
+ZWP_FLOWLINE_HR_A,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"zwp_prod_well_theoretical.getFlowlineConHrs(pwel_day_status.object_id,pwel_day_status.daytime,'Flowline A')",
+ZWP_FLOWLINE_HR_B,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"zwp_prod_well_theoretical.getFlowlineConHrs(pwel_day_status.object_id,pwel_day_status.daytime,'Flowline B')",
+ZWP_MEAS_EV_RATIO,ONLY DV_2,,Y,,NUMBER,,FUNCTION,,"CASE WHEN nvl(pwelDayAlloc.alloc_gas_vol,0)>0 THEN (pwelDayAlloc.alloc_gas_energy/pwelDayAlloc.alloc_gas_vol) ELSE (select alloc_gas_energy/alloc_gas_vol from pwel_day_alloc where object_id=PWEL_DAY_STATUS.object_id and daytime=(select max(daytime) from pwel_day_alloc where object_id=PWEL_DAY_STATUS.object_id and daytime<PWEL_DAY_STATUS.daytime and NVL(alloc_gas_vol,0)>0 and alloc_gas_energy is not null)) END"
+ZWP_MEAS_GAS_ENERGY,ONLY DV_2,,Y,,NUMBER,,BASE,,PWEL_DAY_STATUS.AVG_GAS_ENERGY
+ZWP_MEAS_MV_RATIO,ONLY DV_2,,Y,,NUMBER,,FUNCTION,,"CASE WHEN nvl(pwelDayAlloc.alloc_gas_vol,0)>0 THEN (pwelDayAlloc.alloc_gas_mass/pwelDayAlloc.alloc_gas_vol) ELSE (select alloc_gas_mass/alloc_gas_vol from pwel_day_alloc where object_id=PWEL_DAY_STATUS.object_id and daytime=(select max(daytime) from pwel_day_alloc where object_id=PWEL_DAY_STATUS.object_id and daytime<PWEL_DAY_STATUS.daytime and NVL(alloc_gas_vol,0)>0 and alloc_gas_mass is not null)) END"
+ZWP_THEOR_COND_VOL,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"zwp_prod_well_theoretical.getCondStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime)",
+ZWP_THEOR_GAS_ENERGY,ONLY DV_2,,Y,,NUMBER,,FUNCTION,,"EcBp_Well_Theoretical.getGasEnergyDay(pwel_day_status.object_id, pwel_day_status.daytime)"
+ZWP_THEOR_GAS_VOL,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"zwp_prod_well_theoretical.getGasStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime)",
+ZWP_THEOR_TOTAL_MASS,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"EcBp_Well_Theoretical.findGasMassDay(pwel_day_status.object_id, pwel_day_status.daytime)+EcBp_Well_Theoretical.findCondMassDay(pwel_day_status.object_id, pwel_day_status.daytime) + EcBp_Well_Theoretical.findWaterMassDay(pwel_day_status.object_id, pwel_day_status.daytime)",
+ZWP_THEOR_TOTAL_VOL,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"zwp_prod_well_theoretical.getGasStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime) + zwp_prod_well_theoretical.getCondStdRateDay(pwel_day_status.object_id, pwel_day_status.daytime) + (EcBp_Well_Theoretical.findWaterMassDay(pwel_day_status.object_id, pwel_day_status.daytime) / ec_well_reference_value.WAT_DENSITY(pwel_day_status.object_id, pwel_day_status.daytime,'<='))",
+ZWP_THEOR_WAT_VOL,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"EcBp_Well_Theoretical.findWaterMassDay(pwel_day_status.object_id, pwel_day_status.daytime) / ec_well_reference_value.WAT_DENSITY(pwel_day_status.object_id, pwel_day_status.daytime,'<=')",
+ZWT_CALC_GCV,ONLY DV_1,Y,,NUMBER,,FUNCTION,,"EcBp_Well_Theoretical.findGCV(PWEL_DAY_STATUS.object_id, PWEL_DAY_STATUS.daytime)",
+ZWT_GOR,ONLY DV_1,Y,,NUMBER,,OTHER,,zwtPwelDayStatus3.ZWT_GOR,
+ZWT_RESGAS_VOL,ONLY DV_1,Y,,NUMBER,,OTHER,,zwtPwelDayAlloc2.ZWT_RESGAS_VOL,
