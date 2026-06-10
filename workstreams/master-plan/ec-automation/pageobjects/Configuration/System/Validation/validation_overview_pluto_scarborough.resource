@@ -131,6 +131,36 @@ Rule Should Positively Fire
     ...    msg=No violations on ${daytime} - cannot positively exercise rule ${check_id}
     Check Log Count Should Be    ${check_id}    ${daytime}    ${oracle}
 
+Get Group Summary Warnings
+    [Documentation]    Read the Summary cell for ${group_desc} and return the integer count
+    ...    before " Warnings" (e.g. "0 Errors, 6 Warnings, ..." -> 6). Frozen rules log WARNINGs.
+    [Arguments]    ${group_desc}
+    ${idx}=    Find Group Row Index    ${group_desc}
+    Should Be True    ${idx} >= 0    msg=Group not found in tree: ${group_desc}
+    ${summary}=    Get Text    css=[id="groups:form:T:${idx}:C2_la"]
+    ${m}=    Get Regexp Matches    ${summary}    (\\d+)\\s+Warnings    1
+    Should Not Be Empty    ${m}    msg=Could not parse Warnings from summary: ${summary}
+    RETURN    ${{int(${m}[0])}}
+
+Group Summary Warnings Should Be Positive On Date
+    [Documentation]    Set date + GO, then assert the group's UI Summary shows Warnings > 0
+    ...    (visual confirmation that the frozen WARNINGs surfaced on screen for that date).
+    [Arguments]    ${daytime}    ${group_desc}
+    Set Validation Date Range And Go    ${daytime}    ${daytime}
+    ${warns}=    Get Group Summary Warnings    ${group_desc}
+    Should Be True    ${warns} > 0
+    ...    msg=Expected frozen WARNINGs > 0 for ${group_desc} on ${daytime}, UI showed ${warns}
+
+Frozen Rule Should Positively Fire
+    [Documentation]    Frozen equivalent of Rule Should Positively Fire: independent oracle via
+    ...    getValFrozenValue (Frozen Distinct Violation Objects), assert oracle > 0 AND EC's
+    ...    CTRL_CHECK_LOG (populated by the UI group run) equals it. Proves UI run == DB truth.
+    [Arguments]    ${check_id}    ${daytime}
+    ${oracle}=    Frozen Distinct Violation Objects    ${check_id}    ${daytime}
+    Should Be True    ${oracle} > 0
+    ...    msg=No frozen violations on ${daytime} - cannot positively exercise rule ${check_id}
+    Check Log Count Should Be    ${check_id}    ${daytime}    ${oracle}
+
 Group Summary Errors Should Be On Date
     [Documentation]    Set the date window + GO (so the Summary reflects THAT date), then assert
     ...    the group's UI Summary "Errors". Self-contained, so multiple test dates don't interfere.

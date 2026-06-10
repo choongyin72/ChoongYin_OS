@@ -145,6 +145,43 @@ def distinct_violation_objects_for_rule(check_id, daytime):
         conn.close()
 
 
+def frozen_distinct_violation_objects(check_id, daytime):
+    """Faithful oracle for a FROZEN function-rule (ZWP_P_TOOLTIP.getValFrozenValue).
+
+    distinct_violation_objects_for_rule() can't handle these — their WHERE_FORMULA vars are
+    a package name + 'FROZEN' const, not columns. So derive the oracle from the rule's OWN
+    func-params: read TABLE_ID + the P_VALUE column + P_ATTRIBUTE const, then COUNT(DISTINCT
+    OBJECT_ID) where getValFrozenValue(...) = 'FROZEN' on ``daytime``. Stays faithful to the
+    deployed rule (can't drift). EC logs one row per frozen object -> compare to CTRL_CHECK_LOG.
+    """
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT TABLE_ID FROM CTRL_CHECK_RULES WHERE CHECK_ID = :i", i=int(check_id))
+        row = cur.fetchone()
+        if not row:
+            raise AssertionError(f"Check rule CHECK_ID={check_id} not found")
+        table_id = _safe(row[0])
+        cur.execute(
+            "SELECT PARAMETER_NAME, PARAMETER_VALUE FROM CTRL_CHECK_RULE_FUNC_PARAM "
+            "WHERE CHECK_ID = :i AND PARAMETER_NAME IN ('P_VALUE','P_ATTRIBUTE')",
+            i=int(check_id),
+        )
+        params = {n: v for n, v in cur.fetchall()}
+        valcol = _safe(params["P_VALUE"])
+        attr = params["P_ATTRIBUTE"]
+        cur.execute(
+            f"SELECT COUNT(DISTINCT OBJECT_ID) FROM {table_id} "
+            f"WHERE DAYTIME = TO_DATE(:d,'YYYY-MM-DD') AND {valcol} IS NOT NULL "
+            f"AND ZWP_P_TOOLTIP.getValFrozenValue(DATA_CLASS_NAME,OBJECT_ID,DAYTIME,{valcol},:a)='FROZEN'",
+            d=str(daytime), a=attr,
+        )
+        return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
 def code_should_be_present_in_view(view, code):
     """Fail unless ``code`` appears in any string column of ``view`` (DB ground truth)."""
     if not _code_present(view, code):
