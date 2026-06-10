@@ -47,6 +47,78 @@ Reload Validation Screen
     Wait For Load State    networkidle    timeout=30s
     Sleep    1.5s
 
+Show Only Log Messages By Ticking
+    [Documentation]    Show ONLY rows whose message contains ${match_text}, by unticking
+    ...    toggle-all (clear all) then clicking EACH matching option checkbox individually
+    ...    (avoids the toggle-all-reselects-all bug). Closes to apply.
+    [Arguments]    ${match_text}
+    ${trig}=    Set Variable    css=[id="logs:form:T:sfilter3_cb_filter"] .ui-selectcheckboxmenu-trigger
+    ${panel}=   Set Variable    css=[id="logs:form:T:sfilter3_cb_filter_panel"]
+    ${hdr}=     Set Variable    css=[id="logs:form:T:sfilter3_cb_filter_panel"] .ui-selectcheckboxmenu-header .ui-chkbox-box
+    Click    ${trig}
+    Wait For Elements State    ${panel}    visible    timeout=10s
+    Sleep    0.5s
+    # Step 1: clear ALL currently-ticked items (re-query inside JS)
+    Evaluate JavaScript    ${None}
+    ...    () => { document.querySelectorAll('[id="logs:form:T:sfilter3_cb_filter_panel"] li.ui-selectcheckboxmenu-item .ui-chkbox-box.ui-state-active').forEach(b=>b.click()); }
+    Sleep    3s
+    # re-open the panel if the clear-all AJAX collapsed it, so the tick step sees the items
+    ${vis}=    Get Element States    ${panel}    then    bool(value & visible)
+    IF    not $vis
+        Click    ${trig}
+        Wait For Elements State    ${panel}    visible    timeout=10s
+        Sleep    1s
+    END
+    # Step 2: tick only items matching ${match_text} (fresh re-query, avoids stale refs)
+    ${ticked}=    Evaluate JavaScript    ${None}
+    ...    () => { let c=0; document.querySelectorAll('[id="logs:form:T:sfilter3_cb_filter_panel"] li.ui-selectcheckboxmenu-item').forEach(li=>{ const t=(li.textContent||'').trim(); const b=li.querySelector('.ui-chkbox-box'); if(t.includes('${match_text}') && b && !b.classList.contains('ui-state-active')){ b.click(); c++; } }); return c; }
+    Log    TICKED_ITEMS :: ${ticked}    console=True
+    Sleep    0.8s
+    Sleep    1s
+    Click    ${panel} .ui-selectcheckboxmenu-close
+    Wait For Load State    networkidle    timeout=20s
+    Sleep    1.5s
+
+Show Only Log Messages Matching
+    [Documentation]    Filter the result detail grid's Message column (multi-select sfilter3)
+    ...    to show ONLY rows whose message contains ${match_text}. Correct PrimeFaces sequence:
+    ...    open -> clear search -> UNTICK toggle-all (clear all) -> type ${match_text} ->
+    ...    TICK toggle-all (selects just the filtered messages) -> close.
+    ...    e.g. 'mole percentage' (1156/1157 MOL%) or 'molecular weight percentage'.
+    [Arguments]    ${match_text}
+    ${trig}=      Set Variable    css=[id="logs:form:T:sfilter3_cb_filter"] .ui-selectcheckboxmenu-trigger
+    ${panel}=     Set Variable    css=[id="logs:form:T:sfilter3_cb_filter_panel"]
+    ${search}=    Set Variable    css=[id="logs:form:T:sfilter3_cb_filter_filter"]
+    ${hdr}=       Set Variable    css=[id="logs:form:T:sfilter3_cb_filter_panel"] .ui-selectcheckboxmenu-header .ui-chkbox-box
+    Click    ${trig}
+    Wait For Elements State    ${panel}    visible    timeout=10s
+    Sleep    0.5s
+    Fill Text    ${search}    ${EMPTY}
+    Sleep    0.5s
+    # clear ALL selections first (untick toggle-all only if it is currently active)
+    ${cls}=    Get Attribute    ${hdr}    class
+    IF    'ui-state-active' in $cls
+        Click    ${hdr}
+        Sleep    0.5s
+    END
+    # narrow the list to the wanted text, then tick toggle-all -> selects the filtered set
+    Fill Text    ${search}    ${match_text}
+    Sleep    1s
+    Click    ${hdr}
+    Sleep    1s
+    Click    ${panel} .ui-selectcheckboxmenu-close
+    Wait For Load State    networkidle    timeout=20s
+    Sleep    1.5s
+
+Go To Groups Tree Page
+    [Documentation]    The group tree is paginated; click the paginator page link with the
+    ...    given number (e.g. the "Daily Sampling Validations" groups live on page 2).
+    [Arguments]    ${page_num}
+    Click
+    ...    xpath=//*[contains(@id,"groups:form")]//*[contains(@class,"ui-paginator-page") and normalize-space(.)='${page_num}']
+    Wait For Load State    networkidle    timeout=20s
+    Sleep    1.5s
+
 Find Group Row Index
     [Documentation]    Return the groups:form:T:{idx} index whose C0 label contains
     ...    ${group_desc}, or -1. Located by text so it is robust to row reordering.

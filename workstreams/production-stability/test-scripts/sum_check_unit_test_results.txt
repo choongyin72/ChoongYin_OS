@@ -1,0 +1,70 @@
+================================================================================
+  Issue_1052 — SUM 98–102% COMPOSITION CHECK — Layer-1 Unit Test (COPS DEV)
+================================================================================
+  Function under test : ZWP_P_VALIDATION.isComponentSumOutOfTolerance
+  DB                  : db.plutodev.../plutodev  (ECKERNEL_EC)
+  Run date            : 2026-06-10
+  Method              : read-only DB calls of the deployed function on real analyses;
+                        well MOL% positive case proven with reverted fake data.
+
+--------------------------------------------------------------------------------
+ 0. DEFECT FIX (precondition)
+--------------------------------------------------------------------------------
+  Defect : the NVL fallback defaults for the tolerance band were SWAPPED, so with the
+           system attributes ZWP_STRM_SUM_COMP_LOWER/_UPPER unset the effective band was
+           lower=1.02 / upper=0.98 (inverted) — EVERY composition fired, even a valid 100%.
+  Fix    : package body ZWP_P_VALIDATION recompiled 2026-06-10 20:57:10 (STATUS VALID);
+           defaults corrected -> upper=NVL(_UPPER,1.02), lower=NVL(_LOWER,0.98).
+  Effect : valid band is now [0.98 .. 1.02]; value 1.00 (a 100% sum) PASSES; only true
+           <98% / >102% sums fire.  (System attributes remain unset -> NVL defaults apply.)
+
+================================================================================
+ PART A — WEIGHT %  (COMP_WT_PCT)  — existing rules 1077 (stream) / 1083 (well)
+================================================================================
+  A1. VALID 100% sums SHOULD PASS  (post-fix)
+     RULE 1077 Stream  2026-08-31  ANA 2605 1C1401  sum=100 val=1.00 ret=NO  -> PASS
+     RULE 1083 Well    2025-12-01  ANA 3..14 (12 Pluto A wells) sum=100 val=1.00 ret=NO -> PASS
+     -> 13/13 valid sums PASS
+
+  A2. OUT-OF-RANGE sums SHOULD FIRE  (regression guard, real data)
+     Rule | Analysis | date       | code           | sum(WT%) | value  | ret | verdict
+     1077 |       27 | 2025-12-11 | VENT_T1_HP_N2  |   0.02   | 0.0002 | YES | FIRES (below 0.98)
+     1077 |     2499 | 2026-05-03 | 1C1401_TO_E140 |  45.42   | 0.4542 | YES | FIRES (below 0.98)
+     1083 |     2606 | 2026-08-31 | PLA-08         | 110.00   | 1.1000 | YES | FIRES (above 1.02)
+     -> 3/3 out-of-range sums FIRE
+
+  WT% RESULT: 13/13 valid PASS, 3/3 out-of-range FIRE. Both bounds enforced. PASS.
+
+================================================================================
+ PART B — MOLE %  (COMP_MOL_PCT)  — NEW rules 1156 (stream) / 1157 (well)
+================================================================================
+  Built by cloning 1077/1083 (full-row diff); only change: P_COLUMN_NAME COMP_WT_PCT
+  -> COMP_MOL_PCT.  CHECK_NAME ..._COMP_MOL_PCT_V1; SEVERITY=ERROR; ZWP_SCREEN_VAL=N;
+  linked to V_DLY_SAMPLING_STRM_GAS_COMP (1156) / V_DLY_SAMPLING_WELL_GAS_COMP (1157).
+  Scripts: Issue1052_PHD_Sum_MolPct_Checks.sql (+ _ROLLBACK) and _Check_Group.sql (+ _ROLLBACK).
+  Deploy -> verify -> rollback -> byte-clean -> re-load all confirmed on COPS DEV.
+
+  B1. STREAM 1156 — real data, both directions
+     VALID   2026-08-31 ANA 2605 1C1401   sum(MOL%)=100   val=1.00 ret=NO  -> PASS
+     FIRE    2026-02-03 ANA 2410 1C1401_TO_E140 sum=92.15 val=0.9215 ret=YES -> FIRES (below 0.98)
+     FIRE    2026-02-06 ANA 2413 1C1401_TO_E140 sum=92.36 val=0.9236 ret=YES -> FIRES (below 0.98)
+     (stream has 1,559 valid + 482 out-of-range MOL% analyses)
+     -> STREAM MOL%: PASS (valid passes, real out-of-range fires)
+
+  B2. WELL 1157 — fake data (real wells have NO MOL% populated: all 26 analyses sum to 0)
+     Proven on WELL SCA_01 (ANALYSIS_NO=2592, 2026-06-01, OPEN period); MOL% patched from
+     WT% then reverted to NULL (Issue1052_PHD_Sum_MolPct_FakeData_Patch.sql + _ROLLBACK):
+       baseline (real, NULL)        sum=0   val=0.00 ret=YES -> FIRES (no data)
+       valid   MOL% = WT% x1.00     sum=100 val=1.00 ret=NO  -> PASS
+       below   MOL% = WT% x0.90     sum=90  val=0.90 ret=YES -> FIRES (below 0.98)
+       above   MOL% = WT% x1.10     sum=110 val=1.10 ret=YES -> FIRES (above 1.02)
+       REVERTED                     all COMP_MOL_PCT back to NULL — COPS DEV clean
+     -> WELL MOL% rule is functionally SOUND (passes valid, fires both bounds).
+
+  OPEN ITEM (data, not rule): real wells carry no COMP_MOL_PCT, so rule 1157 fires on all
+  26 real wells until MOL% data is populated. Decision pending (keep live / unlink / Grant).
+
+================================================================================
+  OVERALL:  Function fix VERIFIED.  WT% (1077/1083) PASS.  MOL% stream (1156) PASS on real
+            data; MOL% well (1157) PASS via reverted fake data.  Rules + rollbacks all clean.
+================================================================================
