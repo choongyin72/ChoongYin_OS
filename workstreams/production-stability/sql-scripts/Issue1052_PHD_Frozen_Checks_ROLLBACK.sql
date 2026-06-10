@@ -1,6 +1,7 @@
 -- =============================================================================
 -- Issue_1052: ROLLBACK — Delete FROZEN-VALUE Check Rules
--- Purpose : Remove the 9 frozen rules created by Issue1052_PHD_Frozen_Checks.sql
+-- Purpose : Remove the 4 ACTIVE frozen rules. (1150/1151 composition are ON HOLD/reserved -
+--           NOT deleted here, so their CHECK_IDs stay reserved for revisit.)
 -- Author  : Choong-Yin Lee  |  Date: 2026-06-09
 -- Safe    : Re-runnable — DELETE on non-existent rows returns 0 rows, no error
 -- Order   : children first (func-params, variables, group links) then rule (parent)
@@ -27,8 +28,9 @@ DECLARE
     END delete_frozen_rule;
 
 BEGIN
-    delete_frozen_rule('PHD_STRM_COMP_MOL_PCT_FROZEN_V1');
-    delete_frozen_rule('PHD_STRM_COMP_WT_PCT_FROZEN_V1');
+    -- ON HOLD - NOT deleted (CHECK_IDs 1150/1151 reserved for revisit):
+    --   delete_frozen_rule('PHD_STRM_COMP_MOL_PCT_FROZEN_V1');
+    --   delete_frozen_rule('PHD_STRM_COMP_WT_PCT_FROZEN_V1');
     delete_frozen_rule('PHD_STRM_ANALYSIS_DENSITY_FROZEN_V1');
     delete_frozen_rule('PHD_STRM_ANALYSIS_GCV_FROZEN_V1');
     delete_frozen_rule('PHD_STREAM_WATER_OILINWAT_FROZEN_V1');
@@ -43,13 +45,12 @@ END;
 /
 
 -- =============================================================================
--- VERIFY: confirm all 6 frozen rules removed.  Expected: 0 rows.
+-- VERIFY: confirm the 4 ACTIVE frozen rules removed.  Expected: 0 rows.
+-- (1150/1151 composition are ON HOLD/reserved - intentionally still present.)
 -- =============================================================================
 SELECT CHECK_ID, CHECK_NAME, TABLE_ID
   FROM TV_CTRL_CHECK_RULES
  WHERE CHECK_NAME IN (
-    'PHD_STRM_COMP_MOL_PCT_FROZEN_V1',
-    'PHD_STRM_COMP_WT_PCT_FROZEN_V1',
     'PHD_STRM_ANALYSIS_DENSITY_FROZEN_V1',
     'PHD_STRM_ANALYSIS_GCV_FROZEN_V1',
     'PHD_STREAM_WATER_OILINWAT_FROZEN_V1',

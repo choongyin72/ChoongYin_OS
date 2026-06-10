@@ -1,6 +1,8 @@
 """
 Issue_1052 - Unit Test: FROZEN-VALUE Check Rules (Layer 1, DB-level, COPS DEV)
-Rules 1150-1155 (PHD_*_FROZEN_V1). Mirrors unit_test_check_rules.py structure.
+Rules 1150-1155 (PHD_*_FROZEN_V1). 4 ACTIVE (1152/1153/1154/1155); 1150/1151 composition
+ON HOLD (rule rows reserved but unlinked/dormant - getValFrozenValue can't do per-component).
+Mirrors unit_test_check_rules.py structure.
 
 Approach: discovery-based (read-only) for behaviour; idempotency + rollback self-restore.
 - Wiring asserts (all 6): exists, WARNING, WHERE_FORMULA, FUNCTION_NAME, ConstBOOLEAN,
@@ -27,19 +29,19 @@ RESULTS = Path(r'C:\Projects\ChoongYin_OS\workstreams\production-stability\test-
 LOG = []
 def log(tc, scenario, expected, actual, detail=''):
     status = 'PASS' if expected == actual else ('INFO' if expected == 'INFO' else 'FAIL')
-    if actual in ('KNOWN_DEFECT', 'PENDING', 'INFO'):
+    if actual in ('KNOWN_DEFECT', 'PENDING', 'INFO', 'ON_HOLD'):
         status = actual
     LOG.append(dict(tc=tc, scenario=scenario, expected=expected, actual=actual, status=status, detail=detail))
     print(f"  [{status:12}] {tc:6} | {scenario:30} | {detail}")
 
 # rule -> metadata
 ONE_ROW = 'one_row'   # one row per object/day  (behaviour testable by discovery)
-COMP    = 'comp'      # per-component (grain demo)
+ONHOLD  = 'onhold'    # parked - rule row kept (CHECK_ID reserved) but unlinked/dormant
 RULES = [
     dict(tc='F1150', name='PHD_STRM_COMP_MOL_PCT_FROZEN_V1',   view='RV_STRM_COMP_ANALYSIS',
-         col='MOL_PCT',                 grp='V_PHD_STREAM_COMP',     sv='N', kind=COMP),
+         col='MOL_PCT',                 grp='V_PHD_STREAM_COMP',     sv='N', kind=ONHOLD),
     dict(tc='F1151', name='PHD_STRM_COMP_WT_PCT_FROZEN_V1',    view='RV_STRM_COMP_ANALYSIS',
-         col='WT_PCT',                  grp='V_PHD_STREAM_COMP',     sv='N', kind=COMP),
+         col='WT_PCT',                  grp='V_PHD_STREAM_COMP',     sv='N', kind=ONHOLD),
     dict(tc='F1152', name='PHD_STRM_ANALYSIS_DENSITY_FROZEN_V1', view='RV_STRM_ANALYSIS',
          col='DENSITY',                 grp='V_PHD_STREAM_ANALYSIS', sv='N', kind=ONE_ROW),
     dict(tc='F1153', name='PHD_STRM_ANALYSIS_GCV_FROZEN_V1',   view='RV_STRM_ANALYSIS',
@@ -128,14 +130,20 @@ def test_behaviour(cur, r):
     else:
         log(tc, 'BEHAV_NEGATIVE(changed)', 'INFO', 'PENDING', 'no natural changed row - seeding deferred')
 
-def test_composition_grain(cur, r):
-    tc, view, col = r['tc'], r['view'], r['col']
-    cur.execute(f"""SELECT MAX(c) FROM (SELECT COUNT(*) c FROM {view} GROUP BY OBJECT_ID, DAYTIME)""")
-    maxrows = cur.fetchone()[0]
-    log(tc, 'GRAIN_per_obj_day', 'KNOWN_DEFECT', 'KNOWN_DEFECT',
-        f'{maxrows} rows/object/day (expected 1 for frozen fn) -> SUMs across components')
-    log(tc, 'COMPOSITION_FROZEN', 'KNOWN_DEFECT', 'KNOWN_DEFECT',
-        'function cannot do per-component frozen (grain mismatch) - escalate to Grant')
+def test_onhold(cur, r):
+    """1150/1151 composition frozen are PARKED: rule row kept (CHECK_ID reserved) but
+    unlinked/dormant. Assert: still exists, no group link, tagged ON HOLD."""
+    tc, name = r['tc'], r['name']
+    cur.execute("SELECT CHECK_ID, REV_TEXT FROM TV_CTRL_CHECK_RULES WHERE CHECK_NAME=:n", n=name)
+    row = cur.fetchone()
+    if not row:
+        log(tc, 'ONHOLD_rule_exists', 'FOUND', 'NOT_FOUND', f'{name} missing (id not reserved!)'); return
+    cid, rev = row
+    cur.execute("SELECT COUNT(*) FROM CTRL_CHECK_COMBINATION WHERE CHECK_ID=:c", c=cid)
+    links = cur.fetchone()[0]
+    log(tc, 'ONHOLD_status', 'ON_HOLD', 'ON_HOLD', f'CHECK_ID={cid} reserved; rev={rev}')
+    log(tc, 'ONHOLD_dormant(no group link)', 0, links, f'group_links={links} (expect 0)')
+    log(tc, 'ONHOLD_tagged', 'Y', 'Y' if rev and 'ONHOLD' in rev else 'N', f'rev={rev}')
 
 # ---- script integrity ---------------------------------------------------------
 def plsql(path):
@@ -160,12 +168,13 @@ def test_rollback(cur, conn):
     cur.execute(plsql(SQLDIR/'Issue1052_PHD_Frozen_Check_Group_ROLLBACK.sql')); conn.commit()
     cur.execute(plsql(SQLDIR/'Issue1052_PHD_Frozen_Checks_ROLLBACK.sql')); conn.commit()
     gone = count_rules(cur)
-    log('RBK', 'RULES_DELETED', 0, gone, f'remaining={gone}')
-    # restore
+    # active rollback deletes the 4 active; the 2 ON-HOLD (1150/1151) are reserved -> survive
+    log('RBK', 'ACTIVE_DELETED_HOLD_KEPT', 2, gone, f'remaining={gone} (expect 2 = reserved 1150/1151)')
+    # restore the 4 active
     cur.execute(plsql(SQLDIR/'Issue1052_PHD_Frozen_Checks.sql')); conn.commit()
     cur.execute(plsql(SQLDIR/'Issue1052_PHD_Frozen_Check_Group.sql')); conn.commit()
     back = count_rules(cur)
-    log('RBK', 'RULES_RESTORED', 6, back, f'restored={back}')
+    log('RBK', 'RULES_RESTORED', 6, back, f'restored total={back} (4 active + 2 reserved)')
 
 # ---- main ---------------------------------------------------------------------
 if __name__ == '__main__':
@@ -173,12 +182,12 @@ if __name__ == '__main__':
     conn = connect(); cur = conn.cursor()
     for r in RULES:
         print(f"\n--- {r['tc']} {r['name']} ---")
+        if r['kind'] == ONHOLD:
+            test_onhold(cur, r)
+            continue
         cid = test_wiring(cur, r)
         if cid is None: continue
-        if r['kind'] == COMP:
-            test_composition_grain(cur, r)
-        else:
-            test_behaviour(cur, r)
+        test_behaviour(cur, r)
     print("\n--- script integrity ---")
     test_idempotency(cur, conn)
     test_rollback(cur, conn)
@@ -189,7 +198,7 @@ if __name__ == '__main__':
     c = Counter(x['status'] for x in LOG)
     print('\n'+'='*70)
     print(f"SUMMARY  PASS={c['PASS']} FAIL={c['FAIL']} INFO/PENDING={c['PENDING']+c['INFO']} "
-          f"KNOWN_DEFECT={c['KNOWN_DEFECT']}  total={len(LOG)}")
+          f"ON_HOLD={c['ON_HOLD']} KNOWN_DEFECT={c['KNOWN_DEFECT']}  total={len(LOG)}")
     print('='*70)
     with open(RESULTS, 'w', encoding='utf-8') as f:
         f.write(f"Issue_1052 FROZEN Unit Test  |  {datetime.now()}  |  COPS DEV\n"+'='*90+'\n')

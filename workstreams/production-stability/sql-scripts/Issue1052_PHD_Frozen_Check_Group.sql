@@ -8,13 +8,13 @@
 --   V_PHD_STREAM_COMP / V_PHD_STREAM_ANALYSIS  -> created by Issue1052_PHD_Check_Group.sql
 --   V_PHD_STREAM_WATER / V_PHD_PWEL_STATUS     -> pre-existing LIVE EC groups (do not touch)
 --
---   GROUP                  FROZEN RULE(S)
---   V_PHD_STREAM_COMP      PHD_STRM_COMP_MOL_PCT_FROZEN_V1, PHD_STRM_COMP_WT_PCT_FROZEN_V1
+--   GROUP                  FROZEN RULE(S)  [4 ACTIVE links]
 --   V_PHD_STREAM_ANALYSIS  PHD_STRM_ANALYSIS_DENSITY_FROZEN_V1, PHD_STRM_ANALYSIS_GCV_FROZEN_V1
 --   V_PHD_STREAM_WATER     PHD_STREAM_WATER_OILINWAT_FROZEN_V1
 --   V_PHD_PWEL_STATUS      PHD_PWEL_AVG_GAS_RATE_FROZEN_V1
+--   ON HOLD (NOT linked): V_PHD_STREAM_COMP <- MOL_PCT/WT_PCT composition frozen (1150/1151)
 --
--- PREREQUISITE: run Issue1052_PHD_Frozen_Checks.sql first (creates the 6 rules).
+-- PREREQUISITE: run Issue1052_PHD_Frozen_Checks.sql first (creates the 4 active rules).
 -- =============================================================================
 
 DECLARE
@@ -41,8 +41,9 @@ DECLARE
     END link_rule_to_group;
 
 BEGIN
-    link_rule_to_group('PHD_STRM_COMP_MOL_PCT_FROZEN_V1',     'V_PHD_STREAM_COMP');
-    link_rule_to_group('PHD_STRM_COMP_WT_PCT_FROZEN_V1',      'V_PHD_STREAM_COMP');
+    -- ON HOLD - composition frozen 1150/1151 (dormant). Do NOT link until component-aware fn:
+    --   link_rule_to_group('PHD_STRM_COMP_MOL_PCT_FROZEN_V1', 'V_PHD_STREAM_COMP');
+    --   link_rule_to_group('PHD_STRM_COMP_WT_PCT_FROZEN_V1',  'V_PHD_STREAM_COMP');
     link_rule_to_group('PHD_STRM_ANALYSIS_DENSITY_FROZEN_V1', 'V_PHD_STREAM_ANALYSIS');
     link_rule_to_group('PHD_STRM_ANALYSIS_GCV_FROZEN_V1',     'V_PHD_STREAM_ANALYSIS');
     link_rule_to_group('PHD_STREAM_WATER_OILINWAT_FROZEN_V1', 'V_PHD_STREAM_WATER');
@@ -56,17 +57,15 @@ EXCEPTION
 END;
 /
 
--- VERIFY: each frozen rule linked to its group (expect 6 rows).
+-- VERIFY: each ACTIVE frozen rule linked to its group (expect 4 rows; 1150/1151 ON HOLD, unlinked).
 SELECT c.CHECK_GROUP, c.CHECK_ID, r.CHECK_NAME, r.TABLE_ID
   FROM CTRL_CHECK_COMBINATION c
   JOIN CTRL_CHECK_RULES r ON r.CHECK_ID = c.CHECK_ID
  WHERE r.CHECK_NAME IN (
-    'PHD_STRM_COMP_MOL_PCT_FROZEN_V1',
-    'PHD_STRM_COMP_WT_PCT_FROZEN_V1',
     'PHD_STRM_ANALYSIS_DENSITY_FROZEN_V1',
     'PHD_STRM_ANALYSIS_GCV_FROZEN_V1',
     'PHD_STREAM_WATER_OILINWAT_FROZEN_V1',
     'PHD_PWEL_AVG_GAS_RATE_FROZEN_V1'
  )
  ORDER BY c.CHECK_GROUP, r.CHECK_NAME;
--- Expected: 6 rows
+-- Expected: 4 rows

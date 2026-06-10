@@ -2,8 +2,8 @@
 -- Issue_1052: FROZEN-VALUE Check Rules for PHD Tags  (DRAFT — DO NOT DEPLOY)
 -- Author : Choong-Yin Lee  |  Date: 2026-06-09
 -- Template: live rule 1042 (ZWP_P_TOOLTIP.getValFrozenValue, WARNING). Wiring, not new PL/SQL.
--- Scope  : 6 rules, stream + well objects only. Tanks excluded (function handles stream/well only).
--- Open   : STRM_COMP grain; ZWT_OILINWAT needs FROM_UNIT=mg/L; AVG_GAS_RATE UOM assumed SM3.
+-- Scope  : 4 ACTIVE rules (stream + well). Composition frozen (MOL/WT) is ON HOLD - see body note.
+-- Open   : ZWT_OILINWAT needs FROM_UNIT=mg/L; AVG_GAS_RATE UOM assumed SM3 (1155 under Grant review).
 -- ScreenVal: ZWP_SCREEN_VAL (Woodside project attr) gates on-screen tooltip display. 'N' for all
 --          stream rules (batch only, matches stream-family convention); 'Y' for PWEL (matches the
 --          8 live PWEL frozen rules). Comp/analysis kept 'N' until grain confirmed by Grant.
@@ -82,11 +82,17 @@ DECLARE
     END frozen_rule;
 
 BEGIN
-    -- stream-family rules: ZWP_SCREEN_VAL='N' (batch only)
-    frozen_rule('PHD_STRM_COMP_MOL_PCT_FROZEN_V1', 'RV_STRM_COMP_ANALYSIS', 'MOL_PCT',
-        'Stream :STREAM_NAME component :COMPONENT_NO has Mol% same as previous day', 'N');
-    frozen_rule('PHD_STRM_COMP_WT_PCT_FROZEN_V1', 'RV_STRM_COMP_ANALYSIS', 'WT_PCT',
-        'Stream :STREAM_NAME component :COMPONENT_NO has Wt% same as previous day', 'N');
+    -- ===== ON HOLD (revisit after Issue_1052 complete) =====================================
+    -- Composition frozen rules PHD_STRM_COMP_MOL_PCT_FROZEN_V1 (1150) / _WT_PCT_FROZEN_V1 (1151):
+    -- getValFrozenValue SUMs across components (STRM_COMP_ANALYSIS = up to 10 rows/object/day),
+    -- so it cannot do per-component frozen. On COPS DEV the 2 rule rows are KEPT (CHECK_IDs
+    -- 1150/1151 reserved) but UNLINKED from V_PHD_STREAM_COMP -> dormant. Re-enable only with a
+    -- component/ANALYSIS_NO-aware function. DO NOT re-run these (kept here for revisit):
+    --   frozen_rule('PHD_STRM_COMP_MOL_PCT_FROZEN_V1','RV_STRM_COMP_ANALYSIS','MOL_PCT','... Mol% ...','N');
+    --   frozen_rule('PHD_STRM_COMP_WT_PCT_FROZEN_V1', 'RV_STRM_COMP_ANALYSIS','WT_PCT', '... Wt% ...','N');
+    -- ======================================================================================
+
+    -- ACTIVE (4 rules) - stream ZWP_SCREEN_VAL='N', PWEL 'Y'
     frozen_rule('PHD_STRM_ANALYSIS_DENSITY_FROZEN_V1', 'RV_STRM_ANALYSIS', 'DENSITY',
         'Stream :STREAM_NAME has Density same as previous day', 'N');
     frozen_rule('PHD_STRM_ANALYSIS_GCV_FROZEN_V1', 'RV_STRM_ANALYSIS', 'GCV_MJPERSM3',
@@ -106,12 +112,11 @@ EXCEPTION
 END;
 /
 
--- VERIFY: expect 6 rows, all WARNING; ZWP_SCREEN_VAL = N x5 (stream), Y x1 (PWEL).
+-- VERIFY: expect 4 ACTIVE rows, all WARNING; ZWP_SCREEN_VAL = N x3 (stream), Y x1 (PWEL).
+-- (1150/1151 composition rules are ON HOLD - dormant, not listed here.)
 SELECT r.CHECK_ID, r.CHECK_NAME, r.TABLE_ID, r.SEVERITY_LEVEL, r.ZWP_SCREEN_VAL
   FROM TV_CTRL_CHECK_RULES r
  WHERE r.CHECK_NAME IN (
-    'PHD_STRM_COMP_MOL_PCT_FROZEN_V1',
-    'PHD_STRM_COMP_WT_PCT_FROZEN_V1',
     'PHD_STRM_ANALYSIS_DENSITY_FROZEN_V1',
     'PHD_STRM_ANALYSIS_GCV_FROZEN_V1',
     'PHD_STREAM_WATER_OILINWAT_FROZEN_V1',

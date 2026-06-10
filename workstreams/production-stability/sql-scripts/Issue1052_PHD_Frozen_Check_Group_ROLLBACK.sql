@@ -1,6 +1,7 @@
 -- =============================================================================
 -- Issue_1052: ROLLBACK - Unlink FROZEN-VALUE Check Rules from their Check Groups
--- Purpose : Revert the 6 links created by Issue1052_PHD_Frozen_Check_Group.sql
+-- Purpose : Revert the 4 ACTIVE links created by Issue1052_PHD_Frozen_Check_Group.sql
+--           (1150/1151 composition already unlinked + ON HOLD - not handled here.)
 -- Author  : Choong-Yin Lee  |  Date: 2026-06-09
 -- Safe    : Re-runnable - DELETE on non-existent rows returns 0 rows, no error
 --
@@ -24,8 +25,9 @@ DECLARE
     END unlink_rule;
 
 BEGIN
-    unlink_rule('PHD_STRM_COMP_MOL_PCT_FROZEN_V1',     'V_PHD_STREAM_COMP');
-    unlink_rule('PHD_STRM_COMP_WT_PCT_FROZEN_V1',      'V_PHD_STREAM_COMP');
+    -- ON HOLD - 1150/1151 already unlinked/dormant (not re-handled here):
+    --   unlink_rule('PHD_STRM_COMP_MOL_PCT_FROZEN_V1', 'V_PHD_STREAM_COMP');
+    --   unlink_rule('PHD_STRM_COMP_WT_PCT_FROZEN_V1',  'V_PHD_STREAM_COMP');
     unlink_rule('PHD_STRM_ANALYSIS_DENSITY_FROZEN_V1', 'V_PHD_STREAM_ANALYSIS');
     unlink_rule('PHD_STRM_ANALYSIS_GCV_FROZEN_V1',     'V_PHD_STREAM_ANALYSIS');
     unlink_rule('PHD_STREAM_WATER_OILINWAT_FROZEN_V1', 'V_PHD_STREAM_WATER');
@@ -39,13 +41,11 @@ EXCEPTION
 END;
 /
 
--- VERIFY: the 6 frozen-rule links removed (expect 0 rows).
+-- VERIFY: the 4 ACTIVE frozen-rule links removed (expect 0 rows).
 SELECT c.CHECK_GROUP, c.CHECK_ID, r.CHECK_NAME
   FROM CTRL_CHECK_COMBINATION c
   JOIN CTRL_CHECK_RULES r ON r.CHECK_ID = c.CHECK_ID
  WHERE r.CHECK_NAME IN (
-    'PHD_STRM_COMP_MOL_PCT_FROZEN_V1',
-    'PHD_STRM_COMP_WT_PCT_FROZEN_V1',
     'PHD_STRM_ANALYSIS_DENSITY_FROZEN_V1',
     'PHD_STRM_ANALYSIS_GCV_FROZEN_V1',
     'PHD_STREAM_WATER_OILINWAT_FROZEN_V1',
