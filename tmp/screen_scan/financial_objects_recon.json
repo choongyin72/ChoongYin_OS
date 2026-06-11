@@ -1,0 +1,2975 @@
+[
+ {
+  "screen": "Account",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.cd/manage_object_object_list/CLASS_NAME/FIN_ACCOUNT",
+  "gridId": "nav:form:T_data",
+  "firstCodes": [
+   "1410010",
+   "4000000",
+   "4005000"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Account Category",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Cost Object Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "GL Account",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Account Cost Object",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Split Share",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Include Quantities in ERP",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:9:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Company Code Required",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:10:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "UOM Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:11:C:1:in",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Account Category",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Cost Object Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "GL Account",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Account Cost Object",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Split Share",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Include Quantities in ERP",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Company Code Required",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "UOM Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:in",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_FIN_ACCOUNT",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_FIN_ACCOUNT",
+   "OV_BANK_ACCOUNT",
+   "OV_FIN_ACCOUNT_JN",
+   "OV_BANK_ACCOUNT_JN",
+   "OV_LIFTING_ACCOUNT"
+  ]
+ },
+ {
+  "screen": "Bank Account",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/BANK_ACCOUNT",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "ALBERTA_GOV",
+   "ALL1239000_GBP_GB_ECP",
+   "ALL1239001_NOK_GB_ECP"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Bank Account Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Priority",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Reference",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Sort Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Account Number",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Account IBAN",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Account Info 1",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Account Info 2",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Account Info 3",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:11:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Account Info 4",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:12:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Account Info 5",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:13:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Account Info 6",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:14:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Account Info 7",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:15:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Account Info 8",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:16:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": "Account Info 9",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:17:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 18,
+    "label": "Bank",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:18:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 19,
+    "label": "Customer",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:19:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 20,
+    "label": "Vendor",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:20:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 21,
+    "label": "Currency",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:21:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Bank Account Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Priority",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Reference",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Sort Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Account Number",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Account IBAN",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Account Info 1",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Account Info 2",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Account Info 3",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Account Info 4",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:14:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Account Info 5",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:15:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Account Info 6",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:16:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": "Account Info 7",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:17:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 18,
+    "label": "Account Info 8",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:18:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 19,
+    "label": "Account Info 9",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:19:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 20,
+    "label": "Bank",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:20:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 21,
+    "label": "Customer",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:21:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 22,
+    "label": "Vendor",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:22:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 23,
+    "label": "Currency",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:23:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_BANK_ACCOUNT",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_BANK_ACCOUNT",
+   "OV_BANK_ACCOUNT_JN"
+  ]
+ },
+ {
+  "screen": "Cost Centre",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.cd/manage_object_object_list/CLASS_NAME/FIN_COST_CENTER",
+  "gridId": "nav:form:T_data",
+  "firstCodes": [
+   "AA",
+   "BITUMEN_LEISMER_NA",
+   "BITUMEN_OTHER_AL"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Cost Center",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "External Ref",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Split Share",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:in",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Cost Center",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "External Ref",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Split Share",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_FIN_COST_CENTER",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_FIN_COST_CENTER"
+  ]
+ },
+ {
+  "screen": "Cost Object Mapping",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/FIN_COST_OBJECT",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "BLEND_COST_A_INTERNAL",
+   "BLEND_COST_A_ROYALTY",
+   "BLEND_COST_B_INTERNAL"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Alternative Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Object Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Cost Object",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Line Item Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Node",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:8:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Product",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:9:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Distribution Object Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:10:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Profit Centre",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:11:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Alternative Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Object Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Cost Object",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Line Item Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Node",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Product",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Distribution Object Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Profit Centre",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_FIN_COST_OBJECT",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_FIN_COST_OBJECT"
+  ]
+ },
+ {
+  "screen": "Currency",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/CURRENCY",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "ARS",
+   "BOB",
+   "CAD"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Active",
+    "kind": "checkbox",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "1/100 Units",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:in",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Active",
+    "kind": "checkbox",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "1/100 Units",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_CURRENCY",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_CURRENCY",
+   "OV_CURRENCY_JN"
+  ]
+ },
+ {
+  "screen": "DOA Credit Limit",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/DOA_CREDIT_LIMIT",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "CREDIT_LIMIT_10000",
+   "CREDIT_LIMIT_100000",
+   "CREDIT_LIMIT_1000000"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "DOA Credit Limit Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "DOA Credit Limit Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "DOA Type",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Credit Limit",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Currency",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Role Name",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:7:C:1:in",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "DOA Credit Limit Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "DOA Credit Limit Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "DOA Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Credit Limit",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Currency",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "UOM",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Role Name",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:in",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_DOA_CREDIT_LIMIT",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_DOA_CREDIT_LIMIT",
+   "OV_DOA_CREDIT_LIMIT_JN"
+  ]
+ },
+ {
+  "screen": "Exchange Rate Source",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/FOREX_SOURCE",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "BE",
+   "BOC",
+   "ECB"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "URL",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "URL",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_FOREX_SOURCE",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_FOREX_SOURCE"
+  ]
+ },
+ {
+  "screen": "Payment Scheme",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/PAYMENT_SCHEME",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_PAYMENT_SCHEME",
+  "dbViewVerified": false,
+  "dbViewCandidates": [
+   "OV_PAYMENT_SCHEME",
+   "OV_PAYMENT_SCHEME_JN"
+  ]
+ },
+ {
+  "screen": "Product Description",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/PRODUCT_NODE_ITEM",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "PD0001A",
+   "PD0001B",
+   "PD0002"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Product Node Item Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Product",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Node",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Financial Code",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Product Node Item Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Product",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Node",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Financial Code",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_PRODUCT_NODE_ITEM",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_PRODUCT_NODE_ITEM"
+  ]
+ },
+ {
+  "screen": "Revenue Order",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.cd/manage_object_object_list/CLASS_NAME/FIN_REVENUE_ORDER",
+  "gridId": "nav:form:T_data",
+  "firstCodes": [
+   "RO_01"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Revenue Order",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "External Ref",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Split Share",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:in",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Revenue Order",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "External Ref",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Split Share",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_FIN_REVENUE_ORDER",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_FIN_REVENUE_ORDER",
+   "OV_FIN_REVENUE_ORDER_JN"
+  ]
+ },
+ {
+  "screen": "Sales Order",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/PRODUCT_SALES_ORDER",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "BU_0001",
+   "BU_0002",
+   "BU_0003"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Product Sales Order Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Restrict Use",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Field",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Product Sales Order Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Restrict Use",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Field",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_PRODUCT_SALES_ORDER",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_PRODUCT_SALES_ORDER",
+   "OV_PRODUCT_SALES_ORDER_JN"
+  ]
+ },
+ {
+  "screen": "VAT Code",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/VAT_CODE",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "CA_V0",
+   "CA_V10",
+   "CH_A0"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "VAT Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "VAT Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Rate (Decimal)",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Rate (%)",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Legal Text",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Country Validation",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:9:C:1:cb",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "VAT Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "VAT Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Rate (Decimal)",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Rate (%)",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Legal Text",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Country Validation",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:cb",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_VAT_CODE",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_VAT_CODE",
+   "OV_VAT_CODE_JN"
+  ]
+ },
+ {
+  "screen": "WBS",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.cd/manage_object_object_list/CLASS_NAME/FIN_WBS",
+  "gridId": "nav:form:T_data",
+  "firstCodes": [
+   "13150479",
+   "13151141",
+   "14156433"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "WBS",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "External Ref",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Split Share",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:in",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "WBS",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "External Ref",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Split Share",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_FIN_WBS",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_FIN_WBS",
+   "OV_FIN_WBS_JN"
+  ]
+ },
+ {
+  "screen": "Account Mapping",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.cd/manage_account_mapping/CLASS_NAME/FIN_ACCOUNT_MAPPING",
+  "gridId": "manageObject:form:T_data",
+  "firstCodes": [
+   "CR_CRUDE_FINAL",
+   "SALE_CRUDE_ALL_ALL_ACC_DR",
+   "INCO_ALL_ALL_GB_ECL_ALL_CR"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Alternative Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Product",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Line Item Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Financial Code",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Company Category",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:8:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Status",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:9:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Debit / Credit",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:10:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Debit PK",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:11:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Credit PK",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:12:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Account Category",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:13:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Financial Account",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:14:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": ""
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Account Mapping Complete"
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": ""
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Alternative Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Product",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Line Item Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Financial Code",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Company Category",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Status",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Debit / Credit",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Debit PK",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Credit PK",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:14:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Account Category",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Financial Account",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:16:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": ""
+   },
+   {
+    "g": 0,
+    "r": 18,
+    "label": ""
+   },
+   {
+    "g": 0,
+    "r": 19,
+    "label": ""
+   }
+  ],
+  "dbView": "OV_FIN_ACCOUNT_MAPPING",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_FIN_ACCOUNT_MAPPING",
+   "OV_FIN_ACCOUNT_MAPPING_JN"
+  ]
+ }
+]
