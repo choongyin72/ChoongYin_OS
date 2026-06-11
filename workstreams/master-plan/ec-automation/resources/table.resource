@@ -33,12 +33,18 @@ Select EC Dropdown Option
     ...    date Tab-out) can close the panel between open and click, so one re-open
     ...    retry is built in. Typing into autocomplete-dd fields is unreliable.
     [Arguments]    ${dd_prefix}    ${value}
-    VAR    ${item}    css=[id="${dd_prefix}_panel"] tr[data-item-label="${value}"]
+    # normalize-space tolerates leading/double spaces in stored labels
+    # (real case: OV_AREA names like ' Offshore area' / ' Permit  Block 15')
+    VAR    ${item}    xpath=//*[@id='${dd_prefix}_panel']//tr[normalize-space(@data-item-label)='${value}']
     Click    css=[id="${dd_prefix}_button"]
     TRY
         Wait For Elements State    ${item}    visible    timeout=6s
     EXCEPT
-        # panel was closed by a concurrent partial re-render - re-open once
+        # two stale cases: the panel was closed by a concurrent partial re-render,
+        # OR it is open but its options have not arrived yet (cascading dropdown).
+        # Escape guarantees a closed panel, then re-open fresh after a settle.
+        Keyboard Key    press    Escape
+        Sleep    1.5s
         Click    css=[id="${dd_prefix}_button"]
         Wait For Elements State    ${item}    visible    timeout=10s
     END
