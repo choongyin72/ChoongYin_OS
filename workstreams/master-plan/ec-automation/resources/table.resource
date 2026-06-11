@@ -26,6 +26,26 @@ Fill EC Date
     ...    () => { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }
     Sleep    0.4s
 
+Select EC Dropdown Option
+    [Documentation]    Pick an option from an EC autocomplete dropdown (…:dd) by its
+    ...    exact item label: click the chevron, wait for the option row
+    ...    (tr[data-item-label]) and click it. A pending form re-render (e.g. after a
+    ...    date Tab-out) can close the panel between open and click, so one re-open
+    ...    retry is built in. Typing into autocomplete-dd fields is unreliable.
+    [Arguments]    ${dd_prefix}    ${value}
+    VAR    ${item}    css=[id="${dd_prefix}_panel"] tr[data-item-label="${value}"]
+    Click    css=[id="${dd_prefix}_button"]
+    TRY
+        Wait For Elements State    ${item}    visible    timeout=6s
+    EXCEPT
+        # panel was closed by a concurrent partial re-render - re-open once
+        Click    css=[id="${dd_prefix}_button"]
+        Wait For Elements State    ${item}    visible    timeout=10s
+    END
+    Click    ${item}
+    Wait For Load State    networkidle    timeout=12s
+    Sleep    0.6s
+
 Get Table Rows
     [Documentation]    Return a list of non-empty cell-lists from a results table by id.
     [Arguments]    ${table_id}

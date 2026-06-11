@@ -182,6 +182,34 @@ def frozen_distinct_violation_objects(check_id, daytime):
         conn.close()
 
 
+def view_count_where(view, column, value):
+    """Count rows of ``view`` where ``column`` equals ``value`` (bind-safe).
+
+    Built for delta-style assertions on shared/parent-child tables (e.g.
+    OBJECT_LIST_SETUP): record the count before an insert, assert +1 after,
+    assert back after the delete - pre-existing rows never matter.
+    """
+    _safe(view)
+    _safe(column)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(f"SELECT COUNT(*) FROM {view} WHERE {column} = :v", v=value)
+        return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def view_count_where_should_be(view, column, value, expected):
+    """Fail unless ``view_count_where`` returns exactly ``expected``."""
+    actual = view_count_where(view, column, value)
+    if int(actual) != int(expected):
+        raise AssertionError(
+            f"DB check FAILED: {view}.{column} = {value!r} has {actual} rows, expected {expected}"
+        )
+
+
 def code_should_be_present_in_view(view, code):
     """Fail unless ``code`` appears in any string column of ``view`` (DB ground truth)."""
     if not _code_present(view, code):
