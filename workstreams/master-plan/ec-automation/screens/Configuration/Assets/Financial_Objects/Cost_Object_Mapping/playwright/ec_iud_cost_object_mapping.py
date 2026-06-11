@@ -23,8 +23,8 @@ CFG = {
     "upd_code": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
     "upd_name": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
     "del_end": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
-    "start_date": "2000-01-01",
-    "end_date": "2000-01-01",
+    "start_date": "2003-01-01",
+    "end_date": "2003-01-01",
     "db_view": "OV_FIN_COST_OBJECT",
     "extra_go_after_delete": False,
 }

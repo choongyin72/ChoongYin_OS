@@ -11,17 +11,17 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${EXCHANGE_RATE_SOURCE_SCREEN}          Exchange Rate Source
-${EXCHANGE_RATE_SOURCE_TABLE}           manage_object_nav_nav:form:T_data
+${EXCHANGE_RATE_SOURCE_SCREEN}    Exchange Rate Source
+${EXCHANGE_RATE_SOURCE_TABLE}    manage_object_nav_nav:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${EXCHANGE_RATE_SOURCE_INS_CODE}        tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${EXCHANGE_RATE_SOURCE_INS_NAME}        tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
-${EXCHANGE_RATE_SOURCE_INS_DATE}        tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+${EXCHANGE_RATE_SOURCE_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${EXCHANGE_RATE_SOURCE_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
+${EXCHANGE_RATE_SOURCE_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
 # updateAttributes field IDs (Update — existing object)
-${EXCHANGE_RATE_SOURCE_UPD_CODE}        tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${EXCHANGE_RATE_SOURCE_UPD_NAME}        tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+${EXCHANGE_RATE_SOURCE_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${EXCHANGE_RATE_SOURCE_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
-${EXCHANGE_RATE_SOURCE_DEL_ENDDATE}     tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+${EXCHANGE_RATE_SOURCE_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
@@ -60,30 +60,16 @@ Exchange Rate Source Row Should Show Name
 Insert Exchange Rate Source Record
     [Documentation]    Insert a new exchange rate source: Code/Name/Start Date -> Save.
     [Arguments]    ${code}    ${name}    ${start_date}
-    Fill New Object Form
-    ...    ${EXCHANGE_RATE_SOURCE_INS_CODE}
-    ...    ${EXCHANGE_RATE_SOURCE_INS_NAME}
-    ...    ${EXCHANGE_RATE_SOURCE_INS_DATE}
-    ...    ${code}
-    ...    ${name}
-    ...    ${start_date}
+    Fill New Object Form    ${EXCHANGE_RATE_SOURCE_INS_CODE}    ${EXCHANGE_RATE_SOURCE_INS_NAME}    ${EXCHANGE_RATE_SOURCE_INS_DATE}
+    ...    ${code}    ${name}    ${start_date}
     Save And Refresh List
 
 Update Exchange Rate Source Name
     [Documentation]    Select the exchange rate source, edit Name, save + reload.
     [Arguments]    ${code}    ${new_name}
-    Update Object Name
-    ...    ${EXCHANGE_RATE_SOURCE_TABLE}
-    ...    ${EXCHANGE_RATE_SOURCE_UPD_CODE}
-    ...    ${EXCHANGE_RATE_SOURCE_UPD_NAME}
-    ...    ${code}
-    ...    ${new_name}
+    Update Object Name    ${EXCHANGE_RATE_SOURCE_TABLE}    ${EXCHANGE_RATE_SOURCE_UPD_CODE}    ${EXCHANGE_RATE_SOURCE_UPD_NAME}    ${code}    ${new_name}
 
 Delete Exchange Rate Source
     [Documentation]    Delete via End Date = Start Date (EC true delete), save + reload.
     [Arguments]    ${code}    ${date}
-    Delete Object Via End Date
-    ...    ${EXCHANGE_RATE_SOURCE_TABLE}
-    ...    ${EXCHANGE_RATE_SOURCE_DEL_ENDDATE}
-    ...    ${code}
-    ...    ${date}
+    Delete Object Via End Date    ${EXCHANGE_RATE_SOURCE_TABLE}    ${EXCHANGE_RATE_SOURCE_DEL_ENDDATE}    ${code}    ${date}

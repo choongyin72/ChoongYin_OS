@@ -11,25 +11,25 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${VAT_CODE_SCREEN}          VAT Code
-${VAT_CODE_TABLE}           manage_object_nav_nav:form:T_data
+${VAT_CODE_SCREEN}    VAT Code
+${VAT_CODE_TABLE}    manage_object_nav_nav:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${VAT_CODE_INS_CODE}        tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${VAT_CODE_INS_NAME}        tab:tabPanel:objectForm:form:G:0:R:6:C:1:in
-${VAT_CODE_INS_DATE}        tab:tabPanel:objectForm:form:G:0:R:1:C:1:da_input
+${VAT_CODE_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${VAT_CODE_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:6:C:1:in
+${VAT_CODE_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:1:C:1:da_input
 # mandatory extra: VAT Code (text)
-${VAT_CODE_INS_X0}          tab:tabPanel:objectForm:form:G:0:R:3:C:1:in
+${VAT_CODE_INS_X0}    tab:tabPanel:objectForm:form:G:0:R:3:C:1:in
 # mandatory extra: Rate (Decimal) (text)
-${VAT_CODE_INS_X1}          tab:tabPanel:objectForm:form:G:0:R:7:C:1:in
+${VAT_CODE_INS_X1}    tab:tabPanel:objectForm:form:G:0:R:7:C:1:in
 # mandatory reference dd: Country (banner-discovered; first option used)
-${VAT_CODE_INS_DD0}         tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd
+${VAT_CODE_INS_DD0}    tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd
 # mandatory reference dd: VAT Type (banner-discovered; first option used)
-${VAT_CODE_INS_DD1}         tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd
+${VAT_CODE_INS_DD1}    tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd
 # updateAttributes field IDs (Update — existing object)
-${VAT_CODE_UPD_CODE}        tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${VAT_CODE_UPD_NAME}        tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in
+${VAT_CODE_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${VAT_CODE_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
-${VAT_CODE_DEL_ENDDATE}     tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+${VAT_CODE_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***

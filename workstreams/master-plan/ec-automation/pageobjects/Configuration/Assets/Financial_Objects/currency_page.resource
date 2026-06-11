@@ -11,19 +11,19 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${CURRENCY_SCREEN}          Currency
-${CURRENCY_TABLE}           manage_object_nav_nav:form:T_data
+${CURRENCY_SCREEN}    Currency
+${CURRENCY_TABLE}    manage_object_nav_nav:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${CURRENCY_INS_CODE}        tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${CURRENCY_INS_NAME}        tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
-${CURRENCY_INS_DATE}        tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+${CURRENCY_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${CURRENCY_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
+${CURRENCY_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
 # mandatory extra: Active (checkbox)
-${CURRENCY_INS_X0}          tab:tabPanel:objectForm:form:G:0:R:6:C:1:cb
+${CURRENCY_INS_X0}    tab:tabPanel:objectForm:form:G:0:R:6:C:1:cb
 # updateAttributes field IDs (Update — existing object)
-${CURRENCY_UPD_CODE}        tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${CURRENCY_UPD_NAME}        tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+${CURRENCY_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${CURRENCY_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
-${CURRENCY_DEL_ENDDATE}     tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+${CURRENCY_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***

@@ -11,31 +11,31 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${ACCOUNT_MAPPING_SCREEN}           Account Mapping
-${ACCOUNT_MAPPING_TABLE}            manageObject:form:T_data
+${ACCOUNT_MAPPING_SCREEN}    Account Mapping
+${ACCOUNT_MAPPING_TABLE}    manageObject:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${ACCOUNT_MAPPING_INS_CODE}         tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${ACCOUNT_MAPPING_INS_NAME}         tab:tabPanel:objectForm:form:G:0:R:2:C:1:in
-${ACCOUNT_MAPPING_INS_DATE}         tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input
+${ACCOUNT_MAPPING_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${ACCOUNT_MAPPING_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:2:C:1:in
+${ACCOUNT_MAPPING_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input
 # mandatory reference dd: Line Item Type (banner-discovered; first option used)
-${ACCOUNT_MAPPING_INS_DD0}          tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd
+${ACCOUNT_MAPPING_INS_DD0}    tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd
 # mandatory reference dd: Financial Code (banner-discovered; first option used)
-${ACCOUNT_MAPPING_INS_DD1}          tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd
+${ACCOUNT_MAPPING_INS_DD1}    tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd
 # mandatory reference dd: Company Category (banner-discovered; first option used)
-${ACCOUNT_MAPPING_INS_DD2}          tab:tabPanel:objectForm:form:G:0:R:9:C:1:dd
+${ACCOUNT_MAPPING_INS_DD2}    tab:tabPanel:objectForm:form:G:0:R:9:C:1:dd
 # mandatory reference dd: Status (banner-discovered; first option used)
-${ACCOUNT_MAPPING_INS_DD3}          tab:tabPanel:objectForm:form:G:0:R:11:C:1:dd
+${ACCOUNT_MAPPING_INS_DD3}    tab:tabPanel:objectForm:form:G:0:R:11:C:1:dd
 # mandatory reference dd: Debit / Credit (banner-discovered; first option used)
-${ACCOUNT_MAPPING_INS_DD4}          tab:tabPanel:objectForm:form:G:0:R:12:C:1:dd
+${ACCOUNT_MAPPING_INS_DD4}    tab:tabPanel:objectForm:form:G:0:R:12:C:1:dd
 # mandatory reference dd: Debit PK (banner-discovered; first option used)
-${ACCOUNT_MAPPING_INS_DD5}          tab:tabPanel:objectForm:form:G:0:R:13:C:1:dd
+${ACCOUNT_MAPPING_INS_DD5}    tab:tabPanel:objectForm:form:G:0:R:13:C:1:dd
 # mandatory reference dd: Credit PK (banner-discovered; first option used)
-${ACCOUNT_MAPPING_INS_DD6}          tab:tabPanel:objectForm:form:G:0:R:14:C:1:dd
+${ACCOUNT_MAPPING_INS_DD6}    tab:tabPanel:objectForm:form:G:0:R:14:C:1:dd
 # updateAttributes field IDs (Update — existing object)
-${ACCOUNT_MAPPING_UPD_CODE}         tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${ACCOUNT_MAPPING_UPD_NAME}         tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in
+${ACCOUNT_MAPPING_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${ACCOUNT_MAPPING_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
-${ACCOUNT_MAPPING_DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+${ACCOUNT_MAPPING_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
@@ -88,12 +88,7 @@ Insert Account Mapping Record
 Update Account Mapping Name
     [Documentation]    Select the account mapping, edit Name, save + reload.
     [Arguments]    ${code}    ${new_name}
-    Update Object Name
-    ...    ${ACCOUNT_MAPPING_TABLE}
-    ...    ${ACCOUNT_MAPPING_UPD_CODE}
-    ...    ${ACCOUNT_MAPPING_UPD_NAME}
-    ...    ${code}
-    ...    ${new_name}
+    Update Object Name    ${ACCOUNT_MAPPING_TABLE}    ${ACCOUNT_MAPPING_UPD_CODE}    ${ACCOUNT_MAPPING_UPD_NAME}    ${code}    ${new_name}
 
 Delete Account Mapping
     [Documentation]    Delete via End Date = Start Date (EC true delete), save + reload.

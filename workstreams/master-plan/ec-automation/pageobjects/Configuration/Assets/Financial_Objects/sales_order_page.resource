@@ -11,21 +11,21 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${SALES_ORDER_SCREEN}           Sales Order
-${SALES_ORDER_TABLE}            manage_object_nav_nav:form:T_data
+${SALES_ORDER_SCREEN}    Sales Order
+${SALES_ORDER_TABLE}    manage_object_nav_nav:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${SALES_ORDER_INS_CODE}         tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${SALES_ORDER_INS_NAME}         tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
-${SALES_ORDER_INS_DATE}         tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+${SALES_ORDER_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${SALES_ORDER_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
+${SALES_ORDER_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
 # mandatory reference dd: Company (banner-discovered; first option used)
-${SALES_ORDER_INS_DD0}          tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd
+${SALES_ORDER_INS_DD0}    tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd
 # mandatory reference dd: Field (banner-discovered; first option used)
-${SALES_ORDER_INS_DD1}          tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd
+${SALES_ORDER_INS_DD1}    tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd
 # updateAttributes field IDs (Update — existing object)
-${SALES_ORDER_UPD_CODE}         tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${SALES_ORDER_UPD_NAME}         tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+${SALES_ORDER_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${SALES_ORDER_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
-${SALES_ORDER_DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+${SALES_ORDER_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
@@ -73,12 +73,7 @@ Insert Sales Order Record
 Update Sales Order Name
     [Documentation]    Select the sales order, edit Name, save + reload.
     [Arguments]    ${code}    ${new_name}
-    Update Object Name
-    ...    ${SALES_ORDER_TABLE}
-    ...    ${SALES_ORDER_UPD_CODE}
-    ...    ${SALES_ORDER_UPD_NAME}
-    ...    ${code}
-    ...    ${new_name}
+    Update Object Name    ${SALES_ORDER_TABLE}    ${SALES_ORDER_UPD_CODE}    ${SALES_ORDER_UPD_NAME}    ${code}    ${new_name}
 
 Delete Sales Order
     [Documentation]    Delete via End Date = Start Date (EC true delete), save + reload.

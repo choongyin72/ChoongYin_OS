@@ -11,17 +11,17 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${WBS_SCREEN}           WBS
-${WBS_TABLE}            nav:form:T_data
+${WBS_SCREEN}    WBS
+${WBS_TABLE}    nav:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${WBS_INS_CODE}         tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${WBS_INS_NAME}         tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
-${WBS_INS_DATE}         tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+${WBS_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${WBS_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
+${WBS_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
 # updateAttributes field IDs (Update — existing object)
-${WBS_UPD_CODE}         tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${WBS_UPD_NAME}         tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+${WBS_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${WBS_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
-${WBS_DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+${WBS_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***

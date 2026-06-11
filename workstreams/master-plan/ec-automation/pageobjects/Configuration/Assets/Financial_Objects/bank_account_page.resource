@@ -11,25 +11,25 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${BANK_ACCOUNT_SCREEN}          Bank Account
-${BANK_ACCOUNT_TABLE}           manage_object_nav_nav:form:T_data
+${BANK_ACCOUNT_SCREEN}    Bank Account
+${BANK_ACCOUNT_TABLE}    manage_object_nav_nav:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${BANK_ACCOUNT_INS_CODE}        tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${BANK_ACCOUNT_INS_NAME}        tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
-${BANK_ACCOUNT_INS_DATE}        tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+${BANK_ACCOUNT_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${BANK_ACCOUNT_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
+${BANK_ACCOUNT_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
 # mandatory extra: Sort Code (text)
-${BANK_ACCOUNT_INS_X0}          tab:tabPanel:objectForm:form:G:0:R:8:C:1:in
+${BANK_ACCOUNT_INS_X0}    tab:tabPanel:objectForm:form:G:0:R:8:C:1:in
 # mandatory reference dd: Customer (banner-discovered; first option used)
-${BANK_ACCOUNT_INS_DD0}         tab:tabPanel:objectForm:form:G:0:R:21:C:1:dd
+${BANK_ACCOUNT_INS_DD0}    tab:tabPanel:objectForm:form:G:0:R:21:C:1:dd
 # mandatory reference dd: Bank (banner-discovered; first option used)
-${BANK_ACCOUNT_INS_DD1}         tab:tabPanel:objectForm:form:G:0:R:20:C:1:dd
+${BANK_ACCOUNT_INS_DD1}    tab:tabPanel:objectForm:form:G:0:R:20:C:1:dd
 # mandatory reference dd: Currency (banner-discovered; first option used)
-${BANK_ACCOUNT_INS_DD2}         tab:tabPanel:objectForm:form:G:0:R:23:C:1:dd
+${BANK_ACCOUNT_INS_DD2}    tab:tabPanel:objectForm:form:G:0:R:23:C:1:dd
 # updateAttributes field IDs (Update — existing object)
-${BANK_ACCOUNT_UPD_CODE}        tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${BANK_ACCOUNT_UPD_NAME}        tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+${BANK_ACCOUNT_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${BANK_ACCOUNT_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
-${BANK_ACCOUNT_DEL_ENDDATE}     tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+${BANK_ACCOUNT_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
@@ -79,12 +79,7 @@ Insert Bank Account Record
 Update Bank Account Name
     [Documentation]    Select the bank account, edit Name, save + reload.
     [Arguments]    ${code}    ${new_name}
-    Update Object Name
-    ...    ${BANK_ACCOUNT_TABLE}
-    ...    ${BANK_ACCOUNT_UPD_CODE}
-    ...    ${BANK_ACCOUNT_UPD_NAME}
-    ...    ${code}
-    ...    ${new_name}
+    Update Object Name    ${BANK_ACCOUNT_TABLE}    ${BANK_ACCOUNT_UPD_CODE}    ${BANK_ACCOUNT_UPD_NAME}    ${code}    ${new_name}
 
 Delete Bank Account
     [Documentation]    Delete via End Date = Start Date (EC true delete), save + reload.

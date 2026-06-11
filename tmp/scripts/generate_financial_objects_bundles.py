@@ -19,6 +19,11 @@ ABBR = {"Account": "ACC", "Bank Account": "BACC", "Cost Centre": "CC",
         "VAT Code": "VAT", "WBS": "WBS", "Account Mapping": "AM"}
 EXTRA_VALUES = {"GL Account": "999999", "Sort Code": "000000",
                 "Credit Limit": "1000", "VAT Code": "AT9", "Rate (Decimal)": "0.1"}
+# per-screen test dates: reference dropdowns are EFFECTIVE-DATE-FILTERED, so the
+# form Start Date must postdate the referenced seed objects (customers/cost
+# objects start 2003-01-01) - user-explained 2026-06-12
+SCREEN_DATES = {"Bank Account": "2003-01-01", "Cost Object Mapping": "2003-01-01"}
+
 # mandatory reference dropdowns per screen (from the EC save banner) - first option used
 REQUIRED_DDS = {
     "Account": ["Cost Object Type"],
@@ -72,8 +77,8 @@ CFG = {{
     "upd_code": "{upd_code}",
     "upd_name": "{upd_name}",
     "del_end": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
-    "start_date": "2000-01-01",
-    "end_date": "2000-01-01",
+    "start_date": "{start_date}",
+    "end_date": "{start_date}",
     "db_view": "{view}",
     "extra_go_after_delete": False,
 }}
@@ -148,7 +153,7 @@ DELETE: End   tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 ```
 {quirks}
 ### Test data
-Code `AUTOTEST_{abbr}_<timestamp>` | Name `{label} <code>` (+` UPD`) | Start=End `2000-01-01`
+Code `AUTOTEST_{abbr}_<timestamp>` | Name `{label} <code>` (+` UPD`) | Start=End `{start_date}`
 {extra_data}
 ## 3. DEVELOPMENT
 Generated DATA-DRIVEN from the section recon (`investigation/financial_objects_recon.py`
@@ -214,7 +219,7 @@ for rec in records:
     if rec.get("dbViewVerified") is False:
         quirks = "\nNote: base table was EMPTY at recon time - the DB view was verified live by TC02.\n"
 
-    ctx = dict(label=label, slug=slug, abbr=ABBR[label], view=rec["dbView"],
+    ctx = dict(start_date=SCREEN_DATES.get(label, "2000-01-01"), label=label, slug=slug, abbr=ABBR[label], view=rec["dbView"],
                table=rec["gridId"], ins_code=ins_code["id"], ins_name=ins_name["id"],
                ins_date=ins_date["id"], upd_code=u_code, upd_name=u_name,
                ins_extra=ins_extra, ins_dd_first=ins_dd_first,

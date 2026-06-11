@@ -3,7 +3,7 @@
 **Task:** EC Screen Insert/Update/Delete (IUD) Automation — Account Mapping
 **Author:** Choong-Yin Lee / Claude Fable 5
 **Date:** 2026-06-11
-**Version:** 0.9 — ⚠ PARKED 2026-06-11: config-heavy screen (11 reference dropdowns); validation layers keep stacking after 7 first-option dds - needs domain input
+**Version:** 0.9 — PARKED 2026-06-12: needs valid business combination across 11 reference dropdowns (validation layers stack); plan: deep-dive Revenue setup in ECpedia/EC docs first. Financial Account column also effective-date-filtered (use Start Date >= 2003-01-01).
 
 ---
 
@@ -59,7 +59,7 @@ values (cleaned up by the delete).
 | Run | Mode | Result |
 |---|---|---|
 | RF dryrun | headless | PASS |
-| RF live batch | headless | TC02 blocked (see Version note); suite preserved in tests/.../_parked/ |
+| RF live batch | headless | TC02 blocked; suite preserved in tests/.../_parked/ |
 | Playwright reference run | headless | see `evidence/account_mapping_results.json` |
 
 ## 5. DELIVERABLES

@@ -11,15 +11,15 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${REVENUE_ORDER_SCREEN}         Revenue Order
-${REVENUE_ORDER_TABLE}          nav:form:T_data
+${REVENUE_ORDER_SCREEN}    Revenue Order
+${REVENUE_ORDER_TABLE}    nav:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${REVENUE_ORDER_INS_CODE}       tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${REVENUE_ORDER_INS_NAME}       tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
-${REVENUE_ORDER_INS_DATE}       tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+${REVENUE_ORDER_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${REVENUE_ORDER_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
+${REVENUE_ORDER_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
 # updateAttributes field IDs (Update — existing object)
-${REVENUE_ORDER_UPD_CODE}       tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${REVENUE_ORDER_UPD_NAME}       tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+${REVENUE_ORDER_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${REVENUE_ORDER_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
 ${REVENUE_ORDER_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
@@ -67,12 +67,7 @@ Insert Revenue Order Record
 Update Revenue Order Name
     [Documentation]    Select the revenue order, edit Name, save + reload.
     [Arguments]    ${code}    ${new_name}
-    Update Object Name
-    ...    ${REVENUE_ORDER_TABLE}
-    ...    ${REVENUE_ORDER_UPD_CODE}
-    ...    ${REVENUE_ORDER_UPD_NAME}
-    ...    ${code}
-    ...    ${new_name}
+    Update Object Name    ${REVENUE_ORDER_TABLE}    ${REVENUE_ORDER_UPD_CODE}    ${REVENUE_ORDER_UPD_NAME}    ${code}    ${new_name}
 
 Delete Revenue Order
     [Documentation]    Delete via End Date = Start Date (EC true delete), save + reload.

@@ -42,9 +42,9 @@ The goal: derive screen facts from here + recon (not by asking), and confirm rat
 | Sales Order | Configuration > Assets > Financial Objects > Sales Order | OV | `OV_PRODUCT_SALES_ORDER` | manage-object | End Date = Start Date | `manage_object_nav_nav:form:T_data` | `Configuration/Assets/Financial_Objects/sales_order_page.resource` (dds: Company, Field) |
 | VAT Code | Configuration > Assets > Financial Objects > VAT Code | OV | `OV_VAT_CODE` | manage-object | End Date = Start Date | `manage_object_nav_nav:form:T_data` | `Configuration/Assets/Financial_Objects/vat_code_page.resource` (dds: Country, VAT Type; dates at R1/R2!) |
 | WBS | Configuration > Assets > Financial Objects > WBS | OV | `OV_FIN_WBS` | none (toolbar Refresh) | End Date = Start Date | `nav:form:T_data` | `Configuration/Assets/Financial_Objects/wbs_page.resource` |
-| Bank Account | Configuration > Assets > Financial Objects > Bank Account | PARKED | `OV_BANK_ACCOUNT` | manage-object | — | `manage_object_nav_nav:form:T_data` | **Parked 2026-06-11:** needs Bank+Currency+Customer/Vendor; Customer dd fails to populate inside the suite flow (works standalone) — re-render interference unresolved after timeboxed attempts; suite preserved in `tests/.../Financial_Objects/_parked/` |
-| Cost Object Mapping | Configuration > Assets > Financial Objects > Cost Object Mapping | PARKED | `OV_FIN_COST_OBJECT` | manage-object | — | `manage_object_nav_nav:form:T_data` | **Parked 2026-06-11:** mandatory Cost Object picker never offers options regardless of Object Type/Company cascade order — likely a popup-table picker, not autocomplete; needs its own recon pass |
-| Account Mapping | Configuration > Assets > Financial Objects > Account Mapping | PARKED | `OV_FIN_ACCOUNT_MAPPING` | none | — | `manageObject:form:T_data` | **Parked 2026-06-11:** config-heavy screen (11 reference dropdowns); save still silently rejects after 7 first-option dds — validation layers keep stacking; needs domain input on a valid combination |
+| Bank Account | Configuration > Assets > Financial Objects > Bank Account | OV | `OV_BANK_ACCOUNT` | manage-object | End Date = Start Date | `manage_object_nav_nav:form:T_data` | `Configuration/Assets/Financial_Objects/bank_account_page.resource` (dds: Customer, Bank, Currency; **Start Date 2003-01-01** — see date rule below) |
+| Cost Object Mapping | Configuration > Assets > Financial Objects > Cost Object Mapping | OV | `OV_FIN_COST_OBJECT` | manage-object | End Date = Start Date | `manage_object_nav_nav:form:T_data` | `Configuration/Assets/Financial_Objects/cost_object_mapping_page.resource` (dds: Object Type, Company, Distribution Object Type, Cost Object; **Start Date 2003-01-01**) |
+| Account Mapping | Configuration > Assets > Financial Objects > Account Mapping | PARKED | `OV_FIN_ACCOUNT_MAPPING` | none | — | `manageObject:form:T_data` | **Parked 2026-06-12 (Choong-Yin agreed):** needs a VALID business combination across 11 reference dropdowns; plan = deep-dive Revenue setup (ECpedia/EC docs) first; Financial Account column is also effective-date-filtered (Start Date ≥ 2003-01-01); suite preserved in `tests/.../Financial_Objects/_parked/` |
 | Production Sub Unit | Configuration > Assets > Basic Objects > Production Sub Unit | EXCLUDED | `OV_PROD_SUB_UNIT` | — | — | `manageObject:form:T_data` | **Excluded 2026-06-11 (Choong-Yin):** the screen's operational groupmodel is NOT enabled in this environment, so the grid can never query/list data (inserts persist to DB but stay invisible). Do not automate until the groupmodel is turned on. |
 
 ---
@@ -103,6 +103,13 @@ The goal: derive screen facts from here + recon (not by asking), and confirm rat
 - **Navigator + GO is MANDATORY** after filling navigator data (date/filters) — the screen does not refresh on its own. (See memory: EC Navigator GO Button.)
 - **Hidden vs visible submit:** a matching id is not proof — verify the element is the VISIBLE/intended control (e.g. GO was `navButton:form:B`, NOT the hidden `nav:form:defaultSubmit`).
 - **Verify at DB ground truth** via `DbVerify` — the UI can lie (optimistic state, pagination, grain). Dryrun checks structure only; the live run + DB check is the proof.
+- **OBJECT START DATE = VERSION FILTER (universal!).** Every reference dropdown on an
+  object form only offers objects EFFECTIVE AT THE FORM'S START DATE (Choong-Yin,
+  2026-06-12: "the object start date is a kind of object version"). A test Start Date
+  of 2000-01-01 empties dropdowns whose seed objects start 2003-01-01 (Customers, Cost
+  Objects, Financial Accounts, Op Production Units…). Symptom: dropdown populates on a
+  fresh form but not after the date is filled. Rule: pick a test Start Date AT/AFTER the
+  seed-data epoch (2003-01-01 in this sandbox) on any screen with reference dropdowns.
 - **Silent reject = mandatory field missing.** If Save produces no row, look for the EC banner *"Required fields are empty: <field>"* — fill the named dropdown via `Select EC Dropdown Option` (T1 table.resource). Seen on Object List (Class Name) and Regulatory Permits (Regulatory Agency).
 - **Insert-form field rows vary per class** — recon `tab:tabPanel:objectForm:form:G:0:R:{r}:C:0:la` labels first (Code/Name are not always R0/R1: State/County have Master System rows above them).
 

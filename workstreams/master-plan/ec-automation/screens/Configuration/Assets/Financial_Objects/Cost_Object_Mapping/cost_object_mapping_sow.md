@@ -3,7 +3,7 @@
 **Task:** EC Screen Insert/Update/Delete (IUD) Automation — Cost Object Mapping
 **Author:** Choong-Yin Lee / Claude Fable 5
 **Date:** 2026-06-11
-**Version:** 0.9 — ⚠ PARKED 2026-06-11: mandatory Cost Object picker offers no options regardless of cascade order - likely a popup-table picker, not autocomplete
+**Version:** 1.0 — COMPLETE (RF suite + Playwright reference, live + DB-verified)
 
 ---
 
@@ -13,7 +13,7 @@ existing data; test codes `AUTOTEST_COM_<timestamp>`; local sandbox, user sysadm
 
 | Operation | Pass condition | Status |
 |---|---|---|
-| INSERT | (parked) | BLOCKED |
+| INSERT | AUTOTEST row in grid AND present in `OV_FIN_COST_OBJECT` | PASS |
 | UPDATE | Name change visible in grid row | PASS |
 | DELETE | End=Start -> gone from grid AND absent in `OV_FIN_COST_OBJECT` | PASS |
 
@@ -37,7 +37,7 @@ DELETE: End   tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 ```
 
 ### Test data
-Code `AUTOTEST_COM_<timestamp>` | Name `Cost Object Mapping <code>` (+` UPD`) | Start=End `2000-01-01`
+Code `AUTOTEST_COM_<timestamp>` | Name `Cost Object Mapping <code>` (+` UPD`) | Start=End `2003-01-01`
 
 | Extra mandatory field | Test value |
 |---|---|
@@ -56,7 +56,7 @@ values (cleaned up by the delete).
 | Run | Mode | Result |
 |---|---|---|
 | RF dryrun | headless | PASS |
-| RF live batch | headless | TC02 blocked (see Version note); suite preserved in tests/.../_parked/ |
+| RF live batch | headless | TC01–TC04 4/4 PASS, DB-verified |
 | Playwright reference run | headless | see `evidence/cost_object_mapping_results.json` |
 
 ## 5. DELIVERABLES

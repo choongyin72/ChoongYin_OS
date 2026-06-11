@@ -11,21 +11,21 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${ACCOUNT_SCREEN}           Account
-${ACCOUNT_TABLE}            nav:form:T_data
+${ACCOUNT_SCREEN}    Account
+${ACCOUNT_TABLE}    nav:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${ACCOUNT_INS_CODE}         tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${ACCOUNT_INS_NAME}         tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
-${ACCOUNT_INS_DATE}         tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+${ACCOUNT_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${ACCOUNT_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
+${ACCOUNT_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
 # mandatory extra: GL Account (text)
-${ACCOUNT_INS_X0}           tab:tabPanel:objectForm:form:G:0:R:8:C:1:in
+${ACCOUNT_INS_X0}    tab:tabPanel:objectForm:form:G:0:R:8:C:1:in
 # mandatory reference dd: Cost Object Type (banner-discovered; first option used)
-${ACCOUNT_INS_DD0}          tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd
+${ACCOUNT_INS_DD0}    tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd
 # updateAttributes field IDs (Update — existing object)
-${ACCOUNT_UPD_CODE}         tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${ACCOUNT_UPD_NAME}         tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+${ACCOUNT_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${ACCOUNT_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
-${ACCOUNT_DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+${ACCOUNT_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***

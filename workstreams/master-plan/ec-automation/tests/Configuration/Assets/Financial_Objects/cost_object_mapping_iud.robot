@@ -4,20 +4,20 @@ Documentation       EC IUD Test - Cost Object Mapping (Configuration > Assets > 
 ...                 NEVER touch existing data. A unique AUTOTEST_COM_<timestamp> code is generated
 ...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
 
-Resource            ../../../../../pageobjects/Configuration/Assets/Financial_Objects/cost_object_mapping_page.resource
+Resource            ../../../../pageobjects/Configuration/Assets/Financial_Objects/cost_object_mapping_page.resource
 
 Suite Setup         Set Up Cost Object Mapping Suite
 Suite Teardown      Close EC
 
-Test Tags           iud    parked-needs-deeper-work    cost-object-mapping
+Test Tags           iud    cost-object-mapping
 
 
 *** Variables ***
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       2003-01-01
+${END_DATE}         2003-01-01
 
 
 *** Test Cases ***

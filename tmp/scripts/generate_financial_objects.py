@@ -25,6 +25,11 @@ ABBR = {"Account": "ACC", "Bank Account": "BACC", "Cost Centre": "CC",
 EXTRA_VALUES = {"GL Account": "999999", "Sort Code": "000000",
                 "Credit Limit": "1000", "VAT Code": "AT9", "Rate (Decimal)": "0.1"}
 
+# per-screen test dates: reference dropdowns are EFFECTIVE-DATE-FILTERED, so the
+# form Start Date must postdate the referenced seed objects (customers/cost
+# objects start 2003-01-01) - user-explained 2026-06-12
+SCREEN_DATES = {"Bank Account": "2003-01-01", "Cost Object Mapping": "2003-01-01"}
+
 # mandatory reference DROPDOWNS per screen, discovered from the EC save banner
 # ("Required fields are empty: ...") - the static {mandatory:true} marker misses
 # popup-type fields. Throwaway records -> first available option is selected.
@@ -151,8 +156,8 @@ Test Tags           iud    {tag}
 ${{TEST_CODE}}        ${{EMPTY}}
 ${{OBJ_NAME}}         ${{EMPTY}}
 ${{OBJ_NAME_UPD}}     ${{EMPTY}}
-${{START_DATE}}       2000-01-01
-${{END_DATE}}         2000-01-01
+${{START_DATE}}       {start_date}
+${{END_DATE}}         {start_date}
 
 
 *** Test Cases ***
@@ -237,7 +242,7 @@ for rec in records:
         extra_fill += f"    Select First EC Dropdown Option    ${{{var}}}\n"
         extra_doc = " + mandatory extras"
 
-    ctx = dict(label=label, slug=slug, UP=up, lower=label.lower(),
+    ctx = dict(start_date=SCREEN_DATES.get(label, "2000-01-01"), label=label, slug=slug, UP=up, lower=label.lower(),
                tag=slug.replace("_", "-"), abbr=ABBR[label], view=rec["dbView"],
                table=rec["gridId"], ins_code=ins_code["id"], ins_name=ins_name["id"],
                ins_date=ins_date["id"], upd_code=u_code["id"], upd_name=u_name["id"],

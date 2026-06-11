@@ -11,17 +11,17 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${COST_CENTRE_SCREEN}           Cost Centre
-${COST_CENTRE_TABLE}            nav:form:T_data
+${COST_CENTRE_SCREEN}    Cost Centre
+${COST_CENTRE_TABLE}    nav:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${COST_CENTRE_INS_CODE}         tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${COST_CENTRE_INS_NAME}         tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
-${COST_CENTRE_INS_DATE}         tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+${COST_CENTRE_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${COST_CENTRE_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
+${COST_CENTRE_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
 # updateAttributes field IDs (Update — existing object)
-${COST_CENTRE_UPD_CODE}         tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${COST_CENTRE_UPD_NAME}         tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+${COST_CENTRE_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${COST_CENTRE_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
-${COST_CENTRE_DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+${COST_CENTRE_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
@@ -67,12 +67,7 @@ Insert Cost Centre Record
 Update Cost Centre Name
     [Documentation]    Select the cost centre, edit Name, save + reload.
     [Arguments]    ${code}    ${new_name}
-    Update Object Name
-    ...    ${COST_CENTRE_TABLE}
-    ...    ${COST_CENTRE_UPD_CODE}
-    ...    ${COST_CENTRE_UPD_NAME}
-    ...    ${code}
-    ...    ${new_name}
+    Update Object Name    ${COST_CENTRE_TABLE}    ${COST_CENTRE_UPD_CODE}    ${COST_CENTRE_UPD_NAME}    ${code}    ${new_name}
 
 Delete Cost Centre
     [Documentation]    Delete via End Date = Start Date (EC true delete), save + reload.

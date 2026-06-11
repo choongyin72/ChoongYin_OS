@@ -11,17 +11,17 @@ Resource            ../../../../resources/manage_object.resource
 
 
 *** Variables ***
-${PAYMENT_SCHEME_SCREEN}            Payment Scheme
-${PAYMENT_SCHEME_TABLE}             manage_object_nav_nav:form:T_data
+${PAYMENT_SCHEME_SCREEN}    Payment Scheme
+${PAYMENT_SCHEME_TABLE}    manage_object_nav_nav:form:T_data
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
-${PAYMENT_SCHEME_INS_CODE}          tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
-${PAYMENT_SCHEME_INS_NAME}          tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
-${PAYMENT_SCHEME_INS_DATE}          tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
+${PAYMENT_SCHEME_INS_CODE}    tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
+${PAYMENT_SCHEME_INS_NAME}    tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
+${PAYMENT_SCHEME_INS_DATE}    tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input
 # updateAttributes field IDs (Update — existing object)
-${PAYMENT_SCHEME_UPD_CODE}          tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
-${PAYMENT_SCHEME_UPD_NAME}          tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
+${PAYMENT_SCHEME_UPD_CODE}    tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in
+${PAYMENT_SCHEME_UPD_NAME}    tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in
 # objectdates field ID (Delete — End Date = Start Date)
-${PAYMENT_SCHEME_DEL_ENDDATE}       tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+${PAYMENT_SCHEME_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
@@ -67,12 +67,7 @@ Insert Payment Scheme Record
 Update Payment Scheme Name
     [Documentation]    Select the payment scheme, edit Name, save + reload.
     [Arguments]    ${code}    ${new_name}
-    Update Object Name
-    ...    ${PAYMENT_SCHEME_TABLE}
-    ...    ${PAYMENT_SCHEME_UPD_CODE}
-    ...    ${PAYMENT_SCHEME_UPD_NAME}
-    ...    ${code}
-    ...    ${new_name}
+    Update Object Name    ${PAYMENT_SCHEME_TABLE}    ${PAYMENT_SCHEME_UPD_CODE}    ${PAYMENT_SCHEME_UPD_NAME}    ${code}    ${new_name}
 
 Delete Payment Scheme
     [Documentation]    Delete via End Date = Start Date (EC true delete), save + reload.
