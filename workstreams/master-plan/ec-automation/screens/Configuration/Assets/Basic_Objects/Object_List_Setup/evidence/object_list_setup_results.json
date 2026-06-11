@@ -1,0 +1,7 @@
+{
+  "login": "PASS",
+  "navigate": "PASS",
+  "clean": "CLEAN",
+  "insert": "PASS",
+  "delete": "PASS (physical)"
+}
