@@ -1,13 +1,14 @@
 -- =============================================================================
 -- Issue_1052: Add Check Rules for PHD Tags without Check Rule Validation
--- Classes: STRM_COMP_ANALYSIS, STRM_ANALYSIS, TANK_DAY_DIP_STATUS
+-- Classes: STRM_ANALYSIS, TANK_DAY_DIP_STATUS
+--          (STRM_COMP_ANALYSIS MOL/WT rules 1142/1143 removed 2026-06-11 — invalid)
 -- Author : Choong-Yin Lee
 -- Date   : 2026-06-03
 -- Status : LOCAL DRAFT - DO NOT DEPLOY without Grant approval
 -- Pattern: UPDATE then INSERT (re-runnable)
 --          CHECK_ID dynamically assigned per DB instance
 -- ECPR   : TBD - replace 'ECPR-Issue1052' with actual ECPR ticket before deploy
--- Covers : 131 NEITHER PHD tags (no check rule, no class validation)
+-- Covers : 6 rules — STRM_ANALYSIS (Density, GCV) + TANK_DAY_DIP_STATUS (Grs Vol, Grs Mass, Avg Temp, Std Density)
 -- =============================================================================
 
 DECLARE
@@ -77,37 +78,11 @@ DECLARE
 
 BEGIN
 
-    -- =========================================================================
-    -- PART 1: STRM_COMP_ANALYSIS - MOL_PCT (78 tags)
-    -- Streams: 1C1401 to E1405A/B, DBNGP Export, HP/MP Fuel Gas GT4001-4004,
-    --          1KT1410/1430, Pluto Feed Ref, Train 1 HP N2 Vent
-    -- =========================================================================
-    upsert_check_rule(
-        p_check_name => 'PHD_STRM_COMP_MOL_PCT_VAL1',
-        p_table_id   => 'RV_STRM_COMP_ANALYSIS',
-        p_where      => '(${MolPct} IS NULL OR ${MolPct} < 0 OR ${MolPct} > 100)',
-        p_message    => 'Stream :STREAM_NAME component :COMPONENT_NO has invalid or missing Mol% for :DAYTIME',
-        p_severity   => 'ERROR',
-        p_var_name   => 'MolPct',
-        p_var_value  => 'MOL_PCT'
-    );
+    -- NOTE: STRM_COMP_ANALYSIS MOL_PCT/WT_PCT rules (1142/1143) removed 2026-06-11
+    --       — invalid / no longer used. See PHD_STRM_COMP_* in git history if needed.
 
     -- =========================================================================
-    -- PART 2: STRM_COMP_ANALYSIS - WT_PCT (24 tags)
-    -- Streams: 1C1401 to E1405A/B, Flare Pilot A, Pluto-NWS Interconnector
-    -- =========================================================================
-    upsert_check_rule(
-        p_check_name => 'PHD_STRM_COMP_WT_PCT_VAL1',
-        p_table_id   => 'RV_STRM_COMP_ANALYSIS',
-        p_where      => '(${WtPct} IS NULL OR ${WtPct} < 0 OR ${WtPct} > 100)',
-        p_message    => 'Stream :STREAM_NAME component :COMPONENT_NO has invalid or missing Wt% for :DAYTIME',
-        p_severity   => 'ERROR',
-        p_var_name   => 'WtPct',
-        p_var_value  => 'WT_PCT'
-    );
-
-    -- =========================================================================
-    -- PART 3: STRM_ANALYSIS - DENSITY (6 tags)
+    -- PART 1: STRM_ANALYSIS - DENSITY (6 tags)
     -- Streams: HP Fuel Gas 1KT1410/1430, MP Fuel Gas GT4001-GT4004
     -- =========================================================================
     upsert_check_rule(
@@ -121,7 +96,7 @@ BEGIN
     );
 
     -- =========================================================================
-    -- PART 4: STRM_ANALYSIS - GCV (9 tags)
+    -- PART 2: STRM_ANALYSIS - GCV (9 tags)
     -- Streams: HP/MP Fuel Gas GT4001-4004, 1KT1410/1430, Flare Pilots A/B, RTO
     -- =========================================================================
     upsert_check_rule(
@@ -135,7 +110,7 @@ BEGIN
     );
 
     -- =========================================================================
-    -- PART 5: TANK_DAY_DIP_STATUS - GRS_VOL (5 tags)
+    -- PART 3: TANK_DAY_DIP_STATUS - GRS_VOL (5 tags)
     -- Tanks: LNG T3101/T3102, Condensate T3301/T3302/T3303
     -- =========================================================================
     upsert_check_rule(
@@ -149,7 +124,7 @@ BEGIN
     );
 
     -- =========================================================================
-    -- PART 6: TANK_DAY_DIP_STATUS - ZWP_GRS_MASS (2 tags)
+    -- PART 4: TANK_DAY_DIP_STATUS - ZWP_GRS_MASS (2 tags)
     -- Tanks: LNG Tank 3101, LNG Tank 3102
     -- =========================================================================
     upsert_check_rule(
@@ -163,7 +138,7 @@ BEGIN
     );
 
     -- =========================================================================
-    -- PART 7: TANK_DAY_DIP_STATUS - AVG_TEMP (5 tags)
+    -- PART 5: TANK_DAY_DIP_STATUS - AVG_TEMP (5 tags)
     -- Tanks: LNG T3101/T3102, Condensate T3301/T3302/T3303
     -- =========================================================================
     upsert_check_rule(
@@ -177,7 +152,7 @@ BEGIN
     );
 
     -- =========================================================================
-    -- PART 8: TANK_DAY_DIP_STATUS - MEAS_STD_DENSITY (2 tags)
+    -- PART 6: TANK_DAY_DIP_STATUS - MEAS_STD_DENSITY (2 tags)
     -- Tanks: LNG Tank 3101, LNG Tank 3102
     -- =========================================================================
     upsert_check_rule(
@@ -200,13 +175,11 @@ END;
 /
 
 -- =============================================================================
--- VERIFY: Confirm all 8 rules exist after running
+-- VERIFY: Confirm all 6 rules exist after running
 -- =============================================================================
 SELECT CHECK_ID, CHECK_NAME, TABLE_ID, SEVERITY_LEVEL, REV_TEXT
   FROM TV_CTRL_CHECK_RULES
  WHERE CHECK_NAME IN (
-    'PHD_STRM_COMP_MOL_PCT_VAL1',
-    'PHD_STRM_COMP_WT_PCT_VAL1',
     'PHD_STRM_ANALYSIS_DENSITY_VAL1',
     'PHD_STRM_ANALYSIS_GCV_VAL1',
     'PHD_TANK_DIP_GRS_VOL_VAL1',

@@ -1,6 +1,9 @@
 # ECPR Drafts — PHD Validation Gaps (Issue_1052)
 _Drafted: 2026-06-02 | Status: DRAFT — pending your review before raising in JIRA_
 
+> ⚠️ **CORRECTION (2026-06-11): ECPR-D / ECPR-E / ECPR-F check-rule specifics are UNCONFIRMED INFERENCES, not requirements.**
+> The validation details below for **AVG_GAS_RATE** (≥0 / %diff), **AVG_CHOKE_SIZE** (0–100%), and **ZWT_OILINWAT** (≥0) are **NOT specified in As-Built 09 or As-Built 05** — they were my own guesses by analogy. As-Built 05 calls AVG_CHOKE_SIZE simply "Choke Position" (no "%", so no 0–100 basis); AVG_GAS_RATE is undocumented; ZWT_OILINWAT is not mentioned in either As-Built. **Do NOT treat these as defined tasks.** Woodside/Grant must define *if* and *what* validation each needs before any build.
+
 ---
 
 ## ECPR-DRAFT-A: Add Check Rules for STRM_COMP_ANALYSIS Gas Composition Tags
@@ -80,7 +83,7 @@ Document PWEL_DAY_STATUS.AVG_GAS_RATE in As-Built 05 and add appropriate check r
 **Actions required:**
 1. Confirm purpose and UOM with Woodside/engineering team
 2. Update As-Built 05 to document AVG_GAS_RATE as PHD interface element
-3. Add check rules (>= 0, frozen value, % diff) once UOM confirmed
+3. ⚠️ INFERENCE ONLY — (>= 0 / frozen / %diff) NOT specified in As-Built 05/09; attribute undocumented. Needs Woodside to define purpose + UOM + validation before any rule.
 4. Update As-Built 09 with validation spec
 
 ---
@@ -94,7 +97,7 @@ Document PWEL_DAY_STATUS.AVG_GAS_RATE in As-Built 05 and add appropriate check r
 Add check rules for PWEL_DAY_STATUS.AVG_CHOKE_SIZE (12 tags). Attribute is specified in As-Built 05 but missing from As-Built 09 validation spec.
 
 **Actions required:**
-1. Add check rule: AVG_CHOKE_SIZE must be between 0 and 100 (%)
+1. ⚠️ INFERENCE ONLY — As-Built 05 says "Choke Position" (no "%"); 0–100% is NOT specified anywhere. Woodside/Grant to define the actual validation (if any).
 2. Update As-Built 09 to include validation specification
 
 ---
@@ -108,8 +111,8 @@ Add check rules for PWEL_DAY_STATUS.AVG_CHOKE_SIZE (12 tags). Attribute is speci
 Fix ZWT_OILINWAT (Oil in Water, WATER_OVERBOARD stream): set FROM_UNIT to mg/L, add check rules, update As-Built 05 with EC Target attribute name.
 
 **Actions required:**
-1. Set FROM_UNIT = 'mg/L' in V_TRANS_CONFIG for tag PRP.00AI02631XR24.DACA.PV
-2. Add check rule: ZWT_OILINWAT >= 0 (ERROR), frozen value (WARNING)
+1. Set FROM_UNIT = 'mg/L' in V_TRANS_CONFIG for tag PRP.00AI02631XR24.DACA.PV  (FROM_UNIT confirmed still NULL; mg/L is from the tag description, needs Woodside confirmation)
+2. ⚠️ INFERENCE ONLY — ZWT_OILINWAT is NOT mentioned in As-Built 05 or 09; the >= 0 check is my guess. Woodside/Grant to define the actual validation (if any).
 3. Update As-Built 05 — EC Target column for "Measured Oil in Water" row is blank
 4. Update As-Built 09 — add ZWT_OILINWAT to V_DAILY_PHD_VALIDATION section
 

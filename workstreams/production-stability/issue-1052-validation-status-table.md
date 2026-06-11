@@ -38,7 +38,7 @@ _Scope: All active PHD tags with LAST_TRANSFER >= 1 Dec 2025_
 | EC Class | Class Attribute | Object Name | Tags | From Unit | Check Rule IDs | Severity | Notes |
 |----------|----------------|------------|------|-----------|----------------|---------|-------|
 | PWEL_DAY_STATUS | ON_STREAM_HRS | Wells (12) | 12 | NULL | CR 1016, 1031 (0–24 hrs), MISSING_DATA | ERROR | OK |
-| PWEL_DAY_STATUS | AVG_CHOKE_SIZE | Wells (12) | 12 | NULL | Generic PWEL rules only | ERROR/WARNING | ⚠️ No 0–100% range rule |
+| PWEL_DAY_STATUS | AVG_CHOKE_SIZE | Wells (12) | 12 | NULL | Generic PWEL rules only | ERROR/WARNING | ⚠️ No As-Built 09 validation spec ("Choke Position", no "%"); any range is TBD by Woodside/Grant |
 | PWEL_DAY_STATUS | AVG_GAS_RATE | Wells (9) | 9 | NULL | Generic PWEL rules only | ERROR/WARNING | ⚠️ Not in As-Built |
 | STRM_DAY_STREAM_MEAS_GAS | GRS_MASS_GAS | Gas streams (135 streams) | 135 | KG/NULL | CR 1039–1058 (mandatory, frozen, variance, std dev) | ERROR/WARNING | OK |
 | STRM_DAY_STREAM_MEAS_GAS | GRS_VOL_GAS | Gas streams (112 streams) | 112 | SM3/NULL | CR 1039–1058 | ERROR/WARNING | OK |
@@ -267,7 +267,7 @@ _Scope: All active PHD tags with LAST_TRANSFER >= 1 Dec 2025_
 | MEDIUM | TANK_DAY_DIP_STATUS | AVG_TEMP | LNG Tank 3101/3102, Condensate Tanks T3301/3302/3303 | 5 | Add range check, frozen | Draft-C |
 | MEDIUM | TANK_DAY_DIP_STATUS | MEAS_STD_DENSITY | LNG Tank 3101/3102 | 2 | Add >= 0 | Draft-C |
 | MEDIUM | TANK_DAY_DIP_STATUS | ZWP_GRS_MASS | LNG Tank 3101/3102 | 2 | Add >= 0, mandatory | Draft-C |
-| LOW | STRM_DAY_STREAM_MEAS_WAT | ZWT_OILINWAT | Water Overboard | 1 | Set FROM_UNIT=mg/L, add >= 0, frozen | Draft-F |
+| LOW | STRM_DAY_STREAM_MEAS_WAT | ZWT_OILINWAT | Water Overboard | 1 | ⚠️ Not in As-Built 05/09 — no validation spec. FROM_UNIT (NULL→mg/L?) + any check = TBD by Woodside/Grant. Frozen 1154 built but speculative | Draft-F |
 
 ---
 _Source: Oracle DB V_TRANS_CONFIG, TV_CLASS_ATTR_VALIDATION, TV_CTRL_CHECK_RULES, TV_OBJECTS — read-only_

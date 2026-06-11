@@ -50,14 +50,16 @@ Completely undocumented — not in As-Built 05 or 09.
 Unknown purpose. No validation.
 
 ### Finding 5 — AVG_CHOKE_SIZE (12 tags) LOW
-In As-Built 05 as interface data element (Choke Position %).
-Not in As-Built 09 = no validation spec. No specific check rule.
+In As-Built 05 as interface data element ("Choke Position" — NB: no "%", so a 0–100% range is NOT specified/implied).
+Not in As-Built 09 = no validation spec. No specific check rule. (Any validation = TBD by Woodside/Grant.)
 
 ### Finding 6 — ZWT_OILINWAT (1 tag) LOW
 EC Target BLANK in As-Built 05. Not in As-Built 09.
 FROM_UNIT = NULL (description says mg/L). Zero check rules in DB.
 
 ## ECPRs Required
+> ⚠️ 2026-06-11: ECPRs D/E/F (AVG_GAS_RATE, AVG_CHOKE_SIZE, ZWT_OILINWAT) carry **no validation spec in As-Built 05/09**. Any specific checks I drafted for them are inferences, not requirements — Woodside/Grant must define them first.
+
 1. ECPR-NEW-A: Add check rules for STRM_COMP_ANALYSIS (MOL_PCT, WT_PCT)
 2. ECPR-NEW-B: Investigate + fix STRM_ANALYSIS double-write + add validation
 3. ECPR-NEW-C: Add check rules for TANK_DAY_DIP_STATUS + update As-Built

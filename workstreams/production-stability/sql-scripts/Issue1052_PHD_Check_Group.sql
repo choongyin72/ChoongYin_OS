@@ -12,18 +12,18 @@
 --   exist in CTRL_CHECK_RULES but have NO group -> nothing runs them. EC resolves a
 --   group's rules via the junction table CTRL_CHECK_COMBINATION (CHECK_GROUP <-> CHECK_ID).
 --   This script:
---     1. Creates 3 new check groups under parent V_DAILY_PHD_VALIDATION, each linked
+--     1. Creates 2 new check groups under parent V_DAILY_PHD_VALIDATION, each linked
 --        to its proper EC screen (EC_USER_OBJECT).
 --     2. Links each rule to its group via CTRL_CHECK_COMBINATION.
+--   (V_PHD_STREAM_COMP for STRM_COMP_ANALYSIS MOL_PCT/WT_PCT removed 2026-06-11 — 1142/1143 invalid.)
 --
 --   GROUP                 SCREEN (EC_USER_OBJECT)                                          RULES
---   V_PHD_STREAM_COMP     stream_gas_component_analysis (qualified: STRM_SET/COMP_SET)      MOL_PCT, WT_PCT
 --   V_PHD_STREAM_ANALYSIS stream_gas_component_analysis (qualified: STRM_SET/COMP_SET)      DENSITY, GCV
 --   V_PHD_TANK_DIP        /com.ec.prod.po.screens/daily_tank_dip_status                    GRS_VOL, GRS_MASS, AVG_TEMP, STD_DENSITY
 --   (stream screen needs the STRM_SET/COMP_SET qualifier to resolve in the Check Group screen;
 --    the bare template root renders a blank Screen column — fixed 2026-06-08.)
 --
--- PREREQUISITE: run Issue1052_PHD_Check_Rules.sql first (creates the 8 rules).
+-- PREREQUISITE: run Issue1052_PHD_Check_Rules.sql first (creates the 6 rules).
 -- =============================================================================
 
 DECLARE
@@ -92,13 +92,9 @@ DECLARE
 BEGIN
 
     -- =========================================================================
-    -- STEP 1: create the 3 new check groups (under V_DAILY_PHD_VALIDATION)
+    -- STEP 1: create the 2 new check groups (under V_DAILY_PHD_VALIDATION)
+    -- (V_PHD_STREAM_COMP removed 2026-06-11 — its only rules 1142/1143 are invalid)
     -- =========================================================================
-    upsert_check_group(
-        p_group  => 'V_PHD_STREAM_COMP',
-        p_screen => '/com.ec.prod.po.screens/stream_gas_component_analysis/STRM_SET/PO.0020/COMP_SET/STRM_GAS_COMP?screentemplate=/com.ec.prod.po.screens/stream_gas_component_analysis',
-        p_desc   => 'Stream Gas Component Analysis (Composition) - PHD Validations');
-
     upsert_check_group(
         p_group  => 'V_PHD_STREAM_ANALYSIS',
         p_screen => '/com.ec.prod.po.screens/stream_gas_component_analysis/STRM_SET/PO.0020/COMP_SET/STRM_GAS_COMP?screentemplate=/com.ec.prod.po.screens/stream_gas_component_analysis',
@@ -112,10 +108,6 @@ BEGIN
     -- =========================================================================
     -- STEP 2: link each rule to its group (CTRL_CHECK_COMBINATION)
     -- =========================================================================
-    -- Group V_PHD_STREAM_COMP  (STRM_COMP_ANALYSIS)
-    link_rule_to_group('PHD_STRM_COMP_MOL_PCT_VAL1',     'V_PHD_STREAM_COMP');
-    link_rule_to_group('PHD_STRM_COMP_WT_PCT_VAL1',      'V_PHD_STREAM_COMP');
-
     -- Group V_PHD_STREAM_ANALYSIS  (STRM_ANALYSIS)
     link_rule_to_group('PHD_STRM_ANALYSIS_DENSITY_VAL1', 'V_PHD_STREAM_ANALYSIS');
     link_rule_to_group('PHD_STRM_ANALYSIS_GCV_VAL1',     'V_PHD_STREAM_ANALYSIS');
@@ -136,22 +128,21 @@ END;
 /
 
 -- =============================================================================
--- VERIFY 1: the 3 new groups exist under the PHD parent
+-- VERIFY 1: the 2 new groups exist under the PHD parent
 -- =============================================================================
 SELECT CHECK_GROUP, PARENT_GROUP, EC_USER_OBJECT, RECORD_STATUS
   FROM TV_CTRL_CHECK_GROUP
- WHERE CHECK_GROUP IN ('V_PHD_STREAM_COMP','V_PHD_STREAM_ANALYSIS','V_PHD_TANK_DIP')
+ WHERE CHECK_GROUP IN ('V_PHD_STREAM_ANALYSIS','V_PHD_TANK_DIP')
  ORDER BY CHECK_GROUP;
 
 -- =============================================================================
--- VERIFY 2: each rule is linked to its group (expect 8 rows)
+-- VERIFY 2: each rule is linked to its group (expect 6 rows)
 -- =============================================================================
 SELECT c.CHECK_GROUP, c.CHECK_ID, r.CHECK_NAME, r.TABLE_ID
   FROM CTRL_CHECK_COMBINATION c
   JOIN CTRL_CHECK_RULES r ON r.CHECK_ID = c.CHECK_ID
- WHERE c.CHECK_GROUP IN ('V_PHD_STREAM_COMP','V_PHD_STREAM_ANALYSIS','V_PHD_TANK_DIP')
+ WHERE c.CHECK_GROUP IN ('V_PHD_STREAM_ANALYSIS','V_PHD_TANK_DIP')
  ORDER BY c.CHECK_GROUP, c.CHECK_ID;
--- Expected: 8 rows
+-- Expected: 6 rows
 --   V_PHD_STREAM_ANALYSIS -> PHD_STRM_ANALYSIS_DENSITY_VAL1 / _GCV_VAL1   (RV_STRM_ANALYSIS)
---   V_PHD_STREAM_COMP     -> PHD_STRM_COMP_MOL_PCT_VAL1 / _WT_PCT_VAL1    (RV_STRM_COMP_ANALYSIS)
 --   V_PHD_TANK_DIP        -> PHD_TANK_DIP_GRS_VOL/_GRS_MASS/_AVG_TEMP/_STD_DENSITY (RV_TANK_DAY_DIP_STATUS)

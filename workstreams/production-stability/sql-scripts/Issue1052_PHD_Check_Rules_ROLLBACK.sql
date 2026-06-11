@@ -40,8 +40,7 @@ DECLARE
 
 BEGIN
 
-    delete_check_rule('PHD_STRM_COMP_MOL_PCT_VAL1');
-    delete_check_rule('PHD_STRM_COMP_WT_PCT_VAL1');
+    -- PHD_STRM_COMP_MOL_PCT_VAL1 / _WT_PCT_VAL1 (1142/1143) removed 2026-06-11 — invalid, no longer used
     delete_check_rule('PHD_STRM_ANALYSIS_DENSITY_VAL1');
     delete_check_rule('PHD_STRM_ANALYSIS_GCV_VAL1');
     delete_check_rule('PHD_TANK_DIP_GRS_VOL_VAL1');
@@ -59,14 +58,12 @@ END;
 /
 
 -- =============================================================================
--- VERIFY: Confirm all 8 rules have been removed
+-- VERIFY: Confirm all 6 rules have been removed
 -- Expected result: 0 rows returned
 -- =============================================================================
 SELECT CHECK_ID, CHECK_NAME, TABLE_ID
   FROM TV_CTRL_CHECK_RULES
  WHERE CHECK_NAME IN (
-    'PHD_STRM_COMP_MOL_PCT_VAL1',
-    'PHD_STRM_COMP_WT_PCT_VAL1',
     'PHD_STRM_ANALYSIS_DENSITY_VAL1',
     'PHD_STRM_ANALYSIS_GCV_VAL1',
     'PHD_TANK_DIP_GRS_VOL_VAL1',

@@ -1,7 +1,7 @@
 -- =============================================================================
 -- Issue_1052: ROLLBACK - Remove Check GROUPS + rule links for PHD Tag Validation
 -- Purpose : Revert everything created by Issue1052_PHD_Check_Group.sql
---           (the 3 groups and their CTRL_CHECK_COMBINATION rule links)
+--           (the 2 groups and their CTRL_CHECK_COMBINATION rule links)
 -- Author  : Choong-Yin Lee
 -- Date    : 2026-06-08
 -- Safe    : Re-runnable - DELETE on non-existent rows returns 0 rows, no error
@@ -24,7 +24,7 @@ DECLARE
 
 BEGIN
 
-    drop_group('V_PHD_STREAM_COMP');
+    -- V_PHD_STREAM_COMP removed 2026-06-11 (its only rules 1142/1143 are invalid)
     drop_group('V_PHD_STREAM_ANALYSIS');
     drop_group('V_PHD_TANK_DIP');
 
@@ -42,7 +42,7 @@ END;
 -- =============================================================================
 SELECT CHECK_GROUP, PARENT_GROUP
   FROM TV_CTRL_CHECK_GROUP
- WHERE CHECK_GROUP IN ('V_PHD_STREAM_COMP','V_PHD_STREAM_ANALYSIS','V_PHD_TANK_DIP');
+ WHERE CHECK_GROUP IN ('V_PHD_STREAM_ANALYSIS','V_PHD_TANK_DIP');
 -- Expected: 0 rows
 
 -- =============================================================================
@@ -50,5 +50,5 @@ SELECT CHECK_GROUP, PARENT_GROUP
 -- =============================================================================
 SELECT CHECK_GROUP, CHECK_ID
   FROM CTRL_CHECK_COMBINATION
- WHERE CHECK_GROUP IN ('V_PHD_STREAM_COMP','V_PHD_STREAM_ANALYSIS','V_PHD_TANK_DIP');
+ WHERE CHECK_GROUP IN ('V_PHD_STREAM_ANALYSIS','V_PHD_TANK_DIP');
 -- Expected: 0 rows
