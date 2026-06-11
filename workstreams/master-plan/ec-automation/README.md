@@ -121,10 +121,15 @@ preserved Playwright implementation + the discovery trail + a spec, per screen:
 screens/<menu path>/
 ├── README.md          # Playwright run guide for this screen
 ├── <screen>_sow.md    # statement of work / spec
-├── playwright/        # standalone Playwright (Python) implementation
+├── playwright/        # Playwright (Python) implementation
 ├── investigation/     # recon scripts (DOM scans + DB queries) used to learn the screen
-└── evidence/          # screenshots from a full IUD run
+└── evidence/          # screenshots + results JSON from a full IUD run
 ```
+
+Since the **Basic Objects** section (2026-06-11) new bundles share ONE engine —
+`screens/.../Basic_Objects/_shared/iud_engine.py` — and each screen's
+`playwright/ec_iud_<slug>.py` is a thin config over it (the original Bank/Equipment/MIME
+bundles keep their standalone scripts). Prefer the shared-engine form for new sections.
 
 Playwright/recon tooling installs from `requirements-dev.txt` (`playwright`); the RF suite
 itself only needs `requirements.txt`.
@@ -137,4 +142,5 @@ itself only needs `requirements.txt`.
 | **Negative / validation testing** (assert EC *rejects* bad input; read the VALIDATION/error panel; make `Save` fail on a silent reject) | Deferred — needs a DOM scan of the error/validation panel + design; tackle as its own pass tied to the "VALIDATION" screen area |
 | **Per-test-suite user-id strategy** (data-driven template / per-role suites / context-per-test) + credentials subfolder variable file | Parked until we build a multi-test-case / multi-role suite |
 | **Retire original `drafts/` suites** | Kept **frozen as backup**; not retired |
-| **Equipment + MIME conversion** into this structure | Pending go-ahead (Bank is the proven template) |
+| ~~Equipment + MIME conversion~~ | ✅ Done — both live in this structure (see registry) |
+| **Next sections** (from the 2026-06-11 Assets scan: 385 screens classified, `tmp/screen_scan/assets_scan_summary.md`) | Financial Objects (15 OV) / Commercial Objects (12 OV) queued; OTHER bucket (188) parked for a pattern-study pass |

@@ -1,0 +1,490 @@
+[
+ {
+  "screen": "Area",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/AREA/TARGET/AREA/CLASS_NAME/AREA",
+  "gridBefore": {
+   "gridId": null,
+   "firstCodes": []
+  },
+  "toolbar": [
+   {
+    "icon": "-insert",
+    "items": [
+     "",
+     "New Object",
+     "New Version"
+    ]
+   },
+   {
+    "icon": "-delete",
+    "items": [
+     ""
+    ]
+   },
+   {
+    "icon": "fas fa-ellipsis-h",
+    "items": [
+     "",
+     "Override system of measurement",
+     "Oil Field",
+     "SI",
+     "Custom",
+     "Reset personalisation",
+     "Set as user defaults",
+     "Reset user defaults"
+    ]
+   },
+   {
+    "icon": "-triangle-1-e",
+    "items": [
+     "Override system of measurement",
+     "Oil Field",
+     "SI",
+     "Custom"
+    ]
+   }
+  ],
+  "navDropdowns": [
+   {
+    "id": "nav:form:G:0:R:1:C:1:dd",
+    "near": "",
+    "options": [
+     "<failed: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n >"
+    ]
+   }
+  ],
+  "selectGoError": "Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locator(\"[id='nav:form:G:0:R:1:C:1:dd_panel'] li\") to be visible\n",
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Area Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Area Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "System of Measurement",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Op Production Unit",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Cp Production Unit",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Business Unit",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Conversion Context",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Time Zone",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:dd_button",
+    "visible": true
+   }
+  ]
+ },
+ {
+  "screen": "Sub Area",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/SUB_AREA/TARGET/SUB_AREA/CLASS_NAME/SUB_AREA",
+  "gridBefore": {
+   "gridId": null,
+   "firstCodes": []
+  },
+  "toolbar": [
+   {
+    "icon": "-insert",
+    "items": [
+     "",
+     "New Object",
+     "New Version"
+    ]
+   },
+   {
+    "icon": "-delete",
+    "items": [
+     ""
+    ]
+   },
+   {
+    "icon": "fas fa-ellipsis-h",
+    "items": [
+     "",
+     "Override system of measurement",
+     "Oil Field",
+     "SI",
+     "Custom",
+     "Reset personalisation",
+     "Set as user defaults",
+     "Reset user defaults"
+    ]
+   },
+   {
+    "icon": "-triangle-1-e",
+    "items": [
+     "Override system of measurement",
+     "Oil Field",
+     "SI",
+     "Custom"
+    ]
+   }
+  ],
+  "navDropdowns": [
+   {
+    "id": "nav:form:G:0:R:1:C:1:dd",
+    "near": "",
+    "options": [
+     "<failed: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n >"
+    ]
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:2:dd",
+    "near": "",
+    "options": [
+     "<failed: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n >"
+    ]
+   }
+  ],
+  "selectGoError": "Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locator(\"[id='nav:form:G:0:R:1:C:1:dd_panel'] li\") to be visible\n",
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Sub Area Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Sub Area Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "System of Measurement",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Op Production Unit",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Op Area",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd_button",
+    "visible": true
+   }
+  ]
+ },
+ {
+  "screen": "Production Sub Unit",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/PROD_SUB_UNIT/TARGET/PROD_SUB_UNIT/CLASS_NAME/PROD_SUB_UNIT",
+  "gridBefore": {
+   "gridId": "manageObject:form:T_data",
+   "firstCodes": []
+  },
+  "toolbar": [
+   {
+    "icon": "-insert",
+    "items": [
+     "",
+     "New Object",
+     "New Version"
+    ]
+   },
+   {
+    "icon": "-delete",
+    "items": [
+     ""
+    ]
+   },
+   {
+    "icon": "fas fa-ellipsis-h",
+    "items": [
+     "",
+     "Override system of measurement",
+     "Oil Field",
+     "SI",
+     "Custom",
+     "Reset personalisation",
+     "Set as user defaults",
+     "Reset user defaults"
+    ]
+   },
+   {
+    "icon": "-triangle-1-e",
+    "items": [
+     "Override system of measurement",
+     "Oil Field",
+     "SI",
+     "Custom"
+    ]
+   }
+  ],
+  "navDropdowns": [],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Production Sub Unit Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Production Sub Unit Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "System of Measurement",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   }
+  ]
+ },
+ {
+  "screen": "Object List Setup",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.revn.cd/manage_object_list",
+  "gridBefore": {
+   "gridId": null,
+   "firstCodes": []
+  },
+  "toolbar": [
+   {
+    "icon": "-insert",
+    "items": [
+     "",
+     "Object List Item"
+    ]
+   },
+   {
+    "icon": "-delete",
+    "items": [
+     "",
+     "Object List Item"
+    ]
+   },
+   {
+    "icon": "fas fa-ellipsis-h",
+    "items": [
+     "",
+     "Override system of measurement",
+     "Oil Field",
+     "SI",
+     "Custom",
+     "Reset personalisation",
+     "Set as user defaults",
+     "Reset user defaults"
+    ]
+   },
+   {
+    "icon": "-triangle-1-e",
+    "items": [
+     "Override system of measurement",
+     "Oil Field",
+     "SI",
+     "Custom"
+    ]
+   }
+  ],
+  "navDropdowns": [
+   {
+    "id": "nav:form:G:1:R:1:C:0:dd",
+    "near": "",
+    "options": [
+     "<failed: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n >"
+    ]
+   },
+   {
+    "id": "nav:form:G:2:R:1:C:0:dd",
+    "near": "",
+    "options": [
+     "<failed: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n >"
+    ]
+   }
+  ],
+  "selectGoError": "Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locator(\"[id='nav:form:G:1:R:1:C:0:dd_panel'] li\") to be visible\n",
+  "insertFormError": "Locator.wait_for: Timeout 6000ms exceeded.\nCall log:\n  - waiting for locator(\"//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Ob"
+ }
+]
