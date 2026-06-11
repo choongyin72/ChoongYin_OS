@@ -34,21 +34,39 @@ Select EC Dropdown Option
     ...    retry is built in. Typing into autocomplete-dd fields is unreliable.
     [Arguments]    ${dd_prefix}    ${value}
     # normalize-space tolerates leading/double spaces in stored labels
-    # (real case: OV_AREA names like ' Offshore area' / ' Permit  Block 15')
-    VAR    ${item}    xpath=//*[@id='${dd_prefix}_panel']//tr[normalize-space(@data-item-label)='${value}']
+    # (real case: OV_AREA names like ' Offshore area' / ' Permit    Block 15')
+    VAR    ${item}=    xpath=//*[@id='${dd_prefix}_panel']//tr[normalize-space(@data-item-label)='${value}']
+    Open EC Dropdown Panel    ${dd_prefix}    ${item}
+    Click    ${item}
+    Wait For Load State    networkidle    timeout=12s
+    Sleep    0.6s
+
+Open EC Dropdown Panel
+    [Documentation]    Open an EC autocomplete dropdown and wait for its first option
+    ...    row; one Escape+reopen retry covers panels closed by a concurrent partial
+    ...    re-render or cascades whose options arrive late.
+    [Arguments]    ${dd_prefix}    ${item}
     Click    css=[id="${dd_prefix}_button"]
     TRY
-        Wait For Elements State    ${item}    visible    timeout=6s
+        Wait For Elements State    ${item} >> nth=0    visible    timeout=6s
     EXCEPT
-        # two stale cases: the panel was closed by a concurrent partial re-render,
-        # OR it is open but its options have not arrived yet (cascading dropdown).
-        # Escape guarantees a closed panel, then re-open fresh after a settle.
         Keyboard Key    press    Escape
         Sleep    1.5s
         Click    css=[id="${dd_prefix}_button"]
-        Wait For Elements State    ${item}    visible    timeout=10s
+        Wait For Elements State    ${item} >> nth=0    visible    timeout=10s
     END
-    Click    ${item}
+
+Select First EC Dropdown Option
+    [Documentation]    Pick the FIRST option of an EC autocomplete dropdown — for
+    ...    mandatory reference dropdowns on throwaway test records where the specific
+    ...    value is irrelevant (the record is deleted again by the cleanup TC). The
+    ...    chosen label is logged for the evidence trail.
+    [Arguments]    ${dd_prefix}
+    VAR    ${item}=    css=[id="${dd_prefix}_panel"] tr[data-item-label]
+    Open EC Dropdown Panel    ${dd_prefix}    ${item}
+    ${label}=    Get Attribute    ${item} >> nth=0    data-item-label
+    Log    First option selected for ${dd_prefix}: ${label}
+    Click    ${item} >> nth=0
     Wait For Load State    networkidle    timeout=12s
     Sleep    0.6s
 

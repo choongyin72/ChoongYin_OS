@@ -46,10 +46,12 @@ Fill New Object Form
     Fill EC Date    ${date_id}    ${start_date}
 
 Save And Refresh List
-    [Documentation]    Save the form, then Apply Navigator so the list reloads from
-    ...    the DB (the grid does not refresh on its own — see registry: GO is mandatory).
+    [Documentation]    Save the form, then reload the list from the DB: Apply Navigator
+    ...    (GO) where the screen has one, else the toolbar Refresh — some custom-URL OV
+    ...    screens (Account, Cost Centre, Revenue Order, WBS…) have NO navigator GO.
     Save
-    Apply Navigator
+    ${has_go}=    Get Element Count    css=button[id="button:form:B"]:visible, a[id="button:form:B"]:visible
+    IF    ${has_go} > 0    Apply Navigator    ELSE    Refresh Screen
 
 Update Object Name
     [Documentation]    Select the object row by code, prove the row actually loaded

@@ -110,7 +110,13 @@ class Engine:
         self.ajax()
 
     def go(self):
-        self.page.click(_css("button:form:B"))
+        """Apply Navigator (GO) where present; some custom-URL OV screens have no
+        navigator - fall back to the toolbar Refresh."""
+        go_btn = self.page.locator(_css("button:form:B"))
+        if go_btn.count() and go_btn.first.is_visible():
+            go_btn.first.click()
+        else:
+            self.page.click("xpath=//a[@title='Refresh [Ctrl+r]']")
         self.ajax()
 
     def select_row(self, code):
@@ -197,6 +203,29 @@ class Engine:
             for dd, val in cfg.get("ins_dd", []):
                 print(f"  insert dropdown: {val}")
                 self.select_dd(dd, val)
+            for dd in cfg.get("ins_dd_first", []):
+                # mandatory reference dropdown on a throwaway record: first option
+                item = f"css=[id='{dd}_panel'] tr[data-item-label]"
+                self.page.click(_css(dd + "_button"))
+                try:
+                    self.page.locator(item).first.wait_for(state="visible", timeout=6000)
+                except Exception:
+                    self.page.keyboard.press("Escape")
+                    self.page.wait_for_timeout(1500)
+                    self.page.click(_css(dd + "_button"))
+                    self.page.locator(item).first.wait_for(state="visible", timeout=10000)
+                label = self.page.locator(item).first.get_attribute("data-item-label")
+                print(f"  insert dropdown (first option): {label}")
+                self.page.locator(item).first.click()
+                self.ajax(12000)
+            for fid, val, kind in cfg.get("ins_extra", []):
+                # extra MANDATORY fields beyond the universal trio (text/checkbox)
+                print(f"  insert extra ({kind}): {val}")
+                if kind == "checkbox":
+                    self.page.check(_css(fid))
+                    self.page.wait_for_timeout(400)
+                else:
+                    self.fill(fid, val)
             self.ss("insert_filled")
             self.save()
             self.go()
