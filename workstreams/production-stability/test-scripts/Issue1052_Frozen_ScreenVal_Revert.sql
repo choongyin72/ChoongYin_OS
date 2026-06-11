@@ -1,0 +1,3 @@
+-- Revert temporary ZWP_SCREEN_VAL='Y' (Layer-2a tooltip check) back to 'N'
+UPDATE TV_CTRL_CHECK_RULES SET ZWP_SCREEN_VAL='N' WHERE CHECK_ID IN (1152,1153,1154);
+COMMIT;
