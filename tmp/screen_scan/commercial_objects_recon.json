@@ -1,0 +1,2764 @@
+[
+ {
+  "screen": "Company",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/COMPANY",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "100_SOUTHWESTERN_ENERGY",
+   "179_XTO_ENERGY",
+   "180_CHESAPEAKE"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Company Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Company Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Sort Order",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Official Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Address",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Address Line 1",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Address Line 2",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Address Line 3",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Address Line 4",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Address Line 5",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:11:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Address Line 6",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:12:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Address Line 7",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:13:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Address Line 8",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:14:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Phone",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:15:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Fax",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:16:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": "Telex",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:17:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 18,
+    "label": "e-mail",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:18:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 19,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:19:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 20,
+    "label": "System Company",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:20:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 21,
+    "label": "Truck Company",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:21:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 22,
+    "label": "Laboratory",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:22:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 23,
+    "label": "Chemical Vendor",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:23:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 24,
+    "label": "Container Company",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:24:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 25,
+    "label": "Company Number",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:25:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 26,
+    "label": "Registration Details",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:26:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 27,
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:27:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 28,
+    "label": "Interface Sequence Owner",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:28:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 29,
+    "label": "Local Currency",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:29:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Company Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Company Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Sort Order",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Official Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Address",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Address Line 1",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Address Line 2",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Address Line 3",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Address Line 4",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Address Line 5",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Address Line 6",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:14:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Address Line 7",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:15:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Address Line 8",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:16:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": "Phone",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:17:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 18,
+    "label": "Fax",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:18:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 19,
+    "label": "Telex",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:19:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 20,
+    "label": "e-mail",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:20:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 21,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:21:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 22,
+    "label": "System Company",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:22:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 23,
+    "label": "Truck Company",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:23:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 24,
+    "label": "Laboratory",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:24:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 25,
+    "label": "Chemical Vendor",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:25:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 26,
+    "label": "Container Company",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:26:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 27,
+    "label": "Company Number",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:27:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 28,
+    "label": "Registration Details",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:28:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 29,
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:29:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 30,
+    "label": "Interface Sequence Owner",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:30:C:1:cb",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 31,
+    "label": "Local Currency",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:31:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_COMPANY",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_COMPANY",
+   "OV_COMPANY_JN",
+   "OV_COMPANY_CONTACT",
+   "OV_COMPANY_CONTACT_JN",
+   "OV_COMPANY_CAP_RELEASE"
+  ]
+ },
+ {
+  "screen": "Customer",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/CUSTOMER",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "BLEND_BUYER",
+   "BUTANE_BUYER",
+   "CA_ALBERTA"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "ERP Customer Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Official Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Address Line 1",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Address Line 2",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Address Line 3",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Address Line 4",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Address Line 5",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Address Line 6",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:11:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Address Line 7",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:12:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Address Line 8",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:13:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Telephone",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:14:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Fax",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:15:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Internet",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:16:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": "E-Mail",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:17:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 18,
+    "label": "Telex",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:18:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 19,
+    "label": "Org. No",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:19:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 20,
+    "label": "Customer Group",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:20:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 21,
+    "label": "Trading Partner",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:21:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 22,
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:22:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 23,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:23:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "ERP Customer Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Official Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Address Line 1",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Address Line 2",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Address Line 3",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Address Line 4",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Address Line 5",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Address Line 6",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Address Line 7",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:14:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Address Line 8",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:15:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Telephone",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:16:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": "Fax",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:17:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 18,
+    "label": "Internet",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:18:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 19,
+    "label": "E-Mail",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:19:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 20,
+    "label": "Telex",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:20:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 21,
+    "label": "Org. No",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:21:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 22,
+    "label": "Customer Group",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:22:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 23,
+    "label": "Trading Partner",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:23:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 24,
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:24:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 25,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:25:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_CUSTOMER",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_CUSTOMER",
+   "OV_CUSTOMER_JN"
+  ]
+ },
+ {
+  "screen": "Vendor",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/VENDOR",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "BUTANE_SELLER",
+   "CA_ALBERTA",
+   "CA_DILUENT_SELLER"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "ERP Vendor Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Official Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Address Line 1",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Address Line 2",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Address Line 3",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Address Line 4",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Address Line 5",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Address Line 6",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:11:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Address Line 7",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:12:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Address Line 8",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:13:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Telephone",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:14:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Fax",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:15:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Internet",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:16:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": "E-Mail",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:17:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 18,
+    "label": "Telex",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:18:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 19,
+    "label": "Org. No",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:19:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 20,
+    "label": "Vendor Group",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:20:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 21,
+    "label": "Chamber of Commerce",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:21:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 22,
+    "label": "Reporter Code",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:22:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 23,
+    "label": "Trading Partner",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:23:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 24,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:24:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 25,
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:25:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "ERP Vendor Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Official Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Address Line 1",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Address Line 2",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Address Line 3",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Address Line 4",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Address Line 5",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Address Line 6",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Address Line 7",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:14:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Address Line 8",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:15:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Telephone",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:16:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": "Fax",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:17:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 18,
+    "label": "Internet",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:18:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 19,
+    "label": "E-Mail",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:19:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 20,
+    "label": "Telex",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:20:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 21,
+    "label": "Org. No",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:21:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 22,
+    "label": "Vendor Group",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:22:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 23,
+    "label": "Chamber of Commerce",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:23:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 24,
+    "label": "Reporter Code",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:24:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 25,
+    "label": "Trading Partner",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:25:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 26,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:26:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 27,
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:27:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_VENDOR",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_VENDOR",
+   "OV_VENDOR_JN"
+  ]
+ },
+ {
+  "screen": "Licence",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/LICENCE",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "EEA_OFF-B",
+   "EEA_ONS-A",
+   "P1_LICENCE"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Licence Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Licence Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Sort Order",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:in",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Licence Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Licence Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Sort Order",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:da_input",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_LICENCE",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_LICENCE",
+   "OV_LICENCE_JN"
+  ]
+ },
+ {
+  "screen": "MMS Lease",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/MMS_LEASE",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "MMS Lease Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "MMS Lease Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Operator",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_MMS_LEASE",
+  "dbViewVerified": false,
+  "dbViewCandidates": [
+   "OV_MMS_LEASE",
+   "OV_MMS_LEASE_JN"
+  ]
+ },
+ {
+  "screen": "State Lease",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/STATE_LEASE",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "State Lease Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "State Lease Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_STATE_LEASE",
+  "dbViewVerified": false,
+  "dbViewCandidates": [
+   "OV_STATE_LEASE",
+   "OV_STATE_LEASE_JN"
+  ]
+ },
+ {
+  "screen": "Operator Lease",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/OPERATOR_LEASE",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Operator Lease Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Operator Lease Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_OPERATOR_LEASE",
+  "dbViewVerified": false,
+  "dbViewCandidates": [
+   "OV_OPERATOR_LEASE",
+   "OV_OPERATOR_LEASE_JN"
+  ]
+ },
+ {
+  "screen": "Field Group",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/FIELD_GROUP",
+  "gridId": "manage_object_nav_nav:form:T_data",
+  "firstCodes": [
+   "APOLLO_NEPTUNE",
+   "APOLLO_NEPTUNE_MERCURY",
+   "GB_ALL"
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Field Group Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Reporting Field Group Indicator",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:cb",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Field Group Type",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Reporting Field Group Indicator",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:cb",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_FIELD_GROUP",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_FIELD_GROUP",
+   "OV_FIELD_GROUP_JN"
+  ]
+ },
+ {
+  "screen": "Commercial Entity",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/commercial_entity",
+  "gridId": "manageObject:form:T_data",
+  "firstCodes": [
+   "EEA_KIZ",
+   "EEA_XIK",
+   "P1_COMM_ENTITY_A"
+  ],
+  "navDropdowns": [
+   {
+    "id": "nav:form:G:0:R:1:C:1:dd",
+    "options": [
+     " EC Norway offshore",
+     " EC Norway onshore",
+     "Licence 03",
+     "P1 Licence 1",
+     "PS7_L_1",
+     "TS1 Chev Cop",
+     "TS1 Statoil",
+     "TS1_Agip_Chev",
+     "TS1_Agip_Esso",
+     "TS1_Chev_Stat_Esso",
+     "TS1_Elf",
+     "TS1_Shell"
+    ]
+   }
+  ],
+  "updatePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Commercial Entity Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Commercial Entity Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Sort Order",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Field Name",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:5:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Licence Name",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:6:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:updateAttributes:form:G:0:R:7:C:1:in",
+    "visible": true
+   }
+  ],
+  "datePlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input",
+    "visible": true
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Commercial Entity Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Commercial Entity Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Sort Order",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Field Name",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Licence Name",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:in",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_COMMERCIAL_ENTITY",
+  "dbViewVerified": true,
+  "dbViewCandidates": [
+   "OV_COMMERCIAL_ENTITY",
+   "OV_COMMERCIAL_ENTITY_JN"
+  ]
+ },
+ {
+  "screen": "Company Contact",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.prod.co.screens/company_contact",
+  "gridId": "manageObject:form:T_data",
+  "firstCodes": [],
+  "navDropdowns": [
+   {
+    "id": "nav:form:G:0:R:1:C:1:dd",
+    "options": []
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Contact Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Contact Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "First Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Last Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Telephone",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Mobile",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Address Line 1",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Address Line 2",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Address Line 3",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Address Line 4",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Address Line 5",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "Zip Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Delivery Method",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:14:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Delivery Address",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:15:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:16:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 17,
+    "label": "Company",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:17:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_COMPANY_CONTACT",
+  "dbViewVerified": false,
+  "dbViewCandidates": [
+   "OV_COMPANY_CONTACT",
+   "OV_COMPANY_CONTACT_JN"
+  ]
+ },
+ {
+  "screen": "Field",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/FIELD/TARGET/FIELD/CLASS_NAME/FIELD",
+  "gridId": null,
+  "firstCodes": [],
+  "navDropdowns": [
+   {
+    "id": "nav:form:G:0:R:1:C:1:dd",
+    "options": [
+     " Offshore area",
+     " Onshore area",
+     " Permit  Block 15",
+     "AS1_Area",
+     "AS2_Onshore Area",
+     "AS3_Offshore_Area",
+     "AS4_Diluent_Area",
+     "AS5_Injection_Area",
+     "Area 1",
+     "Area 2",
+     "EC-UT-GENERIC Area",
+     "FRMW Area",
+     "MID - Area",
+     "P1 Area",
+     "P3 Area"
+    ]
+   }
+  ],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Field Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Field Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Sort Order",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 8,
+    "label": "Commercial Entity",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 9,
+    "label": "Parent field",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 10,
+    "label": "Operator",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 11,
+    "label": "Geo Area",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 12,
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 13,
+    "label": "State",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:dd_button",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 14,
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:14:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 15,
+    "label": "Full field name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:15:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 16,
+    "label": "Non equity Indicator",
+    "kind": "checkbox",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:16:C:1:cb",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_FIELD",
+  "dbViewVerified": false,
+  "dbViewCandidates": [
+   "OV_FIELD",
+   "OV_FIELD_JN",
+   "OV_SUB_FIELD",
+   "OV_FIELD_GROUP",
+   "OV_SUB_FIELD_JN"
+  ]
+ },
+ {
+  "screen": "Sub Field",
+  "url": "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/SUB_FIELD/TARGET/SUB_FIELD/CLASS_NAME/SUB_FIELD",
+  "gridId": "manageObject:form:T_data",
+  "firstCodes": [],
+  "insertPlan": [
+   {
+    "g": 0,
+    "r": 0,
+    "label": "Sub Field Code",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 1,
+    "label": "Sub Field Name",
+    "kind": "text",
+    "mandatory": true,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 2,
+    "label": "Sort Order",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 3,
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 4,
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 5,
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 6,
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:da_input",
+    "visible": true
+   },
+   {
+    "g": 0,
+    "r": 7,
+    "label": "Commercial Entity Name",
+    "kind": "dropdown",
+    "mandatory": false,
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_button",
+    "visible": true
+   }
+  ],
+  "dbView": "OV_SUB_FIELD",
+  "dbViewVerified": false,
+  "dbViewCandidates": [
+   "OV_SUB_FIELD",
+   "OV_SUB_FIELD_JN"
+  ]
+ }
+]
