@@ -16,8 +16,8 @@ Test Tags           iud    account-mapping
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       2003-01-01
+${END_DATE}         2003-01-01
 
 
 *** Test Cases ***

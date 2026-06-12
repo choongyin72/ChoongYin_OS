@@ -82,6 +82,23 @@ robot --outputdir results tests/Configuration/Assets/Financial_Objects/bank_iud.
 EC_HEADLESS=false robot --outputdir results tests/Configuration/Assets/Financial_Objects/bank_iud.robot
 ```
 
+## Shared keyword-file change protocol (MANDATORY)
+
+Common files (`resources/*.resource`, `libraries/*.py`, `screens/.../_shared/*.py`) are
+load-bearing for every suite. Before changing one:
+
+1. **BACKUP FIRST** — `py tmp/scripts/backup_keyword_file.py <file>` copies it to
+   `.keyword_backups/<name>.<timestamp>.bak` so any problem reverts to the exact
+   pre-change state (covers uncommitted mid-session edits that git cannot restore).
+2. **Classify** the change: additive (new keyword) / conditional extension (fallback that
+   only fires where the old path failed) / behavioral (happy path changes). Signature
+   changes to keywords in use are FORBIDDEN — extend with defaulted optional args.
+3. **Grep all callers** before editing.
+4. **Verify by class**: dryrun everything, then for conditional/behavioral changes run the
+   **canary pack** — `py tmp/scripts/run_canary.py` — one live suite per pattern
+   (Bank OV · Area OV-GM · MIME TV · Object List Setup PC · Account Mapping combination).
+5. Cite the canary result in the commit message.
+
 ## Lint & format (Robocop 6+, unified)
 
 ```bash

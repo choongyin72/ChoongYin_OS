@@ -44,7 +44,7 @@ The goal: derive screen facts from here + recon (not by asking), and confirm rat
 | WBS | Configuration > Assets > Financial Objects > WBS | OV | `OV_FIN_WBS` | none (toolbar Refresh) | End Date = Start Date | `nav:form:T_data` | `Configuration/Assets/Financial_Objects/wbs_page.resource` |
 | Bank Account | Configuration > Assets > Financial Objects > Bank Account | OV | `OV_BANK_ACCOUNT` | manage-object | End Date = Start Date | `manage_object_nav_nav:form:T_data` | `Configuration/Assets/Financial_Objects/bank_account_page.resource` (dds: Customer, Bank, Currency; **Start Date 2003-01-01** — see date rule below) |
 | Cost Object Mapping | Configuration > Assets > Financial Objects > Cost Object Mapping | OV | `OV_FIN_COST_OBJECT` | manage-object | End Date = Start Date | `manage_object_nav_nav:form:T_data` | `Configuration/Assets/Financial_Objects/cost_object_mapping_page.resource` (dds: Object Type, Company, Distribution Object Type, Cost Object; **Start Date 2003-01-01**) |
-| Account Mapping | Configuration > Assets > Financial Objects > Account Mapping | PARKED | `OV_FIN_ACCOUNT_MAPPING` | none | — | `manageObject:form:T_data` | **Parked 2026-06-12 (Choong-Yin agreed):** needs a VALID business combination across 11 reference dropdowns; plan = deep-dive Revenue setup (ECpedia/EC docs) first; Financial Account column is also effective-date-filtered (Start Date ≥ 2003-01-01); suite preserved in `tests/.../Financial_Objects/_parked/` |
+| Account Mapping | Configuration > Assets > Financial Objects > Account Mapping | OV (custom URL) | `OV_FIN_ACCOUNT_MAPPING` | none (toolbar Refresh) | End Date = Start Date | `manageObject:form:T_data` | `Configuration/Assets/Financial_Objects/account_mapping_page.resource` — **UNPARKED 2026-06-12**: the 9-dropdown REFERENCE COMBINATION is the screen's unique key (ALT_CODE = FIN_PRODUCT_LIT_CC_STATUS_CLASS); test uses valid-and-unused `JOU_ENT_ALL_ALL_ALL_ACCRUAL_CREDIT` cloned from existing rows; Start Date 2003-01-01; slow 75-row grid → WAITING row assert |
 | Company | Configuration > Assets > Commercial Objects > Company | OV | `OV_COMPANY` | manage-object | End Date = Start Date | `manage_object_nav_nav:form:T_data` | `Configuration/Assets/Commercial_Objects/company_page.resource` |
 | Customer | Configuration > Assets > Commercial Objects > Customer | OV | `OV_CUSTOMER` | manage-object | End Date = Start Date | `manage_object_nav_nav:form:T_data` | `Configuration/Assets/Commercial_Objects/customer_page.resource` (texts: ERP Customer Code, Official Name; dd: Customer Group) |
 | Vendor | Configuration > Assets > Commercial Objects > Vendor | OV | `OV_VENDOR` | manage-object | End Date = Start Date | `manage_object_nav_nav:form:T_data` | `Configuration/Assets/Commercial_Objects/vendor_page.resource` (texts: ERP Vendor Code, Official Name; dd: Vendor Group) |
@@ -122,6 +122,11 @@ The goal: derive screen facts from here + recon (not by asking), and confirm rat
   Objects, Financial Accounts, Op Production Units…). Symptom: dropdown populates on a
   fresh form but not after the date is filled. Rule: pick a test Start Date AT/AFTER the
   seed-data epoch (2003-01-01 in this sandbox) on any screen with reference dropdowns.
+- **Config-combination screens (e.g. Account Mapping): the reference-dropdown COMBINATION
+  is the unique key.** First-option guessing can build an already-taken or incoherent
+  combination — both silently reject. Recipe: SELECT existing rows from the OV view,
+  decode the combination pattern (ALT_CODE style), pick a VALID-AND-UNUSED combination
+  reusing a proven sub-trio (account/category/PKs), choose dropdowns BY VALUE.
 - **Silent reject = mandatory field missing.** If Save produces no row, look for the EC banner *"Required fields are empty: <field>"* — fill the named dropdown via `Select EC Dropdown Option` (T1 table.resource). Seen on Object List (Class Name) and Regulatory Permits (Regulatory Agency).
 - **Insert-form field rows vary per class** — recon `tab:tabPanel:objectForm:form:G:0:R:{r}:C:0:la` labels first (Code/Name are not always R0/R1: State/County have Master System rows above them).
 
@@ -133,3 +138,11 @@ The goal: derive screen facts from here + recon (not by asking), and confirm rat
 3. Write the T3 page object (mirror an existing same-type one) + the test; set relative-import depth to the folder depth.
 4. **Dryrun** (structure) → **live run** (behaviour) → **DB verify** (ground truth).
 5. Add a row to the table above + persist any new gotcha to memory.
+
+## Changing a SHARED keyword file (resources/, libraries/, _shared/)
+MANDATORY protocol — see README "Shared keyword-file change protocol":
+**backup first** (`py tmp/scripts/backup_keyword_file.py <file>` → `.keyword_backups/`),
+classify the change (additive / conditional / behavioral; signature changes FORBIDDEN),
+grep all callers, then verify with the **canary pack** (`py tmp/scripts/run_canary.py` —
+Bank OV · Area OV-GM · MIME TV · Object List Setup PC · Account Mapping combination)
+before commit. Any problem → copy the .bak back over the file = instant revert.

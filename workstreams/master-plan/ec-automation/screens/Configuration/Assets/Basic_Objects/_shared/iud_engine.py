@@ -63,8 +63,14 @@ class Engine:
             " if(c.some(x=>x)) out.push(c);}); return out; }",
             self.cfg["table_id"])
 
-    def in_table(self, code):
-        return any(r and r[0].strip() == code for r in self.rows())
+    def in_table(self, code, retries=3):
+        # large custom grids repopulate slowly after save/refresh - retry the scan
+        for i in range(retries):
+            if any(r and r[0].strip() == code for r in self.rows()):
+                return True
+            if i < retries - 1:
+                self.page.wait_for_timeout(3000)
+        return False
 
     def fill(self, fid, value):
         el = self.page.locator(_css(fid))

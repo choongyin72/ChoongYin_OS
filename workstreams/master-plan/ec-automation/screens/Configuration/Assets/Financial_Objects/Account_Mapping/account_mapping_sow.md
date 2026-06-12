@@ -3,7 +3,7 @@
 **Task:** EC Screen Insert/Update/Delete (IUD) Automation — Account Mapping
 **Author:** Choong-Yin Lee / Claude Fable 5
 **Date:** 2026-06-11
-**Version:** 0.9 — PARKED 2026-06-12: needs valid business combination across 11 reference dropdowns (validation layers stack); plan: deep-dive Revenue setup in ECpedia/EC docs first. Financial Account column also effective-date-filtered (use Start Date >= 2003-01-01).
+**Version:** 1.0 — COMPLETE 2026-06-12: unparked via VALID-AND-UNUSED combination cloned from the 75 existing rows (combination = unique key; ALT_CODE pattern FIN_PRODUCT_LIT_CC_STATUS_CLASS). Test combo JOU_ENT_ALL_ALL_ALL_ACCRUAL_CREDIT + proven trio (Account Category Revenue / Financial Account ACCRUAL CR Acct / PKs 40-50). Start Date 2003-01-01 (date-version rule).
 
 ---
 
@@ -13,7 +13,7 @@ existing data; test codes `AUTOTEST_AM_<timestamp>`; local sandbox, user sysadmi
 
 | Operation | Pass condition | Status |
 |---|---|---|
-| INSERT | (parked) | BLOCKED |
+| INSERT | AUTOTEST row in grid AND present in  | PASS |
 | UPDATE | Name change visible in grid row | PASS |
 | DELETE | End=Start -> gone from grid AND absent in `OV_FIN_ACCOUNT_MAPPING` | PASS |
 
