@@ -1,0 +1,97 @@
+// documentation
+Documentation
+Release Documentation
+Installation Guide
+Upgrade Guide
+Configuration
+Technical Documentation
+Technical Documentation Overview
+Energy Components Business Areas
+Energy Components Basic User Guide
+Energy Components Product Concepts
+EC Framework
+Docker Images
+Identity & Access Management
+Event
+Rest API
+GraphQL API
+EC Integration Services
+EC BPM - Business Process Modelling
+Extensions
+General Configuration and Guidelines
+Class Configuration
+How to configure Screen Treeview Menu
+Unit of Measure Support in Energy Components
+System of Measurement
+How to get Users and User’s roles
+System Property Exclude Synonyms
+Four Eyes Approval
+How to manage User Exit packages
+Calculation Group configuration
+Calculation Library
+Database Users and Logging
+How to change table content PINC logging in install mode
+How to configure a Business Action to call SQL procedure
+How to use Date Macro Parameter
+How to resolve blocked schedules automatically
+How to re-pin scheduled jobs
+How to define check rules
+How to configure Tab Label in EC Screens
+How to configure Context Menu
+How to configure EC Dashboards
+How to Configure the Application Title Bar
+How to Configure Table Column Sets
+Time Zone Support in Energy Components
+Deprecating Ecdp_ProductionDay
+How to configure language translation in EC
+How to configure Messaging
+Navigator default values
+How to send messages from EC
+How to disable navigator cache
+EC Dataloader
+Data Purging
+Expression and Scripting support
+Migration utility functions
+REC ID utility
+Pendo
+EC Data Access Control (eDAC)
+Reporting and Analytics
+EC Tools
+Application Development
+Database Development
+Flyway
+EC Production
+EC Chemistry
+EC Transport
+EC Sales
+EC Revenue
+How To Get Started
+Documentation
+14.2.4
+Documentation
+Technical Documentation
+EC Framework
+General Configuration and Guidelines
+How to re-pin scheduled jobs
+Contents
+Introduction
+Give Access To Role
+Re-pin schedules in Schedules screen
+How to re-pin scheduled jobs
+Introduction
+
+The re-pinning of scheduled jobs is not usually required. Since scheduled jobs are pinned to either a cluster or a server the scheduled jobs will not automatically be transferred to another cluster or server. If one server needs maintenance it can be taken out of the cluster for a while and the remaining servers will handle the scheduled jobs. However, if it is a standalone server the scheduled jobs have to be pinned to another server. Several users have done this by updating the status in the database directly or via a custom button. The scheduler keeps the state of running jobs in memory and updating directly in the database does not work. Typically, this is not discovered in the test environment due to frequent restarts of the test servers hiding that the job is not pinned to other servers before restarting the server. This can also lead to schedules becoming blocked instead of pinned to the new server as intended.
+
+Hence there is provided a button for re-pinning in the correct way. The button is hidden by default and can be enabled as described below.
+
+Give Access To Role
+
+To enable the button, grant access to the intended roles.
+
+Re-pin schedules in Schedules screen
+
+Re-pinning is done in the Schedules screen. It will re-pin the schedules that are enabled and pinned to other servers. To see which jobs will be affected, filter on the enabled jobs only.
+
+The jobs can be pinned to the server currently serving the screen by clicking the "REPIN JOBS" button. The other server should be shut down gracefully so that already running jobs can complete.
+
+Energy Components ©2026

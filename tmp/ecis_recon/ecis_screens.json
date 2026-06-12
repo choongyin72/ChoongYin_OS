@@ -1,0 +1,193 @@
+{
+ "Mapping Configuration": {
+  "nav": [],
+  "grids": [
+   {
+    "id": "imp_interface_table:form:T_data",
+    "rows": 19,
+    "vis": true
+   },
+   {
+    "id": "imp_source_mapping_table:form:T_data",
+    "rows": 3,
+    "vis": true
+   },
+   {
+    "id": "tab:tabPanel:imp_source_path_table:form:T_data",
+    "rows": 2,
+    "vis": true
+   },
+   {
+    "id": "imp_target_mapping_table:form:T_data",
+    "rows": 1,
+    "vis": true
+   }
+  ],
+  "tabs": [
+   "Source Mapping Commands",
+   "Source Mapping Commands",
+   "Source Mapping Validation Rule",
+   "Source Mapping Validation Rule",
+   "Record Status",
+   "Record Status",
+   "Revision Info",
+   "Revision Info",
+   "Approval Status",
+   "Approval Status",
+   "Hints & Tips",
+   "Hints & Tips"
+  ],
+  "buttons": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Preview Interface",
+   "UploadXML",
+   "Cancel",
+   "Delete Staging Data",
+   "ui-button"
+  ],
+  "status": "OK"
+ },
+ "Target Mapping Configuration": {
+  "nav": [],
+  "grids": [],
+  "tabs": [
+   "Record Status",
+   "Record Status",
+   "Revision Info",
+   "Revision Info",
+   "Approval Status",
+   "Approval Status",
+   "Hints & Tips",
+   "Hints & Tips",
+   "Validation",
+   "Validation",
+   "Trending",
+   "Trending"
+  ],
+  "buttons": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go..."
+  ],
+  "status": "OK"
+ },
+ "Upload Files": {
+  "nav": [],
+  "grids": [],
+  "tabs": [
+   "Record Status",
+   "Record Status",
+   "Revision Info",
+   "Revision Info",
+   "Approval Status",
+   "Approval Status",
+   "Hints & Tips",
+   "Hints & Tips",
+   "Validation",
+   "Validation",
+   "Trending",
+   "Trending"
+  ],
+  "buttons": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go...",
+   "Upload File",
+   "Cancel"
+  ],
+  "status": "OK"
+ },
+ "Staging Area": {
+  "status": "NOT_FOUND",
+  "treeview_matches": [
+   "Authentication Audit",
+   "Object Partition",
+   "Analytics Object Access",
+   "Bank",
+   "Equipment",
+   "Dashboard"
+  ]
+ },
+ "Import History": {
+  "status": "NOT_FOUND",
+  "treeview_matches": [
+   "Authentication Audit",
+   "Object Partition",
+   "Analytics Object Access",
+   "Bank",
+   "Equipment",
+   "Dashboard"
+  ]
+ },
+ "Schedules": {
+  "nav": [
+   {
+    "id": "nav:form:G:0:R:0:C:1:dd",
+    "t": ""
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:1:dd_input",
+    "t": "Enabled"
+   }
+  ],
+  "grids": [
+   {
+    "id": "schedule:form:T_data",
+    "rows": 11,
+    "vis": true
+   }
+  ],
+  "tabs": [
+   "Details",
+   "Details",
+   "Business Action",
+   "Business Action",
+   "Schedule",
+   "Schedule",
+   "Event subscriptions",
+   "Event subscriptions",
+   "Monitor",
+   "Monitor",
+   "Record Status",
+   "Record Status"
+  ],
+  "buttons": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go...",
+   "ui-button",
+   "Run Now"
+  ],
+  "status": "OK"
+ }
+}

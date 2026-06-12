@@ -1,0 +1,100 @@
+// documentation
+Documentation
+Release Documentation
+Installation Guide
+Upgrade Guide
+Configuration
+Technical Documentation
+Technical Documentation Overview
+Energy Components Business Areas
+Energy Components Basic User Guide
+Energy Components Product Concepts
+EC Framework
+Docker Images
+Identity & Access Management
+Event
+Rest API
+GraphQL API
+EC Integration Services
+EC BPM - Business Process Modelling
+Extensions
+General Configuration and Guidelines
+Class Configuration
+How to configure Screen Treeview Menu
+Unit of Measure Support in Energy Components
+System of Measurement
+How to get Users and User’s roles
+System Property Exclude Synonyms
+Four Eyes Approval
+How to manage User Exit packages
+Calculation Group configuration
+Calculation Library
+Database Users and Logging
+How to change table content PINC logging in install mode
+How to configure a Business Action to call SQL procedure
+How to use Date Macro Parameter
+How to resolve blocked schedules automatically
+How to re-pin scheduled jobs
+How to define check rules
+How to configure Tab Label in EC Screens
+How to configure Context Menu
+How to configure EC Dashboards
+How to Configure the Application Title Bar
+How to Configure Table Column Sets
+Time Zone Support in Energy Components
+Deprecating Ecdp_ProductionDay
+How to configure language translation in EC
+How to configure Messaging
+Navigator default values
+How to send messages from EC
+How to disable navigator cache
+EC Dataloader
+Data Purging
+Expression and Scripting support
+Migration utility functions
+REC ID utility
+Pendo
+EC Data Access Control (eDAC)
+Reporting and Analytics
+EC Tools
+Application Development
+Database Development
+Flyway
+EC Production
+EC Chemistry
+EC Transport
+EC Sales
+EC Revenue
+How To Get Started
+Documentation
+14.2.4
+Documentation
+Technical Documentation
+EC Framework
+General Configuration and Guidelines
+How to resolve blocked schedules automatically
+Contents
+Introduction
+Scheduling the job releasing the blocked jobs
+How to resolve blocked schedules automatically
+Introduction
+
+To have blocked schedules are in most cases ok and normal. That just means it’s waiting for the currently running job to complete. There are some cases where the scheduler thinks a job is running when it’s not. If the database becomes unavailable while the application server is running, the status of a completed job fails to be updated. Hence, when the database comes back up the status will still be running and the schedule has a false block.
+
+The scheduler has an API that has to be used. Updating the database directly is not the correct way and will cause unexpected behavior. There is a schedule that checks if there are any running jobs that are blocked and unblocks them if that is the case.
+
+Note that there are some jobs that are scheduled at one specific time and others that are repeatable, but it does not matter if executions are skipped. A morning report or instantiation of data is something that you want to do even if the server was offline at the scheduled time. Polling an interface will typically recover even if the jobs have not been fired during maintenance etc. Hence, for the polling jobs, the ignore misfired option should be set to prevent all non-executed jobs to fire when the server is running again. If this is not set it will try to run all schedules not executed while the server was down.
+
+If the jobs are still blocked it should be investigated why the job is running and not completing.
+
+Scheduling the job releasing the blocked jobs
+
+Find the predefined schedule named "ReleaseFalseBlockingJobs" and schedule it to run at a given interval as below.
+
+Go to the job details, set the run as user and make sure it has Ignore Misfires set and Stateful not set. Save if any modifications.
+
+Enable the job.
+
+In the example above, the job has been scheduled to unblock jobs having a wrong status.
+
+Energy Components ©2026

@@ -1,0 +1,229 @@
+// documentation
+Documentation
+Release Documentation
+Installation Guide
+Upgrade Guide
+Configuration
+Technical Documentation
+Technical Documentation Overview
+Energy Components Business Areas
+Energy Components Basic User Guide
+Energy Components Product Concepts
+EC Framework
+Docker Images
+Identity & Access Management
+Event
+Rest API
+GraphQL API
+EC Integration Services
+EC BPM - Business Process Modelling
+Extensions
+General Configuration and Guidelines
+Class Configuration
+How to configure Screen Treeview Menu
+Unit of Measure Support in Energy Components
+System of Measurement
+How to get Users and User’s roles
+System Property Exclude Synonyms
+Four Eyes Approval
+How to manage User Exit packages
+Calculation Group configuration
+Calculation Library
+Database Users and Logging
+How to change table content PINC logging in install mode
+How to configure a Business Action to call SQL procedure
+How to use Date Macro Parameter
+How to resolve blocked schedules automatically
+How to re-pin scheduled jobs
+How to define check rules
+How to configure Tab Label in EC Screens
+How to configure Context Menu
+How to configure EC Dashboards
+How to Configure the Application Title Bar
+How to Configure Table Column Sets
+Time Zone Support in Energy Components
+Deprecating Ecdp_ProductionDay
+How to configure language translation in EC
+How to configure Messaging
+Navigator default values
+How to send messages from EC
+How to disable navigator cache
+EC Dataloader
+Data Purging
+Expression and Scripting support
+Migration utility functions
+REC ID utility
+Pendo
+EC Data Access Control (eDAC)
+Reporting and Analytics
+EC Tools
+Application Development
+Database Development
+Flyway
+EC Production
+EC Chemistry
+EC Transport
+EC Sales
+EC Revenue
+How To Get Started
+Documentation
+14.2.4
+Documentation
+Technical Documentation
+EC Framework
+General Configuration and Guidelines
+How to manage User Exit packages
+Contents
+Introduction: Why do we need to change
+What does this mean for the default Product implementation
+What does this mean for Project upgrading to EC 12.2.3 or above
+Upgrade implementation description
+How to create a custom implementation of a product User Exit package
+How to implement a custom User Exit package
+User Exit Package Configuration (CO.1079) screen
+How to manage User Exit packages
+Introduction: Why do we need to change
+
+This change is to separate ownership between product default implementation of the user exit and project overrides of the user exit and to avoiding injecting code into product owned PL/SQL packages.
+
+This is a hard requirement in the new Extension Framework, that Extensions cannot change product packages.
+
+With the old way of adding User Exit (UE) code, Flyway handling of project UE package implementations would not automatically detect that product had changed the default implementation.
+
+What does this mean for the default Product implementation
+
+The UE header is the definition of a User Exit with the Interface API.
+
+The default Product implementation is done in User Exit Interface (UEI) package inside the Product.
+
+The customers that want to override the default implementation will need to make their own UEI package and change the reference in table CTRL_USER_EXIT.
+
+Handling of global variables in the UE package header:
+
+Has been made into functions in the UE header.
+
+Can still be variables in the UEI package header.
+
+What does this mean for Project upgrading to EC 12.2.3 or above
+
+Upgrade will copy existing project specific UE package into a ZUE_TEMP…
+
+Map the reference in CTRL_USER_EXIT to point to the ZUE_TEMP…
+
+This is only done when we detect a difference in the package.
+
+You should rename the package in your project code repository to UEI_…​
+
+Change reference and Owner Context in CTRL_USER_EXIT to point to your package.
+
+Run ecdp_generate.generate_ue to UE_ package regenerating.
+
+Remove the ZUE_TEMP… package.
+
+Minimize the overrides to only the functions where you have an override. The upgrade will do all the functions/procedures in a package that has changed.
+
+Upgrade implementation description
+
+Mapping table CTRL_USER_EXIT is created. By default, the table CTRL_USER_EXIT has mappings from User Exit methods to the product implementation of the methods. The mapping can be turned ON or OFF by setting a column ACTIVE_IND to 'Y' or 'N', default value is 'Y'.
+
+Run compare the checksum of the UE packages in the customer database with the old “clean” UE packages. As the “clean” database the EC 12.2.0 was taken, product default User Exit packages were not changed since that.
+
+If the checksum is the same, no remapping is needed.
+
+If the checksum is different, it means that there are customer/project changes that need to be handled.
+
+The customer/project package is renamed to the ZUE_TEMP_ package
+
+Insert into CTRL_USER_EXIT is done to point to this implementation, with owner_cntx = 1000.
+
+The owner of the overridden package can change their package and point to it with their owner context and remove the temporary package.
+
+Implement package headers for 18 UE_ packages where global variables are converted to functions.
+
+Implement Product default User Exit packages as UEI_XXXX_ packages
+
+Run ecdp_generate.generate_ue. The UE_ package bodies are generated based on the mapping table, to call the implementation package
+
+either the Product default or the project-specific one.
+
+Example: Customer-specific mapping in the CTRL_USER_EXIT table:
+
+Figure 1. CTRL_USER_EXIT table
+
+Example: The UE_ package body generated based on this mapping in CTRL_USER_EXIT:
+
+CREATE OR REPLACE PACKAGE BODY UE_CALENDAR IS
+   FUNCTION GetRecurringHoliday (p_recurring_holiday_code VARCHAR2, p_year NUMBER) RETURN DATE
+   IS
+      BEGIN
+         RETURN UEI_KING_CALENDAR.GETRECURRINGHOLIDAY(p_recurring_holiday_code, p_year);
+      END GetRecurringHoliday;
+How to create a custom implementation of a product User Exit package
+
+Product User Exit packages can not be modified.
+
+Parameters for existing function/procedure can not be modified.
+
+New function/procedure can not be added.
+
+The set of parameters is defined in the UE package header.
+
+Create a new custom implementation of the product UE package (e.g. UEI_KING_CALENDAR)
+
+Add new functions/procedures to the UEI package header and body for functions/procedures you want to customise.
+
+The function/procedure must have the same parameters as specified in the product UE package.
+
+The custom UEI package can have additional functions/procedures that are used internal in the custom UEI package or by custom code.
+These will not be added to the UE package.
+
+Insert functions/procedures mapping into the table CTRL_USER_EXIT
+
+Add one row for each function/procedure you want to customise.
+
+Source method is the product function/procedure you want to customise.
+
+Target method is the custom function/procedure you want to replace it with.
+
+App space context and owner context should be for the app space context used in the package name (e.g. KING).
+
+The mapping can be turned ON or OFF by setting ACTIVE_IND to 'Y' or 'N', default value is 'Y'. The row with ACTIVE_IND = 'Y' and with the highest owner context is used when generating the UE package.
+
+Run EcDp_generate.generate_UE to generate UE package body
+(e.g. EcDp_generate.generate_UE (‘UE_CALENDAR’))
+
+How to implement a custom User Exit package
+
+Create a new custom UE package (e.g. UE_KING_CALC_UTIL)
+
+Add new functions/procedures to the UE package header
+
+Create a new implementation of the custom UE package (e.g. UEI_KING_CALC_UTIL)
+
+Add new functions/procedures to the UEI package header and body.
+All functions/procedures specified in the custom UE package should be added.
+
+Insert functions/procedures mapping into the table CTRL_USER_EXIT
+
+One row should be added for each function/procedure in the custom UE package.
+
+Run EcDp_generate.generate_UE to generate UE package body
+(e.g. EcDp_generate.generate_UE (‘UE_KING_CALC_UTIL’))
+
+Customer UE package can be customised by other (higher) owner context similar as product UE package. Example: A template (owner context = 1000) can add a customer UE package. Asset (owner context = 3000) can override the template UE package.
+
+User Exit Package Configuration (CO.1079) screen
+
+The User Exit Package Configuration screen provides an interface to configure User Exit packages. Do the following to create a specific customer version of a User Exit package:
+
+Insert a new row for user Exit package function/procedure to be customised. Set Owner Cntx >= 1000 and Target Method to the new specific UEI package function/procedure.
+
+The mapping can be turned ON or OFF by checking or unchecking the Active flag column. The default is On.
+
+Click the "GENERATE CURRENT UE" to generate the User Exit Package.
+
+Click the "GENERATE ALL UEs" button to generate all User Exit packages. This can take some time.
+
+Figure 2. User Exit Package Configuration (CO.1079) screen
+
+Energy Components ©2026

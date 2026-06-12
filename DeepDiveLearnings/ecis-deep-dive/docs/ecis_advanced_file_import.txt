@@ -1,0 +1,3592 @@
+// documentation
+Documentation
+Release Documentation
+Installation Guide
+Upgrade Guide
+Configuration
+Technical Documentation
+Technical Documentation Overview
+Energy Components Business Areas
+Energy Components Basic User Guide
+Energy Components Product Concepts
+EC Framework
+Docker Images
+Identity & Access Management
+Event
+Rest API
+GraphQL API
+EC Integration Services
+EC Integration Services (ECIS) Technical Documentation
+ECIS - Configuration Guide
+ECIS Agent
+ECIS - Advanced File Import
+ECIS - Staging Table Extension
+ECIS - Source Adapter Configuration
+ECIS - Example adapter configurations
+ECIS - Sample Periods explained
+Remote endpoint configuration
+EC BPM - Business Process Modelling
+Extensions
+General Configuration and Guidelines
+EC Data Access Control (eDAC)
+Reporting and Analytics
+EC Tools
+Application Development
+Database Development
+Flyway
+EC Production
+EC Chemistry
+EC Transport
+EC Sales
+EC Revenue
+How To Get Started
+Documentation
+14.2.4
+Documentation
+Technical Documentation
+EC Framework
+EC Integration Services
+ECIS - Advanced File Import
+Contents
+Introduction
+Overview
+Summary
+Functional Concept
+Execution
+Monitoring
+Data Extraction
+General Mapping Structure
+Excel Mapping
+CSV Mapping
+Text Mapping
+Combined Formats Mapping
+XML Mapping
+Data Loading
+Standard Mapping
+Use of Constants
+Execution
+Configuring the Flow
+Scheduling the Execution
+Monitoring the Execution
+Error Handling
+User Exits
+Java
+PLSQL
+Mail Support
+Database Details
+Source Interface
+Source Mapping
+Source Path
+Source XML Path
+Target Mapping
+ECIS - Advanced File Import
+Introduction
+
+This section is the technical reference of the Advanced File Import, describing the concepts behind the design, the configuration details, and how to perform the execution of file import. The file term in this context means files of different types, like Excel, CSV, Fixed Width, XML, etc.
+
+This section has a top-down structure. The first section covers an overview of the Advanced File Import. This is followed by technical details about how to configure the extraction and loading and how this information is organized in the database.
+
+Overview
+Summary
+
+The advanced file import mechanism in EC is a framework that enables the users to easily set up and reconfigure import of advanced files structures. For a typical Excel format, it supports multiple sheets, crosstab, tables, and forms. In addition, the import mechanism supports similar structures for TEXT (CSV and Fixed Width) and XML.
+
+All configuration of the import is done through screens available in EC.
+
+The import mechanism provides file pickup from any drop folder accessible from the EC application server.
+
+Functional Concept
+
+The main concept for the Advanced File Import consists of four steps:
+
+Read the source file based on a set of source mappings.
+
+Convert the read data to the staging format and write it to the staging area.
+
+Read staging data and convert it to the EC class format based on a set of target mappings.
+
+Store the EC class data.
+
+The two first steps can be categorized as extraction and the two last steps as loading of data. In order to set up such a flow, it’s necessary to configure the mappings as described below.
+
+Mapping Configuration
+
+The mappings between a source file and the EC database are split into source mappings and target mappings. The first category represents the extraction and the last category the loading.
+
+Interface definition
+
+The source mappings or extraction part belongs to an interface so that it’s possible to control the execution of each separate file or file set. The interface consists of a name and options related to transaction types and user exits.
+
+Field Name	Description
+
+
+Code
+
+	
+
+The interface code.
+
+
+
+
+Name
+
+	
+
+The interface name.
+
+
+
+
+Functional Area
+
+	
+
+The interface EC Functional Area.
+
+
+
+
+Type
+
+	
+
+The processing type, i.e. data write behavior (INSERT / UPDATE, INSERT or UPDATE).
+
+Insert: Will only perform the insert operation.
+
+Insert then update: Will first perform an insert. If this fails with a unique constraint, it will try an update.
+
+Update: Will only try an update operation.
+
+
+
+
+Transaction Type
+
+	
+
+Whether rows imported should be committed row for the row or the whole job as one transaction.
+
+Row-based: If one row fails, it will still try to insert the rest of the rows, and only the failed row will not be written.
+
+Job-based: If one row fails, the whole transaction is rolled back.
+
+
+
+
+Source Type
+
+	
+
+The interface source type.
+
+
+
+
+Manual Staging Import
+
+	
+
+Manual verification of imported staging data. If this box is ticked, someone will have to manually go into the staging area screen, look at the data and click the import data button before the data can be moved from staging to EC.
+
+
+
+
+EC Validation Level
+
+	
+
+The validation level the interface is allowed to overwrite.
+
+
+
+
+EC Storage Data Level
+
+	
+
+The record status the rows inserted or updated in EC will get when running the interface.
+
+
+
+
+Overwrite
+
+	
+
+This is for overwriting existing data in EC.
+
+Full: All data will be updated regardless of whether they are changed or not.
+
+Incremental: Only data that has changed will be updated.
+
+
+
+
+Save Files (in Days)
+
+	
+
+The time period buffer to keep the imported file(s) in EC.
+
+
+
+
+Sort Order
+
+	
+
+The sort order to read files if there are several files to read.
+
+
+
+
+Revision Text Template
+
+	
+
+If this is set to a value <value>, the import will update the revision text to <value> + timestamp + counter. The counter is to avoid problems if two values on the same row are updated within the same second.
+
+Source mapping definition
+
+Each interface consists of one or several source mappings. Every source mapping extracts a value set from the source file. A value set can act as a single key value, a list of keys or a larger data set (the actual values). The source mapping is also given an EC Key reference so that it can be linked to a target mapping, defining how to handle data against EC.
+
+Field Name	Description
+
+
+Sort Order
+
+	
+
+Sort order of the mapping
+
+
+
+
+Code
+
+	
+
+Source mapping code
+
+
+
+
+Name
+
+	
+
+Source mapping name
+
+
+
+
+Path Origin
+
+	
+
+Set where the program should start reading the file. Example:
+
+Excel: Sheet1.A1
+
+CSV: 0.0
+
+
+
+
+Type
+
+	
+
+Choose what type of mapping
+
+KEY_VALUE - a single key value
+
+KEY_LIST - a list of key values
+
+DATA - data field
+
+
+
+
+Value Type
+
+	
+
+Which type of data
+
+Date
+
+String
+
+Number
+
+
+
+
+Staging Group
+
+	
+
+All data fields with the same staging group will be written in the same update operation, provided that they map to the same row in the database.
+
+
+
+
+ECKey
+
+	
+
+Unique EC key
+
+
+
+
+Key 1
+
+	
+
+Source mapping key value 1
+
+
+
+
+Key 2
+
+	
+
+Source mapping key value 2
+
+
+
+
+Key 3
+
+	
+
+Source mapping key value 3
+
+
+
+
+Key 4
+
+	
+
+Source mapping key value 4
+
+
+
+
+Key 5
+
+	
+
+Source mapping key value 5
+
+
+
+
+Key 6
+
+	
+
+Source mapping key value 6
+
+
+
+
+Key 7
+
+	
+
+Source mapping key value 7
+
+
+
+
+Key 8
+
+	
+
+Source mapping key value 8
+
+
+
+
+Key 9
+
+	
+
+Source mapping key value 9
+
+
+
+
+Key 10
+
+	
+
+Source mapping key value 10
+
+
+
+
+Navigation Method
+
+	
+
+The navigation method if reading text files.
+
+CSV - if the mapping reads a CSV file
+
+Fixed width - if the mapping reads a fixed width file
+
+
+
+
+Column Size
+
+	
+
+If using a fixed width, this value specifies how long the field is.
+
+Source mapping path definition
+
+The atomic extraction commands for a specific source mapping, used to traverse the files, are called Source Paths. Each source mapping has one or several source paths.
+
+Field Name	Description
+
+
+Sort Order
+
+	
+
+Sort order of the command
+
+
+
+
+Type
+
+	
+Which type of command:
+
+UPPER_LEFT - specifies the upper left field of the set
+
+LOWER_RIGHT - specifies the lower right field of the set
+
+
+
+
+Path
+
+	
+What type of operation should be performed
+
+Move
+
+FindVertical
+
+FindHorizontal
+
+
+
+
+Path Param 1
+
+	
+
+Parameter value 1
+
+
+
+
+Path Param 2
+
+	
+
+Parameter value 2
+
+
+
+
+Path Param 3
+
+	
+
+Parameter value 3
+
+Field Name	Description
+
+
+Sort Order
+
+	
+
+Sort order for the validation rule
+
+
+
+
+Rule Name
+
+	
+
+Choose which type of rule to apply
+
+
+
+
+Value String
+
+	
+
+Value to compare with if String
+
+
+
+
+Value Date
+
+	
+
+Value to compare with if Date
+
+
+
+
+Value Number
+
+	
+
+Value to compare with if Number
+
+
+
+
+Value Boolean
+
+	
+
+Value if a Boolean validation
+
+
+
+
+Exception Level
+
+	
+
+What output should the schedule give if this validation is breached? Error or warning?
+
+Target mapping definition
+
+The target mapping defines how the source data should be written to EC. It defines a link to the source mapping via an EC key, in addition to specifying classes and attributes. It’s also possible to specify from-unit and to-unit in this component. If these are specified, the incoming number will be converted.
+
+Field Name	Description
+
+
+Class
+
+	
+
+Which class should the value be written to
+
+
+
+
+Attribute
+
+	
+
+Which attribute in the class should the value be written to
+
+
+
+
+Ec Key
+
+	
+
+Relates to the EC Key in the source mapping. Provides a link between the source mapping and the target mapping
+
+
+
+
+Class Key 1
+
+	
+
+Class key 1 (Choose as many keys as the class has)
+
+
+
+
+Class Key 2
+
+	
+
+Class key 2 (Choose as many keys as the class has)
+
+
+
+
+Class Key 3
+
+	
+
+Class key 3 (Choose as many keys as the class has)
+
+
+
+
+Class Key 4
+
+	
+
+Class key 4 (Choose as many keys as the class has)
+
+
+
+
+Class Key 5
+
+	
+
+Class key 5 (Choose as many keys as the class has)
+
+
+
+
+Class Key 6
+
+	
+
+Class key 6 (Choose as many keys as the class has)
+
+
+
+
+Class Key 7
+
+	
+
+Class key 7 (Choose as many keys as the class has)
+
+
+
+
+Class Key 8
+
+	
+
+Class key 8 (Choose as many keys as the class has)
+
+
+
+
+Class Key 9
+
+	
+
+Class key 9 (Choose as many keys as the class has)
+
+
+
+
+Class Key 10
+
+	
+
+Class key 10 (Choose as many keys as the class has)
+
+
+
+
+Condition 1
+
+	
+
+Interface target mapping criteria condition 1
+
+
+
+
+Condition 2
+
+	
+
+Interface target mapping criteria condition 2
+
+
+
+
+Condition 3
+
+	
+
+Interface target mapping criteria condition 3
+
+
+
+
+From Unit
+
+	
+
+If the unit conversion is needed, choose from-unit
+
+
+
+
+To Unit
+
+	
+
+If the unit conversion is needed, choose to-unit
+
+
+
+
+Constant String
+
+	
+
+Use to define a constant string value
+
+
+
+
+Constant number
+
+	
+
+Use to define a constant number value
+
+
+
+
+Constant Date
+
+	
+
+Use to define a constant date value
+
+Source Mapping Screen
+
+The source mapping screens allow the user to configure interfaces, source mappings, source paths, and target mappings. The EC class information will be provided in the popups to simplify the configuration process.
+
+Details about the underlying data structures can be found in Database Details.
+
+Target Mapping Screen
+
+There is a separate screen for performing target mappings independently from the interfaces. The Target Mapping Configuration screen might be used when the interfaces share the same mappings. The navigator uses EC class, EC attribute, or ECKey as navigator values.
+
+Details about the underlying data structures can be found in Database Details.
+
+Staging Area Screen with Preview
+
+This screen is used to visualize the incoming data. All data shown here are based on the contents of the staging area. The navigator uses interface, filename, and date as a parameter.
+
+Details about the underlying data structures can be found in Database Details.
+
+Import History Screen
+
+This screen is used to visualize the loaded data. From- and to-date can be specified. Interface and filename must be specified.
+
+Execution
+
+Execution is performed by the EC Scheduler, running a business action which is common for all EC Integration Services.
+
+Each job is linked to a job configuration and a specific source interface. In addition, a set of folder references must be applied.
+
+Monitoring
+
+Monitoring is carried out by the EC Scheduler mechanisms. Each interface is connected to a schedule, and the schedule gets a log level. By inspecting the scheduler history screen, the user will get all details about the execution.
+
+Data Extraction
+
+In order to perform data extraction against a source file, specific source mappings need to be specified. Each mapping has a set of paths or commands describing how to navigate in the file.
+
+General Mapping Structure
+
+As mentioned in the Overview section the general mapping structure consists of an interface, source mapping, source path, and target mapping structure. This represents different ways to navigate in a source file.
+
+In general, for all source navigation models we distinguish between three different mapping types:
+
+KEY_VALUE (extraction of one single value)
+
+KEY_LIST (extraction of a one-dimensional list of values, vertically or horizontally)
+
+DATA (extraction of a complete data set, consisting of one or more dimensions)
+
+In order to find the values above, a set of paths or commands are provided:
+
+Move(xDirection, yDirection) (Move to a specific position in the file)
+
+FindHorizontal(text | number | date) (Move horizontally until a specific expression is found)
+
+FindVertical(text | number | date) (Move vertically until a specific expression is found)
+
+Data types for the find commands are defined:
+
+Text: <string | number | date> can be blank. This can be specified by using the expression "" (ASCII-34 x 2)
+
+Number: <number> is specified by the format .#, i.e. with a dot (ASCII-14) as the decimal separator if decimals are needed
+
+Date: <date> is specified by ISO format (yyyy-MM-ddTHH:mm:ss)
+
+To hold a range of values, each path/command must be of the following two types:
+
+UPPER_LEFT
+
+LOWER_RIGHT
+
+There might be minor differences between how the mappings are used for the different file types, especially when it comes to the navigational principles (commands). This will be shown below.
+
+Boolean values in excel files should be mapped as text datatype, and will be written to the database as "Y" for TRUE and "N" for FALSE.
+Excel Mapping
+
+The extraction of Excel data is based on standard EC libraries. Hence the Excel version compatibility is relying on those. Please check the EC documentation for further details.
+
+Path Origin
+
+The path origin for an Excel source file is mandatory and is following the <Sheet>.<Cell> format. The Sheet refers to the naming of a specific sheet in the Excel workbook. The Cell refers to a valid cell in the selected sheet. If the sheet changes name rapidly, use <sheetnumber>.<Cell> instead of sheet name, but here you need to have <> to mark that this is a sheet number. See example.
+
+Example:
+Well Test Values.B4
+<0>.A1
+
+Available Commands
+
+Move(<column number>, <row number>)
+
+FindVertical(<search string>, [CELL_BEFORE])
+
+FindHorizontal(<search string>, [CELL_BEFORE])
+
+Move
+
+The move command takes two parameters, one for the column number and one for the row. The column is given as a number of cells from the current position. The rows are given as the number of rows from the current position.
+
+Example 1)
+
+Initial position: B4
+
+Move(3,4)
+
+Final position: E8
+
+FindVertical
+
+The FindVertical command takes one mandatory parameter, the search string, and one optional parameter indicating if the cell before the found cell should be returned.
+
+Example 2)
+
+Initial position: A1
+
+FindVertical("eof", CELL_BEFORE)
+
+Final position: A6
+
+	A	B	C
+
+
+1
+
+	
+
+Well
+
+	
+
+Date
+
+	
+
+WHT
+
+
+
+
+2
+
+	
+
+W1
+
+	
+
+06.05.2008
+
+	
+
+45.2
+
+
+
+
+3
+
+	
+
+W2
+
+	
+
+06.05.2008
+
+	
+
+46.9
+
+
+
+
+4
+
+	
+
+W3
+
+	
+
+06.05.2008
+
+	
+
+50.2
+
+
+
+
+5
+
+	
+
+W1
+
+	
+
+07.05.2008
+
+	
+
+51.2
+
+
+
+
+6
+
+	
+
+W2
+
+	
+
+07.05.2008
+
+	
+
+48.1
+
+
+
+
+7
+
+	
+
+eof
+
+		
+
+Example 3)
+
+Initial position: B1
+
+FindVertical("")
+
+Final position: B6
+
+	A	B	C
+
+
+1
+
+	
+
+Well
+
+	
+
+Date
+
+	
+
+WHT
+
+
+
+
+2
+
+	
+
+W1
+
+	
+
+06.05.2008
+
+	
+
+45.2
+
+
+
+
+3
+
+	
+
+W2
+
+	
+
+06.05.2008
+
+	
+
+46.9
+
+
+
+
+4
+
+	
+
+W3
+
+	
+
+06.05.2008
+
+	
+
+50.2
+
+
+
+
+5
+
+	
+
+W1
+
+	
+
+07.05.2008
+
+	
+
+51.2
+
+
+
+
+6
+
+	
+
+W2
+
+	
+
+07.05.2008
+
+	
+
+48.1
+
+
+
+
+7
+
+	
+
+eof
+
+		
+
+FindVertical with an empty search string returns not the empty cell, but the cell before.
+
+FindHorizontal
+
+The FindHorizontal command takes one mandatory parameter, the search string, and one optional parameter indicating if the cell before the found cell should be returned.
+
+Example 4)
+
+Initial position: A1
+
+Move(0, 1)
+
+FindHorizontal("eof", CELL_BEFORE)
+
+Final position: F2
+
+	A	B	C	D	E	F	G
+
+
+1
+
+		
+
+Stream
+
+			
+
+Forecast
+
+		
+
+
+2
+
+		
+
+S01
+
+	
+
+S02
+
+		
+
+F01
+
+	
+
+F02
+
+	
+
+eof
+
+
+
+
+3
+
+	
+
+2019-03-02
+
+	
+
+60
+
+	
+
+40
+
+		
+
+100
+
+	
+
+200
+
+	
+
+
+4
+
+	
+
+2019-03-03
+
+	
+
+65
+
+	
+
+50
+
+		
+
+90
+
+	
+
+180
+
+	
+A Table Extraction Example
+
+A typical Excel extraction example consists of two key lists and one or several data sets. The first key list in the example extracts the well codes from the file. The next key list extracts the dates. The two data sets retrieve plain values. The data sets a link to the rows from the two key lists. Hence writing the data to the staging area will result in the table as visualized in the drawing above.
+
+When dealing with one-dimensional data sets the resulting staging area will normally be of staging type TABLE. If the data set is spanning across multiple dimensions (several columns and rows), a CROSSTABLE will be the result. This is shown in the example below.
+
+A Crosstable Extraction Example
+
+As shown in the example, a multi-dimensional data set is selected. This is indexed by two key lists, one vertical (ROW based) and one horizontal (COLUMN based). The resulting staging area will produce the numbers with the matching keys and in addition, refer the corresponding row and column.
+
+CSV Mapping
+
+The CSV format is based on a column separation specified by a single separator character. This character is by default semicolon (;). This can be customized when setting up the job.
+
+Path Origin
+
+The path origin for a CSV source file is mandatory and is following the <column>.<line> format. Both the column and line references are indexed from 0.
+
+Example:
+Path origin: 0.4
+Final position: column 1, line 5
+
+Available Commands
+
+Move(<column number>, <row number>)
+
+FindVertical(<search string>, [CELL_BEFORE])
+
+FindHorizontal(<search string>, [CELL_BEFORE])
+
+The move command takes two parameters, one for the column number and one for the row. The column is given as a number of columns from the current position. The rows are given as the number of rows from the current position.
+
+Example 1)
+
+Initial position: 0.0
+
+Move(1,4)
+
+Final position: 1.4 (column 2, line 5)
+
+The FindVertical and FindHorizontal command is used in the same way as for Excel. Vertical or Horizontal searches are limited to the current column or line in the file.
+
+A Table Extraction Example
+
+The example above shows how key lists and data can be extracted from a CSV file, not very different from the Excel approach. It is important that the path origin is set correctly when a file consists of differently formatted sections.
+
+Text Mapping
+
+Text Mapping is treated as fixed width, meaning that each column in the file has the same number of characters for each line.
+
+Path Origin
+
+The path origin for a Text source file is mandatory and is following the <column>.<line> format. Both the column and line references are indexed from 0.
+
+Example:
+Path origin: 0.4
+Final position: column 1, line 5
+
+Available Commands
+
+Move(<column number>, <row number>, <column size>)
+
+FindVertical(<search string>, <column size>)
+
+FindHorizontal(<search string>, <column size>)
+
+The move command takes three parameters, one for the column number one for the row and a final parameter setting the current column size. The column is given as a number of cells from the current position.
+
+Example 1)
+
+Initial position: 0.0
+
+Move(1,4)
+
+Final position: 1-11.4 ((column 2 – column 12), line 5)
+
+The FindVertical and FindHorizontal have the same behavior as for Excel, except that it’s using an additional parameter, column size/width, to specify each value’s range.
+
+A Table Extraction Example
+
+The example shows how each column in the text file has a specific column size/width and that this can be used for consistent navigation between lines. If spanning across a data set with multiple columns, each column is treated with a common column size specified by the source command.
+
+Combined Formats Mapping
+
+In some text cases, there’s no consistent format throughout the file. It might be a combination of Text and CSV. The interface for this case will typically be specified as text. In addition, each source mapping may get the specific navigation method:
+
+FIXED WIDTH
+
+CSV
+
+Ensure that the source path origin is set correctly for each of the mappings. For example: If the CSV section in the middle of a combined format should be extracted, set the path origin to the start of the section and specify the source mapping with navigation method CSV.
+
+XML Mapping
+
+The XML mapping is basically based on the same concept as for the plain column – line formats. A line in a plain format can correspond to a repeating XML section. A column will correspond to an attribute or tag value in each of the repeating XML sections.
+
+Path Origin
+
+The source origin for an XML is specified by a single tag. The origin will jump to the first instance of the specified tag. If the outer wrapping for an XML is <Body></Body> and the further mappings will be based on the body content, the Body is set as path origin.
+
+Available Commands
+
+The commands for navigating in an XML file are a little bit different from the other formats. The source mapping is similar, but the paths are specified as an XPath expression. The screen setup is helping the user to select the right tags and attributes, but the finally persisted expression is Xpath.
+
+Example:
+
+Each of the paths is extracting a node, tag or attribute, enabling the navigator to read value(s). The TEXT_1 column is representing a condition of the value extracted.
+
+A Table Extraction Example
+Data Loading
+
+All extracted source data will be loaded into the staging area. The remaining step before it can be further loaded into the EC database is a mapping between staging data and EC classes. This is achieved by applying the target mappings.
+
+Standard Mapping
+
+Each staging row will be identified by an EC key. The target mapping is linking this key to a specific class and attribute. Implicit mapping like the class keys is being performed by internal lookup against the EC database. The class keys are linked in the specified order. KEY_1 in the target mapping will be linked against the first class key in the EC class lookup, etc.
+
+Use of Constants
+
+For many classes, there might be mandatory attributes that are not available from the source file. This might typically be fixed values, object types, etc. This can be resolved by making a duplicate target mapping to a specific key and set the constant value. The constant value is of one of the following types:
+
+STRING
+
+DATE
+
+NUMERIC
+
+Execution
+Configuring the Flow
+
+The flow can be configured according to two different approaches, one for manual staging validation and one for automated staging validation.
+
+The first option requires that the flow is split into two different jobs, one for extracting data and loading them into staging and one for loading them into EC. The second flow option can be run in one single job, extracting the data from the source file and loading it into EC through staging.
+
+Each step in the flow is using ECIS Job Actions. The available Job Actions are:
+
+com.ec.ecdm.is.advancedexcel.sourcemapping.jobaction.AdvancedExcelJobAction (reading from a source file and producing staging format)
+
+com.ec.ecdm.is.advancedexcel.staging.jobaction.StagingJobActionTarget (reading staging format and writing to the staging area in the database)
+
+com.ec.ecdm.is.advancedexcel.staging.jobaction.StagingJobActionSource (reading data from staging area in database one file at the time, which means that the importing of data from the staging area to EC data tables will be done sequentially for each imported file)
+
+com.ec.ecdm.is.advancedexcel.staging.jobaction.StagingJobActionSourceChunked (splits and imports the list of staging rows in chunks to avoid excessive memory usage when there is a large number of rows to import)
+
+com.ec.ecdm.is.advancedexcel.staging.jobaction.StagingJobActionSourceChunced (deprecated - same as StagingJobActionSource)
+
+com.ec.ecdm.is.advancedexcel.targetmapping.jobaction.TargetMappingJobAction
+
+According to flow options in the drawing above the following combinations represents the corresponding setup:
+
+Flow 1) Job Action 1 → 2 and Job Action 3 → 4
+
+Flow 2) Job Action 1 → 2 → 4
+
+Since the Advanced File Import is built on the EC Integration Services, the configuration will follow the same scheme as the other ECIS components. This means the job can either be set up through an ecisconfig.xml or by applying parameters directly to the business action (the business action screen).
+
+To be able to configure ECIS through the database, the "ecis_db_config" business action parameter must be set to "Y".
+
+The parameters fulfilling an Advanced File Import configuration are shown below.
+
+Scheduling the Execution
+
+The execution is carried out from the EC Scheduler. The example in the screen above executes a complete flow (or a typical flow option 2 according to the previous section). The folders specified for the business action are:
+
+Drop folder: The folder where the source file will be picked up.
+
+Completed folder: The folder where the read and successful files will be moved after the job transaction.
+
+Error folder: The folder where the failing files will be moved after the job transaction.
+
+File filter: The first part or complete name of the file(s) to be picked up. No asterisk/wildcard characters are supported.
+
+If the FTP file drop service is used, the Drop folder specifies the file path to access the files on FTP remote server and other folder options specified will be ignored. These FTP parameters should be specified:
+
+FTP Server Name: The name of the remote FTP server which you want to read files from.
+
+FTP User Name: The user name which has access to the FTP remote server.
+
+FTP Password: The password of the user name to access the FTP remote server.
+
+FTP Port: The port number which the FTP remote server should connect to. If not specified the default port will be used.
+
+FTP Remove File
+
+N (default): To disable the validation of removing the file on the FTP remote server after dealing with that file.
+
+Y: To enable validation of removing files.
+
+Monitoring the Execution
+
+Monitoring the flow is only available after a finished transaction. The EC Scheduler History will provide status and a summary of the execution. To get more technical details about the run, open the detailed log. The log level is controlled by the scheduler setting in the scheduler screen.
+
+Error Handling
+
+It will be possible to configure the error handling in two different ways.
+
+One way is to handle the whole import job as one atomic transaction. If one or more errors occur the whole data import is rolled back.
+
+The other way is to handle import as several transactions. Errors will then be reported and any successful data contents will be imported into the EC database.
+
+Warnings will be reported and stored in the log and visible through the history screen.
+
+One drop folder must be defined; two other directories must also be defined. One is the "done" folder for successfully loaded files and the other is the "error" folder which stores files which can not be fully loaded. If one or more errors occur the file is stored in the "error" folder.
+
+The different types of transaction handling are defined on each interface. There are three or more important parameters per interface:
+
+Staging Validation
+
+	
+
+This flag will prevent the data from being directly imported into EC. Manual verification by pressing the import data button in the staging screen must be performed before the data can be imported into EC.
+
+
+
+
+EC Validation Level
+
+	
+
+The validation level the interface is allowed to overwrite. The available statuses provided by the default installation of EC are P(rovisional), V(erified) and A(pproved). If the data stored in EC has record status set to 'A' and the EC Validation level is set to 'P', the interface will fail to update the rows within EC.
+
+
+
+
+EC Storage Data Level
+
+	
+
+The record status the rows inserted or updated in EC will get when running the interface.
+
+
+
+
+Transaction Type
+
+	
+
+Whether rows imported should be committed row for the row or the whole job as one transaction. If the "row-based transaction" type is chosen the successful rows will be imported while the ones failing will not. If the "job-based transaction" type is chosen all the data will be rolled back if one failure occurs.
+
+
+
+
+Overwrite
+
+	
+
+This is for overwriting existing data in EC. These values can be used:
+
+Full: Always overwrite existing data in EC.
+
+Incremental: Overwrite only if the new data from the file are different from the existing data in EC.
+
+User Exits
+
+User exits in the Advanced File Import context mean a customized Java method or a PLSQL procedure that can run before or after specific events. The events supported are:
+
+Before writing to staging
+
+After writing to staging
+
+Before writing to EC
+
+After writing to EC
+
+The subscription of the user events can be controlled at two levels:
+
+At interface level (the user exit will be fired for all mappings which belong to the interface).
+
+At mapping level (the user exit will be fired when a specific mapping is handled).
+
+The user exit subscriptions can be defined at the source interface, source mapping, and target mapping.
+
+The user exit signatures must adhere to the following interface:
+
+Java
+/**
+ * Perform user exit with input data provided.
+ *
+ * @param con the connection
+ * @param defaultDTOBody the default dto body
+ *
+ * @throws UserExitException the user exit exception
+ */
+public void performUserExit(Connection con, DefaultDTOBody defaultDTOBody) throws UserExitException;
+
+/**
+* Perform user exit.
+*
+* @param con the connection
+* @throws UserExitException the user exit exception
+*/
+public void performUserExit(Connection con) throws UserExitException;
+PLSQL
+PLSQLPackage.Procedure(param1, param2...., paramN)
+
+…where the input parameters can be of any type but should correspond to the content of the DTO values, both when it comes to ordering and types.
+
+Example:
+
+PROCEDURE ECISUserExit(p_interface_code  VARCHAR2,
+                       p_code            VARCHAR2,
+                       p_file_name       VARCHAR2,
+                       p_ec_key          VARCHAR2,
+                       p_key_1           VARCHAR2,
+                       p_key_2           VARCHAR2,
+                       p_key_3           VARCHAR2,
+                       p_key_4           VARCHAR2,
+                       p_key_5           VARCHAR2,
+                       p_key_6           VARCHAR2,
+                       p_key_7           VARCHAR2,
+                       p_key_8           VARCHAR2,
+                       p_key_9           VARCHAR2,
+                       p_key_10          VARCHAR2,
+                       p_numeric_value   NUMBER,
+                       p_date_value      DATE,
+                       p_string_value    VARCHAR2)
+Mail Support
+
+EC Import has a Business Action (BA) for pulling mail from a mail server, fetching the attachment, and writing it to one of three destinations. This can either be a drop folder, the database or passing it along to MHM. The business action that performs this is:
+
+com.ec.ecdm.is.advancedexcel.mail.PullMailBusinessAction
+
+Typical usage of this BA is to call it before the EC Import BA’s are called. Here is a list of the different parameters the BA will use:
+
+Parameter	Description
+
+
+protocol
+
+	
+
+The protocol used by the mail server, either POP3 or IMAP.
+
+
+
+
+Server
+
+	
+
+The address to the mail server.
+
+
+
+
+port
+
+	
+
+The mail server port.
+
+
+
+
+user_id
+
+	
+
+The user id of the mail user.
+
+
+
+
+password
+
+	
+
+The password of the mail user.
+
+
+
+
+folder
+
+	
+
+Which mail folder to look for incoming messages in.
+
+
+
+
+drop_folder
+
+	
+
+If messages are to be written to a drop folder by the business action, this folder will be used.
+
+
+
+
+search
+
+	
+
+The search string to look for in the mail subject. Used together with the operator.
+
+
+
+
+compare_operator
+
+	
+
+How to search for the search string in the mail subject. The operator can have the following values:
+
+EQUALS
+
+	
+
+The subject has to match the string given in the parameter search.
+
+
+
+
+STARTS_WITH
+
+	
+
+The subject has to start with the string given in the parameter search.
+
+
+
+
+CONTAINS
+
+	
+
+The subject has to contain the string given in the parameter search.
+
+
+
+
+ENDS_WITH
+
+	
+
+The subject has to end with the string given in the parameter search.
+
+
+
+
+target
+
+	
+
+Determine where the BA will put the data. Can have the following values:
+
+MHM
+
+	
+
+Attachments will be saved to EC – MHM and MHM will need to be configured for further handling of the data.
+
+
+
+
+DATABASE
+
+	
+
+Attachments will be saved to the database.
+
+
+
+
+DROP_FOLDER
+
+	
+
+Attachments will be saved to the folder given in the parameter drop_folder.
+
+
+
+
+interface_code
+
+	
+
+This is the mapping against EC Import. The data will be saved with this interface_code in the database.
+
+
+
+
+Unzip
+
+	
+
+Set to y if the attachment is zipped. The BA will then unzip the files to the destination.
+
+
+
+
+Unzip_delete
+
+	
+
+If you want the zipped file to be deleted after it has been unzipped, set this to y.
+
+
+
+
+ssl_required
+
+	
+
+If this parameter is set to y, the BA will use SSL to connect to the mail server.
+
+Database Details
+Source Interface
+COLUMN_NAME	DATA_TYPE	NULLABLE
+
+
+INTERFACE_CODE
+
+	
+
+VARCHAR2
+
+	
+
+N
+
+
+
+
+NAME
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+TRANSACTION_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+STAGING_VALIDATION_IND
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+EC_VALID_LEVEL
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+EC_DATA_LEVEL
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PRE_STAGING_UE_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PRE_STAGING_UE_PATH
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+POST_STAGING_UE_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+POST_STAGING_UE_PATH
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PRE_TARGET_UE_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PRE_TARGET_UE_PATH
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+POST_TARGET_UE_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+POST_TARGET_UE_PATH
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+FORMAT
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+SOURCE_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+OVERWRITE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+RECORD_STATUS
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CREATED_BY
+
+	
+
+VARCHAR2
+
+	
+
+N
+
+
+
+
+CREATED_DATE
+
+	
+
+DATE
+
+	
+
+N
+
+
+
+
+LAST_UPDATED_BY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+LAST_UPDATED_DATE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+REV_NO
+
+	
+
+NUMBER
+
+	
+
+Y
+
+
+
+
+REV_TEXT
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_STATE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_BY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_DATE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+REC_ID
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+Source Mapping
+COLUMN_NAME	DATA_TYPE	NULLABLE
+
+
+IMP_SOURCE_MAPPING_NO
+
+	
+
+NUMBER
+
+	
+
+N
+
+
+
+
+CODE
+
+	
+
+VARCHAR2
+
+	
+
+N
+
+
+
+
+INTERFACE_CODE
+
+	
+
+VARCHAR2
+
+	
+
+N
+
+
+
+
+SORT_ORDER
+
+	
+
+NUMBER
+
+	
+
+Y
+
+
+
+
+NAME
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+NAVIGATION_METHOD
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PATH_ORIGIN
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+VALUE_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+STAGING_GROUP
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+EC_KEY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+KEY_1
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+KEY_2
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+KEY_3
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+KEY_4
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+KEY_5
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+KEY_6
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+KEY_7
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+KEY_8
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+KEY_9
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+KEY_10
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+TRANSACTION_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PRE_UE_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PRE_UE_PATH
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+POST_UE_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+POST_UE_PATH
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+NAVIGATION_METHOD
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+RECORD_STATUS
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CREATED_BY
+
+	
+
+VARCHAR2
+
+	
+
+N
+
+
+
+
+CREATED_DATE
+
+	
+
+DATE
+
+	
+
+N
+
+
+
+
+LAST_UPDATED_BY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+LAST_UPDATED_DATE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+REV_NO
+
+	
+
+NUMBER
+
+	
+
+Y
+
+
+
+
+REV_TEXT
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_STATE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_BY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_DATE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+REC_ID
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+Source Path
+COLUMN_NAME	DATA_TYPE	NULLABLE
+
+
+IMP_SOURCE_PATH_NO
+
+	
+
+NUMBER
+
+	
+
+N
+
+
+
+
+IMP_SOURCE_MAPPING_NO
+
+	
+
+NUMBER
+
+	
+
+N
+
+
+
+
+SORT_ORDER
+
+	
+
+NUMBER
+
+	
+
+Y
+
+
+
+
+TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PATH
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PATH_PARAM_1
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PATH_PARAM_2
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PATH_PARAM_3
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+RECORD_STATUS
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CREATED_BY
+
+	
+
+VARCHAR2
+
+	
+
+N
+
+
+
+
+CREATED_DATE
+
+	
+
+DATE
+
+	
+
+N
+
+
+
+
+LAST_UPDATED_BY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+LAST_UPDATED_DATE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+REV_NO
+
+	
+
+NUMBER
+
+	
+
+Y
+
+
+
+
+REV_TEXT
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_STATE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_BY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_DATE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+REC_ID
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+Source XML Path
+COLUMN_NAME	DATA_TYPE	NULLABLE
+
+
+IMP_SOURCE_XML_PATH_NO
+
+	
+
+NUMBER
+
+	
+
+N
+
+
+
+
+IMP_SOURCE_MAPPING_NO
+
+	
+
+NUMBER
+
+	
+
+N
+
+
+
+
+SORT_ORDER
+
+	
+
+NUMBER
+
+	
+
+Y
+
+
+
+
+PATH
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+TEXT_1
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+TEXT_2
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+TEXT_3
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+TEXT_4
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+TEXT_5
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+RECORD_STATUS
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CREATED_BY
+
+	
+
+VARCHAR2
+
+	
+
+N
+
+
+
+
+CREATED_DATE
+
+	
+
+DATE
+
+	
+
+N
+
+
+
+
+LAST_UPDATED_BY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+LAST_UPDATED_DATE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+REV_NO
+
+	
+
+NUMBER
+
+	
+
+Y
+
+
+
+
+REV_TEXT
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_STATE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_BY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_DATE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+REC_ID
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+Target Mapping
+COLUMN_NAME	DATA_TYPE	NULLABLE
+
+
+EC_KEY
+
+	
+
+VARCHAR2
+
+	
+
+N
+
+
+
+
+CLASS
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+ATTRIBUTE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CLASS_KEY_1
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CLASS_KEY_2
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CLASS_KEY_3
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CLASS_KEY_4
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CLASS_KEY_5
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CLASS_KEY_6
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CLASS_KEY_7
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CLASS_KEY_8
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CLASS_KEY_9
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CLASS_KEY_10
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CONDITION_1
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CONDITION_2
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CONDITION_3
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CONSTANT_STRING_VALUE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+FROM_UNIT
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+TO_UNIT
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CONSTANT_NUMBER_VALUE
+
+	
+
+NUMBER
+
+	
+
+Y
+
+
+
+
+CONSTANT_DATE_VALUE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+PRE_UE_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+PRE_UE_PATH
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+POST_UE_TYPE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+POST_UE_PATH
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+RECORD_STATUS
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+CREATED_BY
+
+	
+
+VARCHAR2
+
+	
+
+N
+
+
+
+
+CREATED_DATE
+
+	
+
+DATE
+
+	
+
+N
+
+
+
+
+LAST_UPDATED_BY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+LAST_UPDATED_DATE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+REV_NO
+
+	
+
+NUMBER
+
+	
+
+Y
+
+
+
+
+REV_TEXT
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_STATE
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_BY
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+
+
+
+APPROVAL_DATE
+
+	
+
+DATE
+
+	
+
+Y
+
+
+
+
+REC_ID
+
+	
+
+VARCHAR2
+
+	
+
+Y
+
+Energy Components ©2026

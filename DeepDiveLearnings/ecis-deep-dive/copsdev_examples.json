@@ -1,0 +1,3069 @@
+{
+ "ZWP_INTERIM_DATA_UPLOAD": {
+  "interface": {
+   "OBJECT_ID": "513355FC0AD6D45FE0630100007F1E9A",
+   "OBJECT_CODE": "ZWP_INTERIM_DATA_UPLOAD",
+   "NAME": "Interim Data upload",
+   "TYPE": "INSERT_UPDATE",
+   "TRANSACTION_TYPE": "ROW",
+   "EC_DATA_LEVEL": "P",
+   "EC_VALID_LEVEL": "P",
+   "STAGING_VALIDATION_IND": null,
+   "PRE_STAGING_UE_TYPE": null,
+   "PRE_STAGING_UE_PATH": null,
+   "POST_STAGING_UE_TYPE": null,
+   "POST_STAGING_UE_PATH": "ZWP_P_ECIS_UTIL.runPostStaging",
+   "PRE_TARGET_UE_TYPE": null,
+   "PRE_TARGET_UE_PATH": null,
+   "POST_TARGET_UE_TYPE": null,
+   "POST_TARGET_UE_PATH": null
+  },
+  "source_mappings": [
+   {
+    "OBJECT_ID": "513355FC0AE2D45FE0630100007F1E9A",
+    "CODE": "CLASS_NAME",
+    "NAME": "Class Name",
+    "SORT_ORDER": 10,
+    "PATH_ORIGIN": "Upload_data.A2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0AEBD45FE0630100007F1E9A",
+    "CODE": "KEY",
+    "NAME": "KEY",
+    "SORT_ORDER": 20,
+    "PATH_ORIGIN": "Upload_data.B2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0AD9D45FE0630100007F1E9A",
+    "CODE": "DATE",
+    "NAME": "Month",
+    "SORT_ORDER": 30,
+    "PATH_ORIGIN": "Upload_data.C2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "DATE",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0AF4D45FE0630100007F1E9A",
+    "CODE": "OBJECT_CODE",
+    "NAME": "Object Code",
+    "SORT_ORDER": 40,
+    "PATH_ORIGIN": "Upload_data.D2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B09D45FE0630100007F1E9A",
+    "CODE": "ACCOUNT_CODE",
+    "NAME": "ACCOUNT_CODE",
+    "SORT_ORDER": 50,
+    "PATH_ORIGIN": "Upload_data.E2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": "ecINT_ACC_CODE",
+    "KEY_1": "ROWS:CLASS_NAME",
+    "KEY_2": "ROWS:KEY",
+    "KEY_3": "ROWS:DATE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 11,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B15D45FE0630100007F1E9A",
+    "CODE": "COMPANY_CODE",
+    "NAME": "COMPANY_CODE",
+    "SORT_ORDER": 60,
+    "PATH_ORIGIN": "Upload_data.F2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": "ecINT_COMP_CODE",
+    "KEY_1": "ROWS:CLASS_NAME",
+    "KEY_2": "ROWS:KEY",
+    "KEY_3": "ROWS:DATE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 11,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B21D45FE0630100007F1E9A",
+    "CODE": "TIME_SPAN",
+    "NAME": "TIME_SPAN",
+    "SORT_ORDER": 70,
+    "PATH_ORIGIN": "Upload_data.G2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": "ecINT_TIME_SPAN",
+    "KEY_1": "ROWS:CLASS_NAME",
+    "KEY_2": "ROWS:KEY",
+    "KEY_3": "ROWS:DATE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 11,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B2DD45FE0630100007F1E9A",
+    "CODE": "COLUMN_NAME",
+    "NAME": "COLUMN_NAME",
+    "SORT_ORDER": 80,
+    "PATH_ORIGIN": "Upload_data.H2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": "ecINT_COLUMN_NAME",
+    "KEY_1": "ROWS:CLASS_NAME",
+    "KEY_2": "ROWS:KEY",
+    "KEY_3": "ROWS:DATE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 11,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0AFDD45FE0630100007F1E9A",
+    "CODE": "VALUE",
+    "NAME": "Value",
+    "SORT_ORDER": 90,
+    "PATH_ORIGIN": "Upload_data.I2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": null,
+    "EC_KEY": "ecINT_VALUE",
+    "KEY_1": "ROWS:CLASS_NAME",
+    "KEY_2": "ROWS:KEY",
+    "KEY_3": "ROWS:DATE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 11,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B46D45FE0630100007F1E9A",
+    "CODE": "CAR_CLASS_NAME",
+    "NAME": "Class Name",
+    "SORT_ORDER": 110,
+    "PATH_ORIGIN": "Upload_Export_LNG.A2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B3DD45FE0630100007F1E9A",
+    "CODE": "CAR_DATE",
+    "NAME": "Month",
+    "SORT_ORDER": 120,
+    "PATH_ORIGIN": "Upload_Export_LNG.B2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "DATE",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B4FD45FE0630100007F1E9A",
+    "CODE": "CARGO_NO",
+    "NAME": "CARGO_NO",
+    "SORT_ORDER": 130,
+    "PATH_ORIGIN": "Upload_Export_LNG.C2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B58D45FE0630100007F1E9A",
+    "CODE": "LIFTER_GROUP",
+    "NAME": "Lifter Group",
+    "SORT_ORDER": 140,
+    "PATH_ORIGIN": "Upload_Export_LNG.D2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B61D45FE0630100007F1E9A",
+    "CODE": "LIFTER",
+    "NAME": "Lifter",
+    "SORT_ORDER": 150,
+    "PATH_ORIGIN": "Upload_Export_LNG.E2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B6AD45FE0630100007F1E9A",
+    "CODE": "SUM_TONNES",
+    "NAME": "SUM TONNES",
+    "SORT_ORDER": 160,
+    "PATH_ORIGIN": "Upload_Export_LNG.F2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": null,
+    "EC_KEY": "ecINT_SUM_TONNES",
+    "KEY_1": "ROWS:CAR_CLASS_NAME",
+    "KEY_2": "ROWS:CAR_DATE",
+    "KEY_3": "ROWS:CARGO_NO",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 11,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B76D45FE0630100007F1E9A",
+    "CODE": "SUM_GJ",
+    "NAME": "SUM GJ",
+    "SORT_ORDER": 170,
+    "PATH_ORIGIN": "Upload_Export_LNG.G2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": null,
+    "EC_KEY": "ecINT_SUM_GJ",
+    "KEY_1": "ROWS:CAR_CLASS_NAME",
+    "KEY_2": "ROWS:CAR_DATE",
+    "KEY_3": "ROWS:CARGO_NO",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 11,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "513355FC0B82D45FE0630100007F1E9A",
+    "CODE": "SUM_MMBTU",
+    "NAME": "SUM MMBTU",
+    "SORT_ORDER": 180,
+    "PATH_ORIGIN": "Upload_Export_LNG.H2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": null,
+    "EC_KEY": "ecINT_SUM_MMBTU",
+    "KEY_1": "ROWS:CAR_CLASS_NAME",
+    "KEY_2": "ROWS:CAR_DATE",
+    "KEY_3": "ROWS:CARGO_NO",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 11,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   }
+  ],
+  "target_mappings": [
+   {
+    "EC_KEY": "ecINT_VALUE",
+    "CLASS": "ZWP_I_UPLOAD_INT_VALUE",
+    "ATTRIBUTE": "VALUE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ecINT_ACC_CODE",
+    "CLASS": "ZWP_I_UPLOAD_INT_VALUE",
+    "ATTRIBUTE": "ACCOUNT_CODE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ecINT_COMP_CODE",
+    "CLASS": "ZWP_I_UPLOAD_INT_VALUE",
+    "ATTRIBUTE": "COMPANY_CODE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ecINT_TIME_SPAN",
+    "CLASS": "ZWP_I_UPLOAD_INT_VALUE",
+    "ATTRIBUTE": "TIME_SPAN",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ecINT_COLUMN_NAME",
+    "CLASS": "ZWP_I_UPLOAD_INT_VALUE",
+    "ATTRIBUTE": "COLUMN_NAME",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ecINT_SUM_TONNES",
+    "CLASS": "ZWP_I_UPLOAD_CARGO_VALUE",
+    "ATTRIBUTE": "SUM_TONNES",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ecINT_SUM_GJ",
+    "CLASS": "ZWP_I_UPLOAD_CARGO_VALUE",
+    "ATTRIBUTE": "SUM_GJ",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ecINT_SUM_MMBTU",
+    "CLASS": "ZWP_I_UPLOAD_CARGO_VALUE",
+    "ATTRIBUTE": "SUM_MMBTU",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   }
+  ]
+ },
+ "ZWP_PROD_TARGET": {
+  "interface": {
+   "OBJECT_ID": "45A9A31E4C9F4198E0630100007F1329",
+   "OBJECT_CODE": "ZWP_PROD_TARGET",
+   "NAME": "Production Targets",
+   "TYPE": "INSERT_UPDATE",
+   "TRANSACTION_TYPE": "JOB",
+   "EC_DATA_LEVEL": "P",
+   "EC_VALID_LEVEL": "P",
+   "STAGING_VALIDATION_IND": "N",
+   "PRE_STAGING_UE_TYPE": null,
+   "PRE_STAGING_UE_PATH": null,
+   "POST_STAGING_UE_TYPE": "PLSQL",
+   "POST_STAGING_UE_PATH": "ZWP_P_ECIS_UTIL.processFcstScen",
+   "PRE_TARGET_UE_TYPE": null,
+   "PRE_TARGET_UE_PATH": null,
+   "POST_TARGET_UE_TYPE": null,
+   "POST_TARGET_UE_PATH": null
+  },
+  "source_mappings": [
+   {
+    "OBJECT_ID": "45A9A31E4CA84198E0630100007F1329",
+    "CODE": "DATE",
+    "NAME": "Date",
+    "SORT_ORDER": 10,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "DATE",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4CA34198E0630100007F1329",
+    "CODE": "FCTY_CLASS_1",
+    "NAME": "Facility ",
+    "SORT_ORDER": 20,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "KEY_VALUE",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "1",
+      "PATH_PARAM_2": "2",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4CAE4198E0630100007F1329",
+    "CODE": "SCENARIO_CODE",
+    "NAME": "Scenario Code",
+    "SORT_ORDER": 30,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "KEY_VALUE",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "1",
+      "PATH_PARAM_2": "6",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4F244198E0630100007F1329",
+    "CODE": "SCENARIO_NAME",
+    "NAME": "Scenario Name",
+    "SORT_ORDER": 31,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "KEY_VALUE",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "1",
+      "PATH_PARAM_2": "5",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4F3F4198E0630100007F1329",
+    "CODE": "SCENARIO_START_DATE",
+    "NAME": "Scenario Start Date",
+    "SORT_ORDER": 32,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "KEY_VALUE",
+    "VALUE_TYPE": "DATE",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "1",
+      "PATH_PARAM_2": "7",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4F5B4198E0630100007F1329",
+    "CODE": "SCENARIO_END_DATE",
+    "NAME": "Scenario End Date",
+    "SORT_ORDER": 33,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "KEY_VALUE",
+    "VALUE_TYPE": "DATE",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "1",
+      "PATH_PARAM_2": "8",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4CD04198E0630100007F1329",
+    "CODE": "FORECAST_CODE",
+    "NAME": "Forecast Code",
+    "SORT_ORDER": 40,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "KEY_VALUE",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "1",
+      "PATH_PARAM_2": "4",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4CDB4198E0630100007F1329",
+    "CODE": "LNG_CAPACITY",
+    "NAME": "LNG Capacity",
+    "SORT_ORDER": 50,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_LNG_CAPACITY",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "1",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4CE74198E0630100007F1329",
+    "CODE": "GAS_CAPACITY",
+    "NAME": "Pipeline Gas Capacity",
+    "SORT_ORDER": 60,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_GAS_CAPACITY",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "2",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4D024198E0630100007F1329",
+    "CODE": "CONDENSATE_CAPACITY",
+    "NAME": "Condensate Capacity",
+    "SORT_ORDER": 70,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_COND_CAPACITY",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "3",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4D114198E0630100007F1329",
+    "CODE": "OIL_CAPACITY",
+    "NAME": "Oil Capacity",
+    "SORT_ORDER": 80,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_NET_OIL_CAPACITY",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "4",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4D214198E0630100007F1329",
+    "CODE": "LNG_FCST",
+    "NAME": "LNG Forecast",
+    "SORT_ORDER": 90,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_LNG_FORECAST",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "5",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4CBD4198E0630100007F1329",
+    "CODE": "GAS_FCST",
+    "NAME": "Pipeline Gas Forecast",
+    "SORT_ORDER": 100,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "GAS_RATE",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "6",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4CB54198E0630100007F1329",
+    "CODE": "CONDENSATE_FCST",
+    "NAME": "Condensate Forecast",
+    "SORT_ORDER": 110,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "COND_RATE",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "7",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4CC64198E0630100007F1329",
+    "CODE": "OIL_FCST",
+    "NAME": "Oil Forecast",
+    "SORT_ORDER": 120,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "OIL_RATE",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "8",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4CF44198E0630100007F1329",
+    "CODE": "FLARE_TARGET",
+    "NAME": "Flare Target",
+    "SORT_ORDER": 130,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_FLARE_TARGET",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "9",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4D324198E0630100007F1329",
+    "CODE": "FLARE_FCST",
+    "NAME": "Flare Forecast",
+    "SORT_ORDER": 140,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_FLARE_FORECAST",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "10",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4D444198E0630100007F1329",
+    "CODE": "FUEL_FCST",
+    "NAME": "Fuel Forecast",
+    "SORT_ORDER": 150,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_FUEL_FORECAST",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "11",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4D574198E0630100007F1329",
+    "CODE": "VENT_FCST",
+    "NAME": "Vent Forecast",
+    "SORT_ORDER": 160,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_VENT_FORECAST",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "13",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4D6B4198E0630100007F1329",
+    "CODE": "FUGITIVE_FCST",
+    "NAME": "Fugitive Forecast",
+    "SORT_ORDER": 170,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_FUGITIVE_FORECAST",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "14",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E4D804198E0630100007F1329",
+    "CODE": "TOTAL_GHG_FCST",
+    "NAME": "GHG Forecast",
+    "SORT_ORDER": 180,
+    "PATH_ORIGIN": "ForecastDataTemplate.A1",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_TOTAL_GHG",
+    "KEY_1": "ROWS:DATE",
+    "KEY_2": "FCTY_CLASS_1",
+    "KEY_3": "SCENARIO_CODE",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "15",
+      "PATH_PARAM_2": "12",
+      "PATH_PARAM_3": null
+     }
+    ]
+   }
+  ],
+  "target_mappings": [
+   {
+    "EC_KEY": "COND_RATE",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "COND_MASS_RATE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNESPERDAY",
+    "TO_UNIT": "KGPERDAY"
+   },
+   {
+    "EC_KEY": "GAS_RATE",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "GAS_RATE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TJ",
+    "TO_UNIT": "GJ"
+   },
+   {
+    "EC_KEY": "OIL_RATE",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "NET_OIL_RATE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_FLARE_TARGET",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "ZWP_FLARE_TARGET",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNESPERDAY",
+    "TO_UNIT": "KGPERDAY"
+   },
+   {
+    "EC_KEY": "ZWP_LNG_CAPACITY",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "ZWP_LNG_CAPACITY",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNESPERDAY",
+    "TO_UNIT": "KGPERDAY"
+   },
+   {
+    "EC_KEY": "ZWP_GAS_CAPACITY",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "ZWP_GAS_CAPACITY",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TJ",
+    "TO_UNIT": "GJ"
+   },
+   {
+    "EC_KEY": "ZWP_COND_CAPACITY",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "ZWP_COND_CAPACITY",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNESPERDAY",
+    "TO_UNIT": "KGPERDAY"
+   },
+   {
+    "EC_KEY": "ZWP_NET_OIL_CAPACITY",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "ZWP_NET_OIL_CAPACITY",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_LNG_FORECAST",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "GAS_MASS_RATE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNESPERDAY",
+    "TO_UNIT": "KGPERDAY"
+   },
+   {
+    "EC_KEY": "ZWP_FLARE_FORECAST",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "ZWP_FLARE_FORECAST",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNES",
+    "TO_UNIT": "KG"
+   },
+   {
+    "EC_KEY": "ZWP_FUEL_FORECAST",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "ZWP_FUEL_FORECAST",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNES",
+    "TO_UNIT": "KG"
+   },
+   {
+    "EC_KEY": "ZWP_VENT_FORECAST",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "ZWP_VENT_FORECAST",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNES",
+    "TO_UNIT": "KG"
+   },
+   {
+    "EC_KEY": "ZWP_FUGITIVE_FORECAST",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "ZWP_FUGITIVE_FORECAST",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNES",
+    "TO_UNIT": "KG"
+   },
+   {
+    "EC_KEY": "ZWP_TOTAL_GHG",
+    "CLASS": "FCST_FCTY1_DAY_STATUS",
+    "ATTRIBUTE": "ZWP_TOTAL_GHG",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNES",
+    "TO_UNIT": "KG"
+   }
+  ]
+ },
+ "I_IN_RAU_TARGET": {
+  "interface": {
+   "OBJECT_ID": "45A9A31E50D64198E0630100007F1329",
+   "OBJECT_CODE": "I_IN_RAU_TARGET",
+   "NAME": "Contract Account RAU",
+   "TYPE": "INSERT_UPDATE",
+   "TRANSACTION_TYPE": "JOB",
+   "EC_DATA_LEVEL": "P",
+   "EC_VALID_LEVEL": "P",
+   "STAGING_VALIDATION_IND": "N",
+   "PRE_STAGING_UE_TYPE": null,
+   "PRE_STAGING_UE_PATH": null,
+   "POST_STAGING_UE_TYPE": null,
+   "POST_STAGING_UE_PATH": null,
+   "PRE_TARGET_UE_TYPE": null,
+   "PRE_TARGET_UE_PATH": null,
+   "POST_TARGET_UE_TYPE": null,
+   "POST_TARGET_UE_PATH": null
+  },
+  "source_mappings": [
+   {
+    "OBJECT_ID": "45A9A31E50DB4198E0630100007F1329",
+    "CODE": "DATE",
+    "NAME": "DATE",
+    "SORT_ORDER": 10,
+    "PATH_ORIGIN": "RAUTargets.A1",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "DATE",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "2",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E50F54198E0630100007F1329",
+    "CODE": "CONTRACT_ACCOUNT",
+    "NAME": "CONTRACT ACCOUNT",
+    "SORT_ORDER": 20,
+    "PATH_ORIGIN": "RAUTargets.A1",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "5",
+      "PATH_PARAM_2": "2",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E51104198E0630100007F1329",
+    "CODE": "CONTRACT_NAME",
+    "NAME": "CONTRACT NAME",
+    "SORT_ORDER": 30,
+    "PATH_ORIGIN": "RAUTargets.K3",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E512C4198E0630100007F1329",
+    "CODE": "EVENT_TYPE",
+    "NAME": "EVENT TYPE",
+    "SORT_ORDER": 40,
+    "PATH_ORIGIN": "Readme.F3",
+    "TYPE": "KEY_VALUE",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E51494198E0630100007F1329",
+    "CODE": "TIME_SPAN",
+    "NAME": "TIME SPAN",
+    "SORT_ORDER": 50,
+    "PATH_ORIGIN": "Readme.G3",
+    "TYPE": "KEY_VALUE",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E51674198E0630100007F1329",
+    "CODE": "TARGET",
+    "NAME": "TARGET",
+    "SORT_ORDER": 60,
+    "PATH_ORIGIN": "RAUTargets.G3",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "I_IN_RAU_TARGET.TARGET",
+    "KEY_1": "ROWS:CONTRACT_NAME",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": "ROWS:CONTRACT_ACCOUNT",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E51864198E0630100007F1329",
+    "CODE": "COMMENT",
+    "NAME": "COMMENT",
+    "SORT_ORDER": 70,
+    "PATH_ORIGIN": "RAUTargets.H3",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "I_IN_RAU_TARGET.COMMENT",
+    "KEY_1": "ROWS:CONTRACT_NAME",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": "ROWS:CONTRACT_ACCOUNT",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   }
+  ],
+  "target_mappings": [
+   {
+    "EC_KEY": "I_IN_RAU_TARGET.COMMENT",
+    "CLASS": "SCTR_ACC_MTH_EVENT",
+    "ATTRIBUTE": "COMMENTS",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "I_IN_RAU_TARGET.TARGET",
+    "CLASS": "SCTR_ACC_MTH_EVENT",
+    "ATTRIBUTE": "QTY",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   }
+  ]
+ },
+ "ZWP_PROD_WELL_RESULT": {
+  "interface": {
+   "OBJECT_ID": "45A9A31E52304198E0630100007F1329",
+   "OBJECT_CODE": "ZWP_PROD_WELL_RESULT",
+   "NAME": "Production Well Test Result",
+   "TYPE": "INSERT_UPDATE",
+   "TRANSACTION_TYPE": "JOB",
+   "EC_DATA_LEVEL": "P",
+   "EC_VALID_LEVEL": "P",
+   "STAGING_VALIDATION_IND": "N",
+   "PRE_STAGING_UE_TYPE": null,
+   "PRE_STAGING_UE_PATH": null,
+   "POST_STAGING_UE_TYPE": "PLSQL",
+   "POST_STAGING_UE_PATH": "ZWP_P_ECIS_UTIL.postStagingWellTestResultInterface",
+   "PRE_TARGET_UE_TYPE": null,
+   "PRE_TARGET_UE_PATH": null,
+   "POST_TARGET_UE_TYPE": null,
+   "POST_TARGET_UE_PATH": null
+  },
+  "source_mappings": [
+   {
+    "OBJECT_ID": "45A9A31E54314198E0630100007F1329",
+    "CODE": "DATE",
+    "NAME": "DATE",
+    "SORT_ORDER": 10,
+    "PATH_ORIGIN": "WellTestsUpload.A1",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "DATE",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "4",
+      "PATH_PARAM_2": "4",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E53AD4198E0630100007F1329",
+    "CODE": "WELL_CODE",
+    "NAME": "WELL CODE",
+    "SORT_ORDER": 20,
+    "PATH_ORIGIN": "WellTestsUpload.A1",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "3",
+      "PATH_PARAM_2": "4",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E53D84198E0630100007F1329",
+    "CODE": "CHOKE",
+    "NAME": "CHOKE",
+    "SORT_ORDER": 30,
+    "PATH_ORIGIN": "WellTestsUpload.F5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.CHOKE",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E54044198E0630100007F1329",
+    "CODE": "WH_PRESS",
+    "NAME": "TUBING PRESSURE",
+    "SORT_ORDER": 40,
+    "PATH_ORIGIN": "WellTestsUpload.G5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.WH_PRESS",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E52E54198E0630100007F1329",
+    "CODE": "ANNULUS_PRESS",
+    "NAME": "Separation",
+    "SORT_ORDER": 50,
+    "PATH_ORIGIN": "WellTestsUpload.H5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.ANNULUS_PRESS",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E530B4198E0630100007F1329",
+    "CODE": "NET_OIL_RATE_ADJ",
+    "NAME": "Oil Rate",
+    "SORT_ORDER": 60,
+    "PATH_ORIGIN": "WellTestsUpload.I5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.NET_OIL_RATE_ADJ",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E53324198E0630100007F1329",
+    "CODE": "WATERCUT_PCT",
+    "NAME": "Water Cut",
+    "SORT_ORDER": 70,
+    "PATH_ORIGIN": "WellTestsUpload.J5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.WATERCUT_PCT",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E535A4198E0630100007F1329",
+    "CODE": "GOR",
+    "NAME": "Production GOR",
+    "SORT_ORDER": 80,
+    "PATH_ORIGIN": "WellTestsUpload.K5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.GOR",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E529C4198E0630100007F1329",
+    "CODE": "GL_CHOKE_SIZE",
+    "NAME": "Gas Lift Choke",
+    "SORT_ORDER": 90,
+    "PATH_ORIGIN": "WellTestsUpload.L5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.GL_CHOKE_SIZE",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E52C04198E0630100007F1329",
+    "CODE": "GL_RATE",
+    "NAME": "Gas Lift Rate",
+    "SORT_ORDER": 100,
+    "PATH_ORIGIN": "WellTestsUpload.M5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.GL_RATE",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E53834198E0630100007F1329",
+    "CODE": "TOT_WATER_RATE_ADJ",
+    "NAME": "Water Rate",
+    "SORT_ORDER": 110,
+    "PATH_ORIGIN": "WellTestsUpload.N5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.TOT_WATER_RATE_ADJ",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E52364198E0630100007F1329",
+    "CODE": "GAS_RATE_ADJ",
+    "NAME": "Gas Rate",
+    "SORT_ORDER": 120,
+    "PATH_ORIGIN": "WellTestsUpload.O5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.GAS_RATE_ADJ",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E52574198E0630100007F1329",
+    "CODE": "DURATION",
+    "NAME": "Test Length",
+    "SORT_ORDER": 130,
+    "PATH_ORIGIN": "WellTestsUpload.P5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.DURATION",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E52794198E0630100007F1329",
+    "CODE": "COMMENTS",
+    "NAME": "Comments",
+    "SORT_ORDER": 140,
+    "PATH_ORIGIN": "WellTestsUpload.Q5",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": "group1",
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.COMMENTS",
+    "KEY_1": "ROWS:WELL_CODE",
+    "KEY_2": "ROWS:DATE",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     }
+    ]
+   }
+  ],
+  "target_mappings": [
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.ANNULUS_PRESS",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "ANNULUS_PRESS",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.NET_OIL_RATE_ADJ",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "NET_OIL_RATE_ADJ",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.WATERCUT_PCT",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "WATERCUT_PCT",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.GOR",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "GOR",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.GL_CHOKE_SIZE",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "GL_CHOKE_SIZE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.GL_RATE",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "GL_RATE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.TOT_WATER_RATE_ADJ",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "TOT_WATER_RATE_ADJ",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.GAS_RATE_ADJ",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "GAS_RATE_ADJ",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.DURATION",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "DURATION",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.COMMENTS",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "COMMENTS",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.CHOKE",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "CHOKE_SIZE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "ZWP_PROD_WELL_RESULT.WH_PRESS",
+    "CLASS": "PWEL_RESULT",
+    "ATTRIBUTE": "WH_PRESS",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   }
+  ]
+ },
+ "I_IN_UPLOAD_GAS_OIL_GREASE": {
+  "interface": {
+   "OBJECT_ID": "45A9A31E583F4198E0630100007F1329",
+   "OBJECT_CODE": "I_IN_UPLOAD_GAS_OIL_GREASE",
+   "NAME": "Upload Gas Oil Grease",
+   "TYPE": "INSERT_UPDATE",
+   "TRANSACTION_TYPE": "JOB",
+   "EC_DATA_LEVEL": "P",
+   "EC_VALID_LEVEL": "P",
+   "STAGING_VALIDATION_IND": null,
+   "PRE_STAGING_UE_TYPE": null,
+   "PRE_STAGING_UE_PATH": null,
+   "POST_STAGING_UE_TYPE": null,
+   "POST_STAGING_UE_PATH": null,
+   "PRE_TARGET_UE_TYPE": null,
+   "PRE_TARGET_UE_PATH": null,
+   "POST_TARGET_UE_TYPE": null,
+   "POST_TARGET_UE_PATH": null
+  },
+  "source_mappings": [
+   {
+    "OBJECT_ID": "45A9A31E58464198E0630100007F1329",
+    "CODE": "MonthGas.OBJECT_CODE",
+    "NAME": "Object_Code",
+    "SORT_ORDER": 10,
+    "PATH_ORIGIN": "MonthGas.A2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E59084198E0630100007F1329",
+    "CODE": "MonthLiquid.OBJECT_CODE",
+    "NAME": "Object_Code",
+    "SORT_ORDER": 10,
+    "PATH_ORIGIN": "MonthLiquid.A2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E58754198E0630100007F1329",
+    "CODE": "MonthGas.DAYTIME",
+    "NAME": "Daytime",
+    "SORT_ORDER": 20,
+    "PATH_ORIGIN": "MonthGas.B2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "DATE",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E593B4198E0630100007F1329",
+    "CODE": "MonthLiquid.DAYTIME",
+    "NAME": "Daytime",
+    "SORT_ORDER": 20,
+    "PATH_ORIGIN": "MonthLiquid.B2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "DATE",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E58A54198E0630100007F1329",
+    "CODE": "MonthGas.GRS_VOL_GAS",
+    "NAME": "Volume_Gas",
+    "SORT_ORDER": 30,
+    "PATH_ORIGIN": "MonthGas.C2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "MonthGas",
+    "EC_KEY": "MonthGas.GRS_VOL_GAS",
+    "KEY_1": "ROWS:MonthGas.OBJECT_CODE",
+    "KEY_2": "ROWS:MonthGas.DAYTIME",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E596F4198E0630100007F1329",
+    "CODE": "MonthLiquid.GRS_VOL",
+    "NAME": "Volume_Gas",
+    "SORT_ORDER": 30,
+    "PATH_ORIGIN": "MonthLiquid.D2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "MonthLiquid",
+    "EC_KEY": "MonthLiquid.GRS_VOL",
+    "KEY_1": "ROWS:MonthLiquid.OBJECT_CODE",
+    "KEY_2": "ROWS:MonthLiquid.DAYTIME",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E58D64198E0630100007F1329",
+    "CODE": "MonthGas.COMMENTS",
+    "NAME": "Comments",
+    "SORT_ORDER": 40,
+    "PATH_ORIGIN": "MonthGas.D2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": "MonthGas",
+    "EC_KEY": "MonthGas.COMMENTS",
+    "KEY_1": "ROWS:MonthGas.OBJECT_CODE",
+    "KEY_2": "ROWS:MonthGas.DAYTIME",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E59A44198E0630100007F1329",
+    "CODE": "MonthLiquid.GRS_MASS",
+    "NAME": "Volume_Gas",
+    "SORT_ORDER": 40,
+    "PATH_ORIGIN": "MonthLiquid.E2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "MonthLiquid",
+    "EC_KEY": "MonthLiquid.GRS_MASS",
+    "KEY_1": "ROWS:MonthLiquid.OBJECT_CODE",
+    "KEY_2": "ROWS:MonthLiquid.DAYTIME",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E59DA4198E0630100007F1329",
+    "CODE": "MonthLiquid.COMMENTS",
+    "NAME": "Comments",
+    "SORT_ORDER": 50,
+    "PATH_ORIGIN": "MonthLiquid.F2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": "MonthLiquid",
+    "EC_KEY": "MonthLiquid.COMMENTS",
+    "KEY_1": "ROWS:MonthLiquid.OBJECT_CODE",
+    "KEY_2": "ROWS:MonthLiquid.DAYTIME",
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   }
+  ],
+  "target_mappings": [
+   {
+    "EC_KEY": "MonthGas.GRS_VOL_GAS",
+    "CLASS": "STRM_GAS_MTH",
+    "ATTRIBUTE": "GRS_VOL_GAS",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "MonthGas.COMMENTS",
+    "CLASS": "STRM_GAS_MTH",
+    "ATTRIBUTE": "COMMENTS",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "MonthLiquid.GRS_VOL",
+    "CLASS": "STRM_MTH_LIQ",
+    "ATTRIBUTE": "GRS_VOL",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "MonthLiquid.GRS_MASS",
+    "CLASS": "STRM_MTH_LIQ",
+    "ATTRIBUTE": "GRS_MASS",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "MonthLiquid.COMMENTS",
+    "CLASS": "STRM_MTH_LIQ",
+    "ATTRIBUTE": "COMMENTS",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": null,
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   }
+  ]
+ },
+ "I_IN_TAS": {
+  "interface": {
+   "OBJECT_ID": "45A9A31E5BAA4198E0630100007F1329",
+   "OBJECT_CODE": "I_IN_TAS",
+   "NAME": "Upload Truck Ticket Single Transfer",
+   "TYPE": "INSERT_UPDATE",
+   "TRANSACTION_TYPE": "JOB",
+   "EC_DATA_LEVEL": "P",
+   "EC_VALID_LEVEL": "P",
+   "STAGING_VALIDATION_IND": null,
+   "PRE_STAGING_UE_TYPE": null,
+   "PRE_STAGING_UE_PATH": null,
+   "POST_STAGING_UE_TYPE": null,
+   "POST_STAGING_UE_PATH": null,
+   "PRE_TARGET_UE_TYPE": null,
+   "PRE_TARGET_UE_PATH": null,
+   "POST_TARGET_UE_TYPE": null,
+   "POST_TARGET_UE_PATH": null
+  },
+  "source_mappings": [
+   {
+    "OBJECT_ID": "45A9A31E5BB24198E0630100007F1329",
+    "CODE": "BOL_NO",
+    "NAME": "BOL_NO",
+    "SORT_ORDER": 10,
+    "PATH_ORIGIN": "<0>.B2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E5BEA4198E0630100007F1329",
+    "CODE": "CUST_LNG_SUPPLIER_CODE",
+    "NAME": "CUST_LNG_SUPPLIER_CODE",
+    "SORT_ORDER": 20,
+    "PATH_ORIGIN": "<0>.E2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E5E0F4198E0630100007F1329",
+    "CODE": "TRAILER",
+    "NAME": "TRAILER",
+    "SORT_ORDER": 25,
+    "PATH_ORIGIN": "<0>.I2",
+    "TYPE": "KEY_LIST",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": null,
+    "EC_KEY": null,
+    "KEY_1": null,
+    "KEY_2": null,
+    "KEY_3": null,
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E5C5D4198E0630100007F1329",
+    "CODE": "ISSUE_DATE",
+    "NAME": "ISSUE_DATE",
+    "SORT_ORDER": 30,
+    "PATH_ORIGIN": "<0>.C2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "DATE",
+    "STAGING_GROUP": "TAS",
+    "EC_KEY": "TAS.ISSUE_DATE",
+    "KEY_1": "ROWS:BOL_NO",
+    "KEY_2": "\"LNG_TRUCKED\"",
+    "KEY_3": "ROWS:TRAILER",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E5D8E4198E0630100007F1329",
+    "CODE": "SLOT_ID",
+    "NAME": "SLOT_ID",
+    "SORT_ORDER": 50,
+    "PATH_ORIGIN": "<0>.A2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "STRING",
+    "STAGING_GROUP": "TAS",
+    "EC_KEY": "TAS.SLOT_ID",
+    "KEY_1": "ROWS:BOL_NO",
+    "KEY_2": "\"LNG_TRUCKED\"",
+    "KEY_3": "ROWS:TRAILER",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E5DCE4198E0630100007F1329",
+    "CODE": "TONS_LOADED",
+    "NAME": "TONS_LOADED",
+    "SORT_ORDER": 80,
+    "PATH_ORIGIN": "<0>.G2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "TAS",
+    "EC_KEY": "TAS.TONS_LOADED",
+    "KEY_1": "ROWS:BOL_NO",
+    "KEY_2": "\"LNG_TRUCKED\"",
+    "KEY_3": "ROWS:TRAILER",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E5C234198E0630100007F1329",
+    "CODE": "GJ_LOADED",
+    "NAME": "GJ_LOADED",
+    "SORT_ORDER": 90,
+    "PATH_ORIGIN": "<0>.H2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "TAS",
+    "EC_KEY": "TAS.GJ_LOADED",
+    "KEY_1": "ROWS:BOL_NO",
+    "KEY_2": "\"LNG_TRUCKED\"",
+    "KEY_3": "ROWS:TRAILER",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E5D4F4198E0630100007F1329",
+    "CODE": "PROD_DENSITY",
+    "NAME": "PROD_DENSITY",
+    "SORT_ORDER": 100,
+    "PATH_ORIGIN": "<0>.R2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "TAS",
+    "EC_KEY": "TAS.PROD_DENSITY",
+    "KEY_1": "ROWS:BOL_NO",
+    "KEY_2": "\"LNG_TRUCKED\"",
+    "KEY_3": "ROWS:TRAILER",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E5C984198E0630100007F1329",
+    "CODE": "LNG_TEMP",
+    "NAME": "LNG_TEMP",
+    "SORT_ORDER": 100,
+    "PATH_ORIGIN": "<0>.Q2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "TAS",
+    "EC_KEY": "TAS.LNG_TEMP",
+    "KEY_1": "ROWS:BOL_NO",
+    "KEY_2": "\"LNG_TRUCKED\"",
+    "KEY_3": "ROWS:TRAILER",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E5CD44198E0630100007F1329",
+    "CODE": "M3_VALUE",
+    "NAME": "M3_VALUE",
+    "SORT_ORDER": 120,
+    "PATH_ORIGIN": "<0>.S2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "TAS",
+    "EC_KEY": "TAS.M3_VALUE",
+    "KEY_1": "ROWS:BOL_NO",
+    "KEY_2": "\"LNG_TRUCKED\"",
+    "KEY_3": "ROWS:TRAILER",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   },
+   {
+    "OBJECT_ID": "45A9A31E5D114198E0630100007F1329",
+    "CODE": "MMBTU_VALUE",
+    "NAME": "MMBTU_VALUE",
+    "SORT_ORDER": 130,
+    "PATH_ORIGIN": "<0>.T2",
+    "TYPE": "DATA",
+    "VALUE_TYPE": "NUMBER",
+    "STAGING_GROUP": "TAS",
+    "EC_KEY": "TAS.MMBTU_VALUE",
+    "KEY_1": "ROWS:BOL_NO",
+    "KEY_2": "\"LNG_TRUCKED\"",
+    "KEY_3": "ROWS:TRAILER",
+    "NAVIGATION_METHOD": null,
+    "paths": [
+     {
+      "SORT_ORDER": 10,
+      "TYPE": "UPPER_LEFT",
+      "PATH": "Move",
+      "PATH_PARAM_1": "0",
+      "PATH_PARAM_2": "0",
+      "PATH_PARAM_3": null
+     },
+     {
+      "SORT_ORDER": 20,
+      "TYPE": "LOWER_RIGHT",
+      "PATH": "FindVertical",
+      "PATH_PARAM_1": "\"\"",
+      "PATH_PARAM_2": null,
+      "PATH_PARAM_3": null
+     }
+    ]
+   }
+  ],
+  "target_mappings": [
+   {
+    "EC_KEY": "TAS.ISSUE_DATE",
+    "CLASS": "ZWP_STRM_SINGLE_TRANSFER",
+    "ATTRIBUTE": "BOL_DATE",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "TAS.SLOT_ID",
+    "CLASS": "ZWP_STRM_SINGLE_TRANSFER",
+    "ATTRIBUTE": "SLOT_ID",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "TAS.TONS_LOADED",
+    "CLASS": "ZWP_STRM_SINGLE_TRANSFER",
+    "ATTRIBUTE": "GRS_MASS_ACTUAL",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": "TONNES",
+    "TO_UNIT": "KG"
+   },
+   {
+    "EC_KEY": "TAS.GJ_LOADED",
+    "CLASS": "ZWP_STRM_SINGLE_TRANSFER",
+    "ATTRIBUTE": "ENERGY",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "TAS.LNG_TEMP",
+    "CLASS": "ZWP_STRM_SINGLE_TRANSFER",
+    "ATTRIBUTE": "OBS_TEMP",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "TAS.PROD_DENSITY",
+    "CLASS": "ZWP_STRM_SINGLE_TRANSFER",
+    "ATTRIBUTE": "OBS_DENSITY",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "TAS.M3_VALUE",
+    "CLASS": "ZWP_STRM_SINGLE_TRANSFER",
+    "ATTRIBUTE": "GRS_VOL_ACTUAL",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   },
+   {
+    "EC_KEY": "TAS.MMBTU_VALUE",
+    "CLASS": "ZWP_STRM_SINGLE_TRANSFER",
+    "ATTRIBUTE": "GRS_ENERGY",
+    "CLASS_KEY_1": "KEY_1",
+    "CLASS_KEY_2": "KEY_2",
+    "CLASS_KEY_3": "KEY_3",
+    "CONSTANT_STRING_VALUE": null,
+    "CONSTANT_NUMBER_VALUE": null,
+    "FROM_UNIT": null,
+    "TO_UNIT": null
+   }
+  ]
+ }
+}

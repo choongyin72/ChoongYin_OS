@@ -1,0 +1,5192 @@
+// documentation
+Documentation
+Release Documentation
+Installation Guide
+Upgrade Guide
+Configuration
+Technical Documentation
+Technical Documentation Overview
+Energy Components Business Areas
+Energy Components Basic User Guide
+Energy Components Product Concepts
+EC Framework
+Docker Images
+Identity & Access Management
+Event
+Rest API
+GraphQL API
+EC Integration Services
+EC Integration Services (ECIS) Technical Documentation
+ECIS - Configuration Guide
+ECIS Agent
+ECIS - Advanced File Import
+ECIS - Staging Table Extension
+ECIS - Source Adapter Configuration
+ECIS - Example adapter configurations
+ECIS - Sample Periods explained
+Remote endpoint configuration
+EC BPM - Business Process Modelling
+Extensions
+General Configuration and Guidelines
+EC Data Access Control (eDAC)
+Reporting and Analytics
+EC Tools
+Application Development
+Database Development
+Flyway
+EC Production
+EC Chemistry
+EC Transport
+EC Sales
+EC Revenue
+How To Get Started
+Documentation
+14.2.4
+Documentation
+Technical Documentation
+EC Framework
+EC Integration Services
+ECIS - Source Adapter Configuration
+Contents
+Common Parameters
+PI Adapter
+Required PI Middleware
+Source System Configuration
+PI via REST
+PI via MS SQL Linked Server
+PI JDBC
+PI Jinterop
+OPC Adapter
+OPC UA
+OPC Classic
+IP21 Adapter
+Required Software and Configuration
+Easysoft JDBC-ODBC Bridge
+Source System Configuration
+Supported Source Functions
+SQL Queries Against IP21
+Tag-Based JDBC Adapter
+Source System Configuration - Oracle DBMS
+Source System Configuration - Other DBMS/Non-Standard Queries
+Tag File Adapter
+Source System Configuration
+Supported Source Functions
+Row File Adapter - Source Configuration
+Row JDBC Adapter - Source Configuration
+Updating the Source After Extraction
+Running Multiple SQL Statements to Multiple Target Configurations
+Fetching Data From a Backup Solution
+Target System Configuration for Row Adapters
+Package Service
+EC Class Service
+Write Row Data to a File
+ECIS - Source Adapter Configuration
+Common Parameters
+
+Some parameters/ element types are valid for all tag adapters:
+
+Parameter/Element	Value	Comments
+
+
+config name
+
+	
+
+Unique string
+
+	
+
+Identifier of the configuration. It must be added as EC codes with the type DT_SOURCE_ID.
+
+
+
+
+class (mandatory)
+
+	
+
+<path to implementation>
+
+	
+
+Referring to the class of the adapter.
+
+
+
+
+Sequential (optional)
+
+	
+
+Yes | True OR No | False
+
+	
+
+Indicates if the data coming from the adapter can be expected to be ordered by date/time.
+
+
+
+
+ShiftTimeToPeriodStart (optional) <DEPRECATED, use the attribute in TRANS_TEMPLATE instead>
+
+	
+
+A comma-separated list of source functions
+
+	
+
+For each of the functions listed the timestamp will be moved one period back. This is commonly used if the timestamp is set at the end of a period for a specific function. The parameter will indicate that it should be moved to the start of the period.
+
+
+
+
+DEFAULT_RECORD_STATUS (optional)
+
+	
+
+P | V | A
+
+	
+
+The record status on the values retrieved from the adapter. Valid values are:
+
+P (provisional)
+
+V (verified)
+
+A (approved)
+
+If no value is set the status of the records originating from this adapter will be P. If the value differs from P this must also be changed in the DB; trans_template.overwrite_status must be set to the same value for all affected templates.
+
+
+
+
+RetryTimeout
+
+	
+
+The number of seconds.
+
+	
+
+How many seconds the timeout for the failover mechanism of the adapters should be. Only needed if you plan on using several adapters with the same configuration name for failover.
+
+
+
+
+DateValueFormat
+
+	
+
+A date pattern in Java SimpleDataFormat syntax.
+
+	
+
+The date pattern to use when parsing sample values that are dates in string format. Should be specified when your source datatype is DATE.
+
+To enable the failover mechanism for ECIS adapters, you can create multiple configurations with the same config name. ECIS will then use the first one as the default adapter. If this adapter fails during initialize, ECIS will use the next adapter until there are no more adapters left. If the last specified adapter fails while running, ECIS will fail the schedule and the next schedule that runs will use the next adapter with the same configuration name.
+
+If an adapter fails, ECIS will wait for a timeout. When this timeout occurs the next schedule that runs will use the first adapter once again. If this adapter fails it will proceed to the next adapter in line, etc. How long this timeout should be is specified by the adapter RetryTimeout parameter which can be set as in the example above. This parameter specifies the number of seconds the timeout should be. It is recommended that this timeout is large enough to run many schedules before it occurs.
+
+PI Adapter
+Required PI Middleware
+
+To be able to connect to PI, these PI products must be installed on a server:
+
+PI Web API (For PI via REST)
+
+PI OLEDB (For PI via MS SQL Linked Server)
+
+For further information on the PI software requirements, please refer to the documentation from OSISoft.
+
+Source System Configuration
+
+We have four different implementations of the PI adapter. Our recommended solution is to use the REST adapter, which does not require any additional software to be installed. The other recommended adapter is using MS SQL Express server with a database link to PI OLEDB. For historical reasons, we still have a PI JDBC adapter and a PI J-interop adapter, however, we do not recommend using these.
+
+PI via REST
+
+This PI adapter uses the PI Web API to fetch data from a PI server. PI Web API is a RESTful interface to the PI system. It is installed on the PI server and uses HTTPS for communication. No additional software or middleware is required on the client side, making this adapter very simple to use.
+
+Example configuration:
+
+<config name="PI_REST">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.pi.rest.PiRestAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="endpointConfig">my-pi-web-service</parameter>
+            <parameter name="batchMode">false</parameter>
+            <parameter name="maxTagsPerBatch">10</parameter>
+            <parameter name="maxParallelRequests">10</parameter>
+            <parameter name="maxSamplesPerResponse">10000</parameter>
+            <parameter name="statusCheckLatest">true</parameter>
+            <parameter name="pctGood">80</parameter>
+            <parameter name="avgCalcBasis">TimeWeighted</parameter>
+            <parameter name="maxCalcBasis">TimeWeighted</parameter>
+            <parameter name="minCalcBasis">TimeWeighted</parameter>
+            <parameter name="sumCalcBasis">TimeWeighted</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Many of the adapter parameters are similar to those of the other PI adapters. Parameter names and values are case sensitive.
+
+Parameter name	Mandatory	Value	Comments
+
+
+class
+
+	
+
+Yes
+
+	
+
+com.ec.frmw.is.engine.adapter.pi.rest.PiRestAdapter
+
+	
+
+The class of the adapter.
+
+
+
+
+endpointConfig
+
+	
+
+Yes
+
+	
+
+<string>
+
+	
+
+The object code or id of the Remote Endpoint Configuration, which must be of http-rest type. The referenced configuration should have a URL like: https://<PI server>/piwebapi.
+
+Example: my-pi-web-service
+
+
+
+
+batchMode
+
+	
+
+No
+
+	
+
+true | false (default false)
+
+	
+
+Enables batch mode, which improves performance by batching multiple PI Web API requests into a single server request. This greatly reduces the number of roundtrips to the server and allows the PI Web API to execute the requests more efficiently.
+
+If you are running EC and PI on different domains and CORS rules are in effect, enabling this mode requires that POST is added into the list of allowed HTTP methods in the "CorsMethods" configuration setting on the PI Web API server.
+
+
+
+
+maxTagsPerBatch
+
+	
+
+No
+
+	
+
+<integer> (default 10)
+
+	
+
+The maximum number of tags to include in each batch when batch mode is enabled. All initial PI Web API requests for this number of tags are grouped into a single batch request, which improves performance.
+
+
+
+
+maxParallelRequests
+
+	
+
+No
+
+	
+
+<integer> (default 10)
+
+	
+
+The maximum number of PI Web API requests that can be active simultaneously per adapter instance. A value of 1 will execute all requests sequentially. When batch mode is enabled, this is the number of batch requests that can be active simultaneously.
+
+Note that when using Kerberos authentication method, this parameter has no effect and defaults to 1 due to limitations in SPNEGO/Kerberos.
+
+
+
+
+maxSamplesPerResponse
+
+	
+
+No
+
+	
+
+<integer> (default 10000)
+
+	
+
+Maximum number of samples to return in a single response from the server. If the result has more samples than this, additional queries to the server are used to fetch the remaining samples. Only applicable when fetching plain samples. Not used when fetching aggregated values.
+
+
+
+
+statusCheckLatest
+
+	
+
+No
+
+	
+
+true | false | discard (default false)
+
+	
+
+Adds a good quality filter to requests for LATEST samples (status=0). Use the endTimeLatest param to adjust how far back in time to search for the latest sample.
+
+true: Finds the latest good quality sample.
+
+false: Finds the latest sample regardless of quality status.
+
+discard: Finds the latest sample regardless of quality status, but discards it if it is bad.
+
+
+
+
+endTimeLatest
+
+	
+
+No (used in conjunction with statusCheckLatest)
+
+	
+
+1970-01-01T00:00:00
+
+	
+
+Determines how far back in time to search for latest sample in requests for LATEST samples. It can be a specific datetime in ISO format or a relative interval in PI time string format.
+
+A relative interval is relative to the datetime to get latest sample at or before, and should be negative. E.g. -1d for one day back in time relative to the tag period start time.
+
+See PI time strings for details about the relative time string format.
+
+
+
+
+pctGood
+
+	
+
+No
+
+	
+
+<integer>
+
+	
+
+Adds a PctGood filter to requests for aggregated values. The value is the minimum percentage to accept.
+
+
+
+
+avgCalcBasis
+
+maxCalcBasis
+
+minCalcBasis
+
+sumCalcBasis
+
+	
+
+No
+
+	
+
+TimeWeighted | TimeWeightedContinuous | TimeWeightedDiscrete | EventWeighted | EventWeightedExcludeMostRecentEvent | EventWeightedExcludeEarliestEvent | EventWeightedIncludeBothEnds
+
+	
+
+Calculation basis for aggregated values. There is one parameter for each of the AVG, MAX, MIN and SUM source functions.
+
+If not specified, the PI server uses TimeWeighted by default.
+
+
+
+
+timeType
+
+	
+
+No
+
+	
+
+EarliestTime | MostRecentTime
+
+	
+
+TimeType is set to EarliestTime if not specified.
+
+
+
+
+useIndexedSearch
+
+	
+
+No
+
+	
+
+true | false (default true)
+
+	
+
+Whether or not to use indexed search when searching for tags in the PI system. The PI Web API Indexed Search feature is deprecated and requires a search crawler to be configured and running. Set this parameter to false to avoid using the crawler. It is set to true by default for backwards compatibility.
+
+
+
+
+dataServers
+
+	
+
+No
+
+	
+
+<comma-separated list of PI data server names>
+
+	
+
+The names of the PI data servers to look for tags in when indexed search is disabled. The specified names must be as given by the PI Web API at /dataservers, not the host names.
+
+If no names are provided the adapter looks for tags in all data servers. Only applicable when useIndexedSearch=false.
+
+
+
+
+assetServers
+
+	
+
+No
+
+	
+
+<comma-separated list of PI asset server names>
+
+	
+
+The names of the PI asset servers to search for PI AF element attributes when tags are specified as PI AF queries and indexed search is disabled. The specified names must be as given by the PI Web API at /assetservers, not the host names.
+
+If no names are provided the adapter looks for elements in all asset servers. Only applicable when useIndexedSearch=false and the tag name is a PI AF Attribute Query.
+
+
+
+
+assetDatabases
+
+	
+
+No
+
+	
+
+<comma-separated list of PI asset database names>
+
+	
+
+The names of the PI asset databases to search for PI AF element attributes when tags are specified as PI AF queries and indexed search is disabled. The specified names must be as given by the PI Web API at /assetdatabases/{asset server webId}.
+
+If no names are provided the adapter looks for elements in all asset databases on the specified asset servers. Only applicable when useIndexedSearch=false and the tag name is a PI AF Attribute Query.
+
+
+
+
+adapterTimeout
+
+	
+
+No
+
+	
+
+<integer> (default 3600)
+
+	
+
+Maximum adapter processing time in seconds. This is the total time the adapter is allowed to spend interacting with the PI server and processing responses, per call from the ECIS engine. Keep in mind that ECIS will in many cases, depending on source function, pass all tags to the adapter in one call.
+
+The following parameters are deprecated and replaced with Remote Endpoint Configuration specified by endpointConfig parameter.
+
+Parameter name	Mandatory	Value	Comments
+
+
+url
+
+	
+
+Yes
+
+	
+
+https://<PI server>/piwebapi
+
+	
+
+Base URL to the PI web service.
+
+
+
+
+allowInsecureSSL
+
+	
+
+No
+
+	
+
+true | false (default false)
+
+	
+
+Allows connections over insecure SSL. Typically used to accept self-signed certificates on test servers. This should be set to false for production environments.
+
+
+
+
+authenticationMethod
+
+	
+
+Yes
+
+	
+
+Anonymous | Basic | Bearer | Kerberos
+
+	
+
+Authentication method to use when connecting. The chosen method must be enabled on the PI server.
+
+Anonymous: No credentials required. Do not use anonymous access in production environments.
+
+Basic: Standard username/password authentication.
+
+Bearer: OpenID Connect authentication. See Bearer Authentication.
+
+Kerberos: Kerberos authentication against a Key Distribution Center (e.g. Microsoft Active Directory).
+
+
+
+
+username
+
+	
+
+When authenticationMethod=Basic|Kerberos
+
+	
+
+<username>
+
+	
+
+Username of a user with access to the PI web service. No domainname.
+
+
+
+
+password
+
+	
+
+When authenticationMethod=Basic|Kerberos
+
+	
+
+<password>
+
+	
+
+Password of a user with access to the PI web service.
+
+
+
+
+realm
+
+	
+
+When authenticationMethod=Kerberos
+
+	
+
+<adrealm.com>
+
+	
+
+The Kerberos realm name (AD domain name).
+
+
+
+
+kdcFQDN
+
+	
+
+When authenticationMethod=Kerberos
+
+	
+
+<kdcserver.adrealm.com>|<xx.xx.xx.xx>
+
+	
+
+The fully qualified dns name or ip address of the Key Distribution Center (AD domain controller).
+
+
+
+
+authServerUrl
+
+	
+
+When authenticationMethod=Bearer
+
+	
+
+https://<auth server>
+
+	
+
+Url to the authorization server/identity provider that issues OpenID tokens. An example of such a server is Active Directory (ADFS). The following endpoint must be available on the auth server:
+
+<authServerUrl>/.well-known/openid-configuration
+
+Example: https://adfs.ectestad.com/adfs
+
+
+
+
+clientId
+
+	
+
+When authenticationMethod=Bearer
+
+	
+
+<client id>
+
+	
+
+The application ID that is assigned to EC on the auth server.
+
+Example: 0ba9a8cd-52a3-4edf-af6b-5add0efc76d5
+
+
+
+
+clientSecret
+
+	
+
+When authenticationMethod=Bearer
+
+	
+
+<client secret>
+
+	
+
+The client secret that is assigned to EC on the auth server.
+
+Example: p4HKc_QMD7ntHqx5Lo2cvGY95A3pyx_CKYB75gbd
+
+
+
+
+scope
+
+	
+
+No
+
+	
+
+<string> (default openid)
+
+	
+
+Used with Bearer authentication to set custom scopes if your auth server requires a specific scope. Separate multiple scopes with a single space character.
+
+Example: https://graph.microsoft.com/.default
+
+Bearer Authentication
+
+Bearer authentication requires PI server side configuration to enable this authentication method. Consult PI Web API documentation on how to configure this. The Bearer Authentication article might be a good starting point.
+
+Tag Paths and Dynamic Tag Names
+
+The names or IDs of the tags to import data from are configured in the Maintain Mappings screen using the "Tag Id" column. When using the PiRestAdapter the "Tag Id" column supports, in addition to the plain tag name, several other ways of specifying the tag.
+
+Full tag path. This allows looking up the tag without having to search for it by name.
+
+PI AF attribute path or query. Tag names can be stored in attributes on PI AF elements which in turn are referred to via the "Tag Id" column. The adapter will get the tag name from the value of this attribute. This makes it possible to change the tag name dynamically without altering the ECIS configuration.
+
+These additional ways of specifying the tag name require special syntax in the "Tag Id" column.
+
+Tag Path
+
+To get the tag by path, specify the full PI AF tag path in the "Tag ID" column, including the PI dataserver internal name. This is the path to the PI Point of the tag. The path of a PI Point can be found in the PI system or by browsing the PI Web API in a web browser.
+
+The PI dataserver name in the tag path is not the hostname of the server machine. Note also that the path begins with a double-slash and uses a single slash to separate path segments.
+
+Example of a full tag path:
+
+\\MYPISERVER\SINUSOIDU
+Dynamic Tag Names
+
+The tag name can be dynamically looked up from the value of a PI AF attribute. In this scenario, the AF attribute must be of string type and the attribute value must be the name of the tag you want to retrieve data from. The PI AF attribute must not have any data references. The PI REST adapter does not support fetching data values directly from PI AF attributes.
+
+There are two ways to specify the PI AF attribute that holds the tag name.
+
+PI AF Attribute Path
+
+To get the tag name from a PI AF attribute path, use the following syntax in the "Tag Id" column, including square brackets:
+
+[P:<path>]
+
+Replace <path> with the full path to the PI AF attribute that holds the tag name.
+Path syntax is described in the PI Web API reference.
+
+Example path that gets the tag name from an attribute called "PressureTagName" on an element called "Well1":
+
+[P:\\MySystem\MyDatabase\Wells\Well1|PressureTagName]
+The PI AF attribute must be of string type and must not have any data references.
+PI AF Attribute Query
+
+To get the tag name from a PI AF attribute query, use the following syntax in the "Tag Id" column, including square brackets:
+
+[Q:<query for element>|<attribute name>]
+
+Replace <query for element> with a query that finds one, and only one, PI AF element.
+Replace <attribute name> with the name of an attribute on this element that holds the tag name.
+Query syntax is described in the PI Web API query syntax reference.
+
+Example query that gets the tag name from an attribute called "PressureTagName" on an element called "Well1":
+
+[Q:name:Well1|PressureTagName]
+The PI AF attribute must be of string type and must not have any data references.
+
+Copy-tag labels can be added after the last square bracket:
+
+[P:\\MySystem\MyDatabase\Wells\Well1|PressureTagName]-COPY-1
+[Q:name:Well1|PressureTagName]-COPY-1
+Troubleshooting
+
+Requests to the PI Web API can sometimes fail and interpreting the returned error messages is not always easy. This section lists some common error messages and explains what they mean and how to fix the problem.
+
+Please read the EC server and scheduler logs carefully and enable debug logging for additional information and error context.
+
+Some JSON paths did not select any tokens
+
+This error can occur during batch request processing when a parent request did not return expected data used by a child request. It typically occurs when the PI Indexed Search Crawler is not working or the tags have not been indexed. It can also occur when a tag with the given name does not exist in the PI system.
+
+To fix this issue:
+
+Check that the PI Indexed Search Crawler service is running correctly on the PI server.
+
+Check that the spelling of the tag name is correct in the EC Maintain Mappings screen.
+
+Avoid using the PI Indexed Search Crawler by setting the useIndexedSearch adapter param to false or by providing full tag paths instead of just the tag names in the EC Maintain Mappings screen.
+
+Too Many Requests
+
+This error can occur during batch request processing when you exceed the PI server request rate limit. The PI server is simply receiving too many requests too quickly. The sub-requests within a batch counts towards this limit even though they are sent as a single HTTP request from EC. The PI server settings that control the rate limits are called RateLimitMaxRequests and RateLimitDuration. For more information about these settings consult the PI Web API documentation.
+
+To fix this issue:
+
+Reduce the value of the Max Tags Per Batch (maxTagsPerBatch in xml) adapter parameter. There are at least two requests per tag in a batch, but there can be more depending on how the tag name is specified and which source function is used. Take this into consideration when tweaking this value and make sure it is at the very least half the size of RateLimitMaxRequests, preferably quite a bit lower than that.
+
+Reduce the value of the Max Parallel Requests (maxParallelRequests in xml) adapter parameter. Executing batches in parallell speeds up processing but also makes you more likely to hit the rate limit.
+
+Increase the RateLimitMaxRequests setting on the PI server and decrease the RateLimitDuration setting. These are global server settings and might not be desirable to change, but it is an option to consider.
+
+The following ParentIds did not complete successfully
+
+This error can occur during batch request processing when using full tag paths in the EC Maintain Mappings screen and there is something wrong with the given tag path.
+
+To fix this issue:
+
+Check both the spelling of the tag name and that the full tag path is correct. See the Tag Path section for information on how to specify a tag path correctly.
+
+Search source has not yet been crawled
+
+This error can occur during request processing when the PI Indexed Search Crawler is not working or hasn’t indexed the tag.
+
+To fix this issue:
+
+Check that the PI Indexed Search Crawler service is running correctly on the PI server.
+
+Avoid using the PI Indexed Search Crawler by setting the useIndexedSearch adapter param to false or by providing full tag paths instead of just the tag names in the EC Maintain Mappings screen.
+
+Attribute <name> has a data reference
+
+This error occurs when searching for tags using PI AF attribute path or query, and the target attribute has a data reference. The PI Web API does not support getting the value of an attribute that has a data reference. The attribute must be of string type and not have any data references.
+
+To fix this issue:
+
+Use or create a different string-only attribute to hold the tag name.
+
+Remove the data reference from the existing attribute (but make sure this doesn’t break usage of the attribute for other clients).
+
+Note that when using the COMPRESSED source function to fetch interpolated values using the PI REST adapter, the period end time is inclusive. This means a value timestamped at the end of the period (or at the start of the next, incomplete period if you will) is included in the result. This is different from the default behavior of the PI JDBC-based adapters, where the end time is exclusive and this value is not included in the result.
+PI via MS SQL Linked Server
+
+Another approach for connecting ECIS to PI is to use MS SQL Linked Server. In this case, the MS SQL Server will act as a bridge between ECIS and PI, thus making it possible to query data using a JDBC connection instead of having to depend on COM or DCOM. Following is an example of how this adapter can be configured:
+
+<config name="PI_SOURCE_1">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.pi.jdbc.PiJdbcAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="dbdriver">net.sourceforge.jtds.jdbc.Driver</parameter>
+            <parameter name="connecturl">jdbc:jtds:sqlserver://localhost:1433</parameter>
+            <parameter name="username">sa </parameter>
+            <parameter name="pwd"></parameter>
+            <parameter name="linkedserver">PI</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Parameter name	Value	Comments
+
+
+class (mandatory)
+
+	
+
+com.ec.frmw.is.engine.adapter.pi.jdbc.PiJdbcAdapter
+
+	
+
+Referring to the class of the adapter.
+
+
+
+
+connecturl (mandatory)
+
+	
+
+jdbc:jtds:sqlserver://<host>:<port>, where <host> is a hostname or IP address and <port> is a number
+
+	
+
+The connection string used to connect to the MS SQL Server.
+
+
+
+
+username (mandatory)
+
+	
+
+<Username>
+
+	
+
+Username to a user with privileges to log on to the MS SQL Server.
+
+
+
+
+pwd (mandatory)
+
+	
+
+<Password>
+
+	
+
+The password to a user with privileges to log on to the MS SQL Server.
+
+
+
+
+linkedserver (mandatory)
+
+	
+
+<LinkedServer>
+
+	
+
+Name of the linked server.
+
+
+
+
+check-valid-connection-sql (optional)
+
+		
+
+SQL-statement that will be run upon startup of the adapter. This should return a record if there is a connection to the database, and none if not. (Do not use count(*) in SQL, since this will always return something).
+
+
+
+
+pctgood
+
+	
+
+<Integer stating how many percent>
+
+	
+
+For aggregated queries, how many percent is considered good quality in PI? If this parameter is set, ECIS will add a check saying AND PCTGOOD >= <given value> to aggregated queries. The value should be between 0 and 100.
+
+
+
+
+statuschecklatest
+
+	
+
+True/False
+
+	
+
+If set to True, the latest queries against PI will check for status=0. Default set to False.
+
+
+
+
+compressed-include-end-time
+
+	
+
+True/False
+
+	
+
+If set to true, the period end time is included in the queries against PI when using the COMPRESSED source function. The consequence is that an interpolated value with timestamp at the end of the period (or start of the next period if you will) is included in the result and Last Transfer is set to this time. Default is false.
+
+In addition, the MS SQL Server must be configured as a linked server. The following steps show how this is done for MS SQL Server Express Edition. The process should, however, be similar independent on which version of MS SQL Server you have. It is assumed that an MS SQL Server has already been installed and is available:
+
+Start Microsoft SQL Server Management Studio (if this is not available it needs to be installed). In the Object Explorer window expand the Server Objects folder and right-click on Linked Servers. Select New Linked Server (see figure "Right-click on Linked Server and select New Linked Server"). Fill in the information as per the pictures below. Make sure to also provide the Provider string, to ensure you get the samples with correct timestamps.
+
+In the New Linked Server window that appears, select the General page and fill in the fields according to the figure "General page". Please note that the name of the Linked server must correspond with the linkedserver parameter in the configuration above. Furthermore, the value of Data source should be hostname or IP address of the PI server. Also, the Log File location, Log Level, and Command Timeout parameters can be changed in the Provider string, if required. The other parameters should be kept as in the figure "General page".
+
+In the Security page in the New Linked Server window, select 'Be made using this security context:' and provide a username and password with access to the PI server (see figure "Security page"). For other ways of authenticating against the PI server, please refer to Chapter 8 – MS SQL Server Linked Server in the PI OLEDB Data Provider for the PI System.
+
+In the Server Options page set the parameters according to the figure "Server Options page".
+
+You should now be able to connect to PI using the MS SQL Server (JDBC) adapter in ECIS. Please refer to Chapter 8 – MS SQL Server Linked Server in the PI OLEDB Data Provider for the PI System for further information on how to run an MS SQL Server as a Linked Server.
+
+Right-click on Linked Server and select New Linked Server
+
+ General page
+
+ Security page
+
+ Server Options page
+
+Troubleshooting
+
+In case of problems using this adapter or configuring the MS SQL Server as a Linked Server, try the following:
+
+TCP/IP for SQL Server Express
+
+By default, TCP/IP for SQL Server Express is disabled, so JDBC cannot connect to it and you may get the following exception: Network error IOException: Connection refused: connect
+
+To enable TCP/IP, start the SQL Server Configuration Manager.
+
+Expand SQL Server 2005 Network Configuration node.
+
+In the right pane, select Protocols for SQLEXPRESS. The right pane should now show Protocols and Status columns.
+
+Select Enable from the TCP/IP context menu.
+
+Find or Configure TCP/IP Port
+
+After enabling TCP/IP, you have to find out which port number to use. SQL Server Express allocates a port dynamically each time it is started, so to find or configure the port number, continue using SQL Server Configuration Manager …
+
+Select Properties from the TCP/IP context menu. The TCP/IP Properties dialog should open.
+
+Select the IP Addresses tab.
+
+In the IPAll node …
+
+The TCP Dynamic Ports field shows the currently used port number. If you set that field to blank, then SQL Server Express should not automatically choose another port when it restarts.
+
+Set the desired port number in the TCP Port field.
+
+Press OK to apply your settings and close the dialog.
+
+
+Test TCP/IP
+
+If you change the TCP/IP port, you have to restart SQL Server Express before it can use the new port number. To test that your port number is used, start a cmd window and type: netstat -an. For instance, if you used port 1433, you should see this line in the list of ports used:
+
+TCP 0.0.0.0:1433 0.0.0.0:0 LISTENING
+
+Authentication Method
+
+By default, SQL Server Express uses Windows Authentication Mode to authenticate connections. If you get this exception: Login failed for user '<User name>'. The user is not associated with a trusted SQL Server connection, then you may have to enable SQL Server Authentication Mode and create or enable a user.
+
+Start Microsoft SQL Server Management Studio Express (SSMSE) and connect to your database server.
+
+In Object Explorer pane, select Properties from your database’s context menu. The Server Properties dialog should open.
+
+Select the Security page.
+
+Select SQL Server and Windows Authentication Mode checkbox.
+
+Press the OK button to close the dialog.
+
+In Object Explorer pane, expand the Security / Logins node.
+
+Select existing user sa. Note that there is a red downward arrow next to that user’s image.
+
+View sa's properties. The Login Properties dialog should open.
+
+Select Status page.
+
+Ensure that the Login: Enabled radio button is selected.
+
+Select the General page.
+
+Enter a password for this user.
+
+Press the OK button to close the dialog.
+
+If you refresh the Object Explorer pane, note that the user sa no longer has a red downward arrow.
+
+PI JDBC
+EC is not compatible with PI JDBC Driver 2018 or newer. The reason for this is that EC runs with JVM time zone set to UTC while PI JDBC Driver requires to run the same time zone as PI SQL DAS. For newer versions of EC we recommend using PI Web API instead, while for older versions our adapter with PI via MS SQL Express is a good alternative. See the sections PI via MS SQL Linked Server and PI via REST below for further information. For older versions of the PI JDBC driver, it will still be possible to use it, however one will need to use ECISAgent instead of fetching it through EC directly.
+
+Following is an example of how this adapter can be configured for connecting ECIS to PI using the PI JDBC driver:
+
+<config name="PI_SOURCE_1">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.pi.jdbc.PiAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="dbdriver">com.osisoft.jdbc.Driver</parameter>
+            <parameter name="connecturl">jdbc:pisql://<PI-DAS-server>; /Data Source=<PI-server>; Integrated Security=SSPI;</parameter>
+            <parameter name="username">piadmin</parameter>
+            <parameter name="pwd"></parameter>
+            <parameter name="timezone">Asia/Singapore</parameter>
+            <parameter name="avg_calcbasis">EventWeighted</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Parameter name	Value	Comments
+
+
+class (mandatory)
+
+	
+
+com.ec.frmw.is.engine.adapter.pi.jdbc.PiAdapter
+
+	
+
+Referring to the class of the adapter.
+
+
+
+
+Sequential (optional)
+
+	
+
+Yes | True OR No | False
+
+	
+
+Indicates if the data coming from the adapter can be expected to be ordered by date/time.
+
+
+
+
+connecturl
+(mandatory)
+
+	
+
+jdbc:pisql://<PI-DAS-server>/Data Source=<PI-server>; Integrated Security=SSPI;
+where <PI-server> is the machine name of the PI server.
+
+Use jdbc:pioledb for PI JDBC Driver 2015 and later.
+
+	
+
+The connection string used to connect to the PI server.
+
+
+
+
+username
+(mandatory)
+
+	
+
+<PIUser>
+
+	
+
+User id for logging into the PI server.
+
+
+
+
+pwd (mandatory)
+
+	
+
+<PIPassword>
+
+	
+
+Password for logging into the PI server.
+
+
+
+
+timezone (mandatory)
+
+	
+
+<TimeZone>
+
+	
+
+PI SQL DAS server time zone (e.g. Asia/Singapore, CET & etc) (PI documentation states that PI SQL DAS timezone has to be the same as the PI JDBC Client timezone)
+
+
+
+
+avg_calcbasis (optional)
+
+	
+
+<TimeWeighted>
+
+	
+
+PI AVG aggregation calculation function methods (e.g. TimeWeighted,
+EventWeighted & etc. Please refer to PI-OLEDB-Provider help file from osisoft)
+
+
+
+
+max_calcbasis (optional)
+
+	
+
+<TimeWeighted>
+
+	
+
+PI MAX aggregation calculation function methods (e.g. TimeWeighted,
+EventWeighted & etc. Please refer to PI-OLEDB-Provider help file from osisoft)
+
+
+
+
+min_calcbasis (optional)
+
+	
+
+<TimeWeighted>
+
+	
+
+PI MIN aggregation calculation function methods (e.g. TimeWeighted,
+EventWeighted & etc. Please refer to PI-OLEDB-Provider help file from osisoft)
+
+
+
+
+sum_calcbasis (optional)
+
+	
+
+<TimeWeighted>
+
+	
+
+PI SUM aggregation calculation function methods (e.g. TimeWeighted,
+EventWeighted & etc. Please refer to PI-OLEDB-Provider help file from osisoft)
+
+
+
+
+check-valid-connection-sql (optional)
+
+		
+
+SQL-statement that will be run upon startup of the adapter. This should return a record if there is a connection to the database, and none if not. (Do not use count(*) in SQL, since this will always return something)
+
+
+
+
+logfile
+(optional)
+
+	
+
+c:\temp\PIJDBClogfile.log
+
+	
+
+Location of the log file for PI adapter.
+
+
+
+
+pctgood
+
+	
+
+<Integer stating how many percent>
+
+	
+
+For aggregated queries, how many percent is considered good quality in PI? If this parameter is set, ECIS will add a check saying AND PCTGOOD >= <given value> to aggregated queries. The value should be between 0 and 100.
+
+
+
+
+statuschecklatest
+
+	
+
+True OR False
+
+	
+
+If set to True, the latest queries against PI will check for status=0. Default set to False.
+
+
+
+
+TrustedConnection
+(optional)
+
+	
+
+True OR False
+
+	
+
+A trusted connection causes user authentication to be performed on the client side using the credentials of the OS user running the Wildfly process. Thus it is not necessary to specify a username and password in adapter configuration. The default value is True.
+
+Only supported on Windows with the net.TCP protocol.
+
+Only available in PI JDBC Driver 2015 and later. See documentation from OsiSoft for details.
+
+
+
+
+ProtocolOrder
+(optional)
+
+	
+
+Single:
+NetTcp:port - net.tcp protocol
+Https/Soap:port - Soap over https protocol
+
+Combinations (order):
+NetTcp:port, Https/Soap:port
+Https/Soap:port, NetTcp:port
+
+	
+
+Specifies the protocols being used when connecting to the PI SQL Data Access Server and in which order they are used for connection attempts.
+
+The port numbers depend on the TCP/IP ports being used by the PI SQL DAS. By default port 5461 is used for https communication and port 5462 is used for net.tcp.
+
+Example: NetTcp:5462,Https/Soap:5461
+
+Only available in PI JDBC Driver 2015 and later. See documentation from OsiSoft for details.
+
+
+
+
+DCA (optional)
+
+	
+
+INIT – Clears persisted authentication information.
+
+REUSE – Reuses persisted authentication (default).
+
+<file name> – Use specific authentication file.
+
+SAVE – Persists a DCA file from values specified in user and password properties.
+
+	
+
+Use persisted authentication (filename.dca) when connecting to PI SQL DAS. The DCA file is specific to a certain user and a certain PI SQL DAS. Thus it is not necessary to specify a username and password in adapter configuration. The default value is REUSE.
+
+On the first connection attempt, a dialog box opens and asks for credentials. Tick the "Save authentication for reuse" checkbox to save the credentials in an encrypted *.dca file in the user’s home directory. This file will be automatically used in subsequent connections without further prompts. The getSnap utility provided with the PI JDBC Driver can be used to generate the DCA file in advance, before connecting from EC.
+
+Only takes effect when the TrustedConnection parameter is set to False. See documentation from OsiSoft for details.
+
+
+
+
+maxChunkSize (optional)
+
+	
+
+<Integer stating the number>
+
+	
+
+A request for a tag-value for an interval is called a tag request. By default, the system will query one tag request at a time.
+
+By including multiple tag requests in one query (multiple tags for multiple intervals), the performance can be improved (fewer but bigger calls to the PI Server). The maxChunkSize tells the system how many tag requests to include in each chunk. The requests in a chunk will be included in one query.
+
+Note that the project should experiment with the chunk size to find the optimal value. Having too big chunk size can give a decrease in performance.
+
+
+
+
+driverpath
+
+	
+
+<Path to PIJDBCDriver.jar>
+
+	
+
+This adapter parameter can be used to specify the file system path to where the jar is installed. The adapter will load the driver from this path during execution.
+
+Since EC-12.2.9.
+
+How to Install the PI JDBC Driver as a Wildfly Module
+
+This approach requires the installation of the PI JDBC driver. For further information on the PI JDBC software requirements and installation procedures, please refer to the documentation from OSISoft. PI JDBC is part of OSIsoft’s PI SQL Data Access Server (PI SQL DAS).
+
+It is assumed that JDBC has already been installed. Please take note of the following steps:
+
+Check the installation of PI SQL DAS and PI JDBC by locating the PIPC directory which is by default in C:\Program Files.
+
+Verify that there is a folder PIPC\JDBC containing the file PIJDBCDriver.jar (platform-independent).
+
+Also, for PI JDBC Driver older than 2018, verify the file RDSAWrapper.dll (native code library) is installed. Take note that if used with a 64 bit Java VM the name is RDSAWrapper64.dll.
+
+The location of the DLL has to be included in the PATH variable (alternatively on the java.library.path system variable).
+Note: PI JDBC Driver 2015 and later uses two separate environment variables to locate the DLL: PI_RDSA_LIB and PI_RDSA_LIB64.
+
+Configure the ECIS Agent with the PI library as described in the ECIS Agent Documentation.
+
+Supported Source Functions
+
+The following source functions are supported in the PI adapter:
+
+Function name	Description
+
+
+SAMPLE
+
+	
+
+Reads raw samples from the PIArchive. It can be slow when used on tags with high sampling frequency.
+
+
+
+
+AVG
+
+	
+
+The time-weighted average for a given period using linear interpolation.
+
+
+
+
+MAX
+
+	
+
+Maximum tag value within the given period.
+
+
+
+
+MIN
+
+	
+
+Minimum tag value within the given period.
+
+
+
+
+MEAN
+
+	
+
+Plain average of all values within the given period.
+
+
+
+
+VALUE_AT_START
+
+	
+
+Values will be the last event before each period change.
+
+
+
+
+VALUE_AT_END
+
+	
+
+The value will be the last event in each period.
+
+
+
+
+COMPRESSED
+
+	
+
+Interpolated values from PI.
+
+In the mapping configuration, these can be set up as the Source Function in the Maintain template screen. (CO.1017: Maintain templates).
+
+The extraction of these data in the adapter is done with selects against the tables in the piarchive.
+
+Under is the Pseudocode for the Select related to each function. The implementation can be slightly different, but the queries illustrate that there is not much function-specific logic in the adapter. The adapter is using the aggregation functionality provided by PI.
+
+SAMPLE
+
+SELECT tag,CAST(value AS Float64),time FROM piarchive..picomp2 WHERE tag = '<tagid>' AND status = 0 AND time >= DATE('<fromDate>') AND time < DATE('<toDate>')"
+
+AVG
+
+SELECT tag,CAST(value AS Float64),time FROM piarchive..piavg WHERE tag = '<tagid>' AND time >= DATE('<fromDate>') AND time < DATE('<toDate>') AND timestep = '<timeStep>'
+
+MIN
+
+SELECT tag,CAST(value AS Float64),time FROM piarchive..pimin WHERE tag = '<tagid>' AND time >= DATE('<fromDate>') AND time < DATE('<toDate>') AND timestep = '<timeStep>'
+
+MAX
+
+SELECT tag,CAST(value AS Float64),time FROM piarchive..pimax WHERE tag = '<tagid>' AND time >= DATE('<fromDate>') AND time < DATE('<toDate>') AND timestep = '<timeStep>'
+
+MEAN
+
+SELECT tag,CAST(value AS Float64),time FROM piarchive..pimean WHERE tag = '<tagid>' AND time >= DATE('<fromDate>') AND time < DATE('<toDate>') AND timestep = '<timeStep>'
+
+SUM
+
+SELECT tag,CAST(value AS Float64),time FROM piarchive..pitotal WHERE tag = '<tagid>' AND time >= DATE('<fromDate>') AND time < DATE('<toDate>') AND timestep = '<timeStep>'
+
+COMPRESSED
+
+SELECT tag,CAST(value AS Float64),time FROM piarchive..piinterp2 WHERE tag = '<tagid>' AND time >= DATE('<fromDate>') AND time < DATE('<toDate>') AND timestep = '<timeStep>'
+PI Jinterop
+
+This adapter uses the jinterop bridge for talking to PI. It needs to authenticate against the domain or the dom server it is querying. Here is an example of how it can look.
+
+ <config name="PI_SOURCE_1">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.pi.jinterop.PiAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="authdomain">MyDomain</parameter>
+            <parameter name="domainuser">auser</parameter>
+            <parameter name="domainpwd">password</parameter>
+            <parameter name="dsn">127.0.0.1</parameter>
+            <parameter name="username">piadmin</parameter>
+            <parameter name="pwd"></parameter>
+            <parameter name="timeout">180</parameter>
+            <parameter name="logfile">c:\temp\logfile2.log</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Parameter name	Value	Comments
+
+
+class (mandatory)
+
+	
+
+com.ec.frmw.is.engine.adapter.pi.jinterop.PiAdapter
+
+	
+
+Referring to the class of the adapter
+
+
+
+
+Sequential (optional)
+
+	
+
+Yes | True OR No | False
+
+	
+
+Indicates if the data coming from the adapter can be expected to be ordered by date/time.
+
+
+
+
+authdomain
+(mandatory)
+
+	
+
+<Domain>
+
+	
+
+The domain the adapter is going to be authenticated towards. This could be a Windows domain or a host.
+
+
+
+
+domainuser
+(mandatory)
+
+	
+
+<Username>
+
+	
+
+Username to a user with privileges to call the PI OLE DB dll. This user needs to have DCOM access to the Wildfly server. More information can be found here:
+http://j-interop.org/quickstart.html.
+
+
+
+
+domainpwd (mandatory)
+
+	
+
+<Password>
+
+	
+
+The password to a user with privileges to call the PI OLE DB dll.
+
+
+
+
+domhost
+(optional)
+
+	
+
+<host>
+
+	
+
+An optional parameter for use when the PI OLE DB dll is exposed as an executable on the other host. If the parameter is not present or set to an empty string the adapter will contact "localhost".
+
+
+
+
+dsn (mandatory)
+
+	
+
+<PI Server Machine>
+
+	
+
+A machine name or IP address of the PI server.
+
+
+
+
+username (mandatory)
+
+	
+
+<PiUser>
+
+	
+
+User id for logging in to the PI server.
+
+
+
+
+pwd
+
+	
+
+<PiPassword>
+
+	
+
+Password for logging into the PI server.
+
+
+
+
+timeout
+
+	
+
+180
+
+	
+
+Seconds to wait for a request to PI.
+
+
+
+
+commandtimeout
+
+	
+
+<seconds>
+
+	
+
+Sets the command timeout. This will override the command timeout set by the timeout parameter.
+
+
+
+
+connectiontimeout
+
+	
+
+<seconds>
+
+	
+
+Sets the connection timeout. This will override the connection timeout set by the timeout parameter.
+
+
+
+
+logfile
+
+	
+
+C:\temp\logfile2.log
+
+	
+
+Location of the log file for PI adapter.
+
+
+
+
+usentlmv2
+
+	
+
+True/False
+
+	
+
+Use NTLMv2 instead of NTLMv1.
+
+
+
+
+avg_calcbasis (optional)
+
+	
+
+<TimeWeighted>
+
+	
+
+PI AVG aggregation calculation function methods (e.g. TimeWeighted,
+EventWeighted & etc. Please refer to PI-OLEDB-Provider help file from osisoft)
+
+
+
+
+max_calcbasis (optional)
+
+	
+
+<TimeWeighted>
+
+	
+
+PI MAX aggregation calculation function methods (e.g. TimeWeighted,
+EventWeighted & etc. Please refer to PI-OLEDB-Provider help file from osisoft)
+
+
+
+
+min_calcbasis (optional)
+
+	
+
+<TimeWeighted>
+
+	
+
+PI MIN aggregation calculation function methods (e.g. TimeWeighted,
+EventWeighted & etc. Please refer to PI-OLEDB-Provider help file from osisoft)
+
+
+
+
+sum_calcbasis (optional)
+
+	
+
+<TimeWeighted>
+
+	
+
+PI SUM aggregation calculation function methods (e.g. TimeWeighted,
+EventWeighted & etc. Please refer to PI-OLEDB-Provider help file from osisoft)
+
+
+
+
+pctgood
+
+	
+
+<Integer stating how many percent>
+
+	
+
+For aggregated queries, how many percents is considered good quality in PI? If this parameter is set, ECIS will add a check saying AND PCTGOOD >= <given value> to aggregated queries. The value should be between 0 and 100.
+
+
+
+
+statuschecklatest
+
+	
+
+True/False
+
+	
+
+If set to True, the latest queries against PI will check for status=0. Default set to False.
+
+This adapter requires that the user set up to connect to PI is given DCOM privileges so that it can fetch the PI OLEDB com object from Windows Com Server. Further information on how to configure DCOM privileges can be found at http://j-interop.org/quickstart.html. Be aware that PI J-interop requires PI SDK 1.3.8.388 or earlier version.
+
+OPC Adapter
+
+OPC stands for Open Platform Communications and is a series of standards for data access and data exchange between industrial systems and devices. EC provides two OPC adapters for importing historical data from OPC servers.
+
+The OPC UA adapter supports the modern OPC Unified Architecture specification.
+
+The OPC Classic adapter supports the older OPC HDA (Historical Data Access) specification.
+
+OPC UA
+
+OPC UA is a platform independent service-oriented architecture that integrates all the functionality of the OPC Classic specifications without the limitations of the mostly Windows specific COM/DCOM technology that OPC Classic is based upon. It is the recommended standard for modern OPC systems.
+
+The EC OPC UA adapter supports only historical data extraction from OPC UA compliant servers.
+
+Source System Configuration
+
+The adapter is configured using the Adapter Configuration screen, where it is possible to import xml-based configurations. The OPC server connection is configured in the Remote Endpoint Configuration screen. Link the adapter with the endpoint configuration by specifying the endpoint code in the endpointConfig adapter parameter.
+
+Example configuration:
+
+<config name="OPC_UA">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.opc.ua.OpcUaAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="endpointConfig">my-opc-server</parameter>
+            <parameter name="defaultOpcNamespace">http://www.prosysopc.com/OPCUA/SimulationNodes/</parameter>
+            <parameter name="pctGood">80</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+OPC Server Endpoint Configuration
+
+Use the Remote Endpoint Configuration screen to setup the OPC server connection parameters.
+
+Parameter names and values are case sensitive. Supported endpoint parameters:
+
+Parameter name	Mandatory	Value	Comments
+
+
+url
+
+	
+
+Yes
+
+	
+
+<opc.tcp|opc.https>://<host>[:port][/path]
+
+	
+
+OPC UA server endpoint to connect to. Both TCP and HTTPS endpoints are supported.
+
+Example urls:
+
+opc.tcp://test.qdev.net:53530/OPCUA/SimulationServer
+
+opc.https://test.qdev.net:53443/OPCUA/SimulationServer
+
+
+
+
+authentication-method
+
+	
+
+Yes
+
+	
+
+Anonymous | Basic | Certificate
+
+	
+
+Authentication method to use when connecting. The chosen method must be enabled on the OPC UA server.
+
+Anonymous: No credentials required. Do not use anonymous access in production environments.
+
+Basic: Standard username/password authentication.
+
+Certificate: X.509 user certificate.
+
+See Authentication for more information.
+
+
+
+
+username
+
+	
+
+When
+authentication-method = Basic
+
+	
+
+<username>
+
+	
+
+Username of a user with access to the OPC UA server.
+
+
+
+
+password
+
+	
+
+When
+authentication-method = Basic
+
+	
+
+<password>
+
+	
+
+Password of a user with access to the OPC UA server.
+
+
+
+
+security-mode
+
+	
+
+No (default = None)
+
+	
+
+One of:
+
+None
+
+Sign
+
+SignAndEncrypt
+
+	
+
+Determines whether messages sent over the network are signed, signed and encrypted, or neither. Only security modes that are enabled on the OPC UA server endpoint can be used.
+
+The SignAndEncrypt option is unavailable when connecting to the OPC UA server over HTTPS since the channel is already secured by SSL/TLS.
+
+If a value other than None is used the security-policy endpoint parameter must also have a value other than None.
+
+Values other than None require additional configuration. See Security for details on how to secure the connection.
+
+
+
+
+security-policy
+
+	
+
+No (default = None)
+
+	
+
+One of:
+
+None
+
+Basic128Rsa15
+
+Basic256
+
+Basic256Sha256
+
+Aes128_Sha256_RsaOaep
+
+Aes256_Sha256_RsaPss
+
+	
+
+Suite of cryptographic algorithms to use for securing network communication. Only security policies that are enabled on the OPC UA server endpoint can be used.
+
+Mostly irrelevant when connecting to the OPC UA server over HTTPS since the channel is already secured by SSL/TLS.
+
+Note that Basic128Rsa15 and Basic256 are deprecated by the OPC UA specification due to the weakness of the SHA-1 algorithm used in these suites.
+
+Values other than None require additional configuration. See Security for details on how to secure the connection.
+
+
+
+
+keystore
+
+	
+
+When
+authentication-method = Certificate or a security-mode is enabled
+
+	
+
+<base64 encoded keystore file in PKCS12 or JKS format>
+
+	
+
+Keystore file holding certificates required for user authentication and selected security mechanisms.
+
+See Authentication and Security for details.
+
+
+
+
+keystore-password
+
+	
+
+No
+
+	
+
+<string>
+
+	
+
+The password to the keystore if it is password protected. It is recommended to password protect your keystore file.
+
+
+
+
+connection-timeout
+
+	
+
+No (default = 10)
+
+	
+
+<integer>
+
+	
+
+Timeout for establishing a connection to the OPC UA server in seconds.
+
+
+
+
+request-timeout
+
+	
+
+No (default = 60)
+
+	
+
+<integer>
+
+	
+
+Timeout for requests to the OPC UA server in seconds.
+
+
+
+
+session-timeout
+
+	
+
+No (default = 120)
+
+	
+
+<integer>
+
+	
+
+Timeout for sessions on the OPC UA server in seconds.
+
+
+
+
+application-uri
+
+	
+
+No (default = urn:ec:frmw:is:engine:adapter:opc:ua)
+
+	
+
+<URI>
+
+	
+
+A URI that identifies the application and that must be present in the Subject Alt Name (SAN) field in the client certificate when such a certificate is required.
+
+See Encryption for details.
+
+
+
+
+disable-cert-validation
+
+	
+
+No (default = false)
+
+	
+
+<boolean> (true | false | Y | N)
+
+	
+
+Disables all certificate validation in the adapter. Enabling this reduces security. Use only for troubleshooting certificate validation problems with e.g. self signed certificates.
+
+This setting does not affect certificate validation on the OPC UA server.
+
+Adapter Parameters
+
+Use the Adapter Configuration screen to setup adapter parameters.
+
+Parameter names and values are case sensitive. Supported adapter parameters:
+
+Parameter name	Mandatory	Value	Comments
+
+
+endpointConfig
+
+	
+
+Yes
+
+	
+
+<string>
+
+	
+
+The code of the endpoint configuration that contains the OPC server connection parameters to use for this adapter.
+
+
+
+
+defaultOpcNamespace
+
+	
+
+No (default = 0)
+
+	
+
+<integer> | <uri>
+
+	
+
+Default OPC namespace to fall back to when tag ids do not contain a namespace (see Tag Mapping). The value is either the namespace’s numeric index on the OPC UA server, or the namespace’s full URI.
+
+Example values:
+
+Namespace as index: 3
+
+Namespace as URI: http://test.qdev.net/OPCUA/SimulationNodes/
+
+
+
+
+tagNamePrefix
+
+	
+
+No
+
+	
+
+<string>
+
+	
+
+A prefix to add to all tag ids that are specified as strings or OPC UA node paths in the ECIS tag mapping.
+
+If all tags have a common tag name prefix, this parameter can be used to shorten the tag mapping by setting the common prefix string as its value. Only applicable for string and path identifier types.
+
+Example values:
+
+Name Prefix
+
+	
+
+Tag Id
+
+	
+
+Result
+
+
+
+
+My
+
+	
+
+Temperature
+
+	
+
+MyTemperature
+
+
+
+
+2:
+
+	
+
+NS532
+
+	
+
+2:NS532
+
+
+
+
+Sinus
+
+	
+
+ns=3;p=/Simulation/oid
+
+	
+
+ns=3;p=/Simulation/Sinusoid
+
+
+
+
+tagPathPrefix
+
+	
+
+No
+
+	
+
+<string>
+
+	
+
+A prefix to add to all tag ids that are specified as OPC UA node paths in the ECIS tag mapping.
+
+If all tags have the same base path, this parameter can be used to shorten the tag mapping by setting the common base path as its value. The value must start with a leading slash, but does not need to end with a slash.
+
+Example values:
+
+Path Prefix
+
+	
+
+Tag Id
+
+	
+
+Result
+
+
+
+
+/Simulation
+
+	
+
+Sinusoid
+
+	
+
+/Simulation/Sinusoid
+
+
+
+
+/Simulation/
+
+	
+
+Sinusoid
+
+	
+
+/Simulation/Sinusoid
+
+
+
+
+/PHDServer/MyTags/
+
+	
+
+/MyCategory/MyTemperature
+
+	
+
+/PHDServer/MyTags/MyCategory/MyTemperature
+
+
+
+
+endTimeLatest
+
+	
+
+No (default = P1D)
+
+	
+
+<ISO-8601 duration> |
+<ISO datetime>
+
+	
+
+Determines how far back in time to search for latest data value in requests for LATEST samples. It can be a specific datetime in ISO format or a relative interval in ISO-8601 duration format. Duration values are deducted from the period start time to find the actual period end time.
+
+Example values:
+
+One day back in time: P1D
+
+Two hours back in time: PT2H
+
+One month back in time: P1M
+
+January 1st 2023: 2023-01-01T00:00:00
+
+Ref. Wikipedia for a description of the duration format.
+
+
+
+
+pctGood
+
+	
+
+No (default = 100)
+
+	
+
+<integer>
+
+	
+
+Indicates the minimum percentage of good data in a given interval required for the aggregated data value of the interval to be marked as good. Only applicable when importing aggregated data.
+
+Note that you can only use this parameter if your OPC UA server supports the ability to override aggregate configuration settings. If the server doesn’t support this the tag will fail with the error code Bad_AggregateConfigurationRejected.
+
+
+
+
+goodQuality
+
+	
+
+No
+
+	
+
+<Comma-separated list of integers or hexadecimals>
+
+	
+
+If this parameter is provided, only sample values with an OPC UA status code in this list are accepted as good quality. All other samples are discarded as bad quality.
+
+Example value (using integers) that only accepts samples with status code Good and Good_LocalOverride:
+0,9830400
+
+Ref: List of OPC UA status codes
+
+
+
+
+badQuality
+
+	
+
+No
+
+	
+
+<Comma-separated list of integers or hexadecimals>
+
+	
+
+If this parameter is provided, only sample values with an OPC UA status code in this list are discarded as bad quality. All other samples are accepted as good quality.
+
+Example value (using hexadecimals) that only discards samples with status code Bad_SensorFailure and Uncertain_SubNormal:
+0x808C0000,0x40950000
+
+Ref: List of OPC UA status codes
+
+
+
+
+maxSamplesPerTag
+
+	
+
+No (default 0)
+
+	
+
+<integer>
+
+	
+
+Maximum number of samples to return per tag in a single response from the server. If the result has more samples than this, additional queries to the server are used to fetch the remaining samples. A value of zero means all samples are returned in a single response. This can cause the response to exceed the maximum response size limit. Set this value to larger than zero to enable response chunking if you encounter errors saying "message size exceeds configured limit".
+
+Only applicable when fetching plain samples. Not used when fetching aggregated values.
+
+Corresponds to the numValuesPerNode parameter in the OPC UA ReadRawModifiedDetails structure. Ref: OPC UA specification [Part 11, Section 6.5.3]
+
+
+
+
+maxBufferSize
+
+	
+
+No (default 65535)
+
+	
+
+<integer>
+
+	
+
+The maximum send and receive buffer size, in bytes. Essentially the maximum size of a message chunk. Large messages are split into multiple smaller chunks. OPC UA server side settings may override this setting.
+
+Corresponds to the SendBufferSize and ReceiveBufferSize fields in the OPC UA Hello message. Ref: OPC UA specification [Part 6, Section 7.1.2.3].
+
+
+
+
+maxMessageSize
+
+	
+
+No (default 2097152)
+
+	
+
+<integer>
+
+	
+
+The maximum size, in bytes, for any message sent from the server to the client. The message size is calculated using the unencrypted message body.
+
+Corresponds to the MaxMessageSize field in the OPC UA Hello message. Ref: OPC UA specification [Part 6, Section 7.1.2.3].
+
+
+
+
+maxResponseMessageSize
+
+	
+
+No (default 0)
+
+	
+
+<integer>
+
+	
+
+The maximum size, in bytes, for any response message sent from the server to the client.
+
+Note that this message size limit only applies to the raw message body and do not include headers or the effect of applying any security. This means that a message body that is smaller than the specified maximum could still cause message size errors. Take this into consideration when tweaking this value.
+
+A value of 0 indicates that this parameter is not used.
+
+Corresponds to the MaxResponseMessageSize parameter in the OPC UA CreateSession service request. Ref: OPC UA specification [Part 4, Section 5.6.2.2].
+
+
+
+
+functionAvg
+functionMax
+functionMin
+functionSum
+functionMean
+functionLatest
+
+	
+
+No
+
+Default mappings:
+functionAvg: Average
+functionMax: Maximum
+functionMin: Minimum
+functionSum: Not mapped
+functionMean: Not mapped
+functionLatest: Not mapped
+
+	
+
+<OPC node id>
+
+	
+
+Custom function mapping between ECIS source functions and OPC aggregate functions. The value must be the OPC node id of the aggregate function on the same format as tag ids (see Tag Mapping).
+
+Unmapped functions require a custom mapping before the corresponding ECIS source function can be used. The only exception is functionLatest, which has an internal fallback algorithm if a mapping is not provided.
+
+Example values:
+
+ns=0;i=2341
+
+ns=0;p=/Server/ServerCapabilities/HistoryServerCapabilities/AggregateFunctions/Interpolative
+
+Tag Mapping
+
+ECIS tag mapping for the OPC UA adapter requires special syntax for the tag id.
+
+Every tag is a node in the OPC UA address space. To uniquely identify a node, each node has an id that consists of a namespace and an identifier. The identifier further consists of a format type and the actual id given in that format. It can e.g. be a numeric value or a string. This information can be found by inspecting the OPC UA server using an OPC UA client application such as UaExpert.
+
+The following string notation is used to define a tag id in the ECIS tag mapping:
+
+<namespace type>=<namespace value>;<identifier type>=<identifier value>
+
+The following type flags are supported:
+
+Flag	Description	Example value
+
+
+ns
+
+	
+
+Namespace index
+
+	
+
+3
+
+
+
+
+nsu
+
+	
+
+Namespace URI
+
+	
+
+http://test.qdev.net/OPCUA/SimulationNodes/
+
+
+
+
+i
+
+	
+
+Numeric id
+
+	
+
+1005
+
+
+
+
+s
+
+	
+
+String id
+
+	
+
+MyTemperature
+
+
+
+
+g
+
+	
+
+GUID id
+
+	
+
+09087e75-8e5e-499b-954f-f2a9603db28a
+
+
+
+
+b
+
+	
+
+Opaque/ByteString id
+
+	
+
+M/RbKBsRVkePCePcx24oRA==
+
+
+
+
+p
+
+	
+
+Path to node
+
+	
+
+/Simulation/Sinusoid
+
+The flags are defined as in the OPC UA XML schema specification. The nsu and p flags are ECIS specific additions to make the tag mapping more human friendly.
+
+The order of the flags is not important in the tag id. The identifier flag can be placed before the namespace flag or vice versa. Values must not contain the semi-colon separator character.
+
+The namespace flags are optional. If a namespace is not provided as part of the tag id the default namespace given by the defaultOpcNamespace adapter parameter is used. When the majority of your tags are located in the same namespace, you can shorten the tag ids by skipping the namespace part and instead provide the namespace using the adapter parameter. If still no namespace is found the adapter falls back to the standard OPC namespace with index 0 (zero).
+
+If the namespace is not given as part of the tag id and the node identifier type is either numeric, string or a path to the node, the identifier type flag can be skipped. It will be automatically deduced from the value.
+
+The tagNamePrefix and tagPathPrefix adapter parameters can be used to shorten the tag ids by specifying a common tag name prefix and/or a shared folder base path. When provided, these prefixes will be applied to all applicable tag ids. Note that when a tag path prefix is provided, a tag id given as a string with no leading slash is resolved as a node path, not as a string id.
+
+Example tag ids:
+
+Tag id	Description
+
+
+ns=3;i=1005
+
+	
+
+Namespace index 3 and numeric node id 1005
+
+
+
+
+ns=3;p=/Simulation/Sinusoid
+
+	
+
+Namespace index 3 and the path to the node
+
+
+
+
+i=1005;nsu=http://test.qdev.net/OPCUA/SimulationNodes/
+
+	
+
+Numeric identifier 1005 and namespace URI
+
+
+
+
+ns=3;s=MyTemperature
+
+	
+
+Namespace index 3 and string node id MyTemperature
+
+
+
+
+i=2045
+
+	
+
+Numeric node id 2045 and default namespace
+
+
+
+
+ns=1;g=09087e75-8e5e-499b-954f-f2a9603db28a
+
+	
+
+Namespace index 1 and GUID node id
+
+
+
+
+ns=1;b=M/RbKBsRVkePCePcx24oRA==
+
+	
+
+Namespace index 1 and opaque byte string node id
+
+
+
+
+1005
+
+	
+
+Numeric node id 1005 and default namespace
+
+
+
+
+MyTemperature
+
+	
+
+String node id MyTemperature and default namespace
+
+
+
+
+/Simulation/Sinusoid
+
+	
+
+Path to the node and default namespace
+
+Authentication
+
+The OPC UA adapter supports several authentication methods. Inspect your OPC UA server to determine which authentication methods are enabled on the server. Use the authentication-method endpoint parameter to specify which method the adapter should apply.
+
+The following sub-sections describe the supported authentication methods.
+
+Anonymous
+
+No authentication required. Convenient for testing against OPC UA simulation servers. Do not use this authentication method in production systems.
+
+Basic Username/Password
+
+Authenticate using plain username and password credentials. Use the username and password endpoint parameters to supply the credentials.
+
+Certificate
+
+Authenticate using an X.509 certificate. This authentication method requires a keystore containing the user certificate. See Security for details on how to provide the keystore to the adapter.
+
+The keystore must contain an entry with alias/name userCertificate. The entry must contain a private key and an associated X.509 certificate or certificate chain that identifies the user. If the entry is password protected the password must be equal to the keystore password.
+
+The user certificate has certain field requirements as per the OPC UA specification [Part 6, Section 6.2.3 - User Certificates]. Most notably that the Common Name (CN) attribute of the subject field should be the username. The OPC UA server may have additional requirements for the certificates in the chain.
+
+The user certificate must be registered on the OPC UA server. Consult your OPC UA server documentation for requirements and procedures related to creating and registering user certificates.
+
+Security
+
+It is important to secure the communication between the adapter and the OPC UA server. The adapter supports all OPC UA security modes and policies.
+
+Two endpoint parameters define how security is applied:
+
+security-mode defines whether or not to sign and/or encrypt messages.
+
+security-policy defines which encryption algorithms to use.
+
+Inspect your OPC UA server to see which policies and modes are enabled and available for the endpoint you are connecting to.
+
+In addition to these parameters a keystore file in PKCS12 or JKS format must be provided. This keystore holds certificates and cryptographic keys needed by the applied security mechanisms. The keystore password must be supplied using the keystore-password endpoint parameter.
+
+Which entries the keystore must contain depends on the chosen security and authentication mechanisms. This is described in other sections of the adapter documentation. The following table lists all possible entries.
+
+Alias/name	Description
+
+
+userCertificate
+
+	
+
+Certificate and private key for user authentication. See Authentication.
+
+
+
+
+clientCertificate
+
+	
+
+Certificate and private key for client authentication, signing and encryption. See Encryption and Trust Management.
+
+
+
+
+serverCertificate
+
+	
+
+Certificate for server authentication. See Trust Management.
+
+Any password protected entries must have a password that is equal to the keystore password.
+
+See Keystore for information on how to create a keystore file.
+
+Encryption
+
+The connection to the OPC UA server can and should be encrypted. When using the HTTPS protocol encryption is handled by SSL/TLS and nothing else is needed. The TCP protocol on the other hand does not have encryption enabled by default and requires configuration to secure the channel.
+
+To enable message encryption for TCP endpoints set the security-mode endpoint parameter to SignAndEncrypt and the security-policy endpoint parameter to anything other than None. Ensure that the security policy you choose is enabled on the OPC UA server.
+
+In addition a keystore must be provided containing an entry with alias/name clientCertificate which contains the client private key and its associated certificate or certificate chain. If the entry is password protected the password must be equal to the keystore password.
+
+The client certificate has certain field requirements as per the OPC UA specification [Part 6, Section 6.2.2 - Application Instance Certificate]. The OPC UA server may not accept the connection if some of the fields do not fulfill the requirements. The OPC UA server may also have additional requirements for the certificates in the chain. Consult your OPC UA server documentation for requirements related to client certificates.
+
+Note especially that the Subject Alt Name (SAN) field must contain the value of the application-uri endpoint parameter. If no value is provided the default application URI is urn:ec:frmw:is:engine:adapter:opc:ua.
+
+If messages should only be signed and not encrypted, set the security-mode adapter parameter to Sign. The client certificate and private key is still required in this case.
+
+Trust Management
+
+The OPC UA server certificate is provided to the adapter automatically when connecting, to be used for securing the communication between the two. But the adapter does not know if the server really is who it expects it to be. To establish trust between the adapter and the server, the server certificate can be provided to the adapter using the keystore. The adapter will then validate the certificate it receives from the server against the provided certificate in the keystore, and only accept the connection if they are equal.
+
+The OPC UA server certificate can be provided to the adapter by adding a keystore entry with alias/name serverCertificate. The entry must contain the server X.509 certificate or certificate chain.
+
+Likewise, the client certificate should be registered on the OPC UA server so that the server can verify the identity of the adapter. Depending on the OPC UA server, the client certificate may either be manually uploaded and registered on the server up front, or you may have to manually enable trust for the client certificate after the first connection. Consult your OPC UA server documentation for how to do this.
+
+Keystore
+
+A keystore file in PKCS12 or JKS format is required when authentication method is set to Certificate or when enabling the various security mechanisms. A keystore file can be created using various tools.
+
+The below example commands use a combination of openssl and keytool. These example commands are intended to serve as a starting point. Do not expect to use them as is. Choose the commands you need and change and adapt them to your specific case. Or use different tools entirely.
+
+The example commands below generate self-signed certificates. This might be fine for test servers, but production servers will require trusted certificates provided by your OPC server admin or your company’s certificate provider. To get a valid certificate for production use, forward the certificate signing request file (.csr) to your certificate provider and they will return a certificate file to you that you can put in the keystore.
+User Certificate
+
+To create a keystore containing a self-signed user certificate and key you can use the following commands as a starting point.
+
+First create config files containing parameters used by openssl. Adjust parameter values in these files as needed. In particular, make sure that the commonName is the username, and adjust the other subject parameters to match your company’s location and name.
+
+opcuser.cert.conf
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid, issuer
+subjectAltName = URI:urn:opcua:user:opcuser
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment, dataEncipherment, keyCertSign
+extendedKeyUsage = serverAuth, clientAuth
+nsCertType = client, server
+opcuser.csr.conf
+prompt = no
+string_mask = utf8only
+distinguished_name = subject
+default_bits = 2048
+default_md = sha256
+req_extensions = req_ext
+
+[ subject ]
+countryName = NO
+stateOrProvinceName = Rogaland
+localityName = Sandnes
+organizationName = Quorum
+commonName = opcuser
+
+[ req_ext ]
+subjectAltName = URI:urn:opcua:user:opcuser
+
+The following commands generate a user private key and certificate and puts them in a keystore file. Adjust arguments as needed. You might want to set a better keystore password than what is used here.
+
+For production servers you should obtain a user certificate signed by a trusted certificate authority (CA) from your certificate provider instead of generating it yourself.
+// Generate user private key.
+openssl genrsa -out opcuser.key 2048
+
+// Generate user certificate signing request.
+openssl req -new -sha256 -key opcuser.key -out opcuser.csr -config opcuser.csr.conf
+
+// Convert CA certificate in DER format to PEM format.
+openssl x509 -inform der -in OPCServerCA.der -out OPCServerCA.pem
+
+// Generate signed user certificate (or obtain one from you certificate provider).
+openssl x509 -req -days 10000 -in opcuser.csr -CA OPCServerCA.pem -CAkey OPCServerCA.key -CAcreateserial -out opcuser.der -outform DER -extfile opcuser.cert.conf
+
+// Convert user certificate in DER format to PEM format.
+openssl x509 -inform der -in opcuser.der -out opcuser.pem
+
+// Generate OPC keystore in PKCS12 format.
+openssl pkcs12 -export -in opcuser.pem -inkey opcuser.key -chain -name userCertificate -CAfile OPCServerCA.pem -out opc.p12 -passout pass:energy
+Client Certificate
+
+To create a keystore containing a self-signed client certificate and key you can use the following commands as a starting point.
+
+First create config files containing parameters used by openssl. Adjust parameter values in these files as needed. In particular, make sure to adjust the subject parameters to match your company’s location and name. Your OPC UA server might also have special requirements on the value of the subjectAltName parameter.
+
+client.cert.conf
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid, issuer
+subjectAltName = URI:urn:ec:frmw:is:engine:adapter:opc:ua
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment, dataEncipherment, keyCertSign
+extendedKeyUsage = serverAuth, clientAuth
+nsCertType = client, server
+client.csr.conf
+prompt = no
+string_mask = utf8only
+distinguished_name = subject
+default_bits = 2048
+default_md = sha256
+req_extensions = req_ext
+
+[ subject ]
+countryName = NO
+stateOrProvinceName = Rogaland
+localityName = Sandnes
+organizationName = Quorum
+commonName = ECIS
+
+[ req_ext ]
+subjectAltName = URI:urn:ec:frmw:is:engine:adapter:opc:ua
+
+The following commands generate a client private key and certificate and puts them in a keystore file. Adjust arguments as needed. You might want to set a better keystore password than what is used here.
+
+For production servers you should obtain a client certificate signed by a trusted certificate authority (CA) from your certificate provider instead of generating it yourself.
+// Generate client private key.
+openssl genrsa -out client.key 2048
+
+// Generate client certificate signing request.
+openssl req -new -sha256 -key client.key -out client.csr -config client.csr.conf
+
+// Convert CA certificate in DER format to PEM format.
+openssl x509 -inform der -in OPCServerCA.der -out OPCServerCA.pem
+
+// Generate signed client certificate (or obtain one from you certificate provider).
+openssl x509 -req -days 10000 -in client.csr -CA OPCServerCA.pem -CAkey OPCServerCA.key -CAcreateserial -out client.der -outform DER -extfile client.cert.conf
+
+// Convert client certificate in DER format to PEM format.
+openssl x509 -inform der -in client.der -out client.pem
+
+// Generate client keystore in PKCS12 format.
+openssl pkcs12 -export -in client.pem -inkey client.key -chain -name clientCertificate -CAfile OPCServerCA.pem -out client.p12 -passout pass:energy
+Server Certificate
+
+The server certificate is obtained from the OPC UA server. It is not a certificate you generate yourself. You can use the following command to create a keystore holding the server certificate. If you have already created a user or client keystore you can simply import the server certificate directly into that keystore instead of creating a new keystore.
+
+// Generate keystore containing server certificate in PKCS12 format.
+keytool -importcert -keystore server.p12 -storepass energy -storetype pkcs12 -file OPCServer.der -alias serverCertificate -noprompt
+Combining Multiple Certificates Into a Single Keystore
+
+The above commands generate separate keystore files for each type of certificate. If you need more than one certificate you have to combine these into a single keystore file holding all the certificates. The below commands can be used to achieve that.
+
+First choose one of the existing keystores to import the other keystores into. In the below example commands we will use the user certificate keystore called opc.p12 created previously as the main keystore.
+
+// Import client keystore into opc.p12 keystore.
+keytool -importkeystore -srckeystore client.p12 -srcstoretype pkcs12 -srcstorepass energy -destkeystore opc.p12 -deststoretype pkcs12 -deststorepass energy -noprompt
+
+// Import server certificate into opc.p12 keystore.
+keytool -importcert -keystore opc.p12 -storepass energy -storetype pkcs12 -alias serverCertificate -file OPCServer.der -noprompt
+Certificate Revocation List
+
+If you need to create a certificate revocation list for the OPC UA server, you can use the below commands as a starting point. This is mostly applicable if you are setting up your own OPC UA test server.
+
+First create an openssl config file with parameters for generating the certificate revocation list. Adjust params as needed.
+
+crl.conf
+[ ca ]
+default_ca = myca
+
+[ crl_ext ]
+authorityKeyIdentifier = keyid:always
+
+[ myca ]
+dir = ./crl
+new_certs_dir = $dir
+unique_subject = no
+certificate = $dir/ca.crt
+database = $dir/certindex
+private_key = $dir/ca.key
+serial = $dir/certserial
+default_days = 10000
+default_md = sha256
+policy = myca_policy
+crlnumber = $dir/crlnumber
+default_crl_days = 10000
+
+[ myca_policy ]
+commonName = supplied
+stateOrProvinceName = optional
+countryName = optional
+emailAddress = optional
+organizationName = optional
+organizationalUnitName = optional
+
+Create a sub-directory called crl containing the following files:
+
+certindex
+<this file is empty>
+certserial
+01
+crlnumber
+01
+
+Generate the certificate revocation list file (.crl):
+
+// Generate certificate revocation list for the CA.
+openssl ca -gencrl -keyfile OPCServerCA.key -cert OPCServerCA.pem -out OPCServerCA.crl -config crl.conf
+Troubleshooting
+
+Tips for how to handle various errors that may be encountered during import.
+
+Enable DEBUG log level to print detailed information about the adapter processing in the log.
+
+To print the raw OPC UA server responses to the log for advanced inspection, set the Detailed Log Level on the scheduled job instance to All, or set the ECIS Agent -loglevel parameter to either ALL or TRACE.
+
+When running the import job from the EC scheduler, some OPC UA logging appears in the server log, not in the scheduler log. Set the log level of the org.eclipse.milo logging category to TRACE in the Wildfly admin console to output detailed information about the OPC UA communication in the server log.
+Errors
+
+>>>>>>> develop_14.1.x
+
+If you get a connection error saying no endpoint was selected, it means the server doesn’t allow the combination of security-mode and security-policy you have selected in the endpoint configuration. Consult with your OPC UA server administrator what options are available for the server URL you are connecting to.
+
+If data is not imported for some tags and you see error messages saying "message size exceeds configured limit" in the job log, this means the server response is larger than allowed. To solve this issue, either run the import job for a shorter time period, set the value of the Max Samples Per Tag adapter parameter to a non-zero value to enable response chunking, or increase the value of the Max Message Size adapter parameter.
+
+Bad_AggregateConfigurationRejected: If the tags fail with this error code, it means your OPC UA server doesn’t support custom aggregate configuration settings. The adapter customizes the OPC UA aggregate configuration when fetching aggregate samples and you have set the Percent Good Quality (pctGood) adapter parameter to a value other than 100. This error means you cannot use this adapter param because your OPC UA server does not support it. To fix the error remove the Percent Good Quality parameter from your adapter configuration.
+
+Bad_TcpMessageTooLarge: The size of the response message is larger than the current message limits allow. Increase the value of the Max Message Size adapter parameter. The error message might additionally state max chunk count exceeded. The max chunk count is calculated using the formula (Max Message Size / Max Buffer Size) * 2. Take this into consideration when tweaking the message limits.
+
+
+
+
+OPC Classic
+
+OPC Classic is the OPC Foundation’s original set of specifications based on Microsoft Windows technology using COM/DCOM (Distributed Component Object Model) to exchange data between systems.
+
+The EC OPC Classic adapter supports only the HDA part of the specification for extracting historical data.
+
+Required Software and Configuration
+
+The OPC Classic adapter attempts to contact an OPC server over the OPCHDA protocol, hence the OPC server must be OPCHDA 1.0/1.1 compliant and expose the DCOM interfaces with the correct security constraints. The configured user must have COM privileges to launch/activate and access the interface from the node the adapter is running. Further information on how to configure DCOM privileges can be found at http://j-interop.org/quickstart.html.
+
+Note on Server Configuration for Newer Windows Versions
+The OPC Classic adapter uses the OPC server’s IP address to connect to it. In newer versions of Windows, SMB by default doesn’t accept connections that use the IP address. To disable this restriction, open the Registry Editor on the server, navigate to HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters and add a REG_DWORD value with the name SmbServerNameHardeningLevel, and set the value to 0.
+Source System Configuration
+
+This must be configured through the Adapter Configuration screen, for example by importing a configuration XML:
+
+<config name="OPC_SOURCE_1">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.opc.classic.OPCAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="AUTH_DOMAIN">MyDomain</parameter>
+            <parameter name="USR">opcreader</parameter>
+            <parameter name="PWD">password</parameter>
+            <parameter name="OPC_HOST">127.0.0.1</parameter>
+            <parameter name="PROG_ID">Some.OPC.Server.1</parameter>
+            <parameter name="IID"></parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+In the section (config name) referring to the OPC adapter, the following must be configured:
+
+Parameter name	Value	Comments
+
+
+class (mandatory)
+
+	
+
+com.ec.frmw.is.engine.adapter.opc.classic.OPCAdapter
+
+	
+
+Referring to the class of the adapter.
+
+
+
+
+AUTH_DOMAIN (mandatory)
+
+	
+
+<Domain>
+
+	
+
+The domain the adapter is going to be authenticated towards. This could be a windows domain or a host.
+
+
+
+
+USR (mandatory)
+
+	
+
+<OPC Username>
+
+	
+
+Username to a user with privileges to call the OPC server.
+
+
+
+
+PWD
+(mandatory)
+
+	
+
+<OPC Password>
+
+	
+
+The password to a user with privileges to call the OPC server.
+
+
+
+
+OPC_HOST
+(mandatory)
+
+	
+
+<OPC Host>
+
+	
+
+The DNS/IP to the server responding to OPCHDA requests.
+
+
+
+
+PROG_ID
+
+	
+
+<OPC progId>
+
+	
+
+The progId for the com interface exposed by the server. If this value is not provided, the IID parameter must be provided. If both PROG_ID and IID are given, the PROG_ID takes precedence.
+
+
+
+
+IID
+
+	
+
+<OPC clsId>
+
+	
+
+The clsId for the com interface exposed by the server. If this value is not provided, the progId parameter must be provided. If both PROG_ID and IID are given, the PROG_ID takes precedence.
+
+
+
+
+ADD_SHUTDOWN_CALLBACK
+
+	
+
+"ADD_SHUTDOWN_CALLBACK"
+
+	
+
+Optional field, when present the client will register itself to the server in order to receive a callback upon server shutdown.
+The specification states this callback is needed to enable a clean shutdown, but as the adapter frees up resources for each call, this is not necessary for the current implementation. However, some servers (Rapid) might require the client to register using the interface.
+
+
+
+
+goodQuality
+
+	
+
+List of integers separated by a comma.
+
+	
+
+If this attribute is specified, ECIS will only accept the integers given in this list as good quality.
+
+
+
+
+badQuality
+
+	
+
+List of integers separated by a comma.
+
+	
+
+If goodQuality is not given, you can give a list of bad qualities. ECIS will then throw away all samples having a quality value like the ones given in this list. If neither goodQuality or badQuality is given, ECIS will accept all samples.
+
+
+
+
+usentlmv2
+
+	
+
+True/False
+
+	
+
+Use NTLMv2 instead of NTLMv1.
+
+
+
+
+SKIP_STATUS_REQUEST
+
+	
+
+True
+
+	
+
+Every time the OPCAdapter sets up a connection towards OPC, it will check if the server is available. Some servers return an error on this request even though it is fine. If that is the case, set this parameter, and the check will be skipped.
+
+
+
+
+TIMEOUT
+
+	
+
+<Milliseconds>
+
+	
+
+The jinterop timeout for all socket level operations to the COM server in milliseconds.
+
+The parameter values must be changed to match the local infrastructure with machine names and user ids.
+
+Supported Source Functions
+
+The following source functions are supported as specified in the OPCHDA specification. However, this can be configured to use other values if the OPC server has vendor-specific aggregate functions.
+
+Function name	Description
+
+
+SAMPLE
+
+	
+
+Reads raw samples from the OPC server. It can be slow when used on tags with high sampling frequency.
+
+
+
+
+AVG
+
+	
+
+The time-weighted average for a given period using linear interpolation. Default configuration mapped to OPCHDA TIMEAVERAGE.
+
+
+
+
+MAX
+
+	
+
+Maximum tag value within the given period. Default configuration mapped to OPCHDA MAXIMUM ACTUAL TIME.
+
+
+
+
+MIN
+
+	
+
+Minimum tag value within the given period. Default configuration mapped to OPCHDA MINIMUM ACTUAL TIME.
+
+
+
+
+MEAN
+
+	
+
+Not supported in the default configuration, but can be configured if the OPC server supports this aggregate.
+
+
+
+
+SUM
+
+	
+
+Not supported in the default configuration, but can be configured if the OPC server supports this aggregate.
+
+
+
+
+VALUE_AT_START
+
+	
+
+Values will be the last event before each period change.
+
+
+
+
+VALUE_AT_END
+
+	
+
+The value will be the last event in each period.
+
+Configuring Source Functions
+
+As mentioned above, the OPC Classic adapter uses the standard aggregate functionality as specified by the OPC foundation without any extra configuration. But if different aggregate ids are needed, these can be mapped in the source adapter configuration described in section "Source System Configuration". The default mapping can be overridden by providing an aggregate id the OPC server supports, like the example below shows:
+
+<config name="OPC_SOURCE_1">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.opc.classic.OPCAdapter</class>
+        <parameters>
+            <parameter name="AUTH_DOMAIN">MyDomain</parameter>
+            <parameter name="USR">opcreader</parameter>
+            <parameter name="PWD">password</parameter>
+            <parameter name="OPC_HOST">127.0.0.1</parameter>
+            <parameter name="PROG_ID">SOME.OPC.Server.1</parameter>
+            <parameter name="FUNCTION_AVG">4</parameter>
+            <parameter name="FUNCTION_MAX">9</parameter>
+            <parameter name="FUNCTION_MIN">7</parameter>
+            <parameter name="FUNCTION_SUM">11</parameter>
+            <parameter name="FUNCTION_MEAN">13</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Each function parameter is separate, so none is needed and any of the five function parameters in the example above can exist on its own.
+
+IP21 Adapter
+
+The IP21 adapter needs to be used together with the ECISAgent, which is described in the section ECIS Agent.
+
+Required Software and Configuration
+
+The IP21 adapter will talk to an IP21 server through its ODBC interface. Thus an IP21 server needs to be in place. EC requires a third party jdbc-odbc bridge for IP21 to work, that has been set up and verified with Easysoft’s solution.
+
+Easysoft JDBC-ODBC Bridge
+
+Since Java 8 no longer contains a jdbc-odbc bridge, it is required to acquire a jdbc-odbc bridge to use this interface. EC has been tested together with Easysoft’s solution. To set it up, first install the software from easysoft.com:
+
+http://www.easysoft.com/products/data_access/jdbc_odbc_bridge/index.html#section=tab-1
+
+After installation, there will be a JAR folder in the easysoft installation folder. Find and copy the ejob.jar file to c:\temp for easier access.
+
+This jar needs to be used with the ECIS Agent as described here or deployed in an EC Extension.
+
+Source System Configuration
+
+XML config example:
+
+<config name="IP21_SOURCE_1">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.ip21.IP21JdbcAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="endpointConfig">my-ip21-endpoint-config</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+In the section (config name) referring to the IP21 adapter, the following must be configured:
+
+Parameter name	Value	Comments
+
+
+class (mandatory)
+
+	
+
+com.ec.frmw.is.engine.adapter.ip21.IP21JdbcAdapter
+
+	
+
+Referring to the class of the adapter.
+
+
+
+
+endpointConfig
+
+	
+
+my-jdbc-config-service
+
+	
+
+The object code or id for the Remote Endpoint Configuration of jdbc type.
+
+The referenced configuration should have these parameters :
+
+driver
+
+easysoft.sql.jobDriver
+
+url
+
+jdbc:easysoft://SERVER:8831/IP21SNA:logonuser=username:logonpassword=password
+
+jdbc:easysoft://192.168.0.45/IP21:logonuser=username:logonpassword=password
+
+username
+
+password
+
+validation-sql (Optional sql to run to verify connection)
+
+
+
+
+fieldid
+
+	
+
+<FIELD>
+
+	
+
+If you need to specify FIELD_ID in your queries, set this parameter to the field you want.
+
+
+
+
+request
+
+	
+
+REQUEST can take the following values:
+
+0 = STEPPED request (the default and means that the data is treated as analog or continuous).
+1 = TIMES request (evenly spaced data).
+2 = TIMES2 request (evenly spaced data plus a data point for the end of the time range).
+3 = FITS request (The FITS request reduces the number of actual data points while retaining the shape of the overall plot. The time period is divided into equally spaced intervals. The maximum, minimum, first, last, and first bad values in each interval are returned.)
+4 = VALUES request (actual recorded data).
+5 = ACTUALS AND CURRENT request (actual recorded data plus a data point for the current value).
+6 = TIMES_EXTENDED request (same as TIMES but can return data for time periods after the most recent data point. This only applies if STEPPED=1.)
+7 = TIMES2_EXTENDED request (same as TIMES2 but can return data for time periods after the most recent data point).
+
+	
+
+Adds the REQUEST parameter to all queries against the HISTORY table.
+
+
+
+
+stepped
+
+	
+
+0 = analog or continuous (default).
+1 = discrete or stepped.
+
+	
+
+Adds the STEPPED parameter to all queries.
+
+
+
+
+timestamp
+
+	
+
+Values examples:
+
+TS
+
+TS_START
+
+	
+
+Enables users to ask against different timestamps to get the timestamp for the sample. If not set, the default value is TS when querying against HISTORY and TS_START against AGGREGATES. All the values will be embraced by ISO8601(<timestamp>) to ensure the parameters meets ECIS’s requirement to format.
+
+
+
+
+timestampstart
+
+	
+
+Values examples:
+
+TS
+
+TS_START
+
+	
+
+Same as timestamp, however, this attribute is only used against aggregated functions.
+
+
+
+
+valuefunction
+
+	
+
+Value example: F15.8
+
+	
+
+If set, we will not ask for value, but for value using '<valuefunction>'. It enables the possibility to specify the format of the output.
+
+
+
+
+checkstatussample
+
+	
+
+Yes/No or true/false
+
+	
+
+If this value is set to false or no, ECIS will not add AND STATUS = 0 to SAMPLE queries towards PI. If this value is not set, default is considered to be yes/true.
+
+
+
+
+checkstatusaggregate
+
+	
+
+Yes/No or true/false
+
+	
+
+If this value is set to yes or true, ECIS will add AND STATUS = 0 to AGGREGATED queries towards PI. If this value is not set, default is considered to be no/false.
+
+
+
+
+tagid-characters-allowed
+
+	
+
+String of additional characters to allow in tag ids.
+
+	
+
+If your tag ids contain special characters that the IP21 adapter considers illegal, you can specify this parameter to allow these characters to pass validation. Regex-reserved characters must be escaped with slashes.
+
+The parameter values must be changed to match the local infrastructure with machine names and user ids.
+
+The following parameters are deprecated and replaced with Remote Endpoint Configuration specified by endpointConfig parameter.
+
+Parameter name	Value	Comments
+
+
+username (mandatory)
+
+	
+
+<IP21 username>
+
+	
+
+The username needed to authenticate against the IP21 server.
+
+
+
+
+pwd (mandatory)
+
+	
+
+<IP21 password>
+
+	
+
+The password needed to authenticate against the IP21 server.
+
+
+
+
+connecturl
+(mandatory)
+
+	
+
+<IP21 connecturl>
+
+	
+
+The URL to connect against IP21’s ODBC interface. Example:
+
+jdbc:easysoft://192.168.0.45/IP21
+
+:logonuser=username
+
+:logonpassword=password
+
+
+
+
+dbdriver
+(mandatory)
+
+	
+
+easysoft.sql.jobDriver
+
+	
+
+The driver used to connect to the ODBC interface of IP21.
+
+
+
+
+check-valid-connection-sql
+
+	
+
+<SQL to check if the connection is valid>
+
+	
+
+If you want a check upon initialization to verify that the IP21 server is up and running, this is the parameter to use.
+
+Supported Source Functions
+
+The supported source functions for the adapter are:
+
+Function name	Description
+
+
+SAMPLE
+
+	
+
+Reads raw samples from the IP21 server. It can be slow when used on tags with high sampling frequency.
+
+
+
+
+AVG
+
+	
+
+Time-weighted average values.
+
+
+
+
+MAX
+
+	
+
+Maximum tag value within the given period.
+
+
+
+
+MIN
+
+	
+
+Minimum tag value within the given period.
+
+
+
+
+SUM
+
+	
+
+Sum tag value within the given period.
+
+
+
+
+VALUE_AT_START
+
+	
+
+Values will be the last event before each period change.
+
+
+
+
+VALUE_AT_END
+
+	
+
+The value will be the last event in each period.
+
+SQL Queries Against IP21
+
+Here is a list of the functions used against IP21. In addition, the following things can be added:
+
+If the request parameter is set, then for all queries against the HISTORY table, AND REQUEST = <request> will be added to the end of the query.
+
+If the timestamp parameter is set, then <timestamp> will be replaced by that value, if not TS will be the default value.
+
+If the fielded parameter is set, then for all queries, AND FIELD_ID = FT('<fielded>') will be added to the end of the query.
+
+SAMPLE
+
+SELECT NAME, Value, ISO8601(<timestamp>) FROM HISTORY WHERE NAME = '<tagid>' AND status = 0 AND TS >= '<fromDate>.000Z' AND TS < '<toDate>.000Z'
+
+AVG
+
+SELECT NAME, AVG, ISO8601(<timestamp>) FROM aggregates WHERE NAME = '<tagid>' AND TS >= '<fromDate>.000Z' AND TS_END < '<toDate>.000Z' AND period = <timeStep>
+
+MIN
+
+SELECT NAME, MIN, ISO8601(<timestamp>) FROM aggregates WHERE NAME = '<tagid>' AND TS >= '<fromDate>.000Z' AND TS_END < '<toDate>.000Z' AND period = <timeStep>
+
+MAX
+
+SELECT NAME, MAX, ISO8601(<timestamp>) FROM aggregates WHERE NAME = '<tagid>' AND TS >= '<fromDate>.000Z' AND TS_END < '<toDate>.000Z' AND period = <timeStep>
+
+SUM
+
+SELECT NAME, SUM, ISO8601(<timestamp>) FROM aggregates WHERE NAME = '<tagid>' AND TS >= '<fromDate>.000Z' AND TS_END < '<toDate>.000Z' AND period = <timeStep>
+Tag-Based JDBC Adapter
+
+The tag-based JDBC adapter simply selects values and quality based on a tag identifier and a daytime field from a table row in a database. In the simplest form of configuration, the adapter will build the SQL, but there is also a possibility to provide the SQL to the adapter with markers to where the adapter should insert tag id and dates. The tag-based JDBC adapter only supports source function SAMPLE and LATEST.
+
+Source System Configuration - Oracle DBMS
+
+XML config example:
+
+<config name="TAGADAPTER">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.jdbc.SourceTagJdbcAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="endpointConfig">my-jdbc-endpoint-config</parameter>
+            <parameter name="SQL_TAG_ID">IDENTIFIER</parameter>
+            <parameter name="SQL_TABLE">db_name.SOMETABLE</parameter>
+            <parameter name="SQL_VALUE">SOMEVALUE</parameter>
+            <parameter name="SQL_DAYTIME">DAYTIME</parameter>
+            <parameter name="REUSE_JDBC_CONNECTION">false</parameter>
+            <parameter name="DISABLE_TRANSACTIONS">false</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+In the section <config name> referring to the JDBC adapter, the following must be configured:
+
+Parameter name	Value	Comments
+
+
+class (mandatory)
+
+	
+
+com.ec.frmw.is.engine.adapter.jdbc.SourceTagJdbcAdapter
+
+	
+
+Referring to the class of the adapter.
+
+
+
+
+endpointConfig
+
+	
+
+my-jdbc-config-service
+
+	
+
+The object code or id for the Remote Endpoint Configuration of jdbc type.
+
+The referenced configuration should have these parameters :
+
+driver : Classname of jdbcdriver. Each DBMS is providing a driver which is used by java to communicate with the DBMS. If a non-Oracle driver is used, the library containing the driver should be available for the ECIS classloader, (f.eks add the library to your EC Extension). It is also possible to use a Wildfly datasource instead of defining the connection directly. This can be accomplished by setting JBOSS_DATASOURCE as the driver and the JNDI name in the url parameter.
+
+oracle.jdbc.driver.OracleDriver
+
+JBOSS_DATASOURCE
+
+url: The connection string to the database. Look in the vendors' driver documentation for the format of the selected driver. If JBOSS_DATASOURE has been provided as a driver, this parameter should specify the JNDI name of the datasource to use.
+
+jdbc:oracle:thin:@//<host>:1521/<ServiceName>
+
+jboss/datasources/ECDS (JNDI name if driver is JBOSS_DATA_SOURCE)
+
+username
+
+password
+
+validation-sql (Optional sql to run to verify connection)
+
+
+
+
+SQL_TAG_ID
+
+	
+
+String
+
+	
+
+A field in source table identifying the tag. Used to create the select statements.
+
+
+
+
+SQL_TABLE
+
+	
+
+String
+
+	
+
+The table in the source database where the adapter should retrieve data from.
+
+
+
+
+SQL_VALUE
+
+	
+
+String
+
+	
+
+A field in source table holding the tag value. Used to create the select statements.
+
+
+
+
+SQL_DAYTIME
+
+	
+
+String
+
+	
+
+A field in source table holding the timestamp for the tag value. Used to create the select statements. This field must be a date type.
+
+
+
+
+SQL_QUALITY
+
+	
+
+String
+
+	
+
+A field in source table holding the quality value. This is not mandatory. Used to create the select statements.
+
+
+
+
+REUSE_JDBC_CONNECTION
+
+	
+
+Boolean (true / false)
+
+	
+
+If false (the default), the driver will be reloaded for each tag. If true, the connection will be reused across tag retrieval. In this case, the DISABLE_TRANSACTIONS is ignored, i.e. transactions are enabled.
+
+
+
+
+DISABLE_TRANSACTIONS
+
+	
+
+Boolean (true / false)
+
+	
+
+Only used if REUSE_JDBC_CONNECTION is absent or false. If transactions are enabled, auto-commit is active, i.e. data is committed after each SQL update/insert/delete statement.
+
+The following parameters are deprecated and replaced with Remote Endpoint Configuration specified by endpointConfig parameter.
+
+Parameter name	Value	Comments
+
+
+DRIVER (mandatory)
+
+	
+
+Path to the jdbcdriver
+or
+JBOSS_DATASOURCE
+
+	
+
+Each DBMS is providing a driver which is used by java to communicate with the DBMS. If a non-Oracle driver is used. The library containing the driver should be available for ECIS classloader(add the library to .<JBOSS-HOME>/server/ec/lib-EnergyX-ext/). It is also possible to use a Wildfly datasource instead of defining the connection directly. This can be accomplished by setting JBOSS_DATASOURCE as the driver and the JNDI name in the DB_URL parameter.
+
+
+
+
+DB_URL (mandatory)
+
+	
+
+jdbc:oracle:thin:@//<host>:1521/<ServiceName>
+or
+JNDI name
+
+	
+
+The connection string to the database. Look in the vendors' driver documentation for the format of the selected driver. If JBOSS_DATASOURE has been provided as a driver, this parameter should specify the JNDI name of the datasource to use.
+
+
+
+
+DB_USER (mandatory)
+
+	
+
+Username
+
+	
+
+Id to the user with access to read from the database.
+
+
+
+
+DB_PWD (mandatory)
+
+	
+
+Password
+
+	
+
+The password to the user with access to read from the database.
+
+The parameter values must be changed to match the local infrastructure with machine names and user ids.
+
+Source System Configuration - Other DBMS/Non-Standard Queries
+
+Since the JDBC adapter produces the select statement in a syntax tailored for Oracle DBMS, there is a possibility to configure the adapter to use predefined SQL instead of the generated. In order for the adapter to inject the needed variables, the SQL should contain keywords for tagId, startDate, and endDate. For aggregated functions, the keyword resolution is also available. The select must also provide the value as the first return column, the timestamp as the second, and an optional quality column as the third. GET_SAMPLES_SQL and GET_LATEST_SQL are mandatory if you want to use the functionality this way. In addition it is possible to specify SQL statements for the following parameters (Source functions in parenthesis): GET_AVG_SQL (AVG), GET_MEAN_SQL (MEAN), GET_MAX_SQL (MAX), GET_MIN_SQL (MIN), GET_SUM_SQL (SUM). If you are using aggregated queries, you will need to use the parameter maxsourceintervalinrequest, and set it to 1. This way the adapter will ask for 1 source interval at a time.
+
+<config name="TAGADAPTER">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.jdbc.SourceTagJdbcAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="DRIVER">oracle.jdbc.driver.OracleDriver</parameter>
+            <parameter name="DB_URL">jdbc:oracle:thin:@//host:1521/ServiceName</parameter>
+            <parameter name="DB_USER">user</parameter>
+            <parameter name="DB_PWD">pwd</parameter>
+            <parameter name="GET_SAMPLES_SQL">SELECT AVG_WH_TEMP, DAYTIME FROM ECKERNEL_VER_9_4_INC6_01.PWEL_SUB_DAY_STATUS WHERE DATA_CLASS_NAME='$tagId$' AND DAYTIME&gt;to_date('$startDate$', 'yyyy-MM-dd"T"HH24:Mi:SS') AND DAYTIME&lt;to_date('$endDate$', 'yyyy-MM-dd"T"HH24:Mi:SS')</parameter>
+            <parameter name="GET_LATEST_SQL">SELECT AVG_WH_TEMP, DAYTIME FROM ECKERNEL_VER_9_4_INC6_01.PWEL_SUB_DAY_STATUS WHERE DATA_CLASS_NAME='$tagId$' AND DAYTIME&lt;to_date('$endDate$', 'yyyy-MM-dd"T"HH24:Mi:SS') AND DAYTIME=(SELECT MAX(DAYTIME) FROM ECKERNEL_VER_9_4_INC6_01.PWEL_SUB_DAY_STATUS WHERE DATA_CLASS_NAME='$tagId$' AND DAYTIME&lt;to_date('$endDate$', 'yyyy-MM-dd"T"HH24:Mi:SS'))</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+Tag File Adapter
+Source System Configuration
+
+XML config example:
+
+<config name="FILEADAPTER">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.TagFileAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="DropFolder">c:\\temp</parameter>
+            <parameter name="CompletedFolder">c:\\temp\\completed</parameter>
+            <parameter name="ErrorFolder">c:\\temp\\error</parameter>
+            <parameter name="BadFolder">c:\\temp\\bad</parameter>
+            <parameter name="DateFormat">dd.MM.yyyy HH:mm:ss</parameter>
+            <parameter name="FileFilter"></parameter>
+            <parameter name="QualityColumnIndex">0</parameter>
+            <parameter name="TagColumnIndex">1</parameter>
+            <parameter name="TimeColumnIndex">2</parameter>
+            <parameter name="ValueColumnIndex">3</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+In the section (config name) referring to the FileAdapter, the following must be configured:
+
+Parameter name	Value	Comments
+
+
+class (mandatory)
+
+	
+
+com.ec.frmw.is.engine.adapter.file.FileAdapter
+
+	
+
+Referring to the class of the adapter.
+
+
+
+
+sequential (optional)
+
+	
+
+Yes | True OR No | False
+
+	
+
+Indicates if the data coming from the adapter can be expected to be ordered by date/time.
+
+
+
+
+DropFolder (mandatory)
+
+	
+
+.
+
+	
+
+The folder where the adapter will look for files containing data.
+
+
+
+
+ErrorFolder (mandatory)
+
+	
+
+/error/
+
+	
+
+The folder where the adapter will write rows with errors.
+
+
+
+
+BadFolder (mandatory)
+
+	
+
+/bad/
+
+	
+
+The folder where the adapter will move bad files.
+
+
+
+
+CompletedFolder (mandatory)
+
+	
+
+/completed/
+
+	
+
+The folder where the adapter will move files it has parsed.
+
+
+
+
+DateFormat
+
+	
+
+yyyy-MM-dd’T’HH:mm:ss
+
+	
+
+The format the date column contains. Uses the same notation as SimpleDateFormat in java.
+
+
+
+
+FileFilter
+
+	
+
+Null per default will parse all files in the folder.
+
+	
+
+Filter to filter out the files the adapter should parse.
+
+
+
+
+HeaderRow
+
+	
+
+N
+
+	
+
+Decides if there is a header row at the beginning of the file.
+
+
+
+
+QualityColumnIndex
+
+	
+
+-1
+
+	
+
+Gives the index of the quality column. If this value is -1, then the data does not contain any quality column. The default is -1.
+
+
+
+
+TagColumnIndex
+
+	
+
+0
+
+	
+
+Gives the index of the tag column.
+
+
+
+
+TimeColumnIndex
+
+	
+
+1
+
+	
+
+Gives the index of the time column.
+
+
+
+
+ValueColumnIndex
+
+	
+
+2
+
+	
+
+Gives the index of the value column.
+
+The following parameters need to be set to be able to read text-files:
+
+Parameter name	Value	Comments
+
+
+DecimalSeparator
+
+	
+
+.
+
+	
+
+Sets the separator used in decimal numbers.
+
+
+
+
+FieldSeparator
+
+	
+
+;
+
+	
+
+Sets the separator used to separate columns.
+
+The following parameters need to be set to be able to read Excel files. If these are not set, the parameter assumes that the Excel sheet starts at cell A1:
+
+Parameter name	Value	Comments
+
+
+StartCell
+
+	
+
+Null per default will assume A1 as the starting cell
+
+	
+
+The cell where the data starts.
+
+
+
+
+EndCell
+
+	
+
+Null per default
+
+	
+
+The last cell with data (Only EndCell or EndRow needs to be set).
+
+
+
+
+EndRow
+
+	
+
+Null per default
+
+	
+
+The last row that contains data.
+
+The parameter values must be changed to match the values needed to read your input files.
+
+Supported Source Functions
+
+The following source functions are supported in the fileadapter:
+
+Function name	Description
+
+
+SAMPLE
+
+	
+
+Reads raw samples from the files.
+
+
+
+
+AVG
+
+	
+
+The time-weighted average for a given period using linear interpolation.
+
+
+
+
+MAX
+
+	
+
+Maximum tag value within a given period.
+
+
+
+
+MIN
+
+	
+
+Minimum tag value within a given period.
+
+
+
+
+MEAN
+
+	
+
+Plain average of all values within a given period.
+
+
+
+
+SUM
+
+	
+
+Sum of all values within a given period.
+
+
+
+
+VALUE_AT_START
+
+	
+
+Values will be the last event before each period change.
+
+
+
+
+VALUE_AT_END
+
+	
+
+The value will be the last event in each period.
+
+In the mapping configuration, these can be set up as the Source Function in the Maintain template screen (CO.1017: Maintain templates).
+
+Row File Adapter - Source Configuration
+
+The example uses a package to write the data to EC. If you want to use another approach, please look at the target configuration for rowadapters below.
+
+<config name="ROWADAPTER">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.RowFileAdapter</class>
+        <parameters>
+            <parameter name="DropFolder">c:\\temp\\jboss\\rowadapter</parameter>
+            <parameter name="CompletedFolder">c:\\temp\\jboss\\rowadapter\\completed</parameter>
+            <parameter name="ErrorFolder">c:\\temp\\jboss\\rowadapter\\error</parameter>
+            <parameter name="BadFolder">c:\\temp\\jboss\\rowadapter\\bad</parameter>
+            <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="FileFilter">rowdata</parameter>
+            <parameter name="DbPackageProcedure">UE_ECISROWTEST.ReceiveTestdat</parameter>
+            <parameter name="targetEndpointConfig">my-target-jdbc-endpoint-config</parameter>
+            <parameter name="Col_1" type="list">
+                <subparameter name="columnIndex">0</subparameter>
+                <subparameter name="columnType">Date</subparameter>
+                <subparameter name="packageIndex">1</subparameter>
+            </parameter>
+            <parameter name="Col_2" type="list">
+                <subparameter name="columnIndex">1</subparameter>
+                <subparameter name="columnType">Double</subparameter>
+                <subparameter name="packageIndex">2</subparameter>
+            </parameter>
+            <parameter name="Col_3" type="list">
+                <subparameter name="columnIndex">2</subparameter>
+                <subparameter name="columnType">Double</subparameter>
+                <subparameter name="packageIndex">3</subparameter>
+            </parameter>
+            <parameter name="Col_4" type="list">
+                <subparameter name="columnIndex">4</subparameter>
+                <subparameter name="columnType">String</subparameter>
+                <subparameter name="packageIndex">4</subparameter>
+            </parameter>
+            <parameter name="ErrorFile">c:\\temp\\jboss\\rowadapter\\errors\\errorfile.log</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+In the section (config name) referring to the RowAdapter, the following must be configured:
+
+Parameter name	Value	Comments
+
+
+DropFolder (mandatory)
+
+	
+
+.
+
+	
+
+The folder where the adapter will look for files containing data.
+
+
+
+
+ErrorFolder (mandatory)
+
+	
+
+/error/
+
+	
+
+The folder where the adapter will write rows with errors.
+
+
+
+
+BadFolder (mandatory)
+
+	
+
+/bad/
+
+	
+
+The folder where the adapter will move bad files.
+
+
+
+
+CompletedFolder (mandatory)
+
+	
+
+/completed/
+
+	
+
+The folder where the adapter will move files it has parsed.
+
+
+
+
+DateFormat
+
+	
+
+yyyy-MM-dd’T’HH:mm:ss
+
+	
+
+The format the date column contains. Uses the same notation as SimpleDateFormat in java.
+
+
+
+
+FileFilter
+
+	
+
+Null per default will parse all files in the folder.
+
+	
+
+Filter to filter out the files the adapter should parse.
+
+
+
+
+HeaderRow
+
+	
+
+N
+
+	
+
+Decides if there is a header row at the beginning of the file.
+
+
+
+
+ErrorFile
+
+	
+
+C:\\temp\\jboss\\rowadapter
+errorRows.log
+
+	
+
+An error file that will contain all the rows that threw an exception when the package tried to write them to DB.
+
+
+
+
+AppendErrorCode
+
+	
+
+true/false
+
+	
+
+If this is set to true, a text saying "Errorcode: <errorcode>" will be appended to the end of each row of the file specified in the parameter ErrorFile.
+
+
+
+
+SeparateErrorfiles
+
+	
+
+true/false
+
+	
+
+If this is set, error files generated during the reading of files will end up in the bad folder, while error files generated during writing will end up in the error folder.
+
+The following parameters need to be set to be able to read text-files:
+
+Parameter name	Value	Comments
+
+
+DecimalSeparator
+
+	
+
+.
+
+	
+
+Sets the separator used in decimal numbers.
+
+
+
+
+FieldSeparator
+
+	
+
+;
+
+	
+
+Sets the separator used to separate columns.
+
+The following parameters need to be set to be able to read Excel-files. If these are not set, the parameter assumes that the Excel sheet starts at cell A1:
+
+Parameter name	Value	Comments
+
+
+StartCell
+
+	
+
+Null per default will assume A1 as the starting cell
+
+	
+
+The cell where the data starts.
+
+
+
+
+EndCell
+
+	
+
+Null per default
+
+	
+
+The last cell with data (Only EndCell or EndRow needs to be set).
+
+
+
+
+EndRow
+
+	
+
+Null per default
+
+	
+
+The last row that contains data.
+
+In addition, you need to specify each column you want the RowAdapter to read, each row is specified as a parameter with a name starting with Col_ and type set to list.
+
+Parameter name	Value	Comments
+
+
+Col_<number>
+
+	
+
+No value for this element, but needs to contain subparameters. The type of this element needs to be set to list.
+
+	
+
+Defines a new column.
+
+
+
+
+SubParameter name
+
+	
+
+Value
+
+	
+
+Comments.
+
+
+
+
+columnIndex
+
+	
+
+No default value
+
+	
+
+Describes which column in the file the adapter should map to this column.
+
+
+
+
+columnType
+
+	
+
+No default value
+
+	
+
+The type of this column. Legal values are:
+
+String
+
+Date
+
+Double
+
+
+
+
+startPosition
+
+	
+
+No default value
+
+	
+
+If the file is a fixed format file, this field defines the start position for this column.
+
+
+
+
+endPosition
+
+	
+
+No default value
+
+	
+
+If the file is a fixed format file, this field defines the end position for this column.
+
+The parameter values must be changed to match the values needed to read your input files.
+
+The adapter reads files from the drop folder without any checking if the file is ready first. Because of this, the files should be copied or moved into the folder after they are fully populated. This way you avoid the adapter reading files that are not yet ready.
+
+Row JDBC Adapter - Source Configuration
+
+This example is writing directly to an EcClass using the classadapter. For other ways of handling rows on the target side, see the section about the target system configuration for rowadapters.
+
+<config name="JDBCADAPTER">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.jdbc.SourceRowJdbcAdapter</class>
+        <parameters>
+            <parameter name="endpointConfig">my-jdbc-endpoint-config</parameter>
+            <parameter name="SQL">select s.daytime, s.avg_wh_press,s.avg_wh_temp, s.max_sand_rate, s.object_id, s.object_code from dv_pwel_sub_day_status s where s.daytime &gt; $last_fetch_oracle_format$</parameter>
+            <parameter name="EcClass">PWEL_SAMPLE_1</parameter>
+            <parameter name="Col_1" type="list">
+                <subparameter name=" EcClassAttribute ">DAYTIME</subparameter>
+            </parameter>
+            <parameter name="Col_2" type="list">
+                <subparameter name=" EcClassAttribute ">AVG_WH_PRESS</subparameter>
+            </parameter>
+            <parameter name="Col_3" type="list">
+                <subparameter name=" EcClassAttribute ">WH_TEMP</subparameter>
+            </parameter>
+            <parameter name="Col_4" type="list">
+                <subparameter name=" EcClassAttribute ">MAX_SAND_RATE</subparameter>
+            </parameter>
+            <parameter name="Col_5" type="list">
+                <subparameter name=" EcClassAttribute ">OBJECT_ID</subparameter>
+                <subparameter name=" EcAttributeFunction ">UE_ECISFUNCTION.mapObjectID</subparameter>
+            </parameter>
+            <parameter name="Col_6" type="list">
+                <subparameter name=" EcClassAttribute ">OBJECT_CODE</subparameter>
+            </parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+In the section (config name) referring to the JDBCAdapter, the following must be configured:
+
+Parameter name	Value	Comments
+
+
+endpointConfig
+
+	
+
+my-jdbc-config-service
+
+	
+
+The object code or id for the Remote Endpoint Configuration of jdbc type.
+
+The referenced configuration should have these parameters :
+
+driver : Classname of jdbcdriver. Each DBMS is providing a driver which is used by java to communicate with the DBMS. If a non-Oracle driver is used, the library containing the driver should be available for the ECIS classloader, (f.eks add the library to your EC Extension). It is also possible to use a Wildfly datasource instead of defining the connection directly. This can be accomplished by setting JBOSS_DATASOURCE as the driver and the JNDI name in the url parameter.
+
+oracle.jdbc.driver.OracleDriver
+
+JBOSS_DATASOURCE
+
+url: The connection string to the database. Look in the vendors' driver documentation for the format of the selected driver. If JBOSS_DATASOURE has been provided as a driver, this parameter should specify the JNDI name of the datasource to use.
+
+jdbc:oracle:thin:@//<host>:1521/<ServiceName>
+
+jboss/datasources/ECDS (JNDI name if driver is JBOSS_DATA_SOURCE)
+
+username
+
+password
+
+validation-sql (Optional sql to run to verify connection)
+
+
+
+
+SQL
+
+	
+
+Select statement(s)
+
+	
+
+A statement that will retrieve data from the database. By inserting $last_fetch$ in the statement the adapter will inject a timestamp of when it last started the retrieval of data as a string with the format: yyyy-mm-ddThh:MM:ss. You can use multiple selects in one payload by separating them with ';'. Note: if this feature is used the consuming package must be able to handle the variance in the columns.
+
+
+
+
+SQLFN
+
+	
+
+DB function that dynamically builds the select statement used to retrieve data.
+
+
+Example value: XYZ.generateQuery('QUERY1')
+
+	
+
+Calls DB function to dynamically build the SQL statement used to retrieve data from the target DB. Use the SQLFN parameter if the DB function resides in the target database. Use ECSQLFN or ECSQLCLOBFN if the function resides in the EC database.
+
+
+Note that SQLFN and ECSQLFN assume that the function returns the query as string/VARCHAR (i.e. limited length). ECSQLCLOBFN assumes that the function returns a CLOB.
+
+The returned query is subject to user event parameter substitution before being executed.
+
+
+
+
+ECSQLFN
+
+ECSQLCLOBFN
+
+		
+A JDBC row adapter config must provide a value for exactly one of the SQL, SQLFN, ECSQLFN or ECSQLCLOBFN parameters.
+See the previous section "Row File Adapter" for the details on the target configuration.
+It is also possible to define a Wildfly datasource for the row-based JDBC adapter. In this case, the JNDI name must be referenced in the DB_URL parameter.
+If a Wildfly datasource is used, the DB_USER and DB_PWD parameters are not required.
+
+The following parameters are deprecated and replaced with Remote Endpoint Configuration specified by endpointConfig parameter.
+
+Parameter name	Value	Comments
+
+
+DRIVER (mandatory)
+
+	
+
+Path to the jdbcdriver
+or
+JBOSS_DATASOURCE
+
+	
+
+Each DBMS is providing a driver which is used by java to communicate with the DBMS. If a non-Oracle driver is used. The library containing the driver should be available for ECIS classloader(add the library to .<JBOSS-HOME>/server/ec/lib-EnergyX-ext/). It is also possible to use a Wildfly datasource instead of defining the connection directly. This can be accomplished by setting JBOSS_DATASOURCE as the driver and the JNDI name in the DB_URL parameter.
+
+
+
+
+DB_URL (mandatory)
+
+	
+
+jdbc:oracle:thin:@//<host>:1521/<ServiceName>
+or
+JNDI name
+
+	
+
+The connection string to the database. Look in the vendors' driver documentation for the format of the selected driver. If JBOSS_DATASOURE has been provided as a driver, this parameter should specify the JNDI name of the datasource to use.
+
+
+
+
+DB_USER (mandatory)
+
+	
+
+Username
+
+	
+
+Id to the user with access to read from the database.
+
+
+
+
+DB_PWD (mandatory)
+
+	
+
+Password
+
+	
+
+The password to the user with access to read from the database.
+
+Updating the Source After Extraction
+
+It is possible to use the adapter to perform an update on the rows which have been read. If the parameter with name UPDATE_SQL is defined, the adapter will execute this for each row read successfully. The format of this parameter is normal SQL syntax except that you can create markers for where the adapter can insert columns for each row. A marker is of the format $<col_no> where col_no is the index in the select starting from 1.
+
+Example:
+
+<parameter name=" UPDATE_SQL ">update dv_pwel_sub_day_status set status='processed' where somekey=$1 and someOtherKey=$2</parameter>
+
+These update statements are run within the same transaction, so it is possible to have the select statement be a SELECT FOR UPDATE.
+
+Running Multiple SQL Statements to Multiple Target Configurations
+
+If several datasets are fetched from the same connection, you can configure a collection of SourceRowJdbcAdapters. The parameters are the same as described under section Source System Configuration and Supported source functions, but the SQL, update and target parameters are subparameters to a new parameter where the name must contain the string "SRC_TARGET".
+
+ <config name="JDBCADAPTER">
+    <sourceadapter>
+        <!-- NB: This has changed from previous class SourceJdbcAdapterCollection can execute several SRC_TARGET mappings while SourceRowJdbcAdapter can only execute one sql -->
+        <class>com.ec.frmw.is.engine.adapter.jdbc.SourceJdbcAdapterCollection</class>
+        <parameters>
+            <parameter name="endpointConfig">my-jdbc-endpoint-config</parameter>
+            <!-- All sqls target mappings are ordered alphabetically and must contain string 'SRC_TARGET'' -->
+            <parameter name="SRC_TARGET_SOME_IDENTIFYING_NAME_1" type="list">
+                <subparameter name="SQL">select pa.daytime, pa.avg_wh_press,pa.record_status from parentA pa where pa.lastupdate &gt; to_date('$last_fetch$', 'yyyy-MM-dd"T"HH24:Mi:SS')</subparameter>
+                <subparameter name="EcClass">EcClassName</subparameter>
+                <subparameter name="Col_1" type="list">
+                    <subparameter name="EcClassAttribute">daytime</subparameter>
+                    <subparameter name="EcAttributeFunction">package.function</subparameter>
+                </subparameter>
+                <subparameter name="Col_2" type="list">
+                    <subparameter name="EcClassAttribute">avg_wh_press</subparameter>
+                </subparameter>
+                <subparameter name="Col_3" type="list">
+                    <subparameter name="EcClassAttribute">record_status</subparameter>
+                </subparameter>
+            </parameter>
+            <!-- All sqls target mappings are ordered alphabetically and must contain string 'SRC_TARGET'' -->
+            <!-- depends attribute indicates that it should not execute if the name inside depends has returned no values -->
+            <parameter name="SRC_TARGET_SOME_IDENTIFYING_NAME_2" type="list" depends="SRC_TARGET_SOME_IDENTIFYING_NAME_1">
+                <subparameter name="SQL">select ca.daytime, ca.avg_wh_press,ca.record_status from childtA ca  where ca.lastupdate &gt; to_date('$last_fetch$', 'yyyy-MM-dd"T"HH24:Mi:SS')</subparameter>
+                <subparameter name="EcClass">EcClassName2</subparameter>
+                <subparameter name="Col_1" type="list">
+                    <subparameter name="EcClassAttribute">daytime</subparameter>
+                </subparameter>
+                <subparameter name="Col_2" type="list">
+                    <subparameter name="EcClassAttribute">avg_wh_press</subparameter>
+                </subparameter>
+                <subparameter name="Col_3" type="list">
+                    <subparameter name="EcClassAttribute">record_status</subparameter>
+                </subparameter>
+            </parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+The configured SRC_TARGET elements will share the database connection but will create independent data units which it will send in sequence for writing to the defined targets. Like the other parameters in the adapter configuration, they are sorted alphabetically. However, this will be overridden by the depends attribute. In the depends attribute it is possible to define one or more SRC_TARGET elements which must return at least one row before the depending SRC_TARGET is executed.
+
+Fetching Data From a Backup Solution
+
+Both the SourceRowJdbcAdapter and the SourceJdbcAdapter collection have the possibility to retrieve data from a failover source. This is achieved by defining the connection parameters inside parameters which name contains "CONNECTION". Like the example below:
+
+ <!-- All connections are ordered alphabetically and must contain string 'CONNECTION' -->
+<parameter name="CONNECTION_PROPERTIES" type="list">
+    <subparameter name="endpointConfig">my-jdbc-endpoint-config</subparameter>
+</parameter>
+<!-- All connections are ordered alphabetically and must contain string 'CONNECTION' -->
+<parameter name="CONNECTION_PROPERTIES_ALTERNATIVE" type="list">
+    <subparameter name="endpointConfig">my-jdbc-endpoint-config-2</subparameter>
+</parameter>
+
+Like the other parameters in adapter configuration, they are sorted alphabetically. If the first fails the adapter will try to execute the next. The subparameter ACTIVE_SQL is not mandatory, but if it is present the SQL must return at least one row if the connection should be treated as operational.
+
+Target System Configuration for Row Adapters
+
+The target system is configured in the adapter configuration. Just add the parameters among all the others.
+
+Package Service
+
+To write to a package, you need to specify which package and procedure you are going to write to. You can also specify if you want to write to another DB than the one associated with your running Wildfly. This is done using these parameters:
+
+Parameter name	Value	Comments
+
+
+DbPackageProcedure
+
+	
+
+No default value
+
+	
+
+Gives the procedure in the PL/SQL package that will be run to insert the data into EC.
+
+
+
+
+targetEndpointConfig
+
+	
+
+my-target-jdbc-config-service
+
+	
+
+The object code or id for the Remote Endpoint Configuration of jdbc type to write to.
+
+The referenced configuration should have these parameters :
+
+driver : Classname of jdbcdriver. Each DBMS is providing a driver which is used by java to communicate with the DBMS. If a non-Oracle driver is used, the library containing the driver should be available for the ECIS classloader, (f.eks add the library to your EC Extension). It is also possible to use a Wildfly datasource instead of defining the connection directly. This can be accomplished by setting JBOSS_DATASOURCE as the driver and the JNDI name in the url parameter.
+
+oracle.jdbc.driver.OracleDriver
+
+JBOSS_DATASOURCE
+
+url: The connection string to the database. Look in the vendors' driver documentation for the format of the selected driver. If JBOSS_DATASOURE has been provided as a driver, this parameter should specify the JNDI name of the datasource to use.
+
+jdbc:oracle:thin:@//<host>:1521/<ServiceName>
+
+jboss/datasources/ECDS (JNDI name if driver is JBOSS_DATA_SOURCE)
+
+username
+
+password
+
+validation-sql (Optional sql to run to verify connection)
+
+
+
+
+ErrorFile
+
+	
+
+C:\\temp\\jboss\\rowadapter\\errorRows.log
+
+	
+
+An error file that will contain all the rows that threw an exception when the package tried to write them to DB.
+
+
+
+
+AppendErrorCode
+
+	
+
+true/false
+
+	
+
+If this is set to true, a text saying "Errorcode: <errorcode>" will be appended to the end of each row of the file specified in the parameter ErrorFile.
+
+
+
+
+SendUser
+
+	
+
+true/false
+
+	
+
+If this is set, the username of the user running the ECIS schedule will be sent as the last incoming value into the package.
+
+The following parameters are deprecated and replaced with Remote Endpoint Configuration specified by targetEndpointConfig parameter.
+
+Parameter name	Value	Comments
+
+
+TargetDriver
+
+	
+
+No default value
+
+	
+
+Give the driver to the DB you want to write to. If you don’t specify any targetdriver and targetdburl, it will write to the DB you are logged into Wildfly with. It is also possible to use a Wildfly datasource instead of defining the connection directly. This can be accomplished by setting JBOSS_DATASOURCE as the driver and the JNDI name in the DB_URL parameter.
+
+
+
+
+TargetDbURL
+
+	
+
+No default value
+
+	
+
+Give the dbURL to the DB you want to write to. If JBOSS_DATASOURE has been provided as a driver, this parameter should specify the JNDI name of the datasource to use.
+
+
+
+
+TargetDbUser
+
+	
+
+No default value
+
+	
+
+Username (not always needed).
+
+
+
+
+TargetDbPassword
+
+	
+
+No default value
+
+	
+
+Password (not always needed).
+
+If a Wildfly datasource is used, the TargetDbUser and TargetDbPassword parameters are not required.
+
+In addition, one needs to specify which column in the source configuration goes to which inparameter in the procedure. This is done using the packageIndex subparameter. You don’t make new Col_ parameters, just put the subparameter packageIndex in the same as the sourceadapter.
+
+Parameter name	Value	Comments
+
+
+Col_<number>
+
+	
+
+No value for this element, but needs to contain subparameters. The type of this element needs to be set to list.
+
+	
+
+Defines a new column.
+
+
+
+
+SubParameter name
+
+	
+
+Value
+
+	
+
+Comments.
+
+
+
+
+packageIndex
+
+	
+
+No default value
+
+	
+
+Describes which position this column will have when putting it into the PL/SQL package.
+Only used with a row file adapter.
+
+EC Class Service
+
+To write to a class, you need to specify which class you are going to write to. This is done using the EcClass parameter. Be aware that this parameter is case sensitive.
+
+Parameter name	Value	Comments
+
+
+EcClass
+
+	
+
+No default value
+
+	
+
+The class you are going to write to (case sensitive).
+
+In addition, you need to specify which field each column in the row is going to be written to. This is done using the subparameter EcClassAttribute. Be aware that this attribute is also case sensitive, and that you need to fulfill the primary key requirements for each class to be allowed to write to it. In addition, you might get a value from the source system which you want to map to something else before you can write it. This can be done by specifying the parameter EcAttributeFunction. The value will then be put through this function before it is written to the DB.
+
+Parameter name	Value	Comments
+
+
+Col_<number>
+
+	
+
+No value for this element, but needs to contain subparameters. The type of this element needs to be set to list.
+
+	
+
+Defines a new column.
+
+
+
+
+SubParameter name
+
+	
+
+Value
+
+	
+
+Comments.
+
+
+
+
+EcClassAttribute
+
+	
+
+No default value
+
+	
+
+The class attribute you want the column to be mapped to (case sensitive).
+
+
+
+
+EcAttributeFunction
+
+	
+
+No default value
+
+	
+
+If you specify this parameter, the value will be run through this PLSQLfunction before it is written to the database.
+
+Write Row Data to a File
+
+It is possible to write row output to a file. To do that you can use the following parameters:
+
+Parameter name	Value	Comments
+
+
+CSV_OUTFILE
+
+	
+
+No default value
+
+	
+
+Path to a file where the data is to be written.
+
+
+
+
+CSV_DELIMITER
+(optional)
+
+	
+
+;
+
+	
+
+String separating the values in the CSV file. If none is given, a single semicolon is used. If the string is larger than one character, the first character will be appended before the first value and after the last value in each row.
+
+
+
+
+OVERWRITE_OUTFILE
+(optional)
+
+	
+
+false
+
+	
+
+If the adapter should always write to the same file this value must be set to true. The default behavior is that for each run it will append a timestamp before the file ending. I.e If CSV_OUTFILE is set to C:\\temp\\csvouttest.txt the adapter will write the results to a file named C:\temp\csvouttest2008-07-09-06-43-37.txt
+
+This functionality works combined with another target system configuration. This means you can add these parameters in combination with writing through a package or directly to an EC Class. The system will then write the rows to a file before sending the DataTransferObjects to the JMS queue. An example of a system using this functionality can look like this:
+
+ <config name="CSVOUT">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.jdbc.SourceRowJdbcAdapter</class>
+        <parameters>
+            <parameter name="endpointConfig">my-jdbc-endpoint-config</parameter>
+            <parameter name="SQL">select s.daytime, s.avg_wh_press, s.object_id, s.object_code from dv_pwel_sub_day_status s where s.daytime > $last_fetch$</parameter>
+            <parameter name="CSV_OUTFILE">C:\\temp\\csvouttest.txt</parameter>
+            <parameter name="CSV_DELIMITER">","</parameter>
+            <parameter name="OVERWRITE_OUTFILE">true</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Energy Components ©2026

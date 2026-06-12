@@ -1,0 +1,296 @@
+// documentation
+Documentation
+Release Documentation
+Installation Guide
+Upgrade Guide
+Configuration
+Technical Documentation
+Technical Documentation Overview
+Energy Components Business Areas
+Energy Components Basic User Guide
+Energy Components Product Concepts
+EC Framework
+Docker Images
+Identity & Access Management
+Event
+Rest API
+GraphQL API
+EC Integration Services
+EC Integration Services (ECIS) Technical Documentation
+ECIS - Configuration Guide
+ECIS Agent
+ECIS - Advanced File Import
+ECIS - Staging Table Extension
+ECIS - Source Adapter Configuration
+ECIS - Example adapter configurations
+ECIS - Sample Periods explained
+Remote endpoint configuration
+EC BPM - Business Process Modelling
+Extensions
+General Configuration and Guidelines
+EC Data Access Control (eDAC)
+Reporting and Analytics
+EC Tools
+Application Development
+Database Development
+Flyway
+EC Production
+EC Chemistry
+EC Transport
+EC Sales
+EC Revenue
+How To Get Started
+Documentation
+14.2.4
+Documentation
+Technical Documentation
+EC Framework
+EC Integration Services
+ECIS - Example adapter configurations
+ECIS - Example adapter configurations
+
+Here are some example configurations. Remember that the values inside the parameters need to be changed to fit your setup.
+
+These examples can be imported in the Adapter Configuration screen.
+
+<configurations>
+    <config name="TagFileAdapter">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.file.TagFileAdapter</class>
+            <sequential>Yes</sequential> <!-- alternative: No -->
+            <parameters>
+                <parameter name="DropFolder">C:\\temp\\dropfolder</parameter>
+                <parameter name="CompletedFolder">C:\\temp\\completed</parameter>
+                <parameter name="ErrorFolder">C:\\temp\\error</parameter>
+                <parameter name="BadFolder">C:\\temp\\bad</parameter>
+                <parameter name="FileFilter">filefilter</parameter>
+                <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+                <parameter name="DateValueFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+                <parameter name="HeaderRow">N</parameter>
+                <parameter name="QualityColumnIndex">-1</parameter>
+                <parameter name="TagColumnIndex">4</parameter>
+                <parameter name="TimeColumnIndex">0</parameter>
+                <parameter name="ValueColumnIndex">2</parameter>
+                <parameter name="DecimalSeparator">.</parameter>
+                <parameter name="FieldSeparator">;</parameter>
+                <parameter name="StartCell">A1</parameter>
+                <parameter name="EndCell"></parameter>
+                <parameter name="EndRow"></parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+    <config name="RowFileAdapter_to_package">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.file.RowFileAdapter</class>
+            <parameters>
+                <parameter name="DropFolder">C:\\temp\\dropfolder</parameter>
+                <parameter name="CompletedFolder">C:\\temp\\completed</parameter>
+                <parameter name="ErrorFolder">C:\\temp\\error</parameter>
+                <parameter name="BadFolder">C:\\temp\\bad</parameter>
+                <parameter name="FileFilter">filefilter</parameter>
+                <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+                <parameter name="HeaderRow">N</parameter>
+                <parameter name="DecimalSeparator">.</parameter>
+                <parameter name="FieldSeparator">;</parameter>
+                <parameter name="StartCell">A1</parameter>
+                <parameter name="EndCell"></parameter>
+                <parameter name="EndRow"></parameter>
+                <parameter name="DbPackageProcedure">UE_ECISROWTEST.ConsTestdata</parameter>
+                <parameter name="Col_1" type="list">
+                    <subparameter name="columnIndex">0</subparameter>
+                    <subparameter name="columnType">Date/Double/String</subparameter>
+                    <subparameter name="packageIndex">1</subparameter>
+                    <subparameter name="startPosition"></subparameter>
+                    <subparameter name="endPosition"></subparameter>
+                </parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+    <config name="RowFileAdapter_to_class">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.file.RowFileAdapter</class>
+            <parameters>
+                <parameter name="DropFolder">C:\\temp\\dropfolder</parameter>
+                <parameter name="CompletedFolder">C:\\temp\\completed</parameter>
+                <parameter name="ErrorFolder">C:\\temp\\error</parameter>
+                <parameter name="BadFolder">C:\\temp\\bad</parameter>
+                <parameter name="FileFilter">filefilter</parameter>
+                <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+                <parameter name="HeaderRow">N</parameter>
+                <parameter name="DecimalSeparator">.</parameter>
+                <parameter name="FieldSeparator">;</parameter>
+                <parameter name="StartCell">A1</parameter>
+                <parameter name="EndCell"></parameter>
+                <parameter name="EndRow"></parameter>
+                <parameter name="EcClass">PWEL_SAMPLE_1</parameter>
+                <parameter name="Col_1" type="list">
+                    <subparameter name="columnIndex">0</subparameter>
+                    <subparameter name="columnType">Date/Double/String</subparameter>
+                    <subparameter name="startPosition"></subparameter>
+                    <subparameter name="endPosition"></subparameter>
+                    <subparameter name="EcClassAttribute">DAYTIME</subparameter>
+                    <subparameter name="EcAttributeFunction">UE_ECISTESTPACKAGE.MAPVALUE</subparameter>
+                </parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+    <config name="JDBCAdapter_to_class">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.jdbc.SourceRowJdbcAdapter</class>
+            <parameters>
+                <parameter name="DRIVER">oracle.jdbc.driver.OracleDriver</parameter>
+                <parameter name="DB_URL">jdbc:oracle:thin:@//localhost:1521/ECPM</parameter>
+                <parameter name="DB_USER">user</parameter>
+                <parameter name="DB_PWD">password</parameter>
+                <parameter name="ErrorFile">C:\\temp\\errorFile.log</parameter>
+                <parameter name="SQL">select s.daytime, s.avg_wh_press,s.avg_wh_temp, s.max_sand_rate, s.object_id, s.object_code from dv_pwel_sub_day_status s where s.daytime &gt; $last_fetch_oracle_format$ for update</parameter>
+                <parameter name="UPDATE_SQL">update dv_pwel_sub_day_status s set s.avg_wh_press = 14 where s.daytime = $1 and s.object_id = $5 and s.object_code = $6</parameter>
+                <parameter name="EcClass">PWEL_SAMPLE_1</parameter>
+                <parameter name="Col_1" type="list">
+                    <subparameter name="EcClassAttribute">DAYTIME</subparameter>
+                    <subparameter name="EcAttributeFunction">UE_ECISTESTPACKAGE.MAPVALUE</subparameter>
+                </parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+    <config name="JDBCAdapter_to_package_on_different_DB">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.jdbc.SourceRowJdbcAdapter</class>
+            <parameters>
+                <parameter name="DRIVER">oracle.jdbc.driver.OracleDriver</parameter>
+                <parameter name="DB_URL">jdbc:oracle:thin:@//localhost:1521/ECPM</parameter>
+                <parameter name="DB_USER">user</parameter>
+                <parameter name="DB_PWD">password</parameter>
+                <parameter name="TargetDriver">oracle.jdbc.driver.OracleDriver</parameter>
+                <parameter name="TargetDbURL">jdbc:oracle:thin:@//localhost:1521/ECPM</parameter>
+                <parameter name="TargetDbUser">targetDbUser</parameter>
+                <parameter name="TargetDbPassword">password</parameter>
+                <parameter name="ErrorFile">C:\\temp\\errorFile.log</parameter>
+                <parameter name="SQL">select s.daytime, s.avg_wh_press,s.avg_wh_temp, s.max_sand_rate, s.object_id, s.object_code from dv_pwel_sub_day_status s where s.daytime &gt; $last_fetch_oracle_format$ for update</parameter>
+                <parameter name="UPDATE_SQL">update dv_pwel_sub_day_status s set s.avg_wh_press = 14 where s.daytime = $1 and s.object_id = $5 and s.object_code = $6</parameter>
+                <parameter name="DbPackageProcedure">UE_ECISROWTEST.ConsTestdata</parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+    <config name="JDBCAdapter_collection_to_class">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.jdbc.SourceJdbcAdapterCollection</class>
+            <parameters>
+                <parameter name="DRIVER">oracle.jdbc.driver.OracleDriver</parameter>
+                <parameter name="DB_URL">jdbc:oracle:thin:@//localhost:1521/ECPM</parameter>
+                <parameter name="DB_USER">user</parameter>
+                <parameter name="DB_PWD">password</parameter>
+                <parameter name="ErrorFile">C:\\temp\\errorFile.log</parameter>
+                <parameter name="SRC_TARGET_CONFIG_1" type="list">
+                    <subparameter name="SQL">select s.daytime, s.avg_wh_press,s.avg_wh_temp, s.max_sand_rate, s.object_id, s.object_code from dv_pwel_sub_day_status s where s.daytime &gt; $last_fetch_oracle_format$</subparameter>
+                    <subparameter name="EcClass">PWEL_SAMPLE_2</subparameter>
+                    <subparameter name="Col_01" type="list">
+                        <subparameter name="EcClassAttribute">DAYTIME</subparameter>
+                    </subparameter>
+                    <subparameter name="Col_02" type="list">
+                        <subparameter name="EcClassAttribute">WH_PRESS</subparameter>
+                    </subparameter>
+                    <subparameter name="Col_03" type="list">
+                        <subparameter name="EcClassAttribute">WH_TEMP</subparameter>
+                    </subparameter>
+                    <subparameter name="Col_04" type="list">
+                        <subparameter name="EcClassAttribute">MAX_SAND_RATE</subparameter>
+                    </subparameter>
+                    <subparameter name="Col_05" type="list">
+                        <subparameter name="EcClassAttribute">OBJECT_ID</subparameter>
+                        <subparameter name="EcAttributeFunction">UE_ECISCONVERTVALUE.StreamCode2ObjectId</subparameter>
+                    </subparameter>
+                    <subparameter name="Col_06" type="list">
+                        <subparameter name="EcClassAttribute">OBJECT_CODE</subparameter>
+                    </subparameter>
+                </parameter>
+                <parameter name="SRC_TARGET_CONFIG_2" type="list">
+                    <subparameter name="SQL">select s.daytime, s.avg_wh_press, s.object_id, s.object_code from dv_pwel_sample_1 s where s.daytime &gt; $last_fetch_oracle_format$</subparameter>
+                    <subparameter name="EcClass">PWEL_SAMPLE_3</subparameter>
+                    <subparameter name="Col_01" type="list">
+                        <subparameter name="EcClassAttribute">DAYTIME</subparameter>
+                        <subparameter name="EcAttributeFunction">UE_ECISCONVERTVALUE.FindCorrectDaytime</subparameter>
+                    </subparameter>
+                    <subparameter name="Col_02" type="list">
+                        <subparameter name="EcClassAttribute">WH_PRESS</subparameter>
+                    </subparameter>
+                    <subparameter name="Col_03" type="list">
+                        <subparameter name="EcClassAttribute">OBJECT_ID</subparameter>
+                    </subparameter>
+                    <subparameter name="Col_04" type="list">
+                        <subparameter name="EcClassAttribute">OBJECT_CODE</subparameter>
+                    </subparameter>
+                </parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+    <config name="JDBCAdapter_collection_to_package">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.jdbc.SourceJdbcAdapterCollection</class>
+            <parameters>
+                <parameter name="DRIVER">oracle.jdbc.driver.OracleDriver</parameter>
+                <parameter name="DB_URL">jdbc:oracle:thin:@//localhost:1521/ECPM</parameter>
+                <parameter name="DB_USER">user</parameter>
+                <parameter name="DB_PWD">password</parameter>
+                <parameter name="ErrorFile">C:\\temp\\errorFile.log</parameter>
+                <parameter name="SRC_TARGET_CONFIG_1" type="list">
+                    <subparameter name="SQL">select s.daytime, s.avg_wh_press,s.avg_wh_temp, s.max_sand_rate, s.object_id, s.object_code from dv_pwel_sub_day_status s where s.daytime &gt; $last_fetch_oracle_format$</subparameter>
+                    <subparameter name="DbPackageProcedure">UE_ECISROWTEST.ConsTestdata</subparameter>
+                </parameter>
+                <parameter name="SRC_TARGET_CONFIG_2" type="list">
+                    <subparameter name="SQL">select s.daytime, s.avg_wh_press, s.object_id, s.object_code from dv_pwel_sample_1 s where s.daytime &gt; $last_fetch_oracle_format$</subparameter>
+                    <subparameter name="DbPackageProcedure">UE_ECISROWTEST.ConsTestdata2</subparameter>
+                </parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+    <config name="OPCAdapter">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.opc.classic.OPCAdapter</class>
+            <sequential>Yes/NO</sequential>
+            <parameters>
+                <parameter name="AUTH_DOMAIN">MyDomain</parameter>
+                <parameter name="USR">opcreader</parameter>
+                <parameter name="PWD">password</parameter>
+                <parameter name="OPC_HOST">127.0.0.1</parameter>
+                <parameter name="PROG_ID">Some.OPC.Server.1</parameter>
+                <parameter name="IID"></parameter>
+                <parameter name="USE_PROG_ID">true</parameter>
+                <parameter name="ADD_SHUTDOWN_CALLBACK">ADD_SHUTDOWN_CALLBACK</parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+    <config name="PIAdapter_MSSQL_Server">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.pi.jdbc.PiJdbcAdapter</class>
+            <sequential>Yes/NO</sequential>
+            <parameters>
+                <parameter name="dbdriver">net.sourceforge.jtds.jdbc.Driver</parameter>
+                <parameter name="connecturl">jdbc:jtds:sqlserver://localhost:1433</parameter>
+                <parameter name="username">username</parameter>
+                <parameter name="pwd">password</parameter>
+                <parameter name="linkedserver">linkedserver</parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+    <config name="PIAdapter_jinterop">
+        <sourceadapter>
+            <class>com.ec.frmw.is.engine.adapter.pi.jinterop.PiAdapter</class>
+            <sequential>Yes/NO</sequential>
+            <parameters>
+                <parameter name="authdomain">MyDomain</parameter>
+                <parameter name="domainuser">domainuser</parameter>
+                <parameter name="domainpwd">password</parameter>
+                <parameter name="dsn">127.0.0.1</parameter>
+                <parameter name="username">username</parameter>
+                <parameter name="pwd"></parameter>
+                <parameter name="timeout">180</parameter>
+                <parameter name="logfile">c:\\temp\\logfile.log</parameter>
+            </parameters>
+        </sourceadapter>
+    </config>
+</configurations>
+XML
+Copied!
+
+Energy Components ©2026

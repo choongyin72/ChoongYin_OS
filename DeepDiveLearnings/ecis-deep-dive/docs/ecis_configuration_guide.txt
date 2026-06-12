@@ -1,0 +1,793 @@
+// documentation
+Documentation
+Release Documentation
+Installation Guide
+Upgrade Guide
+Configuration
+Technical Documentation
+Technical Documentation Overview
+Energy Components Business Areas
+Energy Components Basic User Guide
+Energy Components Product Concepts
+EC Framework
+Docker Images
+Identity & Access Management
+Event
+Rest API
+GraphQL API
+EC Integration Services
+EC Integration Services (ECIS) Technical Documentation
+ECIS - Configuration Guide
+ECIS Agent
+ECIS - Advanced File Import
+ECIS - Staging Table Extension
+ECIS - Source Adapter Configuration
+ECIS - Example adapter configurations
+ECIS - Sample Periods explained
+Remote endpoint configuration
+EC BPM - Business Process Modelling
+Extensions
+General Configuration and Guidelines
+EC Data Access Control (eDAC)
+Reporting and Analytics
+EC Tools
+Application Development
+Database Development
+Flyway
+EC Production
+EC Chemistry
+EC Transport
+EC Sales
+EC Revenue
+How To Get Started
+Documentation
+14.2.4
+Documentation
+Technical Documentation
+EC Framework
+EC Integration Services
+ECIS - Configuration Guide
+Contents
+Configuration Scenarios
+How to setup an OPC Classic to EC connection
+How to setup a PI to EC connection
+How to setup a tag based database to EC connection
+How to setup a tag based Excel to EC connection
+How to setup a general Excel to EC connection
+How to setup a general database to EC connection
+Troubleshooting
+Problem – General issues
+ECIS - Configuration Guide
+Configuration Scenarios
+
+The section describes how to configure EC Integration Services for the most common data capture scenarios and should be read in conjunction with the EC Integration Services (ECIS) Technical Documentation which describes all features and possible options for the different EC IS components. It focuses on typical configuration scenarios and defines a step by step approach on how to capture the data required.
+
+Before starting this document, please see EC Integration Services (ECIS) Technical Documentation and perform the necessary steps.
+
+For all configuration involving reading/writing files, note that the system will perform a security validation to prevent file traversal attacks. Please see Post Install Configuration, subsection Validation of Directories for Read/Write in the Installation Guideline.
+
+For configuration involving ecisconfig.xml files, these files can either be imported in the Adapter Configuration screen or entered in to the configuration form in the screen.
+
+How to setup an OPC Classic to EC connection
+This guide uses the Classic version of the OPC adapter. An alternative is the OPC UA adapter. Please read ECIS - Source Adapter Configuration for more details about the configuration.
+
+Main objective: Extract historian data from an OPC source and store it in EC classes.
+
+Flow objects description: The configuration consists of six steps:
+
+Configure the connection to the source system
+
+Configure how tags should be retrieved
+
+Configure how tags should be mapped to EC
+
+Schedule the transfer job
+
+Verify results
+
+Verify connection
+
+Step 1 – Configure the OPC connection
+
+XML config template:
+
+ <config name="OPCConfig">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.opc.classic.OPCAdapter</class>
+        <sequential>Yes/NO</sequential>
+        <parameters>
+            <parameter name="AUTH_DOMAIN">MyDomain</parameter>
+            <parameter name="USR">opcreader</parameter>
+            <parameter name="PWD">password</parameter>
+            <parameter name="OPC_HOST">127.0.0.1</parameter>
+            <parameter name="PROG_ID">Some.OPC.Server.1</parameter>
+            <parameter name="IID"></parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Substitute the config name (ex. OPCConfig_Norway_1). No spaces are allowed in this name. The name is unique and cannot be used for any other config name.
+
+Set the sequential flag to 'Yes' (indicating that data from OPC will come ordered by date).
+
+Set the domain where the OPC server is located (AUTH_DOMAIN parameter).
+
+Set the user name, password and host IP (USR, PWD and OPC_HOST parameters).
+
+Set the program id OR the interface ID (PROG_ID or IID parameter). The value of this one is given by the OPC server.
+
+Open the screen Configuration → Codes → EC Codes - All.
+
+Select the code type DT_SOURCE_ID.
+
+Add a new code equal to the config name in this step.
+
+Step 2 – Configure the load templates
+
+Ensure that you have identified the different source tags needed to do the data capture and how they should be aggregated in order to write to a final EC class.
+
+Open the screen Configuration → Integration Service → Maintain Templates.
+
+For each combination of aggregation type and resolution (the length of an aggregated period), create a new template and give information about the following details:
+
+Template Code: A unique code to identify the template.
+
+Description: Description to identify the template.
+
+Source Function: AVG, MIN, MAX, MEAN, SUM defining how the source system should aggregate when extracting values for each tag. If no aggregation is needed at the source side use SAMPLE as the function.
+
+Source DataType: DATE, DECIMAL, STRING defining the source system data type.
+
+Source Interval: The length of the aggregated time intervals given in seconds.
+
+Source Delay: The number of seconds between the execution time to the latest available value.
+
+Minimum Samples: The number of values necessary for doing an aggregation at the target / write side instead of the source side. This parameter may be 1 if the target function is a SAMPLE.
+
+Target Interval: The length of the aggregation time intervals given in seconds. This parameter may be set equal to the source interval if no aggregation is required at the target side.
+
+Target Function: AVG, MIN, MAX, MEAN, SUM or LATEST defining how to aggregate the extracted values. If no aggregation is needed at the target side use SAMPLE as the function.
+
+Target Date Time: The name of the date time attribute in the final EC class. This should in most cases be set to "DAYTIME".
+
+Use Summer Time: Set this if the final EC class needs daylight saving flag as a part of the primary key.
+
+Overwrite User: Set this if existing rows in an EC class (updated by non-system users) can be updated by EC IS. How to specify system users is described in EC Integration Services (ECIS) Technical Documentation and section Overwrite rules.
+
+Overwrite Status: Set this to "Provisional", "Verified" or "Approved" to indicate the highest status of the data EC IS may be allowed to overwrite.
+
+Production Day Start: The number of offset hours from midnight to the start of the production day.
+
+Shift Time To Period Start: Define the number of shift times to the period start.
+
+Step 3 – Configure the tag mappings
+
+Identify all the tags needed to extract and the class attributes to write data into.
+
+Open the screen Configuration → Integration Service → Maintain Mappings.
+
+Choose the EC class to provide mappings for. Remember that ECIS needs access to be able to write to this class. Add the class as an object of type class in the Object Maintenance screen, and add the roles you want to be able to update it.
+
+Choose the specific object to provide mappings for.
+
+Create one mapping for each class attribute and provide the following information.
+
+Attribute: The name of the class attribute.
+
+Source Id: A reference to one of the available sources, ex. OPCConfig_Norway_1 (ref. Step 1. Will be used for grouping the mappings between different jobs). If the source id cannot be found, please check the EC Integration Services (ECIS) Technical Documentation for how to register new sources in EC.
+
+Tag Id: The name of the tag in the source system providing values for this specific attribute on the selected object. (Note: If the same source tag will be used for many different attributes please postfix the next mappings with a "-COPY", ex. TAG_A-COPY-1).
+
+Template Code: A reference to one of the templates inserted in step 2.
+
+From Unit: Select the unit of measure for the values extracted from the source system.
+
+To Unit: Select the standard unit of measure for the EC class attribute. If the class has an already defined UOM attribute, the "To Unit" property may not be set.
+
+Last Transfer: Set the date and time specifying the latest sample time for the attribute. This setting is also used for forcing EC IS to perform a recapture of data (please check the EC Integration Services (ECIS) Technical Documentation for further details on this property).
+
+Active: Turn on the mapping.
+
+Attribute Primary Key <n>: Specify additional PK columns for the class.
+
+Value of Primary Key <n>: Specify additional PK columns for the class.
+
+Step 4 – Schedule a transfer job
+
+Open the scheduler screen Configuration → Schedules.
+
+Create a new schedule.
+
+Set loglevel and user in the Details tab. Also set retain count if you want EC to do housekeeping and not keep all schedule histories.
+
+Go to the Business Action tab, and create a business action for the schedule. Choose the ECISDataTransfer action and set the sequence number to 1. This should exist in the list as a default value. If not:
+
+Open the Configuration → Scheduler → Business Actions screen.
+
+Add a new Business Action.
+
+Set the name to ECISDataTransfer.
+
+Set the action reference to com.ec.frmw.is.engine.source.action.SourceAction.
+
+Save Business Action.
+
+Select the source system (configurationid). This should reflect the source id chosen in the adapter configuration, and used as a part of the tag mappings. In this example, the OPCConfig_Norway_1 has been used.
+
+Set an identifier for the job. This is not affecting how the system runs but is rather an internal descriptor for the job.
+
+Go to the Schedule tab, choose the type of schedule you want to run (Cron, Once, etc.), and set the timing details.
+
+Save the settings.
+
+Go to the Details tab again, and enable the schedule.
+
+Step 5 – Verify test run
+
+Go to the Monitor tab in the scheduler.
+
+Check the status of the reading job.
+
+Open the scheduler log for further details.
+
+Open the status screen Configuration → Integration Service → Transform Status Log.
+
+Check the details of the writing.
+
+How to setup a PI to EC connection
+
+Main objective: Extract historian data from a PI source and store it in EC classes.
+
+Flow objects description: The configuration consists of six steps:
+
+Configure the connection to the source system
+
+Configure how tags should be retrieved
+
+Configure how tags should be mapped to EC
+
+Schedule the transfer job
+
+Verify results
+
+Verify connection
+
+This guide uses the J-Interop version of the PI adapter. Alternatives are the PI REST adapter and the PI MS SQL adapter. Please read ECIS - Source Adapter Configuration for more details about the configuration.
+Step 1 – Configure the PI connection
+
+XML config template:
+
+<config name="PI_SOURCE_1">
+    <dtomergeenabled>true</dtomergeenabled>
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.pi.jinterop.PiAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="authdomain">MyDomain</parameter>
+            <parameter name="domainuser">auser</parameter>
+            <parameter name="domainpwd">password</parameter>
+            <parameter name="dsn">127.0.0.1</parameter>
+            <parameter name="username">piadmin</parameter>
+            <parameter name="pwd"></parameter>
+            <parameter name="timeout">180</parameter>
+            <parameter name="logfile">c:\temp\logfile2.log</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Substitute the config name (ex. PIConfig_Norway_1). No spaces are allowed in this name. The name is unique and cannot be used for any other config name.
+
+Set the sequential flag to 'Yes' (indicating that data from PI will come ordered by date).
+
+Set the domain where the PI server is located (AUTH_DOMAIN parameter).
+
+Set the domainuser and the domainpwd that enables ECIS to connect to the Windows COM server and get a COM object. This user needs to have DCOM access. See http://www.j-interop.org/quickstart.html for more info about how to setup this. There has also been some trouble related to getting access to Windows Server 2008 64 bit. See the EC Integration Services (ECIS) Technical Documentation section about PI-adapter for more information around this.
+
+Set the user name, password and host IP (dsn, username and pwd parameters).
+
+Setup the logfile parameter to point to a log directory. Be aware that there is no housekeeping on this file, so you should remove the logfile parameter while running in production, or setup some project specific housekeeping for this file.
+
+Open the screen Configuration → Codes → EC Codes - All.
+
+Select the code type DT_SOURCE_ID.
+
+Add a new code equal to the config name in this step.
+
+Step 2 - 5
+
+Step 2 – 5 can be done by following the description of the step for the OPC scenario. (Step 2 – Configure the load templates, Step 3 – Configure the tag mappings, Step 4 – Schedule a transfer job, Step 5 – Verify test run).
+
+Step 6 – Verify connection
+
+If the verification in step 5 failed because of connectivity problems to PI, please recheck your settings.
+
+How to setup a tag based database to EC connection
+
+Main objective: Extract tag based data from a database source and store it in EC classes.
+
+Flow objects description: The configuration consists of five steps:
+
+Configure the connection to the source system
+
+Configure how tags should be retrieved
+
+Configure how tags should be mapped to EC
+
+Schedule the transfer job
+
+Verify results
+
+Step 1 – Configure the tag based database connection
+
+XML config template:
+
+<config name="tagBasedJdbcConfig">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.jdbc.SourceTagJdbcAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="DRIVER">oracle.jdbc.driver.OracleDriver</parameter>
+            <parameter name="DB_URL">jdbc:oracle:thin:@host:1521:SID</parameter>
+            <parameter name="DB_USER">user</parameter>
+            <parameter name="DB_PWD">pwd</parameter>
+            <parameter name="SQL_TAG_ID">IDENTIFIER</parameter>
+            <parameter name="SQL_TABLE">db_name.SOMETABLE</parameter>
+            <parameter name="SQL_VALUE">SOMEVALUE</parameter>
+            <parameter name="SQL_DAYTIME">DAYTIME</parameter>
+            <parameter name="REUSE_JDBC_CONNECTION">true/false</parameter>
+            <parameter name="DISABLE_TRANSACTIONS">true/false</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Substitute the config name (ex. TagConfig_Norway_1). No spaces are allowed in this name. The name is unique and cannot be used for any other config name.
+
+Set the sequential flag to 'Yes' (indicating that data from the database will come ordered by date). This flag assumes that the SQL sent to the database source system is ordering the output by date. If you cannot order it, set the flag to 'No'.
+
+Set the database driver used (DRIVER parameter, leave the default value if using an Oracle database).
+
+Set the user name, password and database URL (DB_USER, DB_PWD, and DB_URL parameters).
+
+The other SQL parameters are all optional and used only if you need to set up your own SQLs. To do so please refer to EC Integration Services (ECIS) Technical Documentation.
+
+Open the screen Configuration → Codes → EC Codes - All.
+
+Select the code type DT_SOURCE_ID.
+
+REUSE_JDBC_CONNECTION: if false (the default), the driver will be reloaded for each tag. If true, the connection will be reused across tag retrieval. In this case, the DISABLE_TRANSACTIONS is ignored, i.e. transactions are enabled.
+reusing the JDBC connection can improve the performance of the tag retrieval.
+
+DISABLE_TRANSACTIONS: only used if REUSE_JDBC_CONNECTION is absent or false if transactions are enabled, auto-commit is active, i.e. data is committed after each SQL update/insert/delete statement.
+
+Add a new code equal to the config name in this step.
+
+Step 2 – Configure the load templates
+
+Please refer to step 2 in the OPC section.
+
+Exception: Tag based JDBC to EC connection only supports source function SAMPLE and LATEST.
+
+Step 3 - 5
+
+Please refer to step 3 - 5 in the OPC section (Step 3 – Configure the tag mappings, Step 4 – Schedule a transfer job, Step 5 – Verify test run).
+
+How to setup a tag based Excel to EC connection
+
+Main objective: Extract tag based data from an Excel file and store it in EC classes.
+
+Flow objects description: The configuration consists of five steps:
+
+Configure the connection to the source system
+
+Configure how tags should be retrieved
+
+Configure how tags should be mapped to EC
+
+Schedule the transfer job
+
+Verify results
+
+Step 1 – Configure the tag based Excel connection
+
+XML config template:
+
+ <config name="FILEADAPTER">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.TagFileAdapter</class>
+        <sequential>Yes</sequential>
+        <parameters>
+            <parameter name="DropFolder">c:\\temp</parameter>
+            <parameter name="CompletedFolder">c:\\temp\\completed</parameter>
+            <parameter name="ErrorFolder">c:\\temp\\error</parameter>
+            <parameter name="BadFolder">c:\\temp\\bad</parameter>
+            <parameter name="DateFormat">dd.MM.yyyy HH:mm:ss</parameter>
+            <parameter name="FileFilter"></parameter>
+            <parameter name="StartCell">A1</parameter>
+            <parameter name="EndCell">E104</parameter>
+            <parameter name="QualityColumnIndex">0</parameter>
+            <parameter name="TagColumnIndex">1</parameter>
+            <parameter name="TimeColumnIndex">2</parameter>
+            <parameter name="ValueColumnIndex">3</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Substitute the config name (ex. TagConfig_Norway_1). No spaces are allowed in this name. The name is unique and cannot be used for any other config name.
+
+Set the sequential flag to 'Yes' (indicating that data from the file will come ordered by date).
+
+Set the drop folder where the file containing data are.
+
+Set the error folder where data with errors will be written.
+
+Set the bad and the completed folder where the file will be moved.
+
+Set the date format used in the file (The format is based on a composite expression ex. yyyy-MM-dd HH:mm:ss).
+
+Year (yyyy or yy)
+
+Month (MM or MMM)
+
+Day (dd)
+
+Hour (HH)
+
+Minute (mm)
+
+Second (ss)
+
+Spacing characters (- . etc)
+
+Set the file filter that will match the file to read (if empty then all files will be read).
+
+Specify the cell where the range of data in the Excel sheet starts (StartCell).
+
+Specify the cell where the range of data in the Excel sheet ends (EndCell).
+
+Set the column index for the quality, tag, time and value which the index of these columns in the files (if one of these columns is not present in the file just remove it).
+
+Open the screen Configuration → Codes → EC Codes - All.
+
+Select the code type DT_SOURCE_ID.
+
+Add a new code equal to the config name in this step.
+
+Step 2 - 5
+
+Please refer to step 2 - 5 in the OPC section (Step 2 – Configure the load templates, Step 3 – Configure the tag mappings, Step 4 – Schedule a transfer job, Step 5 – Verify test run)
+
+How to setup a general Excel to EC connection
+
+Main objective: Extract rows from an Excel file and store them in EC.
+
+Flow objects description: The configuration consists of four steps:
+
+Choose the type of writing
+
+Configure mapping (either one):
+
+Configure EC Class Mapping
+
+Configure EC DB Package Mapping
+
+Schedule the transfer job
+
+Verify results
+
+Step 1 – Choose the type of writing
+
+If you are writing directly to an EC class go to step 2A.
+
+If you are writing to an EC DB package go to step 2B.
+
+Step 2a – Configure the Excel connection for EC class writing
+
+XML config template:
+
+<config name="excel_connection">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.RowFileAdapter</class>
+        <parameters>
+            <parameter name="DropFolder">c:\\temp\\jboss\\rowadapter</parameter>
+            <parameter name="CompletedFolder">c:\\temp\\jboss\\rowadapter\\completed</parameter>
+            <parameter name="ErrorFolder">c:\\temp\\jboss\\rowadapter\\error</parameter>
+            <parameter name="BadFolder">c:\\temp\\jboss\\rowadapter\\bad</parameter>
+            <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="FileFilter">rowdata</parameter>
+            <parameter name="StartCell">A1</parameter>
+            <parameter name="EndCell">E104</parameter>
+            <parameter name="TargetDriver">oracle.jdbc.driver.OracleDriver</parameter>
+            <parameter name="TargetDbURL">jdbc:oracle:thin:@//<host>:1521/<ServiceName></parameter>
+            <parameter name="TargetDbUser">dbuser</parameter>
+            <parameter name="TargetDbPassword">pwd</parameter>
+            <parameter name="EcClass">PWEL_SAMPLE_1</parameter>
+            <parameter name="Col_1" type="list">
+                <subparameter name="columnIndex">0</subparameter>
+                <subparameter name="columnType">Date</subparameter>
+                <subparameter name=" EcClassAttribute ">DAYTIME</subparameter>
+            </parameter>
+            <parameter name="Col_2" type="list">
+                <subparameter name="columnIndex">1</subparameter>
+                <subparameter name="columnType">Double</subparameter>
+                <subparameter name=" EcClassAttribute ">AVG_WH_PRESS</subparameter>
+            </parameter>
+            <parameter name="Col_3" type="list">
+                <subparameter name="columnIndex">2</subparameter>
+                <subparameter name="columnType">Double</subparameter>
+                <subparameter name=" EcClassAttribute ">WH_TEMP</subparameter>
+            </parameter>
+            <parameter name="Col_4" type="list">
+                <subparameter name="columnIndex">3</subparameter>
+                <subparameter name="columnType">String</subparameter>
+                <subparameter name=" EcClassAttribute ">MAX_SAND_RATE</subparameter>
+            </parameter>
+            <parameter name="Col_5" type="list">
+                <subparameter name="columnIndex">4</subparameter>
+                <subparameter name="columnType">String</subparameter>
+                <subparameter name=" EcClassAttribute ">OBJECT_ID</subparameter>
+                <subparameter name=" EcAttributeFunction ">UE_ECISFUNCTION.mapObjectID</subparameter>
+            </parameter>
+            <parameter name="Col_6" type="list">
+                <subparameter name="columnIndex">5</subparameter>
+                <subparameter name="columnType">String</subparameter>
+                <subparameter name=" EcClassAttribute ">OBJECT_CODE</subparameter>
+            </parameter>
+            <parameter name="ErrorFile">c:\\temp\\jboss\\rowadapter\\errors\\errorfile.log</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Substitute the config name (ex. ExcelConfig_Norway_1). No spaces are allowed in this name. The name is unique and cannot be used for any other config name.
+
+Set the folder parameters describing where to pick up the files (DropFolder), where to move it after it has been completed/read (CompletedFolder), and where to write error files (ErrorFolder and BadFolder). The file filter (FileFilter) can be left empty (all files will be picked up) or set to a substring of the file name. No asterisks are needed in order to specify a file filter, ex. 'rowdata' will pick up all files containing 'rowdata' as part of the file name.
+
+Specify the cell where the range of data in the Excel sheet starts (StartCell).
+
+Specify the cell where the range of data in the Excel sheet ends (EndCell).
+
+Set the DB connection details (TargetDriver, TargetDbUrl, TargetDBUser and TargetDbPassword).
+
+Set the name of the EC class which will be used to store the rows (EcClass).
+
+For each column in the Excel, range specify a Column (Col_x) with the attribute mapping to the EC class (You can also specify a function to fill out the class attribute – please see EC Integration Services (ECIS) Technical Documentation
+
+Set the name of the error log file (ErrorFile).
+
+Open the screen Configuration → Codes → EC Codes - All.
+
+Select the code type DT_SOURCE_ID.
+
+Add a new code equal to the config name in this step.
+
+Step 2b – Configure the Excel connection for EC package writing
+
+XML config template:
+
+<config name="excel_connection">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.file.RowFileAdapter</class>
+        <parameters>
+            <parameter name="DropFolder">c:\\temp\\jboss\\rowadapter</parameter>
+            <parameter name="CompletedFolder">c:\\temp\\jboss\\rowadapter\\completed</parameter>
+            <parameter name="ErrorFolder">c:\\temp\\jboss\\rowadapter\\error</parameter>
+            <parameter name="BadFolder">c:\\temp\\jboss\\rowadapter\\bad</parameter>
+            <parameter name="DateFormat">yyyy-MM-dd'T'HH:mm:ss</parameter>
+            <parameter name="FileFilter">rowdata</parameter>
+            <parameter name="StartCell">A1</parameter>
+            <parameter name="EndCell">E104</parameter>
+            <parameter name="DbPackageProcedure">UE_ECISROWTEST.ReceiveTestdat</parameter>
+            <parameter name="TargetDriver">oracle.jdbc.driver.OracleDriver</parameter>
+            <parameter name="TargetDbURL">jdbc:oracle:thin:@//<host>:1521/<ServiceName></parameter>
+            <parameter name="TargetDbUser">dbuser</parameter>
+            <parameter name="TargetDbPassword">pwd</parameter>
+            <parameter name="Col_1" type="list">
+                <subparameter name="columnIndex">0</subparameter>
+                <subparameter name="columnType">Date</subparameter>
+                <subparameter name="packageIndex">1</subparameter>
+            </parameter>
+            <parameter name="Col_2" type="list">
+                <subparameter name="columnIndex">1</subparameter>
+                <subparameter name="columnType">Double</subparameter>
+                <subparameter name="packageIndex">2</subparameter>
+            </parameter>
+            <parameter name="Col_3" type="list">
+                <subparameter name="columnIndex">2</subparameter>
+                <subparameter name="columnType">Double</subparameter>
+                <subparameter name="packageIndex">3</subparameter>
+            </parameter>
+            <parameter name="Col_4" type="list">
+                <subparameter name="columnIndex">4</subparameter>
+                <subparameter name="columnType">String</subparameter>
+                <subparameter name="packageIndex">4</subparameter>
+            </parameter>
+            <parameter name="ErrorFile">c:\\temp\\jboss\\rowadapter\\errors\\errorfile.log</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Substitute the config name (ex. ExcelConfig_Norway_1). No spaces are allowed in this name. The name is unique and cannot be used for any other config name.
+
+Set the folder parameters describing where to pick up the files (DropFolder), where to move it after it has been completed/read (CompletedFolder), and where to write error files (ErrorFolder and BadFolder). The file filter (FileFilter) can be left empty (all files will be picked up) or set to a substring of the file name. No asterisks are needed in order to specify a file filter, ex. 'rowdata will pick up all files containing the 'rowdata as the part of the file name.
+
+Specify the cell where the range of data in the Excel sheet starts (StartCell).
+
+Specify the cell where the range of data in the Excel sheet ends (EndCell).
+
+Set the name of the DB package and function/procedure which will be used to store the rows (DBPackageProcedure).
+
+Set the DB connection details (TargetDriver, TargetDbUrl, TargetDBUser and TargetDbPassword).
+
+For each column, you want to extract make a reference to the column index (columnIndex) in the source file and the parameter index (packageIndex) in the package call. The column index starts at 0 and the package index starts at 1.
+
+Set the name of the error log file (ErrorFile).
+
+Open the screen Configuration → Codes → EC Codes - All.
+
+Select the code type DT_SOURCE_ID.
+
+Add a new code equal to the config name in this step.
+
+Step 3 – Schedule a transfer job
+
+Schedule a transfer job the same way as shown in the OPC section (Step 4 – Schedule a transfer job).
+
+Step 4 – Verify test run
+
+Verify a test run the same way as in the OPC section (Step 5 – Verify test run).
+
+How to setup a general database to EC connection
+
+Main objective: Extract rows from a database and store them in EC.
+
+Flow objects description: The configuration consists of four steps:
+
+Choose the type of writing
+
+Configure mapping (either one):
+
+Configure EC Class Mapping
+
+Configure EC DB Package Mapping
+
+Schedule the transfer job
+
+Verify results
+
+Step 1 – Choose the type of writing
+
+If you are writing directly to an EC class go to step 2A.
+
+If you are writing to an EC DB package go to step 2B.
+
+Step 2a – Configure the database connection for EC class writing
+
+XML config template:
+
+<config name="database_connection">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.jdbc.SourceJdbcAdapterCollection</class>
+        <parameters>
+            <parameter name="DRIVER">Oracle.jdbc.driver.OracleDriver</parameter>
+            <parameter name="DB_URL">jdbc:oracle:thin:@//<host>:1521/<ServiceName></parameter>
+            <parameter name="DB_USER">dbuser</parameter>
+            <parameter name="DB_PWD">pwd</parameter>
+            <parameter name="SQL "></parameter>
+            <parameter name="EcClass">PWEL_SAMPLE_1</parameter>
+            <parameter name="Col_1" type="list">
+                <subparameter name=" EcClassAttribute ">DAYTIME</subparameter>
+            </parameter>
+            <parameter name="Col_2" type="list">
+                <subparameter name=" EcClassAttribute ">AVG_WH_PRESS</subparameter>
+            </parameter>
+            <parameter name="Col_3" type="list">
+                <subparameter name=" EcClassAttribute ">WH_TEMP</subparameter>
+            </parameter>
+            <parameter name="Col_4" type="list">
+                <subparameter name=" EcClassAttribute ">MAX_SAND_RATE</subparameter>
+            </parameter>
+            <parameter name="Col_5" type="list">
+                <subparameter name=" EcClassAttribute ">OBJECT_ID</subparameter>
+                <subparameter name=" EcAttributeFunction ">UE_ECISFUNCTION.mapObjectID</subparameter>
+            </parameter>
+            <parameter name="Col_6" type="list">
+                <subparameter name=" EcClassAttribute ">OBJECT_CODE</subparameter>
+            </parameter>
+            <parameter name="ErrorFile">c:\\temp\\jboss\\rowadapter\\errors\\errorfile.log</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Substitute the config name (ex. DBConfig_Norway_1). No spaces are allowed in this name. The name is unique and cannot be used for any other config name.
+
+Set the DB connection details (DRIVER, DB_URL, DB_USER and DB_PWD).
+
+Set the name of the EC class which will be used to store the rows (EcClass).
+
+For each column in the Excel, range specify a Column (Col_x) with the attribute mapping to the EC class (You can also specify a function to fill out the class attribute – please see EC Integration Services (ECIS) Technical Documentation
+
+Open the screen Configuration → Codes → EC Codes - All.
+
+Select the code type DT_SOURCE_ID.
+
+Add a new code equal to the config name in this step.
+
+In some cases, you might want to load data into several different EC classes in the same run. In order to configure such a connection properly, see EC Integration Services (ECIS) Technical Documentation.
+
+Step 2b – Configure the database connection for EC package writing
+
+XML config template:
+
+<config name=" database_connection ">
+    <sourceadapter>
+        <class>com.ec.frmw.is.engine.adapter.jdbc.SourceJdbcAdapterCollection</class>
+        <parameters>
+            <parameter name="DbPackageProcedure">UE_ECISROWTEST.ReceiveTestdat</parameter>
+            <parameter name="DRIVER">Oracle.jdbc.driver.OracleDriver</parameter>
+            <parameter name="DB_URL">jdbc:oracle:thin:@//<host>:1521/<ServiceName></parameter>
+            <parameter name="DB_USER">dbuser</parameter>
+            <parameter name="DB_PWD">pwd</parameter>
+            <parameter name="Col_1" type="list">
+                <subparameter name="columnIndex">0</subparameter>
+                <subparameter name="columnType">Date</subparameter>
+                <subparameter name="packageIndex">1</subparameter>
+            </parameter>
+            <parameter name="Col_2" type="list">
+                <subparameter name="columnIndex">1</subparameter>
+                <subparameter name="columnType">Double</subparameter>
+                <subparameter name="packageIndex">2</subparameter>
+            </parameter>
+            <parameter name="Col_3" type="list">
+                <subparameter name="columnIndex">2</subparameter>
+                <subparameter name="columnType">Double</subparameter>
+                <subparameter name="packageIndex">3</subparameter>
+            </parameter>
+            <parameter name="Col_4" type="list">
+                <subparameter name="columnIndex">4</subparameter>
+                <subparameter name="columnType">String</subparameter>
+                <subparameter name="packageIndex">4</subparameter>
+            </parameter>
+            <parameter name="ErrorFile">c:\\temp\\jboss\\rowadapter\\errors\\errorfile.log</parameter>
+        </parameters>
+    </sourceadapter>
+</config>
+
+Substitute the config name (ex. DBConfig_Norway_1). No spaces are allowed in this name. The name is unique and cannot be used for any other config name.
+
+Set the name of the DB package and function/procedure which will be used to store the rows (DBPackageProcedure).
+
+Set the DB connection details (TargetDriver, TargetDbUrl, TargetDBUser and TargetDbPassword).
+
+For each column, you want to extract make a reference to the column index (columnIndex) in the source file and the parameter index (packageIndex) in the package call. The column index starts at 0 and the package index starts at 1.
+
+Set the name of the error log file (ErrorFile).
+
+Open the screen Configuration → Codes → EC Codes - All.
+
+Select the code type DT_SOURCE_ID.
+
+Add a new code equal to the config name in this step.
+
+Step 3 – Schedule a transfer job
+
+Schedule a transfer job the same way as in the OPC section (Step 4 – Schedule a transfer job).
+
+Step 4 – Verify test run
+
+Verify a test run the same way as in the OPC section (Step 5 – Verify test run).
+
+Troubleshooting
+Problem – General issues
+
+Before reporting any errors there are some common issues that should be checked. Some general error sources are:
+
+The file that is supposed to be handled is not present at the path where the configuration says it should be.
+
+The file that is supposed to be handled is open in an editor.
+
+The date format is wrong.
+
+The last transfer is wrong.
+
+Mapping is not activated or mapping is wrong.
+
+Energy Components ©2026
