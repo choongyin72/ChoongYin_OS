@@ -8,8 +8,16 @@ Variables           environment.py
 *** Keywords ***
 Open EC Browser
     [Documentation]    Launch Chromium + context (headless from environment).
-    New Browser    chromium    headless=${HEADLESS}
-    New Context    ignoreHTTPSErrors=${TRUE}    viewport={'width': 1920, 'height': 1080}
+    ...    Headed: OS-maximised window (--start-maximized, no fixed viewport) so the
+    ...    page fills the screen. Headless: 1920x1080 virtual viewport as before.
+    IF    ${HEADLESS}
+        New Browser    chromium    headless=${TRUE}
+        New Context    ignoreHTTPSErrors=${TRUE}    viewport={'width': 1920, 'height': 1080}
+    ELSE
+        VAR    @{args}    --start-maximized
+        New Browser    chromium    headless=${FALSE}    args=${args}
+        New Context    ignoreHTTPSErrors=${TRUE}    viewport=${None}
+    END
     Set Browser Timeout    30s
     Set Strict Mode    False
 
