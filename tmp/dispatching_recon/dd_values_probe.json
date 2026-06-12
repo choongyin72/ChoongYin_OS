@@ -1,0 +1,42 @@
+{
+ "Delivery Point": {
+  "Business Unit Name": [
+   "DD-OPEN-FAILED: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locat",
+   "cells=['tab:tabPanel:objectForm:form:G:0:R:11:C:1:dd', 'tab:tabPanel:objectForm:form:G:0:R:11:C:1:dd_input', 'tab:tabPanel:objectForm:form:G:0:R:11:C:1:dd_hinput', 'tab:tabPanel:objectForm:form:G:0:R:11:C:1:dd_button']"
+  ]
+ },
+ "Meter": {
+  "Meter Type": [
+   "DD-OPEN-FAILED: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locat",
+   "cells=['tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd', 'tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd_input', 'tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd_hinput', 'tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd_button']"
+  ],
+  "Delivery Point Name": [
+   "DD-OPEN-FAILED: Page.click: Timeout 5000ms exceeded.\nCall log:\n  - waiting for locator(\"[id=\\\"ta",
+   "cells=['tab:tabPanel:objectForm:form:G:0:R:5:C:1:pin', 'tab:tabPanel:objectForm:form:G:0:R:5:C:1:pinB']"
+  ]
+ },
+ "Nomination Point": {
+  "Contract Name": [
+   "DD-OPEN-FAILED: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locat",
+   "cells=['tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd', 'tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_input', 'tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_hinput', 'tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_button']"
+  ]
+ },
+ "Pipeline Segment": {
+  "Pipeline Name": [
+   "DD-OPEN-FAILED: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locat",
+   "cells=['tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd', 'tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_input', 'tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_hinput', 'tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button']"
+  ]
+ },
+ "Transport System": {
+  "Business Unit Name": [
+   "DD-OPEN-FAILED: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locat",
+   "cells=['tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd', 'tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_input', 'tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_hinput', 'tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_button']"
+  ]
+ },
+ "Transport Zone": {
+  "Transport System Name": [
+   "DD-OPEN-FAILED: Page.wait_for_selector: Timeout 8000ms exceeded.\nCall log:\n  - waiting for locat",
+   "cells=['tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd', 'tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_input', 'tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_hinput', 'tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_button']"
+  ]
+ }
+}

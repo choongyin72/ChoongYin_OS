@@ -1,0 +1,63 @@
+{
+ "Delivery Point": {
+  "Business Unit Name": [
+   "EC LNG Norway",
+   "ECP Canada",
+   "ECP GB",
+   "ECP Norway",
+   "Royalty Canada",
+   "Royalty USA",
+   "SS1 BU",
+   "SS2 BU",
+   "TS5 BU"
+  ]
+ },
+ "Meter": {
+  "Meter Type": [
+   "Entry",
+   "Exit",
+   "Fuel",
+   "Transit"
+  ]
+ },
+ "Nomination Point": {
+  "Contract Name": [
+   "Blend Stream",
+   "C5 (for Fake Lake)",
+   "Diluent Stream",
+   "ECP Norway 3P Gas Purchase",
+   "Fake Lake Blend",
+   "Journal Entry",
+   "Multi Field Multi Vendor Cargo - Prior Month Correction",
+   "Multi Field Multi Vendor Period - Prior Month Correction",
+   "Multi Field Single Vendor Incl Add Line Items",
+   "Multi Period",
+   "Multiple Composition",
+   "Multiple Price Elements"
+  ]
+ },
+ "Pipeline Segment": {
+  "Pipeline Name": [
+   "TS5 Gas Pipeline",
+   "TS5 Oil Pipeline"
+  ]
+ },
+ "Transport System": {
+  "Business Unit Name": [
+   "EC LNG Norway",
+   "ECP Canada",
+   "ECP GB",
+   "ECP Norway",
+   "Royalty Canada",
+   "Royalty USA",
+   "SS1 BU",
+   "SS2 BU",
+   "TS5 BU"
+  ]
+ },
+ "Transport Zone": {
+  "Transport System Name": [
+   "TS5 Transport System"
+  ]
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "Delivery Point": {
+  "banner": "Required fields are empty.\nPlease enter data for these fields: Business Unit Name[BUSINESS_UNIT_POPUP]",
+  "code": "AUTOTEST_PRB_184834"
+ },
+ "Delivery Stream": {
+  "banner": null,
+  "code": "AUTOTEST_PRB_184844"
+ },
+ "Meter": {
+  "banner": "Required fields are empty.\nPlease enter data for these fields: Meter Type[METER_TYPE_POPUP], Delivery Point Name[DELIVERY_POINT_POPUP]",
+  "code": "AUTOTEST_PRB_184854"
+ },
+ "Nomination Point": {
+  "banner": "Required fields are empty.\nPlease enter data for these fields: Contract Name[CONTRACT_POPUP]",
+  "code": "AUTOTEST_PRB_184903"
+ },
+ "Pipeline Segment": {
+  "banner": "Required fields are empty.\nPlease enter data for these fields: Pipeline Name[PIPELINE_POPUP]",
+  "code": "AUTOTEST_PRB_184913"
+ },
+ "Transport System": {
+  "banner": "Required fields are empty.\nPlease enter data for these fields: Business Unit Name[BUSINESS_UNIT_POPUP]",
+  "code": "AUTOTEST_PRB_184922"
+ },
+ "Transport Zone": {
+  "banner": "Required fields are empty.\nPlease enter data for these fields: Transport System Name[TRANSPORT_SYSTEM_POPUP]",
+  "code": "AUTOTEST_PRB_184932"
+ }
+}

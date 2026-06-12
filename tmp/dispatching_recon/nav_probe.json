@@ -1,0 +1,178 @@
+{
+ "Delivery Point": {
+  "nav": {
+   "labels": [],
+   "dds": [
+    "nav:form:G:0:R:1:C:1:dd"
+   ]
+  },
+  "options": {
+   "nav:form:G:0:R:1:C:1:dd": [
+    "EC LNG Norway",
+    "ECP Canada",
+    "ECP GB",
+    "ECP Norway",
+    "MID - Business Unit",
+    "PR BU",
+    "RBS Business Unit",
+    "Royalty Canada"
+   ]
+  },
+  "grid_after_pick_go": [
+   {
+    "id": "manageObject:form:T_data",
+    "rows": 1
+   }
+  ]
+ },
+ "Delivery Stream": {
+  "nav": {
+   "labels": [],
+   "dds": [
+    "nav:form:G:0:R:1:C:1:dd",
+    "nav:form:G:0:R:1:C:2:dd"
+   ]
+  },
+  "options": {
+   "nav:form:G:0:R:1:C:1:dd": [
+    "EC LNG Norway",
+    "ECP Canada",
+    "ECP GB",
+    "ECP Norway",
+    "MID - Business Unit",
+    "PR BU",
+    "RBS Business Unit",
+    "Royalty Canada"
+   ],
+   "nav:form:G:0:R:1:C:2:dd": [
+    "FAILED: Page.wait_for_selector: Timeout 6000ms exceeded.\nCall log:\n "
+   ]
+  },
+  "grid_after_pick_go": [
+   {
+    "id": "manageObject:form:T_data",
+    "rows": 1
+   }
+  ]
+ },
+ "Nomination Point": {
+  "nav": {
+   "labels": [],
+   "dds": [
+    "nav:form:G:0:R:1:C:1:dd",
+    "nav:form:G:0:R:1:C:2:dd",
+    "nav:form:G:0:R:1:C:3:dd"
+   ]
+  },
+  "options": {
+   "nav:form:G:0:R:1:C:1:dd": [
+    "EC LNG Norway",
+    "ECP Canada",
+    "ECP GB",
+    "ECP Norway",
+    "MID - Business Unit",
+    "PR BU",
+    "RBS Business Unit",
+    "Royalty Canada"
+   ],
+   "nav:form:G:0:R:1:C:2:dd": [
+    "FAILED: Page.wait_for_selector: Timeout 6000ms exceeded.\nCall log:\n "
+   ],
+   "nav:form:G:0:R:1:C:3:dd": [
+    "FAILED: Page.wait_for_selector: Timeout 6000ms exceeded.\nCall log:\n "
+   ]
+  },
+  "grid_after_pick_go": [
+   {
+    "id": "manageObject:form:T_data",
+    "rows": 1
+   }
+  ]
+ },
+ "Pipeline Segment": {
+  "nav": {
+   "labels": [],
+   "dds": [
+    "nav:form:G:0:R:1:C:1:dd",
+    "nav:form:G:0:R:1:C:2:dd"
+   ]
+  },
+  "options": {
+   "nav:form:G:0:R:1:C:1:dd": [
+    "EC LNG Norway",
+    "ECP Canada",
+    "ECP GB",
+    "ECP Norway",
+    "MID - Business Unit",
+    "PR BU",
+    "RBS Business Unit",
+    "Royalty Canada"
+   ],
+   "nav:form:G:0:R:1:C:2:dd": [
+    "FAILED: Page.wait_for_selector: Timeout 6000ms exceeded.\nCall log:\n "
+   ]
+  },
+  "grid_after_pick_go": [
+   {
+    "id": "manageObject:form:T_data",
+    "rows": 1
+   }
+  ]
+ },
+ "Transport System": {
+  "nav": {
+   "labels": [],
+   "dds": [
+    "nav:form:G:0:R:1:C:1:dd"
+   ]
+  },
+  "options": {
+   "nav:form:G:0:R:1:C:1:dd": [
+    "EC LNG Norway",
+    "ECP Canada",
+    "ECP GB",
+    "ECP Norway",
+    "MID - Business Unit",
+    "PR BU",
+    "RBS Business Unit",
+    "Royalty Canada"
+   ]
+  },
+  "grid_after_pick_go": [
+   {
+    "id": "manageObject:form:T_data",
+    "rows": 1
+   }
+  ]
+ },
+ "Transport Zone": {
+  "nav": {
+   "labels": [],
+   "dds": [
+    "nav:form:G:0:R:1:C:1:dd",
+    "nav:form:G:0:R:1:C:2:dd"
+   ]
+  },
+  "options": {
+   "nav:form:G:0:R:1:C:1:dd": [
+    "EC LNG Norway",
+    "ECP Canada",
+    "ECP GB",
+    "ECP Norway",
+    "MID - Business Unit",
+    "PR BU",
+    "RBS Business Unit",
+    "Royalty Canada"
+   ],
+   "nav:form:G:0:R:1:C:2:dd": [
+    "FAILED: Page.wait_for_selector: Timeout 6000ms exceeded.\nCall log:\n "
+   ]
+  },
+  "grid_after_pick_go": [
+   {
+    "id": "manageObject:form:T_data",
+    "rows": 1
+   }
+  ]
+ }
+}
