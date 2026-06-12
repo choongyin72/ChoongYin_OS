@@ -34,9 +34,7 @@ ${CUSTOMER_DEL_ENDDATE}     tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 Open Customer Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Customer screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${CUSTOMER_SCREEN}
+    Launch EC And Open Screen    ${CUSTOMER_SCREEN}    ${user}    ${pass}
 
 Customer Row Should Exist
     [Documentation]    Assert a customer with ${code} is present in the list.

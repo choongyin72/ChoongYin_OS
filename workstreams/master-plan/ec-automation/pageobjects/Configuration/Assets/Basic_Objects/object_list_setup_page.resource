@@ -30,9 +30,7 @@ Open Object List Setup Screen
     [Documentation]    Suite Setup: launch, login, navigate, select List Class +
     ...    Object List in the navigator and apply (item grid is empty until then).
     [Arguments]    ${list_class}    ${object_list}    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${OLS_SCREEN}
+    Launch EC And Open Screen    ${OLS_SCREEN}    ${user}    ${pass}
     Select EC Dropdown Option    ${OLS_NAV_CLASS}    ${list_class}
     Select EC Dropdown Option    ${OLS_NAV_LIST}    ${object_list}
     Apply Navigator

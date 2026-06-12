@@ -34,9 +34,7 @@ ${PRODUCT_DESCRIPTION_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:
 Open Product Description Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Product Description screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${PRODUCT_DESCRIPTION_SCREEN}
+    Launch EC And Open Screen    ${PRODUCT_DESCRIPTION_SCREEN}    ${user}    ${pass}
 
 Product Description Row Should Exist
     [Documentation]    Assert a product description with ${code} is present in the list.

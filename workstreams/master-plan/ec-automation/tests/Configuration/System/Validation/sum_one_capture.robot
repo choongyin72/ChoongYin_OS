@@ -22,6 +22,8 @@ ${PAGE}     2
 
 *** Test Cases ***
 Capture One Filtered View
+    [Documentation]    One isolated capture: select ${GRP}, filter messages to ${MATCH},
+    ...    screenshot as ${SHOT}. Parameterized via --variable for reuse.
     Set Validation Date Range And Go    ${FROM}    ${TO}
     Go To Groups Tree Page    ${PAGE}
     ${idx}=    Find Group Row Index    ${GRP}

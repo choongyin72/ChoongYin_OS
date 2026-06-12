@@ -28,9 +28,7 @@ ${COST_CENTRE_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 Open Cost Centre Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Cost Centre screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${COST_CENTRE_SCREEN}
+    Launch EC And Open Screen    ${COST_CENTRE_SCREEN}    ${user}    ${pass}
 
 Cost Centre Row Should Exist
     [Documentation]    Assert a cost centre with ${code} is present in the list.

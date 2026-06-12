@@ -28,9 +28,7 @@ ${EXCHANGE_RATE_SOURCE_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3
 Open Exchange Rate Source Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Exchange Rate Source screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${EXCHANGE_RATE_SOURCE_SCREEN}
+    Launch EC And Open Screen    ${EXCHANGE_RATE_SOURCE_SCREEN}    ${user}    ${pass}
 
 Exchange Rate Source Row Should Exist
     [Documentation]    Assert a exchange rate source with ${code} is present in the list.

@@ -1,0 +1,919 @@
+{
+ "Account Mapping Assistance": {
+  "screenLabel": "Account Mapping Assistance",
+  "nav": [
+   {
+    "id": "nav:form:G:0:R:0:C:1:da_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:3:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:3:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:5:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:5:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:7:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:7:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:9:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:9:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:1:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:1:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:3:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:3:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   }
+  ],
+  "dropdowns": [
+   {
+    "id": "nav:form:G:0:R:0:C:3:dd",
+    "options": []
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:5:dd",
+    "options": []
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:7:dd",
+    "options": []
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:9:dd",
+    "options": []
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:1:dd",
+    "options": []
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:3:dd",
+    "options": []
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "nav:form:G:0:R:0:C:0:la",
+    "label": "Daytime"
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:2:la",
+    "label": "Contract"
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:4:la",
+    "label": "Transaction Template"
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:6:la",
+    "label": "Price Object"
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:8:la",
+    "label": "Product"
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:0:la",
+    "label": "Line Item Template"
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:2:la",
+    "label": "Line Item Type"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [
+   {
+    "id": "Account_Mapping_Search_Criteria:form:T_data",
+    "rows": 1,
+    "visible": true
+   }
+  ],
+  "toolbar": [
+   "Account Mapping Assistance"
+  ],
+  "status": "OK"
+ },
+ "Cost Object Mapping Assistance": {
+  "screenLabel": "Cost Object Mapping Assistance",
+  "nav": [],
+  "dropdowns": [
+   {
+    "id": "costNavigator:form:G:0:R:0:C:3:dd",
+    "options": []
+   },
+   {
+    "id": "costNavigator:form:G:0:R:0:C:5:dd",
+    "options": []
+   },
+   {
+    "id": "costNavigator:form:G:0:R:0:C:7:dd",
+    "options": []
+   },
+   {
+    "id": "costNavigator:form:G:0:R:0:C:9:dd",
+    "options": []
+   },
+   {
+    "id": "costNavigator:form:G:0:R:1:C:1:dd",
+    "options": []
+   },
+   {
+    "id": "costNavigator:form:G:0:R:1:C:3:dd",
+    "options": []
+   },
+   {
+    "id": "costNavigator:form:G:0:R:1:C:7:dd",
+    "options": []
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "costNavigator:form:G:0:R:0:C:0:la",
+    "label": "Daytime"
+   },
+   {
+    "id": "costNavigator:form:G:0:R:0:C:2:la",
+    "label": "Contract"
+   },
+   {
+    "id": "costNavigator:form:G:0:R:0:C:4:la",
+    "label": "Transaction Template"
+   },
+   {
+    "id": "costNavigator:form:G:0:R:0:C:6:la",
+    "label": "Price Object"
+   },
+   {
+    "id": "costNavigator:form:G:0:R:0:C:8:la",
+    "label": "Product"
+   },
+   {
+    "id": "costNavigator:form:G:0:R:1:C:0:la",
+    "label": "Line Item Template"
+   },
+   {
+    "id": "costNavigator:form:G:0:R:1:C:2:la",
+    "label": "Line Item Type"
+   },
+   {
+    "id": "costNavigator:form:G:0:R:1:C:4:la",
+    "label": "Profit Centre"
+   },
+   {
+    "id": "costNavigator:form:G:0:R:1:C:6:la",
+    "label": "Account"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [
+   {
+    "id": "Cost_Object_Search_Criteria:form:T_data",
+    "rows": 1,
+    "visible": true
+   }
+  ],
+  "toolbar": [
+   "Cost Object Mapping Assistance"
+  ],
+  "status": "OK"
+ },
+ "Exchange Rate Setup": {
+  "screenLabel": "Exchange Rate Setup",
+  "nav": [],
+  "dropdowns": [
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "StandardNavigator:form:G:0:R:0:C:0:la",
+    "label": "Date"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "Exchange Rate Setup"
+  ],
+  "status": "OK"
+ },
+ "Exchange Rates": {
+  "screenLabel": "Exchange Rates",
+  "nav": [
+   {
+    "id": "nav:form:G:0:R:1:C:0:da_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": "2026-06-01"
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:1:da_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": "2026-06-30"
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:2:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:2:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:3:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:3:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:4:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:4:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:5:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:5:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   }
+  ],
+  "dropdowns": [
+   {
+    "id": "nav:form:G:0:R:1:C:2:dd",
+    "options": []
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:3:dd",
+    "options": []
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:4:dd",
+    "options": []
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:5:dd",
+    "options": []
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "nav:form:G:0:R:0:C:0:la",
+    "label": "From Date:"
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:1:la",
+    "label": "To Date:"
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:2:la",
+    "label": "Forex Source:"
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:3:la",
+    "label": "Forex Time Scope:"
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:4:la",
+    "label": "From Currency:"
+   },
+   {
+    "id": "nav:form:G:0:R:0:C:5:la",
+    "label": "To Currency:"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "Exchange Rates"
+  ],
+  "status": "OK"
+ },
+ "Financial Posting Setup": {
+  "screenLabel": "Financial Posting Setup",
+  "nav": [
+   {
+    "id": "nav:form:G:0:R:1:C:0:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:0:R:1:C:0:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   }
+  ],
+  "dropdowns": [
+   {
+    "id": "nav:form:G:0:R:1:C:0:dd",
+    "options": []
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "nav:form:G:0:R:0:C:0:la",
+    "label": "Financial Code"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "Financial Posting Setup"
+  ],
+  "status": "OK"
+ },
+ "VAT Country Setup": {
+  "screenLabel": "VAT Country Setup",
+  "nav": [],
+  "dropdowns": [
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "StandardNavigator:form:G:0:R:0:C:0:la",
+    "label": "Date"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "VAT Country Setup"
+  ],
+  "status": "OK"
+ },
+ "Payment Scheme Setup": {
+  "screenLabel": "Payment Scheme Setup",
+  "nav": [],
+  "dropdowns": [
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "StandardNavigator:form:G:0:R:0:C:0:la",
+    "label": "From Date"
+   },
+   {
+    "id": "StandardNavigator:form:G:1:R:0:C:0:la",
+    "label": "To Date"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "Payment Scheme Setup"
+  ],
+  "status": "OK"
+ },
+ "Customer VAT Reg No": {
+  "screenLabel": "Customer VAT Reg No",
+  "nav": [],
+  "dropdowns": [
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "StandardNavigator:form:G:0:R:0:C:0:la",
+    "label": "Date"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "Customer VAT Reg No"
+  ],
+  "status": "OK"
+ },
+ "Vendor VAT Reg No": {
+  "screenLabel": "Vendor VAT Reg No",
+  "nav": [],
+  "dropdowns": [
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "StandardNavigator:form:G:0:R:0:C:0:la",
+    "label": "Date"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "Vendor VAT Reg No"
+  ],
+  "status": "OK"
+ },
+ "Restricted Customer Setup": {
+  "screenLabel": "Restricted Customer Setup",
+  "nav": [],
+  "dropdowns": [
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "StandardNavigator:form:G:0:R:0:C:0:la",
+    "label": "Date"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "Restricted Customer Setup"
+  ],
+  "status": "OK"
+ },
+ "Restricted Vendor Setup": {
+  "screenLabel": "Restricted Vendor Setup",
+  "nav": [],
+  "dropdowns": [
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "StandardNavigator:form:G:0:R:0:C:0:la",
+    "label": "Date"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "Restricted Vendor Setup"
+  ],
+  "status": "OK"
+ },
+ "Field Group Setup": {
+  "screenLabel": "Field Group Setup",
+  "nav": [],
+  "dropdowns": [
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "StandardNavigator:form:G:0:R:0:C:0:la",
+    "label": "Date"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "Field Group Setup"
+  ],
+  "status": "OK"
+ },
+ "Maintain Equity Share": {
+  "screenLabel": "Maintain Equity Share",
+  "nav": [
+   {
+    "id": "nav:form:G:0:R:1:C:0:da_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": "2026-06-11"
+   },
+   {
+    "id": "nav:form:G:1:R:1:C:0:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:1:R:1:C:0:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:2:R:1:C:0:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:2:R:1:C:0:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:3:R:1:C:0:dd",
+    "tag": "SPAN",
+    "text": "",
+    "val": ""
+   },
+   {
+    "id": "nav:form:G:3:R:1:C:0:dd_input",
+    "tag": "INPUT",
+    "text": "",
+    "val": ""
+   }
+  ],
+  "dropdowns": [
+   {
+    "id": "nav:form:G:1:R:1:C:0:dd",
+    "options": []
+   },
+   {
+    "id": "nav:form:G:2:R:1:C:0:dd",
+    "options": []
+   },
+   {
+    "id": "nav:form:G:3:R:1:C:0:dd",
+    "options": []
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd",
+    "options": []
+   }
+  ],
+  "formLabels": [
+   {
+    "id": "nav:form:G:0:R:0:C:0:la",
+    "label": "Date"
+   },
+   {
+    "id": "nav:form:G:1:R:0:C:0:la",
+    "label": "Licence"
+   },
+   {
+    "id": "nav:form:G:2:R:0:C:0:la",
+    "label": "Commercial Entity"
+   },
+   {
+    "id": "nav:form:G:3:R:0:C:0:la",
+    "label": "Phase"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:0:la",
+    "label": "Created by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:0:C:3:la",
+    "label": "Record status"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:0:la",
+    "label": "Last updated by"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:3:la",
+    "label": "Revision text"
+   },
+   {
+    "id": "statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:5:la",
+    "label": "Revision Event"
+   }
+  ],
+  "grids": [],
+  "toolbar": [
+   "Maintain Equity Share"
+  ],
+  "status": "OK"
+ }
+}

@@ -16,8 +16,8 @@ Test Tags           iud    bank-account
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2003-01-01
-${END_DATE}         2003-01-01
+${START_DATE}       ${TEST_START_DATE_REFDD}
+${END_DATE}         ${TEST_START_DATE_REFDD}
 
 
 *** Test Cases ***
@@ -54,8 +54,5 @@ TC04 Delete Bank Account
 *** Keywords ***
 Set Up Bank Account Suite
     [Documentation]    Generate a unique test code/name, then open the Bank Account screen.
-    ${code}    Generate Unique Code    AUTOTEST_BACC_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Bank Account ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Bank Account ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_BACC_    Bank Account
     Open Bank Account Screen

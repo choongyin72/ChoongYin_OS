@@ -17,8 +17,8 @@ Test Tags           iud    state
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -55,8 +55,5 @@ TC04 Delete State
 *** Keywords ***
 Set Up State Suite
     [Documentation]    Generate a unique test code/name, then open the State screen.
-    ${code}    Generate Unique Code    AUTOTEST_ST_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    State ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    State ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_ST_    State
     Open State Screen

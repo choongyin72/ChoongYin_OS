@@ -36,9 +36,7 @@ ${VAT_CODE_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 Open VAT Code Screen
     [Documentation]    Suite Setup: launch, login, navigate to the VAT Code screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${VAT_CODE_SCREEN}
+    Launch EC And Open Screen    ${VAT_CODE_SCREEN}    ${user}    ${pass}
 
 VAT Code Row Should Exist
     [Documentation]    Assert a vat code with ${code} is present in the list.

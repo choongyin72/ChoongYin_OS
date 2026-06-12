@@ -17,8 +17,8 @@ Test Tags           iud    object-list
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 # class of objects the (empty, throwaway) test list holds - user-approved 2026-06-11
 ${LIST_CLASS}       BANK
 
@@ -57,8 +57,5 @@ TC04 Delete Object List
 *** Keywords ***
 Set Up Object List Suite
     [Documentation]    Generate a unique test code/name, then open the Object List screen.
-    ${code}    Generate Unique Code    AUTOTEST_OL_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Object List ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Object List ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_OL_    Object List
     Open Object List Screen

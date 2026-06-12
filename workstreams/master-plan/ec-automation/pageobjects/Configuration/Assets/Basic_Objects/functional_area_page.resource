@@ -29,9 +29,7 @@ Open Functional Area Screen
     [Documentation]    Suite Setup: launch, login as ${user} (defaults to the env
     ...    user), navigate to the Functional Area screen. Pass a different user for role tests.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${FUNCTIONAL_AREA_SCREEN}
+    Launch EC And Open Screen    ${FUNCTIONAL_AREA_SCREEN}    ${user}    ${pass}
 
 Functional Area Row Should Exist
     [Documentation]    Assert a functional area with ${code} is present in the list.

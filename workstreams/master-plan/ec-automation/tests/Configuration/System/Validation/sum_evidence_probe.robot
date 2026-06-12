@@ -12,6 +12,8 @@ Test Tags           probe
 
 *** Test Cases ***
 Stream WT Only First
+    [Documentation]    Probe: apply the WT% Message filter as the FIRST filter on a fresh grid
+    ...    and verify only molwt rows remain (cascading-filter behavior check).
     Set Validation Date Range And Go    2026-05-01    2026-05-31
     Go To Groups Tree Page    2
     Select Validation Group    Stream Gas Component Analysis - Daily Sampling Validations

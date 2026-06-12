@@ -16,8 +16,8 @@ Test Tags           iud    payment-scheme
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -54,8 +54,5 @@ TC04 Delete Payment Scheme
 *** Keywords ***
 Set Up Payment Scheme Suite
     [Documentation]    Generate a unique test code/name, then open the Payment Scheme screen.
-    ${code}    Generate Unique Code    AUTOTEST_PSCH_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Payment Scheme ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Payment Scheme ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_PSCH_    Payment Scheme
     Open Payment Scheme Screen

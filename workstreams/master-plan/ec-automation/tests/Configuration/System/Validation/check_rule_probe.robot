@@ -10,14 +10,10 @@ Suite Teardown      Close EC
 Test Tags           probe
 
 
-*** Keywords ***
-Open And Login
-    Open EC Browser
-    Login To EC    ${EC_USER}    ${EC_PASS}
-
-
 *** Test Cases ***
 Open Check Rule Screen
+    [Documentation]    Diagnostic: open the Check Rule screen, dump candidate filter inputs and
+    ...    screenshot it (used to find the Check Name column filter id).
     Navigate To Screen    Check Rule
     Wait For Load State    networkidle    timeout=30s
     Sleep    2s
@@ -28,3 +24,10 @@ Open Check Rule Screen
     ...    () => [...document.querySelectorAll('input,select')].map(e=>e.id).filter(id=>id && (id.includes('nav')||id.toLowerCase().includes('check')||id.toLowerCase().includes('rule')||id.toLowerCase().includes('filter'))).slice(0,30)
     Log    INPUTS :: ${inputs}    console=True
     Take Screenshot    filename=${OUTPUT DIR}/check_rule_screen.png    fullPage=True
+
+
+*** Keywords ***
+Open And Login
+    [Documentation]    Suite Setup: launch the browser and authenticate.
+    Open EC Browser
+    Login To EC    ${EC_USER}    ${EC_PASS}

@@ -21,9 +21,7 @@ ${LANG_GRID}        table:form:T_data
 Open Language Screen
     [Documentation]    Suite Setup: launch, login as ${user} (default env user), open Language (no navigator).
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${LANG_SCREEN}
+    Launch EC And Open Screen    ${LANG_SCREEN}    ${user}    ${pass}
 
 Language Cell Id
     [Documentation]    Build the cell input id for a grid row/column.

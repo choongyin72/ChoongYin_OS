@@ -21,3 +21,11 @@ EC_PASS = os.environ.get("EC_PASS", "sysadmin")
 DB_DSN = os.environ.get("EC_DB_DSN", "localhost:1521/ORCL")
 HEADLESS = os.environ.get("EC_HEADLESS", "true").lower() in ("1", "true", "yes")
 HOLD = os.environ.get("EC_HOLD", "0s")
+
+# Test-data date conventions (centralized so a sandbox/data change is one edit, not 40):
+# - TEST_START_DATE: default Start/End date for IUD test objects on plain screens.
+# - TEST_START_DATE_REFDD: for screens whose form has REFERENCE DROPDOWNS — the date
+#   must be on/after the seed objects' effective dates or the dropdowns come up empty
+#   (see registry: "EC Object Start Date = Version Filter"). Keep >= 2003-01-01.
+TEST_START_DATE = os.environ.get("EC_TEST_START_DATE", "2000-01-01")
+TEST_START_DATE_REFDD = os.environ.get("EC_TEST_START_DATE_REFDD", "2003-01-01")

@@ -29,9 +29,7 @@ Open Region Screen
     [Documentation]    Suite Setup: launch, login as ${user} (defaults to the env
     ...    user), navigate to the Region screen. Pass a different user for role tests.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${REGION_SCREEN}
+    Launch EC And Open Screen    ${REGION_SCREEN}    ${user}    ${pass}
 
 Region Row Should Exist
     [Documentation]    Assert a region with ${code} is present in the list.

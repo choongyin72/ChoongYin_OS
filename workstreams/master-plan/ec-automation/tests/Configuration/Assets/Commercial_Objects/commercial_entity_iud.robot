@@ -17,8 +17,8 @@ Test Tags           iud    commercial-entity
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2003-01-01
-${END_DATE}         2003-01-01
+${START_DATE}       ${TEST_START_DATE_REFDD}
+${END_DATE}         ${TEST_START_DATE_REFDD}
 
 
 *** Test Cases ***
@@ -55,8 +55,5 @@ TC04 Delete Commercial Entity
 *** Keywords ***
 Set Up Commercial Entity Suite
     [Documentation]    Generate a unique test code/name, then open the Commercial Entity screen.
-    ${code}    Generate Unique Code    AUTOTEST_CE_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Commercial Entity ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Commercial Entity ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_CE_    Commercial Entity
     Open Commercial Entity Screen

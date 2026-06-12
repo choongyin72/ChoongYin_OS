@@ -28,9 +28,7 @@ ${COMPANY_DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 Open Company Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Company screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${COMPANY_SCREEN}
+    Launch EC And Open Screen    ${COMPANY_SCREEN}    ${user}    ${pass}
 
 Company Row Should Exist
     [Documentation]    Assert a company with ${code} is present in the list.

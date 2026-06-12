@@ -29,9 +29,7 @@ Open Production Unit Screen
     [Documentation]    Suite Setup: launch, login as ${user} (defaults to the env
     ...    user), navigate to the Production Unit screen. Pass a different user for role tests.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${PRODUCTION_UNIT_SCREEN}
+    Launch EC And Open Screen    ${PRODUCTION_UNIT_SCREEN}    ${user}    ${pass}
 
 Production Unit Row Should Exist
     [Documentation]    Assert a production unit with ${code} is present in the list.

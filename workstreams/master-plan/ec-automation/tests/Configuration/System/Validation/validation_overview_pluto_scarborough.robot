@@ -40,18 +40,22 @@ ${STD_DENSITY}          1149
 
 *** Test Cases ***
 TC_UI_01 Composition MOL_PCT — EC Matches DB Oracle
+    [Documentation]    Rule ${MOL_PCT}: EC's CTRL_CHECK_LOG count equals the independent oracle.
     [Tags]    tc_ui_01    stream_comp
     Rule Log Matches Oracle    ${MOL_PCT}    ${TEST_DATE}
 
 TC_UI_02 Composition WT_PCT — EC Matches DB Oracle
+    [Documentation]    Rule ${WT_PCT}: EC's CTRL_CHECK_LOG count equals the independent oracle.
     [Tags]    tc_ui_02    stream_comp
     Rule Log Matches Oracle    ${WT_PCT}    ${TEST_DATE}
 
 TC_UI_03 Analysis DENSITY — EC Matches DB Oracle
+    [Documentation]    Rule ${DENSITY}: EC's CTRL_CHECK_LOG count equals the independent oracle.
     [Tags]    tc_ui_03    stream_analysis
     Rule Log Matches Oracle    ${DENSITY}    ${TEST_DATE}
 
 TC_UI_04 Analysis GCV — EC Matches DB Oracle
+    [Documentation]    Rule ${GCV}: EC's CTRL_CHECK_LOG count equals the independent oracle.
     [Tags]    tc_ui_04    stream_analysis
     Rule Log Matches Oracle    ${GCV}    ${TEST_DATE}
 
@@ -61,6 +65,7 @@ TC_UI_05 Tank GRS_VOL — EC Matches DB Oracle
     Rule Log Matches Oracle    ${GRS_VOL}    ${TEST_DATE}
 
 TC_UI_06 Tank GRS_MASS — EC Matches DB Oracle
+    [Documentation]    Rule ${GRS_MASS}: EC's CTRL_CHECK_LOG count equals the independent oracle.
     [Tags]    tc_ui_06    tank_dip
     Rule Log Matches Oracle    ${GRS_MASS}    ${TEST_DATE}
 
@@ -70,20 +75,24 @@ TC_UI_07 Tank AVG_TEMP — EC Matches DB Oracle
     Rule Log Matches Oracle    ${AVG_TEMP}    ${TEST_DATE}
 
 TC_UI_08 Tank STD_DENSITY — EC Matches DB Oracle
+    [Documentation]    Rule ${STD_DENSITY}: EC's CTRL_CHECK_LOG count equals the independent oracle.
     [Tags]    tc_ui_08    tank_dip
     Rule Log Matches Oracle    ${STD_DENSITY}    ${TEST_DATE}
 
 TC_UI_09 Composition UI Summary Matches DB Total
+    [Documentation]    UI Summary "Errors" for the Composition group equals the summed oracles.
     [Tags]    tc_ui_09    stream_comp    ui-summary
     ${total}=    Group Oracle Total    ${TEST_DATE}    ${MOL_PCT}    ${WT_PCT}
     Group Summary Errors Should Be On Date    ${TEST_DATE}    ${GROUP_COMP}    ${total}
 
 TC_UI_10 Analysis UI Summary Matches DB Total
+    [Documentation]    UI Summary "Errors" for the Analysis group equals the summed oracles.
     [Tags]    tc_ui_10    stream_analysis    ui-summary
     ${total}=    Group Oracle Total    ${TEST_DATE}    ${DENSITY}    ${GCV}
     Group Summary Errors Should Be On Date    ${TEST_DATE}    ${GROUP_ANALYSIS}    ${total}
 
 TC_UI_11 Tank UI Summary Matches DB Total
+    [Documentation]    UI Summary "Errors" for the Tank group equals the summed oracles.
     [Tags]    tc_ui_11    tank_dip    ui-summary
     ${total}=    Group Oracle Total    ${TEST_DATE}    ${GRS_VOL}    ${GRS_MASS}    ${AVG_TEMP}    ${STD_DENSITY}
     Group Summary Errors Should Be On Date    ${TEST_DATE}    ${GROUP_TANK}    ${total}
@@ -101,6 +110,7 @@ TC_UI_13 Tank AVG_TEMP Positively Fires (2nd date)
     Rule Should Positively Fire    ${AVG_TEMP}    ${TANK_DATE2}
 
 TC_UI_14 Tank UI Summary Matches DB Total (2nd date)
+    [Documentation]    UI Summary "Errors" for the Tank group equals the summed oracles on TANK_DATE2.
     [Tags]    tc_ui_14    tank_dip    ui-summary    second-date
     ${total}=    Group Oracle Total    ${TANK_DATE2}    ${GRS_VOL}    ${GRS_MASS}    ${AVG_TEMP}    ${STD_DENSITY}
     Group Summary Errors Should Be On Date    ${TANK_DATE2}    ${GROUP_TANK}    ${total}

@@ -36,9 +36,7 @@ Open Sub Area Screen
     [Documentation]    Suite Setup: launch, login, navigate, set the cascading
     ...    Production Unit -> Area navigator context and apply it.
     [Arguments]    ${production_unit}    ${area}    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${SUB_AREA_SCREEN}
+    Launch EC And Open Screen    ${SUB_AREA_SCREEN}    ${user}    ${pass}
     Select EC Dropdown Option    ${SUB_AREA_NAV_PU}    ${production_unit}
     Select EC Dropdown Option    ${SUB_AREA_NAV_AREA}    ${area}
     Apply Navigator

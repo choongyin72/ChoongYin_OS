@@ -13,6 +13,18 @@ Generate Unique Code
     ${ts}=    Get Current Date    result_format=%Y%m%d%H%M%S
     RETURN    ${prefix}${ts}
 
+Prepare IUD Object Data
+    [Documentation]    Standard IUD suite-setup data step: generate a unique AUTOTEST
+    ...    code from ${prefix} and publish the conventional suite variables
+    ...    ${TEST_CODE} / ${OBJ_NAME} ("${label} <code>") / ${OBJ_NAME_UPD} (...UPD).
+    ...    Returns the code for suites that need it directly.
+    [Arguments]    ${prefix}    ${label}
+    ${code}=    Generate Unique Code    ${prefix}
+    VAR    ${TEST_CODE}    ${code}    scope=SUITE
+    VAR    ${OBJ_NAME}    ${label} ${code}    scope=SUITE
+    VAR    ${OBJ_NAME_UPD}    ${label} ${code} UPD    scope=SUITE
+    RETURN    ${code}
+
 Capture Step
     [Documentation]    Take a screenshot into the output dir with a step label.
     [Arguments]    ${label}

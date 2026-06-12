@@ -28,9 +28,7 @@ ${PAYMENT_SCHEME_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_in
 Open Payment Scheme Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Payment Scheme screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${PAYMENT_SCHEME_SCREEN}
+    Launch EC And Open Screen    ${PAYMENT_SCHEME_SCREEN}    ${user}    ${pass}
 
 Payment Scheme Row Should Exist
     [Documentation]    Assert a payment scheme with ${code} is present in the list.

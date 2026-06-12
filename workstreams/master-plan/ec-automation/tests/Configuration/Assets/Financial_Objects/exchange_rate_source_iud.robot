@@ -16,8 +16,8 @@ Test Tags           iud    exchange-rate-source
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -54,8 +54,5 @@ TC04 Delete Exchange Rate Source
 *** Keywords ***
 Set Up Exchange Rate Source Suite
     [Documentation]    Generate a unique test code/name, then open the Exchange Rate Source screen.
-    ${code}    Generate Unique Code    AUTOTEST_ERS_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Exchange Rate Source ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Exchange Rate Source ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_ERS_    Exchange Rate Source
     Open Exchange Rate Source Screen

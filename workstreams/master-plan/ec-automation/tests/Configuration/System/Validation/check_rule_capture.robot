@@ -15,14 +15,10 @@ ${NAME}     COMP_MOL_PCT
 ${SHOT}     check_rule_capture
 
 
-*** Keywords ***
-Open And Login
-    Open EC Browser
-    Login To EC    ${EC_USER}    ${EC_PASS}
-
-
 *** Test Cases ***
 Filter Check Rule List
+    [Documentation]    Filter the Check Rule list to ${NAME} and screenshot the matching rows
+    ...    (evidence the rule is configured/deployed).
     Navigate To Screen    Check Rule
     Wait For Load State    networkidle    timeout=30s
     Sleep    1.5s
@@ -35,3 +31,10 @@ Filter Check Rule List
     ...    () => { const tb=document.querySelector('[id="check_rules:form:T_data"]'); return tb?tb.querySelectorAll('tr').length:-1; }
     Log    RULE_ROWS :: ${rows}    console=True
     Take Screenshot    filename=${OUTPUT DIR}/${SHOT}.png    fullPage=True
+
+
+*** Keywords ***
+Open And Login
+    [Documentation]    Suite Setup: launch the browser and authenticate.
+    Open EC Browser
+    Login To EC    ${EC_USER}    ${EC_PASS}

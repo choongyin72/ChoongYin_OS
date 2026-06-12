@@ -29,9 +29,7 @@ Open Country Screen
     [Documentation]    Suite Setup: launch, login as ${user} (defaults to the env
     ...    user), navigate to the Country screen. Pass a different user for role tests.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${COUNTRY_SCREEN}
+    Launch EC And Open Screen    ${COUNTRY_SCREEN}    ${user}    ${pass}
 
 Country Row Should Exist
     [Documentation]    Assert a country with ${code} is present in the list.

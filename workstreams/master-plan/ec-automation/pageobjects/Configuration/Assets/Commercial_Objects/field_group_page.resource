@@ -28,9 +28,7 @@ ${FIELD_GROUP_DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_inp
 Open Field Group Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Field Group screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${FIELD_GROUP_SCREEN}
+    Launch EC And Open Screen    ${FIELD_GROUP_SCREEN}    ${user}    ${pass}
 
 Field Group Row Should Exist
     [Documentation]    Assert a field group with ${code} is present in the list.

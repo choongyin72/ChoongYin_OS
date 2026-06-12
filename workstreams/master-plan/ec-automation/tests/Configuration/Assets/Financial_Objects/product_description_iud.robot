@@ -16,8 +16,8 @@ Test Tags           iud    product-description
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -54,8 +54,5 @@ TC04 Delete Product Description
 *** Keywords ***
 Set Up Product Description Suite
     [Documentation]    Generate a unique test code/name, then open the Product Description screen.
-    ${code}    Generate Unique Code    AUTOTEST_PD_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Product Description ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Product Description ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_PD_    Product Description
     Open Product Description Screen

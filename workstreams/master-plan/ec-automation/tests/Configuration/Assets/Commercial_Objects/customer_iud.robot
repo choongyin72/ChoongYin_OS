@@ -17,8 +17,8 @@ Test Tags           iud    customer
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2003-01-01
-${END_DATE}         2003-01-01
+${START_DATE}       ${TEST_START_DATE_REFDD}
+${END_DATE}         ${TEST_START_DATE_REFDD}
 
 
 *** Test Cases ***
@@ -55,8 +55,5 @@ TC04 Delete Customer
 *** Keywords ***
 Set Up Customer Suite
     [Documentation]    Generate a unique test code/name, then open the Customer screen.
-    ${code}    Generate Unique Code    AUTOTEST_CUST_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Customer ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Customer ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_CUST_    Customer
     Open Customer Screen

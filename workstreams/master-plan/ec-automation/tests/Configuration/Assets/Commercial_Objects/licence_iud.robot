@@ -17,8 +17,8 @@ Test Tags           iud    licence
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2003-01-01
-${END_DATE}         2003-01-01
+${START_DATE}       ${TEST_START_DATE_REFDD}
+${END_DATE}         ${TEST_START_DATE_REFDD}
 
 
 *** Test Cases ***
@@ -55,8 +55,5 @@ TC04 Delete Licence
 *** Keywords ***
 Set Up Licence Suite
     [Documentation]    Generate a unique test code/name, then open the Licence screen.
-    ${code}    Generate Unique Code    AUTOTEST_LIC_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Licence ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Licence ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_LIC_    Licence
     Open Licence Screen

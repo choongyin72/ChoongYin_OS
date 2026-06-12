@@ -28,9 +28,7 @@ ${OPERATOR_LEASE_DEL_ENDDATE}       tab:tabPanel:objectdates:form:G:0:R:0:C:3:da
 Open Operator Lease Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Operator Lease screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${OPERATOR_LEASE_SCREEN}
+    Launch EC And Open Screen    ${OPERATOR_LEASE_SCREEN}    ${user}    ${pass}
 
 Operator Lease Row Should Exist
     [Documentation]    Assert a operator lease with ${code} is present in the list.

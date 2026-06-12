@@ -8,8 +8,8 @@ Documentation       T3 (screen) — Validation Overview - Pluto Scarborough page
 ...                 Verifies against CTRL_CHECK_LOG (EC's validation output) via DbVerify.
 ...                 Folder is 4 deep -> imports use ../../../../ to reach root.
 
-Library             Browser
 Library             String
+Library             Browser
 Library             ../../../../libraries/DbVerify.py
 Resource            ../../../../resources/common.resource
 
@@ -22,15 +22,18 @@ ${VO_GO}            navButton:form:B
 # Run Selected Groups button (PrimeFaces commandButton wrapping a span)
 ${VO_RUN_SELECTED}      xpath=//*[self::button or self::a or contains(@class,'ui-button')][.//*[normalize-space()='Run Selected Groups'] or normalize-space(.)='Run Selected Groups']
 # group tree: label cell groups:form:T:{idx}:C0_la , summary cell ...:C2_la
+# result-detail Message column multi-select filter (sfilter3) parts
+${MSG_FILTER_TRIGGER}   css=[id="logs:form:T:sfilter3_cb_filter"] .ui-selectcheckboxmenu-trigger
+${MSG_FILTER_PANEL}     css=[id="logs:form:T:sfilter3_cb_filter_panel"]
+${MSG_FILTER_SEARCH}    css=[id="logs:form:T:sfilter3_cb_filter_filter"]
+${MSG_FILTER_TOGGLE}    css=[id="logs:form:T:sfilter3_cb_filter_panel"] .ui-selectcheckboxmenu-header .ui-chkbox-box
 
 
 *** Keywords ***
 Open Validation Overview Screen
     [Documentation]    Suite Setup: launch, login (default env user), open the screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${VO_SCREEN}
+    Launch EC And Open Screen    ${VO_SCREEN}    ${user}    ${pass}
 
 Set Validation Date Range And Go
     [Documentation]    Set From/To date then click GO (mandatory navigator reload, filters
@@ -47,37 +50,45 @@ Reload Validation Screen
     Wait For Load State    networkidle    timeout=30s
     Sleep    1.5s
 
+Open Message Filter Panel
+    [Documentation]    Open the Message column multi-select filter dropdown panel.
+    Click    ${MSG_FILTER_TRIGGER}
+    Wait For Elements State    ${MSG_FILTER_PANEL}    visible    timeout=10s
+    Sleep    0.5s
+
+Close Message Filter Panel And Apply
+    [Documentation]    Close the filter panel (applies the selection) and wait for the
+    ...    grid AJAX refresh to settle.
+    Click    ${MSG_FILTER_PANEL} .ui-selectcheckboxmenu-close
+    Wait For Load State    networkidle    timeout=20s
+    Sleep    1.5s
+
 Show Only Log Messages By Ticking
     [Documentation]    Show ONLY rows whose message contains ${match_text}, by unticking
     ...    toggle-all (clear all) then clicking EACH matching option checkbox individually
     ...    (avoids the toggle-all-reselects-all bug). Closes to apply.
     [Arguments]    ${match_text}
-    ${trig}=    Set Variable    css=[id="logs:form:T:sfilter3_cb_filter"] .ui-selectcheckboxmenu-trigger
-    ${panel}=   Set Variable    css=[id="logs:form:T:sfilter3_cb_filter_panel"]
-    ${hdr}=     Set Variable    css=[id="logs:form:T:sfilter3_cb_filter_panel"] .ui-selectcheckboxmenu-header .ui-chkbox-box
-    Click    ${trig}
-    Wait For Elements State    ${panel}    visible    timeout=10s
-    Sleep    0.5s
+    Open Message Filter Panel
     # Step 1: clear ALL currently-ticked items (re-query inside JS)
     Evaluate JavaScript    ${None}
     ...    () => { document.querySelectorAll('[id="logs:form:T:sfilter3_cb_filter_panel"] li.ui-selectcheckboxmenu-item .ui-chkbox-box.ui-state-active').forEach(b=>b.click()); }
     Sleep    3s
     # re-open the panel if the clear-all AJAX collapsed it, so the tick step sees the items
-    ${vis}=    Get Element States    ${panel}    then    bool(value & visible)
+    ${vis}=    Get Element States    ${MSG_FILTER_PANEL}    then    bool(value & visible)
     IF    not $vis
-        Click    ${trig}
-        Wait For Elements State    ${panel}    visible    timeout=10s
-        Sleep    1s
+        Open Message Filter Panel
+        Sleep    0.5s
     END
     # Step 2: tick only items matching ${match_text} (fresh re-query, avoids stale refs)
     ${ticked}=    Evaluate JavaScript    ${None}
-    ...    () => { let c=0; document.querySelectorAll('[id="logs:form:T:sfilter3_cb_filter_panel"] li.ui-selectcheckboxmenu-item').forEach(li=>{ const t=(li.textContent||'').trim(); const b=li.querySelector('.ui-chkbox-box'); if(t.includes('${match_text}') && b && !b.classList.contains('ui-state-active')){ b.click(); c++; } }); return c; }
+    ...    () => { let c=0;
+    ...    document.querySelectorAll('[id="logs:form:T:sfilter3_cb_filter_panel"] li.ui-selectcheckboxmenu-item').forEach(li=>{
+    ...    const t=(li.textContent||'').trim(); const b=li.querySelector('.ui-chkbox-box');
+    ...    if(t.includes('${match_text}') && b && !b.classList.contains('ui-state-active')){ b.click(); c++; } });
+    ...    return c; }
     Log    TICKED_ITEMS :: ${ticked}    console=True
-    Sleep    0.8s
-    Sleep    1s
-    Click    ${panel} .ui-selectcheckboxmenu-close
-    Wait For Load State    networkidle    timeout=20s
-    Sleep    1.5s
+    Sleep    1.8s
+    Close Message Filter Panel And Apply
 
 Show Only Log Messages Matching
     [Documentation]    Filter the result detail grid's Message column (multi-select sfilter3)
@@ -86,29 +97,21 @@ Show Only Log Messages Matching
     ...    TICK toggle-all (selects just the filtered messages) -> close.
     ...    e.g. 'mole percentage' (1156/1157 MOL%) or 'molecular weight percentage'.
     [Arguments]    ${match_text}
-    ${trig}=      Set Variable    css=[id="logs:form:T:sfilter3_cb_filter"] .ui-selectcheckboxmenu-trigger
-    ${panel}=     Set Variable    css=[id="logs:form:T:sfilter3_cb_filter_panel"]
-    ${search}=    Set Variable    css=[id="logs:form:T:sfilter3_cb_filter_filter"]
-    ${hdr}=       Set Variable    css=[id="logs:form:T:sfilter3_cb_filter_panel"] .ui-selectcheckboxmenu-header .ui-chkbox-box
-    Click    ${trig}
-    Wait For Elements State    ${panel}    visible    timeout=10s
-    Sleep    0.5s
-    Fill Text    ${search}    ${EMPTY}
+    Open Message Filter Panel
+    Fill Text    ${MSG_FILTER_SEARCH}    ${EMPTY}
     Sleep    0.5s
     # clear ALL selections first (untick toggle-all only if it is currently active)
-    ${cls}=    Get Attribute    ${hdr}    class
+    ${cls}=    Get Attribute    ${MSG_FILTER_TOGGLE}    class
     IF    'ui-state-active' in $cls
-        Click    ${hdr}
+        Click    ${MSG_FILTER_TOGGLE}
         Sleep    0.5s
     END
     # narrow the list to the wanted text, then tick toggle-all -> selects the filtered set
-    Fill Text    ${search}    ${match_text}
+    Fill Text    ${MSG_FILTER_SEARCH}    ${match_text}
     Sleep    1s
-    Click    ${hdr}
+    Click    ${MSG_FILTER_TOGGLE}
     Sleep    1s
-    Click    ${panel} .ui-selectcheckboxmenu-close
-    Wait For Load State    networkidle    timeout=20s
-    Sleep    1.5s
+    Close Message Filter Panel And Apply
 
 Go To Groups Tree Page
     [Documentation]    The group tree is paginated; click the paginator page link with the
@@ -186,7 +189,7 @@ Group Oracle Total
     [Documentation]    Sum the per-object oracles of a group's rules — the expected UI
     ...    Summary "Errors" total for the group.
     [Arguments]    ${daytime}    @{check_ids}
-    ${total}=    Set Variable    ${0}
+    VAR    ${total}    ${0}
     FOR    ${id}    IN    @{check_ids}
         ${n}=    Distinct Violation Objects For Rule    ${id}    ${daytime}
         ${total}=    Evaluate    ${total} + ${n}

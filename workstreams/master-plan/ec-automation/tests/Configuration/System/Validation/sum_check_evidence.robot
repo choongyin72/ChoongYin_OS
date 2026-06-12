@@ -22,6 +22,8 @@ ${STREAM_GRP}       Stream Gas Component Analysis - Daily Sampling Validations
 
 *** Test Cases ***
 Stream Sum — Mole% And WT% Isolated
+    [Documentation]    Isolate the stream mole% (1156) then WT% (1077) sum-check errors in the
+    ...    result grid and screenshot each (fresh group select between filters).
     [Tags]    stream
     Select Daily Sampling Group    ${STREAM_GRP}    2026-05-01    2026-05-31
     Show Only Log Messages By Ticking    sum of mole percentage
@@ -36,6 +38,7 @@ Stream Sum — Mole% And WT% Isolated
     Take Screenshot    filename=${SHOTS}/sum_stream_WT_pct.png    fullPage=True
 
 Well Sum — Mole% Isolated (1157 fires)
+    [Documentation]    Isolate the well mole% (1157) sum-check errors and screenshot them.
     [Tags]    well
     Select Daily Sampling Group    ${WELL_GRP}    2026-06-01    2026-06-11
     Show Only Log Messages By Ticking    sum of mole percentage
@@ -61,6 +64,7 @@ Select Daily Sampling Group
     Sleep    1.5s
 
 Count Message Rows
+    [Documentation]    Return {mole, molwt, rows} counts from the visible result-detail grid.
     ${counts}=    Evaluate JavaScript    ${None}
     ...    () => { const tb=document.querySelector('[id="logs:form:T_data"]'); const txt=tb?(tb.innerText||''):''; return { mole:(txt.match(/sum of mole percentage/g)||[]).length, molwt:(txt.match(/molecular weight percentage/g)||[]).length, rows: tb?tb.querySelectorAll('tr').length:-1 }; }
     RETURN    ${counts}

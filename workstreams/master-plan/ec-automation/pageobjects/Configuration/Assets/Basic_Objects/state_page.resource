@@ -29,9 +29,7 @@ Open State Screen
     [Documentation]    Suite Setup: launch, login as ${user} (defaults to the env
     ...    user), navigate to the State screen. Pass a different user for role tests.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${STATE_SCREEN}
+    Launch EC And Open Screen    ${STATE_SCREEN}    ${user}    ${pass}
 
 State Row Should Exist
     [Documentation]    Assert a state with ${code} is present in the list.

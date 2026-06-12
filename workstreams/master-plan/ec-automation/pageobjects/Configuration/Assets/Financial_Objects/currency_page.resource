@@ -30,9 +30,7 @@ ${CURRENCY_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 Open Currency Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Currency screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${CURRENCY_SCREEN}
+    Launch EC And Open Screen    ${CURRENCY_SCREEN}    ${user}    ${pass}
 
 Currency Row Should Exist
     [Documentation]    Assert a currency with ${code} is present in the list.

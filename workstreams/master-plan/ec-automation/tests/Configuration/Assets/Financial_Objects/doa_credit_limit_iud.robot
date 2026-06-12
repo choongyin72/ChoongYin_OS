@@ -16,8 +16,8 @@ Test Tags           iud    doa-credit-limit
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -54,8 +54,5 @@ TC04 Delete DOA Credit Limit
 *** Keywords ***
 Set Up DOA Credit Limit Suite
     [Documentation]    Generate a unique test code/name, then open the DOA Credit Limit screen.
-    ${code}    Generate Unique Code    AUTOTEST_DOA_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    DOA Credit Limit ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    DOA Credit Limit ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_DOA_    DOA Credit Limit
     Open DOA Credit Limit Screen

@@ -17,8 +17,42 @@ Test Tags           frozen    visual    layer2a
 ${SHOTS}            ${OUTPUT DIR}
 
 
+*** Test Cases ***
+Water Oil-in-Water hover tooltip (2026-05-24)
+    [Documentation]    Load Daily Water Stream Status for Pluto A on 2026-05-24 and hover the
+    ...    frozen Oil-in-Water cell so EC's verificationText tooltip shows (screenshot evidence).
+    [Tags]    water
+    Navigate To Screen    Daily Water Stream Status
+    Fill Text    css=[id="nav:form:G:0:R:1:C:0:da_input"]    2026-05-24
+    Keyboard Key    press    Escape
+    Set Navigator Filter    G:1    Pluto Scarborough
+    Set Navigator Filter    G:2    Upstream
+    Set Navigator Filter    G:3    Pluto A
+    Click    css=[id="button:form:B"]
+    Wait For Load State    networkidle    timeout=30s
+    Sleep    2s
+    Hover Frozen Cell    Oil in Water    water
+
+Analysis GCV hover tooltip (2025-12-13)
+    [Documentation]    Load Stream Gas Component Analysis for LNG Train 1 on 2025-12-13 and hover
+    ...    the frozen GCV cell so EC's verificationText tooltip shows (screenshot evidence).
+    [Tags]    analysis
+    Navigate To Screen    Stream Gas Component Analysis
+    Fill Text    css=[id="nav:form:G:0:R:1:C:0:da_input"]    2025-12-13
+    Fill Text    css=[id="nav:form:G:1:R:1:C:0:da_input"]    2025-12-13
+    Keyboard Key    press    Escape
+    Set Navigator Filter    G:2    Pluto Scarborough
+    Set Navigator Filter    G:3    Burrup LNG Park
+    Set Navigator Filter    G:4    LNG Train 1
+    Click    css=[id="go_button:form:B"]
+    Wait For Load State    networkidle    timeout=30s
+    Sleep    2s
+    Hover Frozen Cell    GCV    analysis
+
+
 *** Keywords ***
 Open EC Browser And Login
+    [Documentation]    Suite Setup: launch the browser and authenticate.
     Open EC Browser
     Login To EC    ${EC_USER}    ${EC_PASS}
 
@@ -39,32 +73,3 @@ Hover Frozen Cell
     Run Keyword And Continue On Failure    Hover    css=[data-hov="1"]
     Sleep    2s
     Take Screenshot    filename=${SHOTS}/${tag}_hover_tooltip.png    fullPage=True
-
-
-*** Test Cases ***
-Water Oil-in-Water hover tooltip (2026-05-24)
-    [Tags]    water
-    Navigate To Screen    Daily Water Stream Status
-    Fill Text    css=[id="nav:form:G:0:R:1:C:0:da_input"]    2026-05-24
-    Keyboard Key    press    Escape
-    Set Navigator Filter    G:1    Pluto Scarborough
-    Set Navigator Filter    G:2    Upstream
-    Set Navigator Filter    G:3    Pluto A
-    Click    css=[id="button:form:B"]
-    Wait For Load State    networkidle    timeout=30s
-    Sleep    2s
-    Hover Frozen Cell    Oil in Water    water
-
-Analysis GCV hover tooltip (2025-12-13)
-    [Tags]    analysis
-    Navigate To Screen    Stream Gas Component Analysis
-    Fill Text    css=[id="nav:form:G:0:R:1:C:0:da_input"]    2025-12-13
-    Fill Text    css=[id="nav:form:G:1:R:1:C:0:da_input"]    2025-12-13
-    Keyboard Key    press    Escape
-    Set Navigator Filter    G:2    Pluto Scarborough
-    Set Navigator Filter    G:3    Burrup LNG Park
-    Set Navigator Filter    G:4    LNG Train 1
-    Click    css=[id="go_button:form:B"]
-    Wait For Load State    networkidle    timeout=30s
-    Sleep    2s
-    Hover Frozen Cell    GCV    analysis

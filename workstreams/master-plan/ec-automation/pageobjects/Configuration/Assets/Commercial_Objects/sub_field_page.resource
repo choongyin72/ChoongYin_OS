@@ -28,9 +28,7 @@ ${SUB_FIELD_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 Open Sub Field Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Sub Field screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${SUB_FIELD_SCREEN}
+    Launch EC And Open Screen    ${SUB_FIELD_SCREEN}    ${user}    ${pass}
 
 Sub Field Row Should Exist
     [Documentation]    Assert a sub field with ${code} is present in the list.

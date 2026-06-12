@@ -28,9 +28,7 @@ ${REVENUE_ORDER_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_inp
 Open Revenue Order Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Revenue Order screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${REVENUE_ORDER_SCREEN}
+    Launch EC And Open Screen    ${REVENUE_ORDER_SCREEN}    ${user}    ${pass}
 
 Revenue Order Row Should Exist
     [Documentation]    Assert a revenue order with ${code} is present in the list.

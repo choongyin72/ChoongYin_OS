@@ -28,9 +28,7 @@ ${COMMERCIAL_ENTITY_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da
 Open Commercial Entity Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Commercial Entity screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${COMMERCIAL_ENTITY_SCREEN}
+    Launch EC And Open Screen    ${COMMERCIAL_ENTITY_SCREEN}    ${user}    ${pass}
 
 Commercial Entity Row Should Exist
     [Documentation]    Assert a commercial entity with ${code} is present in the list.

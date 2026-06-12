@@ -36,9 +36,7 @@ ${DOA_CREDIT_LIMIT_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_
 Open DOA Credit Limit Screen
     [Documentation]    Suite Setup: launch, login, navigate to the DOA Credit Limit screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${DOA_CREDIT_LIMIT_SCREEN}
+    Launch EC And Open Screen    ${DOA_CREDIT_LIMIT_SCREEN}    ${user}    ${pass}
 
 DOA Credit Limit Row Should Exist
     [Documentation]    Assert a doa credit limit with ${code} is present in the list.

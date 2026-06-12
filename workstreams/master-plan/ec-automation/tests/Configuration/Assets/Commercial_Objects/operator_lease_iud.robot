@@ -17,8 +17,8 @@ Test Tags           iud    operator-lease
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2003-01-01
-${END_DATE}         2003-01-01
+${START_DATE}       ${TEST_START_DATE_REFDD}
+${END_DATE}         ${TEST_START_DATE_REFDD}
 
 
 *** Test Cases ***
@@ -55,8 +55,5 @@ TC04 Delete Operator Lease
 *** Keywords ***
 Set Up Operator Lease Suite
     [Documentation]    Generate a unique test code/name, then open the Operator Lease screen.
-    ${code}    Generate Unique Code    AUTOTEST_OPL_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Operator Lease ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Operator Lease ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_OPL_    Operator Lease
     Open Operator Lease Screen

@@ -15,10 +15,10 @@ Test Tags           iud    equipment
 
 *** Variables ***
 ${TEST_CODE}        ${EMPTY}
-${EQP_NAME}         ${EMPTY}
-${EQP_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${OBJ_NAME}         ${EMPTY}
+${OBJ_NAME_UPD}     ${EMPTY}
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -32,7 +32,7 @@ TC01 Verify Clean State
 TC02 Insert New Equipment
     [Documentation]    Insert a new equipment and confirm it appears (UI + DB).
     [Tags]    insert
-    Insert Equipment Record    ${TEST_CODE}    ${EQP_NAME}    ${START_DATE}
+    Insert Equipment Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
     Equipment Row Should Exist    ${TEST_CODE}
     Equipment Should Exist In DB    ${TEST_CODE}
     Capture Step    eqp_tc02_inserted
@@ -40,8 +40,8 @@ TC02 Insert New Equipment
 TC03 Update Equipment Name
     [Documentation]    Edit the equipment name and confirm the list reflects the change.
     [Tags]    update
-    Update Equipment Name    ${TEST_CODE}    ${EQP_NAME_UPD}
-    Equipment Row Should Show Name    ${TEST_CODE}    ${EQP_NAME_UPD}
+    Update Equipment Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
+    Equipment Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
     Capture Step    eqp_tc03_updated
 
 TC04 Delete Equipment
@@ -56,8 +56,5 @@ TC04 Delete Equipment
 *** Keywords ***
 Set Up Equipment Suite
     [Documentation]    Generate a unique test code/name, then open the Equipment screen.
-    ${code}    Generate Unique Code    AUTOTEST_EQP_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${EQP_NAME}    Equipment ${code}    scope=SUITE
-    VAR    ${EQP_NAME_UPD}    Equipment ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_EQP_    Equipment
     Open Equipment Screen

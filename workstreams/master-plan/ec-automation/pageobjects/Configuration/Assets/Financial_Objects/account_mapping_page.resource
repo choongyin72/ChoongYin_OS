@@ -42,9 +42,7 @@ ${ACCOUNT_MAPPING_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_i
 Open Account Mapping Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Account Mapping screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${ACCOUNT_MAPPING_SCREEN}
+    Launch EC And Open Screen    ${ACCOUNT_MAPPING_SCREEN}    ${user}    ${pass}
 
 Account Mapping Row Should Exist
     [Documentation]    Assert a account mapping with ${code} is present in the list.

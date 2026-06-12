@@ -29,9 +29,7 @@ Open Bank Screen
     [Documentation]    Suite Setup: launch, login as ${user} (defaults to the env
     ...    user), navigate to the Bank screen. Pass a different user for role tests.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${BANK_SCREEN}
+    Launch EC And Open Screen    ${BANK_SCREEN}    ${user}    ${pass}
 
 Bank Row Should Exist
     [Documentation]    Assert a bank with ${code} is present in the list.

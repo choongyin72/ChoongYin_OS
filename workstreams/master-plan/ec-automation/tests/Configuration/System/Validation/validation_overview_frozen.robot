@@ -34,14 +34,17 @@ ${OILINWAT_FRZ}         1154
 
 *** Test Cases ***
 TC_FRZ_01 Analysis DENSITY Frozen — UI Run Matches DB Oracle
+    [Documentation]    Frozen rule ${DENSITY_FRZ}: oracle > 0 AND EC's CTRL_CHECK_LOG matches it.
     [Tags]    tc_frz_01    stream_analysis
     Frozen Rule Should Positively Fire    ${DENSITY_FRZ}    ${ANALYSIS_DATE}
 
 TC_FRZ_02 Analysis GCV Frozen — UI Run Matches DB Oracle
+    [Documentation]    Frozen rule ${GCV_FRZ}: oracle > 0 AND EC's CTRL_CHECK_LOG matches it.
     [Tags]    tc_frz_02    stream_analysis
     Frozen Rule Should Positively Fire    ${GCV_FRZ}    ${ANALYSIS_DATE}
 
 TC_FRZ_03 Water Oil-in-Water Frozen — UI Run Matches DB Oracle
+    [Documentation]    Frozen rule ${OILINWAT_FRZ}: oracle > 0 AND EC's CTRL_CHECK_LOG matches it.
     [Tags]    tc_frz_03    stream_water
     Frozen Rule Should Positively Fire    ${OILINWAT_FRZ}    ${WATER_DATE}
 

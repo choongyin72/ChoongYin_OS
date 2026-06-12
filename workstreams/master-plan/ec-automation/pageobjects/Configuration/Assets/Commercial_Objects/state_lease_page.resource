@@ -28,9 +28,7 @@ ${STATE_LEASE_DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_inp
 Open State Lease Screen
     [Documentation]    Suite Setup: launch, login, navigate to the State Lease screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${STATE_LEASE_SCREEN}
+    Launch EC And Open Screen    ${STATE_LEASE_SCREEN}    ${user}    ${pass}
 
 State Lease Row Should Exist
     [Documentation]    Assert a state lease with ${code} is present in the list.

@@ -109,6 +109,16 @@ The goal: derive screen facts from here + recon (not by asking), and confirm rat
 ---
 
 ## EC web common patterns (all screens)
+- **Suite Setup gesture:** `Launch EC And Open Screen    ${<X>_SCREEN}` (T1 common.resource)
+  = browser + login + navigate. Every page object's `Open <X> Screen` is a one-line
+  delegation to it (OV-GM screens add their navigator dropdown steps + Apply Navigator after).
+- **IUD test data:** `Prepare IUD Object Data    <AUTOTEST_prefix_>    <Label>` (T1
+  utils.resource) generates the unique code and publishes suite vars `${TEST_CODE}` /
+  `${OBJ_NAME}` / `${OBJ_NAME_UPD}` — the standard data step in every IUD Suite Setup.
+- **Test dates are CENTRAL:** `${TEST_START_DATE}` (2000-01-01) and
+  `${TEST_START_DATE_REFDD}` (2003-01-01, for screens with reference dropdowns) come from
+  `environment.py` and are overridable via `EC_TEST_START_DATE(_REFDD)` env vars — never
+  hardcode date literals in new suites.
 - **Login:** `Login To EC` (Keycloak `#username`/`#password`/`#kc-login`).
 - **Navigate:** `Navigate To Screen <label>` — treeview search box `menu:searchForm:searchTxt`, click `.tv-link` with exact text; confirm via `screenToolbar:form:screenLabel`.
 - **PrimeFaces id grammar:** `form:component:T:{row}:C{col}_{suffix}` — `_la` label, `_in`/`_input` input, `_da_input` date, `_data` datatable body.
@@ -135,7 +145,7 @@ The goal: derive screen facts from here + recon (not by asking), and confirm rat
 ## How to add a new screen (recon-first protocol)
 1. Recon: search the treeview for the screen; capture its `EC_USER_OBJECT` URL, list/grid id, key field/cell ids, navigator + GO, and (for run screens) the output table.
 2. Identify the **type** (OV / TV / RUN-verify) — reuse that type's T2 + patterns above.
-3. Write the T3 page object (mirror an existing same-type one) + the test; set relative-import depth to the folder depth.
+3. Write the T3 page object (mirror an existing same-type one) + the test; set relative-import depth to the folder depth. Use the standard conventions: `Open <X> Screen` delegates to `Launch EC And Open Screen`; Suite Setup data via `Prepare IUD Object Data`; dates via `${TEST_START_DATE}` / `${TEST_START_DATE_REFDD}`.
 4. **Dryrun** (structure) → **live run** (behaviour) → **DB verify** (ground truth).
 5. Add a row to the table above + persist any new gotcha to memory.
 
@@ -145,4 +155,5 @@ MANDATORY protocol — see README "Shared keyword-file change protocol":
 classify the change (additive / conditional / behavioral; signature changes FORBIDDEN),
 grep all callers, then verify with the **canary pack** (`py tmp/scripts/run_canary.py` —
 Bank OV · Area OV-GM · MIME TV · Object List Setup PC · Account Mapping combination)
+**plus one random non-canary suite live** (`py tmp/scripts/run_random_suite.py`)
 before commit. Any problem → copy the .bak back over the file = instant revert.

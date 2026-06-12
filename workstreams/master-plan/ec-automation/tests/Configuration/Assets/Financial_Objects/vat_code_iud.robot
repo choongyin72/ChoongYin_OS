@@ -16,8 +16,8 @@ Test Tags           iud    vat-code
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -54,8 +54,5 @@ TC04 Delete VAT Code
 *** Keywords ***
 Set Up VAT Code Suite
     [Documentation]    Generate a unique test code/name, then open the VAT Code screen.
-    ${code}    Generate Unique Code    AUTOTEST_VAT_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    VAT Code ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    VAT Code ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_VAT_    VAT Code
     Open VAT Code Screen

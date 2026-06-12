@@ -17,8 +17,8 @@ Test Tags           iud    field
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2003-01-01
-${END_DATE}         2003-01-01
+${START_DATE}       ${TEST_START_DATE_REFDD}
+${END_DATE}         ${TEST_START_DATE_REFDD}
 
 
 *** Test Cases ***
@@ -55,8 +55,5 @@ TC04 Delete Field
 *** Keywords ***
 Set Up Field Suite
     [Documentation]    Generate a unique test code/name, then open the Field screen.
-    ${code}    Generate Unique Code    AUTOTEST_FLD_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Field ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Field ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_FLD_    Field
     Open Field Screen

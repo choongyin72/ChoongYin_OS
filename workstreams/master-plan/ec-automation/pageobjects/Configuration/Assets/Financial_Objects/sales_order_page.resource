@@ -32,9 +32,7 @@ ${SALES_ORDER_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 Open Sales Order Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Sales Order screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${SALES_ORDER_SCREEN}
+    Launch EC And Open Screen    ${SALES_ORDER_SCREEN}    ${user}    ${pass}
 
 Sales Order Row Should Exist
     [Documentation]    Assert a sales order with ${code} is present in the list.

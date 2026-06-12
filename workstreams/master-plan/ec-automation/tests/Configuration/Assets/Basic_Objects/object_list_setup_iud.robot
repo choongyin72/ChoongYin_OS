@@ -20,7 +20,7 @@ Test Tags           iud    object-list-setup
 ${LIST_CLASS}       FIN_ACCOUNT
 ${OBJECT_LIST}      OPEX GL Equipment Rental
 ${ITEM_OBJECT}      6931250
-${START_DATE}       2003-01-01
+${START_DATE}       ${TEST_START_DATE_REFDD}
 ${BASE_COUNT}       ${EMPTY}
 
 

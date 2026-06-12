@@ -31,9 +31,7 @@ Open Object List Screen
     [Documentation]    Suite Setup: launch, login as ${user} (defaults to the env
     ...    user), navigate to the Object List screen. Pass a different user for role tests.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${OBJECT_LIST_SCREEN}
+    Launch EC And Open Screen    ${OBJECT_LIST_SCREEN}    ${user}    ${pass}
 
 Object List Row Should Exist
     [Documentation]    Assert a object list with ${code} is present in the list.

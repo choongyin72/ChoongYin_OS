@@ -19,8 +19,8 @@ ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
 # 2003+: the Op PU / Op Area dropdowns only offer objects effective at the form's
 # start date, and 'Production Unit' / 'Offshore area' start 2002-01-01
-${START_DATE}       2003-01-01
-${END_DATE}         2003-01-01
+${START_DATE}       ${TEST_START_DATE_REFDD}
+${END_DATE}         ${TEST_START_DATE_REFDD}
 # cascading navigator context + Op fields of the test sub area - user-approved 2026-06-11
 ${NAV_PU}           Production Unit
 ${NAV_AREA}         Offshore area
@@ -61,8 +61,5 @@ TC04 Delete Sub Area
 Set Up Sub Area Suite
     [Documentation]    Generate a unique test code/name, then open the Sub Area screen
     ...    with the approved cascading navigator context.
-    ${code}    Generate Unique Code    AUTOTEST_SUBAREA_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Sub Area ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Sub Area ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_SUBAREA_    Sub Area
     Open Sub Area Screen    ${NAV_PU}    ${NAV_AREA}

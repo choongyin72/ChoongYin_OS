@@ -20,6 +20,8 @@ ${SHOT}         well_run
 
 *** Test Cases ***
 Run Well Group
+    [Documentation]    Run the well daily-sampling group on ${DAY}; if CAPTURE=yes, isolate the
+    ...    mole% errors and screenshot as ${SHOT}.
     Set Validation Date Range And Go    ${DAY}    ${DAY}
     Go To Groups Tree Page    2
     Run Check Group    ${WELL_GRP}

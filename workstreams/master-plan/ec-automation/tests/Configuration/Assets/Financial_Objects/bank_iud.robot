@@ -15,10 +15,10 @@ Test Tags           iud    bank
 
 *** Variables ***
 ${TEST_CODE}        ${EMPTY}
-${BANK_NAME}        ${EMPTY}
-${BANK_NAME_UPD}    ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${OBJ_NAME}        ${EMPTY}
+${OBJ_NAME_UPD}    ${EMPTY}
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -31,7 +31,7 @@ TC01 Verify Clean State
 TC02 Insert New Bank
     [Documentation]    Insert a new bank and confirm it appears in the list.
     [Tags]    insert
-    Insert Bank Record    ${TEST_CODE}    ${BANK_NAME}    ${START_DATE}
+    Insert Bank Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
     Bank Row Should Exist    ${TEST_CODE}
     Bank Should Exist In DB    ${TEST_CODE}
     Capture Step    bank_tc02_inserted
@@ -39,8 +39,8 @@ TC02 Insert New Bank
 TC03 Update Bank Name
     [Documentation]    Edit the bank name and confirm the list reflects the change.
     [Tags]    update
-    Update Bank Name    ${TEST_CODE}    ${BANK_NAME_UPD}
-    Bank Row Should Show Name    ${TEST_CODE}    ${BANK_NAME_UPD}
+    Update Bank Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
+    Bank Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
     Capture Step    bank_tc03_updated
 
 TC04 Delete Bank
@@ -55,8 +55,5 @@ TC04 Delete Bank
 *** Keywords ***
 Set Up Bank Suite
     [Documentation]    Generate a unique test code/name, then open the Bank screen.
-    ${code}    Generate Unique Code    AUTOTEST_BNK_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${BANK_NAME}    Bank ${code}    scope=SUITE
-    VAR    ${BANK_NAME_UPD}    Bank ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_BNK_    Bank
     Open Bank Screen

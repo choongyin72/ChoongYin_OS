@@ -16,8 +16,8 @@ Test Tags           iud    account-mapping
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2003-01-01
-${END_DATE}         2003-01-01
+${START_DATE}       ${TEST_START_DATE_REFDD}
+${END_DATE}         ${TEST_START_DATE_REFDD}
 
 
 *** Test Cases ***
@@ -54,8 +54,5 @@ TC04 Delete Account Mapping
 *** Keywords ***
 Set Up Account Mapping Suite
     [Documentation]    Generate a unique test code/name, then open the Account Mapping screen.
-    ${code}    Generate Unique Code    AUTOTEST_AM_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Account Mapping ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Account Mapping ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_AM_    Account Mapping
     Open Account Mapping Screen

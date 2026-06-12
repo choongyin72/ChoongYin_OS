@@ -17,8 +17,8 @@ Test Tags           iud    regulatory-permits
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 # issuing agency for the throwaway test permit - user-approved 2026-06-11
 ${PERMIT_AGENCY}    Texas RRC
 
@@ -57,8 +57,5 @@ TC04 Delete Regulatory Permits
 *** Keywords ***
 Set Up Regulatory Permits Suite
     [Documentation]    Generate a unique test code/name, then open the Regulatory Permits screen.
-    ${code}    Generate Unique Code    AUTOTEST_RP_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Regulatory Permits ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Regulatory Permits ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_RP_    Regulatory Permits
     Open Regulatory Permits Screen

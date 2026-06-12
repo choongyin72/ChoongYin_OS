@@ -29,9 +29,7 @@ Open County Screen
     [Documentation]    Suite Setup: launch, login as ${user} (defaults to the env
     ...    user), navigate to the County screen. Pass a different user for role tests.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${COUNTY_SCREEN}
+    Launch EC And Open Screen    ${COUNTY_SCREEN}    ${user}    ${pass}
 
 County Row Should Exist
     [Documentation]    Assert a county with ${code} is present in the list.

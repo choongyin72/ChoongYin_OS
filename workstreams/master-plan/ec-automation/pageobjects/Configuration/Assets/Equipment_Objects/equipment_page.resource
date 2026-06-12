@@ -34,9 +34,7 @@ Open Equipment Screen
     [Documentation]    Suite Setup: launch, login as ${user} (default env user),
     ...    navigate to Equipment, and apply the cascading navigator.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${EQP_SCREEN}
+    Launch EC And Open Screen    ${EQP_SCREEN}    ${user}    ${pass}
     Apply Equipment Navigator
 
 Apply Equipment Navigator

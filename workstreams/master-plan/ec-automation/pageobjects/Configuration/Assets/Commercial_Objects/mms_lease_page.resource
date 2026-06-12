@@ -28,9 +28,7 @@ ${MMS_LEASE_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 Open MMS Lease Screen
     [Documentation]    Suite Setup: launch, login, navigate to the MMS Lease screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${MMS_LEASE_SCREEN}
+    Launch EC And Open Screen    ${MMS_LEASE_SCREEN}    ${user}    ${pass}
 
 MMS Lease Row Should Exist
     [Documentation]    Assert a mms lease with ${code} is present in the list.

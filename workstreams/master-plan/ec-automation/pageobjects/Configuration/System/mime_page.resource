@@ -22,9 +22,7 @@ ${MIME_GRID}        mime_type_table:form:T_data
 Open MIME Screen
     [Documentation]    Suite Setup: launch, login as ${user} (default env user), open MIME (no navigator).
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${MIME_SCREEN}
+    Launch EC And Open Screen    ${MIME_SCREEN}    ${user}    ${pass}
 
 MIME Cell Id
     [Documentation]    Build the cell input id for a grid row/column.

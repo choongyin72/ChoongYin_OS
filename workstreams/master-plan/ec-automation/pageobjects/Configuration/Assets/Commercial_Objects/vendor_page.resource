@@ -34,9 +34,7 @@ ${VENDOR_DEL_ENDDATE}       tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 Open Vendor Screen
     [Documentation]    Suite Setup: launch, login, navigate to the Vendor screen.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${VENDOR_SCREEN}
+    Launch EC And Open Screen    ${VENDOR_SCREEN}    ${user}    ${pass}
 
 Vendor Row Should Exist
     [Documentation]    Assert a vendor with ${code} is present in the list.

@@ -19,8 +19,8 @@ ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
 # 2003+: the Op Production Unit dropdown only offers PUs effective at the form's
 # start date, and 'Production Unit' (user-approved context) starts 2002-01-01
-${START_DATE}       2003-01-01
-${END_DATE}         2003-01-01
+${START_DATE}       ${TEST_START_DATE_REFDD}
+${END_DATE}         ${TEST_START_DATE_REFDD}
 # navigator context + Op Production Unit of the test area - user-approved 2026-06-11
 ${NAV_PU}           Production Unit
 
@@ -60,8 +60,5 @@ TC04 Delete Area
 Set Up Area Suite
     [Documentation]    Generate a unique test code/name, then open the Area screen
     ...    with the approved Production Unit navigator context.
-    ${code}    Generate Unique Code    AUTOTEST_AREA_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Area ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Area ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_AREA_    Area
     Open Area Screen    ${NAV_PU}

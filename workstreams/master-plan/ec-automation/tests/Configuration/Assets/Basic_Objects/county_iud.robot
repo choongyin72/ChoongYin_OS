@@ -17,8 +17,8 @@ Test Tags           iud    county
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -55,8 +55,5 @@ TC04 Delete County
 *** Keywords ***
 Set Up County Suite
     [Documentation]    Generate a unique test code/name, then open the County screen.
-    ${code}    Generate Unique Code    AUTOTEST_CNTY_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    County ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    County ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_CNTY_    County
     Open County Screen

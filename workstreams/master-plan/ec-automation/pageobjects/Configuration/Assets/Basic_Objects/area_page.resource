@@ -33,9 +33,7 @@ Open Area Screen
     [Documentation]    Suite Setup: launch, login, navigate, select the Production Unit
     ...    navigator context and apply it (grid is empty until then).
     [Arguments]    ${production_unit}    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Open EC Browser
-    Login To EC    ${user}    ${pass}
-    Navigate To Screen    ${AREA_SCREEN}
+    Launch EC And Open Screen    ${AREA_SCREEN}    ${user}    ${pass}
     Select EC Dropdown Option    ${AREA_NAV_PU}    ${production_unit}
     Apply Navigator
 

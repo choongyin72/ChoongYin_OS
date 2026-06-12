@@ -16,8 +16,8 @@ Test Tags           iud    revenue-order
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -54,8 +54,5 @@ TC04 Delete Revenue Order
 *** Keywords ***
 Set Up Revenue Order Suite
     [Documentation]    Generate a unique test code/name, then open the Revenue Order screen.
-    ${code}    Generate Unique Code    AUTOTEST_RO_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Revenue Order ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Revenue Order ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_RO_    Revenue Order
     Open Revenue Order Screen

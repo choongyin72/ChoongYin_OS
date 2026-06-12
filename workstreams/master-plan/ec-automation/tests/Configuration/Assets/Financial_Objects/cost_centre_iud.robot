@@ -16,8 +16,8 @@ Test Tags           iud    cost-centre
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${START_DATE}       ${TEST_START_DATE}
+${END_DATE}         ${TEST_START_DATE}
 
 
 *** Test Cases ***
@@ -54,8 +54,5 @@ TC04 Delete Cost Centre
 *** Keywords ***
 Set Up Cost Centre Suite
     [Documentation]    Generate a unique test code/name, then open the Cost Centre screen.
-    ${code}    Generate Unique Code    AUTOTEST_CC_
-    VAR    ${TEST_CODE}    ${code}    scope=SUITE
-    VAR    ${OBJ_NAME}    Cost Centre ${code}    scope=SUITE
-    VAR    ${OBJ_NAME_UPD}    Cost Centre ${code} UPD    scope=SUITE
+    Prepare IUD Object Data    AUTOTEST_CC_    Cost Centre
     Open Cost Centre Screen

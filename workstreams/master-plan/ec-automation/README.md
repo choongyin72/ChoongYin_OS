@@ -97,7 +97,11 @@ load-bearing for every suite. Before changing one:
 4. **Verify by class**: dryrun everything, then for conditional/behavioral changes run the
    **canary pack** — `py tmp/scripts/run_canary.py` — one live suite per pattern
    (Bank OV · Area OV-GM · MIME TV · Object List Setup PC · Account Mapping combination).
-5. Cite the canary result in the commit message.
+5. **Random spot-check** — `py tmp/scripts/run_random_suite.py` live-runs ONE randomly
+   picked non-canary suite. The canary set is fixed, so a regression that only hits one
+   of the other suites would slip through; the random pick gives every suite a chance to
+   catch it (habit per Choong-Yin, 2026-06-12 — after ANY refactor/change).
+6. Cite the canary + random-pick results in the commit message.
 
 ## Lint & format (Robocop 6+, unified)
 
