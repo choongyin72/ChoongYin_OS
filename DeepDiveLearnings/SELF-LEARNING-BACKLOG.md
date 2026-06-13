@@ -121,6 +121,16 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   for N2). EC Production parent = thin diagram (children later). Series runs during idle going fwd.
   NOTE (user 2026-06-13): commit ONLY inside C:\Projects\ChoongYin_OS; external writes (incl Confluence)
   need explicit permission, never silent.
+- 2026-06-13: N2 allocation (HA.0002) deep recon + run attempt → pattern_n2_allocation_run_design.md.
+  Mapped screen/nav/networks (AS2_Onshore etc.)/result tables (PWEL_DAY_ALLOC ALLOC_*_VOL per well;
+  STRM_DAY_*_ALLOC at PC/company/component grains). ⛔ HONEST BLOCKER: the allocation RUN is NOT
+  executable in this sandbox — G3/G4 dds empty after network pick, GO surfaces no Run control, no
+  row created, and toolbar shows "Process automation not available" (the calc executor; separate
+  from the Quartz scheduler the user restarted). NOT cracked (unlike N1) — needs PA enabled or a
+  known run path (SME). ✅ Doable now: the VERIFY half — conservation oracle on EXISTING results;
+  no-negatives invariant VERIFIED on 2021-10-01 (0 negative ALLOC_* values). Next: DbVerify
+  allocation-conservation helper + read-only suite on existing data (no run needed). OPEN Q for user:
+  can Process Automation be enabled locally / what's the supported allocation-run path?
 - (next blocks append here…)
 
 ## Operating rules (always)
