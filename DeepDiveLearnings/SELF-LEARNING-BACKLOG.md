@@ -35,6 +35,10 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   by cross-ref As-Built 02 screen catalog x automated registry. Finding: master-data layer largely
   done; the real Pluto value is the daily/monthly STATUS data-entry grids (new T2 pattern N1) +
   RUN/status-process screens. Next slice = build N1 "daily-status grid" T2 on WR.0001. Committed.
+- 2026-06-13: Wrote EC Web App Internals field guide (ec-automation/docs/ec_webapp_internals.md) —
+  consolidated reverse-engineered framework/PrimeFaces/DOM knowledge (id grammar, screen types,
+  the working gestures incl. popup/dd/save, config layers, SI units, DB-verify). Accelerates every
+  future screen build. Committed. Also: standing-autonomy+coaching grant saved to memory.
 - (next blocks append here…)
 
 ## Operating rules (always)
