@@ -28,7 +28,7 @@ stack, not our client RF/Playwright; Hydrocarbon Accounting = concise allocation
 **✅ Phase 1 COMPLETE (2026-06-14)** — all 8 domain pages read; reservoir→revenue chain mapped + SOX "why" layered on. Next = Phase 2 (VCF `1853432`).
 
 ### Phase 2 — Calculation / framework depth ★ high (ties to allocation + EC internals)
-- [ ] VCF Calculation in EC `1853432` (2023) — tank volume correction, API Ch.12.1 (5-step GSV); recent + concrete
+- [x] VCF Calculation in EC `1853432` (2023) — READ 2026-06-14 → `vcf-calculation.md`. Tank volume correction, API MPMS Ch.12.1 8-step chain (GSV→NSV→mass; EC skips mass-in-vacuum). EC 10.4+ = PL/SQL formula (MPMS Ch.11 2004, ITS-90, combined temp+pressure). ⭐ Test oracle: external published standard + the rounding rule (intermediates UNrounded, final VCF=5 dp). Feeds inventory valuation (Revenue IN) + custody transfer.
 - [x] The calculation engine is in dire need of enhancements `1843903` (2017) — READ → calc-engine-insights.md. GOLD: variable-cache model, DIMENSIONED variables (stream×day×PC×company×product, day/mth) mapping to STRM_DAY_*_ALLOC tables, prorate/rollup/round/recombine ops, IsValid/IsZero hazard, AND the allocation TEST ORACLE (sum-to-total / no-neg / rounding tolerance / multi-grain roll-up) for N2.
 - [ ] EC Framework `1854410` (2015) — framework KB parent
 - [ ] EC Technology `1853250` (2021) — CTO-team architecture info
@@ -86,3 +86,12 @@ pages next time the scheduler misbehaves). One synthesized note per substantive 
   Status + DB mass-balance/no-neg on the GHG result table); Chemistry = N1-family data entry. Both are
   add-ons → confirm licensed/installed for Woodside before real coverage (open Q for user). Spaces are
   product-dev admin + external SharePoint for calc detail — no deeper crawl.
+  ↪ PARKED (user, 2026-06-14): "jump back to Chemistry later" — revisit the ECCM/XEM emission+chemistry
+  add-ons as a coverage candidate once licensing/install in the Woodside sandbox is confirmed.
+- 2026-06-14: **Phase 2 started.** Read VCF Calculation in EC → `vcf-calculation.md`. Tank volume
+  correction (API MPMS Ch.12.1 8-step GSV→NSV→mass; EC omits mass-in-vacuum); EC 10.4+ uses a PL/SQL
+  formula (MPMS Ch.11 2004 ed., ITS-90 scale, combined temp+pressure). Strong test-oracle family — has
+  an EXTERNAL published standard to check against, and the rounding rule (intermediates unrounded, final
+  VCF rounded to 5 dp) is the headline test concern (matches the calc-engine rounding-tolerance hazard).
+  Feeds inventory valuation (Revenue IN) + custody transfer → a VCF error hits revenue + SOX numbers.
+  Next Phase-2 idle item: EC Framework `1854410` or EC Technology `1853250`.
