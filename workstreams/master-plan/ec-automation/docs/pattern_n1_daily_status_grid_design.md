@@ -199,6 +199,22 @@ Confirmed facts:
   whose onclick = `EC.forceChange();PrimeFaces.ab({s:"screenToolbar:form:menuBar",…})`) fires but
   the grid edit never reaches the DB.
 - Data integrity verified intact throughout; the phantom self-clears on session expiry.
+### ✅✅ SOLVED 2026-06-13 — N1 write gesture cracked + DB-PROVEN (both manual & automated)
+A headed capture of the USER performing a real save, then an automated replica, both persisted to
+`PWEL_DAY_STATUS` (`ON_STREAM_HRS` 24→22 by hand, then automated 22→24 revert — DB-verified both ways).
+**The working gesture (now the canonical N1 commit):**
+1. **Edit the measured cell with REAL keystrokes + Tab** → fires the cell's `change` behavior
+   (`POST … source=daily_well_status:form:T:{r}:C{c}_in  event=change`) which **stages** the value
+   server-side. The typed value MUST differ from what's currently shown, or no change event fires.
+2. **Click the toolbar Save** (`screenToolbar:form:menuBar`) → `POST … execute=@all` → **commits**.
+**Root cause of the earlier 14 failures:** step 1 wasn't happening — `fill()`/synthetic events don't
+fire the `change` behavior, and when the value equalled the leftover phantom it was a no-op (nothing
+staged), so the Save committed nothing. The framework's `Type Cell By Id` (real Type Text + Tab) DOES
+fire it; the suite just needs (a) a clean/true starting value and (b) a sentinel ≠ current.
+**Correction:** `AS2_Onshore Well no 2` is **row index 1** (T:1), not 0 (row 0 = Well no 1). Target the
+well's row by NAME, don't assume row 0. Validated by `tmp/scripts/wr0001_revert_validate.py`.
+
+**Earlier escalation notes (kept for the record):**
 **SME answer (user, 2026-06-13): the toolbar Save IS correct and SHOULD persist** → it's a gesture
 bug on the automation side, not a domain/edit-mode/approval issue. Follow-up findings:
 - There is exactly ONE Save anchor: `a[title="Save [Ctrl+s]"]`, `ui-menuitem-link`, onclick

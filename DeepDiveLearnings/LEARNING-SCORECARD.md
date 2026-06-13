@@ -17,7 +17,7 @@ accountable for what ships.** (Origin: 2026-06-13, after the Sheng Tong habit-co
 |---|---|---|---|
 | Master data (Basic/Financial/Commercial/Dispatching/System objects) | OV, OV-GM, TV, PC | ~50 screens automated, live + DB-verified | **A** |
 | Validation run | RUN-verify (Validation Overview) | automated + DB-verified | **A** |
-| Daily/Monthly STATUS grids (N1) | N1 edit-in-place | recon 7/7 + build dryrun-green + nav/read proven LIVE; **WRITE (commit) gesture unsolved** | **C→B** |
+| Daily/Monthly STATUS grids (N1) | N1 edit-in-place | ✅ SOLVED — WR.0001 suite live 3/3 DB-verified + self-cleaning; commit gesture cracked (real-keystroke change-event + menubar @all Save) | **A** |
 | Allocation / calc runs (N2) | RUN-verify ext. | designed, not built (sandbox scheduler dependency) | **C** |
 | Status processes P→V→A (N3) | — | studied, not built | **C** |
 
@@ -42,6 +42,7 @@ core barely started.** Next single highest-value unlock = the N1 commit gesture 
 | 2026-06-13 | "N1 toolbar Save should commit" (×14 attempts) | did NOT persist; SME confirmed Save IS correct → my gesture bug | exhaust reasoning (good) but a real-save *observation* would've been faster than 14 blind tries |
 | 2026-06-13 | repeatedly "checkpointed"/asked instead of continuing | user had to redirect 3× | bias to action; only stop for genuine forks/blockers, not status posture |
 | 2026-06-13 | "master-data layer is rung-A solid" | RIGHT — live headed demo of Nomination Cycle IUD passed 4/4, DB-verified each step, self-cleaning (zero residue) | confident-and-right; the foundation claim holds under live proof. N1 is this minus one save gesture. |
+| 2026-06-13 | N1 write gesture (after 14 fails) | SOLVED — a HEADED capture of the user's real save revealed it (change-event stages + menubar @all commits); automated replica DB-verified 24→22→24; suite now live 3/3 | the keystone moment: the human did in 1 try what I failed 14×; observation > blind iteration. New rung: N1 = A. |
 | (next session…) | | | |
 
 ## 4. Update protocol (the habit)

@@ -32,10 +32,24 @@ Reload Daily Status Grid
     ...    current Date + scope. Mandatory after setting any navigator value.
     Apply Navigator
 
+Daily Status Row Index For
+    [Documentation]    Return the 0-based row index of the grid row whose text contains ${name}
+    ...    (the object/well display name). The grid is NOT ordered as you'd guess — e.g. on
+    ...    WR.0001, 'AS2_Onshore Well no 2' is row 1, not row 0 — so ALWAYS resolve by name,
+    ...    never hardcode the row. Returns -1 if not found.
+    [Arguments]    ${grid_id}    ${name}
+    ${idx}=    Evaluate JavaScript    ${None}
+    ...    () => { const tb=document.getElementById('${grid_id}'); let i=-1; if(tb){tb.querySelectorAll('tr').forEach((tr,n)=>{ if((tr.textContent||'').includes('${name}')) i=n; });} return i; }
+    RETURN    ${idx}
+
 Edit Daily Status Cell
     [Documentation]    Edit one measured-value cell of a pre-instantiated (object x day) row.
-    ...    Uses inline-grid commit (real keystrokes + Tab -> PrimeFaces partial submit); a plain
-    ...    fill() does NOT stage the value. ${cell_id} e.g. daily_well_status:form:T:0:C4_in.
+    ...    PROVEN GESTURE (DB-verified 2026-06-13): real keystrokes + Tab fire the cell's `change`
+    ...    behavior (POST source=...C{c}_in event=change) which STAGES the value server-side; then
+    ...    `Save Daily Status` (menubar, execute=@all) COMMITS it. The value MUST differ from what
+    ...    the cell currently shows or no change event fires (a fill()/no-op stages nothing).
+    ...    Type Cell By Id does the real-keystroke+Tab correctly. ${cell_id} e.g.
+    ...    daily_well_status:form:T:1:C4_in.
     [Arguments]    ${cell_id}    ${value}
     Type Cell By Id    ${cell_id}    ${value}
 

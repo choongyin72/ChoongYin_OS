@@ -85,6 +85,14 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   DATA INTEGRITY VERIFIED INTACT (no PWEL_DAY_STATUS col=21; phantom 21 = unsaved view-state).
   Next genuine blocker = crack the inline edit→commit gesture (what enables that Save / edit-mode /
   row action / status gate), then establish the column map. Coaching note logged below.
+- 2026-06-13: 🎉 N1 WRITE SOLVED + suite GREEN 3/3 LIVE (DB-verified, self-cleaning). Cracked via a
+  HEADED capture of the USER's real save: the working gesture = (1) edit cell with real keystrokes +
+  Tab → fires the cell `change` behavior (POST source=...C{c}_in event=change) which STAGES the value;
+  (2) toolbar Save (`screenToolbar:form:menuBar`, execute=@all) → COMMITS. My 14 fails = step 1 never
+  fired (fill() doesn't; or value==phantom=no-op). Automated replica DB-verified 24→22→24. Fixed T3 to
+  resolve well BY NAME (Well no 2 = row 1, not 0) + reload-before-revert for edit→save→edit chaining.
+  Updated T2 daily_status_grid (Daily Status Row Index For + gesture docs), T3, suite, registry, scorecard.
+  N1 rung C→A. Next: generalize to PO.0002 Daily Gas Stream Status (reuse the pattern).
 - (next blocks append here…)
 
 ## Operating rules (always)
