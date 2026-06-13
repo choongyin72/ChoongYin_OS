@@ -199,10 +199,25 @@ Confirmed facts:
   whose onclick = `EC.forceChange();PrimeFaces.ab({s:"screenToolbar:form:menuBar",…})`) fires but
   the grid edit never reaches the DB.
 - Data integrity verified intact throughout; the phantom self-clears on session expiry.
-**Open question for the EC SME (user):** how is an edit on this daily-status screen actually
-COMMITTED? Candidates: the screen needs an explicit edit-mode / the Save lives behind the menubar
-trigger that must be opened first / a status-process or approval step / the manual entry goes to a
-different layer than PWEL_DAY_STATUS. This 30-sec domain answer unblocks the whole N1 track.
+**SME answer (user, 2026-06-13): the toolbar Save IS correct and SHOULD persist** → it's a gesture
+bug on the automation side, not a domain/edit-mode/approval issue. Follow-up findings:
+- There is exactly ONE Save anchor: `a[title="Save [Ctrl+s]"]`, `ui-menuitem-link`, onclick
+  `EC.forceChange();PrimeFaces.ab({s:"screenToolbar:form:menuBar", f:"screenToolbar:form",
+  pa:[{name:"…menuBar_menuid", value:"<dynamic>|0"}]})`. It submits the **screenToolbar** form;
+  `EC.forceChange()` is meant to flush the dirty grid edit first.
+- **Tab IS required**: typing into the cell WITHOUT blurring leaves Save DISABLED — the cell's
+  `onchange` (stage + dirty) fires only on blur/Tab. With Tab, Save enables.
+- Yet type+Tab→(Save enabled)→click Save still does NOT change PWEL_DAY_STATUS (REV_NO stays 0),
+  across fill() AND real-keystroke edits, with/without focus. Edits DO stage server-side (they
+  survive as uncommitted "phantom" values across fresh sessions) but never commit via my click.
+- The recurring phantom (stale staged value reloading into the grid) confounds headless iteration:
+  it makes "edit to X" a no-op whenever the phantom already = X.
+**Conclusion / next step (HEADED):** stop headless probing (~14 attempts, diminishing returns).
+Capture the exact working save by OBSERVING a real headed save (record the precise gesture/timing,
+any focus requirement, any post-save AJAX) — or have the SME demo it once — then encode that in
+`Save Daily Status`. The robot suite is otherwise complete (nav/read proven, dryrun-green); only
+this commit gesture remains. Scripts: `tmp/scripts/wr0001_write_*.py`, `wr0001_save_*.py`.
+DATA INTEGRITY remains verified intact throughout (PWEL_DAY_STATUS unchanged; phantoms self-clear).
 
 ### ✅ Frame handling: NONE needed — screen is the MAIN frame (settled 2026-06-13)
 Initial worry of a nested iframe was a Playwright frame-detachment artifact. **Decisive test
