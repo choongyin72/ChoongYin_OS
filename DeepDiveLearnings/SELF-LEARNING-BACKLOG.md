@@ -31,6 +31,10 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   lifting-year into GLOSSARY. EFK deep dive effectively complete; RD130 = future product source.
 - 2026-06-13: COMMITTED be9d537 (15 files) — all As-Built syntheses + EFK notes + backlog, pushed. Standing PK auto-commit grant now active for my deep-dive work.
 - 2026-06-13: As-Built 07 Reports READ → ASBUILT07-REPORTS.md (35-report catalog; NOPTA/PRRT/Petroleum-Statistics/NGER/NPI/Safeguard regulatory theme) + CAPSTONE tying the whole As-Built chain. As-Built deep dive substantively complete.
+- 2026-06-13: Produced Pluto-PRIORITIZED coverage backlog (ec-automation/docs/coverage_pluto_prioritized.md)
+  by cross-ref As-Built 02 screen catalog x automated registry. Finding: master-data layer largely
+  done; the real Pluto value is the daily/monthly STATUS data-entry grids (new T2 pattern N1) +
+  RUN/status-process screens. Next slice = build N1 "daily-status grid" T2 on WR.0001. Committed.
 - (next blocks append here…)
 
 ## Operating rules (always)
@@ -49,7 +53,7 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
 | 1 | **ECpedia EFK deep dive** (user-directed) | `ecpedia-efk/EFK-DEEP-DIVE-PLAN.md` | DONE for value (thin hub → RD130 for depth) | ✅ A+B done |
 | 2 | **Pluto As-Built series** | `business-domains/PLUTO-ASBUILT-INDEX.md` | finish As-Built 14 monthly detail; lower-pri vols 01/02/03/07/11 [05,06,09,14 DONE] | 🔵 14+05 done |
 | 3 | **Business-domain syntheses** (deepen) | `business-domains/PLAN.md` | fold EFK/As-Built findings into production/sales/revenue deep passes | 🔵 drafts done |
-| 4 | **EC coverage track** (screen automation) | `ec-automation/docs/ec_screen_registry.md` | next treeview section after Dispatching; dependency-screen setup-chains | 🟢 slices 1-2 done |
+| 4 | **EC coverage track** (screen automation) | `ec-automation/docs/coverage_pluto_prioritized.md` | build N1 daily-status-grid T2 on WR.0001 (Pluto-prioritized) | 🟢 slices 1-2 done |
 | 5 | **Industry grounding** | (feeds `business-domains/GLOSSARY.md`) | EFK "Learn more about the Oil & Gas Industry" + allocation/lifting/royalty concepts | ☐ |
 
 ## Pull-from-here when idle (self-pick logic)
