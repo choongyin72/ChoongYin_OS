@@ -30,8 +30,8 @@ stack, not our client RF/Playwright; Hydrocarbon Accounting = concise allocation
 ### Phase 2 — Calculation / framework depth ★ high (ties to allocation + EC internals)
 - [x] VCF Calculation in EC `1853432` (2023) — READ 2026-06-14 → `vcf-calculation.md`. Tank volume correction, API MPMS Ch.12.1 8-step chain (GSV→NSV→mass; EC skips mass-in-vacuum). EC 10.4+ = PL/SQL formula (MPMS Ch.11 2004, ITS-90, combined temp+pressure). ⭐ Test oracle: external published standard + the rounding rule (intermediates UNrounded, final VCF=5 dp). Feeds inventory valuation (Revenue IN) + custody transfer.
 - [x] The calculation engine is in dire need of enhancements `1843903` (2017) — READ → calc-engine-insights.md. GOLD: variable-cache model, DIMENSIONED variables (stream×day×PC×company×product, day/mth) mapping to STRM_DAY_*_ALLOC tables, prorate/rollup/round/recombine ops, IsValid/IsZero hazard, AND the allocation TEST ORACLE (sum-to-total / no-neg / rounding tolerance / multi-grain roll-up) for N2.
-- [ ] EC Framework `1854410` (2015) — framework KB parent
-- [ ] EC Technology `1853250` (2021) — CTO-team architecture info
+- [x] EC Framework `1854410` (2015) — READ 2026-06-14 → `framework-db-sanity.md`. Thin parent; 13 children mostly 2014 empty stubs (BPM/EC Core/ECIS/JSF/Logging/Messaging/Reporting/Jboss). ⭐ Keeper child = **Database Sanity** `1851734`: unsupported-config rules (object_id unique across classes; group-model loop-free w/ FCTY_CLASS_1/Well_Hookup/Well exceptions; class-trigger discipline; no order/group-by in class DB-where). Calculation Framework `1852084` + EC Timezone `1853989` = empty placeholders.
+- [x] EC Technology `1853250` (2021) — READ 2026-06-14. Thin CTO parent; only child = Presentations `1853267` (slide decks, low text value). Noted, skipped.
 
 ### Phase 3 — Reference (consult, don't deep-read)
 - [ ] EC Vocabulary `1844980` (2022) — abbreviations/acronyms (ACQ, ACL, …) — cross-check vs my GLOSSARY
@@ -95,3 +95,12 @@ pages next time the scheduler misbehaves). One synthesized note per substantive 
   VCF rounded to 5 dp) is the headline test concern (matches the calc-engine rounding-tolerance hazard).
   Feeds inventory valuation (Revenue IN) + custody transfer → a VCF error hits revenue + SOX numbers.
   Next Phase-2 idle item: EC Framework `1854410` or EC Technology `1853250`.
+- 2026-06-14: **Phase 2 framework cohort done** → `framework-db-sanity.md`. EC Framework + EC
+  Technology are thin parents (children mostly 2014 empty stubs / slide decks). The keeper = **Database
+  Sanity**: a list of EC's *unsupported* config patterns (object_id unique across classes; group-model
+  must be loop-free w/ the FCTY_CLASS_1/Well_Hookup/Well exceptions — which explains the N1 nav cascade
+  shape; class INSTEAD-OF trigger discipline = High severity; no order/group-by in class DB-where).
+  High-value guardrail for any class-config / ZWP-extension / ECPR change. Calculation Framework +
+  EC Timezone children are empty placeholders. **Phase 2 effectively complete** (calc+framework depth
+  held across calc-engine-insights / vcf-calculation / framework-db-sanity). Next: Phase-3 reference —
+  EC Vocabulary `1844980` (cross-check vs business-domains/GLOSSARY.md), then EC Talks `1837692` (newest).
