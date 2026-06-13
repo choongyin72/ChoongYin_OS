@@ -20,10 +20,12 @@ stack, not our client RF/Playwright; Hydrocarbon Accounting = concise allocation
 - [x] Hydrocarbon Accounting `1839786` (2021) — allocation network (fields→wells, custody transfer, fiscal flare metering). READ 2026-06-13 → grounds the N2/HA.0002 allocation track.
 - [x] EC Sales `1838256` (2020) — gas sales contracts, nominations/re-nominations, availability. READ 2026-06-13 → `sales-revenue.md`. Thin overview; delivery-attribution = a rules+priority engine (sales analogue of allocation).
 - [x] EC Revenue `1840867` (2018) — quantities → monetary value. READ 2026-06-13 → `sales-revenue.md`. BAs CD/IN/FT/QTY/FC/RTY/FI (child ids captured). Oracle ideas: invoice=Σ(qty×price), take-or-pay roll-over, JV/royalty splits=100%.
-- [ ] EC Regulatory Reporting `1845940` (2014) — SOX / SEC governance reporting
-- [ ] EC Chemistry Management `1853912` (2020) — (link page)
-- [ ] EC Environment Management `1851143` (2021) — (link to ECpedia/IH space)
-- [ ] EC IAM `1850998` (2020) — Integrated Asset Modelling (link)
+- [x] EC Regulatory Reporting `1845940` (2014) — SOX/SEC governance. READ 2026-06-14 → `regulatory-reporting.md`. The *why* behind EC's validation/freeze/audit features (SOX404 internal controls); reporting moved E&P→CFO; ties to CTRL_CHECK_* + Issue_1052.
+- [x] EC Chemistry Management `1853912` (2020) — link-out to space **ECCM**. Noted (not deep-read).
+- [x] EC Environment Management `1851143` (2021) — link-out to ecpedia.eu.tieto/**XEM**. Noted; GHG frame already in `environment-ghg.md`.
+- [x] EC IAM `1850998` (2020) — link-out to **ECIAMD** (Integrated Asset Modelling). Noted (reference only).
+
+**✅ Phase 1 COMPLETE (2026-06-14)** — all 8 domain pages read; reservoir→revenue chain mapped + SOX "why" layered on. Next = Phase 2 (VCF `1853432`).
 
 ### Phase 2 — Calculation / framework depth ★ high (ties to allocation + EC internals)
 - [ ] VCF Calculation in EC `1853432` (2023) — tank volume correction, API Ch.12.1 (5-step GSV); recent + concrete
@@ -70,3 +72,10 @@ pages next time the scheduler misbehaves). One synthesized note per substantive 
   allocation), so meaningful tests are conservation/priority/Σ(qty×price) oracles, not CRUD — and
   all three are contract-driven (need a configured contract as fixture). Next: EC Regulatory Reporting
   `1845940`, then the 3 link pages.
+- 2026-06-14: **Phase 1 CLOSED.** Read EC Regulatory Reporting → `regulatory-reporting.md` (SOX404
+  governance = the *why* behind EC's validation/freeze/audit machinery; reporting org moves E&P→CFO;
+  3 upstream needs = downtime loss / reliable production data / gov+internal control). The 3 remaining
+  Phase-1 pages are link-outs (Chemistry→ECCM, Environment→XEM, IAM→ECIAMD) — noted, not chased.
+  All 8 Phase-1 domain pages now read; reservoir→revenue value chain mapped with the SOX layer on top,
+  explicitly tied back to the validation framework (CTRL_CHECK_*/Issue_1052) + N1/N2 data-integrity
+  oracles. Next idle item: Phase 2 — VCF Calculation `1853432`.
