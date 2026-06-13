@@ -11,11 +11,11 @@ PRODUCTION ALLOCATION implementation (confirms domain priority #1).**
 | 01 SystemConfig | WSPLU_EC_AsBuilt01_SystemConfig_v1.0.xlsx (Archived/) | 2026-04-23 | ☐ |
 | 02 ScreenConfig | WSPLU_EC_AsBuilt02_ScreenConfig_v1.0.docx | 2026-06-11 | ✅ catalog read → ASBUILT02-SCREENS.md (Pluto screen list by code + SI units) |
 | 03 ObjectConfig | WSPLU_EC_AsBuilt03_ObjectConfig_v1.2.xlsx | **2026-06-12** | ☐ |
-| 05 Interfaces | WSPLU_EC_AsBuilt05_Interfaces_v1.0.docx | **2026-06-12** | ☐ ← ECIS task! |
-| 06 Calculations | WSPLU_EC_AsBuilt06_Calculations_v1.0.docx | 2026-06-11 | ☐ ← allocation design |
-| 07 Reports | WSPLU_EC_AsBuilt07_Reports_v1.0.docx (+ANNEX folder with report mappings, e.g. r_blp_daily_prod_alloc_pluto) | 2026-06-10 | ☐ |
+| 05 Interfaces | WSPLU_EC_AsBuilt05_Interfaces_v1.0.docx | 2026-06-12 | ✅ → ASBUILT05-INTERFACES.md (I_IN_PHD_DAILY OPC UA; ECIS-backup precedents) |
+| 06 Calculations | WSPLU_EC_AsBuilt06_Calculations_v1.0.docx | 2026-06-11 | ✅ → ASBUILT06-CALCULATIONS.md (ZWP_ALLOC_*/C_PRRT/emissions; data-flow chain) |
+| 07 Reports | WSPLU_EC_AsBuilt07_Reports_v1.0.docx | 2026-06-10 | ✅ catalog read → ASBUILT07-REPORTS.md (35 reports; Australian regulatory theme) + CAPSTONE |
 | 11 Notification | WSPLU_EC_AsBuilt11_Notification_v1.0.docx | 2026-05-19 | ☐ |
-| 14 BusinessProcesses | WSPLU_EC_AsBuilt14_BusinessProcesses_v1.2.docx | 2026-05-18 | 🔵 PARTIAL — §1 + §2.1.1 daily allocation done → ASBUILT14-BUSINESS-PROCESSES.md; §2.1.3-2.4 (monthly/deferment/emissions) pending |
+| 14 BusinessProcesses | WSPLU_EC_AsBuilt14_BusinessProcesses_v1.2.docx | 2026-05-18 | ✅ → ASBUILT14-BUSINESS-PROCESSES.md (daily + monthly + GHG/PRRT + QC governance) |
 
 Gaps in numbering (04, 08-10, 12-13) — enumerate the folder next session (folder may hold
 more; also an ANNEX subfolder per volume). Several volumes ACTIVELY EDITED this week

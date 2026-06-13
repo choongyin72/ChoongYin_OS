@@ -29,6 +29,8 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   thin intros linking to RD130 release-docs; depth already held. Captured allocation rationale
   (custody-transfer / fiscal metering / reconciliation factor) + PRRT/RAU/CO2e/component-set/
   lifting-year into GLOSSARY. EFK deep dive effectively complete; RD130 = future product source.
+- 2026-06-13: COMMITTED be9d537 (15 files) — all As-Built syntheses + EFK notes + backlog, pushed. Standing PK auto-commit grant now active for my deep-dive work.
+- 2026-06-13: As-Built 07 Reports READ → ASBUILT07-REPORTS.md (35-report catalog; NOPTA/PRRT/Petroleum-Statistics/NGER/NPI/Safeguard regulatory theme) + CAPSTONE tying the whole As-Built chain. As-Built deep dive substantively complete.
 - (next blocks append here…)
 
 ## Operating rules (always)
