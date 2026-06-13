@@ -74,3 +74,48 @@ Even without a fresh run, the meaningful allocation invariants can be DB-asserte
 - **Independent of the run**: build a `DbVerify` allocation-conservation helper (no-neg + sum-to-total
   + roll-up) and a read-only suite that asserts invariants on existing allocation data — a meaningful
   N2 test that needs no calc execution. (Mechanical; doable next.)
+
+## ✅ BUILT + GREEN (2026-06-13) — N2 RUN-verify suite, 3/3 live (DB-verified, no DB write)
+The N2 pattern is now a working, layered RF suite — the run mechanism is fully cracked and the
+verify half is DB-grounded.
+
+**Artifacts (layered T1→T3):**
+- T2 `resources/allocation_run.resource` — cross-screen allocation-RUN mechanics: set date range,
+  pick network (G:2) + calc job (G:4), apply navigator, enable **Simulate**, click RUN CALCULATIONS
+  (`ProdAllocButton:form:B`), and poll `log_list` for the newest run's **Exit Status**.
+- T3 `pageobjects/Production/ha0002_daily_allocation_page.resource` — screen name, result table
+  (`PWEL_DAY_ALLOC`), and the scope data (the positive/negative cases).
+- Suite `tests/Production/daily_allocation_run.robot` — TC01 positive Success, TC02 negative
+  Failure, TC03 DB conservation oracle.
+- `libraries/DbVerify.py` — added `allocation_row_count`, `allocation_negative_count`,
+  `allocation_conservation_should_hold` (no-negatives oracle; fails on an empty day too).
+
+**Proven scope (exact labels):**
+- POSITIVE (Success): network **"Testing allocation RUN_NO"** → job **"01 Run No .test"** @ 2003-01-01.
+- NEGATIVE (Failure): network **"P1 Dashboard"** → job **"Daily Well Volume"** @ 2021-10-01 (the calc
+  errors on equation steps — a real calc-engine defect; the Failure status is the test signal).
+
+**Run-mechanism details nailed during the build:**
+- The network selector is navigator group **G:2** (lists the networks directly, e.g. "Testing
+  allocation RUN_NO", "P1 Dashboard"); the calc-job dd is **G:4** (populated after the network pick).
+- **Simulate** is a native `<input type=checkbox>` styled with class `ECCell ECCheckboxCell`, id
+  **`dateStartJob:form:G:0:R:1:C:2:cb`**. There is NO separate `...:C:2` container element — clicking
+  that id (a Browser-lib `Click`) times out. The reliable, headed-safe gesture is a **JS click on the
+  input** (`i.click()` toggles `.checked` and fires EC's onclick; PrimeFaces serializes the checked
+  state on the RUN ajax). Simulate ON = the calc runs but writes NOTHING to the DB (SME-confirmed) —
+  **verified**: after both runs, PWEL_DAY_ALLOC @2021-10-01 still = 22 rows, 0 negatives (untouched).
+- **`log_list:form:T_data`** row (newest = top, ri=0): cells = `[Timestamp, RunNo, User, Date,
+  NETWORK(idx 4), Duration, Details, EXIT STATUS(idx 7), …]`. The reader polls the top row until its
+  network cell matches the scope AND the status is terminal (Success/Failure/Error) — disambiguates
+  the just-submitted run from a prior one.
+- **Timing caveat**: Simulate runs complete synchronously (~1-2s) → log_list. The NON-simulate path
+  goes through the Quartz executor (RunningJobs = WAITING→ACQUIRED) and can stall in this sandbox
+  (observed >26s with no completion) — so functional RUN tests use Simulate; do not depend on a
+  fresh non-simulate completion here.
+
+**Conservation oracle — honest scope:** asserted (no-negatives + rows-exist) on REAL persisted
+results (PWEL_DAY_ALLOC @ 2021-10-01, 22 wells produced by a prior real run). A fresh non-simulate
+Success that writes new rows isn't reliably reproducible in this sandbox (executor stalls; the
+RUN_NO_TEST calc doesn't write well allocations), so the oracle reads existing real output rather
+than a freshly-triggered write. **sum-to-total** and **day→month roll-up** remain future extensions
+(need the network→members→measured-total mapping from `ALLOC_NETWORK_JOB_CONN` + source totals).

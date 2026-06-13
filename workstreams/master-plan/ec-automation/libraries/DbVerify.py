@@ -277,6 +277,86 @@ def day_status_value_should_be(table, object_id, daytime, column, expected):
         )
 
 
+# --- N2: allocation conservation oracle ---------------------------------------------------------
+# An allocation calc RUN distributes measured field/stream totals onto wells/streams, writing per-
+# object quantities to the *_DAY_ALLOC tables (e.g. PWEL_DAY_ALLOC, key OBJECT_ID+DAYTIME). The
+# calc-engine critique (DeepDiveLearnings/ecpedia-efk/calc-engine-insights.md) gives the invariants
+# a correct allocation must satisfy — the "conservation oracle". The cheapest, always-true invariant
+# is NO NEGATIVES: an allocated physical volume/mass/energy can never be < 0. (Sum-to-total and
+# day->month roll-up need the network->members->measured-total mapping; staged as a later extension.)
+
+def _alloc_numeric_columns(cur, table):
+    """The ALLOC_* numeric columns of an allocation result table (the quantities to invariant-check)."""
+    cur.execute(
+        "SELECT column_name FROM all_tab_columns "
+        r"WHERE table_name = :t AND column_name LIKE 'ALLOC\_%' ESCAPE '\' "
+        "AND data_type IN ('NUMBER','FLOAT','BINARY_DOUBLE','BINARY_FLOAT') ORDER BY column_id",
+        t=table.upper(),
+    )
+    return [r[0] for r in cur.fetchall()]
+
+
+def allocation_row_count(table, daytime):
+    """Count allocation result rows in ``table`` on ``daytime`` (YYYY-MM-DD).
+
+    Guards the no-negatives check from being vacuously true on a day with no allocation data.
+    """
+    _safe(table)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            f"SELECT COUNT(*) FROM {table} WHERE TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD')",
+            d=str(daytime),
+        )
+        return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def allocation_negative_count(table, daytime):
+    """Count rows on ``daytime`` where ANY ALLOC_* numeric quantity is negative (should be 0)."""
+    _safe(table)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cols = _alloc_numeric_columns(cur, table)
+        if not cols:
+            raise AssertionError(f"No ALLOC_* numeric columns found on {table}")
+        preds = " OR ".join(f"{_safe(c)} < 0" for c in cols)
+        cur.execute(
+            f"SELECT COUNT(*) FROM {table} "
+            f"WHERE TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD') AND ({preds})",
+            d=str(daytime),
+        )
+        return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def allocation_conservation_should_hold(table, daytime):
+    """Conservation oracle (no-negatives) on an allocation result table for ``daytime``.
+
+    Fails if the day has no allocation rows (nothing to verify) or if any allocated ALLOC_*
+    quantity is negative. The trustworthy ground-truth assertion for an allocation RUN: the calc
+    may report "Success" in the UI log, but only the DB invariants prove the result is sane.
+    """
+    rows = allocation_row_count(table, daytime)
+    if int(rows) == 0:
+        raise AssertionError(
+            f"Conservation check FAILED: {table} has NO allocation rows on {daytime} "
+            f"(nothing to verify — wrong date or the run wrote nothing)"
+        )
+    neg = allocation_negative_count(table, daytime)
+    if int(neg) != 0:
+        raise AssertionError(
+            f"Conservation check FAILED: {table} on {daytime} has {neg} row(s) with a negative "
+            f"ALLOC_* quantity (allocated volumes/masses/energy must be >= 0)"
+        )
+
+
 def code_should_be_present_in_view(view, code):
     """Fail unless ``code`` appears in any string column of ``view`` (DB ground truth)."""
     if not _code_present(view, code):

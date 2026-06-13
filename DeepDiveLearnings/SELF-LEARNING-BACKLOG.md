@@ -147,17 +147,29 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   @2003-01-01, Simulate ON → log_list = **"Simulate Success"** (executor: WAITING→ACQUIRED→Success,
   ~1s). Confirms the full run path works; the P1 EC_DAILY_VOLUME Failure is that calc's own equation
   defect, not the mechanism. Run path FULLY PROVEN.
-- ▶ **RESUME POINT (2026-06-13 ~22:55, window checkpoint @76% of 1M context):** Next = build the N2
-  RUN-verify: a T2/T3 + suite that sets network+job+date, clicks RUN CALCULATIONS (Simulate for
-  safe/no-write OR real to persist), reads `log_list` Exit Status (assert Success), and on a real
-  (non-simulate) Success run asserts the **conservation oracle** on PWEL_DAY_ALLOC/STRM_DAY_*_ALLOC
-  (no-neg ✓ / sum-to-total / day→month roll-up). Use "Testing allocation RUN_NO" as the known-Success
-  case; EC_DAILY_VOLUME/P1 = a known-Failure case (good negative test). Run trigger=`ProdAllocButton:form:B`. On a Success run, build the **conservation-oracle** verification
-  (no-neg ✓ already on existing 2021-10-01 data; add sum-to-total + day→month roll-up) on
-  PWEL_DAY_ALLOC / STRM_DAY_*_ALLOC. Run-mechanism is cracked (RUN CALCULATIONS = `ProdAllocButton:form:B`).
-  Standing idle track = EFK deep-dive series (DeepDiveLearnings/ecpedia-efk/EFK-DEEP-DIVE-SERIES.md,
-  Phase-1 domain modules next). Held for user: BPM/Process-Automation deep dive; Bitbucket cred
-  rotation; Issue_1052 D/E/F. Everything committed+pushed (master=origin @ 2196704).
+- 2026-06-13: 🎉 N2 RUN-verify suite BUILT + live 3/3 (DB-verified, no DB write). HA.0002 Daily
+  Allocation, layered T1→T3: T2 `resources/allocation_run.resource` (set date range / network(G:2) /
+  calc job(G:4) / Simulate / RUN CALCULATIONS `ProdAllocButton:form:B` / poll `log_list` Exit Status),
+  T3 `pageobjects/Production/ha0002_daily_allocation_page.resource` (scope), suite
+  `tests/Production/daily_allocation_run.robot`, + DbVerify conservation oracle
+  (`allocation_conservation_should_hold` = no-neg + rows-exist). **TC01 positive** "Testing allocation
+  RUN_NO"/"01 Run No .test"@2003-01-01 → **Success**; **TC02 negative** "P1 Dashboard"/"Daily Well
+  Volume"@2021-10-01 → **Failure** (real calc-engine equation defect); **TC03** conservation oracle on
+  PWEL_DAY_ALLOC@2021-10-01 (22 wells, 0 neg). All runs **Simulate ON = no DB write — VERIFIED**
+  (22 rows/0 neg unchanged after). Build calibration: the Simulate checkbox is the `:cb` *input*
+  itself (id `dateStartJob:form:G:0:R:1:C:2:cb`, native input styled ECCheckboxCell) — there is NO
+  `...C:2` container; the live `Click` hung until I JS-clicked the input. log_list cell map:
+  NETWORK=4, EXIT STATUS=7, newest=top. Non-simulate path stalls in the Quartz executor (ACQUIRED) —
+  functional tests use Simulate. Robocop clean; full-suite --dryrun 235/235; N1 canary (WR.0001) still
+  live 3/3 (additive DbVerify edit safe). Design doc + registry (HA.0002 row + N2 type pattern) +
+  scorecard updated. Recon scripts: `tmp/scripts/n2_*`.
+- ▶ **RESUME POINT (2026-06-13, N2 DONE):** N2 allocation RUN-verify is BUILT + live 3/3 (committed
+  inside C:\Projects\ChoongYin_OS). Next options, in priority: (1) **EFK deep-dive series** (standing
+  idle track — `DeepDiveLearnings/ecpedia-efk/EFK-DEEP-DIVE-SERIES.md`, Phase-1 domain modules) —
+  continue this per the user's directive. (2) **N3** status-process P→V→A state transitions (next
+  operational-core pattern after N1/N2). (3) **N2 sum-to-total oracle** extension (needs
+  network→members→measured-total mapping from `ALLOC_NETWORK_JOB_CONN` + source totals).
+  Held for user: BPM/Process-Automation deep dive; Bitbucket cred rotation; Issue_1052 D/E/F.
 - (next blocks append here…)
 
 ## Operating rules (always)
@@ -176,7 +188,7 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
 | 1 | **ECpedia EFK deep dive** (user-directed) | `ecpedia-efk/EFK-DEEP-DIVE-PLAN.md` | DONE for value (thin hub → RD130 for depth) | ✅ A+B done |
 | 2 | **Pluto As-Built series** | `business-domains/PLUTO-ASBUILT-INDEX.md` | finish As-Built 14 monthly detail; lower-pri vols 01/02/03/07/11 [05,06,09,14 DONE] | 🔵 14+05 done |
 | 3 | **Business-domain syntheses** (deepen) | `business-domains/PLAN.md` | fold EFK/As-Built findings into production/sales/revenue deep passes | 🔵 drafts done |
-| 4 | **EC coverage track** (screen automation) | `ec-automation/docs/coverage_pluto_prioritized.md` | build N1 daily-status-grid T2 on WR.0001 (Pluto-prioritized) | 🟢 slices 1-2 done |
+| 4 | **EC coverage track** (screen automation) | `ec-automation/docs/coverage_pluto_prioritized.md` | N1 done (WR.0001+PO.0002), N2 done (HA.0002); next = N3 status-process P→V→A | 🟢 N1+N2 live |
 | 5 | **Industry grounding** | (feeds `business-domains/GLOSSARY.md`) | EFK "Learn more about the Oil & Gas Industry" + allocation/lifting/royalty concepts | ☐ |
 
 ## Pull-from-here when idle (self-pick logic)

@@ -18,13 +18,17 @@ accountable for what ships.** (Origin: 2026-06-13, after the Sheng Tong habit-co
 | Master data (Basic/Financial/Commercial/Dispatching/System objects) | OV, OV-GM, TV, PC | ~50 screens automated, live + DB-verified | **A** |
 | Validation run | RUN-verify (Validation Overview) | automated + DB-verified | **A** |
 | Daily/Monthly STATUS grids (N1) | N1 edit-in-place | ✅ SOLVED + GENERALIZES — TWO screens live 3/3 DB-verified self-cleaning: WR.0001 (PWEL_DAY_STATUS) + PO.0002 (STRM_DAY_STREAM); T2 reuses, save gesture transfers | **A** |
-| Allocation / calc runs (N2) | RUN-verify ext. | designed, not built (sandbox scheduler dependency) | **C** |
+| Allocation / calc runs (N2) | RUN-verify ext. | ✅ BUILT + live 3/3 (2026-06-13): HA.0002 Daily Allocation — synchronous RUN CALCULATIONS, Simulate=no-DB-write (verified untouched), positive Success + negative Failure + DB conservation oracle (no-neg). T2 `allocation_run.resource` | **B+** |
 | Status processes P→V→A (N3) | — | studied, not built | **C** |
 
 **Rough coverage of the Pluto transactional value:** master-data foundation ≈ done; the
-operational core (N1/N2/N3 — where PHD data + validations + allocation live) ≈ **just opened
-(~1 screen in recon/build, 0 fully closed).** Honest headline: **foundation strong, operational
-core barely started.** Next single highest-value unlock = the N1 commit gesture (headed).
+operational core (N1/N2/N3 — where PHD data + validations + allocation live) ≈ **opening up** —
+N1 fully closed (2 screens), **N2 now BUILT (RUN + verify, 3/3 live)**, N3 still untouched. Honest
+headline: **foundation strong; operational core now has its first two patterns proven.** N2 is
+rung-B+ not A only because the conservation oracle reads existing real results (a fresh non-simulate
+write isn't reproducible — sandbox executor stalls) and sum-to-total/roll-up are future extensions.
+Next single highest-value unlock = N3 status-process (P→V→A state transitions) OR the N2 sum-to-total
+oracle (needs network→members→measured-total mapping).
 
 ## 2. Domain knowledge (generic EC + Pluto As-Built)
 | Area | State | Rung |
@@ -45,6 +49,8 @@ core barely started.** Next single highest-value unlock = the N1 commit gesture 
 | 2026-06-13 | N1 write gesture (after 14 fails) | SOLVED — a HEADED capture of the user's real save revealed it (change-event stages + menubar @all commits); automated replica DB-verified 24→22→24; suite now live 3/3 | the keystone moment: the human did in 1 try what I failed 14×; observation > blind iteration. New rung: N1 = A. |
 | 2026-06-13 | N2 allocation run "blocked by Process Automation" | WRONG ×2 — the run works via a "RUN CALCULATIONS" button (synchronous, not BPM); jobs execute in 1-2s. I over-concluded from a red-herring toolbar flag + not reading the log_list grid | don't infer an environmental block from one UI flag; read the actual result table. (SME corrected; then I found it.) |
 | 2026-06-13 | N2 allocation calc itself | runs but EXIT=Failure (equation errors) on P1/2021-10-01 — real finding, not a block | the engine runs; the specific allocation errors (missing input/config). Use Simulate to iterate safely. |
+| 2026-06-13 | "Simulate checkbox cell = `dateStartJob:form:G:0:R:1:C:2`" (live run timed out ×2) | WRONG — that id has NO element; the styled checkbox IS the `:cb` input. Headless probe masked it (Playwright clicked a child point; Browser-lib Click on a nonexistent id hung) | a recon that "works" headless can hide the real locator; when the live Click times out, dump the element by id (`tagName===NONE`) before guessing. Fixed: JS-click the `:cb` input. |
+| 2026-06-13 | N2 suite built + 3/3 live, no DB write | confident-and-RIGHT — dryrun→live headed 3/3, then DB re-checked (22 rows/0 neg unchanged = Simulate guard held), N1 canary still 3/3 (additive DbVerify safe), robocop clean | the full rhythm paid off: independent DB proof of the no-write claim, not just a green log. N2 = C→B+. |
 | (next session…) | | | |
 
 ## 4. Update protocol (the habit)
