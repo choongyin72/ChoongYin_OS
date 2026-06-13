@@ -163,13 +163,28 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   functional tests use Simulate. Robocop clean; full-suite --dryrun 235/235; N1 canary (WR.0001) still
   live 3/3 (additive DbVerify edit safe). Design doc + registry (HA.0002 row + N2 type pattern) +
   scorecard updated. Recon scripts: `tmp/scripts/n2_*`.
-- ▶ **RESUME POINT (2026-06-13, N2 DONE):** N2 allocation RUN-verify is BUILT + live 3/3 (committed
-  inside C:\Projects\ChoongYin_OS). Next options, in priority: (1) **EFK deep-dive series** (standing
-  idle track — `DeepDiveLearnings/ecpedia-efk/EFK-DEEP-DIVE-SERIES.md`, Phase-1 domain modules) —
-  continue this per the user's directive. (2) **N3** status-process P→V→A state transitions (next
-  operational-core pattern after N1/N2). (3) **N2 sum-to-total oracle** extension (needs
-  network→members→measured-total mapping from `ALLOC_NETWORK_JOB_CONN` + source totals).
-  Held for user: BPM/Process-Automation deep dive; Bitbucket cred rotation; Issue_1052 D/E/F.
+- 2026-06-14: EFK series CLOSED for value (Phases 1–3: Production→Revenue chain, VCF, Database Sanity,
+  Extensions Matrix; notes in `ecpedia-efk/`). N2 sum-to-total extension attempted → BLOCKED (sandbox
+  data sparse: only ALLOC_GAS_VOL populated, no co-present STRM totals; logged in N2 design doc).
+  Post-change re-test habit honoured (random suite nomination_point flaked then 4/4).
+- 2026-06-14: **N3 RECON DONE → build is a GO** (user empowered me to self-plan). N3 = **HA.0001 Daily
+  Data Status Processes** (P→V→A record-status engine). Found it's an **N2-analog** (same RUN
+  scaffolding: From/To date + GO `button:form:B`, `dateStartJob:form`, `statusProcess:form`,
+  `RunningJobs:form:T_data`) → reuse `allocation_run.resource` as the T2 template. DB: all
+  PWEL_DAY_STATUS = 'P' (liftable); chosen positive process **`P3_VERIFY_FCTY`** (P→V); oracle =
+  RECORD_STATUS P→V + `STAT_PROCESS_STATUS.ROWS_UPDATED`; self-clean via reverse process (`P1_RevUpd`).
+  Full ready-to-execute plan → `ec-automation/docs/pattern_n3_status_process_design.md`. Recon:
+  `tmp/scripts/n3_*.py`. ⚠️ One open risk: status processes may run via the BPM executor (could stall
+  like N2 non-simulate) — first live run on HA.0001's RUN button resolves it.
+- ▶ **RESUME POINT (2026-06-14, N3 recon done — BUILD NEXT):** Execute the N3 build per
+  `docs/pattern_n3_status_process_design.md` §"Build steps": (1) live-crack `statusProcess:form` post-GO
+  (process-select control + RUN button id + any Simulate + the completed-run/log grid id), on a tiny
+  one-facility/day scope; (2) DbVerify `record_status_count` + `status_should_lift` + ROWS_UPDATED;
+  (3) T2 `status_process_run.resource` (fork of `allocation_run.resource`); (4) T3
+  `ha0001_daily_status_process_page.resource` (P3_VERIFY_FCTY + scope + reverse-process cleanup);
+  (5) suite `daily_status_process_run.robot` (TC01 P→V + ROWS_UPDATED; TC02 reverse→P); dryrun→live
+  (headed)→DB-verify→robocop→commit+push; (6) re-test habit + registry row + scorecard. Held for user:
+  BPM/Process-Automation deep dive; Bitbucket cred rotation; Issue_1052 D/E/F; Chemistry-module licensing.
 - (next blocks append here…)
 
 ## Operating rules (always)

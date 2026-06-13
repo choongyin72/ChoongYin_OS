@@ -19,7 +19,7 @@ accountable for what ships.** (Origin: 2026-06-13, after the Sheng Tong habit-co
 | Validation run | RUN-verify (Validation Overview) | automated + DB-verified | **A** |
 | Daily/Monthly STATUS grids (N1) | N1 edit-in-place | ✅ SOLVED + GENERALIZES — TWO screens live 3/3 DB-verified self-cleaning: WR.0001 (PWEL_DAY_STATUS) + PO.0002 (STRM_DAY_STREAM); T2 reuses, save gesture transfers | **A** |
 | Allocation / calc runs (N2) | RUN-verify ext. | ✅ BUILT + live 3/3 (2026-06-13): HA.0002 Daily Allocation — synchronous RUN CALCULATIONS, Simulate=no-DB-write (verified untouched), positive Success + negative Failure + DB conservation oracle (no-neg). T2 `allocation_run.resource` | **B+** |
-| Status processes P→V→A (N3) | — | studied, not built | **C** |
+| Status processes P→V→A (N3) | recon DONE 2026-06-14 (HA.0001 = N2-analog RUN screen; oracle = RECORD_STATUS P→V + STAT_PROCESS_STATUS.ROWS_UPDATED; process P3_VERIFY_FCTY; plan written), build queued | **C+** |
 
 **Rough coverage of the Pluto transactional value:** master-data foundation ≈ done; the
 operational core (N1/N2/N3 — where PHD data + validations + allocation live) ≈ **opening up** —
