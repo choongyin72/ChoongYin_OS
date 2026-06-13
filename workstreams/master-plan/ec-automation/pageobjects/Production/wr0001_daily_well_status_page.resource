@@ -30,10 +30,11 @@ ${SCOPE_PU}                 AS2 EC Exploration Norway
 ${SCOPE_AREA}               AS2_Onshore Area
 ${SCOPE_FCTY_CLASS_1}       AS2_Production Facility no 1
 ${SCOPE_WELL_HOOKUP}        AS2_Lift Gas Manifold 1
-# Row-0 editable cell + its DB column — CONFIRM LIVE then pin (recon: C4_in is a measured _in cell)
+# Row-0 editable cell + its DB column — CONFIRMED by read-only cross-ref 2026-06-13:
+# grid C4_in shows 24.00 and PWEL_DAY_STATUS.ON_STREAM_HRS for this well/day = 24.
 ${ROW0_CELL}                daily_well_status:form:T:0:C4_in
 ${ROW0_DB_COLUMN}           ON_STREAM_HRS
-${ROW0_WELL_NAME}           ${EMPTY}
+${ROW0_WELL_NAME}           AS2_Onshore Well no 2
 
 
 *** Keywords ***

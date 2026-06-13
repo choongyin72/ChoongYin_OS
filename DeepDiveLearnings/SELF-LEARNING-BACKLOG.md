@@ -75,6 +75,16 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   **Robocop clean + --dryrun 3/3 PASS; re-dryran nomination_cycle (DbVerify consumer) PASS (no
   breakage).** Remaining = first LIVE run (headed): pin ROW0_WELL_NAME + ROW0_CELL↔ROW0_DB_COLUMN
   (edit→Save→diff PWEL_DAY_STATUS), then it proves N1 end-to-end + generalizes to PO.0002.
+- 2026-06-13: N1 LIVE run — honest result. TC01 PASS (cascade+GO renders rows LIVE → nav/read path
+  fully proven). TC02/03 FAIL: inline-grid EDIT does NOT persist; DB-verify correctly caught it (no
+  false pass). Two findings: (1) toolbar Save (`screenToolbar:form:menuB…`, onclick EC.forceChange)
+  stays DISABLED after a cell edit — the OV/TV Save gesture doesn't commit this grid; Ctrl+s also no.
+  (2) CORRECTION of earlier overconfidence: the grid is NOT 1:1 with PWEL_DAY_STATUS raw cols — only
+  C4=24=ON_STREAM_HRS lined up; the rate cols (791/4822/2186/187 in DB) ≠ grid cells (644/5081/2356/
+  239), so the grid shows derived/blended values; true cell↔col map needs a real edit→commit→diff.
+  DATA INTEGRITY VERIFIED INTACT (no PWEL_DAY_STATUS col=21; phantom 21 = unsaved view-state).
+  Next genuine blocker = crack the inline edit→commit gesture (what enables that Save / edit-mode /
+  row action / status gate), then establish the column map. Coaching note logged below.
 - (next blocks append here…)
 
 ## Operating rules (always)

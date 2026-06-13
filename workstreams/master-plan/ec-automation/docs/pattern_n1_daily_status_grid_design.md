@@ -151,10 +151,34 @@ trace_group,area_cascade}.py` + `wr0001_db_probe{,2}.py`.
   (read original → edit → Save → UI + DB verify → revert). **Robocop clean, `--dryrun` PASS 3/3**;
   re-dryran nomination_cycle (a DbVerify consumer) PASS — the helper append broke nothing.
 
-**Remaining = the live run (best headed, per run-robot-headed):** on first live execution, pin two
-recon-default values in the T3: `${ROW0_WELL_NAME}` (grid row-0 well display name) and the
-`${ROW0_CELL}`↔`${ROW0_DB_COLUMN}` pairing (edit the cell → Save → diff PWEL_DAY_STATUS to see which
-column changed). Then the suite proves the N1 pattern end-to-end and generalizes to PO.0002 etc.
+### ⚠️ LIVE RUN (2026-06-13) — read/nav path PROVEN; WRITE path NOT yet working (honest)
+Ran the suite live (headless). Result: **TC01 PASS** — the full cascade + GO renders the well rows
+LIVE (the navigation + read path is fully proven end-to-end). **TC02/TC03 FAIL — the inline-grid
+EDIT does not persist**, and the DB-verify correctly caught it (no false pass). Two real findings:
+
+1. **Save stays DISABLED after an inline edit.** The Save control is `screenToolbar:form:menuB…`
+   (`onclick = EC.forceChange();PrimeFaces.ab({s:"screenToolbar:form:menu…"})`), rendered as a
+   `ui-state-disabled` menu item. The cell's own `onchange` (`PrimeFaces.ab`) stages a value
+   (cell shows `fVal:'21.00'`) but does NOT enable Save; clicking it (or Ctrl+s) does not commit.
+   → The edit→commit gesture for this grid is NOT the OV/TV toolbar Save. Unknown to resolve:
+   what enables Save here (record must be in an explicit edit mode? a row-level action? the screen
+   in a different state? a status-process gate even though RECORD_STATUS='P'?).
+2. **The grid is NOT a 1:1 view of PWEL_DAY_STATUS raw columns** (CORRECTION of an earlier
+   overconfident claim). DB row for AS2_Onshore Well no 2 / 2003-01-01: ON_STREAM_HRS=24,
+   AVG_GL_RATE=791.24, AVG_OIL_RATE=4822.64, AVG_GAS_RATE=2186.46, AVG_WATER_RATE=187.82. Only
+   **C4=24 = ON_STREAM_HRS** lined up; the other visible cells (644.0 / 5081.2 / 2356.5 / 239.0) do
+   NOT match the raw rate columns → the grid likely shows a blend of entered + DERIVED/allocated
+   values, or maps columns in a non-obvious order. The cell↔DB-column map must be established by a
+   genuine edit→commit→diff once the Save gesture is solved (a coincidental value match is not proof).
+
+**DATA INTEGRITY VERIFIED INTACT:** PWEL_DAY_STATUS has NO column = 21; ON_STREAM_HRS=24 unchanged.
+The `21.00` seen in the grid is unsaved JSF view-state (never committed), transient on session end.
+
+**Next (genuine blocker — needs focused, ideally headed iteration):** crack the inline-grid
+edit→commit gesture (what enables `screenToolbar:form:menu…` Save / whether edit-mode or a row
+action is required), THEN diff PWEL_DAY_STATUS to establish the true cell↔column map. Until then the
+N1 WRITE is unproven — the suite is wired + dryrun-green + nav/read proven, but **not** a passing
+live edit. Same difficulty class as the Meter save no-op (took several probes).
 
 ### ✅ Frame handling: NONE needed — screen is the MAIN frame (settled 2026-06-13)
 Initial worry of a nested iframe was a Playwright frame-detachment artifact. **Decisive test
