@@ -66,6 +66,15 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   scope: AS2 EC Exploration Norway / AS2_Onshore Area / AS2_Production Facility no 1 / AS2_Lift Gas
   Manifold 1. Design doc + registry updated. **N1 build now fully unblocked** — next = T2
   daily_status_grid.resource + T3 wr0001 page + DbVerify.value_in_day_status, dryrun→live→DB-verify.
+- 2026-06-13: N1 BUILD (dryrun-green). Settled the frame question — the screen IS the main frame
+  (top-level locators work, no iframe piercing; earlier "nested iframe" was a Playwright detach
+  artifact). Built: T1 DbVerify day-status helpers (self-tested vs live DB, 4b8e96f); T2
+  resources/daily_status_grid.resource (reusable N1 edit-in-place layer on existing T1); T3
+  pageobjects/Production/wr0001_daily_well_status_page.resource (cascade + scope); suite
+  tests/Production/daily_well_status_edit.robot (self-reverting edit→Save→UI+DB verify→revert).
+  **Robocop clean + --dryrun 3/3 PASS; re-dryran nomination_cycle (DbVerify consumer) PASS (no
+  breakage).** Remaining = first LIVE run (headed): pin ROW0_WELL_NAME + ROW0_CELL↔ROW0_DB_COLUMN
+  (edit→Save→diff PWEL_DAY_STATUS), then it proves N1 end-to-end + generalizes to PO.0002.
 - (next blocks append here…)
 
 ## Operating rules (always)

@@ -140,10 +140,32 @@ wells (confirms the **object-start-date = version-filter** rule; the default ~to
 Recon scripts: `tmp/scripts/wr0001_{status_recon,go_probe,find_scope,find_date,trace_well,
 trace_group,area_cascade}.py` + `wr0001_db_probe{,2}.py`.
 
-**Nothing blocking the build.** Next = assemble the T2 (`daily_status_grid.resource`) + T3
-(`wr0001_daily_well_status_page.resource`) + the `DbVerify.value_in_day_status` helper, then
-dryrun → live edit one cell for an open day → DB-verify on PWEL_DAY_STATUS → revert. Use the
-working scope above (or a Pluto-data env when targeting real Pluto wells).
+**BUILD DONE (dryrun-green) — one live step remains.** Delivered:
+- T1 `DbVerify` helpers (self-tested, commit 4b8e96f): `well_object_id_by_name`, `day_status_value`,
+  `day_status_value_should_be`.
+- T2 `resources/daily_status_grid.resource` — the reusable N1 layer (Set Daily Status Date /
+  Reload / Edit Daily Status Cell / Daily Status Cell Should Show / Save / DB assert). Thin: built
+  on existing T1 (navigator/table `Type Cell By Id`/toolbar).
+- T3 `pageobjects/Production/wr0001_daily_well_status_page.resource` — ids + working scope + cascade.
+- Suite `tests/Production/daily_well_status_edit.robot` — self-reverting edit-in-place test
+  (read original → edit → Save → UI + DB verify → revert). **Robocop clean, `--dryrun` PASS 3/3**;
+  re-dryran nomination_cycle (a DbVerify consumer) PASS — the helper append broke nothing.
+
+**Remaining = the live run (best headed, per run-robot-headed):** on first live execution, pin two
+recon-default values in the T3: `${ROW0_WELL_NAME}` (grid row-0 well display name) and the
+`${ROW0_CELL}`↔`${ROW0_DB_COLUMN}` pairing (edit the cell → Save → diff PWEL_DAY_STATUS to see which
+column changed). Then the suite proves the N1 pattern end-to-end and generalizes to PO.0002 etc.
+
+### ✅ Frame handling: NONE needed — screen is the MAIN frame (settled 2026-06-13)
+Initial worry of a nested iframe was a Playwright frame-detachment artifact. **Decisive test
+(`tmp/scripts/wr0001_toplevel_test.py`): the screen frame IS `page.main_frame`** — opening the
+screen NAVIGATES the main content frame to `/com.ec.prod.wr.screens/daily_well_status/...`, and the
+app shell (search/toolbar) re-renders in that same document. A **top-level** locator
+`[id="nav:form:G:0:R:1:C:0:da_input"]` returns count=1 (so does the grid `daily_well_status:form:*`).
+→ **N1 is reachable exactly like every other screen — no `>>>` piercing for the screen itself**
+(only popups still use `popupIFrame`). No new framework capability required; existing T1 keywords
+(`Launch EC And Open Screen`, `Select EC Dropdown Option`, `Fill EC Field`, `Apply Navigator`/GO)
+apply directly. The build is straightforward.
 
 ## Build sequence (when sandbox reachable)
 1. Read-only recon pass → answer the 7 questions → fill the id variables.
