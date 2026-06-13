@@ -119,3 +119,20 @@ Success that writes new rows isn't reliably reproducible in this sandbox (execut
 RUN_NO_TEST calc doesn't write well allocations), so the oracle reads existing real output rather
 than a freshly-triggered write. **sum-to-total** and **day→month roll-up** remain future extensions
 (need the network→members→measured-total mapping from `ALLOC_NETWORK_JOB_CONN` + source totals).
+
+## Sum-to-total / cross-column oracle — recon BLOCKER (2026-06-14)
+Tried to extend the conservation oracle beyond no-negatives. **Not feasible on existing sandbox data:**
+- **No co-present totals:** `STRM_DAY_ALLOC` has rows only on 2011-01-01 (8), NOT on 2021-10-01 where
+  the 22 `PWEL_DAY_ALLOC` wells live — so there is no stream/field total to sum the per-well
+  allocations up to. (`tmp/scripts/n2_sumtotal_recon.py`)
+- **Sparse columns:** on 2021-10-01 only `ALLOC_GAS_VOL` (+ a few volumes) is populated;
+  `ALLOC_NET_GAS_VOL`, `ALLOC_GAS_MASS`, `ALLOC_GAS_ENERGY`, `ALLOC_GAS_GCV` are **all NULL** — so the
+  per-row physical invariants (NET≤GROSS gas, energy≈vol×GCV, mass-present-where-vol) have nothing to
+  compare; they'd pass vacuously. (`tmp/scripts/n2_invariant_recon.py`) — deliberately NOT shipped.
+- **Root cause:** the existing allocation rows are a sparse/partial (gross-volume-only) result. A
+  meaningful sum-to-total / mass-energy oracle needs a *fresh full* allocation that writes the complete
+  column set + co-present stream totals — which requires the **non-simulate** executor, and that stalls
+  in this sandbox (ACQUIRED, see above). So `allocation_conservation_should_hold` (no-neg + rows-exist)
+  remains the shippable oracle until a complete real allocation result exists.
+- **To revisit when:** Process Automation / a working non-simulate run is available (then run a full
+  allocation, and add sum-to-total via `ALLOC_NETWORK_JOB_CONN` network→members + the stream totals).
