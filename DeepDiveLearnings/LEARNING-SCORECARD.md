@@ -35,9 +35,10 @@ oracle (needs network→members→measured-total mapping).
 |---|---|---|
 | EC web internals (JSF/PrimeFaces id grammar, screen types, gestures) | field guide written | **A** |
 | Pluto As-Built series (02/05/06/07/09/11/14) | synthesized; only 01/03 xlsx left | **A−** |
-| Allocation / emissions / PRRT business chain | mapped end-to-end (capstone) | **B** |
+| Allocation / emissions / PRRT business chain | mapped end-to-end (capstone); + EFK SOX/governance "why" layered on | **B+** |
 | ECIS Excel upload | built once end-to-end; set aside | **B** |
 | Issue_1052 validations | rules pinned to As-Built 09 | **B** |
+| EC module/framework KB (EFK deep dive) | Phase-1 (Production→Allocation→Sales→Revenue→RegReporting) + Phase-2 (calc-engine, VCF, Database Sanity) synthesized 2026-06-13/14; reservoir→revenue chain + calc-oracle families + config guardrails captured | **B+** |
 
 ## 3. Calibration log (honest — confident vs ground truth)
 | Date | Claimed | Reality | Lesson |
@@ -51,6 +52,7 @@ oracle (needs network→members→measured-total mapping).
 | 2026-06-13 | N2 allocation calc itself | runs but EXIT=Failure (equation errors) on P1/2021-10-01 — real finding, not a block | the engine runs; the specific allocation errors (missing input/config). Use Simulate to iterate safely. |
 | 2026-06-13 | "Simulate checkbox cell = `dateStartJob:form:G:0:R:1:C:2`" (live run timed out ×2) | WRONG — that id has NO element; the styled checkbox IS the `:cb` input. Headless probe masked it (Playwright clicked a child point; Browser-lib Click on a nonexistent id hung) | a recon that "works" headless can hide the real locator; when the live Click times out, dump the element by id (`tagName===NONE`) before guessing. Fixed: JS-click the `:cb` input. |
 | 2026-06-13 | N2 suite built + 3/3 live, no DB write | confident-and-RIGHT — dryrun→live headed 3/3, then DB re-checked (22 rows/0 neg unchanged = Simulate guard held), N1 canary still 3/3 (additive DbVerify safe), robocop clean | the full rhythm paid off: independent DB proof of the no-write claim, not just a green log. N2 = C→B+. |
+| 2026-06-14 | EFK series triage (Phase-1+2, ~12 pages) | confident-and-RIGHT — correctly called most pages thin overviews / empty placeholders (Calc Framework `---`, XEM Calculations blank, EC Framework/Technology stubs) and extracted the few keepers (VCF rounding oracle; Database Sanity rules) without churning on empties | recognizing a low-yield source fast + harvesting the meta-signal is the skill; don't deep-read a stub hoping for gold. Followed the link-outs to real spaces only when the user asked. |
 | (next session…) | | | |
 
 ## 4. Update protocol (the habit)
