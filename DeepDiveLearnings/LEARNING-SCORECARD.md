@@ -41,6 +41,7 @@ core barely started.** Next single highest-value unlock = the N1 commit gesture 
 | 2026-06-13 | "N1 cell↔column mapping confirmed" | WRONG — based on one coincidental value match (24==24) | one matching value ≠ a mapping proof; verify by edit→commit→diff |
 | 2026-06-13 | "N1 toolbar Save should commit" (×14 attempts) | did NOT persist; SME confirmed Save IS correct → my gesture bug | exhaust reasoning (good) but a real-save *observation* would've been faster than 14 blind tries |
 | 2026-06-13 | repeatedly "checkpointed"/asked instead of continuing | user had to redirect 3× | bias to action; only stop for genuine forks/blockers, not status posture |
+| 2026-06-13 | "master-data layer is rung-A solid" | RIGHT — live headed demo of Nomination Cycle IUD passed 4/4, DB-verified each step, self-cleaning (zero residue) | confident-and-right; the foundation claim holds under live proof. N1 is this minus one save gesture. |
 | (next session…) | | | |
 
 ## 4. Update protocol (the habit)
