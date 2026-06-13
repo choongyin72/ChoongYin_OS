@@ -163,16 +163,17 @@ EDIT does not persist**, and the DB-verify correctly caught it (no false pass). 
    → The edit→commit gesture for this grid is NOT the OV/TV toolbar Save. Unknown to resolve:
    what enables Save here (record must be in an explicit edit mode? a row-level action? the screen
    in a different state? a status-process gate even though RECORD_STATUS='P'?).
-2. **The grid is NOT a 1:1 view of PWEL_DAY_STATUS raw columns** (CORRECTION of an earlier
-   overconfident claim). DB row for AS2_Onshore Well no 2 / 2003-01-01: ON_STREAM_HRS=24,
-   AVG_GL_RATE=791.24, AVG_OIL_RATE=4822.64, AVG_GAS_RATE=2186.46, AVG_WATER_RATE=187.82. Only
-   **C4=24 = ON_STREAM_HRS** lined up; the other visible cells (644.0 / 5081.2 / 2356.5 / 239.0) do
-   NOT match the raw rate columns → the grid likely shows a blend of entered + DERIVED/allocated
-   values, or maps columns in a non-obvious order. The cell↔DB-column map must be established by a
-   genuine edit→commit→diff once the Save gesture is solved (a coincidental value match is not proof).
+2. **cell↔DB-column map is NOT yet established** (CORRECTION of an earlier overconfident claim).
+   In a CLEAN session C4=24.00 = PWEL_DAY_STATUS.ON_STREAM_HRS (holds). The other cells I saw
+   (644.0/5081.2/2356.5/239.0) did NOT match the DB rate columns (AVG_GL_RATE=791.24,
+   AVG_OIL_RATE=4822.64, AVG_GAS_RATE=2186.46, AVG_WATER_RATE=187.82) — BUT that read happened
+   while a stale uncommitted edit polluted the view, so it's **inconclusive**, not proof the grid
+   is derived. The true full map must be re-derived in a clean session via edit→commit→diff once
+   the Save gesture is solved. (Lesson: a single coincidental value match is not a mapping proof.)
 
-**DATA INTEGRITY VERIFIED INTACT:** PWEL_DAY_STATUS has NO column = 21; ON_STREAM_HRS=24 unchanged.
-The `21.00` seen in the grid is unsaved JSF view-state (never committed), transient on session end.
+**DATA INTEGRITY VERIFIED INTACT + ENVIRONMENT CLEAN:** PWEL_DAY_STATUS has NO column = 21;
+ON_STREAM_HRS=24 unchanged. The `21.00` was unsaved JSF conversation view-state from the failed
+live run — it **self-cleared** (a later fresh session shows C4=24.00 = DB). Nothing left dangling.
 
 **Next (genuine blocker — needs focused, ideally headed iteration):** crack the inline-grid
 edit→commit gesture (what enables `screenToolbar:form:menu…` Save / whether edit-mode or a row
