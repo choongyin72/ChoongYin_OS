@@ -101,6 +101,14 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   `daily_status_grid` reuses verbatim (keywords take grid_id/cell_id/table as args). Registry row +
   design-doc generalization section added. Build pending = thin PO.0002 T3 + suite + a stream→OID
   DbVerify helper + pin C{c}↔STRM_DAY_STREAM column, then live edit→save→DB-verify→revert (mechanical).
+- 2026-06-13: 🎉 PO.0002 Daily Gas Stream Status BUILT + live 3/3 (DB-verified, self-cleaning) — the
+  N1 pattern GENERALIZES (2 proven screens now). Post-restart clean slate; mapped C7=STRM_DAY_STREAM.
+  GRS_VOL via edit→save→diff; stream resolved by name via OV_STREAM. Refactored T2 DB-verify to a
+  generic `Object Id By Name` (DbVerify) + comma-tolerant `Daily Status Cell Should Show` / `Read
+  Daily Status Cell` (gas rates formatted 2,949.9). WR.0001 re-tested 3/3 (no regression from the
+  shared-keyword change). Robocop clean. NOTE: running 2 N1 suites in ONE robot invocation is flaky
+  (2nd suite's grid load races — "object not found"); run N1 suites individually OR add inter-suite
+  session reset (known limitation, logged). Next: extend to liquid/water/electrical/well-comp.
 - (next blocks append here…)
 
 ## Operating rules (always)

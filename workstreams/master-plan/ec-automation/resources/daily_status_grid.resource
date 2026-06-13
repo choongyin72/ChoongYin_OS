@@ -9,6 +9,7 @@ Documentation       T2 pattern — N1 Daily/Monthly STATUS data-entry grid (edit
 ...                 Screen-specific bits (nav-group ids, scope, grid/cell ids, DB table) live in
 ...                 the T3 page object; this layer is the cross-screen N1 mechanics.
 
+Library             String
 Library             Browser
 Library             ../libraries/DbVerify.py
 Resource            common.resource
@@ -55,21 +56,29 @@ Edit Daily Status Cell
 
 Daily Status Cell Should Show
     [Documentation]    Assert the on-screen grid cell currently displays ${value} (UI-side).
-    ...    NOT a pass on its own — always pair with the DB assertion below.
+    ...    Comma-tolerant: EC formats large numbers with thousands separators (e.g. 2,949.9), so
+    ...    strip commas before the numeric compare. NOT a pass on its own — pair with the DB check.
     [Arguments]    ${cell_id}    ${value}
     ${v}=    Get Cell Value By Id    ${cell_id}
-    Should Be Equal As Numbers    ${v}    ${value}
+    ${vclean}=    Replace String    ${v}    ,    ${EMPTY}
+    ${expclean}=    Replace String    ${value}    ,    ${EMPTY}
+    Should Be Equal As Numbers    ${vclean}    ${expclean}
     ...    msg=Grid cell ${cell_id} shows '${v}', expected '${value}'
+
+Read Daily Status Cell
+    [Documentation]    Return a grid cell's current value with thousands-separator commas stripped
+    ...    (so the raw number can be re-typed/compared). e.g. '2,949.9' -> '2949.9'.
+    [Arguments]    ${cell_id}
+    ${v}=    Get Cell Value By Id    ${cell_id}
+    ${clean}=    Replace String    ${v}    ,    ${EMPTY}
+    RETURN    ${clean}
 
 Save Daily Status
     [Documentation]    Persist the edited grid via the toolbar Save (async). Always follow with
     ...    the DB assertion — the spinner/optimistic grid is not proof.
     Save
 
-Daily Status Value In DB Should Be
-    [Documentation]    GROUND TRUTH: assert the measured value really persisted to the
-    ...    (object x day) status row. Resolves the well's OBJECT_ID from its display NAME, then
-    ...    reads ${table}.${column} for that OBJECT_ID + ${date}. ${table} e.g. PWEL_DAY_STATUS.
-    [Arguments]    ${table}    ${well_name}    ${date}    ${column}    ${expected}
-    ${oid}=    Well Object Id By Name    ${well_name}
-    Day Status Value Should Be    ${table}    ${oid}    ${date}    ${column}    ${expected}
+# GROUND-TRUTH DB assertion: each T3 resolves its object's OBJECT_ID via the DbVerify library
+# keyword `Object Id By Name  <name_source>  <name>` (WELL_VERSION / OV_STREAM / ...), then calls
+# `Day Status Value Should Be  <table>  <oid>  <date>  <column>  <expected>`. Kept in the T3 (not a
+# shared wrapper) so this layer stays within the arg-count limit and each screen owns its resolver.

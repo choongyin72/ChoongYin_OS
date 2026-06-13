@@ -210,27 +210,30 @@ def view_count_where_should_be(view, column, value, expected):
         )
 
 
-def well_object_id_by_name(well_name):
-    """Resolve a well's OBJECT_ID from its WELL_VERSION.NAME (the grid's display name).
+def object_id_by_name(source, name):
+    """Resolve an object's OBJECT_ID from its display NAME, via any name-bearing source.
 
-    Daily-status tables (PWEL_DAY_STATUS etc.) key on OBJECT_ID, but the N1 grid shows the
-    well NAME. This bridges the two so a suite can assert a measured value by the name it typed.
+    N1 day-status tables key on OBJECT_ID, but the grid shows the object NAME. ``source`` is the
+    view/table that maps NAME->OBJECT_ID for that object type: WELL_VERSION for wells, OV_STREAM
+    for streams, etc. (NAME is matched exactly.) Generic so every N1 screen reuses one helper.
     """
+    _safe(source)
     conn = _connect()
     cur = conn.cursor()
     try:
-        cur.execute(
-            "SELECT OBJECT_ID FROM WELL_VERSION WHERE NAME = :n "
-            "ORDER BY DAYTIME FETCH FIRST 1 ROWS ONLY",
-            n=well_name,
-        )
+        cur.execute(f"SELECT OBJECT_ID FROM {source} WHERE NAME = :n FETCH FIRST 1 ROWS ONLY", n=name)
         row = cur.fetchone()
         if not row:
-            raise AssertionError(f"Well named {well_name!r} not found in WELL_VERSION")
+            raise AssertionError(f"Object named {name!r} not found in {source}")
         return row[0]
     finally:
         cur.close()
         conn.close()
+
+
+def well_object_id_by_name(well_name):
+    """Back-compat wrapper: resolve a well's OBJECT_ID from WELL_VERSION.NAME."""
+    return object_id_by_name("WELL_VERSION", well_name)
 
 
 def day_status_value(table, object_id, daytime, column):

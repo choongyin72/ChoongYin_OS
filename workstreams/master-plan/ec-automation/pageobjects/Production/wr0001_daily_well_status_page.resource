@@ -87,4 +87,5 @@ Well Status Value Should Be In DB
     [Documentation]    Ground truth: assert ${TARGET_DB_COLUMN} of the (well x date) row in
     ...    PWEL_DAY_STATUS equals ${expected}.
     [Arguments]    ${expected}
-    Daily Status Value In DB Should Be    ${WELL_STATUS_DB_TABLE}    ${TARGET_WELL}    ${SCOPE_DATE}    ${TARGET_DB_COLUMN}    ${expected}
+    ${oid}=    Object Id By Name    WELL_VERSION    ${TARGET_WELL}
+    Day Status Value Should Be    ${WELL_STATUS_DB_TABLE}    ${oid}    ${SCOPE_DATE}    ${TARGET_DB_COLUMN}    ${expected}

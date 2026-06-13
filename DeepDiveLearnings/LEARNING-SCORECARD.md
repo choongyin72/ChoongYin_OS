@@ -17,7 +17,7 @@ accountable for what ships.** (Origin: 2026-06-13, after the Sheng Tong habit-co
 |---|---|---|---|
 | Master data (Basic/Financial/Commercial/Dispatching/System objects) | OV, OV-GM, TV, PC | ~50 screens automated, live + DB-verified | **A** |
 | Validation run | RUN-verify (Validation Overview) | automated + DB-verified | **A** |
-| Daily/Monthly STATUS grids (N1) | N1 edit-in-place | ✅ SOLVED — WR.0001 suite live 3/3 DB-verified + self-cleaning; commit gesture cracked (real-keystroke change-event + menubar @all Save) | **A** |
+| Daily/Monthly STATUS grids (N1) | N1 edit-in-place | ✅ SOLVED + GENERALIZES — TWO screens live 3/3 DB-verified self-cleaning: WR.0001 (PWEL_DAY_STATUS) + PO.0002 (STRM_DAY_STREAM); T2 reuses, save gesture transfers | **A** |
 | Allocation / calc runs (N2) | RUN-verify ext. | designed, not built (sandbox scheduler dependency) | **C** |
 | Status processes P→V→A (N3) | — | studied, not built | **C** |
 
