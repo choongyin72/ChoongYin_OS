@@ -35,10 +35,10 @@ stack, not our client RF/Playwright; Hydrocarbon Accounting = concise allocation
 
 ### Phase 3 — Reference (consult, don't deep-read)
 - [x] EC Vocabulary `1844980` (2022) — CROSS-CHECKED 2026-06-14 vs `business-domains/GLOSSARY.md`. Broad industry+EC acronym list; harvested the table/screen-tied + EC-specific terms into GLOSSARY (ACL/Refresh-ACL, Standard vs Normal Conditions=15°C/0°C→VCF, ACQ/DCQ/MDQ, TSA/TSO, PSA, CGR/GOR, Diluent→ALLOC_DILUENT_VOL, Recovery Factor, Lifter/Lifting Account). Left the page as the canonical full industry reference (no duplication).
-- [ ] EC Talks `1837692` (2026.03 — NEWEST) — cross-unit knowledge-sharing talks; scan for current topics
-- [ ] EC Product Trainings `1853607` (2021) — training index
-- [ ] EC Releases and live assets `1853526` (2024) — version/asset matrix
-- [ ] EC Extensions Compatibility Matrix `1851205` (updated ~daily) — extension↔EC compat (CPD-maintained)
+- [x] EC Talks `1837692` (2026.03) — READ 2026-06-14. Purpose/team stub; "Content" empty (talk recordings in children/SharePoint). Noted, no text value.
+- [x] EC Product Trainings `1853607` (2021) — training index. Skipped (index only).
+- [x] EC Releases and live assets `1853526` (2024) — READ 2026-06-14. Template with only "test row" placeholder data (no real version/asset counts). Skipped.
+- [x] EC Extensions Compatibility Matrix `1851205` (updated daily) — READ 2026-06-14 → `ec-extensions-matrix.md`. ⭐ KEEPER: extension catalog (XEM/XCH/XMS/ECME/XTO/XGH/TAP/reporting XRP*/XRR* by region…) + Pluto EC-14.2.x verified versions (XEM-4.1.2, ECME-1.5.6, XTO-2.0.0…). ⭐ Resolves parked Chemistry Q: **XCH discontinued → Chemistry is an EC CORE MODULE since 13.1.2** (so on Pluto 14.2.x ask "is the module licensed?" not "is XCH installed?").
 
 ### Phase 4 — Operational / how-to (read on-demand when I hit the matching problem)
 - [ ] How to Script and Enable a Schedule Job in EC 11.2 `1841913` (2017) — ⭐ relevant to ECIS/scheduler + the stall I hit
@@ -104,3 +104,13 @@ pages next time the scheduler misbehaves). One synthesized note per substantive 
   EC Timezone children are empty placeholders. **Phase 2 effectively complete** (calc+framework depth
   held across calc-engine-insights / vcf-calculation / framework-db-sanity). Next: Phase-3 reference —
   EC Vocabulary `1844980` (cross-check vs business-domains/GLOSSARY.md), then EC Talks `1837692` (newest).
+- 2026-06-14: **Phase 3 reference done.** EC Vocabulary → harvested table-tied/EC-specific terms into
+  `business-domains/GLOSSARY.md` (left the page as the canonical industry acronym source). EC Talks /
+  Product Trainings / Releases = thin stub / index / template-with-test-rows (noted, skipped). **EC
+  Extensions Compatibility Matrix** (updated daily) = the keeper → `ec-extensions-matrix.md`: extension
+  catalog + Pluto EC-14.2.x verified versions (XEM-4.1.2, ECME-1.5.6, XTO-2.0.0…). ⭐ Resolved the
+  parked Chemistry question — **XCH discontinued → Chemistry is an EC CORE MODULE since 13.1.2**, so for
+  Woodside it's "is the module licensed?" not "is the extension installed?". **EFK series now
+  effectively complete for value** (Phases 1–3 done; Phase-4 ops = on-demand when the scheduler
+  misbehaves; Phase-5 = skip). Next idle work returns to the automation track (N3 status-process
+  P→V→A) or a held item.

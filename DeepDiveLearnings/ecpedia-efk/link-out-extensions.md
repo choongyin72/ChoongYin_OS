@@ -4,6 +4,12 @@ energycomponents.atlassian.net (the old `ecpedia.eu.tieto.com` URLs were migrate
 **EC product add-on / extension** spaces (not Woodside/Pluto client config), so they're reference —
 but one tie-in is directly actionable for my calc/allocation test track.
 
+> **UPDATE 2026-06-14 (from the Extensions Compatibility Matrix, `ec-extensions-matrix.md`):**
+> **XCH (Chemistry) is DISCONTINUED as an extension — moved into EC as a CORE MODULE from EC 13.1.2.**
+> So on Pluto's EC 14.2.x, Chemistry is a built-in module (licensing-dependent), not the XCH add-on.
+> The emissions XEM extension is still separate (v4.x for EC 14.2.x). This refines the parked
+> Chemistry question → ask the user "is the Chemistry *module* licensed/enabled for Woodside?".
+
 ## EC Chemical Management — space **ECCM** (homepage `2326530`, "Chemistry and Environmental technical hub")
 A hub for two add-ons (SharePoint: `qbsol.sharepoint.com/sites/oilfieldchemistry`):
 - **EC Chemical & Laboratory Management ("EC Chemistry")** — features for operators to **monitor +
