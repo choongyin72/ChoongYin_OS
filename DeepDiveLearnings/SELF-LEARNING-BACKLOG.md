@@ -143,6 +143,16 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   with complete input) via Simulate, then verify conservation oracle. CALIBRATION: I was wrong twice
   — (1) "PA blocks the run" (it doesn't; found RUN CALCULATIONS); (2) implied executor dead (jobs DO
   run, in 1-2s). DB-as-truth + reading the log_list corrected both.
+- ▶ **RESUME POINT (2026-06-13 ~22:40, window checkpoint):** Next action = **N2 allocation**: on
+  HA.0002 "Daily Allocation", iterate with **Simulate ON** (no DB write) to find an allocation that
+  exits **Success** — try the **"Testing allocation RUN_NO" → RUN_NO_TEST** network/job first, or a
+  P1 network+date with complete input (EC_DAILY_VOLUME on P1 Dashboard/2021-10-01 exits **Failure**
+  with equation errors). On a Success run, build the **conservation-oracle** verification
+  (no-neg ✓ already on existing 2021-10-01 data; add sum-to-total + day→month roll-up) on
+  PWEL_DAY_ALLOC / STRM_DAY_*_ALLOC. Run-mechanism is cracked (RUN CALCULATIONS = `ProdAllocButton:form:B`).
+  Standing idle track = EFK deep-dive series (DeepDiveLearnings/ecpedia-efk/EFK-DEEP-DIVE-SERIES.md,
+  Phase-1 domain modules next). Held for user: BPM/Process-Automation deep dive; Bitbucket cred
+  rotation; Issue_1052 D/E/F. Everything committed+pushed (master=origin @ 2196704).
 - (next blocks append here…)
 
 ## Operating rules (always)
