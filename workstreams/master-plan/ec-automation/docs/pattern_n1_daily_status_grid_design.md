@@ -181,6 +181,29 @@ action is required), THEN diff PWEL_DAY_STATUS to establish the true cell↔colu
 N1 WRITE is unproven — the suite is wired + dryrun-green + nav/read proven, but **not** a passing
 live edit. Same difficulty class as the Meter save no-op (took several probes).
 
+### DEEP-DIVE LOG — write-gesture investigation (2026-06-13, ~11 probes, ESCALATED to user)
+Confirmed facts:
+- Screen URL = `…/daily_well_status/GROUPMODEL/WELL/TARGET/WELL/CLASS_NAME/PWEL_DAY_STATUS` — the
+  grid IS bound to PWEL_DAY_STATUS. ON_STREAM_HRS is an editable raw input (grid C4_in); most other
+  visible cells (644/5081/2356/239, some duplicated across C15/C76, C23/C71, C26/C75) are
+  DERIVED/theoretical/allocated columns (read-only-ish), not raw measured — hence they don't match
+  the 5 non-null raw DB values.
+- **Save enables only on a REAL change** (editing the cell to a value ≠ its current display).
+  Earlier "Save disabled" runs were no-ops: a stale **uncommitted phantom** value kept reloading
+  into the grid (server-side JSF conversation state survives across fresh browser sessions until it
+  times out), so "editing" to that same value didn't dirty the form. Edit to a UNIQUE sentinel (19)
+  → Save enables.
+- **But clicking the enabled Save does NOT persist** — DB ON_STREAM_HRS stays 24, REV_NO stays 0,
+  and NO column anywhere becomes the sentinel. Ctrl+s also no-op. After the click the Save anchor
+  vanishes (menubar re-renders). The toolbar Save (`a[title="Save [Ctrl+s]"]`, a `ui-menuitem-link`
+  whose onclick = `EC.forceChange();PrimeFaces.ab({s:"screenToolbar:form:menuBar",…})`) fires but
+  the grid edit never reaches the DB.
+- Data integrity verified intact throughout; the phantom self-clears on session expiry.
+**Open question for the EC SME (user):** how is an edit on this daily-status screen actually
+COMMITTED? Candidates: the screen needs an explicit edit-mode / the Save lives behind the menubar
+trigger that must be opened first / a status-process or approval step / the manual entry goes to a
+different layer than PWEL_DAY_STATUS. This 30-sec domain answer unblocks the whole N1 track.
+
 ### ✅ Frame handling: NONE needed — screen is the MAIN frame (settled 2026-06-13)
 Initial worry of a nested iframe was a Playwright frame-detachment artifact. **Decisive test
 (`tmp/scripts/wr0001_toplevel_test.py`): the screen frame IS `page.main_frame`** — opening the
