@@ -1,0 +1,27 @@
+  EC Chemistry
+    Chemicals
+      Chemical Product Management
+        Manage Chemical Product
+        Chemical Compatibility
+      Chemical Inventory
+        Manage Chemical Tank
+        Chemical Tank Status Read
+        Manage Chemical Inventory
+        Chemical Availability And Order
+      Chemical Treatment
+        Manage Chemical Stream
+        Chemical Stream Flow Configuration
+        Chemical Injection Status
+        Chemical Batch Treatment
+    Laboratory
+      Configuration
+        Sample Schedule Editor
+        Analysis Template
+        Corrosion Coupon Material
+        Analysis Target
+      Modelling
+        Scale Simulation Results
+        Corrosion Simulation Results
+      Sample Manager
+      Sample Analysis
+      Daily Analysis And Measurements

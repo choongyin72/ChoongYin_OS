@@ -1,0 +1,1476 @@
+  Dashboardui-button
+  Configuration
+    Documentationui-button
+    Access
+      Account Settingsui-button
+      User Maintenanceui-button
+      Role Maintenanceui-button
+      Group Maintenanceui-button
+      Object Maintenanceui-button
+      Role Usersui-button
+      Group Usersui-button
+      Object Partitionui-button
+      Analytics Object Accessui-button
+      Authentication Auditui-button
+    Preferences
+      Maintain System Settingsui-button
+      Maintain User Settingsui-button
+      Personal Settingsui-button
+      Create Preferenceui-button
+    Codes
+      EC Codes - Allui-button
+      EC Codes - Non-System Codesui-button
+      EC Codes - System Codesui-button
+      EC Code Objectui-button
+    System
+      System Attributesui-button
+      PKI Signature Verificationui-button
+      Class Configurationui-button
+      Class Attribute Configurationui-button
+      Class Attribute Presentation Configui-button
+      Class Property Codesui-button
+      Group Modelui-button
+      Navigation Modelui-button
+      Business Functionui-button
+      Business Function Profilesui-button
+      Maintain Treeviewui-button
+      Initiate Dayui-button
+      Integrity Statusui-button
+      Production Day Tableui-button
+      User Exit Package Configurationui-button
+      Scenario Definitionui-button
+      MIME Type Mappingui-button
+      Analytics Integration Workflow Configurationui-button
+      Analytics Managerui-button
+      Data purgingui-button
+      Runtime
+        Flush Cacheui-button
+        Event Monitorui-button
+        Versionsui-button
+        Application Server Healthui-button
+        Generation of BF Documentationui-button
+        Application Server Performanceui-button
+      Units
+        Unitsui-button
+        Unit Conversionui-button
+        Measurement Typesui-button
+        Conversion Groupui-button
+        Asset Unit Conversionui-button
+        Inter-Group Conversionui-button
+        BOE Conversionui-button
+      Develop
+        Form Designerui-button
+        Extensions Managerui-button
+        Configuration Exportui-button
+        Configuration Typeui-button
+      Translation
+        Text Translationui-button
+        Languageui-button
+      Validation
+        Class Validationui-button
+        Hierarchical Object Validationui-button
+        Object Validation - Defaultui-button
+        Check Groupui-button
+        Rule Group Combinationui-button
+        Validation Overviewui-button
+        Validation Overview by Facilityui-button
+        Mismeasurement Eventui-button
+    Assets
+      Calculation Objects
+        Calculation Contextui-button
+        Database Object Typesui-button
+        Simple Object Typesui-button
+        Variable Definitionsui-button
+        Global Attributesui-button
+        Create Calculationui-button
+        Maintain Calculationui-button
+        Calculation Libraryui-button
+        Create Library Calculationui-button
+        Maintain Library Calculationui-button
+        Maintain Calculation Log Profilesui-button
+        Component Templateui-button
+        Component Reportui-button
+        Calculation Group Contextui-button
+        Calculation Group Setupui-button
+        Alloc Job Status Process Connui-button
+        Nodeui-button
+        Stream Node Diagramui-button
+        SND Production Data Menuui-button
+        Asset Calculation Attributesui-button
+        Config Variableui-button
+        Config Variable Parameterui-button
+      Basic Objects
+        Production Unitui-button
+        Business Unitui-button
+        Production Sub Unitui-button
+        Countryui-button
+        Stateui-button
+        Countyui-button
+        Areaui-button
+        Sub Areaui-button
+        Regionui-button
+        Regulatory Permitsui-button
+        Object Listui-button
+        Object List Setupui-button
+        Functional Areaui-button
+      Operation Mode
+        Well Mode Attributesui-button
+        Well Modeui-button
+      Hydrocarbon Objects
+        Hydrocarbon Componentui-button
+        Productui-button
+        Blendui-button
+        Maintain Blend Content Splitui-button
+        Disposition Typeui-button
+        Component Setui-button
+        Component Set Listui-button
+        Constant Standardui-button
+        Component Constantui-button
+        Equation Of Stateui-button
+        Constant Standard Values
+          Compression and Summation Factorui-button
+          Calorific Values Ideal Gas Molui-button
+          Calorific Values Ideal Gas Wtui-button
+          Calorific Values Ideal Gas Volui-button
+          Vi Interpolationui-button
+          K1 and K2 Interpolationui-button
+      Commercial Objects
+        Licenceui-button
+        MMS Leaseui-button
+        State Leaseui-button
+        Operator Leaseui-button
+        Companyui-button
+        Company Contactui-button
+        Customerui-button
+        Customer VAT Reg Noui-button
+        Restricted Customer Setupui-button
+        Vendorui-button
+        Vendor VAT Reg Noui-button
+        Restricted Vendor Setupui-button
+        Fieldui-button
+        Sub Fieldui-button
+        Field Groupui-button
+        Field Group Setupui-button
+        Commercial Entityui-button
+        Maintain Equity Shareui-button
+      Date Objects
+        Document Date Termui-button
+        Document Received Termui-button
+        Payment Termui-button
+        Calendarui-button
+        Calendar Collectionui-button
+      Facility Objects
+        Facility Class 1ui-button
+        Manage Facility Class 1ui-button
+        Facility Class 2ui-button
+        Facility Reference Valuesui-button
+        Facility Analysis Itemsui-button
+        External Locationui-button
+        External Location Reference Valueui-button
+        Facility - External Location Connectionui-button
+        Operator Routeui-button
+        Collection Pointui-button
+        Collection Point Hierarchy Reorganizationui-button
+        Flowlineui-button
+        Area Codesui-button
+        Test Separatorui-button
+        Production Separatorui-button
+        Vesselui-button
+        Weather Siteui-button
+        Pipelineui-button
+        Process Trainui-button
+        Report Groupui-button
+        Process Train Event Profilesui-button
+        Report Group Connectionui-button
+        Object Group Connectionui-button
+        Maintain System Reference Valueui-button
+        Well Hookupui-button
+        Shiftui-button
+      Stream Objects
+        Stream - by Group Modelui-button
+        Manage Streamui-button
+        Maintain Streamsui-button
+        Stream Setui-button
+        Stream Set Listui-button
+        Stream Formula Editorui-button
+        Stream Reference Valuesui-button
+        Stream Seasonal Valuesui-button
+        Revenue Stream Categoryui-button
+        Revenue Stream Category Setupui-button
+        Stream Item Categoryui-button
+        Stream - Allui-button
+        Stream Itemui-button
+        Forecast Stream Itemui-button
+        Orifice Plateui-button
+        Stream ORF Valuesui-button
+        Meter Runui-button
+        Meter Run and Orifice Plate Connectionui-button
+        Stream PT Conversion Valuesui-button
+        Stream DPT Conversion Valuesui-button
+        Stream Profit Centre Connectionui-button
+        Stream Well Connectionui-button
+        Choke Modelui-button
+        Choke Model Reference Valuesui-button
+      Tank and Storage Objects
+        Storageui-button
+        Maintain Storagesui-button
+        Tankui-button
+        Manage Tankui-button
+        Maintain Tanksui-button
+        Tank Usageui-button
+        Tank Strappingui-button
+        Tank Tapui-button
+        Intermediate Storage Productsui-button
+        Storage Profit Centre Connectionui-button
+        Storage Flowui-button
+      Well and Reservoir Objects
+        Reservoir Blockui-button
+        Reservoir Formationui-button
+        Reservoir Block Formationui-button
+        Well Holeui-button
+        Planned Wellui-button
+        Wellui-button
+        Manage Wellui-button
+        Maintain Wellsui-button
+        Well Boreui-button
+        Well Bore Splitui-button
+        Well Bore Intervalui-button
+        Well Bore Interval Splitui-button
+        Perforation Intervalui-button
+        Perforation Interval Splitui-button
+        Flowline Well Connectionui-button
+        Swing Well Connectionui-button
+        Well Reference Valueui-button
+        Well Seasonal Valueui-button
+        Chokeui-button
+        Choke Conversionui-button
+        Choke Gas Lift Conversionui-button
+      Equipment Objects
+        Equipmentui-button
+        Maintain Equipmentui-button
+        Equipment Connectionui-button
+        Equipment Reference Valueui-button
+        Test Deviceui-button
+        Test Device Reference Valuesui-button
+      Cargo Objects
+        Carrierui-button
+        Cargo Activityui-button
+        Cargo Accountui-button
+      Laboratory Objects
+        Analysis Pointui-button
+      Chemical Objects
+        Chemical Stream Hookupui-button
+        Chemical Streamui-button
+        Chemical Tankui-button
+        Chemical Transport Tankui-button
+        Chemical Productui-button
+        Chemical Tank Product Combinationui-button
+        Chemical Injection Pointui-button
+      Contract Objects
+        Contractui-button
+        Contract Partiesui-button
+        Contract Templateui-button
+        Contract Attribute Dimension Typeui-button
+        Transport Contract Attributesui-button
+        Transport Contract Attributes Dimension Matrixui-button
+        Sale Contract Attributesui-button
+        Contract Account Listui-button
+        Contract Account Templateui-button
+        Revenue Contract Attributesui-button
+        Contract Seasonalityui-button
+        Contract Accountui-button
+        Copy Contractui-button
+        Contract Areaui-button
+        Contract Area Setupui-button
+        Contract Capacityui-button
+        Contract Capacity Location Connectionui-button
+        Contract Period Capacityui-button
+        Contract Profit Centre Listui-button
+        Contract Profit Centre Company Listui-button
+        Contract Expenditure Codeui-button
+        Contract Inventoryui-button
+        Cargo Price Element Setupui-button
+        Contract - End Dateui-button
+        Maintain Shipper Pairui-button
+      Transport Objects
+        Carrierui-button
+        Carrier Cooldownui-button
+        Truckui-button
+        Trailerui-button
+        Driverui-button
+        Portui-button
+        Lifting Accountui-button
+        Initialize Lifting Accountui-button
+        Lifting Activity Codeui-button
+        Product Lifting Activity Codeui-button
+        Lifting Delay Codeui-button
+        Measurement Itemui-button
+        Product Measurement Setupui-button
+        Lifting Account Measurement Setupui-button
+        Analysis Itemui-button
+        Product Analysis Itemui-button
+        Lifting Account Analysis Itemui-button
+        Lifting Volume Toleranceui-button
+        Laytime Limitui-button
+        Representativeui-button
+        Cargo Status Mappingui-button
+        Cargo Document Templateui-button
+        Lifting Account Document Receiver Templateui-button
+        Lifting Account Document Instructions Templateui-button
+        Company Document Receiver Templateui-button
+        Company Document Instructions Templateui-button
+        Berthui-button
+        Contract Lifting Account Connectionui-button
+        Letter of Protest Templateui-button
+        Harbour Dues Setupui-button
+        Contract Lifting Account Splitui-button
+        Contract Carrierui-button
+        Contract Portui-button
+        Storage Port Resource Mappingui-button
+        Process Train Storage Yield Factorui-button
+        Canal Transitui-button
+        Canalui-button
+        Channelui-button
+        Loading Armui-button
+        Pilotui-button
+        Pilot Boatui-button
+        Tug Boatui-button
+        Maintain Opportunitiesui-button
+        Port Resource Usage Templateui-button
+        Voyage Templateui-button
+        Leg Distancesui-button
+        Carrier Port Acceptance and Clearanceui-button
+        Storage Flow Ratesui-button
+        Carrier Speed Profileui-button
+        Storage Operational Limitsui-button
+        Charter Vessel Ratesui-button
+        Product Spot Priceui-button
+        Cargo Formsui-button
+        Inventory Constraintsui-button
+        Contract Deadline Management
+          Notification Schemeui-button
+          Monitor Configurationui-button
+          Monitor Dataui-button
+        Optimiser Configuration
+          Spot Opportunityui-button
+      Dispatching Objects
+        Pipelineui-button
+        Transport Systemui-button
+        Transport Zoneui-button
+        Pipeline Segmentui-button
+        Delivery Pointui-button
+        Delivery Streamui-button
+        Meterui-button
+        Nomination Cycleui-button
+        Nomination Pointui-button
+        Nomination Point Connectionui-button
+        Nomination Point Profit Centre Listui-button
+        Nomination Point Profit Centre Company Listui-button
+        Meter Allocation Methodui-button
+        Nomination Point - Code Connectionui-button
+        Nomination Location Connectionui-button
+        Transport Zone Connectionui-button
+        Transport System Location Split Keysui-button
+      Service Objects
+        Service Account Listui-button
+        Serviceui-button
+        Service Templateui-button
+        Service Account Templateui-button
+        Service Accountui-button
+        Service Typeui-button
+        Capacity Typeui-button
+        Contract/Service Event Typeui-button
+        Service Attributeui-button
+        Transport System Price Objectui-button
+        Contract/Service Managementui-button
+      Sales Objects
+        Profit Centre Company Contract Priorityui-button
+        Profit Centre Company Nomination Point Priorityui-button
+        Profit Centre Company Nomination Point Priority - Bulk Updateui-button
+        Price Indexui-button
+        Price Index Factorui-button
+        Price Concept/Elementui-button
+        Price Objectui-button
+        Product Price Objectui-button
+        Maintain Stream Mappingsui-button
+        Processing Unitui-button
+        Price Rateui-button
+      Financial Objects
+        Currencyui-button
+        Exchange Rate Sourceui-button
+        Exchange Rate Setupui-button
+        Exchange Ratesui-button
+        Financial Posting Setupui-button
+        Accountui-button
+        Account Mappingui-button
+        Account Mapping Assistanceui-button
+        Cost Centreui-button
+        Revenue Orderui-button
+        WBSui-button
+        Cost Object Mappingui-button
+        Cost Object Mapping Assistanceui-button
+        VAT Codeui-button
+        VAT Country Setupui-button
+        Bankui-button
+        Bank Accountui-button
+        Payment Schemeui-button
+        Payment Scheme Setupui-button
+        Sales Orderui-button
+        Product Descriptionui-button
+        DOA Credit Limitui-button
+      Inventory Objects
+        Inventory Areaui-button
+      Revenue Document Objects
+        Document Templateui-button
+        Document Sequenceui-button
+        Report Document Setupui-button
+        Report Referenceui-button
+        Report Reference Groupui-button
+      Report Tables
+        Report Table Setui-button
+        Report Tableui-button
+        Report Table Dataui-button
+      Revenue Split Keys
+        Product Split Keyui-button
+        Product Split Key Sharesui-button
+        Company Split Keyui-button
+        Company Split Key Sharesui-button
+        Field Split Keyui-button
+        Field Split Key Sharesui-button
+        Stream Item Category Split Keyui-button
+        Stream Item Category Sharesui-button
+        Split Item Otherui-button
+        Other Split Keyui-button
+        Other Split Key Sharesui-button
+        Stream Item Split Keyui-button
+        Stream Item Split Key Sharesui-button
+      Revenue Lists
+        Input Listui-button
+        Input List Setupui-button
+        HCB Systemui-button
+        HCB System Itemsui-button
+        UOP Keyui-button
+        UOP Key Itemsui-button
+      Revenue Object Usage
+        Country Usageui-button
+        Product Usageui-button
+        Node Usageui-button
+        Field Usageui-button
+        Field Group Usageui-button
+        Stream Category Usageui-button
+        Stream Item Category Usageui-button
+        Stream Usageui-button
+        Stream Item Usageui-button
+        Bank Usageui-button
+        Bank Account Usageui-button
+        Company Usageui-button
+        Customer Usageui-button
+        Vendors Usageui-button
+        Document Date Term Usageui-button
+        Document Received Term Usageui-button
+        Payment Term Usageui-button
+        Document Sequence Usageui-button
+        Document Template Usageui-button
+      Royalty Objects
+        Product Groupui-button
+        Product Group Setupui-button
+        Unit Agreementui-button
+        Unit - Well Setupui-button
+        Tractui-button
+        Tract - Well Setupui-button
+        Royalty Ownerui-button
+        Royalty Depositorui-button
+      Mobile Object
+        Mobile Object Mappingui-button
+      Data Mapping Objects
+        Propertyui-button
+        Project Propertiesui-button
+        Object List Uploadui-button
+        Project Data Mapping Setupui-button
+        Data Extract Setupui-button
+        Data Extract Setup Listui-button
+        Data Extract Setui-button
+        Data Extract Set Setupui-button
+        Project Data Extract Connectionui-button
+        Report Reference Group Setupui-button
+    Integration Services
+      Adapter Configurationui-button
+      Maintain Templatesui-button
+      Event Route Configurationui-button
+      Remote Endpoint Configurationui-button
+      Maintain Mappingsui-button
+      Maintain Mappings Overviewui-button
+      Generate Tag Mappingsui-button
+      Transform Tag Activityui-button
+      Transform Process Logui-button
+      ECIS Agent Logui-button
+      Tag Event Statusui-button
+      Dummy Tag Event Objectui-button
+    Scheduler
+      Business Actionsui-button
+      Schedulesui-button
+      Schedule Historyui-button
+      Manage Schedulerui-button
+    Messaging
+      Maintain Contact Group Setui-button
+      Maintain Message Typeui-button
+      Message Groupui-button
+      Message Formatui-button
+      Freetext Message Templateui-button
+      Actor Maintenanceui-button
+    Task List
+      Task Processui-button
+      Task Process Itemui-button
+    Business Action
+      Business Actionui-button
+      Action Triggerui-button
+      Action Trigger Connectionui-button
+  EC Production
+    Daily Dashboardui-button
+    Deferment Dashboardui-button
+    Production Efficiencyui-button
+    Well and Reservoir
+      Well Finderui-button
+      Sub Surface Connection Informationui-button
+      Event
+        Maintain Well Statusui-button
+        Maintain Production Well Statusui-button
+        Production Well Active Statusui-button
+        Maintain Injection Well Statusui-button
+        Injection Well Active Statusui-button
+        Perforation Active Statusui-button
+        Maintain Production Well Estimateui-button
+        Maintain Well Chronologyui-button
+        Well Phase Component Analysisui-button
+        Well Oil Component Analysisui-button
+        Well Gas Component Analysisui-button
+        Well Flash Gas Component Analysisui-button
+        QA of Well Component Analysisui-button
+        Well Gas Injection Component Analysisui-button
+        Well Sample Analysis - by Dateui-button
+        Well Sample Analysisui-button
+        Well Chemical Sample Analysisui-button
+        Well Product Yield Factorsui-button
+        Well Bore Pressure Testui-button
+        Well Bore Interval PLT Testui-button
+        Well Bore Interval Pressure Testui-button
+        Event Production Well Dataui-button
+        Event Production Well Data - Multi Foldersui-button
+        Event Gas Injection Well Dataui-button
+        Event Water Injection Well Dataui-button
+        Event Waste Injection Well Statusui-button
+        Event Well Hole Statusui-button
+        Well Water Ion Analysisui-button
+        Flowline Water Ion Analysisui-button
+        Event Well Inventoryui-button
+        Well Blowdownui-button
+        Inactive Wellsui-button
+      Sub Daily
+        Sub Daily Production Well Status 1 - Validationui-button
+        Sub Daily Production Well Status 1 - by Wellui-button
+        Sub Daily Production Well Status 1 - by Periodui-button
+        Sub Daily Production Well Status 2 - by Wellui-button
+        Sub Daily Production Well Status 2 - by Periodui-button
+        Sub Daily Gas Injection Well Statusui-button
+        Sub Daily Water Injection Well Statusui-button
+        Sub Daily Steam Injection Well Statusui-button
+        Sub Daily CO2 Injection Well Statusui-button
+        Sub Daily Production Flowline Status 1ui-button
+        Sub Daily Gas Injection Flowline Statusui-button
+        Sub Daily Water Injection Flowline Statusui-button
+        Sub Daily Well Bore Interval Statusui-button
+      Daily
+        Group Model - by Day
+          Daily Production Well Status 1ui-button
+          Daily Production Well Status 2ui-button
+          Daily Production Well Status 3ui-button
+          Daily Gas Injection Well Statusui-button
+          Daily Water Injection Well Statusui-button
+          Daily Steam Injection Well Statusui-button
+          Daily Air Injection Well Statusui-button
+          Daily CO2 Injection Well Statusui-button
+          Daily Production Flowline and Well Status 1ui-button
+          Daily Gas Injection Flowline and Well Statusui-button
+          Daily Water Injection Flowline and Well Statusui-button
+          Daily Production Well Hookup and Well Status 1ui-button
+          Daily Well Data - Water Source Wellsui-button
+          Daily Well Data - Observation Wellsui-button
+          Daily Well Bore Interval Statusui-button
+          Daily Perforation Interval Dataui-button
+          Daily Well Tank Dataui-button
+        Group Model - by Well
+          Daily Prod Well Status 1, by Wellui-button
+          Daily Prod Well Status 2, by Wellui-button
+          Daily Prod Well Status 3, by Wellui-button
+          Daily Gas Injection Well Status, by Wellui-button
+          Daily Water Injection Well Status, by Wellui-button
+          Daily Steam Injection Well Status, by Wellui-button
+          Daily Water Source Well Status, by Wellui-button
+          Daily Perforation Interval Data, by Wellui-button
+        Group Model - by Flowline
+          Daily Production Flowline, by Flowlineui-button
+          Daily Gas Injection Flowline, by Flowlineui-button
+          Daily Water Injection Flowline, by Flowlineui-button
+      Period
+        Period Liquid Production Well - Totalizerui-button
+        Period Gas Production Well - Totalizerui-button
+        Period Gas Injection Well - Totalizerui-button
+        Period Water Injection Well - Totalizerui-button
+      Monthly
+        Monthly Production Well Statusui-button
+        Monthly Allocated Production Well Dataui-button
+        Monthly Gas Injection Well Statusui-button
+        Monthly Water Injection Well Statusui-button
+        Monthly Steam Injection Well Statusui-button
+        Monthly Allocated Injection Well Dataui-button
+    Production Operations
+      Equipment Finderui-button
+      Stream Finderui-button
+      Tank Finderui-button
+      Test Device Finderui-button
+      Event
+        Stream Component Analysisui-button
+        Stream Oil Component Analysisui-button
+        Stream Gas Component Analysisui-button
+        Calculate Monthly Composite Analysisui-button
+        Stream LNG Component Analysisui-button
+        Stream Profit Centre Component Analysisui-button
+        Stream Sample Analysis - by Dateui-button
+        Stream Sample Analysisui-button
+        Stream TBP Analysisui-button
+        Stream AGA Analysisui-button
+        Equipment Analysisui-button
+        Facility Object Analysisui-button
+        Equipment Event Dataui-button
+        Compressor Event Dataui-button
+        Test Device Event Dataui-button
+        Batch Oil Stream Dataui-button
+        Batch Oil Tank Export - Tank Dipui-button
+        Event Tank Status - Dip and Exportui-button
+        Event Tank Status - VCF Calcui-button
+        Event Tank Sealui-button
+        Event Tank Tap Analysisui-button
+        Event Gas Stream Dataui-button
+        Truck Ticket Finderui-button
+        Truck Ticket - Single Transferui-button
+        Truck Ticket - Single Transfer - Objectsui-button
+        Truck Ticket - Single Transfer - Objects Formui-button
+        Truck Ticket - Load To Wellsui-button
+        Truck Ticket - Load From Wellsui-button
+        Truck Ticket - Single Load Multiple Offloadui-button
+        Operational Commentsui-button
+        Environmental Eventsui-button
+        Alarmsui-button
+        Marine Logisticsui-button
+        Maintain Stream Company Splitui-button
+        Maintain Stream Profit Centre Splitui-button
+        Maintain Swap Requestsui-button
+        Gas Processing Restrictionsui-button
+        Stream Ownership Reassignmentui-button
+        Maintain Process Train Recovery Factorsui-button
+        Pipeline Profit Centre Transactionsui-button
+        Pipeline Pigging Eventsui-button
+        Pipeline Ticketui-button
+        Product Transaction Overviewui-button
+        Product Entitlementui-button
+        Blend Exportui-button
+      Sub Daily
+        Sub Daily Oil Stream Status - by Streamui-button
+        Sub Daily Oil Stream Status - by Periodui-button
+        Sub Daily Gas Stream Status - by Streamui-button
+        Sub Daily Gas Stream Status - by Periodui-button
+        Sub Daily Water Stream Status - by Streamui-button
+        Sub Daily Water Stream Status - by Periodui-button
+        Sub Daily Steam Stream Statusui-button
+        Sub Daily Electrical Stream Statusui-button
+        Sub Daily Production Separator Statusui-button
+        Sub Daily Gas Processing Restrictionsui-button
+        Sub Daily Pipeline Profit Centre Statusui-button
+      Daily
+        Group Model - by Day
+          Daily Stream Statusui-button
+          Daily Oil Stream Statusui-button
+          Daily Stream Data - Day Navigatorui-button
+          Daily Stream Data - Month Navigatorui-button
+          Daily Oil Stream Status - Massui-button
+          Daily Liquid Stream Dataui-button
+          Daily Gas Stream Statusui-button
+          Daily Gas Stream Profit Centre Statusui-button
+          Daily Gas Stream Company Statusui-button
+          Daily Gas Stream Status - Run Hours and Rateui-button
+          Daily Gas Stream - Vent and Flare Calcui-button
+          Daily Water Stream Statusui-button
+          Daily Water Overboard Statusui-button
+          Daily Steam Stream Statusui-button
+          Daily LNG Stream Statusui-button
+          Daily NGL Stream Statusui-button
+          Daily Sulfur Stream Statusui-button
+          Daily Electrical Stream Statusui-button
+          Daily CO2 Stream Statusui-button
+          Daily Tank Statusui-button
+          Daily Tank Status 2ui-button
+          Daily Tank Status - Massui-button
+          Daily Tank Status - Terminalui-button
+          Daily Tank Status - VCF Calcui-button
+          Daily Safety, Health and Environmentui-button
+          Daily Personnel Onboardui-button
+          Daily Equipment Statusui-button
+          Daily Test Device Statusui-button
+          Daily Weather Statusui-button
+          Daily Production Separator Statusui-button
+          Daily Pipeline Profit Centre Statusui-button
+          Daily Pipeline Statusui-button
+          Chemical Tank Statusui-button
+          Daily Chemical Injection Point Statusui-button
+          Daily Stream Component Split by Profit Centreui-button
+          Daily Stream Overviewui-button
+          Daily Stream Profit Center Split by Companyui-button
+          Daily Storage Overviewui-button
+        Group Model - by Asset
+          Daily Oil Stream Status, by Streamui-button
+          Daily Oil Derived Stream Status, by Streamui-button
+          Daily Gas Stream Status, by Streamui-button
+          Daily Gas Derived Stream Status, by Streamui-button
+          Daily Water Stream Status, by Streamui-button
+          Daily Water Derived Stream Status, by Streamui-button
+          Daily Water Overboard Stream Status, by Streamui-button
+          Daily Steam Stream Status, by Streamui-button
+          Daily Steam Derived Stream Status, by Streamui-button
+          Daily LNG Stream Status, by Streamui-button
+          Daily LNG Derived Stream Status, by Streamui-button
+          Daily NGL Stream Status, by Streamui-button
+          Daily NGL Derived Stream Status, by Streamui-button
+          Daily Sulfur Stream Status, by Streamui-button
+          Daily Sulfur Derived Stream Status, by Streamui-button
+          Daily Electrical Stream Status, by Streamui-button
+          Daily Electrical Derived Stream Status, by Streamui-button
+          Daily CO2 Stream Status, by Streamui-button
+          Daily Tank Status, by Tankui-button
+          Daily Tank Status - Mass, by Tankui-button
+          Daily Tank Status - VCF Calc, by Tankui-button
+          Daily Chemical Tank Status, by Chemical Tankui-button
+          Daily Production Separator Status, by Production Separatorui-button
+          Daily Stream Allocation Result, by Profit Centre/Componentui-button
+      Period
+        Period Gas Stream Data - AGA Calcui-button
+        Period Stream Oil Component Analysisui-button
+        Period Stream Gas Component Analysisui-button
+        Period Oil LACT Stream - Totalizerui-button
+        Period Gas Stream - Totalizerui-button
+        Period Liquid Stream - Totalizerui-button
+        Period Water Stream - Totalizerui-button
+        Period Weather Statusui-button
+      Monthly
+        Monthly Stream Statusui-button
+        Monthly Liquid Stream Statusui-button
+        Monthly Tank Statusui-button
+        Monthly Tank Status - Terminalui-button
+        Monthly Gas Stream Statusui-button
+        Monthly Stream Component Split by Profit Centreui-button
+        Monthly LNG Stream Statusui-button
+        Monthly NGL Stream Statusui-button
+        Monthly Sulfur Stream Statusui-button
+        Monthly Electrical Stream Statusui-button
+        Monthly Stream Profit Centre Split by Companyui-button
+        Monthly Operational Commentsui-button
+        Monthly Stream Ownership Adjustmentui-button
+        Monthly Stream Allocation Result, by Profit Centre/Componentui-button
+    Production Testing
+      Multi Record Multi Well Testing
+        Automated Production Testui-button
+        Production Test Defineui-button
+        Production Test Eventsui-button
+        Stable Period And Summariseui-button
+        Production Test Resultui-button
+        Enhanced Production Well Test Validationui-button
+        Production Test Combinationui-button
+        Injection Test Defineui-button
+        Injection Test Eventsui-button
+        Stable Period and Summarise - Injection Wellsui-button
+        Injection Test Resultui-button
+      Single Record Single Well Testing
+        Single Production Well Test Resultui-button
+        Gas Injection Well Test Resultui-button
+        Steam Injection Well Test Resultui-button
+        Water Injection Well Test Resultui-button
+        CO2 Injection Well Test Resultui-button
+      Well Performance Curvesui-button
+      Flowline Performance Curvesui-button
+      Trend and Validate Test Resultui-button
+      Well Decline Curvesui-button
+    Production Deferment
+      Automatic Deferment Raw Dataui-button
+      Master Eventsui-button
+      Defermentui-button
+      Deferment - by Wellui-button
+      Period Deferment Calculationsui-button
+      Deferment Dayui-button
+      Deferment Summaryui-button
+      Deferment Corrective Actionui-button
+      Equipment Downtimeui-button
+      Daily Deferment
+        Daily Deferment Masterui-button
+        Daily Deferment Summaryui-button
+      Loss Accounting
+        Daily Facility Loss Accountingui-button
+        Daily Field Loss Accountingui-button
+        LIP Opportunityui-button
+    Production Planning and Forecasting
+      Forecast
+        Forecast and Scenariosui-button
+        Forecast Assumptionsui-button
+        CONSTRAINTS
+          Maintain Object Design Capacityui-button
+          Forecast Constraintsui-button
+          Forecast Object Constraintsui-button
+          Forecast Quota and Nominationui-button
+        WELL POTENTIALS
+          Forecast Production Well Potentialui-button
+          Forecast Injection Well Potentialui-button
+          Well Production Curvesui-button
+          Forecast Scenario Curvesui-button
+        DEFERMENTS
+          Forecast Eventui-button
+          Forecast Deferment Factorsui-button
+        ANALYSIS
+          Forecast Quality Factorsui-button
+          Well Oil Component Forecastui-button
+          Well Gas Component Forecastui-button
+          Stream Oil Component Forecastui-button
+          Stream Gas Component Forecastui-button
+        CONSUMPTION
+          Forecast Consumptionui-button
+        REPORTS
+          Calculate Forecastui-button
+          Forecast Productionui-button
+          Forecast Well Deferment and Compensationui-button
+          Forecast Define Scenarios to Compareui-button
+          Forecast Compare Scenario - Directui-button
+          Forecast Compare Scenario - Graphicalui-button
+          Forecast Scenarios Analysisui-button
+          Forecast Summaryui-button
+          Forecast Variable Operating Expensesui-button
+        DIRECT FORECAST
+          DAILY
+            Daily Production Well Forecastui-button
+            Daily Injection Well Forecastui-button
+            Daily Stream Forecastui-button
+            Daily Facility Class 1 Forecastui-button
+            Daily Facility Class 2 Forecastui-button
+            Daily Area Forecastui-button
+            Daily Sub Area Forecastui-button
+            Daily Production Unit Forecastui-button
+            Daily Production Sub Unit Forecastui-button
+            Daily Field Forecastui-button
+            Daily Storage Forecastui-button
+          MONTHLY
+            Monthly Production Well Forecastui-button
+            Monthly Injection Well Forecastui-button
+      Plan
+        Facility Planui-button
+        Field Planui-button
+        Well Planui-button
+        Stream Planui-button
+        Choke Model MPPui-button
+    Hydrocarbon Accounting
+      Daily Data Status Processesui-button
+      Daily Data Status Processes - by Facilityui-button
+      Daily Data Status Processes - Single Dateui-button
+      Monthly Data Status Processesui-button
+      Monthly Data Lockingui-button
+      Monthly Local Data Lockingui-button
+      Period Process Calculationsui-button
+      Allocation
+        Daily Allocationui-button
+        Daily Allocation - Single Dateui-button
+        Monthly Allocationui-button
+        Sub Daily Allocationui-button
+    Cargo Administration
+      Cargo And Parcel Informationui-button
+      Cargo Load and Analysisui-button
+      Port Logui-button
+      Monthly Account Balance Calculationui-button
+    Chemicals
+      Chemical Inventory
+        Chemical Tank Status Read Liteui-button
+      Chemical Treatment
+        Chemical Injection Reading Liteui-button
+    Laboratory
+      Configuration
+        Analysis Template Liteui-button
+        Analysis Target Liteui-button
+      Analysis And Measurementsui-button
+  EC Chemistry
+    Chemicals
+      Chemical Product Management
+        Manage Chemical Productui-button
+        Chemical Compatibilityui-button
+      Chemical Inventory
+        Manage Chemical Tankui-button
+        Chemical Tank Status Readui-button
+        Manage Chemical Inventoryui-button
+        Chemical Availability And Orderui-button
+      Chemical Treatment
+        Manage Chemical Streamui-button
+        Chemical Stream Flow Configurationui-button
+        Chemical Injection Statusui-button
+        Chemical Batch Treatmentui-button
+    Laboratory
+      Configuration
+        Sample Schedule Editorui-button
+        Analysis Templateui-button
+        Corrosion Coupon Materialui-button
+        Analysis Targetui-button
+      Modelling
+        Scale Simulation Resultsui-button
+        Corrosion Simulation Resultsui-button
+      Sample Managerui-button
+      Sample Analysisui-button
+      Daily Analysis And Measurementsui-button
+  EC Transport
+    Cargo Planning
+      Tab Cargo Menuui-button
+      Tab Cargo Plannerui-button
+      Lifting Programui-button
+      Lifting Program - Monthui-button
+      Nomination Entryui-button
+      Schedule Lifting Overview - RBSui-button
+      Schedule Lifting Overviewui-button
+      Schedule Lifting Chart - RBSui-button
+      Schedule Lifting Chartui-button
+      Storage and Tank Chartui-button
+      Cargo Informationui-button
+      Nomination Detailsui-button
+      Nomination Splitui-button
+      Lifting Instructionui-button
+      Document Instructionui-button
+      Daily Storage Forecastui-button
+      Daily Entitlement RBSui-button
+      Daily Entitlementui-button
+      Daily Entitlement - Single Lifting Account RBSui-button
+      Daily Entitlement - Single Lifting Accountui-button
+      Daily Entitlement - Lifting Account RBSui-button
+      Daily Entitlement - Lifting Accountui-button
+      Estimated Monthly Account Statusui-button
+      Monthly Schedule Overviewui-button
+      Monthly Storage Profit Centre Forecastui-button
+      Daily Storage Profit Centre Forecastui-button
+      Official Daily Receiptui-button
+      Period Process Train Storage Yieldui-button
+      Process Train Eventui-button
+      Contract KPI Monitoringui-button
+      Carrier Availabilityui-button
+      Contract Delivery Trackingui-button
+      Daily Rundown Actuals vs. Forecastui-button
+      Daily Rundown Total Actuals vs. Forecastui-button
+      Monthly Reference Entitlementui-button
+      Berth Slot Calendarui-button
+      Lifting Account Entitlement Chart RBSui-button
+      Lifting Account Entitlement Chartui-button
+      Carrier Maintenanceui-button
+      Port Weather Informationui-button
+      Parcel Nominationui-button
+      Master Planui-button
+      Sub Day
+        Sub Day Receipts - Lifting Accountui-button
+        Sub Day Deliveries - Lifting Accountui-button
+        Sub Day Entitlement - Lifting Account RBSui-button
+        Sub Day Entitlement - Lifting Accountui-button
+        Sub Day Entitlement RBSui-button
+        Sub Day Entitlementui-button
+        Sub Daily Receipts Detailsui-button
+      Forecast
+        Cargo Planning Forecast Finderui-button
+        Cargo Planning Forecastui-button
+        Initialize Lifting Accountui-button
+        Lifting Programui-button
+        Lifting Program - Monthui-button
+        Nomination Entryui-button
+        Schedule Lifting Chart -RBSui-button
+        Schedule Lifting Chartui-button
+        Schedule Lifting - Actual vs. Forecastui-button
+        Cargo Informationui-button
+        Nomination Splitui-button
+        Daily Storage Forecastui-button
+        Daily Entitlement RBSui-button
+        Daily Entitlementui-button
+        Daily Entitlement - Single Lifting Account RBSui-button
+        Daily Entitlement - Single Lifting Accountui-button
+        Daily Entitlement - Lifting Account RBSui-button
+        Daily Entitlement - Lifting Accountui-button
+        Monthly Storage Profit Centre Forecastui-button
+        Daily Storage Profit Centre Forecastui-button
+        Lifting Account Adjustmentui-button
+        Contract KPI Monitoringui-button
+        Carrier Availabilityui-button
+        Contract Delivery Trackingui-button
+        Period Process Train Storage Yieldui-button
+        Process Train Eventui-button
+        Berth Slot Calendarui-button
+        Forecast Manager - RBSui-button
+        Forecast Managerui-button
+        Forecast Daily Storage Productionui-button
+        Daily Rundown Total Actuals vs. Forecastui-button
+        Lifting Account Entitlement Chart RBSui-button
+        Lifting Account Entitlement Chartui-button
+        Carrier Maintenanceui-button
+        Parcel Nominationui-button
+        Scenario Managerui-button
+        Tank Usageui-button
+        Sub Day
+    Terminal Operation
+      Tab Harbour Menuui-button
+      Vehicle Logui-button
+      Tab Cargo Operationsui-button
+      Batch Quantityui-button
+      BL/MR Infoui-button
+      BL/MR Lightui-button
+      Cargo Analysisui-button
+      Cargo Activity Timesheetui-button
+      Terminal Operation Delaysui-button
+      Harbour Interruptionui-button
+      Harbour Duesui-button
+      Ship Info and Ullagesui-button
+      Demurrageui-button
+      Day End Not Liftedui-button
+      Month End Not Liftedui-button
+      Nomination Closing Balanceui-button
+      Letter of Protestui-button
+      Cargo Documentui-button
+      Cargo Document Parcelui-button
+      Cargo Document Otherui-button
+      Sailing Adviceui-button
+      Batch Quantity Unloadui-button
+      Unload Infoui-button
+      Cargo Analysis Unloadui-button
+      Cargo Activity Timesheet Unloadui-button
+      Terminal Operation Unload Delaysui-button
+      Demurrage Unloadui-button
+      Port Resource Usageui-button
+      Port Resources Restrictionui-button
+      Marine Noticesui-button
+      Daily Capacity Adjustmentui-button
+      Daily Contract Capacity Requestui-button
+    Lifting Account
+      Sub Daily - Lifting Account Adjustmentui-button
+      Lifting Account Adjustmentui-button
+      Monthly Account Statusui-button
+    Forecasting
+      Forecastui-button
+      Forecast Input Contractui-button
+      Forecast Input Delivery Pointui-button
+      Forecast Input Nomination Pointui-button
+      Forecast Input Nomination Locationui-button
+      Forecast Monthly Input Nomination Locationui-button
+      Forecast Analysis Contractui-button
+      Forecast Analysis Delivery Pointui-button
+      Forecast Analysis Nomination Pointui-button
+      Calculate Forecastui-button
+      Forecast Daily Operational Restrictionui-button
+      Forecast Period Operational Restrictionui-button
+      Forecast Period Component Recovery Factorsui-button
+      Forecast Period Product Component Recovery Factorsui-button
+      Daily AFSui-button
+      Daily Nomination Point AFSui-button
+      Monthly AFS Chartui-button
+      Forecast Contract Capacity Factorsui-button
+    Gas Dispatching
+      Forecast
+        Meter Event Forecast Qualityui-button
+        Period Contract Quality Handlingui-button
+      Availability
+        Period Nomination Point Shareui-button
+        Daily Nomination Point Availabilityui-button
+      Nomination
+        Requester
+        Operator
+      Control and validation
+        Daily Transfer Validationui-button
+        Daily Location Matchingui-button
+        Daily Nomination Validationui-button
+        Daily Capacity Validationui-button
+        Sub Daily Location Matchingui-button
+        Daily Contract Balanceui-button
+        Monthly Contract Balanceui-button
+        Daily Location Contract Balanceui-button
+        Sub Daily Contract Nomination Boundariesui-button
+        Gas Day Summaryui-button
+      Scheduling
+        Daily Gas Schedulingui-button
+        Daily Delivery Point Targetui-button
+        Sub Daily Delivery Point Targetui-button
+        Monthly Dispatching Calculationui-button
+        Daily Dispatching Calculationui-button
+        Sub Daily Dispatching Calculationui-button
+        Contract Capacity Factorsui-button
+        Period Nomination Point Factorsui-button
+        Period Contract Factorsui-button
+        Period Transport Zone Factorsui-button
+        Period Component Recovery Factorsui-button
+        Period Product Component Recovery Factorsui-button
+        Sub Daily Location Summaryui-button
+        Sub Daily Location Summary - Detailsui-button
+        Sub Daily Location Capacityui-button
+        Sub Daily Location Summary Matrixui-button
+        Sub Daily Pipeline Segment Summaryui-button
+        Daily Schedule Jobui-button
+        Daily Allocation Jobui-button
+        Period Schedule Jobui-button
+        Period Allocation Jobui-button
+        Delivery Stream Segment Networkui-button
+      Metering
+        Daily Meter Measurementui-button
+        Sub Daily Meter Measurementui-button
+        Monthly Meter Measurementui-button
+        Meter Compositionui-button
+        Daily Meter Composition Matrixui-button
+        Daily Meter Composition Matrix - Approvedui-button
+        Monthly Meter Composition Matrixui-button
+        Monthly Meter Composition Matrix - Approvedui-button
+        Daily Meter Allocationui-button
+      Delivery
+        Delivery Compositionui-button
+        Daily Nomination Deliveryui-button
+        Sub Daily Nomination Deliveryui-button
+        Daily Path Deliveryui-button
+      Inventory
+        Daily Pipeline Linepackui-button
+        Sub Daily Pipeline Linepackui-button
+        Daily Contract Location Inventoryui-button
+        Daily Contract Location Inventory - Swapui-button
+        Daily Contract Location Inventory - Contract Swapui-button
+        Daily Contract Location Inventory - Location Swapui-button
+        Daily Contract Inventory Matrixui-button
+        Monthly Contract Location Inventoryui-button
+        Daily Inventory Accountingui-button
+        Daily Inventory Tradeui-button
+        Daily Inventory Trade Approvalui-button
+      Capacity
+        Period Operational Restrictionui-button
+        Daily Operational Restrictionui-button
+        Sub Daily Operational Restrictionui-button
+        Daily Capacity Tradesui-button
+        Maintain Capacity Releaseui-button
+        Daily Pipeline Segment Contracted Nominationsui-button
+        Maintain Capacity Bidui-button
+        Capacity Release Detailsui-button
+        Capacity Release - Internalui-button
+        Capacity Release Resultui-button
+        Capacity Release Recall Reputui-button
+        Available Capacity Releaseui-button
+        Daily Contract Capacity Requestui-button
+        Service Capacityui-button
+        Transport Eventsui-button
+        Contract/Service Eventsui-button
+        Service Capacity Requestui-button
+        Annual Service Capacity Requestui-button
+        Service Capacity Request Approvalui-button
+        Annual Service Capacity Request Approvalui-button
+      Contract Bundle Transferui-button
+      Output Nominationui-button
+      Input Nominationui-button
+      Exit Point Matchingui-button
+      Aggregated Exit Point Matchingui-button
+      Delivery Point Targetui-button
+      Monthly Transport Factorsui-button
+      Pipeline Trading Requestui-button
+      Pipeline Trading Confirmationui-button
+      Create Output Nomination Messageui-button
+      Sub Daily Delivery Calculationsui-button
+      Sub Daily Estimate Calculationsui-button
+  EC Sales
+    Sales Dispatching
+      Daily Gas Sales Forecastui-button
+      Monthly Forecastui-button
+      Daily Nominationui-button
+      Daily Re-Nominationui-button
+      Daily Deliveryui-button
+      Monthly Deliveryui-button
+      Daily Profit Centre Deliveryui-button
+      Monthly Profit Centre Deliveryui-button
+      Gas Delivery Eventsui-button
+      Forecast Component Analysisui-button
+      Delivery Component Analysisui-button
+      Planned Delivery Restrictionsui-button
+      Wet Gas Export and Fuelui-button
+      NGL Exportui-button
+      Wet Gas Hourly Profileui-button
+      Daily Availabilityui-button
+      Daily Nomination Overviewui-button
+      Before Day Targetui-button
+      Within Day Targetui-button
+      Daily Dry Gas Flow Profileui-button
+      Forecast
+        Forecast - Sales Dispatchingui-button
+        Forecast - Monthlyui-button
+        Forecast - Nomination Location Delivery Eventsui-button
+      Nomination Point
+        Daily Sales Forecastui-button
+        Daily Sales Availabilityui-button
+        Daily Sales Nominationui-button
+        Sub Daily Sales Nominationui-button
+        Daily Sales Deliveryui-button
+        Sub Daily Sales Deliveryui-button
+        Monthly Sales Deliveryui-button
+        Sales Gas Delivery Eventsui-button
+        Daily Sales Nomination Overviewui-button
+        Nomination Location Delivery Eventsui-button
+        Daily Sales Renominationui-button
+        Period Sales Nominationui-button
+        Daily Nomination Location Targetui-button
+        Daily Nomination Location Flow Profileui-button
+    Price Determination
+      Unit Priceui-button
+      Exchange Ratesui-button
+      Product Price Listui-button
+      Sub Daily Product Price Listui-button
+      Contract Price Listui-button
+      Contract Price List - Datasetui-button
+      Contract Location Price List - Datasetui-button
+      Sub Daily Contract Price Listui-button
+      Cargo Price Listui-button
+      Cargo/Parcel Price Listui-button
+      Cargo Price List - Datasetui-button
+      Price Componentui-button
+      Daily Price Indexui-button
+      Daily Price Index - Datasetui-button
+      Daily Price Index - Dataset and Price Objectui-button
+      Sub Daily Price Indexui-button
+      Monthly Price Indexui-button
+      Product Price List - Datasetui-button
+      Monthly Price Index - Datasetui-button
+      Monthly Price Index - Dataset and Price Objectui-button
+      Monthly Price Index Forecastui-button
+      Yearly Price Indexui-button
+      Price Calculationsui-button
+      Price Calculations - by Price Objectui-button
+      Contract Cargo Elementsui-button
+      Daily Price Rateui-button
+      Daily Price Rate - Datasetui-button
+      Daily Price Rate - Dataset and Price Objectui-button
+      Monthly Price Rateui-button
+      Monthly Price Rate - Datasetui-button
+      Monthly Price Rate - Dataset and Price Objectui-button
+      Yearly Price Rateui-button
+      Matrix Price Listui-button
+      Forecast
+        Forecast Priceui-button
+        Forecast Contract Price Listui-button
+        Forecast - Monthly Price Indexui-button
+        Forecast - Price Calculationsui-button
+    Sales Allocation
+      Daily Contract Calculationui-button
+      Daily Contract Calculation - by Contractui-button
+      Monthly Contract Calculationui-button
+      Monthly Contract Calculation - by Contractui-button
+      Yearly Contract Calculationui-button
+      Yearly Contract Calculation - by Contractui-button
+      Monthly Contract Allocation Adjustmentui-button
+      Sub Daily Contract Account Statusui-button
+      Monthly Contract Account Company Statusui-button
+      Daily Contract Account Eventsui-button
+      Monthly Contract Account Eventsui-button
+      Yearly Contract Account Eventsui-button
+      Monthly Expenditure Forecastui-button
+      Monthly Expenditureui-button
+      Cargo Contract Account Statusui-button
+      Daily Contractual Volumeui-button
+      Monthly Contractual Volumeui-button
+      Period Contract Liftingui-button
+      Daily Contract Account Statusui-button
+      Monthly Contract Account Statusui-button
+      Yearly Contract Account Statusui-button
+      Daily Contract Account Eventsui-button
+      Monthly Contract Account Eventsui-button
+      Yearly Contract Account Eventsui-button
+      Result
+        Daily Contract Account Result - Datasetui-button
+        Monthly Contract Account Result - Datasetui-button
+        Daily Contract Account Result - Profit Centreui-button
+        Monthly Contract Account Result - Profit Centreui-button
+        Yearly Contract Account Result - Profit Centreui-button
+        Daily Contract Account Result - Profit Centre and Datasetui-button
+        Monthly Contract Account Result - Profit Centre and Datasetui-button
+        Daily Contract Account Result - Profit Centre and Companyui-button
+        Sub Daily Contract Account Result - Profit Centre and Companyui-button
+        Monthly Contract Account Result - Profit Centre and Companyui-button
+        Yearly Contract Account Result - Profit Centre and Companyui-button
+        Daily Contract Account Result - Companyui-button
+        Monthly Contract Account Result - Companyui-button
+        Yearly Contract Account Result - Companyui-button
+        Daily Contract Account Result - Profit Centre, Company and Locationui-button
+        Sub Daily Contract Account Result - Profit Centre, Company and Locationui-button
+        Monthly Contract Account Result - Profit Centre, Company and Locationui-button
+        Yearly Contract Account Result - Profit Centre, Company and Locationui-button
+        Daily Contract Account Result - Locationui-button
+        Sub Daily Contract Account Result - Locationui-button
+        Monthly Contract Account Result - Locationui-button
+        Yearly Contract Account Result - Locationui-button
+        Daily Contract Account Result - Profit Centre, Company and Unique Keyui-button
+        Monthly Contract Account Result - Profit Centre, Company and Unique Keyui-button
+        Daily Service Account Statusui-button
+        Sub Daily Service Account Statusui-button
+        Monthly Service Account Statusui-button
+        Yearly Service Account Statusui-button
+        Daily Service Account Result - Locationui-button
+        Sub Daily Service Account Result - Locationui-button
+        Monthly Service Account Result - Locationui-button
+        Yearly Service Account Result - Locationui-button
+        Daily Service Account Result - Profit Centre and Companyui-button
+        Sub Daily Service Account Result - Profit Centre and Companyui-button
+        Monthly Service Account Result - Profit Centre and Companyui-button
+        Yearly Service Account Result - Profit Centre and Companyui-button
+        Daily Service Account Result - Profit Centre, Company and Locationui-button
+        Sub Daily Service Account Result - Profit Centre, Company and Locationui-button
+        Monthly Service Account Result - Profit Centre, Company and Locationui-button
+        Yearly Service Account Result - Profit Centre, Company and Locationui-button
+        Daily Service Account Result - Profit Centre, Company and Unique Keyui-button
+        Monthly Service Account Result - Profit Centre, Company and Unique Keyui-button
+        Daily Service Account Result - Profit Centreui-button
+        Sub Daily Service Account Result - Profit Centreui-button
+        Monthly Service Account Result - Profit Centreui-button
+        Yearly Service Account Result - Profit Centreui-button
+      Forecast
+        Forecast - Daily Contract Account Statusui-button
+        Forecast - Monthly Contract Account Statusui-button
+        Forecast - Yearly Contract Account Statusui-button
+        Forecast - Daily Contract Account Eventsui-button
+        Forecast - Monthly Contract Account Eventsui-button
+        Forecast - Yearly Contract Account Eventsui-button
+        Forecast - Sales Allocationui-button
+        Forecast - Monthly Expenditureui-button
+        Forecast - Monthly Contract Account Company Statusui-button
+        Forecast - Daily Contract Calculationui-button
+        Forecast - Monthly Contract Calculationui-button
+        Forecast - Yearly Contract Calculationui-button
+  EC Revenue
+    Document Tracingui-button
+    Visual Tracingui-button
+    Quantity
+      Daily
+        Split Keys
+        List
+        Node
+        Query
+        Daily Quantity Allocationui-button
+        Daily Status Processui-button
+        Daily SI Pending Calculationui-button
+      Monthly
+        Split Keys
+        List
+        Node
+        Query
+        Monthly Quantity Allocationui-button
+        Monthly Status Processui-button
+        Monthly SI Pending Calculationui-button
+      Forecast
+        Forecast Stream Item Quantitiesui-button
+        Forecast SI Pending Calculationui-button
+    Inventory
+      Validation
+        Inventory Transferui-button
+        Inventory Un-Transferui-button
+        Inventory Bookedui-button
+        Inventory Un-Bookedui-button
+      Validation
+      Setup
+      Process
+      Transactional Inventory
+    Financial Transaction
+      Document Finderui-button
+      Period Documentui-button
+      Cargo Documentui-button
+      ERP Documentui-button
+      Product Price Listui-button
+      Payment Trackingui-button
+      Interface Filesui-button
+      Cargo Dataui-button
+      Validation
+      Contract
+    Data Mapping
+      Data Entry Interfaceui-button
+      Project Data Entryui-button
+      Data Entry Reconciliationui-button
+      Project Data Mappingui-button
+      Project Data Mapping Accrualui-button
+      Project Data Extractui-button
+      Project Data Extract Accrualui-button
+      Project Data Extract By Yearui-button
+      Project Data Extract For 10 Yearsui-button
+      Cost of Serviceui-button
+    Royalty
+      Royalty Canada
+      Royalty USA
+    Forecast
+      Quantity
+      Revenue
+      VO Forecast Qty
+    Closing Process
+      Revenue Lock Moduleui-button
+      Revenue Booking Period - Closeui-button
+      Revenue Reporting Period - Closeui-button
+      Revenue Booking Period - Re-openui-button
+      Revenue Reporting Period - Re-openui-button
+    Revenue Logs
+      Revenue Detailed Logui-button
+      Calculation Logui-button
+    Financial Item
+      Financial Item Definitionui-button
+      Financial Item Templateui-button
+      Daily Financial Itemui-button
+      Daily Financial Item Calculationui-button
+      Monthly Financial Itemui-button
+      Monthly Financial Item Calculationui-button
+      Yearly Financial Itemui-button
+      Yearly Financial Item Calculationui-button
+  System Messages
+    System Messagesui-button
+  Reporting
+    Excel Report Templates
+    Report Areaui-button
+    Report and Analyticsui-button
+    Report Templateui-button
+    Report Definitionui-button
+    Report Administrationui-button
+    Report Generationui-button
+    Report Set Administrationui-button
+    Report Queue Statusui-button
+    Export to Excel Expressui-button
+    Report Publishingui-button
+    Display Published Reportui-button
+  Process Automation
+    Project Managementui-button
+    Process Actionui-button
+    Process Templateui-button
+    Process Executionui-button
+    Process Overviewui-button
+    Process Overview Configurationui-button
+    Process Overview Legacyui-button
+    Todo Listui-button
+    Task Managementui-button
+    Process Notificationsui-button
+    Process Monitorui-button
+    Process Monitor Configurationui-button
+    Viewer Tagui-button
+  Messaging
+    EDI Addressui-button
+    Value Mapping Maintenanceui-button
+    Distribution Listui-button
+    Send Freetext Messageui-button
+    Communication Statusui-button
+    Message Alertsui-button
+    Message Distributionui-button
+    Message Group Listui-button
+    Outgoing Messagesui-button
+    Incoming Messagesui-button
+    Message Journalui-button
+    Message Workflow Overviewui-button
+    Message Generationui-button
+    Manage Outgoing Messagesui-button
+  Task List
+    Task Listui-button
+    Four Eye Approvalui-button
+    Logbookui-button
+  EC Integration Service
+    Scheduler
+    Import

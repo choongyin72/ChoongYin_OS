@@ -1,0 +1,82 @@
+  EC Revenue
+    Document Tracing
+    Visual Tracing
+    Quantity
+      Daily
+        Split Keys
+        List
+        Node
+        Query
+        Daily Quantity Allocation
+        Daily Status Process
+        Daily SI Pending Calculation
+      Monthly
+        Split Keys
+        List
+        Node
+        Query
+        Monthly Quantity Allocation
+        Monthly Status Process
+        Monthly SI Pending Calculation
+      Forecast
+        Forecast Stream Item Quantities
+        Forecast SI Pending Calculation
+    Inventory
+      Validation
+        Inventory Transfer
+        Inventory Un-Transfer
+        Inventory Booked
+        Inventory Un-Booked
+      Validation
+      Setup
+      Process
+      Transactional Inventory
+    Financial Transaction
+      Document Finder
+      Period Document
+      Cargo Document
+      ERP Document
+      Product Price List
+      Payment Tracking
+      Interface Files
+      Cargo Data
+      Validation
+      Contract
+    Data Mapping
+      Data Entry Interface
+      Project Data Entry
+      Data Entry Reconciliation
+      Project Data Mapping
+      Project Data Mapping Accrual
+      Project Data Extract
+      Project Data Extract Accrual
+      Project Data Extract By Year
+      Project Data Extract For 10 Years
+      Cost of Service
+    Royalty
+      Royalty Canada
+      Royalty USA
+    Forecast
+      Quantity
+      Revenue
+      VO Forecast Qty
+    Closing Process
+      Revenue Lock Module
+      Revenue Booking Period - Close
+      Revenue Reporting Period - Close
+      Revenue Booking Period - Re-open
+      Revenue Reporting Period - Re-open
+    Revenue Logs
+      Revenue Detailed Log
+      Calculation Log
+    Financial Item
+      Financial Item Definition
+      Financial Item Template
+      Daily Financial Item
+      Daily Financial Item Calculation
+      Monthly Financial Item
+      Monthly Financial Item Calculation
+      Yearly Financial Item
+      Yearly Financial Item Calculation
+  System Messages
+    System Messages

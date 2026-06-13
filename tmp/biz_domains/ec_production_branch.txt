@@ -1,0 +1,371 @@
+  EC Production
+    Daily Dashboard
+    Deferment Dashboard
+    Production Efficiency
+    Well and Reservoir
+      Well Finder
+      Sub Surface Connection Information
+      Event
+        Maintain Well Status
+        Maintain Production Well Status
+        Production Well Active Status
+        Maintain Injection Well Status
+        Injection Well Active Status
+        Perforation Active Status
+        Maintain Production Well Estimate
+        Maintain Well Chronology
+        Well Phase Component Analysis
+        Well Oil Component Analysis
+        Well Gas Component Analysis
+        Well Flash Gas Component Analysis
+        QA of Well Component Analysis
+        Well Gas Injection Component Analysis
+        Well Sample Analysis - by Date
+        Well Sample Analysis
+        Well Chemical Sample Analysis
+        Well Product Yield Factors
+        Well Bore Pressure Test
+        Well Bore Interval PLT Test
+        Well Bore Interval Pressure Test
+        Event Production Well Data
+        Event Production Well Data - Multi Folders
+        Event Gas Injection Well Data
+        Event Water Injection Well Data
+        Event Waste Injection Well Status
+        Event Well Hole Status
+        Well Water Ion Analysis
+        Flowline Water Ion Analysis
+        Event Well Inventory
+        Well Blowdown
+        Inactive Wells
+      Sub Daily
+        Sub Daily Production Well Status 1 - Validation
+        Sub Daily Production Well Status 1 - by Well
+        Sub Daily Production Well Status 1 - by Period
+        Sub Daily Production Well Status 2 - by Well
+        Sub Daily Production Well Status 2 - by Period
+        Sub Daily Gas Injection Well Status
+        Sub Daily Water Injection Well Status
+        Sub Daily Steam Injection Well Status
+        Sub Daily CO2 Injection Well Status
+        Sub Daily Production Flowline Status 1
+        Sub Daily Gas Injection Flowline Status
+        Sub Daily Water Injection Flowline Status
+        Sub Daily Well Bore Interval Status
+      Daily
+        Group Model - by Day
+          Daily Production Well Status 1
+          Daily Production Well Status 2
+          Daily Production Well Status 3
+          Daily Gas Injection Well Status
+          Daily Water Injection Well Status
+          Daily Steam Injection Well Status
+          Daily Air Injection Well Status
+          Daily CO2 Injection Well Status
+          Daily Production Flowline and Well Status 1
+          Daily Gas Injection Flowline and Well Status
+          Daily Water Injection Flowline and Well Status
+          Daily Production Well Hookup and Well Status 1
+          Daily Well Data - Water Source Wells
+          Daily Well Data - Observation Wells
+          Daily Well Bore Interval Status
+          Daily Perforation Interval Data
+          Daily Well Tank Data
+        Group Model - by Well
+          Daily Prod Well Status 1, by Well
+          Daily Prod Well Status 2, by Well
+          Daily Prod Well Status 3, by Well
+          Daily Gas Injection Well Status, by Well
+          Daily Water Injection Well Status, by Well
+          Daily Steam Injection Well Status, by Well
+          Daily Water Source Well Status, by Well
+          Daily Perforation Interval Data, by Well
+        Group Model - by Flowline
+          Daily Production Flowline, by Flowline
+          Daily Gas Injection Flowline, by Flowline
+          Daily Water Injection Flowline, by Flowline
+      Period
+        Period Liquid Production Well - Totalizer
+        Period Gas Production Well - Totalizer
+        Period Gas Injection Well - Totalizer
+        Period Water Injection Well - Totalizer
+      Monthly
+        Monthly Production Well Status
+        Monthly Allocated Production Well Data
+        Monthly Gas Injection Well Status
+        Monthly Water Injection Well Status
+        Monthly Steam Injection Well Status
+        Monthly Allocated Injection Well Data
+    Production Operations
+      Equipment Finder
+      Stream Finder
+      Tank Finder
+      Test Device Finder
+      Event
+        Stream Component Analysis
+        Stream Oil Component Analysis
+        Stream Gas Component Analysis
+        Calculate Monthly Composite Analysis
+        Stream LNG Component Analysis
+        Stream Profit Centre Component Analysis
+        Stream Sample Analysis - by Date
+        Stream Sample Analysis
+        Stream TBP Analysis
+        Stream AGA Analysis
+        Equipment Analysis
+        Facility Object Analysis
+        Equipment Event Data
+        Compressor Event Data
+        Test Device Event Data
+        Batch Oil Stream Data
+        Batch Oil Tank Export - Tank Dip
+        Event Tank Status - Dip and Export
+        Event Tank Status - VCF Calc
+        Event Tank Seal
+        Event Tank Tap Analysis
+        Event Gas Stream Data
+        Truck Ticket Finder
+        Truck Ticket - Single Transfer
+        Truck Ticket - Single Transfer - Objects
+        Truck Ticket - Single Transfer - Objects Form
+        Truck Ticket - Load To Wells
+        Truck Ticket - Load From Wells
+        Truck Ticket - Single Load Multiple Offload
+        Operational Comments
+        Environmental Events
+        Alarms
+        Marine Logistics
+        Maintain Stream Company Split
+        Maintain Stream Profit Centre Split
+        Maintain Swap Requests
+        Gas Processing Restrictions
+        Stream Ownership Reassignment
+        Maintain Process Train Recovery Factors
+        Pipeline Profit Centre Transactions
+        Pipeline Pigging Events
+        Pipeline Ticket
+        Product Transaction Overview
+        Product Entitlement
+        Blend Export
+      Sub Daily
+        Sub Daily Oil Stream Status - by Stream
+        Sub Daily Oil Stream Status - by Period
+        Sub Daily Gas Stream Status - by Stream
+        Sub Daily Gas Stream Status - by Period
+        Sub Daily Water Stream Status - by Stream
+        Sub Daily Water Stream Status - by Period
+        Sub Daily Steam Stream Status
+        Sub Daily Electrical Stream Status
+        Sub Daily Production Separator Status
+        Sub Daily Gas Processing Restrictions
+        Sub Daily Pipeline Profit Centre Status
+      Daily
+        Group Model - by Day
+          Daily Stream Status
+          Daily Oil Stream Status
+          Daily Stream Data - Day Navigator
+          Daily Stream Data - Month Navigator
+          Daily Oil Stream Status - Mass
+          Daily Liquid Stream Data
+          Daily Gas Stream Status
+          Daily Gas Stream Profit Centre Status
+          Daily Gas Stream Company Status
+          Daily Gas Stream Status - Run Hours and Rate
+          Daily Gas Stream - Vent and Flare Calc
+          Daily Water Stream Status
+          Daily Water Overboard Status
+          Daily Steam Stream Status
+          Daily LNG Stream Status
+          Daily NGL Stream Status
+          Daily Sulfur Stream Status
+          Daily Electrical Stream Status
+          Daily CO2 Stream Status
+          Daily Tank Status
+          Daily Tank Status 2
+          Daily Tank Status - Mass
+          Daily Tank Status - Terminal
+          Daily Tank Status - VCF Calc
+          Daily Safety, Health and Environment
+          Daily Personnel Onboard
+          Daily Equipment Status
+          Daily Test Device Status
+          Daily Weather Status
+          Daily Production Separator Status
+          Daily Pipeline Profit Centre Status
+          Daily Pipeline Status
+          Chemical Tank Status
+          Daily Chemical Injection Point Status
+          Daily Stream Component Split by Profit Centre
+          Daily Stream Overview
+          Daily Stream Profit Center Split by Company
+          Daily Storage Overview
+        Group Model - by Asset
+          Daily Oil Stream Status, by Stream
+          Daily Oil Derived Stream Status, by Stream
+          Daily Gas Stream Status, by Stream
+          Daily Gas Derived Stream Status, by Stream
+          Daily Water Stream Status, by Stream
+          Daily Water Derived Stream Status, by Stream
+          Daily Water Overboard Stream Status, by Stream
+          Daily Steam Stream Status, by Stream
+          Daily Steam Derived Stream Status, by Stream
+          Daily LNG Stream Status, by Stream
+          Daily LNG Derived Stream Status, by Stream
+          Daily NGL Stream Status, by Stream
+          Daily NGL Derived Stream Status, by Stream
+          Daily Sulfur Stream Status, by Stream
+          Daily Sulfur Derived Stream Status, by Stream
+          Daily Electrical Stream Status, by Stream
+          Daily Electrical Derived Stream Status, by Stream
+          Daily CO2 Stream Status, by Stream
+          Daily Tank Status, by Tank
+          Daily Tank Status - Mass, by Tank
+          Daily Tank Status - VCF Calc, by Tank
+          Daily Chemical Tank Status, by Chemical Tank
+          Daily Production Separator Status, by Production Separator
+          Daily Stream Allocation Result, by Profit Centre/Component
+      Period
+        Period Gas Stream Data - AGA Calc
+        Period Stream Oil Component Analysis
+        Period Stream Gas Component Analysis
+        Period Oil LACT Stream - Totalizer
+        Period Gas Stream - Totalizer
+        Period Liquid Stream - Totalizer
+        Period Water Stream - Totalizer
+        Period Weather Status
+      Monthly
+        Monthly Stream Status
+        Monthly Liquid Stream Status
+        Monthly Tank Status
+        Monthly Tank Status - Terminal
+        Monthly Gas Stream Status
+        Monthly Stream Component Split by Profit Centre
+        Monthly LNG Stream Status
+        Monthly NGL Stream Status
+        Monthly Sulfur Stream Status
+        Monthly Electrical Stream Status
+        Monthly Stream Profit Centre Split by Company
+        Monthly Operational Comments
+        Monthly Stream Ownership Adjustment
+        Monthly Stream Allocation Result, by Profit Centre/Component
+    Production Testing
+      Multi Record Multi Well Testing
+        Automated Production Test
+        Production Test Define
+        Production Test Events
+        Stable Period And Summarise
+        Production Test Result
+        Enhanced Production Well Test Validation
+        Production Test Combination
+        Injection Test Define
+        Injection Test Events
+        Stable Period and Summarise - Injection Wells
+        Injection Test Result
+      Single Record Single Well Testing
+        Single Production Well Test Result
+        Gas Injection Well Test Result
+        Steam Injection Well Test Result
+        Water Injection Well Test Result
+        CO2 Injection Well Test Result
+      Well Performance Curves
+      Flowline Performance Curves
+      Trend and Validate Test Result
+      Well Decline Curves
+    Production Deferment
+      Automatic Deferment Raw Data
+      Master Events
+      Deferment
+      Deferment - by Well
+      Period Deferment Calculations
+      Deferment Day
+      Deferment Summary
+      Deferment Corrective Action
+      Equipment Downtime
+      Daily Deferment
+        Daily Deferment Master
+        Daily Deferment Summary
+      Loss Accounting
+        Daily Facility Loss Accounting
+        Daily Field Loss Accounting
+        LIP Opportunity
+    Production Planning and Forecasting
+      Forecast
+        Forecast and Scenarios
+        Forecast Assumptions
+        CONSTRAINTS
+          Maintain Object Design Capacity
+          Forecast Constraints
+          Forecast Object Constraints
+          Forecast Quota and Nomination
+        WELL POTENTIALS
+          Forecast Production Well Potential
+          Forecast Injection Well Potential
+          Well Production Curves
+          Forecast Scenario Curves
+        DEFERMENTS
+          Forecast Event
+          Forecast Deferment Factors
+        ANALYSIS
+          Forecast Quality Factors
+          Well Oil Component Forecast
+          Well Gas Component Forecast
+          Stream Oil Component Forecast
+          Stream Gas Component Forecast
+        CONSUMPTION
+          Forecast Consumption
+        REPORTS
+          Calculate Forecast
+          Forecast Production
+          Forecast Well Deferment and Compensation
+          Forecast Define Scenarios to Compare
+          Forecast Compare Scenario - Direct
+          Forecast Compare Scenario - Graphical
+          Forecast Scenarios Analysis
+          Forecast Summary
+          Forecast Variable Operating Expenses
+        DIRECT FORECAST
+          DAILY
+            Daily Production Well Forecast
+            Daily Injection Well Forecast
+            Daily Stream Forecast
+            Daily Facility Class 1 Forecast
+            Daily Facility Class 2 Forecast
+            Daily Area Forecast
+            Daily Sub Area Forecast
+            Daily Production Unit Forecast
+            Daily Production Sub Unit Forecast
+            Daily Field Forecast
+            Daily Storage Forecast
+          MONTHLY
+            Monthly Production Well Forecast
+            Monthly Injection Well Forecast
+      Plan
+        Facility Plan
+        Field Plan
+        Well Plan
+        Stream Plan
+        Choke Model MPP
+    Hydrocarbon Accounting
+      Daily Data Status Processes
+      Daily Data Status Processes - by Facility
+      Daily Data Status Processes - Single Date
+      Monthly Data Status Processes
+      Monthly Data Locking
+      Monthly Local Data Locking
+      Period Process Calculations
+      Allocation
+        Daily Allocation
+        Daily Allocation - Single Date
+        Monthly Allocation
+        Sub Daily Allocation
+    Cargo Administration
+      Cargo And Parcel Information
+      Cargo Load and Analysis
+      Port Log
+      Monthly Account Balance Calculation
+    Chemicals
+      Chemical Inventory
+        Chemical Tank Status Read Lite
+      Chemical Treatment
+        Chemical Injection Reading Lite
+    Laboratory
