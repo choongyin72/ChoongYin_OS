@@ -210,6 +210,70 @@ def view_count_where_should_be(view, column, value, expected):
         )
 
 
+def well_object_id_by_name(well_name):
+    """Resolve a well's OBJECT_ID from its WELL_VERSION.NAME (the grid's display name).
+
+    Daily-status tables (PWEL_DAY_STATUS etc.) key on OBJECT_ID, but the N1 grid shows the
+    well NAME. This bridges the two so a suite can assert a measured value by the name it typed.
+    """
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            "SELECT OBJECT_ID FROM WELL_VERSION WHERE NAME = :n "
+            "ORDER BY DAYTIME FETCH FIRST 1 ROWS ONLY",
+            n=well_name,
+        )
+        row = cur.fetchone()
+        if not row:
+            raise AssertionError(f"Well named {well_name!r} not found in WELL_VERSION")
+        return row[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def day_status_value(table, object_id, daytime, column):
+    """Return a single measured value from an N1 day-status row (DB ground truth).
+
+    ``table`` = e.g. PWEL_DAY_STATUS; key = (OBJECT_ID, DAYTIME date). ``column`` = a measured
+    column (e.g. ON_STREAM_HRS, AVG_WH_PRESS). Returns None if the (object, day) row is absent.
+    """
+    _safe(table)
+    _safe(column)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            f"SELECT {column} FROM {table} "
+            f"WHERE OBJECT_ID = :o AND TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD')",
+            o=object_id, d=str(daytime),
+        )
+        row = cur.fetchone()
+        return row[0] if row else None
+    finally:
+        cur.close()
+        conn.close()
+
+
+def day_status_value_should_be(table, object_id, daytime, column, expected):
+    """Fail unless an N1 day-status measured value equals ``expected`` (numeric-tolerant).
+
+    The trustworthy oracle for the N1 edit-in-place pattern: after the screen Save, assert the
+    value really persisted to the (well x day) row — not that the grid optimistically showed it.
+    """
+    actual = day_status_value(table, object_id, daytime, column)
+    try:
+        ok = actual is not None and float(actual) == float(expected)
+    except (TypeError, ValueError):
+        ok = str(actual) == str(expected)
+    if not ok:
+        raise AssertionError(
+            f"DB check FAILED: {table}.{column} for OBJECT_ID={object_id} on {daytime} "
+            f"= {actual!r}, expected {expected!r}"
+        )
+
+
 def code_should_be_present_in_view(view, code):
     """Fail unless ``code`` appears in any string column of ``view`` (DB ground truth)."""
     if not _code_present(view, code):
