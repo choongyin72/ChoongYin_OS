@@ -176,6 +176,15 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   Full ready-to-execute plan → `ec-automation/docs/pattern_n3_status_process_design.md`. Recon:
   `tmp/scripts/n3_*.py`. ⚠️ One open risk: status processes may run via the BPM executor (could stall
   like N2 non-simulate) — first live run on HA.0001's RUN button resolves it.
+- 2026-06-14: N3 run path CRACKED + fired live → ⛔ **BLOCKED by BPM/Process-Automation executor**
+  (same infra blocker as N2 non-simulate). Run path proven: dates + process-in-G:2 dd + GO +
+  `RunProcessButton:form:B`; result grid `statusProcess:form:T_data` (# Rows Updated). But "P1 Forward
+  Status Update" @2003-01-01 went RunningJobs=**WAITING** and never executed — DB unchanged (all P,
+  STAT_PROCESS_STATUS empty). Status processes have NO synchronous Simulate, so every run needs the
+  executor. Clean (no data mutated). **Decision for user (see N3 design doc):** (a) enable Process
+  Automation/BPM executor (also unblocks N2 non-simulate) → I finish N3 fully; (b) build partial
+  N3 (submit + read-only oracle, completion-pending-PA); (c) park + move on. This is the recurring
+  held "BPM/Process-Automation" item now on the critical path for N3.
 - ▶ **RESUME POINT (2026-06-14, N3 recon done — BUILD NEXT):** Execute the N3 build per
   `docs/pattern_n3_status_process_design.md` §"Build steps": (1) live-crack `statusProcess:form` post-GO
   (process-select control + RUN button id + any Simulate + the completed-run/log grid id), on a tiny

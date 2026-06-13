@@ -98,3 +98,31 @@ Probed HA.0001 post-GO (`tmp/scripts/n3_ha0001_postgo.py`, `n3_ha0001_deepdump.p
    `ProdAllocButton:form:B`) + whether a **Simulate** toggle + a completed-run/log grid appear.
 3. Then build per "Build steps" above. Watch first RUN: synchronous log row (buildable) vs `RunningJobs`
    ACQUIRED stall (BPM executor → parks like N2 non-simulate).
+
+## ⛔ LIVE RUN BLOCKER (2026-06-14) — status processes need the BPM/Process-Automation executor
+Cracked the full run path and fired a real run; hit a hard infrastructure blocker.
+- **Run path (PROVEN):** set From/To date (G:0/G:1) → pick the **process in `nav:form:G:2` dd** (the
+  G:2 options ARE the process names, e.g. "Verify P3 Facility Process", "P1 Forward Status Update") →
+  GO `button:form:B` → **`RunProcessButton:form:B`** ("Run Process"). Result grid =
+  **`statusProcess:form:T_data`** (cols: Run Date · Run By · From · To · Process Name · New Status ·
+  **# Rows Updated**). In-flight = `RunningJobs:form:T_data`. No Simulate option for status processes.
+- **The blocker:** ran "P1 Forward Status Update" @ 2003-01-01 → the job went to **RunningJobs =
+  WAITING and stayed there 24s+, never completing** to the log grid. **DB ground truth: nothing
+  changed** — `STAT_PROCESS_STATUS` still EMPTY, `PWEL_DAY_STATUS` still 69,794 all `P`. The job
+  dispatches to **BPM** (`BPM_EC_GCOMMAND*` queue) and the **BPM/Process-Automation executor is not
+  running in this sandbox** → the job never executes. This is the SAME infra blocker as the **N2
+  non-simulate** path (ACQUIRED/WAITING stall). The "Process automation not available" bell is telling
+  the truth for the async executor (unlike HA.0002, status processes have NO synchronous Simulate
+  bypass, so EVERY run is blocked).
+- **Clean:** no data mutated (run never executed); the WAITING job is inert (would only run if BPM is
+  enabled — it would then lift the 2003-01-01 P1-facility scope P→V, reversible via "P1 Reverse Status
+  Update").
+
+### Decision needed (why N3 can't be finished here without input)
+The meaningful N3 test (assert a live `RECORD_STATUS` P→V + `# Rows Updated` + reverse self-clean)
+REQUIRES a completed run, which requires the **BPM/Process-Automation executor enabled** in the
+sandbox. Options: (a) enable Process Automation / the job executor (env/SME action — also unblocks N2
+non-simulate); (b) build the honest partial N3 now (drive screen + submit run + assert it queues +
+read-only DB oracle), completion-pending-PA — weaker than N1/N2 since no live P→V can be asserted;
+(c) park N3 until PA is available and move to another unblocked item. Recon/run scripts:
+`tmp/scripts/n3_ha0001_crack.py`, `n3_live_forward.py`, `n3_after_run_dbcheck.py`.
