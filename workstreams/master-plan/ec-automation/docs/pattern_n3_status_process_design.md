@@ -74,3 +74,27 @@ HA.0002 allocation (probe `tmp/scripts/n3_ha0001_probe.py`, shot `tmp/n3_ha0001.
 Recon complete; **GO for build next session** (high confidence it's an N2-analog). Only real risk =
 the BPM-executor stall (#4) — same family as the N2 non-simulate blocker; the first live run resolves
 it. Recon scripts: `tmp/scripts/n3_*.py`.
+
+## Live-crack progress (2026-06-14) — nav fully mapped; grid needs the G:2 scope dd
+Probed HA.0001 post-GO (`tmp/scripts/n3_ha0001_postgo.py`, `n3_ha0001_deepdump.py`):
+- **Navigator = 3 fields:** From Date `nav:form:G:0:R:1:C:0:da_input` + To Date `nav:form:G:1…` +
+  **`nav:form:G:2` = a DROPDOWN (hasDd) — a scope/process selector that is MANDATORY**. GO = `button:form:B`.
+- **Root cause of the empty grid:** I ran GO with only the two dates set → `statusProcess:form` grid
+  stayed empty (no rows, no process names in DOM, no RUN button surfaced). Exactly the N1/N2 rule — the
+  grid only renders after the navigator dd (G:2) is picked + GO. So the run path is intact; my probe
+  just hadn't set G:2.
+- `statusProcess:form` is a **frozen-column datatable** (`fcNum`/`freezePanel`/`hideMenu` = column
+  freeze + show/hide menu); its data rows will be `statusProcess:form:T:{r}:…` once populated (NOT a
+  `:T_data` suffix — that's why the `:T_data` scan found nothing).
+- "Process automation not available" = the toolbar bell only (`screenToolbar:form:taskNotification`) —
+  same red herring as HA.0002; NOT a blocker by itself.
+
+### Refined next step (resume here)
+1. Open HA.0001 → set From/To date → **open `nav:form:G:2:R:1:C:0:dd_button`, dump its options**
+   (likely the facility/asset or data-category scope; pick one that has P rows on the date, e.g. an
+   AS2/onshore facility for 2003-01-01) → **GO**.
+2. Dump the now-populated `statusProcess:form` grid: the process rows (find `P3_VERIFY_FCTY` / a P→V
+   process), how you SELECT a process (row checkbox/click), and the **RUN button** (analog of
+   `ProdAllocButton:form:B`) + whether a **Simulate** toggle + a completed-run/log grid appear.
+3. Then build per "Build steps" above. Watch first RUN: synchronous log row (buildable) vs `RunningJobs`
+   ACQUIRED stall (BPM executor → parks like N2 non-simulate).
