@@ -75,18 +75,24 @@ Well Hookup+Well, Status 1/2/3, Sub-Daily variants). Content renders in an **ifr
 
 1. ✅ **Date navigator + GO confirmed.** Date = `nav:form:G:0:R:1:C:0:da_input` (defaults to ~today,
    2026-06-12). **GO = `button:form:B`** (title "Go [Ctrl+g]") — *inside the content iframe*.
-2. ✅ **Mandatory scope cascade** (nav groups, all `nav:form:G:{n}:R:1:C:0:dd_input`):
-   G1 **Production Unit** · G2 **Area** · G3 **Facility Class 1** · G4 **Well Hookup**.
-   GO with only Date+PU → error growl: *"Required fields are empty. Please enter data for at least
-   one of these fields: Well Hookup [WELL_HOOKUP] or Facility Class 1 [FCTY_CLASS_1]."*
-   → **Required nav = Date + Production Unit + (Well Hookup OR Facility Class 1)**; Area optional.
-3. ⛔ **BLOCKED (sandbox data).** Could not capture grid row behaviour: for `P1 Production Unit` @
-   2026-06-12 the Facility Class 1 + Well Hookup dds return **0 options** — this generic corp
-   sandbox (ap-f0a7g341jn6d) has no WELL/well-hookup master data under that PU/date, so the grid
-   never populates. Need a PU+date that actually has wells (DB query below to find one).
-4. ⛔ **BLOCKED (same cause).** Grid id + editable columns un-captured until #3 resolved. Expected
-   per id grammar: `<grid>:form:T_data` with measured-value cells `...:T:{r}:C{c}_in`.
-5. ☐ **DB table** — query next (authoritative); look for `*_DAY_STATUS` / well-day-status table.
+2. ✅ **Scope is a 4-level CASCADE** (nav groups, all `nav:form:G:{n}:R:1:C:0:dd_input`):
+   G1 **Production Unit** → G2 **Area** → G3 **Facility Class 1** → G4 **Well Hookup**.
+   Each level filters the next (Area options come from PU; FC1 from Area; Well Hookup from FC1).
+   The "Well Hookup OR Facility Class 1" required-field growl is satisfied by FC1, BUT the grid
+   stays empty until you drill all the way to **Well Hookup** (the leaf that resolves to wells).
+   → **To get rows: Date + PU + Area + Facility Class 1 + Well Hookup, then GO.**
+   ⚠️ **Earlier false-zero lesson:** scanning FC1/WH right after picking PU shows 0 options — they
+   cascade from **Area**, not PU. Always walk the cascade in order.
+3. ✅ **Rows are PRE-INSTANTIATED, edit-in-place** (confirmed UI + DB). With full scope @ 2003-01-01
+   the grid showed 2 well rows (the wells under AS2_Lift Gas Manifold 1), each an existing
+   (well × day) row to edit — no New-Object / no Delete.
+4. ✅ **Grid id = `daily_well_status:form:T_data`** (tbody). **Editable cells =
+   `daily_well_status:form:T:{row}:C{col}_in`** (numeric text) with `...:C{col}_dd_input` where a
+   column is a dropdown (e.g. C3). Columns C2..C26+ are measured-value `_in` inputs. Grouped
+   headers: Well · Choke · Well Head · Downhole · Gas lift · USC · Measured Rates · Scale-inhibitor ·
+   Multiphase Meter (+mass rates) · Sub-Daily Theoretical · External Calc Theor 1-4 · Theoretical
+   Calculated · Override Theoretical · Allocated Results · ESP · Name. (Matches predicted grammar.)
+5. ✅ **DB table = `PWEL_DAY_STATUS`** (+ `WELL_HOOKUP_DAY_STATUS`) — see DB section below.
 6. ✅ **Record-status governance present on-screen.** Bottom tabset = **RECORD STATUS / REVISION
    INFO / APPROVAL STATUS / HINTS & TIPS / VALIDATION / TRENDING / ATTACHMENTS**; status dd
    `statusarea_tab:tabPanel:_sa_recordstatus:form:G:0:R:1:C:6:dd_input` + Created/Last-updated/
@@ -125,12 +131,19 @@ The pattern is **edit-in-place on a pre-instantiated (object × day) row**, NOT 
   TRUNC(DAYTIME)=:d`. (No row-count delta oracle — the row pre-exists; assert the VALUE changed.)
 - Pick a day with `RECORD_STATUS='P'` (editable); a V/A day is locked (negative test candidate).
 
-### Remaining blockers → next actions (alternative angles)
-- Find a **data-bearing PU/date** (DB: which PU has WELL_HOOKUP/FCTY_CLASS_1 objects + day-status
-  rows) → re-run probe with that scope to capture grid id + editable cell ids (#3, #4).
-- Confirm exact **day-status table + key columns** via DB (#5).
-- This is the EC generic sandbox, not Pluto — well data is sparse; a Pluto-data env or seeding a
-  test well would unblock the grid capture. Documented; not a structural blocker (nav fully mapped).
+### ✅ RECON COMPLETE — all 7 unknowns answered (2026-06-13)
+**Working test scope** (generic sandbox `ap-f0a7g341jn6d`, seed epoch): Date **2003-01-01** →
+PU **AS2 EC Exploration Norway** → Area **AS2_Onshore Area** → Facility Class 1 **AS2_Production
+Facility no 1** → Well Hookup **AS2_Lift Gas Manifold 1** → GO → grid shows 2 well rows
+(`daily_well_status:form:T:0:*` / `:T:1:*`). Date MUST be data-bearing — 2003-01-xx has 113 filled
+wells (confirms the **object-start-date = version-filter** rule; the default ~today shows nothing).
+Recon scripts: `tmp/scripts/wr0001_{status_recon,go_probe,find_scope,find_date,trace_well,
+trace_group,area_cascade}.py` + `wr0001_db_probe{,2}.py`.
+
+**Nothing blocking the build.** Next = assemble the T2 (`daily_status_grid.resource`) + T3
+(`wr0001_daily_well_status_page.resource`) + the `DbVerify.value_in_day_status` helper, then
+dryrun → live edit one cell for an open day → DB-verify on PWEL_DAY_STATUS → revert. Use the
+working scope above (or a Pluto-data env when targeting real Pluto wells).
 
 ## Build sequence (when sandbox reachable)
 1. Read-only recon pass → answer the 7 questions → fill the id variables.

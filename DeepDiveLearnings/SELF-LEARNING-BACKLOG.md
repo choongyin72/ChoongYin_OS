@@ -57,6 +57,15 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   RECORD_STATUS/APPROVAL per-row (P→V→A) + on-screen VALIDATION tab. Registry row added. **Open #4**:
   grid cell ids need a data-bearing PU (generic sandbox P1 has no wells; 84,914 PWEL rows exist under
   other PUs — one well→facility-class→PU join finds a usable scope to finish the grid capture).
+- 2026-06-13: WR.0001 recon now COMPLETE (7/7). Cracked #4: the navigator is a 4-level cascade
+  PU→Area→Facility Class 1→**Well Hookup** (FC1/WH cascade from AREA, not PU — earlier scan gave
+  false zeros). Full scope @ seed date 2003-01-01 (113 filled wells; default ~today empty — confirms
+  version-filter rule) renders the grid: **`daily_well_status:form:T_data`**, cells
+  **`daily_well_status:form:T:{r}:C{c}_in`** (+`_dd_input` dd cols), grouped headers Well/Choke/
+  WellHead/Downhole/GasLift/MeasuredRates/MultiphaseMeter/Theoretical/Override/Allocated/ESP. Working
+  scope: AS2 EC Exploration Norway / AS2_Onshore Area / AS2_Production Facility no 1 / AS2_Lift Gas
+  Manifold 1. Design doc + registry updated. **N1 build now fully unblocked** — next = T2
+  daily_status_grid.resource + T3 wr0001 page + DbVerify.value_in_day_status, dryrun→live→DB-verify.
 - (next blocks append here…)
 
 ## Operating rules (always)
