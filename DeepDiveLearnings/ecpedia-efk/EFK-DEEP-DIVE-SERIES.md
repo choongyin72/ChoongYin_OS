@@ -34,7 +34,7 @@ stack, not our client RF/Playwright; Hydrocarbon Accounting = concise allocation
 - [x] EC Technology `1853250` (2021) — READ 2026-06-14. Thin CTO parent; only child = Presentations `1853267` (slide decks, low text value). Noted, skipped.
 
 ### Phase 3 — Reference (consult, don't deep-read)
-- [ ] EC Vocabulary `1844980` (2022) — abbreviations/acronyms (ACQ, ACL, …) — cross-check vs my GLOSSARY
+- [x] EC Vocabulary `1844980` (2022) — CROSS-CHECKED 2026-06-14 vs `business-domains/GLOSSARY.md`. Broad industry+EC acronym list; harvested the table/screen-tied + EC-specific terms into GLOSSARY (ACL/Refresh-ACL, Standard vs Normal Conditions=15°C/0°C→VCF, ACQ/DCQ/MDQ, TSA/TSO, PSA, CGR/GOR, Diluent→ALLOC_DILUENT_VOL, Recovery Factor, Lifter/Lifting Account). Left the page as the canonical full industry reference (no duplication).
 - [ ] EC Talks `1837692` (2026.03 — NEWEST) — cross-unit knowledge-sharing talks; scan for current topics
 - [ ] EC Product Trainings `1853607` (2021) — training index
 - [ ] EC Releases and live assets `1853526` (2024) — version/asset matrix

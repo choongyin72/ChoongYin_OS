@@ -1,5 +1,7 @@
 # EC Business Glossary — industry meaning ↔ EC meaning ↔ tables
 Cumulative, grows per domain dive. (Started 2026-06-13.)
+Canonical full industry acronym list = **EC Vocabulary** (EFK `1844980`); this glossary keeps only
+terms that tie to EC tables/screens I touch or are EC-specific — cross-checked vs EC Vocabulary 2026-06-14.
 
 | Term | Industry meaning | In EC | Key tables/screens |
 |---|---|---|---|
@@ -28,6 +30,15 @@ Cumulative, grows per domain dive. (Started 2026-06-13.)
 | **Custody transfer** | The point where ownership/value of product changes hands — metered to fiscal accuracy | Export/sales-point metering is high-accuracy; drives why allocation exists | (HCA allocation network) |
 | **Fiscal measurement** | A meter reading used for taxation/royalty (e.g. flare-gas meter if taxed) | Higher-accuracy meters at custody/fiscal points vs poorly-metered/estimated wells | flare metering |
 | **Why allocate (rationale)** | Wells are poorly metered (low accuracy / estimated); the total at the export/custody meter is accurate | EC measures the accurate total + allocates it back to wells by theoretical/estimated rates (reconciliation factors pro-rate the gap) | allocation network, RF |
+| **Standard vs Normal Conditions** | Reference temp/pressure for reporting gas/liquid volumes | **Standard = 15°C + 1 atm** (e.g. Sm3/d flow rates); **Normal = 0°C + 1 atm**. The basis VCF corrects observed volumes TO | feeds VCF (`vcf-calculation.md`), flow rates |
+| **ACL (Access Control List)** | — (EC concept) | Drives the ACCESS screens of EC Configuration; **Object Partition** screen has a **'Refresh ACL'** button to make changes take effect immediately | Object Partition / ACCESS screens |
+| **ACQ / DCQ / MDQ** | Gas-contract quantities: Annual / Daily Contract Quantity + Maximum Daily Quantity the buyer must take / seller deliver | Sales contract terms validated against nominations (shortfall/take-or-pay) | EC Sales (contracts, nominations) |
+| **TSA / TSO** | Transport Service Agreement (sign to become a pipeline shipper) / Transport Service Operator (confirms nominations, runs the transport schedule); GTA = Gas Transport Agreement = TSA | Place shippers' nominations to the TSO; TSO confirms | NOMINATION_CYCLE, EC Sales |
+| **PSA (Production Sharing Agreement)** | Contract between a government and an extraction company splitting production | Royalty/PSA accounting splits | Royalty branch, Revenue RTY |
+| **CGR / GOR** | Condensate-to-Gas Ratio / Gas-to-Oil Ratio — liquid vs gas produced at standard conditions | Production ratios feeding allocation/test basis | PWEL_* rates, well test |
+| **Diluent** | Light hydrocarbon added to heavy/extra-heavy crude to cut viscosity for transport (recovered later by distillation) | An allocated quantity in the allocation result | PWEL_DAY_ALLOC.ALLOC_DILUENT_VOL |
+| **Recovery Factor** | % of oil/gas in place that's economically recoverable (gas ~60-70% water-drive, up to 90% depletion-drive) | Reserves/UOP + forecasting basis | Revenue FC/reserves, IAM |
+| **Lifter / Lifting Account** | The company holding ownership of the petroleum product / the ledger tracking how much of each product it has available | Daily forecast + official lifting balances; entitlement accrues with production share | LIFT_ACC_DAY_* |
 | **Reconciliation Factor (RF)** | The pro-rating factor closing the gap between summed well/stream estimates and the measured total | Per product/well/stream, daily+monthly; \|RF\| over a threshold raises a validation WARNING | V_ALLOC_* checks; RFw_ProdHC etc. |
 | **CO2e / Emission Factor / Emission Intensity** | CO2-equivalent (GHG weighted by GWP); EF = emission per unit activity; intensity = emission per unit production | ZWPC_EMISSION_DISCHARGE 11-step calc: component EF → CO2e EF → CO2e emission → pollutant → intensity | ZWP_EMIS_STRM_DATA, XEM.0001 |
 | **PRRT** | Petroleum Resource Rent Tax (Australian profit-based tax on petroleum projects) | C_PRRT calc: Pluto PRRT Feed → Phase Points (Pluto + Scarborough) | ZWP_PRRT_MTH_V0 |
