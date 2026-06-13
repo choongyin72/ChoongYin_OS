@@ -50,6 +50,13 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   cleanly to shared `Pick From EC Object Popup`, no inlined duplication) + screen-registry audit
   (all Dispatching screens incl. Meter/Pipeline-parked/Nomination Cycle current with hard-won facts).
   Framework + registry confirmed healthy; no refactor needed. (No code change → nothing to commit.)
+- 2026-06-13: N1 daily-status-grid pattern — wrote design doc (committed c914e72) THEN live+DB recon
+  of WR.0001 Daily Production Well Status 1 (committed c63d1ab). Answered 6/7 unknowns: iframe nav
+  Date+PU+(Well Hookup|Facility Class 1)→GO `button:form:B`; GROUPMODEL/WELL; table PWEL_DAY_STATUS
+  (+WELL_HOOKUP_DAY_STATUS) key (OBJECT_ID,DAYTIME); **rows pre-instantiated → edit-in-place, NO IUD**;
+  RECORD_STATUS/APPROVAL per-row (P→V→A) + on-screen VALIDATION tab. Registry row added. **Open #4**:
+  grid cell ids need a data-bearing PU (generic sandbox P1 has no wells; 84,914 PWEL rows exist under
+  other PUs — one well→facility-class→PU join finds a usable scope to finish the grid capture).
 - (next blocks append here…)
 
 ## Operating rules (always)
