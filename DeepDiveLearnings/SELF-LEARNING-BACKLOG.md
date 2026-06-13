@@ -131,6 +131,18 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   no-negatives invariant VERIFIED on 2021-10-01 (0 negative ALLOC_* values). Next: DbVerify
   allocation-conservation helper + read-only suite on existing data (no run needed). OPEN Q for user:
   can Process Automation be enabled locally / what's the supported allocation-run path?
+- 2026-06-13: N2 RUN MECHANISM CRACKED (corrects 2 wrong conclusions). HA.0002 runs allocations
+  SYNCHRONOUSLY via green "RUN CALCULATIONS" button (`ProdAllocButton:form:B`) — NOT BPM ("process
+  automation not available" = BPM bell red herring; PA=BPM, skip per SME). Flow: date + Network
+  (must have a calc job in ALLOC_NETWORK_JOB_CONN — AS2_Onshore has none; P1 Dashboard/Resv/Testing
+  do) + Calc Job (EC_DAILY_VOLUME="Daily Well Volume" etc.) → RUN → job runs ~1-2s → result in
+  log_list (Success/Failure + downloadable log). Simulate checkbox = run flow but NEVER write DB
+  (SME; safe iteration). Ran EC_DAILY_VOLUME/P1 Dashboard/2021-10-01 → **Failure** (equation errors:
+  "Failed to execute equation step / evaluate iteration / calculate-assign") = real finding (calc
+  errors, doesn't complete). Next: find a Success case (try RUN_NO_TEST test network, or a P1 date
+  with complete input) via Simulate, then verify conservation oracle. CALIBRATION: I was wrong twice
+  — (1) "PA blocks the run" (it doesn't; found RUN CALCULATIONS); (2) implied executor dead (jobs DO
+  run, in 1-2s). DB-as-truth + reading the log_list corrected both.
 - (next blocks append here…)
 
 ## Operating rules (always)

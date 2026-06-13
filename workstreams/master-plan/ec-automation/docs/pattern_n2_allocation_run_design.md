@@ -23,17 +23,37 @@ DeepDiveLearnings/ecpedia-efk/calc-engine-insights.md).
 - Existing allocation data: PWEL_DAY_ALLOC has 2018–2021 (richest **2021-10-01 = 22 wells**);
   STRM_DAY_ALLOC sparse (2011-01-01). (No allocation exists for the 2003 seed dates.)
 
-## ⛔ BLOCKER — the allocation RUN is not executable in this sandbox (honest)
-Attempted (user-authorised; local DB refreshable): set dates + AS2_Onshore network + GO. Result:
-- G3 (Allocation Network) and G4 (Calculation Job) dds stayed **empty** after selecting the G2
-  network; GO surfaced **no Run/Calculate control**; no allocation row was created
-  (`PWEL_DAY_ALLOC` @2003-01-01 stayed 0); no error.
-- The screen toolbar persistently shows **"Process automation not available."**
-→ Conclusion: the allocation calc is **submitted to the Process Automation engine**, which is **not
-available** in this local sandbox (separate from the Quartz scheduler the user restarted). So a
-fresh allocation can't be triggered from this screen here. **NOT yet cracked** (unlike N1). This is
-environmental — needs Process Automation enabled, OR a known alternative run path (e.g. backend calc
-trigger / batch), which requires SME guidance. ⇒ Open question logged for the user.
+## ✅ RUN MECHANISM CRACKED (2026-06-13) — corrects an earlier wrong "PA-blocked" conclusion
+The run is **synchronous via a "RUN CALCULATIONS" button**, NOT BPM. ("Process automation not
+available" = the BPM bell only — a red herring; SME confirmed PA=BPM, skip until a BPM deep dive.)
+Working flow on HA.0002:
+1. Set **From/To Date**, pick **Allocation Network Group/Network** (G2), then the **Calculation Job**
+   (G4) populates (e.g. P1 Dashboard → "Daily Well Volume" = EC_DAILY_VOLUME), GO.
+   ⚠️ The network MUST have a calc job wired in `ALLOC_NETWORK_JOB_CONN` (AS2_Onshore has NONE → its
+   job dd was empty; P1 Dashboard / P1 Day Allocation / Resv network / "Testing allocation RUN_NO" do).
+2. Second row: **Job Start Time**, **Log Level**, **Simulate** (checkbox = run the calc flow but
+   NEVER write to DB — per SME; ideal for safe iteration), then the green **RUN CALCULATIONS**
+   button = **`ProdAllocButton:form:B`** (`PrimeFaces.ab`).
+3. The job runs in ~1–2s and appears in **`log_list:form:T_data`** with Run No / Date / Duration /
+   **Exit Status (Success/Failure)** + DOWNLOAD/VIEW the log. (`RunningJobs:form:T_data` shows
+   in-flight WAITING; it moves to log_list on completion.)
+**Runnable calc TYPES** (CALCULATION where CALC_SCOPE=MAIN): `EC_DAILY_VOLUME` (Daily Well Volume),
+`EC_MONTHLY_VOLUME`, `EC_DAILY_RESV_ALLOC`/`EC_MONTHLY_RESV_ALLOC`, test `RUN_NO_TEST`.
+
+### Current result: the test run FAILED (a real finding, not a block)
+Ran EC_DAILY_VOLUME over **P1 Dashboard @ 2021-10-01** → Exit Status **Failure** in ~1s:
+*"Failed to execute equation step … Failed to evaluate iteration/condition … Failed to calculate
+and/or assign a value."* So the calc executes but **errors out** (likely missing input / config gap
+for that network+date in this sandbox — consistent with the fragile-equation issues in the
+calc-engine critique). No DB write because it failed. ⇒ the calc engine RUNS; this particular
+allocation doesn't complete cleanly here.
+
+### Next (use Simulate — no DB risk)
+Find a calc/network/date that runs **Success** (try the dedicated **"Testing allocation RUN_NO" →
+RUN_NO_TEST**, or a P1 date with complete input), iterating with **Simulate** checked (no writes).
+On a clean Success, verify the conservation oracle on `PWEL_DAY_ALLOC`/`STRM_DAY_*_ALLOC`
+(sum-to-total / no-neg / roll-up). The "Failure exit status" is itself a meaningful test signal
+(an allocation that errors is a defect to catch).
 
 ## ✅ What IS doable now — the VERIFY half (conservation oracle on existing results)
 Even without a fresh run, the meaningful allocation invariants can be DB-asserted against existing

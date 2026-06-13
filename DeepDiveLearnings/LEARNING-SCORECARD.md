@@ -43,6 +43,8 @@ core barely started.** Next single highest-value unlock = the N1 commit gesture 
 | 2026-06-13 | repeatedly "checkpointed"/asked instead of continuing | user had to redirect 3× | bias to action; only stop for genuine forks/blockers, not status posture |
 | 2026-06-13 | "master-data layer is rung-A solid" | RIGHT — live headed demo of Nomination Cycle IUD passed 4/4, DB-verified each step, self-cleaning (zero residue) | confident-and-right; the foundation claim holds under live proof. N1 is this minus one save gesture. |
 | 2026-06-13 | N1 write gesture (after 14 fails) | SOLVED — a HEADED capture of the user's real save revealed it (change-event stages + menubar @all commits); automated replica DB-verified 24→22→24; suite now live 3/3 | the keystone moment: the human did in 1 try what I failed 14×; observation > blind iteration. New rung: N1 = A. |
+| 2026-06-13 | N2 allocation run "blocked by Process Automation" | WRONG ×2 — the run works via a "RUN CALCULATIONS" button (synchronous, not BPM); jobs execute in 1-2s. I over-concluded from a red-herring toolbar flag + not reading the log_list grid | don't infer an environmental block from one UI flag; read the actual result table. (SME corrected; then I found it.) |
+| 2026-06-13 | N2 allocation calc itself | runs but EXIT=Failure (equation errors) on P1/2021-10-01 — real finding, not a block | the engine runs; the specific allocation errors (missing input/config). Use Simulate to iterate safely. |
 | (next session…) | | | |
 
 ## 4. Update protocol (the habit)
