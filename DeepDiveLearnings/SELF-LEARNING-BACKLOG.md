@@ -109,6 +109,18 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   shared-keyword change). Robocop clean. NOTE: running 2 N1 suites in ONE robot invocation is flaky
   (2nd suite's grid load races — "object not found"); run N1 suites individually OR add inter-suite
   session reset (known limitation, logged). Next: extend to liquid/water/electrical/well-comp.
+- 2026-06-13: N2 recon — HA.0002 Daily Allocation (`/com.ec.prod.ha.screens/edit_daily_alloc`): RUN
+  screen, nav = From Date + To Date + Allocation Network Group/Network + Calculation Job, GO=button:form:B
+  (no edit grid until run). Writes PWEL_DAY_ALLOC / STRM_DAY_*_ALLOC. (Did NOT run a calc — pending
+  user's view on what to verify + safe test day.)
+- 2026-06-13: ECpedia/EFK DEEP-DIVE SERIES set up (user-directed) → DeepDiveLearnings/ecpedia-efk/
+  EFK-DEEP-DIVE-SERIES.md. Enumerated all 33 EFK home children (CQL parent=1835010), categorized +
+  phased by value (P1 domain modules → P2 calc/framework → P3 reference → P4 ops-on-demand → P5 skip).
+  Kicked off: read Hydrocarbon Accounting (allocation network) + the calc-engine critique → GOLD
+  (calc-engine-insights.md: variable-cache/dimensioned-variable model + the allocation TEST ORACLE
+  for N2). EC Production parent = thin diagram (children later). Series runs during idle going fwd.
+  NOTE (user 2026-06-13): commit ONLY inside C:\Projects\ChoongYin_OS; external writes (incl Confluence)
+  need explicit permission, never silent.
 - (next blocks append here…)
 
 ## Operating rules (always)
