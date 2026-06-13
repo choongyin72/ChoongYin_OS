@@ -21,9 +21,9 @@ stack, not our client RF/Playwright; Hydrocarbon Accounting = concise allocation
 - [x] EC Sales `1838256` (2020) — gas sales contracts, nominations/re-nominations, availability. READ 2026-06-13 → `sales-revenue.md`. Thin overview; delivery-attribution = a rules+priority engine (sales analogue of allocation).
 - [x] EC Revenue `1840867` (2018) — quantities → monetary value. READ 2026-06-13 → `sales-revenue.md`. BAs CD/IN/FT/QTY/FC/RTY/FI (child ids captured). Oracle ideas: invoice=Σ(qty×price), take-or-pay roll-over, JV/royalty splits=100%.
 - [x] EC Regulatory Reporting `1845940` (2014) — SOX/SEC governance. READ 2026-06-14 → `regulatory-reporting.md`. The *why* behind EC's validation/freeze/audit features (SOX404 internal controls); reporting moved E&P→CFO; ties to CTRL_CHECK_* + Issue_1052.
-- [x] EC Chemistry Management `1853912` (2020) — link-out to space **ECCM**. Noted (not deep-read).
-- [x] EC Environment Management `1851143` (2021) — link-out to ecpedia.eu.tieto/**XEM**. Noted; GHG frame already in `environment-ghg.md`.
-- [x] EC IAM `1850998` (2020) — link-out to **ECIAMD** (Integrated Asset Modelling). Noted (reference only).
+- [x] EC Chemistry Management `1853912` (2020) — link-out FOLLOWED 2026-06-14 → space **ECCM** (`2326530`) → `link-out-extensions.md`. Chemistry add-on (monitor/report chemical volumes·dosages·performance = N1-family) + Emission Mgmt add-on.
+- [x] EC Environment Management `1851143` (2021) — link-out FOLLOWED → space **XEM** (`5734405`) → `link-out-extensions.md`. ⭐ Emission tracking rides EC's **calc+allocation framework** → N2-family target (GHG result screen). Space = mostly dev-admin; calc detail in external SharePoint.
+- [x] EC IAM `1850998` (2020) — link-out FOLLOWED → space **ECIAMD** (`4489220`) → `link-out-extensions.md`. EC IAM product manual (TietoEVRY 2020, reservoir-to-surface modelling). Reference only.
 
 **✅ Phase 1 COMPLETE (2026-06-14)** — all 8 domain pages read; reservoir→revenue chain mapped + SOX "why" layered on. Next = Phase 2 (VCF `1853432`).
 
@@ -79,3 +79,10 @@ pages next time the scheduler misbehaves). One synthesized note per substantive 
   All 8 Phase-1 domain pages now read; reservoir→revenue value chain mapped with the SOX layer on top,
   explicitly tied back to the validation framework (CTRL_CHECK_*/Issue_1052) + N1/N2 data-integrity
   oracles. Next idle item: Phase 2 — VCF Calculation `1853432`.
+- 2026-06-14: Followed the 3 Phase-1 **link-outs** (user-directed) to their real spaces → migrated onto
+  energycomponents.atlassian.net: **ECCM** (Chemistry+Emission add-ons), **XEM** (Emission Tracking),
+  **ECIAMD** (IAM manual). Note → `link-out-extensions.md`. ⭐ Key find: XEM emissions ride EC's **calc
+  +allocation framework** → emissions = an **N2-family** test target (run emission calc → assert Exit
+  Status + DB mass-balance/no-neg on the GHG result table); Chemistry = N1-family data entry. Both are
+  add-ons → confirm licensed/installed for Woodside before real coverage (open Q for user). Spaces are
+  product-dev admin + external SharePoint for calc detail — no deeper crawl.
