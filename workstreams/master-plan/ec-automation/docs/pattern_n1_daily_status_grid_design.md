@@ -235,6 +235,27 @@ any focus requirement, any post-save AJAX) — or have the SME demo it once — 
 this commit gesture remains. Scripts: `tmp/scripts/wr0001_write_*.py`, `wr0001_save_*.py`.
 DATA INTEGRITY remains verified intact throughout (PWEL_DAY_STATUS unchanged; phantoms self-clear).
 
+### ✅ GENERALIZES — PO.0002 Daily Gas Stream Status (recon 2026-06-13, tmp/scripts/po0002_*)
+Confirms the N1 pattern is not a one-off. Same shape, screen-specific ids:
+- **Nav cascade is the same, one level SHORTER**: Date → Production Unit → Area → **Facility Class 1**
+  (no Well Hookup leaf — streams stop at Facility Class). Same GO `button:form:B`. → T2
+  `Set Navigator Filter` + `Apply Navigator` reuse verbatim; the known-good AS2 scope works
+  (AS2 EC Exploration Norway / AS2_Onshore Area / AS2_Production Facility no 1).
+- **Two grids**: editable **`measured:form:T_data`** (cells `measured:form:T:{r}:C{c}_in`) +
+  read-only **`derived:form:T_data`**. (Row 0 = stream `AS2_Flare Gas 001`; cells C7/C8/C9 hold gas
+  rates.) So the grid id PREFIX differs (`measured:form` vs `daily_well_status:form`) — the T2
+  keywords take the grid_id/cell_id as args, so they drop in.
+- **Save gesture: identical** (toolbar Save, menubar @all) — transfers from WR.0001, no re-cracking.
+- **Screen URL**: `/com.ec.prod.po.screens/daily_stream_status/CLASS_NAME/STRM_DAY_STREAM_MEAS_GAS/
+  CLASS_NAME_DETAIL/STRM_DAY_STREAM_DER_GAS`. The CLASS_NAME is a LOGICAL data class (not a physical
+  table — lesson: don't assume class==table here, unlike WR.0001). **Physical table = `STRM_DAY_STREAM`**
+  (wide; the `..._MEAS_GAS`/`..._DER_GAS` classes are projections surfaced via `DV_STRM_DAY_STREAM_*`
+  views). DB-verify the gas measured column in `STRM_DAY_STREAM` by (OBJECT_ID, DAYTIME).
+**Conclusion:** the T2 `daily_status_grid` layer generalizes. A PO.0002 T3 = new ids (measured:form
+grid, 3-level cascade, STRM_DAY_STREAM table, a stream object + its gas-rate column) + reuse of every
+T2/T1 keyword. Remaining mechanical steps: pin C{c}↔STRM_DAY_STREAM column + the stream OBJECT_ID,
+write the thin T3 + suite, live edit→save→DB-verify→revert (same as WR.0001, now de-risked).
+
 ### ✅ Frame handling: NONE needed — screen is the MAIN frame (settled 2026-06-13)
 Initial worry of a nested iframe was a Playwright frame-detachment artifact. **Decisive test
 (`tmp/scripts/wr0001_toplevel_test.py`): the screen frame IS `page.main_frame`** — opening the

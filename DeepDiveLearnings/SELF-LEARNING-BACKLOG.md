@@ -93,6 +93,14 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   resolve well BY NAME (Well no 2 = row 1, not 0) + reload-before-revert for edit→save→edit chaining.
   Updated T2 daily_status_grid (Daily Status Row Index For + gesture docs), T3, suite, registry, scorecard.
   N1 rung C→A. Next: generalize to PO.0002 Daily Gas Stream Status (reuse the pattern).
+- 2026-06-13: PO.0002 Daily Gas Stream Status recon — N1 pattern GENERALIZES (proven, not a one-off).
+  Same nav cascade one level shorter (Date→PU→Area→Facility Class 1; no Well Hookup), same GO, same
+  save gesture (transfers from WR.0001). Two grids: editable `measured:form:T_data` (cells
+  measured:form:T:{r}:C{c}_in) + read-only `derived:form:T_data`. Physical table = STRM_DAY_STREAM
+  (the URL CLASS_NAMEs _MEAS_GAS/_DER_GAS are view projections — lesson: class≠table here). T2
+  `daily_status_grid` reuses verbatim (keywords take grid_id/cell_id/table as args). Registry row +
+  design-doc generalization section added. Build pending = thin PO.0002 T3 + suite + a stream→OID
+  DbVerify helper + pin C{c}↔STRM_DAY_STREAM column, then live edit→save→DB-verify→revert (mechanical).
 - (next blocks append here…)
 
 ## Operating rules (always)
