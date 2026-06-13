@@ -18,8 +18,8 @@ stack, not our client RF/Playwright; Hydrocarbon Accounting = concise allocation
 ### Phase 1 — Business/domain modules (fills the "what makes a test meaningful" gap) ★ highest
 - [~] EC Production `1842679` (2015) — READ: parent is just a DIAGRAM image, no text; value is in children (enumerate later for the production KB)
 - [x] Hydrocarbon Accounting `1839786` (2021) — allocation network (fields→wells, custody transfer, fiscal flare metering). READ 2026-06-13 → grounds the N2/HA.0002 allocation track.
-- [ ] EC Sales `1838256` (2020) — gas sales contracts, nominations/re-nominations, availability
-- [ ] EC Revenue `1840867` (2018) — revenue accounting (quantities → monetary value)
+- [x] EC Sales `1838256` (2020) — gas sales contracts, nominations/re-nominations, availability. READ 2026-06-13 → `sales-revenue.md`. Thin overview; delivery-attribution = a rules+priority engine (sales analogue of allocation).
+- [x] EC Revenue `1840867` (2018) — quantities → monetary value. READ 2026-06-13 → `sales-revenue.md`. BAs CD/IN/FT/QTY/FC/RTY/FI (child ids captured). Oracle ideas: invoice=Σ(qty×price), take-or-pay roll-over, JV/royalty splits=100%.
 - [ ] EC Regulatory Reporting `1845940` (2014) — SOX / SEC governance reporting
 - [ ] EC Chemistry Management `1853912` (2020) — (link page)
 - [ ] EC Environment Management `1851143` (2021) — (link to ECpedia/IH space)
@@ -63,3 +63,10 @@ pages next time the scheduler misbehaves). One synthesized note per substantive 
 ## Progress log
 - 2026-06-13: Series set up (this file). Enumerated 33 EFK home children via CQL `parent=1835010`.
   Read Hydrocarbon Accounting (allocation-network frame). Kicked off P1 (see notes below / commits).
+- 2026-06-13: P1 EC Sales + EC Revenue read → `sales-revenue.md`. Completes the downstream half of
+  the reservoir→revenue chain (Production→Allocation→Sales→Revenue). Both thin overview parents;
+  captured capability sets + Revenue BA child ids (CD/IN/FT/QTY/FC/RTY/FI) for on-demand drilling.
+  Key learning: sales delivery-attribution + revenue valuation are CALCULATION engines (like N2
+  allocation), so meaningful tests are conservation/priority/Σ(qty×price) oracles, not CRUD — and
+  all three are contract-driven (need a configured contract as fixture). Next: EC Regulatory Reporting
+  `1845940`, then the 3 link pages.
