@@ -143,11 +143,16 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   with complete input) via Simulate, then verify conservation oracle. CALIBRATION: I was wrong twice
   — (1) "PA blocks the run" (it doesn't; found RUN CALCULATIONS); (2) implied executor dead (jobs DO
   run, in 1-2s). DB-as-truth + reading the log_list corrected both.
-- ▶ **RESUME POINT (2026-06-13 ~22:40, window checkpoint):** Next action = **N2 allocation**: on
-  HA.0002 "Daily Allocation", iterate with **Simulate ON** (no DB write) to find an allocation that
-  exits **Success** — try the **"Testing allocation RUN_NO" → RUN_NO_TEST** network/job first, or a
-  P1 network+date with complete input (EC_DAILY_VOLUME on P1 Dashboard/2021-10-01 exits **Failure**
-  with equation errors). On a Success run, build the **conservation-oracle** verification
+- 2026-06-13 ~22:55: N2 SUCCESS exit achieved — "Testing allocation RUN_NO" + "01 Run No .test"
+  @2003-01-01, Simulate ON → log_list = **"Simulate Success"** (executor: WAITING→ACQUIRED→Success,
+  ~1s). Confirms the full run path works; the P1 EC_DAILY_VOLUME Failure is that calc's own equation
+  defect, not the mechanism. Run path FULLY PROVEN.
+- ▶ **RESUME POINT (2026-06-13 ~22:55, window checkpoint @76% of 1M context):** Next = build the N2
+  RUN-verify: a T2/T3 + suite that sets network+job+date, clicks RUN CALCULATIONS (Simulate for
+  safe/no-write OR real to persist), reads `log_list` Exit Status (assert Success), and on a real
+  (non-simulate) Success run asserts the **conservation oracle** on PWEL_DAY_ALLOC/STRM_DAY_*_ALLOC
+  (no-neg ✓ / sum-to-total / day→month roll-up). Use "Testing allocation RUN_NO" as the known-Success
+  case; EC_DAILY_VOLUME/P1 = a known-Failure case (good negative test). Run trigger=`ProdAllocButton:form:B`. On a Success run, build the **conservation-oracle** verification
   (no-neg ✓ already on existing 2021-10-01 data; add sum-to-total + day→month roll-up) on
   PWEL_DAY_ALLOC / STRM_DAY_*_ALLOC. Run-mechanism is cracked (RUN CALCULATIONS = `ProdAllocButton:form:B`).
   Standing idle track = EFK deep-dive series (DeepDiveLearnings/ecpedia-efk/EFK-DEEP-DIVE-SERIES.md,
