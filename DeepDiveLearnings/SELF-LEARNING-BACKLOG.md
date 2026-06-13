@@ -39,6 +39,17 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   consolidated reverse-engineered framework/PrimeFaces/DOM knowledge (id grammar, screen types,
   the working gestures incl. popup/dd/save, config layers, SI units, DB-verify). Accelerates every
   future screen build. Committed. Also: standing-autonomy+coaching grant saved to memory.
+- 2026-06-13: As-Built 11 Notification/MHM READ → ASBUILT11-NOTIFICATION.md (committed c06653c).
+  The human-in-the-loop signalling layer: Email (MHM: Actor MHM.0012 / Distribution List MHM.0001 /
+  Message Distribution MHM.0004 / Message Journal MHM.0007 = test oracle; SMTP via Remote Endpoint
+  Config) + Todo (bell/TODO screen). KEY: only **N_R_D_VALIDATION_REVIEW** is live <new scope> (ties
+  to Issue_1052); the 14 <Phase 2> notifications ARE the spec for the future monthly approval
+  workflow (verify→approve provisional→approve final by QMI/Topside/Wells→lock). 8 Pluto DLs map
+  the role taxonomy. As-Built reference now: only 01 SystemConfig + 03 ObjectConfig (both xlsx) left.
+- 2026-06-13: Self-improvement health check — verified T3 popup delegation (meter_page delegates
+  cleanly to shared `Pick From EC Object Popup`, no inlined duplication) + screen-registry audit
+  (all Dispatching screens incl. Meter/Pipeline-parked/Nomination Cycle current with hard-won facts).
+  Framework + registry confirmed healthy; no refactor needed. (No code change → nothing to commit.)
 - (next blocks append here…)
 
 ## Operating rules (always)
