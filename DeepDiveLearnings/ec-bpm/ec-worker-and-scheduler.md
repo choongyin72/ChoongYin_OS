@@ -42,3 +42,21 @@ up. Decisive check = **ec-worker's startup log**: look for the EC scheduler line
 `EC_SCHEDULER_STARTUPSTATE=RUNNING` env didn't apply to ec-worker after the overlay merge, or the
 worker's scheduler failed to start. (Not a per-process defect: nothing fires regardless of which
 process is picked.)
+
+## ✅ BREAKTHROUGH (2026-06-14): worker DOES execute now — status process fails on EMPTY DATA
+The ec-worker log (after a transient startup crash — `UnknownHostException: ec-messaging` then it
+recovered) shows the **ECScheduler IS firing jobs**: `DailyDataStatusProcess` runs on `ECDS_Worker-N`.
+So the earlier "no node firing" was a transient (worker mid-restart), NOT a permanent block. The
+`ECWORKER_CLIENT_SECRET=CHANGE_ME` auth works fine (service-account-ecworker authenticates OK).
+
+**The status process now EXECUTES but FAILS** — `ACTION_INSTANCE_HISTORY.MESSAGE_DETAIL` (RUN_STATUS=
+FAIL, runs #1–3):
+`ORA-06569: Collection bound by bind_array contains no elements  at ECKERNEL_EC.PCK_STATUS line 703 /
+175`. = `PCK_STATUS` bound an EMPTY collection to DBMS_SQL → **the process found no provisional rows to
+lift for the chosen scope/date** (P1 facility @ 2003-01-01). `STAT_PROCESS_STATUS=0`, PWEL still all P.
+
+⇒ **Not infra, not the run mechanism — it's a no-matching-data condition.** Fix = run a status process
+on a (facility, date) that actually has provisional rows matching the process's target set. (Arguably
+also an EC robustness bug: PCK_STATUS should handle an empty set instead of ORA-06569.) Failure detail
+read via `tmp/scripts/n3_fail2.py`. NEXT: find a status-process scope+date with real P data, then the
+run should lift P→V and write STAT_PROCESS_STATUS.ROWS_UPDATED.
