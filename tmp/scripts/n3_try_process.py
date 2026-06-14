@@ -4,7 +4,7 @@ the defect; if it also stays WAITING -> the executor isn't draining (escalate). 
 import time, json, os, sys
 import oracledb
 from playwright.sync_api import sync_playwright
-URL="https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/"; SCREEN="Daily Data Status Processes"; DATE="2003-01-01"
+URL="https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/"; SCREEN="Daily Data Status Processes"; DATE=(sys.argv[2] if len(sys.argv)>2 else "2003-01-01")
 PROCESS = sys.argv[1] if len(sys.argv)>1 else "Verify daily Onshore facility data"
 def spc():
     c=oracledb.connect(user='ECKERNEL_EC',password='energy',dsn=os.environ.get('EC_DB_DSN','localhost:1521/ORCL'),tcp_connect_timeout=15);cur=c.cursor()

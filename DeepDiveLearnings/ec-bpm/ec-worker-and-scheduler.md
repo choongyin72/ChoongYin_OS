@@ -60,3 +60,25 @@ on a (facility, date) that actually has provisional rows matching the process's 
 also an EC robustness bug: PCK_STATUS should handle an empty set instead of ORA-06569.) Failure detail
 read via `tmp/scripts/n3_fail2.py`. NEXT: find a status-process scope+date with real P data, then the
 run should lift P→V and write STAT_PROCESS_STATUS.ROWS_UPDATED.
+
+## ✅✅ N3 PROVEN end-to-end (2026-06-14) — status process lifts P→V
+With ec-worker running, fired **"P1 Forward Status Update" @ DATE 2024-02-06** (a date where the P1
+facility HAS provisional data) → **SUCCESS**: `STAT_PROCESS_STATUS` row = `P1_FwdUpd / level V /
+ROWS_UPDATED=15`. The 15 lifted rows = PWEL_DAY_STATUS(1) + IWEL_DAY_STATUS(1) + **OBJECT_DAY_WEATHER(13)**
+all P→V. So the P→V→A record-status engine works; the earlier failures were (a) ec-worker not running,
+then (b) ORA-06569 = empty data on 2003-01-01. **The fix was the DATA SCOPE (a date with P rows), not
+the mechanism.**
+- **Self-clean:** the EC reverse process ("P1 Reverse Status Update" / P1_RevUpd) ran but updated **0
+  rows** — it does NOT undo the forward lift. So the suite must self-clean via **DB-restore V→P** (like
+  the N1 IWEL/EQPM suites). Cleaned this test run: restored all 15 (PWEL+IWEL+OBJECT_DAY_WEATHER) → 0
+  residual V on 2024-02-06 (broad scan of 6382 RECORD_STATUS+DAYTIME tables = clean).
+- ec-worker note: it had a transient startup crash (`UnknownHostException: ec-messaging`) then recovered
+  — after a redeploy give it a minute before testing.
+
+### N3 build recipe (ready)
+Screen HA.0001 "Daily Data Status Processes" (non-iframed). Nav: From/To date G:0/G:1 = **2024-02-06**,
+process in **G:2 dd** = "P1 Forward Status Update", GO `button:form:B`, then **RunProcessButton:form:B**.
+Oracle: poll `STAT_PROCESS_STATUS` for a new row (PROCESS_ID=P1_FwdUpd, ROWS_UPDATED>0) + assert
+RECORD_STATUS P→V on the lifted rows. Self-clean teardown: DB-restore V→P on 2024-02-06 (reuse a
+DbVerify reset, broadened to RECORD_STATUS). Scripts: `tmp/scripts/n3_try_process.py` (process+date
+args), `n3_verify_lift.py`, `n3_cleanup_lift.py` + `n3_cleanup_weather.py`.

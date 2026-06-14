@@ -243,15 +243,23 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   "Sub Daily Production Well Status 1 - by Well / - by Period" variants (plain name not found). Monthly
   well status = poor target (PWEL_MTH_STATUS sparse, 13 rows). Recon: `tmp/scripts/n1_subdaily_recon.py`,
   `n1_monthly_recon.py`.
-- ▶ **RESUME POINT (2026-06-14):** N1 daily pattern THOROUGHLY proven (4 object types, T2+DbVerify
-  reused). Next options: (1) **sub-daily** N1 variant — build a datetime-keyed DB-verify (full DAYTIME)
-  + pick the "- by Well" screen variant (data: PWEL_SUB_DAY_STATUS 2011-01-01, 18 wells); a genuinely
-  new pattern, deliberate build. (2) more daily N1 clones (CO2/steam/liquid stream, gas-injection well)
-  — marginal. (3) **N3 status-process LIVE** — still blocked on **ec-worker** (redeploy run script w/
-  overlay 12); then finish P→V + ROWS_UPDATED + reverse per `pattern_n3_status_process_design.md`.
-  Shared DbVerify changes this session (allocation oracle, reset_day_status_value, null-equality fix)
-  VERIFIED safe (N1 family live-green; other patterns use untouched functions). Held for user: ec-worker
-  redeploy; disable broken "Daily Offshore Process" schedule.
+- 2026-06-14: ✅✅ **N3 PROVEN end-to-end (ec-worker fixed).** ec-worker is up (1/1, after a transient
+  `UnknownHostException: ec-messaging` boot crash then recovery). Fired "P1 Forward Status Update"
+  @**2024-02-06** (date with P data) → `STAT_PROCESS_STATUS` row `P1_FwdUpd/V/ROWS_UPDATED=15` (lifted
+  PWEL 1 + IWEL 1 + OBJECT_DAY_WEATHER 13 → V). Earlier failures were (a) ec-worker down, then (b)
+  ORA-06569 = empty data on 2003-01-01 — the fix was the DATA SCOPE, not the mechanism. EC reverse
+  process does 0 rows → self-clean via DB-restore V→P. Sandbox cleaned: 0 residual V (broad scan of
+  6382 tables). Full recipe in `ec-bpm/ec-worker-and-scheduler.md` §"N3 PROVEN".
+- ▶ **RESUME POINT (2026-06-14, NEXT SESSION — context was 92%):** **BUILD the N3 suite now** — it's
+  proven + recipe ready (`pattern_n3_status_process_design.md` + `ec-worker-and-scheduler.md`): HA.0001,
+  date 2024-02-06, process "P1 Forward Status Update" (G:2), GO, `RunProcessButton:form:B`; oracle = poll
+  `STAT_PROCESS_STATUS` for P1_FwdUpd row + ROWS_UPDATED>0 + RECORD_STATUS P→V on the lifted rows;
+  self-clean = DB-restore V→P on 2024-02-06 (EC reverse does 0 rows). Reuse `tmp/scripts/n3_try_process.py`
+  + `n3_cleanup_lift.py`/`n3_cleanup_weather.py`. Then other coverage: N1 #5 (sub-daily datetime-keyed,
+  or daily clones), per options below. Shared DbVerify changes this session VERIFIED safe (N1 family
+  live-green). Held for user: disable broken "Daily Offshore Process" schedule (cosmetic log noise).
+  Other next options: (1) **sub-daily** N1 (datetime-keyed DB-verify + "- by Well" variant; data
+  PWEL_SUB_DAY_STATUS 2011-01-01); (2) daily N1 clones (CO2/steam/liquid stream, gas-injection well).
 - (next blocks append here…)
 
 ## Operating rules (always)
