@@ -38,11 +38,18 @@ ${SCOPE_PU}                 FRMW PU
 ${SCOPE_AREA}               FRMW Area
 ${SCOPE_FCTY_CLASS_1}       FRMW Facility 1
 ${SCOPE_WELL}               FRMW Well 1
-# Target interval + cell + DB column. C3 = On Strm[hr]; the DB key is date + this hour.
+# Target interval + the PROVEN-editable cell. C9 = WHP[psig] = DB AVG_WH_PRESS (DB-proven persist
+# 2026-06-14: a live edit of C9 committed via the toolbar Save). NB: C3 "On Strm[hr]" did NOT persist
+# (derived/non-editable on this grid) — always use a proven cell + edit→diff per screen.
 ${TARGET_HOUR}              00:00
-${CELL_COLUMN}              C3
-${TARGET_DB_COLUMN}         ON_STREAM_HRS
+${CELL_COLUMN}              C9
+${TARGET_DB_COLUMN}         AVG_WH_PRESS
 ${TARGET_CELL}              ${EMPTY}
+# Write-test: a distinct WHP DISPLAY value (psi) + the known baseline DB value (bar) for self-clean.
+# The grid shows psi, the DB stores bar (factor derived live = UI_before/DB_before ~= 14.5038),
+# so the oracle is unit-robust (see reference_ec_ui_db_unit_conversion).
+${NEW_WHP_DISP}             3000.00
+${WHP_BASELINE_DB}          ${210}
 
 
 *** Keywords ***
@@ -93,16 +100,31 @@ Sub Daily Cell Should Show
     [Arguments]    ${value}
     Daily Status Cell Should Show    ${TARGET_CELL}    ${value}
 
-Sub Daily Value Should Be In DB
-    [Documentation]    Ground truth: assert PWEL_SUB_DAY_STATUS.${TARGET_DB_COLUMN} of the
-    ...    (well × date × hour) interval equals ${expected} — datetime-keyed (date + HH:MI).
-    [Arguments]    ${expected}
+WHP Edit Should Persist
+    [Documentation]    The sub-daily WRITE oracle (datetime-keyed + unit-robust). Edit the 00:00
+    ...    interval's WHP cell (C9) to ${NEW_WHP_DISP} psi, Save, then assert the DB AVG_WH_PRESS
+    ...    (bar) persisted. The grid shows psi, the DB stores bar, so derive the factor LIVE from the
+    ...    pre-edit UI display ÷ DB value and assert DB_after ≈ typed_display / factor (see
+    ...    reference_ec_ui_db_unit_conversion). Proves the edit-in-place WRITE commits for a specific
+    ...    intraday interval — the genuinely-new sub-daily capability, end to end.
     ${oid}=    Object Id By Name    WELL_VERSION    ${SCOPE_WELL}
-    Sub Day Status Value Should Be    ${SUBDAILY_DB_TABLE}    ${oid}    ${SCOPE_DATE}    ${TARGET_HOUR}    ${TARGET_DB_COLUMN}    ${expected}
+    ${disp0}=    Read Daily Status Cell    ${TARGET_CELL}
+    ${db0}=    Sub Day Status Value    ${SUBDAILY_DB_TABLE}    ${oid}    ${SCOPE_DATE}    ${TARGET_HOUR}    ${TARGET_DB_COLUMN}
+    Should Be True    ${db0} is not None    msg=No baseline DB value for WHP @ ${SCOPE_DATE} ${TARGET_HOUR}
+    Set Sub Daily Cell    ${NEW_WHP_DISP}
+    Save Sub Daily Status
+    Reload And Find Target Interval
+    ${expected}=    Evaluate    float(${NEW_WHP_DISP}) * float(${db0}) / float(${disp0})
+    Sub Day Status Value Should Be Approx
+    ...    ${SUBDAILY_DB_TABLE}    ${oid}    ${SCOPE_DATE}    ${TARGET_HOUR}    ${TARGET_DB_COLUMN}    ${expected}    ${0.05}
 
-Restore Sub Daily Cell To Null
-    [Documentation]    Self-clean teardown: restore the (well × date × hour) cell to NULL at the DB so
-    ...    the test leaves the sandbox exactly as found (cell was NULL-original; UI-clear is unreliable).
+Restore WHP To Baseline
+    [Documentation]    Self-clean teardown: DB-restore AVG_WH_PRESS @ the 00:00 interval to its known
+    ...    baseline (${WHP_BASELINE_DB} bar) so the test leaves the sandbox exactly as found, then
+    ...    verify. Idempotent (no-op if already at baseline). Restores to a KNOWN documented value —
+    ...    not an assumption (see feedback_no_destructive_write_on_assumption).
     ${oid}=    Object Id By Name    WELL_VERSION    ${SCOPE_WELL}
-    Reset Sub Day Status Value    ${SUBDAILY_DB_TABLE}    ${oid}    ${SCOPE_DATE}    ${TARGET_HOUR}    ${TARGET_DB_COLUMN}
-    Sub Daily Value Should Be In DB    ${None}
+    Reset Sub Day Status Value
+    ...    ${SUBDAILY_DB_TABLE}    ${oid}    ${SCOPE_DATE}    ${TARGET_HOUR}    ${TARGET_DB_COLUMN}    ${WHP_BASELINE_DB}
+    Sub Day Status Value Should Be Approx
+    ...    ${SUBDAILY_DB_TABLE}    ${oid}    ${SCOPE_DATE}    ${TARGET_HOUR}    ${TARGET_DB_COLUMN}    ${WHP_BASELINE_DB}    ${0.05}

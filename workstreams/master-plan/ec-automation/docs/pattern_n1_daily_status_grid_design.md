@@ -343,3 +343,37 @@ after ONE failed attempt (stopped — no churn).
   approach and crack C{c}↔column on a cell that is **already non-null** (edit known-value +1 → diff),
   so a non-persist is unambiguous and no null-assumption cleanup is ever needed. Scripts:
   `tmp/scripts/n1_subdaily_{recon2,scope,navdump,grid_crack,grid_crack2,grid_dump,cellcheck}.py`.
+
+### ✅ WRITE PROVEN (manual, 2026-06-14) — save works; real wrinkle = UI↔DB UNIT CONVERSION
+Drive-then-handover live test (I auto-navigated to the 00:00 row; the user edited + saved with their
+normal save) **PERSISTED to the DB** → the save gesture works; the screen is NOT write-blocked.
+- **Edit:** grid **WHP[psig]** on the 00:00 row `3045.80` → `211`, Save. **DB:** `AVG_WH_PRESS`
+  `210` → `14.548`. Reverted to `210` (0 mismatches, sandbox as found; only that 1 col changed).
+- 🔑 **UNIT CONVERSION** — the grid shows **psi**, the DB stores **bar**: factor `3045.80/210 =
+  14.5038`; `211 psi / 14.5038 = 14.548 bar`. A naive "DB == typed value" oracle FAILS on
+  pressure/rate/temp cols (ON_STREAM_HRS is unitless → matched directly on WR.0001 and hid this).
+  Re-explains the old "rate cols don't match grid" note: unit conversion, not just derived values.
+  See [[reference_ec_ui_db_unit_conversion]].
+- **Why my automated TC02 didn't persist (revised):** not a dead screen — manual save commits. Likely
+  my automated edit of **On Strm[hr] (C3)** didn't fire EC's change behavior on this grid (toolbar
+  Save then committed nothing — same class as the daily-N1 14-fail), or C3 isn't the live
+  ON_STREAM_HRS input. Not chased further (no-loop).
+- **Finish the automated WRITE (next slice, de-risked):** target a **proven-editable** cell (WHP),
+  fire the change reliably (`Type Cell By Id` real keystrokes + Tab; confirm the change POST), verify
+  **unit-robustly** (read `factor = UI_display_before / DB_before`; edit UI→V; assert `DB_after ≈ V /
+  factor`; revert to exact original). Confirm with user: the EXACT Save control they used (toolbar
+  Save vs other) to replicate 1:1. Scripts: `tmp/scripts/n1_subdaily_{baseline,handover,revert}.py`.
+
+### ✅✅ AUTOMATED WRITE SHIPPED — sub-daily N1 COMPLETE, live 3/3 (2026-06-14)
+The automated write works and the suite is now full read+write. One informed attempt persisted first
+try (`tmp/scripts/n1_subdaily_autowrite.py`): edited the **WHP cell = C9** (`AVG_WH_PRESS`) via real
+keystrokes + Tab + toolbar Save (`a[title="Save [Ctrl+s]"]`, the same proven N1 commit) → typed
+`3000` psi → DB `206.842` bar (`= 3000 / 14.5038`), reverted to `210`. So my original TC02 fail was
+the **wrong cell** (C3 "On Strm[hr]" is derived/non-persisting) — NOT the save gesture, NOT units.
+- **Suite** `sub_daily_well_status_edit.robot` now ships **TC03 Edit Intraday WHP Cell And Persist
+  (unit-robust)**: reads `disp0`=UI display + `db0`=DB before, edits WHP→`NEW_WHP_DISP`, Saves,
+  reloads, asserts `DB_after ≈ NEW_WHP_DISP * db0 / disp0` (factor derived live, no hardcode), via new
+  DbVerify `sub_day_status_value_should_be_approx`. Suite Teardown DB-restores AVG_WH_PRESS to the
+  known baseline (210 bar). **robocop clean, dryrun 3/3, live 3/3, DB clean after (210), WR.0001
+  canary 3/3.** N1 sub-daily = the 5th proven N1 object/grain (PWEL/STRM/IWEL/EQPM + sub-daily) and
+  the FIRST with a datetime key + unit-robust write-verify.

@@ -364,6 +364,27 @@ def sub_day_status_value_should_be(table, object_id, date, hhmi, column, expecte
         )
 
 
+def sub_day_status_value_should_be_approx(table, object_id, date, hhmi, column, expected, tolerance=0.05, summer_time=None):
+    """Fail unless a sub-daily measured value is within ``tolerance`` of ``expected``.
+
+    For UNIT-bearing columns (pressure/rate/temp) the EC grid shows configured units while the DB
+    stores base/SI units (see reference_ec_ui_db_unit_conversion). A write-verify therefore checks
+    DB_after ~= typed_display / factor, where the factor is derived live from UI_before / DB_before —
+    so an exact equality would spuriously fail on the unit conversion + rounding. None = no row.
+    """
+    actual = sub_day_status_value(table, object_id, date, hhmi, column, summer_time)
+    if actual is None:
+        raise AssertionError(
+            f"DB check FAILED: {table}.{column} for OBJECT_ID={object_id} on {date} {hhmi} is NULL, "
+            f"expected ~{expected}"
+        )
+    if abs(float(actual) - float(expected)) > float(tolerance):
+        raise AssertionError(
+            f"DB check FAILED: {table}.{column} for OBJECT_ID={object_id} on {date} {hhmi} "
+            f"= {actual}, expected ~{expected} (tolerance {tolerance})"
+        )
+
+
 def reset_sub_day_status_value(table, object_id, date, hhmi, column, value=None):
     """TEST-TEARDOWN ONLY: restore a sub-daily measured cell to ``value`` (default NULL) for the
     (OBJECT_ID, date, HH:MI) interval — leaves the sandbox as found after a null-original edit test.

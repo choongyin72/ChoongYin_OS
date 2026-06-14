@@ -7,18 +7,20 @@ Documentation       EC N1 Test — "Sub Daily Production Well Status 1 - by Well
 ...                 NOT the daily TRUNC(DAYTIME)). This suite proves the 4-level cascade + GO render
 ...                 the intraday grid AND that distinct hours resolve to distinct rows.
 ...
-...                 ⚠️ The edit-in-place WRITE half is PARKED, not yet proven: a first live edit
-...                 (On Strm[hr] @ 00:00) did not persist to the DB (gesture/column unconfirmed) —
-...                 see docs/pattern_n1_daily_status_grid_design.md §Sub-daily "WRITE BLOCKER". The
-...                 datetime-keyed DbVerify helpers (sub_day_status_value[_should_be] /
-...                 reset_sub_day_status_value) are built + tested, ready for when the write is cracked.
+...                 The edit-in-place WRITE is now PROVEN: TC03 edits the 00:00 interval's WHP cell
+...                 (C9 = AVG_WH_PRESS) and DB-verifies it persisted. KEY: the grid shows psi but the
+...                 DB stores bar, so the oracle is UNIT-ROBUST — it derives the factor live
+...                 (UI_before / DB_before) and asserts DB_after ≈ typed_display / factor (see
+...                 docs reference_ec_ui_db_unit_conversion). (The original write fail targeted C3
+...                 "On Strm[hr]", a non-persisting/derived cell — always edit→diff per screen.)
+...                 Self-clean = DB-restore AVG_WH_PRESS to its known baseline (210 bar).
 ...                 Layered: this test → subdaily_well_status_page (T3) → daily_status_grid (T2) +
 ...                 common (T1) + DbVerify. Recon: tmp/scripts/n1_subdaily_*.
 
 Resource            ../../pageobjects/Production/subdaily_well_status_page.resource
 
 Suite Setup         Open Sub Daily Well Status Screen
-Suite Teardown      Close EC
+Suite Teardown      Run Keywords    Restore WHP To Baseline    AND    Close EC
 
 Test Tags           n1    sub_daily_well_status
 
@@ -44,3 +46,12 @@ TC02 Distinct Hours Resolve To Distinct Rows
     Should Not Be Equal As Integers    ${r0}    ${r1}
     ...    msg=Distinct hours resolved to the same row (${r0}) — datetime row keying is broken
     Capture Step    subdaily_tc02_datetime_rows
+
+TC03 Edit Intraday WHP Cell And Persist (unit-robust)
+    [Documentation]    The sub-daily WRITE proof: edit the 00:00 interval's WHP cell, Save, and
+    ...    DB-verify it persisted to AVG_WH_PRESS — accounting for the UI(psi)↔DB(bar) unit
+    ...    conversion by deriving the factor live. Proves edit-in-place commits for a specific
+    ...    intraday interval (the datetime-keyed write), then teardown DB-restores the baseline.
+    [Tags]    edit    write
+    WHP Edit Should Persist
+    Capture Step    subdaily_tc03_whp_persisted

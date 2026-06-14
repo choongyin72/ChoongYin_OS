@@ -319,6 +319,20 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   options if parking sub-daily: N3 month-grain (V→A, `P1_FwdUpdPar1`); N2 sum-to-total oracle; daily N1
   clones. Held for user: help on the sub-daily Save gesture (or confirm it's the same toolbar Save);
   disable broken "Daily Offshore Process" schedule.
+- 2026-06-14: ✅✅ **Sub-daily N1 WRITE CRACKED (option B, with user) — suite now READ+WRITE live 3/3.**
+  Reset after the parked write: user-driven manual save (drive-then-handover script) PROVED persistence
+  AND exposed a **UI(psi)↔DB(bar) unit conversion** (grid 3045.8 = DB 210 bar, ×14.5038). The real
+  blocker was a **wrong cell** (C3 "On Strm[hr]" = derived/non-persisting), not the gesture. One
+  informed automated retry on **C9 = AVG_WH_PRESS** (real keystrokes+Tab+toolbar Save) persisted first
+  try, unit-verified (DB_after ≈ typed/factor, factor derived live). Shipped suite TC03 (unit-robust
+  write) + DbVerify `sub_day_status_value_should_be_approx`; self-clean = DB-restore baseline 210.
+  robocop clean, dryrun+live 3/3, DB clean after, WR.0001 canary 3/3. Lesson banked:
+  [[reference_ec_ui_db_unit_conversion]]. **N1 now spans 5 grains: PWEL/STRM/IWEL/EQPM + sub-daily.**
+- ▶ **RESUME POINT (2026-06-14):** Sub-daily N1 CLOSED (read+write). Unblocked next options: (1) **N3
+  month-grain** status process (`P1_FwdUpdPar1` →A, MTH — V→A, a level deeper); (2) **N2 sum-to-total**
+  conservation oracle (needs a full non-simulate run + network→members→measured-total map); (3) daily
+  N1 clones (CO2/steam/liquid). Apply the unit-conversion learning to any future pressure/rate
+  write-verify. Held for user: disable broken "Daily Offshore Process" schedule (cosmetic).
 - (next blocks append here…)
 
 ## Operating rules (always)
