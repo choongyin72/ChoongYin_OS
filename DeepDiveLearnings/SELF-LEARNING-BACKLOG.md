@@ -219,8 +219,11 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   (`tmp/scripts/n1_eqpm_viability.py` + `n1_eqpm_scope.py`): N1 grid (Date + 3-level nav, no
   well-hookup), `EQPM_DAY_STATUS` (ON_STREAM_HRS/AVG_RPM/AVG_PRESS/POWER_*), name source `OV_EQPM`,
   equipment e.g. "Offshore Gas Injection Compressor A" on 2024-02-06 (129 rows). Remaining: map nav
-  scope names (OV_EQPM OP_FCTY_1/OP_AREA → the PU/Area/Facility cascade), confirm grid+cells, edit→diff
-  the cell↔column, then fork the IWEL T3 (different object class = stronger N1 generalization). (2) other
+  scope — ⚠️ OV_EQPM has NO friendly facility-name cols (only CLASS_NAME/NAME); resolve the cascade via
+  `OP_FCTY_1_ID`/`OP_AREA_ID` → facility/area objects, and note equipment spans onshore+offshore (e.g.
+  "Offshore Generator A", "Onshore A Generator A") so the nav PU/Area/Facility must match the chosen
+  equipment's facility. Then confirm grid+cells, edit→diff the cell↔column, fork the IWEL T3 (different
+  object class = stronger N1 generalization). `n1_eqpm_scope2.py` has the equipment list. (2) other
   injection/stream siblings (CO2/steam/liquid), data-confirmed via `n1_daystatus_data_scan.py`. (3) When
   ec-worker is up: finish N3 live (P→V + ROWS_UPDATED + reverse) per `pattern_n3_status_process_design.md`.
   Held for user: redeploy with ec-worker (overlay 12); disable the broken "Daily Offshore Process" schedule.
