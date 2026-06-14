@@ -180,3 +180,32 @@ Then ec-worker runs the scheduler (RUNNING) + executes status/business processes
 After redeploy, retry the N3 forward run — it should complete (RECORD_STATUS P→V + # Rows Updated) and
 the build can finish live. (Secondary: the `BPM_CLIENT_SECRET`/`ECWORKER_CLIENT_SECRET=CHANGE_ME` in
 07-config should be real secrets if BPM auth then errors.)
+
+## ✅ "name is null" ROOT CAUSE TRACED to source + the exact DB row (2026-06-14)
+Traced the `IllegalArgumentException: name is null` end-to-end through the EC source
+(`C:\DEV\GIT\ec-application`):
+- `UserEventHandlerImpl.handleEvent` reads the schedule's event doc → `<data><action class=...>`;
+  `BusinessActionAdvancedConfig.getBusinessActionClassName()` = `actionElement.attributeValue("class")`
+  → fed to `ResourceService.getValidatedClass(name=null)` → throws.
+- The `<action class>` is built by `ActionInstance.generateXML()` (`action.addAttribute(A_CLASS, javaClass)`),
+  and `javaClass` = column 4 of `Q_ACTION_INSTANCE`:
+  `SELECT ... ba.action_class_name ... FROM action_instance ai, business_action ba ...`
+  ⇒ **`javaClass = BUSINESS_ACTION.ACTION_CLASS_NAME`**.
+- **DB ground truth:** exactly ONE of 195 business actions has a NULL class —
+  **`BUSINESS_ACTION NAME='Daily Offshore Process'`: `ACTION_CLASS_NAME=NULL`, jBPM-backed
+  (`JBPM_PROCESS_NAME='Daily Offshore Process'`), `JBPM_DEPLOYMENT_ID='dummy'`, version NULL.** It is
+  wired to an ENABLED schedule **`Daily Offshore Process.1781403336248.AUTOGEN`** (run-as sysadmin) →
+  that schedule auto-fires and crashes with "name is null" every time. Working jBPM actions have a real
+  class (`com.ec.bpm.ext.ec.web.energyx.process_temp...`) + a real deployment GAV (e.g.
+  `com.ec.bpm:prod-bpm-building-blocks:1.0`); "Daily Offshore Process" is a half-configured placeholder
+  (deployment id literally "dummy"), i.e. its jBPM process was never actually deployed.
+
+**It's a CONFIG DEFECT, not infrastructure.** Fix = either (a) **disable/delete the "Daily Offshore
+Process" schedule + business action** if it's an unused sample/leftover (stops the error immediately),
+or (b) **properly deploy that jBPM process** (real deployment id + class) if it's actually needed.
+
+**Relationship to N3 (important):** the daily/monthly STATUS processes I automate run via the
+**`DailyDataStatusProcess` / `MonthlyDataStatusProcess`** business actions, which **have valid classes**
+(`com.ec.eccommon.genericmodel.model.ejb.Generic...`, non-jBPM). So the "name is null" error is a
+SEPARATE broken action and does NOT block N3. N3's remaining need is just a RUNNING scheduler node
+(ec-worker) to drain the WAITING queue.
