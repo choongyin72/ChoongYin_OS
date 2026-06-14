@@ -241,3 +241,32 @@ re-check (0 residual V) → repeatability re-run 2/2 → WR.0001 canary 3/3 + ra
 (the additive DbVerify change is regression-free).
 
 **N3 is now CLOSED (rung A).** The operational core N1/N2/N3 patterns are all proven.
+
+## N3 V→A (approval) lifecycle — recon DONE, build-ready (2026-06-14)
+Extending N3 from P→V (proven) into V→A (Approved) to complete the P→V→A lifecycle. Recon
+(`tmp/scripts/n3_va_recon.py`, `n3_va_chain.py`, `n3_va_optlist.py`):
+- **Levels** (`CTRL_RECORD_STATUS_LEVEL`): P Provisional(40) → V Verified(50) → A Approved(60).
+- **STATUS_PROCESS catalog** — the verify→approve pairs:
+  - DAILY (on **HA.0001** "Daily Data Status Processes" — reuse the proven T2/T3 verbatim):
+    `P1_AnalysisDataManagement_Ver`→V + `P1_AnalysisDataManagement_App` **V→A** ("Analysis Data
+    Management …"); `VER_STIM_DAY`→V + `APPRV_STIM_DAY`→A ("… Daily Stream Item values").
+  - MONTHLY (on a SEPARATE screen **"Monthly Data Status Processes"**, NOT HA.0001 — its G:2 dd lists
+    only daily processes): `P1_FwdUpdPar1` (P1 monthly →A, the approval roll-up of the daily
+    `P1_FwdUpd` I proved), `APPRV_EC_MTH`, `APPRV_EXPORT_MTH`, `P3_APPROVE_FCTY`, etc.
+- **Chain mechanism PROVEN + safe** (`n3_va_chain.py`): ran `P1_FwdUpd` @2024-02-06 → 15 rows P→V
+  (STAT_PROCESS_STATUS `P1_FwdUpd/V/15`), then a guaranteed snapshot→restore set every non-P row in
+  the month back to P (15 restored, **0 residual** — data-safety net held). The monthly approve pick
+  failed only because `P1_FwdUpdPar1` isn't on HA.0001 (it's on "Monthly Data Status Processes").
+- **Two clean build paths (next slice):**
+  1. **Daily P→V→A on HA.0001** (lowest-risk, reuses everything): chain a verify then its approve
+     (Stream Item or Analysis Data Mgmt). Needs a 1-script data-scope recon (which table + a date with
+     liftable rows), then a suite TC: forward→assert V, approve→assert A (dual oracle: ROWS_UPDATED +
+     RECORD_STATUS family count at each level), restore A→P. Reuses `status_process_run.resource` (T2)
+     + `ha0001_daily_status_process_page.resource` (T3) — just new process names + an A-level oracle.
+  2. **Monthly approve** = a thin new T3 `mh_monthly_status_process_page.resource` for the "Monthly
+     Data Status Processes" screen (same T2; month From/To range), running `P1_FwdUpdPar1` to lift the
+     month's V rows → A. Proves N3 generalizes to the monthly grain. (Stage V first via the daily
+     forward, as the chain script does.)
+- **Oracle note:** `record_status_family_count(date, 'A')` already works for the A-level assertion;
+  `restore_record_status_family(date, from_status='A', to_status='P')` (and 'V') self-cleans. The
+  STAT_PROCESS_STATUS +1-delta + ROWS_UPDATED pattern is unchanged.

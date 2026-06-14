@@ -333,6 +333,21 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   conservation oracle (needs a full non-simulate run + network→members→measured-total map); (3) daily
   N1 clones (CO2/steam/liquid). Apply the unit-conversion learning to any future pressure/rate
   write-verify. Held for user: disable broken "Daily Offshore Process" schedule (cosmetic).
+- 2026-06-14 (autonomous, user at dinner): **N3 V→A (approval) lifecycle recon DONE → build-ready.**
+  Mapped STATUS_PROCESS (P40→V50→A60). Verify→approve pairs found: DAILY on HA.0001 (Analysis Data
+  Mgmt Ver/App = V→A; Stream Item Ver/Appr); MONTHLY on a SEPARATE screen "Monthly Data Status
+  Processes" (P1_FwdUpdPar1 = the monthly →A roll-up of the daily P1_FwdUpd I proved). **Chain
+  mechanism proven safe** (`n3_va_chain.py`): forward P→V lifted 15 rows, then a guaranteed
+  snapshot→restore returned every non-P row in the month to P (0 residual — data-safety net worked).
+  The monthly approve pick failed only because P1_FwdUpdPar1 lives on the Monthly screen, not HA.0001
+  (clean finding, not a blocker). Two build paths in `pattern_n3_status_process_design.md` §"N3 V→A".
+  Stopped here at a clean checkpoint (long unsupervised session; data verified clean).
+- ▶ **RESUME POINT (2026-06-14):** Build N3 **V→A** per design doc §"N3 V→A" — recommended path 1
+  (daily P→V→A on HA.0001, reuses proven T2/T3): (a) 1-script data-scope recon for a daily verify→
+  approve chain (Stream Item or Analysis Data Mgmt — find the table + a date with liftable rows);
+  (b) suite TC chaining forward→assert V then approve→assert A (dual oracle ROWS_UPDATED + family
+  count; restore A→P). Then optionally path 2 (Monthly screen T3 for P1_FwdUpdPar1). Other unblocked:
+  N2 sum-to-total; daily N1 clones. Held for user: disable broken "Daily Offshore Process" schedule.
 - (next blocks append here…)
 
 ## Operating rules (always)
