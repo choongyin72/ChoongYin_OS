@@ -77,13 +77,15 @@ existing lines. This keeps parallel PRs auto-mergeable and safe for an automated
 3. Reply in the PR comment thread, not as a new top-level comment.
 4. Re-run the affected suite + the canary after addressing comments; note the result in the thread.
 
-## Open questions — TO BE CONFIRMED by reviewer / human
-1. **Merge gate:** does the reviewer merge only after `MUST-FIX` comments are resolved, or
-   merge-then-comment (advisory)? (Worker's assumption: **MUST-FIX gates the merge**.)
-2. **Notification:** is "check open PRs for review comments at session start" the agreed worker
-   routine? (Worker will adopt it unless told otherwise.)
-3. **Turnaround:** confirm the reviewer does **not** merge an un-addressed worker PR within the
-   ~20h window between PR-open and the next 06:00 review run.
+## Confirmed answers (locked 2026-06-14 by reviewer + human)
+1. **Merge gate:** MUST-FIX comments gate the merge. The reviewer will not merge a worker PR until
+   all MUST-FIX comments are resolved. Merge-then-comment (advisory) is not used. Human approval
+   required before merge — fully automated merge deferred until the system proves reliable.
+2. **Session-start PR check:** Confirmed. Worker checks all open PRs for review comments before
+   opening any new branch. Already mandated in `CLAUDE.md` — no separate wiring needed.
+3. **Turnaround:** Confirmed. Reviewer does not merge an un-addressed worker PR within the ~20h
+   window between PR-open and the next 06:00 review run. Worker has until the next session to
+   address comments before merge is considered.
 
 ## Recommended wiring (not done in this PR)
 Add this file to `CLAUDE.md`'s "On session start (mandatory)" reading list so both sessions load it.
