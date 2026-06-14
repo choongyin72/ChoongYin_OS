@@ -215,7 +215,14 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   status_edit.robot + pageobjects/Production/iwel_water_injection_status_page.resource.
 - ▶ **RESUME POINT (2026-06-14):** N3 status-process LIVE still blocked on **ec-worker not running**
   (run script fixed with overlay 12 — awaits redeploy; "name is null" is a separate broken-config red
-  herring). No-blocker next items: (1) **Daily Equipment Status** N1 #4 — VIABILITY CONFIRMED
+  herring). 2026-06-14: ✅ **N1 #4 "Daily Equipment Status" BUILT + live 3/3** — EQPM_DAY_STATUS, a
+  NEW object class (equipment); C4=**AVG_PRESS** DB-verified (note: different C-col than the well
+  screens — always edit→diff per screen), 3-level nav (P1 Production Unit/P1 Area/P1 Facility 1
+  @2024-02-06), name source OV_EQPM ("P1 Chiller 002 PO.0011"). N1 now spans **4 object types**
+  (PWEL/STRM/IWEL/EQPM). Files: tests/Production/daily_equipment_status_edit.robot +
+  pageobjects/Production/eqpm_daily_status_page.resource. Lesson logged: a name-resolution miss left a
+  stray write briefly (found+restored via the 22-value scan) — resolve OBJECT_ID up front next time.
+  No-blocker next items: (1) ~~Daily Equipment Status~~ DONE. VIABILITY CONFIRMED earlier
   (`tmp/scripts/n1_eqpm_viability.py` + `n1_eqpm_scope.py`): N1 grid (Date + 3-level nav, no
   well-hookup), `EQPM_DAY_STATUS` (ON_STREAM_HRS/AVG_RPM/AVG_PRESS/POWER_*), name source `OV_EQPM`,
   equipment e.g. "Offshore Gas Injection Compressor A" on 2024-02-06 (129 rows). Remaining: map nav
