@@ -377,3 +377,21 @@ the **wrong cell** (C3 "On Strm[hr]" is derived/non-persisting) — NOT the save
   known baseline (210 bar). **robocop clean, dryrun 3/3, live 3/3, DB clean after (210), WR.0001
   canary 3/3.** N1 sub-daily = the 5th proven N1 object/grain (PWEL/STRM/IWEL/EQPM + sub-daily) and
   the FIRST with a datetime key + unit-robust write-verify.
+
+## PFLW (Production Flowline) N1 clone — build-ready recon (2026-06-15)
+6th N1 object class (flowline). DB side fully scoped; UI confirmed to use the standard N1 nav+grid
+pattern; remaining = finish the nav/grid/cell crack + build the suite. Recon: `tmp/scripts/n1_pflw_*`.
+- **DB target:** `PFLW_DAY_STATUS`, key **(OBJECT_ID, DAYTIME)** (simple daily — not sub-daily).
+  Measured cols: ON_STREAM_HRS, AVG_CHOKE_SIZE, AVG_FLWL_PRESS/TEMP, AVG_OIL_MASS, … Name source =
+  **`OV_FLOWLINE`** (37 rows). Data: 7 flowlines/7 P rows on **2003-09-20** (+ many other 2003/2004 dates).
+- **Screen:** "Daily Production Flowline, by Flowline". **Non-iframed** (content in `dashboard.jsf?top=false`).
+  Navigator IS the standard `nav:form:G:*` (32 elements) + GO `button:form:B`. **Divergence:** it has
+  **TWO date fields** (G:0 + G:1 = From/To range), unlike the single-date well grids — so the nav is a
+  date-range + a flowline/scope cascade. (First crack returned nav={} due to a frame-detach race on
+  load; the diagnostic `n1_pflw_diag.py` confirmed the nav is present once the frame settles — re-crack
+  with a longer settle + re-select the dashboard frame.)
+- **Remaining to build:** (1) re-crack the nav (set From/To date 2003-09-20, dump+pick the cascade dds,
+  GO) → grid id + cell ids; (2) edit→diff one measured cell↔column (e.g. ON_STREAM_HRS) per the
+  per-screen rule; (3) T3 `pflw_flowline_status_page.resource` + suite (mirror IWEL/EQPM, reuse N1 T2
+  `daily_status_grid.resource`); (4) dryrun→live→DB-verify→self-clean→canary→PR. Reuses the proven N1
+  T2 + DbVerify day-status helpers verbatim.
