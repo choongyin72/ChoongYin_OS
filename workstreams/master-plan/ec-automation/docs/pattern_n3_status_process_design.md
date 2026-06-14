@@ -141,3 +141,16 @@ job**. Needs (one of): the jBPM ExecutorService actually started/enabled; the `j
 the required eDAC roles for the data + the status processes (DOC-08); or an EC "Process Automation"
 service/toggle beyond deploying ec-bpm. Environment clean (nothing executed; 2 inert WAITING jobs that
 would lift the 2003-01-01 P1 scope P→V if the executor ever drains — reversible).
+
+## Root cause (2026-06-14, from server log the user shared) — ec-bpm business-action class is null
+The EC scheduler/executor IS running (worker `ECDS_Worker-2` fires `BusinessControllerInvokerJob` for
+"Daily Offshore Process"). The job then **fails**:
+`BusinessActionAdvancedConfig.createAndInitBusinessAction` → `ResourceServiceEC.getValidatedClass` →
+**`java.lang.IllegalArgumentException: name is null`**. I.e. when the framework instantiates the
+process's **Business Action**, the action's **implementation class NAME resolves to null** → every
+status/scheduled process throws and never updates data (explains RunningJobs=WAITING→fail, DB
+unchanged). DB scan of *_ACTION/*_EVENT CLASS columns shows the stored class names are populated
+(ECIS/event actions fine) → so this is a **runtime class-resolution / ec-bpm wiring gap**, not a blank
+DB value: the ec-bpm extension's action handler class isn't registered/resolvable after the restart.
+**This is an EC app/ec-bpm setup fix (user/SME), outside automation.** N3 (and N2 non-simulate) stay
+blocked until the business action instantiates. Partial-N3 (submit + read-only oracle) buildable now.
