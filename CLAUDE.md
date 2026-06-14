@@ -2,9 +2,10 @@
 
 ## On session start (mandatory — in this order)
 1. Read docs/lessons-learned.md → standing rules (mandatory)
-2. Read docs/automation-scorecard.md → current coverage + parked backlog
-3. Read STATUS.md → active Jira tickets + blockers
-4. Check all open PRs for reviewer comments before opening any new branch:
+2. Read docs/PR-REVIEW-PROTOCOL.md → shared worker↔reviewer contract (mandatory)
+3. Read docs/automation-scorecard.md → current coverage + parked backlog
+4. Read STATUS.md → active Jira tickets + blockers
+5. Check all open PRs for reviewer comments before opening any new branch:
    - Address MUST-FIX comments first — these gate the merge
    - NICE-TO-HAVE comments are advisory, merge can proceed without them
    - Push fixes to the existing PR branch, do not open a new PR
