@@ -84,3 +84,30 @@ Process" root cause fully explained (un-deployed placeholder). Execution still n
 Next BPM-related learning when unblocked: deploy one SDK sample (e.g. `sql_function_execution_sample`)
 via the Project Management screen → create a template → run an instance → observe `JBPM_PROCESSINSTANCEINFO`
 + Process Overview (a clean, low-risk way to prove the BPM execution path end-to-end).
+
+## EC Scheduler internals (EFK Phase-4 "Enable a Schedule Job", read 2026-06-14) — confirms root cause
+The on-demand ops page gives the full SQL recipe to create+enable a scheduled job, which nails the
+scheduler/business-action wiring (and re-confirms the "Daily Offshore Process" break):
+1. **`TV_BUSINESS_ACTION`** — `NAME`, **`ACTION_CLASS_NAME`** (e.g.
+   `com.ec.eccommon.genericmodel.model.ejb.GenericRunSqlAction`), `BA_TYPE='SCHEDULER'`. ⭐ A scheduled
+   business action MUST have a non-null `ACTION_CLASS_NAME` — precisely what "Daily Offshore Process"
+   lacks (null) → the break is unambiguous.
+2. **`TV_ACTION_PARAMETER`** — the action's params (type/sub-type/mandatory).
+3. **`TV_SCHEDULE`** — the schedule; `ENABLED`, `FUNCTIONAL_AREA_ID`, and **`PIN_TO`** =
+   `substr(instance_name,0,instr(instance_name,'.')-1)` from `QRTZ_SCHEDULER_STATE` → pins the job to a
+   **specific scheduler node**. (Relevant to the ec-app-vs-ec-worker node question: jobs run on the
+   pinned/RUNNING scheduler node.)
+4. **`TV_SCHEDULE_DETAILS`** — notify role/level, run-as user, log level, retain count.
+5. **`TV_ACTION_INSTANCE`** — links business action ↔ schedule (`EXEC_ORDER`, `ISOLATED_TX_IND`).
+6. **`ACTION_INSTANCE_VALUE`** — sets the action's param values for this schedule.
+7. **`QRTZ_JOB_DETAILS`** — `JOB_CLASS_NAME='com.ec.frmw.scheduler.job.StatefulBusinessControllerInvokerJob'`
+   (the very invoker in the failing stack trace) + durable/stateful flags.
+8–10. **`QRTZ_TRIGGERS` / `QRTZ_CRON_TRIGGERS`** — the cron schedule (e.g. `0 0/5 * ? * * *`, TZ
+   `Australia/Perth`), `TRIGGER_STATE='WAITING'`.
+11. **Enable** — `UPDATE TV_SCHEDULE SET ENABLED='Y'`.
+
+So the EC scheduler = Quartz triggers → `StatefulBusinessControllerInvokerJob` → `UserEventHandler`
+→ business action (class from `ACTION_CLASS_NAME`). This is the same path whether the action is plain
+Java (e.g. status processes via `DailyDataStatusProcess`/`GenericRunSqlAction`) or jBPM-backed (class =
+the jBPM invoker + `JBPM_DEPLOYMENT_ID`). (Phase-4 "Stopping a stuck EC Service" = a Windows-service/
+WildFly kill-the-java-process note — not relevant to this docker-swarm deployment.)
