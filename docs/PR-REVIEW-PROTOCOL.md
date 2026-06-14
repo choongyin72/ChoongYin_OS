@@ -83,9 +83,9 @@ existing lines. This keeps parallel PRs auto-mergeable and safe for an automated
    required before merge — fully automated merge deferred until the system proves reliable.
 2. **Session-start PR check:** Confirmed. Worker checks all open PRs for review comments before
    opening any new branch. Already mandated in `CLAUDE.md` — no separate wiring needed.
-3. **Turnaround:** Confirmed. Reviewer does not merge an un-addressed worker PR within the ~20h
-   window between PR-open and the next 06:00 review run. Worker has until the next session to
-   address comments before merge is considered.
+3. **Turnaround:** No PR is merged before the daily 06:00 AWST reviewer has seen it. The merge
+   sequence is always: worker raises PR → reviewer reviews at 06:00 AWST → worker addresses
+   MUST-FIX comments → human approves → reviewer session merges. Nothing auto-merges on a timer.
 
 ## Recommended wiring (not done in this PR)
 Add this file to `CLAUDE.md`'s "On session start (mandatory)" reading list so both sessions load it.
