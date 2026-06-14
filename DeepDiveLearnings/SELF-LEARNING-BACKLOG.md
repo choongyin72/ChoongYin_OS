@@ -194,6 +194,27 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   (5) suite `daily_status_process_run.robot` (TC01 P→V + ROWS_UPDATED; TC02 reverse→P); dryrun→live
   (headed)→DB-verify→robocop→commit+push; (6) re-test habit + registry row + scorecard. Held for user:
   BPM/Process-Automation deep dive; Bitbucket cred rotation; Issue_1052 D/E/F; Chemistry-module licensing.
+- 2026-06-14 (unattended autonomy window): (a) Traced the recurring scheduler "name is null" to its
+  root — `BUSINESS_ACTION 'Daily Offshore Process'` has NULL `ACTION_CLASS_NAME` + `JBPM_DEPLOYMENT_ID
+  ='dummy'` (a never-deployed jBPM process on an ENABLED schedule); config defect, not infra. Memory
+  + N3 design doc + [[reference_ec_daily_offshore_process_broken]]. (b) Deep-dived EC BPM from the SDK
+  working examples + EC source → `DeepDiveLearnings/ec-bpm/ec-bpm-deep-dive.md` (process→deploy(GAV)→
+  template→instance; building blocks; ties to N1/N2/N3) + EC scheduler internals (EFK Phase-4
+  schedule-job recipe). (c) **Diagnosed the deployment**: `run_EC_14_2_4.bat` was missing
+  `12-docker-compose.ec-worker.yml` → ec-worker (background scheduler node) not up → status/BPM runs
+  sit WAITING; fix = add overlay 12 (script now updated). (d) Coverage track: **3rd N1 screen recon'd
+  + build-ready** — "Daily Water Injection Well Status" (IWEL_DAY_STATUS), same WR.0001 template,
+  C4=ON_STREAM_HRS DB-proven, non-iframed, scope AS2_Water Injection Manifold 1 @2026-02-13; registry
+  row added; build pending a null-original self-clean decision.
+- ▶ **RESUME POINT (2026-06-14, unattended):** N3 status-process LIVE still blocked on **ec-worker not
+  running** (add overlay 12 + redeploy; the "name is null" is a separate broken-config red herring,
+  noted). Build-ready next items, no blockers: (1) **Daily Water Injection Well Status** N1 suite —
+  recon complete (IWEL_DAY_STATUS, C4=ON_STREAM_HRS), just needs the self-clean teardown decided
+  (UI-clear vs DB-restore-null) then T3+suite+live+robocop+commit; (2) more N1 siblings (equipment
+  EQPM_DAY_STATUS 34k P rows; other injection/stream types — all data-confirmed via
+  `tmp/scripts/n1_daystatus_data_scan.py`). When ec-worker is up: finish N3 live (P→V + ROWS_UPDATED
+  + reverse) per `pattern_n3_status_process_design.md`. Held for user: the broken "Daily Offshore
+  Process" schedule (disable/redeploy).
 - (next blocks append here…)
 
 ## Operating rules (always)
