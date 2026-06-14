@@ -1,3 +1,11 @@
+# WORKER SESSION — READ FIRST
+Before starting any automation work, read:
+- docs/lessons-learned.md  → standing rules from prior reviews (mandatory)
+- docs/automation-scorecard.md → current coverage + parked backlog
+- STATUS.md → active Jira tickets + blockers
+
+---
+
 GIT Project Folder   : C:\DEV\GIT\woodside_impl_pluto_12839
 EC Web App Url       : https://app-plutodev.woodside-pluto.tieto-og.cloud/
 EC WebUser Id        : sysadmin
