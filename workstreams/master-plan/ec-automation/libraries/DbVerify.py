@@ -306,6 +306,86 @@ def reset_day_status_value(table, object_id, daytime, column, value=None):
         conn.close()
 
 
+# --- N1 sub-daily: intraday (datetime-keyed) day-status value ------------------------------------
+# Sub-daily status tables (e.g. PWEL_SUB_DAY_STATUS) key on (OBJECT_ID, DAYTIME, SUMMER_TIME) where
+# DAYTIME carries the TIME-OF-DAY — many intraday rows per object per day. So the daily helpers
+# (which match TRUNC(DAYTIME)=date) would hit ALL the day's rows; these match the specific interval
+# by date + hour-of-day (HH:MI). On a clean hourly day with a single SUMMER_TIME value, (object,
+# date, HH:MI) uniquely identifies the row; ``summer_time`` can be passed to disambiguate a DST
+# fall-back hour if ever needed.
+
+def sub_day_status_value(table, object_id, date, hhmi, column, summer_time=None):
+    """Return a measured value from a SUB-daily status row, keyed by (OBJECT_ID, date, HH:MI).
+
+    ``date`` = 'YYYY-MM-DD', ``hhmi`` = 'HH:MI' (24h, e.g. '00:00'). Returns None if absent.
+    """
+    _safe(table)
+    _safe(column)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        sql = (
+            f"SELECT {column} FROM {table} "
+            f"WHERE OBJECT_ID = :o AND TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD') "
+            f"AND TO_CHAR(DAYTIME,'HH24:MI') = :h"
+        )
+        binds = {"o": object_id, "d": str(date), "h": str(hhmi)}
+        if summer_time is not None:
+            sql += " AND SUMMER_TIME = :s"
+            binds["s"] = summer_time
+        cur.execute(sql, binds)
+        row = cur.fetchone()
+        return row[0] if row else None
+    finally:
+        cur.close()
+        conn.close()
+
+
+def sub_day_status_value_should_be(table, object_id, date, hhmi, column, expected, summer_time=None):
+    """Fail unless a sub-daily measured value equals ``expected`` (numeric-tolerant; None = NULL).
+
+    The trustworthy oracle for the sub-daily N1 edit-in-place pattern: after the screen Save, assert
+    the value really persisted to the (object x interval) row — proving the cell maps to ``column``
+    AND the datetime key resolves to exactly one intraday row.
+    """
+    actual = sub_day_status_value(table, object_id, date, hhmi, column, summer_time)
+    expected_is_null = expected is None or (isinstance(expected, str) and expected.strip() == "")
+    if expected_is_null:
+        ok = actual is None
+    else:
+        try:
+            ok = actual is not None and float(actual) == float(expected)
+        except (TypeError, ValueError):
+            ok = str(actual) == str(expected)
+    if not ok:
+        raise AssertionError(
+            f"DB check FAILED: {table}.{column} for OBJECT_ID={object_id} on {date} {hhmi} "
+            f"= {actual!r}, expected {expected!r}"
+        )
+
+
+def reset_sub_day_status_value(table, object_id, date, hhmi, column, value=None):
+    """TEST-TEARDOWN ONLY: restore a sub-daily measured cell to ``value`` (default NULL) for the
+    (OBJECT_ID, date, HH:MI) interval — leaves the sandbox as found after a null-original edit test.
+    Same role as ``reset_day_status_value`` for the daily grid. Returns rows updated."""
+    _safe(table)
+    _safe(column)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            f"UPDATE {table} SET {column} = :v "
+            f"WHERE OBJECT_ID = :o AND TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD') "
+            f"AND TO_CHAR(DAYTIME,'HH24:MI') = :h",
+            v=value, o=object_id, d=str(date), h=str(hhmi),
+        )
+        conn.commit()
+        return cur.rowcount
+    finally:
+        cur.close()
+        conn.close()
+
+
 # --- N2: allocation conservation oracle ---------------------------------------------------------
 # An allocation calc RUN distributes measured field/stream totals onto wells/streams, writing per-
 # object quantities to the *_DAY_ALLOC tables (e.g. PWEL_DAY_ALLOC, key OBJECT_ID+DAYTIME). The

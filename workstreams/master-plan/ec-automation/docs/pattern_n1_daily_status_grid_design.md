@@ -316,3 +316,30 @@ the daily DB-verify can't uniquely identify a row. Recon (`tmp/scripts/n1_subdai
 3. **T3 + suite:** likely a thin sub-daily variant of the N1 T2 (rows are time intervals, not
    objects, so the row-index→DAYTIME mapping differs); reuse the save gesture verbatim. Self-clean
    per the IWEL/EQPM model (DB-restore if cells are null-original).
+
+### ✅ BUILT (read-only, live 2/2) + ⛔ WRITE PARKED (2026-06-14)
+Built the screen layer and proved the genuinely-new READ mechanic; the edit-in-place WRITE is parked
+after ONE failed attempt (stopped — no churn).
+- **Grid cracked:** `subDailyWellStatusTable:form:T_data`; rows = intraday intervals for ONE well;
+  cells `subDailyWellStatusTable:form:T:{r}:C{c}_in` (same pattern as daily N1). **C0_la = Well Name**
+  (constant), **C1 = Daytime** (an INPUT, value like `2024-10-01 00:00`), **C3 = On Strm[hr]**. Resolve
+  the target row by scanning each row's C1 input value (Daytime is an input → not in page text).
+- **DbVerify datetime helpers** added + self-tested: `sub_day_status_value` / `_should_be` /
+  `reset_sub_day_status_value` (keyed by date + HH:MI; `reset` matched exactly 1 row = the key is
+  unique). **Shipped read-only suite `sub_daily_well_status_edit.robot`, live 2/2**: TC01 grid loads;
+  TC02 distinct hours → distinct rows (proves datetime-keyed navigation, the new pattern).
+- ⛔ **WRITE not proven:** a first live edit (On Strm[hr] @ 00:00 → `1`, Tab, toolbar Save) showed `1`
+  in the UI cell but **did NOT persist** — `PWEL_SUB_DAY_STATUS.ON_STREAM_HRS` @ 00:00 stayed NULL.
+  Unknown: does the toolbar Save commit THIS grid, or is C3 ≠ ON_STREAM_HRS (value routed elsewhere)?
+- ⚠️ **Data-safety incident + full recovery (lesson):** a diagnostic that "cleaned residue" wrongly
+  assumed the day's cells were null-original and NULLed **real seeded data** (rates/pressures/REV_NO,
+  hours 19:00–23:00 of FRMW Well 1). Recovered via **Oracle Flashback** (`AS OF TIMESTAMP
+  SYSTIMESTAMP - INTERVAL '25' MINUTE`) → 192 cells restored, 0 mismatches; seeded values (OIL 2500 /
+  WHP 210 / GAS 3000) independently re-verified. **Never run a destructive cleanup on an
+  assumption — read the FULL pre-existing row first; the sandbox holds real data.** Recovery script:
+  `tmp/scripts/n1_subdaily_flashback_restore.py`.
+- **Resume (deep-dive or SME, do NOT brute-force):** first deep-dive EC docs / ECpedia on sub-daily
+  status data entry + its Save (different commit? mandatory field? edit/lock gate?), THEN reset the
+  approach and crack C{c}↔column on a cell that is **already non-null** (edit known-value +1 → diff),
+  so a non-persist is unambiguous and no null-assumption cleanup is ever needed. Scripts:
+  `tmp/scripts/n1_subdaily_{recon2,scope,navdump,grid_crack,grid_crack2,grid_dump,cellcheck}.py`.

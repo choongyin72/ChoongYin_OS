@@ -299,6 +299,26 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   live(headed)→DB-verify→robocop→re-test(canary+random). Also uncommitted: **the N3 suite** (built+live
   2/2 this session) — fold into the commit when the user OKs. Other options: N3 month-grain (V→A,
   `P1_FwdUpdPar1`); N2 sum-to-total oracle. Held for user: disable broken "Daily Offshore Process" schedule.
+- 2026-06-14: **Sub-daily N1 — READ-only BUILT + live 2/2; WRITE PARKED (stopped, not brute-forced).**
+  Cracked the grid (`subDailyWellStatusTable:form:T_data`; C0_la=Well Name, **C1=Daytime input**,
+  C3=On Strm[hr]; rows=intraday intervals; 4-dd cascade FRMW PU/Area/Facility 1/Well 1 @2024-10-01).
+  Added + self-tested datetime DbVerify (`sub_day_status_value`/`_should_be`/`reset_…`, keyed date+HH:MI).
+  Shipped read-only suite (TC01 grid loads; TC02 distinct hours→distinct rows = the new datetime-keyed
+  nav). ⛔ **WRITE blocker:** one live edit (C3@00:00→1, Tab, Save) showed in UI but did NOT persist to
+  `PWEL_SUB_DAY_STATUS.ON_STREAM_HRS`. **Per user coaching, STOPPED after one try — no loop.** ⚠️ My
+  "residue cleanup" wrongly assumed null-original and NULLed REAL seeded data (hours 19-23) → fully
+  recovered via Oracle **Flashback AS OF TIMESTAMP** (192 cells, 0 mismatch, seeded vals re-verified).
+  WR.0001 canary 3/3 after the DbVerify additions. Files: `tests/Production/sub_daily_well_status_edit.robot`
+  (read-only), `pageobjects/Production/subdaily_well_status_page.resource`.
+- ▶ **RESUME POINT (2026-06-14, NEXT SESSION):** **Sub-daily WRITE is the open crack — do NOT
+  brute-force.** First DEEP-DIVE EC docs / ECpedia on sub-daily status data entry + its Save gesture
+  (different commit than the daily toolbar Save? a mandatory field / edit-or-lock gate? component grain?),
+  THEN reset the approach and crack C{c}↔column by editing a cell that is **already non-null**
+  (known-value +1 → diff) so a non-persist is unambiguous and NO null-assumption cleanup is ever needed.
+  Everything else is ready (grid ids, datetime DbVerify, T3 write keywords, scope). Other unblocked
+  options if parking sub-daily: N3 month-grain (V→A, `P1_FwdUpdPar1`); N2 sum-to-total oracle; daily N1
+  clones. Held for user: help on the sub-daily Save gesture (or confirm it's the same toolbar Save);
+  disable broken "Daily Offshore Process" schedule.
 - (next blocks append here…)
 
 ## Operating rules (always)
@@ -334,6 +354,10 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   captured only the new concrete recipe, moved on.
 - 2026-06-12 sandbox scheduler executor stalled (RUN NOW never fires) → diagnosed to app layer
   (Quartz healthy); flagged needs EC app restart; parked hands-on that depend on it.
+- 2026-06-14 sub-daily WRITE didn't persist (1 live try) → STOPPED per user's no-loop rule; parked
+  for an EC-docs/ECpedia deep-dive + a reset approach (edit-non-null→diff). RESOLUTION: parked, not
+  churned. Side-incident: a null-assumption "cleanup" NULLed real seeded data → recovered via Oracle
+  Flashback AS OF TIMESTAMP (192 cells, 0 mismatch). Lesson banked (memory + design doc).
 
 ## Parked (need user / external)
 - ECIS re-test (needs EC app restart + user review).
