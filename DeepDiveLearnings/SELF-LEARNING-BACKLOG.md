@@ -215,9 +215,13 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   status_edit.robot + pageobjects/Production/iwel_water_injection_status_page.resource.
 - ▶ **RESUME POINT (2026-06-14):** N3 status-process LIVE still blocked on **ec-worker not running**
   (run script fixed with overlay 12 — awaits redeploy; "name is null" is a separate broken-config red
-  herring). No-blocker next items: (1) more N1 siblings — equipment **EQPM_DAY_STATUS** (34k P rows),
-  other injection/stream types (CO2/steam/liquid) — all data-confirmed via
-  `tmp/scripts/n1_daystatus_data_scan.py`; same template, reuse the IWEL T3 as a fork. (2) When
+  herring). No-blocker next items: (1) **Daily Equipment Status** N1 #4 — VIABILITY CONFIRMED
+  (`tmp/scripts/n1_eqpm_viability.py` + `n1_eqpm_scope.py`): N1 grid (Date + 3-level nav, no
+  well-hookup), `EQPM_DAY_STATUS` (ON_STREAM_HRS/AVG_RPM/AVG_PRESS/POWER_*), name source `OV_EQPM`,
+  equipment e.g. "Offshore Gas Injection Compressor A" on 2024-02-06 (129 rows). Remaining: map nav
+  scope names (OV_EQPM OP_FCTY_1/OP_AREA → the PU/Area/Facility cascade), confirm grid+cells, edit→diff
+  the cell↔column, then fork the IWEL T3 (different object class = stronger N1 generalization). (2) other
+  injection/stream siblings (CO2/steam/liquid), data-confirmed via `n1_daystatus_data_scan.py`. (3) When
   ec-worker is up: finish N3 live (P→V + ROWS_UPDATED + reverse) per `pattern_n3_status_process_design.md`.
   Held for user: redeploy with ec-worker (overlay 12); disable the broken "Daily Offshore Process" schedule.
 - (next blocks append here…)
