@@ -107,6 +107,10 @@ WHP Edit Should Persist
     ...    pre-edit UI display ÷ DB value and assert DB_after ≈ typed_display / factor (see
     ...    reference_ec_ui_db_unit_conversion). Proves the edit-in-place WRITE commits for a specific
     ...    intraday interval — the genuinely-new sub-daily capability, end to end.
+    ...    ⚠️ MULTIPLICATIVE UNITS ONLY: the ratio-derived factor (UI/DB) is valid only for
+    ...    zero-offset conversions (pressure psi↔bar, rates). Do NOT reuse this keyword for an OFFSET
+    ...    unit such as temperature (°F = °C×1.8+32) — the ratio would silently mis-assert; an
+    ...    offset-aware oracle is needed there (lessons-learned 2026-06-15 §R1).
     ${oid}=    Object Id By Name    WELL_VERSION    ${SCOPE_WELL}
     ${disp0}=    Read Daily Status Cell    ${TARGET_CELL}
     ${db0}=    Sub Day Status Value    ${SUBDAILY_DB_TABLE}    ${oid}    ${SCOPE_DATE}    ${TARGET_HOUR}    ${TARGET_DB_COLUMN}
