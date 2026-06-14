@@ -126,3 +126,18 @@ non-simulate); (b) build the honest partial N3 now (drive screen + submit run + 
 read-only DB oracle), completion-pending-PA — weaker than N1/N2 since no live P→V can be asserted;
 (c) park N3 until PA is available and move to another unblocked item. Recon/run scripts:
 `tmp/scripts/n3_ha0001_crack.py`, `n3_live_forward.py`, `n3_after_run_dbcheck.py`.
+
+## Retry after ec-bpm restart (2026-06-14) — still NOT executing; precise diagnosis
+User restarted EC app to include ec-bpm; re-fired "P1 Forward Status Update" @2003-01-01 and watched
+~3.5 min. Job still goes **RunningJobs = WAITING** and never executes. DB ground truth (read-only):
+- `STAT_PROCESS_STATUS` = 0 rows · `PWEL_DAY_STATUS` = all P (no lift) · no change over 3.5 min.
+- **Quartz scheduler IS healthy** (`QRTZ_SCHEDULER_STATE` last checkin 5s ago, 7.5s interval) — but its
+  only trigger is **`DataPurging`** (WAITING). So status processes do NOT run via Quartz.
+- BPM engine = **jBPM** (JBPM_* tables). **`JBPM_PROCESSINSTANCEINFO = 0`** and **`JBPM_REQUESTINFO =
+  0`** throughout — i.e. **no jBPM process instance / async request is ever created** for the queued
+  job. The EC→jBPM hand-off (or the jBPM async ExecutorService that drains the queue) is not processing.
+⇒ Including ec-bpm wasn't sufficient: the **jBPM async job executor isn't picking up the status-process
+job**. Needs (one of): the jBPM ExecutorService actually started/enabled; the `jbpmengine` user holding
+the required eDAC roles for the data + the status processes (DOC-08); or an EC "Process Automation"
+service/toggle beyond deploying ec-bpm. Environment clean (nothing executed; 2 inert WAITING jobs that
+would lift the 2003-01-01 P1 scope P→V if the executor ever drains — reversible).
