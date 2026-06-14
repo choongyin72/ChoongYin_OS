@@ -1,21 +1,30 @@
 # WORKER SESSION — READ FIRST
 
-## On session start (mandatory)
-Before starting any automation work, read:
-- docs/lessons-learned.md  → standing rules from prior reviews (mandatory)
-- docs/automation-scorecard.md → current coverage + parked backlog
-- STATUS.md → active Jira tickets + blockers
+## On session start (mandatory — in this order)
+1. Read docs/lessons-learned.md → standing rules (mandatory)
+2. Read docs/PR-REVIEW-PROTOCOL.md → shared worker↔reviewer contract (mandatory)
+3. Read docs/automation-scorecard.md → current coverage + parked backlog
+4. Read STATUS.md → active Jira tickets + blockers
+5. Check all open PRs for reviewer comments before opening any new branch:
+   - Address MUST-FIX comments first — these gate the merge
+   - NICE-TO-HAVE comments are advisory, merge can proceed without them
+   - Push fixes to the existing PR branch, do not open a new PR
 
 ## Git workflow (mandatory — never commit directly to master)
 1. At the start of every session, create a feature branch from master:
    `git checkout master && git pull origin master && git checkout -b feature/<task-name>`
    Use a descriptive name e.g. `feature/n3-va-suite`, `feature/financial-objects-parked`
 2. Do all your work and commits on that branch
-3. When the task is complete, raise a PR targeting master:
-   - Title: short description of what was built
-   - Body: list what was done + which lessons-learned.md rules were applied
-4. Do NOT merge yourself — the reviewer session or the user will merge
-5. Start the next task only after the PR is merged
+3. When the task is complete, raise a PR targeting master with this body format (every PR, no exceptions):
+   - **What was built** — one sentence
+   - **Files touched** — list
+   - **DB ground-truth evidence** — live N/N pass count + exact DbVerify assertion used
+   - **Self-clean confirmed** — yes/no
+   - **Rules applied** — list R# from lessons-learned.md that were followed
+   - **Base branch** — master (or `depends on #N` if stacked)
+4. Do NOT merge yourself — the reviewer merges after MUST-FIX comments are resolved
+5. Merge gate: reviewer will NOT merge a PR with open MUST-FIX comments
+6. Stacked PRs: if your PR depends on #N, state it. Reviewer will not merge out of order
 
 ## During a long session (self-check rule)
 After every 10 commits OR when resuming after a long pause, re-read
