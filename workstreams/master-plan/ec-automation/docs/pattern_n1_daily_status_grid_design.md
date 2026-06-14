@@ -395,3 +395,16 @@ pattern; remaining = finish the nav/grid/cell crack + build the suite. Recon: `t
   per-screen rule; (3) T3 `pflw_flowline_status_page.resource` + suite (mirror IWEL/EQPM, reuse N1 T2
   `daily_status_grid.resource`); (4) dryrun→live→DB-verify→self-clean→canary→PR. Reuses the proven N1
   T2 + DbVerify day-status helpers verbatim.
+
+### ✅ PFLW BUILT + live 3/3 (2026-06-15)
+Cracked the nav (targeted PU-by-area search) + grid + column map, then built and live-verified.
+- **Scope:** "Daily Production Flowline, by Flowline"; date-range From G:0 + To G:1 = 2003-09-20;
+  cascade **Production Unit → Onshore area → Onshore facility → PRD_FLUID_ADFAY_54401** (G:2..G:5).
+  (Area name has a leading space in the DB; `Select EC Dropdown Option` normalize-space match handles it.)
+- **Grid:** `daily_flowline_status:form:T_data`; cells `…:T:0:C{c}_in`. **C2 = On Strm[hr] =
+  ON_STREAM_HRS** (DB-proven by the live edit→diff; unitless → direct equality, no UI/DB conversion).
+- **Suite:** `tests/Production/daily_production_flowline_status_edit.robot` + T3
+  `pflw_flowline_status_page.resource`. TC01 grid loads; TC02 edit ON_STREAM_HRS=18 → Save → UI + DB
+  verified; TC03 DB-restore NULL (null-original). robocop clean, dryrun 3/3, LIVE headed 3/3, DB clean
+  after, WR.0001 canary 3/3. Reuses N1 T2 `daily_status_grid` + DbVerify VERBATIM (zero shared-file
+  change). **N1 now spans 6 object classes:** PWEL / STRM / IWEL / EQPM / sub-daily PWEL / PFLW.
