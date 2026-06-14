@@ -13,7 +13,7 @@ Context compression does NOT re-read this file automatically — you must do it
 explicitly. New rules from the reviewer take effect immediately when you read them.
 
 ## Why this matters
-A reviewer session runs daily at 20:00 AWST and appends new rules to
+A reviewer session runs daily at 06:00 AWST and appends new rules to
 docs/lessons-learned.md based on analysis of your recent commits. If you are
 in a long-running session that started before 20:00, you will miss those rules
 unless you re-read the file yourself mid-session.
