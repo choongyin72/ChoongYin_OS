@@ -20,8 +20,10 @@ When parking a test or pattern, always write a one-line reason in the commit mes
 **R4 — Sub-daily patterns need datetime-keyed DbVerify**
 PWEL_SUB_DAY_STATUS (and similar sub-daily tables) key on `(OBJECT_ID, DAYTIME[+time], SUMMER_TIME)` — not `TRUNC(date)`. The daily DbVerify helper will silently match wrong rows. Always create a datetime-keyed variant when the PK includes time.
 
-**R5 — ec-worker must be confirmed running before N3 tests**
-Before running any status process (N3 pattern), verify ec-worker is up and its scheduler is in RUNNING state (not STANDBY). ORA-06569 with "no elements" = empty data scope, not an infra failure. ORA-06569 on a date with real P data = ec-worker is down or scheduler is STANDBY.
+**R5 — ec-worker must be confirmed running before N3 tests** _(corrected 2026-06-14 after worker pushback — original second line was wrong)_
+Before running any status process (N3 pattern), verify ec-worker is up and its scheduler is in RUNNING state (not STANDBY). Two distinct failure modes:
+- **ORA-06569** ("Collection bound by bind_array contains no elements") = always a DATA SCOPE issue — the process found no qualifying P rows for that facility/date combination. Fix: verify P rows exist in PWEL/IWEL/OBJECT_DAY_WEATHER for that exact facility+date before running.
+- **ec-worker STANDBY**: the process won't execute at all — it stays WAITING or absent from ACTION_INSTANCE_HISTORY. No ORA-06569. Fix: confirm ec-worker scheduler state in logs.
 
 ---
 
@@ -38,7 +40,7 @@ Before running any status process (N3 pattern), verify ec-worker is up and its s
 
 | Gap | Owner | Priority |
 |-----|-------|----------|
-| 3 Financial Objects parked — root causes not documented | Worker | 🔴 High |
+| 3 Financial Objects parked — reviewer inferred from commit msg "11 screens, 3 parked"; worker to confirm which 3 and document blockers, or correct this if wrong | Worker | 🟡 Medium |
 | N3 V→A daily suite — build-ready but not built | Worker | 🟡 Medium |
 | N3 V→A monthly suite — separate screen, thin T3 needed | Worker | 🟡 Medium |
 | Dispatching Pipeline slice — not started | Worker | 🟢 Low |
