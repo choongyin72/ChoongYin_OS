@@ -234,6 +234,24 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   injection/stream siblings (CO2/steam/liquid), data-confirmed via `n1_daystatus_data_scan.py`. (3) When
   ec-worker is up: finish N3 live (P→V + ROWS_UPDATED + reverse) per `pattern_n3_status_process_design.md`.
   Held for user: redeploy with ec-worker (overlay 12); disable the broken "Daily Offshore Process" schedule.
+- 2026-06-14: ✅ **N1 #4 "Daily Equipment Status" BUILT + live 3/3** (EQPM_DAY_STATUS, NEW object class;
+  C4=AVG_PRESS; 3-level nav P1 Production Unit/P1 Area/P1 Facility 1 @2024-02-06). N1 now spans 4 object
+  types (PWEL/STRM/IWEL/EQPM). Then recon'd the next NOVEL pattern, **sub-daily**, and found it's a real
+  new pattern (not a clone): `PWEL_SUB_DAY_STATUS` keys on **full DAYTIME (date+time)** = multiple
+  intraday rows per well (461 rows/18 wells @2011-01-01); the N1 DB-verify (`TRUNC(DAYTIME)=date`) can't
+  uniquely id a sub-daily row → needs a datetime-keyed DbVerify variant; and the screen exists only as
+  "Sub Daily Production Well Status 1 - by Well / - by Period" variants (plain name not found). Monthly
+  well status = poor target (PWEL_MTH_STATUS sparse, 13 rows). Recon: `tmp/scripts/n1_subdaily_recon.py`,
+  `n1_monthly_recon.py`.
+- ▶ **RESUME POINT (2026-06-14):** N1 daily pattern THOROUGHLY proven (4 object types, T2+DbVerify
+  reused). Next options: (1) **sub-daily** N1 variant — build a datetime-keyed DB-verify (full DAYTIME)
+  + pick the "- by Well" screen variant (data: PWEL_SUB_DAY_STATUS 2011-01-01, 18 wells); a genuinely
+  new pattern, deliberate build. (2) more daily N1 clones (CO2/steam/liquid stream, gas-injection well)
+  — marginal. (3) **N3 status-process LIVE** — still blocked on **ec-worker** (redeploy run script w/
+  overlay 12); then finish P→V + ROWS_UPDATED + reverse per `pattern_n3_status_process_design.md`.
+  Shared DbVerify changes this session (allocation oracle, reset_day_status_value, null-equality fix)
+  VERIFIED safe (N1 family live-green; other patterns use untouched functions). Held for user: ec-worker
+  redeploy; disable broken "Daily Offshore Process" schedule.
 - (next blocks append here…)
 
 ## Operating rules (always)
