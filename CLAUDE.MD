@@ -6,6 +6,17 @@ Before starting any automation work, read:
 - docs/automation-scorecard.md → current coverage + parked backlog
 - STATUS.md → active Jira tickets + blockers
 
+## Git workflow (mandatory — never commit directly to master)
+1. At the start of every session, create a feature branch from master:
+   `git checkout master && git pull origin master && git checkout -b feature/<task-name>`
+   Use a descriptive name e.g. `feature/n3-va-suite`, `feature/financial-objects-parked`
+2. Do all your work and commits on that branch
+3. When the task is complete, raise a PR targeting master:
+   - Title: short description of what was built
+   - Body: list what was done + which lessons-learned.md rules were applied
+4. Do NOT merge yourself — the reviewer session or the user will merge
+5. Start the next task only after the PR is merged
+
 ## During a long session (self-check rule)
 After every 10 commits OR when resuming after a long pause, re-read
 docs/lessons-learned.md to check for new rules added by the reviewer session.
