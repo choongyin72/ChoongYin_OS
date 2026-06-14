@@ -386,6 +386,115 @@ def allocation_conservation_should_hold(table, daytime):
         )
 
 
+# --- N3: status-process (P->V->A record-status engine) oracle -----------------------------------
+# A "status process" run (HA.0001) lifts RECORD_STATUS on the scoped day-status rows
+# (Provisional 'P' -> Verified 'V' -> Approved 'A') and appends a row to STAT_PROCESS_STATUS with
+# ROWS_UPDATED = how many rows it lifted. The run is async (executed by the ec-worker scheduler
+# node; see DeepDiveLearnings/ec-bpm/ec-worker-and-scheduler.md), so the suite polls the DB for the
+# result. Ground-truth oracle = the engine's ROWS_UPDATED self-report AND the actual RECORD_STATUS
+# transition count in the data must AGREE. Self-clean = DB-restore V->P (the EC reverse process
+# lifts 0 rows here, so a scoped restore is the reliable teardown — like reset_day_status_value).
+
+_STATUS_FAMILY_SQL = (
+    "SELECT table_name FROM all_tables WHERE owner = :o "
+    "AND (table_name LIKE '%DAY_STATUS' OR table_name = 'STRM_DAY_STREAM' "
+    "OR table_name = 'OBJECT_DAY_WEATHER') AND table_name NOT LIKE '%JN'"
+)
+
+
+def _status_family_tables(cur):
+    """The day-status family: every %DAY_STATUS table + STRM_DAY_STREAM + OBJECT_DAY_WEATHER
+    (excluding journal %JN tables). The proven P1_FwdUpd lift writes only within this family, and a
+    broad 6382-table scan confirmed nothing outside it changes — so scoping the V-count oracle and
+    the restore to this family is both correct and fast (~10 tables)."""
+    cur.execute(_STATUS_FAMILY_SQL, o=os.environ.get("EC_DB_USER", "ECKERNEL_EC"))
+    return [r[0] for r in cur.fetchall()]
+
+
+def record_status_family_count(daytime, status):
+    """Total day-status rows on ``daytime`` (YYYY-MM-DD) with RECORD_STATUS = ``status`` across the
+    whole day-status family. The data-side oracle for a status-process lift: the Verified ('V')
+    count goes 0 -> ROWS_UPDATED after a P->V run, and back to 0 after the self-clean restore."""
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        total = 0
+        for t in _status_family_tables(cur):
+            cur.execute(
+                f"SELECT COUNT(*) FROM {t} "
+                f"WHERE TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD') AND RECORD_STATUS = :s",
+                d=str(daytime), s=status,
+            )
+            total += cur.fetchone()[0]
+        return total
+    finally:
+        cur.close()
+        conn.close()
+
+
+def status_process_run_count(process_id, daytime):
+    """COUNT(*) of STAT_PROCESS_STATUS log rows for ``process_id`` on ``daytime``.
+
+    STAT_PROCESS_STATUS is an append-only run log (one row per run), so absence of a run can't be
+    asserted once a prior run has logged — the suite captures this baseline, fires the run, then
+    polls for a +1 delta to prove a FRESH run landed.
+    """
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            "SELECT COUNT(*) FROM STAT_PROCESS_STATUS "
+            "WHERE PROCESS_ID = :p AND TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD')",
+            p=process_id, d=str(daytime),
+        )
+        return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def latest_status_process_rows_updated(process_id, daytime):
+    """ROWS_UPDATED from the most-recent STAT_PROCESS_STATUS run row for ``process_id``/``daytime``
+    (the engine's own self-report of how many rows it lifted). Returns None if no run row exists."""
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            "SELECT ROWS_UPDATED FROM STAT_PROCESS_STATUS "
+            "WHERE PROCESS_ID = :p AND TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD') "
+            "ORDER BY RUN_DAYTIME DESC FETCH FIRST 1 ROWS ONLY",
+            p=process_id, d=str(daytime),
+        )
+        row = cur.fetchone()
+        return row[0] if row else None
+    finally:
+        cur.close()
+        conn.close()
+
+
+def restore_record_status_family(daytime, from_status="V", to_status="P"):
+    """TEST-TEARDOWN ONLY: restore RECORD_STATUS on ``daytime`` from ``from_status`` back to
+    ``to_status`` across the whole day-status family — leaves the sandbox exactly as found after a
+    status-process P->V lift. The EC reverse process lifts 0 rows here, so this scoped DB-restore is
+    the reliable self-clean (the only RECORD_STATUS write in this library). Returns rows restored."""
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        total = 0
+        for t in _status_family_tables(cur):
+            cur.execute(
+                f"UPDATE {t} SET RECORD_STATUS = :ts "
+                f"WHERE TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD') AND RECORD_STATUS = :fs",
+                ts=to_status, d=str(daytime), fs=from_status,
+            )
+            total += cur.rowcount
+        conn.commit()
+        return total
+    finally:
+        cur.close()
+        conn.close()
+
+
 def code_should_be_present_in_view(view, code):
     """Fail unless ``code`` appears in any string column of ``view`` (DB ground truth)."""
     if not _code_present(view, code):

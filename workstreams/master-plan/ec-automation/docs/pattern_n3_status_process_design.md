@@ -209,3 +209,35 @@ or (b) **properly deploy that jBPM process** (real deployment id + class) if it'
 (`com.ec.eccommon.genericmodel.model.ejb.Generic...`, non-jBPM). So the "name is null" error is a
 SEPARATE broken action and does NOT block N3. N3's remaining need is just a RUNNING scheduler node
 (ec-worker) to drain the WAITING queue.
+
+## ✅✅ BUILT + live 2/2 (2026-06-14) — N3 suite shipped, DB-verified, self-cleaning
+With ec-worker running, the N3 suite was built and proven end-to-end through automation (headed live
+run, then a headless repeatability re-run — both 2/2). Independent DB re-check confirmed 0 residual V
+and a fresh `STAT_PROCESS_STATUS` row (ROWS_UPDATED=15) per run. Files shipped:
+- **T1** `libraries/DbVerify.py` — added the N3 oracle helpers (self-tested live before wiring):
+  `record_status_family_count(daytime, status)`, `status_process_run_count(process_id, daytime)`,
+  `latest_status_process_rows_updated(process_id, daytime)`, `restore_record_status_family(daytime,
+  from, to)`. Family = `%DAY_STATUS` + `STRM_DAY_STREAM` + `OBJECT_DAY_WEATHER` (excl `%JN`).
+- **T2** `resources/status_process_run.resource` — screen gestures (date range, `Select Status
+  Process` on nav G:2, GO, `Run Status Process` = `RunProcessButton:form:B`, `Submit Status Process
+  Run`). Forked from `allocation_run.resource`.
+- **T3** `pageobjects/Production/ha0001_daily_status_process_page.resource` — screen name + scope
+  (P1 Forward Status Update / `P1_FwdUpd` @ 2024-02-06) + oracle wiring: `Status Process Day Should
+  Be Clean` (baseline V=0), `Run Forward Status Process` (captures append-log baseline, submits),
+  `Wait For Status Process Run` (polls 25×3s for the +1 delta — async via ec-worker), `Status
+  Process Lift Should Verify` (ROWS_UPDATED>0 AND data V-count == ROWS_UPDATED), `Restore Status
+  Process Day` (self-clean + assert 0 residual).
+- **Suite** `tests/Production/daily_status_process_run.robot` — **TC01** lift P→V (dual oracle);
+  **TC02** self-clean restores the day to all-Provisional. Suite Teardown also restores (idempotent
+  safety) + Close EC.
+
+### The proven oracle (why a PASS is trustworthy)
+Two independent ground-truth sources must agree: the **engine's own `ROWS_UPDATED`** count and the
+**actual `RECORD_STATUS='V'` row count** in the data. On 2024-02-06 both = 15 (PWEL 1 + IWEL 1 +
+OBJECT_DAY_WEATHER 13, the P1-facility scope). The append-only `STAT_PROCESS_STATUS` log is handled
+with a **+1 count delta** (baseline captured before the run), so a stale prior row can't cause a
+false pass. Verification ladder honoured: robocop clean → dryrun 2/2 → live 2/2 → independent DB
+re-check (0 residual V) → repeatability re-run 2/2 → WR.0001 canary 3/3 + random `region_iud` 4/4
+(the additive DbVerify change is regression-free).
+
+**N3 is now CLOSED (rung A).** The operational core N1/N2/N3 patterns are all proven.

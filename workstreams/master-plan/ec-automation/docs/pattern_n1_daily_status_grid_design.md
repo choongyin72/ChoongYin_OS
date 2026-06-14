@@ -280,3 +280,39 @@ N1 unlocks the **most Pluto business tests** — it's where PHD data lands, wher
 validations fire, and the input to the whole allocation chain (capstone). Master-data IUD is largely
 done; transactional status entry is the untouched core. This design turns the build into recon +
 mechanical assembly.
+
+---
+
+## Sub-daily N1 — a genuinely NEW pattern (recon build-ready, 2026-06-14)
+Daily N1 (WR.0001/PO.0002/IWEL/EQPM) keys on **(OBJECT_ID, TRUNC(DAYTIME))** — one row per object
+per day. **Sub-daily breaks that**: `PWEL_SUB_DAY_STATUS` has multiple intraday rows per object, so
+the daily DB-verify can't uniquely identify a row. Recon (`tmp/scripts/n1_subdaily_recon2.py`,
+`n1_subdaily_scope.py`, `n1_subdaily_navdump.py`):
+
+- **PK = (OBJECT_ID, DAYTIME, SUMMER_TIME)** — three columns. `DAYTIME` carries the **time-of-day**
+  (hourly grain in the clean data), and `SUMMER_TIME` ('Y'/'N') is the DST discriminator that
+  disambiguates the duplicated hour at a fall-back boundary. ⇒ the DB-verify must match the **full
+  timestamp** (`DAYTIME = TO_DATE(:dt,'YYYY-MM-DD HH24:MI:SS')`) **AND `SUMMER_TIME`**, not `TRUNC`.
+- **Clean test scope:** date **2024-10-01**, PU = **FRMW PU** (G1), wells **FRMW Well 1**
+  (`AEBC774296C611E6E053020011ACFDF3`) + **FRMW Well 2** (`...CE11E6...`), each **24 hourly rows**
+  00:00→23:00, all `RECORD_STATUS='P'`, `SUMMER_TIME='Y'` (single value — no DST ambiguity that day).
+  (2011-01-01 is denser — 461 rows/18 wells — but irregular times; 2024-10-01 is the deterministic
+  hourly set to map cells against.)
+- **Measured cols** = the well family (ON_STREAM_HRS, AVG_WH_PRESS, AVG_WH_TEMP, …) — same as PWEL.
+- **Screen** = "Sub Daily Production Well Status 1 **- by Well**" (the plain name doesn't exist; a
+  "- by Period" sibling also exists). Nav = **Date (G0)** + a **5-dropdown cascade G1→G5**;
+  **G1 = Production Unit** (confirmed list incl. "FRMW PU"); G2–G5 are empty until G1 is picked
+  (dependent cascade, like the daily well screens: PU→Area→FacilityClass1→WellHookup→Well leaf).
+  GO = `button:form:B`. Non-iframed (top-level), like IWEL/EQPM.
+
+### Remaining to BUILD (next slice — the only open cracks)
+1. **Live-crack the post-GO grid:** pick FRMW PU→cascade→FRMW Well 1, GO; dump the grid id + confirm
+   whether **rows = the intraday time intervals** (expected for a "- by Well" view: one well, time
+   down the rows) and the cell ids; then **edit→Save→diff** to nail one cell↔(DAYTIME-hour, column)
+   — the same edit-in-place save gesture as the daily screens should apply.
+2. **Datetime-keyed DbVerify variant:** `sub_day_status_value(table, object_id, datetime, column,
+   summer_time='Y')` + `_should_be` + a `reset_sub_day_status_value` teardown — keyed on the full
+   timestamp + SUMMER_TIME (the daily helpers' `TRUNC(DAYTIME)` would match 24 rows).
+3. **T3 + suite:** likely a thin sub-daily variant of the N1 T2 (rows are time intervals, not
+   objects, so the row-index→DAYTIME mapping differs); reuse the save gesture verbatim. Self-clean
+   per the IWEL/EQPM model (DB-restore if cells are null-original).

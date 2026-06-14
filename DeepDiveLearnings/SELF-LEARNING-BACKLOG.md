@@ -260,6 +260,45 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   live-green). Held for user: disable broken "Daily Offshore Process" schedule (cosmetic log noise).
   Other next options: (1) **sub-daily** N1 (datetime-keyed DB-verify + "- by Well" variant; data
   PWEL_SUB_DAY_STATUS 2011-01-01); (2) daily N1 clones (CO2/steam/liquid stream, gas-injection well).
+- 2026-06-14: ✅✅ **N3 SUITE BUILT + live 2/2 (DB-verified, self-cleaning) — operational core N1/N2/N3
+  all proven.** HA.0001 Daily Data Status Processes. Built T1 DbVerify N3 helpers (self-tested live:
+  `record_status_family_count`/`status_process_run_count`/`latest_status_process_rows_updated`/
+  `restore_record_status_family`), T2 `resources/status_process_run.resource` (fork of allocation_run:
+  date range → process in nav G:2 → GO → `RunProcessButton:form:B`), T3
+  `pageobjects/Production/ha0001_daily_status_process_page.resource`, suite
+  `tests/Production/daily_status_process_run.robot` (TC01 lift P→V; TC02 self-clean). **Run is ASYNC**
+  (ec-worker executes) so the suite POLLS the DB. **Dual oracle**: engine `STAT_PROCESS_STATUS.
+  ROWS_UPDATED` (=15) == data `RECORD_STATUS='V'` family count (=15) on 2024-02-06 — both must agree.
+  Two design wins: append-only log → **+1 delta** baseline (no stale-row false pass); async → poll
+  25×3s. Verification ladder: robocop clean → dryrun 2/2 → **live headed 2/2** → independent DB
+  re-check (0 residual V; fresh STAT_PROCESS_STATUS row) → repeatability re-run 2/2 → **WR.0001 canary
+  3/3 + random region_iud 4/4** (additive DbVerify change regression-free). Registry row + N3 type
+  pattern + scorecard (N3 C+→A) + design doc closing section updated. Recon/scripts: `tmp/scripts/n3_*`.
+- ▶ **RESUME POINT (2026-06-14, NEXT SESSION):** N3 is CLOSED (rung A). Operational core N1/N2/N3 all
+  proven. **Next coverage options** (no blocker): (1) **sub-daily N1** — real new pattern
+  (`PWEL_SUB_DAY_STATUS` keys on full DAYTIME date+time; needs a datetime-keyed DbVerify variant + the
+  "Sub Daily Production Well Status 1 - by Well" screen variant; data @2011-01-01, 461 rows/18 wells;
+  recon `tmp/scripts/n1_subdaily_recon.py`); (2) **daily N1 clones** (CO2/steam/liquid stream,
+  gas-injection well — data-confirmed via `n1_daystatus_data_scan.py`); (3) **N3 month-grain** process
+  (`P1_FwdUpdPar1` →A, MTH — a level deeper, V→A); (4) **N2 sum-to-total** oracle (needs a full
+  non-simulate run + network→members→measured-total mapping). Held for user: disable broken "Daily
+  Offshore Process" schedule (cosmetic log noise only — [[reference_ec_daily_offshore_process_broken]]).
+- 2026-06-14: **Sub-daily N1 recon → BUILD-READY** (genuinely new pattern, not a clone). Cracked the
+  crux: `PWEL_SUB_DAY_STATUS` **PK = (OBJECT_ID, DAYTIME[+time-of-day], SUMMER_TIME)** — hourly intraday
+  rows break the daily `TRUNC(DAYTIME)` key → needs a **datetime-keyed DbVerify variant** (match full
+  timestamp + SUMMER_TIME). Clean scope pinned: screen "Sub Daily Production Well Status 1 **- by Well**",
+  date **2024-10-01**, **FRMW PU** (nav G1), wells **FRMW Well 1/2** (24 hourly P rows each, SUMMER_TIME='Y').
+  Nav = Date(G0) + 5-dd cascade G1→G5 (PU→…→Well), GO `button:form:B`, non-iframed. Open cracks for the
+  build: post-GO grid id + cell↔(hour,col) via edit→Save→diff; the datetime DbVerify + T3 + suite (reuse
+  N1 save gesture). Artifacts: design doc §Sub-daily, registry row (build-ready), `tmp/scripts/n1_subdaily_*`.
+- ▶ **RESUME POINT (2026-06-14, NEXT SESSION):** **BUILD sub-daily N1** per design doc §Sub-daily
+  "Remaining to BUILD": (1) live-crack the post-GO grid (FRMW PU→cascade→FRMW Well 1 @2024-10-01, GO →
+  grid id + confirm rows=time intervals + cell ids; edit→Save→diff to nail one cell↔(DAYTIME-hour, col));
+  (2) add `sub_day_status_value`/`_should_be`/`reset_sub_day_status_value` to DbVerify (full-timestamp +
+  SUMMER_TIME keyed); (3) T3 + suite (thin sub-daily variant of N1 T2; row-index→DAYTIME map); dryrun→
+  live(headed)→DB-verify→robocop→re-test(canary+random). Also uncommitted: **the N3 suite** (built+live
+  2/2 this session) — fold into the commit when the user OKs. Other options: N3 month-grain (V→A,
+  `P1_FwdUpdPar1`); N2 sum-to-total oracle. Held for user: disable broken "Daily Offshore Process" schedule.
 - (next blocks append here…)
 
 ## Operating rules (always)
@@ -278,7 +317,7 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
 | 1 | **ECpedia EFK deep dive** (user-directed) | `ecpedia-efk/EFK-DEEP-DIVE-PLAN.md` | DONE for value (thin hub → RD130 for depth) | ✅ A+B done |
 | 2 | **Pluto As-Built series** | `business-domains/PLUTO-ASBUILT-INDEX.md` | finish As-Built 14 monthly detail; lower-pri vols 01/02/03/07/11 [05,06,09,14 DONE] | 🔵 14+05 done |
 | 3 | **Business-domain syntheses** (deepen) | `business-domains/PLAN.md` | fold EFK/As-Built findings into production/sales/revenue deep passes | 🔵 drafts done |
-| 4 | **EC coverage track** (screen automation) | `ec-automation/docs/coverage_pluto_prioritized.md` | N1 done (WR.0001+PO.0002), N2 done (HA.0002); next = N3 status-process P→V→A | 🟢 N1+N2 live |
+| 4 | **EC coverage track** (screen automation) | `ec-automation/docs/coverage_pluto_prioritized.md` | N1 done (4 object types), N2 done (HA.0002), **N3 done (HA.0001)**; next = sub-daily N1 / N3 month-grain / N2 sum-to-total | 🟢 N1+N2+N3 live |
 | 5 | **Industry grounding** | (feeds `business-domains/GLOSSARY.md`) | EFK "Learn more about the Oil & Gas Industry" + allocation/lifting/royalty concepts | ☐ |
 
 ## Pull-from-here when idle (self-pick logic)

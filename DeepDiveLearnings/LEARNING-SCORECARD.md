@@ -19,18 +19,19 @@ accountable for what ships.** (Origin: 2026-06-13, after the Sheng Tong habit-co
 | Validation run | RUN-verify (Validation Overview) | automated + DB-verified | **A** |
 | Daily/Monthly STATUS grids (N1) | N1 edit-in-place | ✅ SOLVED + GENERALIZES — TWO screens live 3/3 DB-verified self-cleaning: WR.0001 (PWEL_DAY_STATUS) + PO.0002 (STRM_DAY_STREAM); T2 reuses, save gesture transfers | **A** |
 | Allocation / calc runs (N2) | RUN-verify ext. | ✅ BUILT + live 3/3 (2026-06-13): HA.0002 Daily Allocation — synchronous RUN CALCULATIONS, Simulate=no-DB-write (verified untouched), positive Success + negative Failure + DB conservation oracle (no-neg). T2 `allocation_run.resource` | **B+** |
-| Status processes P→V→A (N3) | recon DONE 2026-06-14 (HA.0001 = N2-analog RUN screen; oracle = RECORD_STATUS P→V + STAT_PROCESS_STATUS.ROWS_UPDATED; process P3_VERIFY_FCTY; plan written), build queued. **LIVE blocked: ec-worker not running** (deployment missing overlay 12 — run script fixed; awaits redeploy) | **C+** |
+| Status processes P→V→A (N3) | ✅ **BUILT + live 2/2 (2026-06-14)**: HA.0001 Daily Data Status Processes — async run via Run Process (ec-worker executes), **dual DB oracle** (engine `STAT_PROCESS_STATUS.ROWS_UPDATED` == data `RECORD_STATUS='V'` count, both=15 @2024-02-06), append-log +1 delta, DB-restore V→P self-clean (0 residual). T2 `status_process_run.resource`. Repeatable; canary+random green | **A** |
 | N1 generalization (multi object class) | ✅ live 3/3 each across **4 object types** (2026-06-14): PWEL (WR.0001) / STRM (PO.0002) / **IWEL** "Daily Water Injection Well Status" (C4=ON_STREAM_HRS) / **EQPM** "Daily Equipment Status" (C4=AVG_PRESS, 3-level nav, NEW object class). DB-restore-null self-clean for null-original cells; WR.0001 canary green (shared DbVerify safe). T2 + DbVerify reuse verbatim | **A** |
 | EC BPM / Process Automation | deep dive DONE 2026-06-14: ECBPM/jBPM model (process→deploy(GAV)→template→instance), scheduler internals, building blocks; "name is null" root-caused to a never-deployed action; addresses the held BPM item | **B** |
 
 **Rough coverage of the Pluto transactional value:** master-data foundation ≈ done; the
-operational core (N1/N2/N3 — where PHD data + validations + allocation live) ≈ **opening up** —
-N1 fully closed (2 screens), **N2 now BUILT (RUN + verify, 3/3 live)**, N3 still untouched. Honest
-headline: **foundation strong; operational core now has its first two patterns proven.** N2 is
-rung-B+ not A only because the conservation oracle reads existing real results (a fresh non-simulate
-write isn't reproducible — sandbox executor stalls) and sum-to-total/roll-up are future extensions.
-Next single highest-value unlock = N3 status-process (P→V→A state transitions) OR the N2 sum-to-total
-oracle (needs network→members→measured-total mapping).
+operational core (N1/N2/N3 — where PHD data + validations + allocation live) is now **substantially
+proven** — **N1 closed (4 object types live), N2 BUILT (RUN + verify, 3/3 live), and N3 BUILT
+(status-process P→V→A, 2/2 live, dual DB oracle, self-cleaning)**. Honest headline: **foundation
+strong; all three operational-core patterns now proven end-to-end with DB ground truth.** The async
+N3 run path (ec-worker executor) — which also gates N2's non-simulate write — is now exercised and
+green. Remaining higher-value unlocks: N2 sum-to-total conservation oracle (needs
+network→members→measured-total mapping + a full non-simulate run); N3 month-grain processes
+(`P1_FwdUpdPar1` →A, MTH); sub-daily N1 (datetime-keyed DB-verify).
 
 ## 2. Domain knowledge (generic EC + Pluto As-Built)
 | Area | State | Rung |
@@ -60,6 +61,7 @@ oracle (needs network→members→measured-total mapping).
 | 2026-06-14 | BPM "name is null" root cause | confident-and-RIGHT — traced the Java stack → EC source (`C:\DEV\GIT\ec-application`) → SQL `Q_ACTION_INSTANCE` → the exact DB row: `BUSINESS_ACTION 'Daily Offshore Process'` has NULL `ACTION_CLASS_NAME` + `JBPM_DEPLOYMENT_ID='dummy'` (never-deployed). Also caught my own earlier mis-read ("scheduler dead" → actually healthy; "executor not draining" → actually a deployment gap: missing overlay 12 / ec-worker) | follow the evidence to ground truth (source+DB), and correct earlier confident-wrong reads as new evidence lands; the answer was a config row, not infra. |
 | 2026-06-14 | N1 injection-well self-clean (unattended) | watch-point — I oscillated several times on the null-original self-clean (UI-clear vs DB-restore) and ran multiple live edit cycles before banking it build-ready. Right to STOP at a clean checkpoint given session length, but should have picked the self-clean approach once and moved on faster | decide a design fork once on best-available info and proceed; don't re-litigate mid-build. Recon (proven) was the win; the dithering was the cost. |
 | 2026-06-14 | N1 injection-well suite built + live 3/3 | confident-and-RIGHT — pushed through after the user's nudge ("why'd you stop?"); TC02 wrote+verified ON_STREAM_HRS=18 first try. Caught my OWN helper bug: `day_status_value_should_be` failed None==None (the `actual is not None and …` short-circuit), msg literally "= None, expected None" → fixed the null branch. WR.0001 canary flaked once (grid-load) then 3/3 → re-run, not assumed | the coaching nudge was right: there was no real blocker, I'd over-checkpointed. Build revealed a latent null-equality bug in a shared helper (now fixed for all N1). |
+| 2026-06-14 | N3 suite build + live 2/2 | confident-and-RIGHT — recon was fully proven last session, so the build was mechanical: robocop clean → dryrun 2/2 → live 2/2 first try → independent DB re-check (0 residual V, fresh STAT_PROCESS_STATUS row) → repeatability re-run 2/2 → canary 3/3 + random 4/4. Two design calls paid off: (a) **append-only log → +1 delta** baseline (not absence) avoids a stale-row false pass; (b) **dual oracle** (engine ROWS_UPDATED == data V-count) — neither alone is trustworthy, the agreement is | when the recon is genuinely proven (real run observed, DB ground truth), the build is fast and low-risk. The win was upfront: spotting the append-only-log trap and the async-poll need from the proven run, before writing the oracle. |
 | (next session…) | | | |
 
 ## 4. Update protocol (the habit)
