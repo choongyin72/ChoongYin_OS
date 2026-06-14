@@ -14,7 +14,7 @@ PRODUCTION ALLOCATION implementation (confirms domain priority #1).**
 | 05 Interfaces | WSPLU_EC_AsBuilt05_Interfaces_v1.0.docx | 2026-06-12 | ✅ → ASBUILT05-INTERFACES.md (I_IN_PHD_DAILY OPC UA; ECIS-backup precedents) |
 | 06 Calculations | WSPLU_EC_AsBuilt06_Calculations_v1.0.docx | 2026-06-11 | ✅ → ASBUILT06-CALCULATIONS.md (ZWP_ALLOC_*/C_PRRT/emissions; data-flow chain) |
 | 07 Reports | WSPLU_EC_AsBuilt07_Reports_v1.0.docx | 2026-06-10 | ✅ catalog read → ASBUILT07-REPORTS.md (35 reports; Australian regulatory theme) + CAPSTONE |
-| 11 Notification | WSPLU_EC_AsBuilt11_Notification_v1.0.docx | 2026-05-19 | ☐ |
+| 11 Notification | WSPLU_EC_AsBuilt11_Notification_v1.0.docx | 2026-05-19 | ✅ → ASBUILT11-NOTIFICATION.md (MHM email + Todo; only N_R_D_VALIDATION_REVIEW live; Phase-2 = monthly approval-workflow spec; Message Journal MHM.0007 = test oracle) |
 | 14 BusinessProcesses | WSPLU_EC_AsBuilt14_BusinessProcesses_v1.2.docx | 2026-05-18 | ✅ → ASBUILT14-BUSINESS-PROCESSES.md (daily + monthly + GHG/PRRT + QC governance) |
 
 Gaps in numbering (04, 08-10, 12-13) — enumerate the folder next session (folder may hold

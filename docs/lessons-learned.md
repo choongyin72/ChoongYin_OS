@@ -8,7 +8,7 @@ _Worker sessions: read this before starting any automation work._
 
 ### Rules (apply immediately, no exceptions)
 
-**R1 — Unit conversion guard before any DB write**
+**R1 — Unit conversion guard before any DB write** ⚠️ _refined 2026-06-15 (worker validation below): the `expected = typed * DB_before/UI_before` ratio is valid ONLY for multiplicative/zero-offset units (pressure, rates); it is WRONG for offset units like temperature (°F↔°C). See validation §R1._
 Before writing to any DB column and asserting `typed_value == DB_value`, check if the column has a unit conversion. Pressure and rate columns in EC store SI/base units in DB but display configured units in UI. Factor for pressure: ~14.5038 (psi ↔ bar). Never use a naive equality oracle on these columns — derive the expected DB value from the live ground truth: `expected = typed_display * DB_before / UI_before`.
 
 **R2 — Read current value before any write (no null assumptions)**
@@ -20,10 +20,8 @@ When parking a test or pattern, always write a one-line reason in the commit mes
 **R4 — Sub-daily patterns need datetime-keyed DbVerify**
 PWEL_SUB_DAY_STATUS (and similar sub-daily tables) key on `(OBJECT_ID, DAYTIME[+time], SUMMER_TIME)` — not `TRUNC(date)`. The daily DbVerify helper will silently match wrong rows. Always create a datetime-keyed variant when the PK includes time.
 
-**R5 — ec-worker must be confirmed running before N3 tests** _(corrected 2026-06-14 after worker pushback — original second line was wrong)_
-Before running any status process (N3 pattern), verify ec-worker is up and its scheduler is in RUNNING state (not STANDBY). Two distinct failure modes:
-- **ORA-06569** ("Collection bound by bind_array contains no elements") = always a DATA SCOPE issue — the process found no qualifying P rows for that facility/date combination. Fix: verify P rows exist in PWEL/IWEL/OBJECT_DAY_WEATHER for that exact facility+date before running.
-- **ec-worker STANDBY**: the process won't execute at all — it stays WAITING or absent from ACTION_INSTANCE_HISTORY. No ORA-06569. Fix: confirm ec-worker scheduler state in logs.
+**R5 — ec-worker must be confirmed running before N3 tests** ⚠️ _last sentence CORRECTED 2026-06-15 (worker validation below): ORA-06569 NEVER signals a down worker. See validation §R5._
+Before running any status process (N3 pattern), verify ec-worker is up and its scheduler is in RUNNING state (not STANDBY). ORA-06569 with "no elements" = empty data scope, not an infra failure. ~~ORA-06569 on a date with real P data = ec-worker is down or scheduler is STANDBY.~~ (Incorrect — corrected below: ORA-06569 is raised by `PCK_STATUS` *while executing*, so the worker DID run; a down worker = silent WAITING with no error and no `STAT_PROCESS_STATUS` row.)
 
 ---
 
@@ -40,10 +38,34 @@ Before running any status process (N3 pattern), verify ec-worker is up and its s
 
 | Gap | Owner | Priority |
 |-----|-------|----------|
-| 3 Financial Objects parked — reviewer inferred from commit msg "11 screens, 3 parked"; worker to confirm which 3 and document blockers, or correct this if wrong | Worker | 🟡 Medium |
+| ~~3 Financial Objects parked — root causes not documented~~ ⚠️ NOT VERIFIED (2026-06-15): all 15 FO suites present, none parked — appears incorrect/stale | — | ✖ closed |
 | N3 V→A daily suite — build-ready but not built | Worker | 🟡 Medium |
 | N3 V→A monthly suite — separate screen, thin T3 needed | Worker | 🟡 Medium |
 | Dispatching Pipeline slice — not started | Worker | 🟢 Low |
-| Column unit-conversion registry — no central list of which columns need conversion | Worker | 🔴 High |
+| Column unit-conversion registry — no central list of which columns need conversion | Worker | 🟡 Medium (build when 1st offset/temp write-verify lands — YAGNI) |
+
+---
+
+## 2026-06-15 — Worker Validation (of the 2026-06-14 review)
+
+First peer-review cycle. Worker validated each reviewer rule against the actual code/DB. Verdicts:
+
+### Confirmed correct
+- **R2 / R3 / R4** hold. R4 nuance: `sub_day_status_value` makes `SUMMER_TIME` an OPTIONAL filter (off by default), so on a DST-boundary day one HH:MI maps to two rows — pass `summer_time` on those days. R2 factual tweak: the 192-cell incident was a destructive *cleanup* on a null-assumption, not "writing 0/null to a non-null cell" — the rule (read full state before any destructive write/cleanup) is right.
+
+### §R1 — refined (correct but unsafe as a general rule)
+The live factor derivation `expected = typed_display × DB_before ÷ UI_before` (implemented at `pageobjects/Production/subdaily_well_status_page.resource`, WHP=AVG_WH_PRESS) is mathematically valid **only for zero-offset / multiplicative units** (pressure psi↔bar, rates). It is **WRONG for offset units** — temperature (°F = °C×1.8+32) is not a ratio, so the formula would silently mis-assert. No live failure yet (only pressure write-verify exists), but the guard is unsafe for temp/offset columns. **Action taken:** added an explicit multiplicative-only warning to the WHP keyword doc so the ratio approach is never reused for an offset column. **Deferred (YAGNI):** the full typed unit-conversion registry — build it (recording per-column conversion *type*: multiplicative factor vs offset formula) when the first offset/temperature write-verify is actually needed, not before.
+
+### §R5 — corrected (reviewer's last clause is technically wrong)
+"ORA-06569 on a date with real P data = ec-worker down/STANDBY" is **incorrect**. ORA-06569 is raised by `PCK_STATUS` *during execution* → the worker **ran** and found an empty matching scope. The signatures are opposite:
+- **ORA-06569** ⇒ worker executed; empty/unmatched data scope (a config/scope problem).
+- **silent WAITING, no error, no new `STAT_PROCESS_STATUS` row** ⇒ worker down or scheduler STANDBY.
+Also: the N3 suite does not currently pre-check ec-worker; it relies on a poll timeout (25×3s) that fails with a clear message. An explicit ec-worker pre-flight in Suite Setup is a reasonable future add (not yet built).
+
+### Gap correction
+"3 Financial Objects parked — root causes not documented" (was 🔴 High) is **not substantiated**: all 15 Financial_Objects IUD suites are present and none are parked (the only `_parked` dir is `Commercial_Objects/_parked` → one `sub_field_iud.robot`). Closed as stale/incorrect.
+
+### Process note
+Reviewer correctly re-derived the unit-conversion + data-safety lessons independently — high-value. Two factual errors (R5 clause, FO gap) caught by validating against ground truth rather than accepting the review verbatim. Practice working as intended: review → independent worker validation → corrected shared record.
 
 ---

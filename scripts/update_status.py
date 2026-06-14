@@ -98,6 +98,8 @@ _Run `python scripts/update_status.py` to regenerate. For Jira refresh, ask Clau
 if __name__ == "__main__":
     status_path = f"{REPO_ROOT}/STATUS.md"
     content = build_status()
-    with open(status_path, "w") as f:
+    # encoding="utf-8" is required: commit messages / status content contain non-cp1252 chars
+    # (✅ → — etc.); the default Windows codec (cp1252) raises UnicodeEncodeError without this.
+    with open(status_path, "w", encoding="utf-8") as f:
         f.write(content)
-    print(f"STATUS.md updated → {status_path}")
+    print(f"STATUS.md updated -> {status_path}")
