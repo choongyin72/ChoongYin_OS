@@ -266,15 +266,44 @@ def day_status_value_should_be(table, object_id, daytime, column, expected):
     value really persisted to the (well x day) row — not that the grid optimistically showed it.
     """
     actual = day_status_value(table, object_id, daytime, column)
-    try:
-        ok = actual is not None and float(actual) == float(expected)
-    except (TypeError, ValueError):
-        ok = str(actual) == str(expected)
+    expected_is_null = expected is None or (isinstance(expected, str) and expected.strip() == "")
+    if expected_is_null:
+        ok = actual is None
+    else:
+        try:
+            ok = actual is not None and float(actual) == float(expected)
+        except (TypeError, ValueError):
+            ok = str(actual) == str(expected)
     if not ok:
         raise AssertionError(
             f"DB check FAILED: {table}.{column} for OBJECT_ID={object_id} on {daytime} "
             f"= {actual!r}, expected {expected!r}"
         )
+
+
+def reset_day_status_value(table, object_id, daytime, column, value=None):
+    """TEST-TEARDOWN ONLY: restore an N1 day-status measured cell to ``value`` (default NULL).
+
+    NOT an oracle — the sole DB *write* in this library, used to leave the sandbox exactly as found
+    after an edit-in-place test whose cell was NULL-original (so a faithful UI "revert to empty" is
+    unreliable: clearing a cell can pop a save-confirmation modal). The assertion that proves coverage
+    is still the UI->DB write verified read-only by ``day_status_value_should_be``; this only cleans up.
+    """
+    _safe(table)
+    _safe(column)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            f"UPDATE {table} SET {column} = :v "
+            f"WHERE OBJECT_ID = :o AND TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD')",
+            v=value, o=object_id, d=str(daytime),
+        )
+        conn.commit()
+        return cur.rowcount
+    finally:
+        cur.close()
+        conn.close()
 
 
 # --- N2: allocation conservation oracle ---------------------------------------------------------

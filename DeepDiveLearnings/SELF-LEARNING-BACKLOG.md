@@ -206,15 +206,20 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   + build-ready** — "Daily Water Injection Well Status" (IWEL_DAY_STATUS), same WR.0001 template,
   C4=ON_STREAM_HRS DB-proven, non-iframed, scope AS2_Water Injection Manifold 1 @2026-02-13; registry
   row added; build pending a null-original self-clean decision.
-- ▶ **RESUME POINT (2026-06-14, unattended):** N3 status-process LIVE still blocked on **ec-worker not
-  running** (add overlay 12 + redeploy; the "name is null" is a separate broken-config red herring,
-  noted). Build-ready next items, no blockers: (1) **Daily Water Injection Well Status** N1 suite —
-  recon complete (IWEL_DAY_STATUS, C4=ON_STREAM_HRS), just needs the self-clean teardown decided
-  (UI-clear vs DB-restore-null) then T3+suite+live+robocop+commit; (2) more N1 siblings (equipment
-  EQPM_DAY_STATUS 34k P rows; other injection/stream types — all data-confirmed via
-  `tmp/scripts/n1_daystatus_data_scan.py`). When ec-worker is up: finish N3 live (P→V + ROWS_UPDATED
-  + reverse) per `pattern_n3_status_process_design.md`. Held for user: the broken "Daily Offshore
-  Process" schedule (disable/redeploy).
+- 2026-06-14: ✅ **N1 #3 BUILT + live 3/3** — "Daily Water Injection Well Status" (IWEL_DAY_STATUS).
+  edit→save→DB-verify(ON_STREAM_HRS=18)→DB-restore-null self-clean; chose DB-restore teardown (added
+  `reset_day_status_value` to DbVerify; null cells make UI-clear unreliable — pops a save-confirm modal).
+  Fixed a latent shared-helper bug: `day_status_value_should_be` failed None==None → added a null
+  branch (WR.0001 canary re-verified 3/3, so safe). N1 now generalizes across 3 object types:
+  PWEL (WR.0001) / STRM (PO.0002) / IWEL (this). Files: tests/Production/daily_water_injection_well_
+  status_edit.robot + pageobjects/Production/iwel_water_injection_status_page.resource.
+- ▶ **RESUME POINT (2026-06-14):** N3 status-process LIVE still blocked on **ec-worker not running**
+  (run script fixed with overlay 12 — awaits redeploy; "name is null" is a separate broken-config red
+  herring). No-blocker next items: (1) more N1 siblings — equipment **EQPM_DAY_STATUS** (34k P rows),
+  other injection/stream types (CO2/steam/liquid) — all data-confirmed via
+  `tmp/scripts/n1_daystatus_data_scan.py`; same template, reuse the IWEL T3 as a fork. (2) When
+  ec-worker is up: finish N3 live (P→V + ROWS_UPDATED + reverse) per `pattern_n3_status_process_design.md`.
+  Held for user: redeploy with ec-worker (overlay 12); disable the broken "Daily Offshore Process" schedule.
 - (next blocks append here…)
 
 ## Operating rules (always)
