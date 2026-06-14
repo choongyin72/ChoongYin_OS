@@ -1,3 +1,25 @@
+# WORKER SESSION — READ FIRST
+
+## On session start (mandatory)
+Before starting any automation work, read:
+- docs/lessons-learned.md  → standing rules from prior reviews (mandatory)
+- docs/automation-scorecard.md → current coverage + parked backlog
+- STATUS.md → active Jira tickets + blockers
+
+## During a long session (self-check rule)
+After every 10 commits OR when resuming after a long pause, re-read
+docs/lessons-learned.md to check for new rules added by the reviewer session.
+Context compression does NOT re-read this file automatically — you must do it
+explicitly. New rules from the reviewer take effect immediately when you read them.
+
+## Why this matters
+A reviewer session runs daily at 06:00 AWST and appends new rules to
+docs/lessons-learned.md based on analysis of your recent commits. If you are
+in a long-running session that started before 20:00, you will miss those rules
+unless you re-read the file yourself mid-session.
+
+---
+
 GIT Project Folder   : C:\DEV\GIT\woodside_impl_pluto_12839
 EC Web App Url       : https://app-plutodev.woodside-pluto.tieto-og.cloud/
 EC WebUser Id        : sysadmin
