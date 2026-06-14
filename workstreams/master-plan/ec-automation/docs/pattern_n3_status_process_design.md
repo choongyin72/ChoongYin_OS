@@ -154,3 +154,29 @@ unchanged). DB scan of *_ACTION/*_EVENT CLASS columns shows the stored class nam
 DB value: the ec-bpm extension's action handler class isn't registered/resolvable after the restart.
 **This is an EC app/ec-bpm setup fix (user/SME), outside automation.** N3 (and N2 non-simulate) stay
 blocked until the business action instantiates. Partial-N3 (submit + read-only oracle) buildable now.
+
+## ✅ ROOT-CAUSE FIX FOUND (2026-06-14) — deployment is missing the ec-worker background service
+Deep-dived the SDK deployment `C:\DEV\EC\SDK\energycomponents-sdk-14.2.4\examples\deployments\
+010-default-deployment`. The run script `run_EC_14_2_4.bat` deploys:
+`-c 01-base -c 02-ssl-internal -c 06-testdb -c 07-config -c 09-debug` (NO overlay 12).
+- `ec-bpm` IS running (09-debug sets ec-bpm replicas=1) — so "include ec-bpm" worked.
+- BUT **`ec-worker` = replicas 0** in BOTH `07-config` and `09-debug`, and the run command does **NOT**
+  include **`12-docker-compose.ec-worker.yml`**. So there is **no EC background service** running.
+- EC topology (from `01-base`): `ec-worker` uses the same image as `ec-app` but with
+  **`EC_SCHEDULER_STARTUPSTATE=SERVER_STATE_RUNNING`** — it is THE node meant to execute scheduled /
+  business / status processes. `12-docker-compose.ec-worker.yml` brings `ec-worker` up (replicas 1)
+  AND sets `ec-app` scheduler to **SERVER_STATE_STANDBY**. README §"Setup EC frontend service and
+  background service" documents exactly this: add `-c 12-docker-compose.ec-worker.yml`.
+- Without overlay 12: no worker, and ec-app's scheduler (not standby) fires the jobs on the frontend
+  node → the business action fails to instantiate ("name is null") and status-process jobs sit WAITING.
+
+**THE FIX** — add overlay 12 (after 07/09 so its replica/standby overrides win) to the deploy command:
+```
+docker stack deploy --with-registry-auth ^
+ -c 01-docker-compose.base.yml -c 02-docker-compose.ssl-internal.yml -c 06-docker-compose.testdb.yml ^
+ -c 07-docker-compose.config.yml -c 09-docker-compose.debug.yml -c 12-docker-compose.ec-worker.yml EC01
+```
+Then ec-worker runs the scheduler (RUNNING) + executes status/business processes; ec-app goes STANDBY.
+After redeploy, retry the N3 forward run — it should complete (RECORD_STATUS P→V + # Rows Updated) and
+the build can finish live. (Secondary: the `BPM_CLIENT_SECRET`/`ECWORKER_CLIENT_SECRET=CHANGE_ME` in
+07-config should be real secrets if BPM auth then errors.)
