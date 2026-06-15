@@ -10,6 +10,8 @@ _Last updated: 2026-06-15_
 | N1 | Daily status edit-in-place | IWEL | ✅ Live 3/3 | | - |
 | N1 | Daily status edit-in-place | EQPM | ✅ Live 3/3 | Non-iframed; C4=AVG_PRESS | 14 Jun |
 | N1 | Sub-daily status edit | PWEL | ✅ Live 3/3 | Datetime-keyed PK; UI↔DB unit conversion (~14.5x pressure) | 14 Jun |
+| N1 | Daily status edit-in-place | PFLW (flowline) | ✅ Live 3/3 | Date-range nav (From+To); 4-level cascade; ON_STREAM_HRS unitless | 15 Jun |
+| N1 | Sub-daily status edit | STRM | ⏳ Pending fix | PR #12 — live 3/3 but MUST-FIX doc errors before merge | 15 Jun |
 | N1 | Monthly status edit | PWEL | ⏸ Parked | Sparse data (13 rows), poor target | 14 Jun |
 | N3 | Status process P→V | HA.0001 Daily | ✅ Live 2/2 | Dual DB oracle: ROWS_UPDATED + RECORD_STATUS count | 14 Jun |
 | N3 | Status process V→A | HA.0001 Daily | ⏸ Parked | STIM_DAY_VALUE empty (0 rows); WELL_FLUID_ANALYSIS needs WHERE vars + data/SME — next: seed data | 15 Jun |
