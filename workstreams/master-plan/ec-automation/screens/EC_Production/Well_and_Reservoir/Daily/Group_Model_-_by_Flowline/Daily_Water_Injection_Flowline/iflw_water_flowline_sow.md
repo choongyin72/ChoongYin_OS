@@ -80,5 +80,6 @@ Assert `ON_STREAM_HRS == 18` after save; restore to NULL and assert NULL after c
 ---
 
 ## 3. RESULT
-Live **3/3 PASS** (2026-06-15, headed). DB ground-truth confirmed `ON_STREAM_HRS=18` persisted in
-`IFLW_DAY_STATUS` then restored to NULL. robocop clean; dryrun green. Self-cleaning (0 residue).
+Live **4/4 PASS** (2026-06-15, headed). DB ground-truth confirmed `ON_STREAM_HRS` set 18 -> changed 24 ->
+cleared to NULL in `IFLW_DAY_STATUS` (each step asserted), then restored to NULL. robocop clean; dryrun
+4/4. Self-cleaning (0 residue).
