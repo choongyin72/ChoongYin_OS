@@ -4,7 +4,9 @@
 **Screen:** Daily Water Injection Flowline, by Flowline (EC Production > Daily > Group Model - by Flowline)
 **Author:** Choong-Yin Lee / Claude Opus 4.8
 **Date:** 2026-06-15
-**Version:** 1.0 — COMPLETE (live 3/3, DB-verified against IFLW_DAY_STATUS, self-cleaning)
+**Version:** 1.1 — COMPLETE (live 4/4, DB-verified against IFLW_DAY_STATUS, self-cleaning).
+**Capability:** UPDATE-ONLY — the New/Delete toolbar is disabled (no record insert/delete on this screen,
+by the business-domain nature); the suite tests the full edit of the measured value (set / change / clear).
 
 ---
 
@@ -68,10 +70,10 @@ data-bearing flowline is `P1 F003 WI` under "P1 Facility 1" — select by exact 
 Assert `ON_STREAM_HRS == 18` after save; restore to NULL and assert NULL after cleanup.
 
 ### 2.4 Deliverables (this bundle + RF suite)
-- **RF suite:** `tests/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/daily_water_injection_flowline_status_iud.robot`
+- **RF suite:** `tests/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/daily_water_injection_flowline_status_edit.robot`
   (TC01–03) + `pageobjects/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/iflw_water_flowline_status_page.resource`
   (T3); reuses `daily_status_grid` (T2) + `DbVerify` — no new shared code.
-- **Playwright prototype:** `playwright/ec_iud_iflw_water_flowline.py` (freestyle IUD: insert→update→delete).
+- **Playwright prototype:** `playwright/ec_edit_iflw_water_flowline.py` (freestyle edit: set→change→clear, update-only).
 - **Investigation:** `investigation/` recon scripts (data scope, injection-type, screen crack, grid cells).
 - **Evidence:** `evidence/` screenshots from a full run.
 

@@ -1,10 +1,12 @@
-"""EC N1 IUD prototype (freestyle Playwright) — Daily Water Injection Flowline, by Flowline.
-Full Insert/Update/Delete lifecycle on the daily-status cell (On Strm[hr] = ON_STREAM_HRS) for
-P1 F003 WI on 2019-12-20, DB-verifying IFLW_DAY_STATUS at each step:
-  INSERT (empty->18, save) -> UPDATE (18->24, save) -> DELETE (clear, save -> NULL).
-The cell is null-original, so I->U->D ends back at NULL = original (self-cleaning). Maximises the window
-and expands the screen to full page (matches the RF browser/screen keywords). Screenshots -> evidence/.
-Env: EC_HEADED=1 to watch. NEVER touches data beyond this one cell.
+"""EC N1 EDIT prototype (freestyle Playwright) — Daily Water Injection Flowline, by Flowline.
+This screen is UPDATE-ONLY (New/Delete toolbar disabled — the daily row is batch-instantiated, not
+created/deleted on the screen). So this demos the full EDIT capability of the cell On Strm[hr]
+(= ON_STREAM_HRS) for P1 F003 WI on 2019-12-20, DB-verifying IFLW_DAY_STATUS at each step:
+  SET (empty->18, save) -> CHANGE (18->24, save) -> CLEAR (->NULL, save).
+All three are UPDATEs of the same pre-instantiated row (clearing nulls the value; the record is NOT
+deleted). Null-original, so CLEAR restores the original state (self-cleaning). Maximises the window and
+expands to full page (matches the RF browser/screen keywords). Screenshots -> evidence/.
+Env: EC_HEADED=1 to watch, EC_HOLD=<s> to pause per step. NEVER touches data beyond this one cell.
 """
 import os
 import time
@@ -21,7 +23,7 @@ SCOPE = {"date": "2019-12-20", "pu": "P1 Production Unit", "area": "P1 Area",
 CELL = "daily_flowline_status:form:T:0:C2_in"
 SAVE = "xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]"
 GO = '[id="button:form:B"]'
-INSERT_VALUE, UPDATE_VALUE = "18", "24"
+SET_VALUE, CHANGE_VALUE = "18", "24"
 EVID = Path(__file__).resolve().parent.parent / "evidence"
 EVID.mkdir(parents=True, exist_ok=True)
 
@@ -112,20 +114,20 @@ def main():
         pick(fr, 2, SCOPE["pu"]); pick(fr, 3, SCOPE["area"]); pick(fr, 4, SCOPE["fcty"]); pick(fr, 5, SCOPE["flowline"])
         reload_go(page, fr)
         page.screenshot(path=str(EVID / "01_grid_loaded.png"))
-        set_cell(fr, INSERT_VALUE); save(page, fr); reload_go(page, fr)
-        res["insert"] = val(o); page.screenshot(path=str(EVID / "02_inserted.png"))
-        print(f"  [INSERT] cell={INSERT_VALUE}, DB={res['insert']} — holding {HOLD}s"); time.sleep(HOLD)
-        set_cell(fr, UPDATE_VALUE); save(page, fr); reload_go(page, fr)
-        res["update"] = val(o); page.screenshot(path=str(EVID / "03_updated.png"))
-        print(f"  [UPDATE] cell={UPDATE_VALUE}, DB={res['update']} — holding {HOLD}s"); time.sleep(HOLD)
+        set_cell(fr, SET_VALUE); save(page, fr); reload_go(page, fr)
+        res["set"] = val(o); page.screenshot(path=str(EVID / "02_value_set.png"))
+        print(f"  [SET] cell={SET_VALUE}, DB={res['set']} — holding {HOLD}s"); time.sleep(HOLD)
+        set_cell(fr, CHANGE_VALUE); save(page, fr); reload_go(page, fr)
+        res["change"] = val(o); page.screenshot(path=str(EVID / "03_value_changed.png"))
+        print(f"  [CHANGE] cell={CHANGE_VALUE}, DB={res['change']} — holding {HOLD}s"); time.sleep(HOLD)
         set_cell(fr, ""); save(page, fr); reload_go(page, fr)
-        res["delete"] = val(o); page.screenshot(path=str(EVID / "04_deleted.png"))
-        print(f"  [DELETE] cell cleared, DB={res['delete']} — holding {HOLD * 2}s (watch the empty cell)")
+        res["clear"] = val(o); page.screenshot(path=str(EVID / "04_value_cleared.png"))
+        print(f"  [CLEAR] cell cleared, DB={res['clear']} — holding {HOLD * 2}s (watch the empty cell)")
         time.sleep(HOLD * 2)
         b.close()
-    print(f"INSERT DB={res['insert']} -> {'PASS' if str(res['insert']) == INSERT_VALUE else 'FAIL'}")
-    print(f"UPDATE DB={res['update']} -> {'PASS' if str(res['update']) == UPDATE_VALUE else 'FAIL'}")
-    print(f"DELETE DB={res['delete']} -> {'PASS' if res['delete'] is None else 'FAIL'}")
+    print(f"SET    DB={res['set']} -> {'PASS' if str(res['set']) == SET_VALUE else 'FAIL'}")
+    print(f"CHANGE DB={res['change']} -> {'PASS' if str(res['change']) == CHANGE_VALUE else 'FAIL'}")
+    print(f"CLEAR  DB={res['clear']} -> {'PASS' if res['clear'] is None else 'FAIL'}  (update-to-null, not a record delete)")
     c = db(); cur = c.cursor()
     cur.execute("UPDATE IFLW_DAY_STATUS SET ON_STREAM_HRS=NULL WHERE OBJECT_ID=:o AND TRUNC(DAYTIME)=TO_DATE(:d,'YYYY-MM-DD')", {"o": o, "d": SCOPE["date"]})
     c.commit(); c.close()

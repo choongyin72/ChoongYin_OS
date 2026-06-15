@@ -83,24 +83,19 @@ Save Water Injection Flowline Status
     [Documentation]    Commit the grid edit via the toolbar Save (menubar, execute=@all).
     Save Daily Status
 
-Insert Flowline Daily Value
-    [Documentation]    INSERT — populate the (empty) measured cell with ${value}, Save, reload+re-arm.
-    ...    On this daily grid the row is pre-instantiated; "insert" fills the empty value (DB null→value).
+Set Flowline Daily Value
+    [Documentation]    UPDATE the measured cell to ${value} (works whether it was empty or already had a
+    ...    value — both are edits of the pre-instantiated row), Save, reload+re-arm. This screen is
+    ...    UPDATE-ONLY (New/Delete toolbar disabled), so setting/changing a value is an edit, not a record insert.
     [Arguments]    ${value}
     Set Water Injection Flowline Cell    ${value}
     Save Water Injection Flowline Status
     Reload And Find Target Flowline
 
-Update Flowline Daily Value
-    [Documentation]    UPDATE — change the measured cell to ${value}, Save, reload+re-arm (DB value→value).
-    [Arguments]    ${value}
-    Set Water Injection Flowline Cell    ${value}
-    Save Water Injection Flowline Status
-    Reload And Find Target Flowline
-
-Delete Flowline Daily Value
-    [Documentation]    DELETE — clear the measured cell, Save, reload+re-arm. Nulls the DB column
-    ...    (DB value→null), i.e. the daily value is removed.
+Clear Flowline Daily Value
+    [Documentation]    UPDATE the measured cell to empty (clear + Save → DB column NULL), reload+re-arm.
+    ...    Still an UPDATE of the existing row — the record is NOT deleted (no record delete on this screen);
+    ...    only the measured value is removed. Used to restore the cell to its null-original state.
     Clear Daily Status Cell    ${TARGET_CELL}
     Save Water Injection Flowline Status
     Reload And Find Target Flowline
