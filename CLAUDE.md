@@ -15,6 +15,9 @@
    `git checkout master && git pull origin master && git checkout -b feature/<task-name>`
    Use a descriptive name e.g. `feature/n3-va-suite`, `feature/financial-objects-parked`
 2. Do all your work and commits on that branch
+2a. **Before every push** (new PR or pushing fixes to an existing PR): sync with master first:
+    `git fetch origin master && git merge origin/master`
+    Resolve any conflicts, then push. (R8 — other PRs may have merged while your branch was open)
 3. When the task is complete, raise a PR targeting master with this body format (every PR, no exceptions):
    - **What was built** — one sentence
    - **Files touched** — list

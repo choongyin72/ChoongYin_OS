@@ -111,6 +111,19 @@ In Robot Framework resource files, the class-level `Documentation` block is the 
 
 | Gap | Owner | Priority |
 |-----|-------|----------|
-| PR #12 MUST-FIX: fix doc errors in `subdaily_gas_stream_status_page.resource` and `sub_daily_gas_stream_status_edit.robot` — class doc says C1/ON_STREAM_HRS, code correctly uses C2/GRS_VOL | Worker (next session) | 🔴 High — gates merge |
+| PR #12 MUST-FIX: fix doc errors in `subdaily_gas_stream_status_page.resource` and `sub_daily_gas_stream_status_edit.robot` — class doc says C1/ON_STREAM_HRS, code correctly uses C2/GRS_VOL | Worker (next session) | ✅ Resolved — PR #12 merged 2026-06-15 |
+
+---
+
+## 2026-06-15 — Post-merge Rule (PR #12 conflict incident)
+
+### Rules (apply immediately, no exceptions)
+
+**R8 — Sync feature branch with master before every push/PR update**
+Before pushing any commit to a feature branch (whether raising a new PR or pushing fixes to an existing one), always run:
+```
+git fetch origin master && git merge origin/master
+```
+Resolve any conflicts, then push. Reason: other PRs may have merged into master while your branch was open, touching the same files. Not syncing = guaranteed conflict at merge time, which blocks the merge and forces the reviewer to do manual conflict resolution. Precedent: PR #12's feature branch missed PFLW changes (merged via PRs #11 + #14) to `ec_screen_registry.md` and `pattern_n1_daily_status_grid_design.md`, causing a blocked merge and reviewer-side manual fix.
 
 ---
