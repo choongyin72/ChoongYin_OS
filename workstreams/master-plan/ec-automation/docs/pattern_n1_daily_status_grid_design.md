@@ -378,6 +378,23 @@ the **wrong cell** (C3 "On Strm[hr]" is derived/non-persisting) — NOT the save
   canary 3/3.** N1 sub-daily = the 5th proven N1 object/grain (PWEL/STRM/IWEL/EQPM + sub-daily) and
   the FIRST with a datetime key + unit-robust write-verify.
 
+### ✅ Sub-daily GENERALIZES to a 2nd object class — STRM gas stream, live 3/3 (2026-06-15)
+Proves the datetime-keyed sub-daily pattern is not a one-off. "Sub Daily Gas Stream Status - by Stream":
+- **DB:** `STRM_SUB_DAY_STATUS`, PK (OBJECT_ID, DAYTIME[+time], SUMMER_TIME) — same as PWEL sub-daily.
+  Name source `OV_STREAM`. Scope: 2011-01-01, P1 Production Unit/P1 Area/P1 Facility 1/**P1 S059 M GAS
+  PO.0028** (hourly, SUMMER_TIME single value).
+- **Grid:** `subDailyGasStreamStatusTable:form:T_data`; **C0=Daytime (input — resolve row by its
+  value), C2 = Grs Vol[Sm³] = GRS_VOL** (proven-editable, unitless → direct equality). ⚠️ **C1 "On
+  Strm[hr]" is DERIVED/non-persisting** (an edit to it doesn't commit — same trap as PWEL sub-daily's
+  On Strm; the live edit→diff caught it, then I switched to GRS_VOL). Lesson reaffirmed: edit→diff per
+  screen to find the writable column.
+- **Suite:** `tests/Production/sub_daily_gas_stream_status_edit.robot` + T3
+  `subdaily_gas_stream_status_page.resource`. TC01 grid loads (counts `<tr>` directly — this grid's
+  cells are all inputs, so the text-based Get Table Rows sees none); TC02 distinct hours→distinct
+  rows; TC03 edit GRS_VOL 1000→1500 → Save → DB-verified → restore to 1000. robocop clean, dryrun 3/3,
+  LIVE headed 3/3, DB clean after, WR.0001 canary 3/3. Reuses sub-daily DbVerify (`sub_day_status_*`)
+  + N1 T2 VERBATIM. **Sub-daily now spans 2 object classes: PWEL + STRM.**
+
 ## PFLW (Production Flowline) N1 clone — build-ready recon (2026-06-15)
 6th N1 object class (flowline). DB side fully scoped; UI confirmed to use the standard N1 nav+grid
 pattern; remaining = finish the nav/grid/cell crack + build the suite. Recon: `tmp/scripts/n1_pflw_*`.
