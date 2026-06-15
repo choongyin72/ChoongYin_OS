@@ -1,5 +1,5 @@
 # EC Automation Scorecard
-_Last updated: 2026-06-14_
+_Last updated: 2026-06-15_
 
 ## N-Series Patterns (Production Data Interaction)
 
@@ -12,7 +12,8 @@ _Last updated: 2026-06-14_
 | N1 | Sub-daily status edit | PWEL | ✅ Live 3/3 | Datetime-keyed PK; UI↔DB unit conversion (~14.5x pressure) | 14 Jun |
 | N1 | Monthly status edit | PWEL | ⏸ Parked | Sparse data (13 rows), poor target | 14 Jun |
 | N3 | Status process P→V | HA.0001 Daily | ✅ Live 2/2 | Dual DB oracle: ROWS_UPDATED + RECORD_STATUS count | 14 Jun |
-| N3 | Status process V→A | HA.0001 Daily + Monthly | 🔵 Build-ready | Chain proven safe; monthly-approve on separate screen | 14 Jun |
+| N3 | Status process V→A | HA.0001 Daily | ⏸ Parked | STIM_DAY_VALUE empty (0 rows); WELL_FLUID_ANALYSIS needs WHERE vars + data/SME — next: seed data | 15 Jun |
+| N3 | Status process V→A | HA.0001 Monthly | 🔵 Build-ready | Thin new T3 for Monthly Data Status Processes screen | 14 Jun |
 
 ### Key Learnings
 - **UI↔DB unit conversion**: UI(psi) ↔ DB(bar), factor ~14.5038. Naive "DB == typed" oracle fails on pressure/rate cols.
@@ -27,7 +28,7 @@ _Last updated: 2026-06-14_
 | Section | Screens | Status | Notes |
 |---------|---------|--------|-------|
 | Basic Objects | 12/12 | ✅ Complete | Reference IUD suite |
-| Financial Objects | ~11 screens | 🟡 Mostly complete | 3 parked |
+| Financial Objects | 15/15 | ✅ Complete | All suites present (validated 2026-06-15) |
 | Commercial Objects | ~11 screens | 🟡 Mostly complete | Sub Field parked |
 | Account Mapping | 14/14 | ✅ Complete | Financial; unparked after start-date discovery |
 | MIME Type Mapping | TV | ✅ Complete | Table-class/TV, both frameworks |
@@ -58,8 +59,8 @@ _Last updated: 2026-06-14_
 | Item | Reason | Next step |
 |------|--------|-----------|
 | N1 Monthly PWEL | Sparse data | Find a month with adequate PWEL_MTH_STATUS rows |
-| N3 V→A Daily | Build-ready | Clone N3 P→V suite with V→A process name |
+| N3 V→A Daily | STIM_DAY_VALUE empty (0 rows); WELL_FLUID_ANALYSIS needs WHERE_FORMULA var resolution + seeded data | Seed STIM_DAY_VALUE provisional rows or get SME confirmation on Analysis class→physical-table |
 | N3 V→A Monthly | Build-ready | Thin new T3 for Monthly Data Status Processes screen |
 | Dispatching Pipeline | Not attempted | Resume from slice 2 checkpoint |
-| Financial Objects (3 parked) | Unknown blockers | Investigate per-screen |
+| ~~Financial Objects (3 parked)~~ | Closed as stale — all 15 FO suites present (validated 2026-06-15) | — |
 | Commercial Sub Field | Not attempted | |
