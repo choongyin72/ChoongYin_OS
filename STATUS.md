@@ -28,16 +28,16 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
-| `8fe260d` | 2026-06-15 | improve: enforce feature branch + PR workflow for worker sessions |
-| `74d7898` | 2026-06-14 | improve: enforce feature branch + PR workflow for worker sessions |
-| `baef87e` | 2026-06-15 | feat: reviewer feedback loop, scorecard, STATUS.md automation + CLAUDE.MD worker… |
-| `549cc95` | 2026-06-14 | chore: update scheduled tasks state |
-| `5c7043e` | 2026-06-14 | config: change daily review schedule from 20:00 to 06:00 AWST (22:00 UTC) |
-| `b025e20` | 2026-06-14 | improve: CLAUDE.MD self-check rule for mid-session lessons-learned refresh |
-| `20ee079` | 2026-06-14 | feat: reviewer feedback loop â€” lessons-learned + scheduled daily review |
-| `91e3e9d` | 2026-06-14 | feat: add automation scorecard + STATUS.md update script |
-| `7161152` | 2026-06-14 | N3 V->A (approval) lifecycle recon -> build-ready; chain mechanism proven safe |
-| `3ae2449` | 2026-06-14 | Sub-daily N1 WRITE cracked (with user) â€” suite now READ+WRITE live 3/3, unit-r… |
+| `7d128e5` | 2026-06-15 | review: automated quality feedback 2026-06-15 |
+| `e9c2650` | 2026-06-15 | recon: N3 V→A daily — process→table mapping; blocked on sandbox data |
+| `5271464` | 2026-06-15 | chore: update scheduled_tasks.json lastFiredAt after 2026-06-15 06:00 review run |
+| `7b6bbf5` | 2026-06-15 | review: automated quality feedback 2026-06-15 |
+| `60b98db` | 2026-06-15 | recon: N3 V->A daily — process->table mapping (STAT_PROCESS_TASK); blocked on sa… |
+| `a5558cd` | 2026-06-15 | chore: clarify merge sequence — remove confusing 20h window language |
+| `46d6626` | 2026-06-14 | chore: clarify merge turnaround rule — remove confusing 20h window language |
+| `8f8c0bf` | 2026-06-15 | chore: close PR-REVIEW-PROTOCOL open questions — answers locked 2026-06-14 |
+| `f309cd4` | 2026-06-14 | chore: close protocol open questions — confirmed answers locked 2026-06-14 |
+| `6d07b40` | 2026-06-15 | merge PR #5: reviewer branch sync — lessons-learned conflict resolved, protocol … |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)

@@ -270,3 +270,23 @@ Extending N3 from P→V (proven) into V→A (Approved) to complete the P→V→A
 - **Oracle note:** `record_status_family_count(date, 'A')` already works for the A-level assertion;
   `restore_record_status_family(date, from_status='A', to_status='P')` (and 'V') self-cleans. The
   STAT_PROCESS_STATUS +1-delta + ROWS_UPDATED pattern is unchanged.
+
+## N3 V→A daily — process→table mapping cracked; BLOCKED on sandbox data (2026-06-15)
+Recon for the daily V→A build (`tmp/scripts/n3_va_daily_recon*.py`, `n3_va_stim_recon.py`):
+- **Process→target mapping = `STAT_PROCESS_TASK`** (PROCESS_ID → `TABLE_ID` + optional `WHERE_FORMULA`).
+  This is the config that tells a status process WHICH table/scope to lift (not in STATUS_PROCESS itself).
+- Daily V→A pairs on HA.0001 and their targets:
+  - **Stream Item:** `VER_STIM_DAY` (→V) / `APPRV_STIM_DAY` (→A) → `TABLE_ID = STIM_DAY_VALUE`, no WHERE.
+  - **Analysis:** `P1_AnalysisDataManagement_Ver` (→V) / `_App` (V→A) → `TABLE_ID = WELL_FLUID_ANALYSIS`,
+    `WHERE_FORMULA = (${obj} = ${ConstCode})` (vars resolved via STATUS_PROCESS_VARIABLE/FUNC_VAR/SUBQ_VAR).
+- ⛔ **BLOCKED (no liftable data in this sandbox):** `STIM_DAY_VALUE` is **empty (0 rows)** → the
+  simplest pair has nothing to lift. `WELL_FLUID_ANALYSIS` is **not a resolvable table by that name**
+  (a logical class) AND carries a WHERE_FORMULA needing variable resolution → much higher effort,
+  uncertain data. Both daily V→A processes have **never run** (STAT_PROCESS_STATUS empty for them).
+- **Verdict:** daily V→A is not cleanly demonstrable here without seeded `STIM_DAY_VALUE` data (or
+  resolving the Analysis class→physical-table + its WHERE vars + finding its data). Same "sandbox
+  sparse" wall as the monthly grain. **Not pursued further (no-loop).** The P→V half remains the
+  proven, shipped N3 capability; V→A is parked pending data/SME.
+- **If revisited:** seed a few `STIM_DAY_VALUE` provisional rows on a date, then the chain is trivial
+  (reuse `status_process_run.resource` + the proven snapshot→restore); add a generic
+  `record_status_count(table, daytime, status)` to DbVerify for the A-level oracle on STIM_DAY_VALUE.
