@@ -71,8 +71,15 @@ def main():
     oid = flowline_oid()
     print(f"flowline OBJECT_ID={oid}  baseline ON_STREAM_HRS={db_on_stream_hrs(oid)}")
     with sync_playwright() as p:
-        b = p.chromium.launch(headless=not HEADED, slow_mo=400 if HEADED else 0)
-        page = b.new_context(ignore_https_errors=True, viewport={"width": 1680, "height": 1000}).new_page()
+        b = p.chromium.launch(headless=not HEADED, slow_mo=400 if HEADED else 0,
+                              args=["--start-maximized", "--ignore-certificate-errors"])
+        # Headed: OS-maximised window (no fixed viewport) so the page fills the screen — matches the RF
+        # browser.resource. Headless: a large 1920x1080 virtual viewport.
+        ctx = {"ignore_https_errors": True}
+        ctx["no_viewport"] = True if HEADED else None
+        if not HEADED:
+            ctx["viewport"] = {"width": 1920, "height": 1080}
+        page = b.new_context(**{k: v for k, v in ctx.items() if v is not None}).new_page()
         page.goto(EC_URL, wait_until="domcontentloaded", timeout=60000)
         page.fill('[id="username"]', os.environ.get("EC_USER", "sysadmin"))
         page.fill('[id="password"]', os.environ.get("EC_PASS", "sysadmin"))
@@ -81,6 +88,13 @@ def main():
         page.locator('[id="menu:searchForm:searchTxt"]').type(SCREEN, delay=20); time.sleep(1.3)
         page.locator(f'xpath=//*[contains(@class,"tv-link") and normalize-space(text())="{SCREEN}"]').first.click()
         page.wait_for_load_state("networkidle", timeout=30000); time.sleep(2.0)
+        # Expand the loaded screen to full page (hide the treeview) — the min/max toggle in the main
+        # toolbar. Matches the RF screen.resource "Expand Screen To Full Page".
+        try:
+            page.click('[id="screenToolbar:form:minmaxMenu"]', timeout=10000)
+            page.wait_for_load_state("networkidle", timeout=15000); time.sleep(0.6)
+        except Exception as e:
+            print(f"expand-to-full-page skipped: {str(e)[:60]}")
         fr = get_frame(page)
         fr.fill('[id="nav:form:G:0:R:1:C:0:da_input"]', SCOPE["date"])
         fr.fill('[id="nav:form:G:1:R:1:C:0:da_input"]', SCOPE["date"]); time.sleep(0.4)
