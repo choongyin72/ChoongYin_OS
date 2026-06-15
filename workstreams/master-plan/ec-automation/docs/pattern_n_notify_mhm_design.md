@@ -12,12 +12,19 @@ Oracle: `DbVerify.message_journal_*` ([DbVerify.py](../libraries/DbVerify.py))
 ## The mechanism (stock EC MHM)
 
 ```
-Send Freetext Message screen          MHM_MSG journal              transmission (async)
-  nav: Date + Message Type +   ──▶   new row, DIRECTION='O',  ──▶  scheduler/ec-worker picks
-       Distribution → GO              STATUS='PREPARED'             PREPARED rows → SMTP/MS-Graph
-  compose: subject/body                (the test ORACLE)            → STATUS advances (SENT/…)
-  click Send
+Send Freetext Message screen               MHM_MSG journal              transmission (async)
+  nav: Date + Functional Area +     ──▶   new row, DIRECTION='O',  ──▶  scheduler/ec-worker picks
+       Message Type + Subject → GO         STATUS='PREPARED'             PREPARED rows → SMTP/MS-Graph
+  edit Template body → SEND                (the test ORACLE)             → STATUS advances (SENT/…)
 ```
+
+**Verified live screen model (2026-06-15):** nav columns are Date (`G:0:R:1:C:0:da_input`),
+Functional Area (`…C:1:dd`), Message Type (`…C:2:dd`, cascades from FA), Subject (`…C:4:dd`,
+fixed-list popup); GO = `button:form:B`; body = `template:form:G:0:R:1:C:0:ta`; SEND = `SendButton:form`.
+**There is NO distribution/recipient selector on the screen** — recipients are fixed entirely by the
+chosen Message Type's wiring (`MESSAGE_DISTRIBUTION.MSG_DISTR_CODE` → `DISTRIBUTION_SET`). Under FA=EC
+the only freetext type is `FRMW_TEST_MSG_1` ("FRMW Test Msg 1 for message body"), wired to
+`FRMW_DISTR_SET_FREE_TEXT` (the real-domain set).
 
 - **Oracle = MHM_MSG append-only delta** (`message_journal_new_row_should_exist`, +1), the same
   delta shape as the N3 STAT_PROCESS_STATUS oracle. A send that journals a fresh outbound row proves
@@ -56,19 +63,24 @@ Sending a real email is an irreversible outward-facing action. **No distribution
 guaranteed-non-deliverable domain** (`.invalid` / `.test` / `.example`). So a live run must first
 guarantee a safe recipient.
 
-## Two paths to the live proof (user decision)
+## Paths to the live proof (decision)
 
-1. **Create a safe `.invalid` distribution (recommended).** Additive, reversible config: a contact
-   whose `DELIVERY_ADDRESS` is `autotest@example.invalid` + a `AUTOTEST_FREETEXT_INVALID` distribution
-   with that one contact. Point `${SAFE_DISTRIBUTION}` at it → live send is guaranteed safe even if Send
-   transmits synchronously. EC-correct route = the Distribution List UI screen (MHM.0001); a turnkey
-   additive-SQL clone is prepped for review at
-   [tmp/scripts/mhm_safe_distribution_prep.sql](../../../../tmp/scripts/mhm_safe_distribution_prep.sql)
-   (NOT executed — review + approve first; it clones the FRMW free-text contact row and changes only
-   OBJECT_CODE + DELIVERY_ADDRESS).
-2. **Approve a one-off send through an existing distribution**, accepting the PREPARED-only evidence
-   that nothing transmits. Faster, but relies on the synchronous-send assumption — not recommended
-   while unattended.
+Because the screen has **no distribution selector**, the only lever to change recipients is the
+message type's wiring. The single controlling row is `MESSAGE_DISTRIBUTION` where
+`OBJECT_ID = 491091C52373…` (FRMW_TEST_MSG_1) and `MSG_DISTR_CODE = FRMW_DISTR_SET_FREE_TEXT`.
 
-Build status: suite is **dryrun-green, robocop-clean, journal oracle live-verified**; only the live
-send awaits a safe recipient (path 1) or explicit approval (path 2).
+1. **Rewire the message type to a safe `.invalid` distribution, then revert.** Create a non-deliverable
+   distribution (additive clone → `autotest@example.invalid`, see
+   [mhm_safe_distribution_prep.sql](../../../../tmp/scripts/mhm_safe_distribution_prep.sql)),
+   repoint that one `MESSAGE_DISTRIBUTION` row to it, run the suite live, verify the MHM_MSG +1 delta,
+   then restore the row. Guaranteed safe even if SEND transmits synchronously. Touches one reversible
+   shared-config row.
+2. **Send to the real FRMW distribution**, relying on the journal-only evidence (no config change).
+   Faster, but can't 100% rule out a synchronous SMTP attempt to the real domain.
+3. **Stay build-ready, defer the send** — the suite encodes the verified screen model; the live proof
+   waits for path 1 or 2. **(current state, chosen 2026-06-15)**
+
+Build status: suite is **robocop-clean, journal oracle live-verified, screen model corrected to the
+live UI**; the live send is deferred (path 3). The orphan `.invalid` distribution created during
+recon was removed (clean) — it is unreachable from the screen and only useful once a message type is
+wired to it (path 1).
