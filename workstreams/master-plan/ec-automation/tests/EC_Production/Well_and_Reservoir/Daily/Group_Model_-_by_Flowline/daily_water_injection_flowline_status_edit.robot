@@ -11,7 +11,7 @@ Documentation       EC N1 Test — "Daily Water Injection Flowline, by Flowline"
 ...                 Layered: this test → iflw_water_flowline_status_page (T3) → daily_status_grid (T2) +
 ...                 common (T1) + DbVerify.
 
-Resource            ../../pageobjects/Production/iflw_water_flowline_status_page.resource
+Resource            ../../../../../pageobjects/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/iflw_water_flowline_status_page.resource
 
 Suite Setup         Open Water Injection Flowline Screen
 Suite Teardown      Run Keywords    Restore Water Injection Flowline Cell To Null    AND    Close EC

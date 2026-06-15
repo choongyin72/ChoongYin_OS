@@ -7,8 +7,8 @@ Flowline") — same grid component, so the RF suite reuses `daily_status_grid` (
 
 ## Two parts (per the project convention)
 1. **RF suite** (the productised test) — runs from the project root:
-   - T3: `pageobjects/Production/iflw_water_flowline_status_page.resource`
-   - Suite: `tests/Production/daily_water_injection_flowline_status_edit.robot`
+   - T3: `pageobjects/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/iflw_water_flowline_status_page.resource`
+   - Suite: `tests/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/daily_water_injection_flowline_status_edit.robot`
 2. **Playwright bundle** (this folder, freestyle prototype + discovery trail + spec):
    - `iflw_water_flowline_sow.md` — statement of work
    - `playwright/ec_edit_iflw_water_flowline.py` — standalone edit→DB-verify→restore prototype
@@ -19,7 +19,7 @@ Flowline") — same grid component, so the RF suite reuses `daily_status_grid` (
 
 ```bash
 # RF suite (from ec-automation/) — headed (watchable), the interactive default
-EC_HEADLESS=false robot --outputdir results tests/Production/daily_water_injection_flowline_status_edit.robot
+EC_HEADLESS=false robot --outputdir results tests/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/daily_water_injection_flowline_status_edit.robot
 
 # Playwright prototype (from this folder)
 EC_HEADED=1 py -X utf8 playwright/ec_edit_iflw_water_flowline.py

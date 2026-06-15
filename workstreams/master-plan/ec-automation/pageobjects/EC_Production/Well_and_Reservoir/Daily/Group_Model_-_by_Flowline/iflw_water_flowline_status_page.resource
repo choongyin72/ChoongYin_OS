@@ -15,13 +15,13 @@ Documentation       T3 (screen) — "Daily Water Injection Flowline, by Flowline
 ...                 daily row. C2 = On Strm[hr] = ON_STREAM_HRS (unitless — no UI/DB unit conversion),
 ...                 confirmed live 2026-06-15 (same column as PFLW). Cell is null-original, so the
 ...                 self-clean teardown DB-restores it to NULL (the IWEL/EQPM/PFLW model). Name source =
-...                 OV_FLOWLINE. Recon: tmp/scripts/n1_iflw_*.
+...                 OV_FLOWLINE. Recon: this screen's bundle investigation/ (screens/EC_Production/…).
 ...                 Layered: this test → this T3 → daily_status_grid (T2) + common (T1) + DbVerify.
 
 Library             Browser
-Library             ../../libraries/DbVerify.py
-Resource            ../../resources/common.resource
-Resource            ../../resources/daily_status_grid.resource
+Library             ../../../../../libraries/DbVerify.py
+Resource            ../../../../../resources/common.resource
+Resource            ../../../../../resources/daily_status_grid.resource
 
 
 *** Variables ***
