@@ -21,6 +21,9 @@ EC_PASS = os.environ.get("EC_PASS", "sysadmin")
 DB_DSN = os.environ.get("EC_DB_DSN", "localhost:1521/ORCL")
 HEADLESS = os.environ.get("EC_HEADLESS", "true").lower() in ("1", "true", "yes")
 HOLD = os.environ.get("EC_HOLD", "0s")
+# Per-action slow-motion for HEADED runs so a human can watch each step (e.g. EC_SLOWMO="700 ms").
+# Default "0 ms" = full speed / no change. Applies only to the headed browser; ignored headless.
+SLOWMO = os.environ.get("EC_SLOWMO", "0 ms")
 
 # Test-data date conventions (centralized so a sandbox/data change is one edit, not 40):
 # - TEST_START_DATE: default Start/End date for IUD test objects on plain screens.

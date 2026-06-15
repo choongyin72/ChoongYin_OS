@@ -15,7 +15,7 @@ Open EC Browser
         New Context    ignoreHTTPSErrors=${TRUE}    viewport={'width': 1920, 'height': 1080}
     ELSE
         VAR    @{args}    --start-maximized
-        New Browser    chromium    headless=${FALSE}    args=${args}
+        New Browser    chromium    headless=${FALSE}    args=${args}    slowMo=${SLOWMO}
         New Context    ignoreHTTPSErrors=${TRUE}    viewport=${None}
     END
     Set Browser Timeout    30s
