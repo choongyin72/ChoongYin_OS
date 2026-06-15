@@ -1,4 +1,4 @@
-# Daily Water Injection Flowline, by Flowline — N1 edit
+# Daily Water Injection Flowline, by Flowline — N1 IUD
 
 Edit-in-place daily-status automation for the EC **Daily Water Injection Flowline, by Flowline** screen
 (EC Production → Daily → Group Model - by Flowline). The N1 daily-status-grid pattern generalized to
@@ -8,10 +8,10 @@ Flowline") — same grid component, so the RF suite reuses `daily_status_grid` (
 ## Two parts (per the project convention)
 1. **RF suite** (the productised test) — runs from the project root:
    - T3: `pageobjects/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/iflw_water_flowline_status_page.resource`
-   - Suite: `tests/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/daily_water_injection_flowline_status_edit.robot`
+   - Suite: `tests/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/daily_water_injection_flowline_status_iud.robot`
 2. **Playwright bundle** (this folder, freestyle prototype + discovery trail + spec):
    - `iflw_water_flowline_sow.md` — statement of work
-   - `playwright/ec_edit_iflw_water_flowline.py` — standalone edit→DB-verify→restore prototype
+   - `playwright/ec_iud_iflw_water_flowline.py` — standalone edit→DB-verify→restore prototype
    - `investigation/` — recon scripts (data scope, injection type, screen crack, grid-cell map)
    - `evidence/` — screenshots from a full run
 
@@ -19,10 +19,10 @@ Flowline") — same grid component, so the RF suite reuses `daily_status_grid` (
 
 ```bash
 # RF suite (from ec-automation/) — headed (watchable), the interactive default
-EC_HEADLESS=false robot --outputdir results tests/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/daily_water_injection_flowline_status_edit.robot
+EC_HEADLESS=false robot --outputdir results tests/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/daily_water_injection_flowline_status_iud.robot
 
 # Playwright prototype (from this folder)
-EC_HEADED=1 py -X utf8 playwright/ec_edit_iflw_water_flowline.py
+EC_HEADED=1 py -X utf8 playwright/ec_iud_iflw_water_flowline.py
 ```
 
 | Env var | Default | Purpose |

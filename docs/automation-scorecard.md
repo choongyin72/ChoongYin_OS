@@ -12,7 +12,7 @@ _Last updated: 2026-06-15_
 | N1 | Sub-daily status edit | PWEL | ✅ Live 3/3 | Datetime-keyed PK; UI↔DB unit conversion (~14.5x pressure) | 14 Jun |
 | N1 | Daily status edit-in-place | PFLW (flowline) | ✅ Live 3/3 | Date-range nav (From+To); 4-level cascade; ON_STREAM_HRS unitless | 15 Jun |
 | N1 | Sub-daily status edit | STRM | ✅ Live 3/3 | Datetime-keyed PK; GRS_VOL unitless; doc errors fixed (R7) | 15 Jun |
-| N1 | Daily status edit-in-place | IFLW (water inj flowline) | ✅ Live 3/3 | Sibling of PFLW (same grid); IFLW_DAY_STATUS; C2=ON_STREAM_HRS; full Bank-style bundle (SOW+playwright+investigation+evidence) | 15 Jun |
+| N1 | Daily status **IUD** | IFLW (water inj flowline) | ✅ Live 4/4 | Full IUD on the daily value (insert/update/delete via cell; clear+Save nulls DB); sibling of PFLW (same grid); IFLW_DAY_STATUS; C2=ON_STREAM_HRS; menu-mirrored path; full Bank-style bundle | 15 Jun |
 | N1 | Monthly status edit | PWEL | ⏸ Parked | Sparse data (13 rows), poor target | 14 Jun |
 | N3 | Status process P→V | HA.0001 Daily | ✅ Live 2/2 | Dual DB oracle: ROWS_UPDATED + RECORD_STATUS count | 14 Jun |
 | N3 | Status process V→A | HA.0001 Daily | ⏸ Parked | STIM_DAY_VALUE empty (0 rows); WELL_FLUID_ANALYSIS needs WHERE vars + data/SME — next: seed data | 15 Jun |
