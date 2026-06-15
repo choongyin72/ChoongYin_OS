@@ -1,7 +1,8 @@
 # Draft email — validate the PLP Manual Data Upload template (Issues 1004 + 1067)
 
 > Draft for review before sending. Replace **[recipient]** / **[your name]** / hub-specific names.
-> Attach the working template (`ACTR-3098 Data_Upload_V4.xlsx`, AOPA baseline) for reference.
+> **Attach: `PLP_Data_Upload_Template_V1_DRAFT.xlsx`** (our first-draft Pluto template — one tab per EC
+> screen with proposed columns) and, for reference, the AOPA baseline `ACTR-3098 Data_Upload_V4.xlsx`.
 
 ---
 
@@ -13,9 +14,18 @@ Hi [recipient],
 
 We're combining **Issue 1004** (PLP manual data-upload template) and **Issue 1067** (bulk-update for
 measured streams/tanks/compositions) into one Excel-upload feature, using the **AOPA implementation as the
-baseline** and uplifting it for Pluto. Before we build the Pluto template + ECIS interface, we need your
-sign-off on three things: **(A) which screens are in/out, (B) the columns per screen, and (C) the upload
-rules.** A few items can't be inferred from AOPA — flagged **[CONFIRM]** below.
+baseline** and uplifting it for Pluto. I've **attached a first-draft Pluto template
+(`PLP_Data_Upload_Template_V1_DRAFT.xlsx`)** — one tab per EC screen, with the proposed columns already
+laid out (key columns in orange, updatable values in blue, plus a mandatory Comments column). Please
+**validate/correct the template** alongside the three points below: **(A) which screens are in/out,
+(B) the columns per screen, (C) the upload rules.** Items we couldn't confirm are flagged **[confirm]** in
+the template and **[CONFIRM]** below.
+
+The template currently has **12 tabs**, one per screen in the "EC Screens" pack you provided:
+Daily Production Well Status 1, Daily Gas Stream Status, Daily Liquid Stream Status, Daily Water Stream
+Status, Daily Electrical Stream Status, Daily Tank Status (VCF), Stream Gas Component Analysis, Well Gas
+Component Analysis, Daily Contract Account Status, Daily Contract Account Result – Company, Monthly
+Contract Account Status, Monthly Contract Account Company Status.
 
 ### A. Screens in scope — please confirm in / out
 
