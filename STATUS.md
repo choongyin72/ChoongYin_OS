@@ -28,16 +28,16 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `7d128e5` | 2026-06-15 | review: automated quality feedback 2026-06-15 |
+| `e9c2650` | 2026-06-15 | recon: N3 V→A daily — process→table mapping; blocked on sandbox data |
+| `5271464` | 2026-06-15 | chore: update scheduled_tasks.json lastFiredAt after 2026-06-15 06:00 review run |
+| `7b6bbf5` | 2026-06-15 | review: automated quality feedback 2026-06-15 |
+| `60b98db` | 2026-06-15 | recon: N3 V->A daily — process->table mapping (STAT_PROCESS_TASK); blocked on sa… |
+| `a5558cd` | 2026-06-15 | chore: clarify merge sequence — remove confusing 20h window language |
 | `46d6626` | 2026-06-14 | chore: clarify merge turnaround rule — remove confusing 20h window language |
 | `8f8c0bf` | 2026-06-15 | chore: close PR-REVIEW-PROTOCOL open questions — answers locked 2026-06-14 |
 | `f309cd4` | 2026-06-14 | chore: close protocol open questions — confirmed answers locked 2026-06-14 |
 | `6d07b40` | 2026-06-15 | merge PR #5: reviewer branch sync — lessons-learned conflict resolved, protocol … |
-| `99e9da4` | 2026-06-14 | merge: resolve lessons-learned conflict — take worker's technically-verified cor… |
-| `f6a88a3` | 2026-06-15 | docs: PR & Review Protocol — worker↔reviewer contract (v0.1) |
-| `8a26ef2` | 2026-06-14 | improve: add PR-REVIEW-PROTOCOL.md to CLAUDE.md session-start reading list |
-| `9a7b464` | 2026-06-14 | fix: rename CLAUDE.MD -> CLAUDE.md to match master (PR #3) |
-| `c68d636` | 2026-06-14 | fix+improve: reviewer corrections + worker protocol from two-way feedback |
-| `47d5d85` | 2026-06-15 | docs: add PR & Review Protocol (worker <-> reviewer contract, v0.1 draft) |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
