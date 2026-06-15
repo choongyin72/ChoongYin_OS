@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v8** (R8 added 2026-06-15)
+> **Current rule version: v13** (R11, R12, R13 added 2026-06-15 — full 13-PR review pass, complementary to the v10 run)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -16,6 +16,11 @@ _Worker sessions: read this before starting any automation work._
 | v6 | R6 | Check STAT_PROCESS_TASK.TABLE_ID + WHERE_FORMULA before claiming V→A testable | 2026-06-15 |
 | v7 | R7 | Page-object class docstrings must match the Variables section | 2026-06-15 |
 | v8 | R8 | Sync feature branch with master before every push (git merge origin/master) | 2026-06-15 |
+| v9 | R9 | PR body MUST use the EXACT 6 field headers; non-DB work → "DB ground-truth evidence: N/A (reason)" | 2026-06-15 |
+| v10 | R10 | Check the toolbar New/Delete enabled-state BEFORE claiming Insert/Delete; disabled = UPDATE-ONLY screen | 2026-06-15 |
+| v11 | R11 | Declare CONTENT dependencies (`depends on #N`) even when the PR merges without a git conflict | 2026-06-15 |
+| v12 | R12 | Diff touches a shared T1/T2 resource ⇒ run canary + 1 random sibling suite and cite it; never claim "no shared-file changes / no canary needed" | 2026-06-15 |
+| v13 | R13 | State ONE live N/N equal to the test-case count, identical across title/body/scorecard/README/SOW | 2026-06-15 |
 
 ---
 
@@ -178,5 +183,105 @@ When a rule is derived from code-reading only (not validated against live system
 
 **MR3 — Check own past entries for staleness when reviewing**
 Before the PR review loop, scan open gaps in the table and mark any that are now closed. A gap that was resolved mid-session should be closed before posting new ones.
+
+---
+
+## 2026-06-15 — Automated Review (06:00 AWST, 2nd run) — N1 flowline + skill + infra batch (PRs #15–27)
+
+Listed all 13 open PRs + ran the 6-field body gate BEFORE any diff (MR1/MR3 applied). 4 tailored
+findings posted (#19 MUST-FIX, #24/#26/#27 NICE-TO-HAVE + 1 project gap); 9 doc/SME/gated PRs cleared.
+
+### Rules (apply immediately, no exceptions)
+
+**R9 — PR body MUST use the EXACT 6 field headers**
+The headers must read literally: **What was built / Files touched / DB ground-truth evidence /
+Self-clean confirmed / Rules applied / Base branch**. Variant wording fails the automated 6-field gate.
+For non-DB work (infra/docs), write `DB ground-truth evidence: N/A (<reason + the proof you do have>)`.
+_Live-validated this run: #19 missing 4 fields; #26 (`## What`/`## Files`/`## Verification`) + #27
+(`## Files (GI-only delta)`) header drift._
+
+**R10 — Check the toolbar New/Delete enabled-state BEFORE claiming or building Insert/Delete**
+If New and Delete are disabled, the screen is **UPDATE-ONLY** (daily/sub-daily status grids: the
+(object×day) row is pre-instantiated by EC batch processes — CRUD capability depends on the business
+domain). Never relabel value set/clear as record insert/delete. _Live-validated: IFLW (#24) was first
+built as "IUD" by re-interpreting fill=insert/clear=delete, then corrected to update-only after the
+user verified the disabled toolbar on-screen._
+
+### Observations
+- Strong batch: IFLW (#24) + GI (#27) flowline screens **live 4/4 DB-verified**; `ec-screen-automation`
+  skill (#25) + `EC_SLOWMO` headed slow-motion infra (#26, dryrun 256/256) added. Recon-first +
+  DB-ground-truth + self-clean discipline held throughout.
+- Worker self-corrected the IUD→update-only error promptly on the user's flag, and propagated the fix
+  to the registry, scorecard, skill, and memory — good two-way reflection.
+- The 6-field gate is objective and fast (caught 3 PRs in seconds). This run's findings are all
+  filesystem-verified, not inferred — higher confidence than the prior ~1/3-valid self-assessment cycle.
+
+### Gaps (verified against the filesystem, per MR1)
+- **Folder-convention SPLIT (verified):** 9 legacy N1 screens sit flat under `pageobjects/Production/`
+  (pflw/iwel/eqpm/wr0001/po0002/subdaily*/ha000*) while the 2 new flowline screens use the
+  menu-mirrored `pageobjects/EC_Production/Well_and_Reservoir/Daily/Group_Model_-_by_Flowline/`.
+  → Recommend a follow-up migration PR to unify; until then, locating a screen's files is non-uniform.
+- **`backup_keyword_file.py` MISSING (verified absent):** the shared-file protocol (README + memory)
+  references `tmp/scripts/backup_keyword_file.py`, but it does not exist — workers back up manually
+  (`cp <file> .keyword_backups/<name>.<tag>.bak`). → Create the script OR correct the protocol text so
+  the "backup before editing a shared keyword file" step isn't pointing at a missing tool.
+- (note, not blocking) #19 (MHM live send) + #22 (monthly status-process, no-WHERE mass update) are
+  build-ready **GATED** suites — correct to keep gated; ensure each is tagged so the canary/random
+  runner cannot trigger the outbound/large-write step.
+
+---
+
+## 2026-06-15 — Automated Review (06:00 AWST, run 2b — full 13-PR pass, one comment per PR)
+
+_A second automated run executed the same task concurrently and posted one tailored review comment to
+**every** open PR (#15–#27), with each PR's body+diff verified against the filesystem by an independent
+sub-agent. It is **complementary** to the v10 "2nd run" section above, and it caught two MUST-FIX items
+that run flagged as clear — recorded here as the value of an independent second pass._
+
+### MUST-FIX found this pass (filesystem-verified)
+- **#16 — undeclared CONTENT dependency.** Body said "not stacked on #15 — merges cleanly alongside it,"
+  but the doc references `ec-mhm-sme.md`, which is introduced by the still-open #15 and is **absent on
+  master** (verified). Git-mergeable ≠ content-independent. → R11.
+- **#24 — false "no shared-file changes" claim.** Body said the suite "reuses `daily_status_grid.resource`
+  verbatim — no shared-file changes, so no canary needed," but the diff **adds `Clear Daily Status Cell`
+  to that shared T2 file (+13 lines)**, consumed by ~9 sibling N1 suites (verified). → R12.
+- **#24 — pass-count inconsistency.** Title/body say live **3/3**, but the suite has **4** test cases
+  and scorecard/README/SOW-header say **4/4** (the v10 run above independently wrote "4/4" too —
+  corroborating the mismatch). → R13.
+
+### Rules (apply immediately, no exceptions)
+
+**R11 — Declare CONTENT dependencies, not only git-conflict ones**
+If your doc/suite references a file (or keyword/table) that another OPEN PR introduces and that is not
+yet on master, mark **`depends on #N — merge after`** in the title/body — even when the two PRs merge
+without a git conflict. Verify by checking the referenced path exists on master; if it only exists on a
+sibling branch, the dependency is real and the merger must respect order. Precedent: #16 referenced
+`ec-mhm-sme.md` (introduced by #15) while explicitly claiming "not stacked."
+
+**R12 — A shared-resource edit forces a canary + sibling run; never claim "no shared-file changes"**
+Run `git diff --stat` before writing the PR body. If it lists a shared T1/T2 file
+(`resources/*.resource`, `libraries/DbVerify.py`), you may **not** write "no shared-file changes / no
+canary needed" — even for a purely additive keyword. Per the random-re-test practice, run the canary
+pack PLUS one randomly chosen sibling suite live and cite both results in the Evidence section.
+Precedent: #24 added `Clear Daily Status Cell` to `daily_status_grid.resource` (used by ~9 suites) while
+claiming the file was reused verbatim.
+
+**R13 — One consistent live N/N, equal to the test-case count, everywhere**
+The live pass count in the PR title, PR body, scorecard row, README, and SOW must be identical and must
+equal the number of test cases in the suite. A title saying "3/3" over a 4-test suite that the scorecard
+calls "4/4" leaves a reviewer unable to tell what actually ran. Reconcile before raising the PR.
+Precedent: #24 (3/3 vs 4/4 across title/body vs scorecard/README/SOW-header).
+
+### Observations
+- **Independent second pass earns its keep.** The leaner concurrent run (4 findings) cleared #24 as
+  "live 4/4" and didn't open #16; the full per-PR pass caught both. Keep the redundancy for high-volume
+  batches — the cost is cheap relative to a wrong merge.
+- **Comment-on-every-PR is worth it.** 9 of 13 were docs/SME/gated PRs that cleared, but the 4 with
+  findings (#16, #19, #24, plus stack-order note on #27) were not predictable from the titles alone.
+
+### Note on overlap
+R9 (exact 6-field headers) already covers this pass's **#19** finding (4 missing fields) — not
+re-raised as a new rule. R10 (toolbar enabled-state) and R12 both touch #24 but are orthogonal
+(insert/delete capability vs shared-file/canary discipline).
 
 ---
