@@ -14,6 +14,10 @@ which is a pre-existing reference-only repo). Depth refs: `docs/ec_webapp_intern
 Before building a screen: scan it LIVE (Playwright headless) to confirm the nav model, grid id, and the
 target cell's column index. Two real misses came from guessing (a non-existent distribution dropdown; a
 flat folder). Confirm the *visible/intended* element, and pick a DB scope that actually has data.
+**Check CRUD capability BEFORE claiming IUD:** a screen's allowed operations depend on its business
+domain — inspect the toolbar (are **New** and **Delete** enabled?). If disabled, it is **UPDATE-ONLY**
+(e.g. daily-status grids) — do NOT fabricate insert/delete by re-interpreting value set/clear as record
+create/delete (a real mistake on IFLW). Master-data OV screens DO support IUD.
 
 ## 1. Environment
 - Sandbox: `https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/` · user/pass `sysadmin`/`sysadmin`.
@@ -53,9 +57,11 @@ Convert UI↔DB units where stored SI/base (e.g. pressure psi↔bar ×14.5038) �
   **DELETE = End Date = Start Date** (zero-length window = true delete; removes from the `ov_*` view).
   OV-GM needs a PU/Area cascade + GO first. (T2 `manage_object.resource`; ref `bank_page.resource`.)
 - **N1 daily/sub-daily status grid:** date(+range) nav + object cascade → GO → one pre-instantiated
-  (object×day) row, **edit-in-place** (T2 `daily_status_grid.resource`). No New/Delete toolbar →
-  **IUD is done on the cell VALUE**: INSERT = fill empty cell+Save; UPDATE = change+Save; DELETE =
-  clear cell+Save (→DB null). Oracle = `*_DAY_STATUS` (OBJECT_ID, DAYTIME). Self-clean = restore original.
+  (object×day) row, **edit-in-place** (T2 `daily_status_grid.resource`). **UPDATE-ONLY** — New/Delete
+  toolbar are DISABLED (the row is batch-instantiated; no record insert/delete on these screens, by the
+  business-domain nature). You EDIT the measured value: set / change / clear (clear+Save → DB column
+  NULL is update-to-null, **NOT a record delete**). Oracle = `*_DAY_STATUS` (OBJECT_ID, DAYTIME).
+  Self-clean = restore original value.
 - **N2 allocation/calc RUN:** nav + calc-job dd → GO → Run; SYNCHRONOUS; verify result tables.
 - **N3 status process (P→V→A):** nav date(range) + Process dd → GO → Run Process; **ASYNC** (ec-worker
   must be running) → POLL the DB; oracle = `STAT_PROCESS_STATUS.ROWS_UPDATED` + RECORD_STATUS family
