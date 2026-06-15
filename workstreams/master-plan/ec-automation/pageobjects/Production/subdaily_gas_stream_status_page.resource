@@ -6,10 +6,11 @@ Documentation       T3 (screen) — "Sub Daily Gas Stream Status - by Stream" pa
 ...                 SUMMER_TIME). Reuses the sub-daily DbVerify helpers + the N1 T2 grid gestures.
 ...                 Non-iframed. Nav: Date (G:0) + cascade PU(G:1) → Area(G:2) → Facility(G:1 leaf
 ...                 stream, G:4). Grid shows one stream with the time down the rows.
-...                 C0 = Daytime (resolve the row by its value — an input, scanned not page-text),
-...                 C1 = On Strm[hr] = ON_STREAM_HRS (UNITLESS — direct equality, no UI/DB conversion).
-...                 The target cell is NON-NULL here (=1), so the edit→diff is unambiguous and the
-...                 self-clean restores the recorded original (1) — not NULL. Name source = OV_STREAM.
+...                 C0 = Daytime (resolve the row by its value — an input, scanned not page-text).
+...                 C2 = Grs Vol[Sm³] = GRS_VOL (proven-editable, unitless → direct equality, no UI/DB
+...                 conversion). ⚠️ C1 = On Strm[hr] is DERIVED/non-persisting — do NOT edit (the live
+...                 edit→diff proved it). The target cell is NON-NULL (=1000), so the edit→diff is
+...                 unambiguous and the self-clean restores the recorded original (1000). Name source = OV_STREAM.
 ...                 Recon: tmp/scripts/n1_subdaily_strm_*. Layered: this test → this T3 →
 ...                 daily_status_grid (T2) + common (T1) + DbVerify.
 
@@ -94,7 +95,7 @@ Stream Cell Should Show
 
 Stream Value Should Be In DB
     [Documentation]    Ground truth: assert STRM_SUB_DAY_STATUS.${TARGET_DB_COLUMN} of the
-    ...    (stream × date × hour) interval equals ${expected} (datetime-keyed; ON_STREAM_HRS unitless).
+    ...    (stream × date × hour) interval equals ${expected} (datetime-keyed; GRS_VOL unitless).
     [Arguments]    ${expected}
     ${oid}=    Object Id By Name    OV_STREAM    ${SCOPE_STREAM}
     Sub Day Status Value Should Be    ${SDS_DB_TABLE}    ${oid}    ${SCOPE_DATE}    ${TARGET_HOUR}    ${TARGET_DB_COLUMN}    ${expected}

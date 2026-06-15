@@ -4,10 +4,11 @@ Documentation       EC N1 Test — "Sub Daily Gas Stream Status - by Stream" (ed
 ...                 datetime-keyed sub-daily pattern is not a one-off: STRM_SUB_DAY_STATUS keys on
 ...                 (OBJECT_ID, DAYTIME[+time], SUMMER_TIME) just like PWEL_SUB_DAY_STATUS. Open via
 ...                 the Date + PU→Area→Facility→Stream cascade, resolve the target interval by its
-...                 Daytime, EDIT the On Strm[hr] cell (real keystrokes + Tab → stage), Save (menubar
-...                 @all → commit), verify on-screen AND in STRM_SUB_DAY_STATUS.ON_STREAM_HRS at that
+...                 Daytime, EDIT the Grs Vol[Sm³] cell (real keystrokes + Tab → stage), Save (menubar
+...                 @all → commit), verify on-screen AND in STRM_SUB_DAY_STATUS.GRS_VOL at that
 ...                 exact hour (unitless → direct equality), then RESTORE to the recorded original.
-...                 The edit→Save→DB check also PROVES the cell↔column map (C1 = On Strm[hr]).
+...                 The edit→Save→DB check also PROVES the cell↔column map (C2 = Grs Vol[Sm³] = GRS_VOL);
+...                 ⚠️ C1 = On Strm[hr] is DERIVED/non-persisting — do NOT edit.
 ...                 Layered: this test → subdaily_gas_stream_status_page (T3) → daily_status_grid (T2)
 ...                 + common (T1) + DbVerify.
 
@@ -48,9 +49,9 @@ TC02 Distinct Hours Resolve To Distinct Rows
     Capture Step    sds_tc02_datetime_rows
 
 TC03 Edit Intraday Cell And Persist
-    [Documentation]    Edit the target hour's On Strm[hr] to a sentinel, Save, and confirm persistence
-    ...    on-screen AND in STRM_SUB_DAY_STATUS.ON_STREAM_HRS for that exact (stream × date × hour)
-    ...    interval — the datetime-keyed oracle (which also proves C1 = ON_STREAM_HRS). Self-cleans by
+    [Documentation]    Edit the target hour's Grs Vol[Sm³] to a sentinel, Save, and confirm persistence
+    ...    on-screen AND in STRM_SUB_DAY_STATUS.GRS_VOL for that exact (stream × date × hour)
+    ...    interval — the datetime-keyed oracle (which also proves C2 = GRS_VOL). Self-cleans by
     ...    restoring the recorded original in Suite Teardown.
     [Tags]    edit
     Set Stream Cell    ${SENTINEL_VALUE}
