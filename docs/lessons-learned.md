@@ -2,6 +2,21 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
+> **Current rule version: v8** (R8 added 2026-06-15)
+> If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
+
+### Rules Changelog
+| Version | Rule | One-line summary | Date added |
+|---------|------|-----------------|------------|
+| v1 | R1 | Unit conversion guard before any DB write (multiplicative units only) | 2026-06-14 |
+| v2 | R2 | Read current DB value before any write — no null assumptions | 2026-06-14 |
+| v3 | R3 | Document parked items with a one-line blocker | 2026-06-14 |
+| v4 | R4 | Sub-daily patterns need datetime-keyed DbVerify | 2026-06-14 |
+| v5 | R5 | ec-worker down = silent WAITING; ORA-06569 = worker ran, empty scope | 2026-06-14 (corrected 2026-06-15) |
+| v6 | R6 | Check STAT_PROCESS_TASK.TABLE_ID + WHERE_FORMULA before claiming V→A testable | 2026-06-15 |
+| v7 | R7 | Page-object class docstrings must match the Variables section | 2026-06-15 |
+| v8 | R8 | Sync feature branch with master before every push (git merge origin/master) | 2026-06-15 |
+
 ---
 
 ## 2026-06-14 — Review by Reviewer Session
@@ -125,5 +140,43 @@ Before pushing any commit to a feature branch (whether raising a new PR or pushi
 git fetch origin master && git merge origin/master
 ```
 Resolve any conflicts, then push. Reason: other PRs may have merged into master while your branch was open, touching the same files. Not syncing = guaranteed conflict at merge time, which blocks the merge and forces the reviewer to do manual conflict resolution. Precedent: PR #12's feature branch missed PFLW changes (merged via PRs #11 + #14) to `ec_screen_registry.md` and `pattern_n1_daily_status_grid_design.md`, causing a blocked merge and reviewer-side manual fix.
+
+---
+
+## 2026-06-15 — Reviewer Self-Assessment (after ~6 PRs)
+
+_Honest record of reviewer failures and process improvements. Worker: read this to calibrate how much to trust vs independently validate reviewer findings._
+
+### Reviewer errors this cycle (confirmed)
+
+| Error | Impact | Root cause |
+|-------|--------|-----------|
+| Phantom "3 Financial Objects parked" gap posted (R) | Worker spent time validating a stale claim | Reviewer derived from doc text without checking actual filesystem — accepted stale state |
+| ORA-06569 rule (R5, last clause) backwards — "ORA-06569 on real P data = worker down" | Incorrect mental model published as a rule | Reviewer inferred from first principles, didn't validate against actual error-raising code path |
+| Automated 06:00 run missed PRs #10, #11, #12 | 3 PRs reviewed late; 1 had MUST-FIX that sat unmerged | Step 6 of scheduled task was ambiguous — didn't require listing ALL open PRs before starting |
+
+### What this means for worker
+- Treat reviewer rules as **high-confidence proposals**, not ground truth. When a rule feels wrong against what you see in the DB/code, validate and push back — the process is designed for this (two-way reflection).
+- If you validate a reviewer claim and it's wrong, document the correction in a dated section. The worker-validated §R1 and §R5 corrections are the right model.
+- Reviewer's valid-catch rate across ~6 PRs: 1 genuine MUST-FIX (PR #12 docstring), 1 stale phantom gap, 1 backwards rule. Good-but-not-100% — human merge gate stays.
+
+### Improvements made as a result
+
+| Improvement | Where |
+|------------|-------|
+| Scheduled task step 6: explicit `list_pull_requests` + confirm ALL PRs listed before starting review | `.claude/scheduled_tasks.json` |
+| Version changelog added to this file | Top of this file |
+| R8 (sync before push) added to CLAUDE.md as a mandatory step | `CLAUDE.md` step 2a |
+
+### Reviewer process rules (for reviewer's own conduct)
+
+**MR1 — Validate gaps against ground truth before publishing**
+Before adding a gap entry ("X is parked / missing"), check the actual filesystem or DB — don't infer from stale doc text. If you can't verify, say "unverified" in the gap entry.
+
+**MR2 — Flag confidence level on new rules**
+When a rule is derived from code-reading only (not validated against live system), mark it `⚠️ code-derived, not live-validated`. Worker should independently verify before treating it as final.
+
+**MR3 — Check own past entries for staleness when reviewing**
+Before the PR review loop, scan open gaps in the table and mark any that are now closed. A gap that was resolved mid-session should be closed before posting new ones.
 
 ---
