@@ -14,6 +14,7 @@ from playwright.sync_api import sync_playwright
 
 URL = os.environ.get("EC_URL", "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/")
 HEADED = os.environ.get("EC_HEADED", "0") == "1"
+HOLD = float(os.environ.get("EC_HOLD", "0"))  # seconds to pause after each I/U/D step (to watch it)
 SCREEN = "Daily Water Injection Flowline, by Flowline"
 SCOPE = {"date": "2019-12-20", "pu": "P1 Production Unit", "area": "P1 Area",
          "fcty": "P1 Facility 1", "flowline": "P1 F003 WI"}
@@ -113,10 +114,14 @@ def main():
         page.screenshot(path=str(EVID / "01_grid_loaded.png"))
         set_cell(fr, INSERT_VALUE); save(page, fr); reload_go(page, fr)
         res["insert"] = val(o); page.screenshot(path=str(EVID / "02_inserted.png"))
+        print(f"  [INSERT] cell={INSERT_VALUE}, DB={res['insert']} — holding {HOLD}s"); time.sleep(HOLD)
         set_cell(fr, UPDATE_VALUE); save(page, fr); reload_go(page, fr)
         res["update"] = val(o); page.screenshot(path=str(EVID / "03_updated.png"))
+        print(f"  [UPDATE] cell={UPDATE_VALUE}, DB={res['update']} — holding {HOLD}s"); time.sleep(HOLD)
         set_cell(fr, ""); save(page, fr); reload_go(page, fr)
         res["delete"] = val(o); page.screenshot(path=str(EVID / "04_deleted.png"))
+        print(f"  [DELETE] cell cleared, DB={res['delete']} — holding {HOLD * 2}s (watch the empty cell)")
+        time.sleep(HOLD * 2)
         b.close()
     print(f"INSERT DB={res['insert']} -> {'PASS' if str(res['insert']) == INSERT_VALUE else 'FAIL'}")
     print(f"UPDATE DB={res['update']} -> {'PASS' if str(res['update']) == UPDATE_VALUE else 'FAIL'}")
