@@ -76,3 +76,13 @@ Submit Status Process Run
     Select Status Process    ${process}
     Apply Status Process Navigator
     Run Status Process
+
+Submit Monthly Status Process Run
+    [Documentation]    Monthly screen gesture (verified-live nav model): SINGLE Date (G:0:R:1:C:0:da_input)
+    ...    + Process selector at GROUP 1 — NOT From/To + G:2 like the daily screen. Set the month date,
+    ...    pick the process at G:1, apply Go, click Run Process. Leaves the run submitted to ec-worker.
+    [Arguments]    ${date}    ${process}
+    Fill EC Date    ${STATUS_FROM_DATE_FIELD}    ${date}
+    Select EC Dropdown Option    nav:form:G:1:R:1:C:0:dd    ${process}
+    Apply Status Process Navigator
+    Run Status Process

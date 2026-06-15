@@ -16,6 +16,7 @@ _Last updated: 2026-06-15_
 | N3 | Status process P→V | HA.0001 Daily | ✅ Live 2/2 | Dual DB oracle: ROWS_UPDATED + RECORD_STATUS count | 14 Jun |
 | N3 | Status process V→A | HA.0001 Daily | ⏸ Parked | STIM_DAY_VALUE empty (0 rows); WELL_FLUID_ANALYSIS needs WHERE vars + data/SME — next: seed data | 15 Jun |
 | N3 | Status process V→A | HA.0001 Monthly | 🔵 Build-ready | Thin new T3 for Monthly Data Status Processes screen | 14 Jun |
+| N3 | Status process →A (month) | Monthly Data Status Processes (P1_FwdUpdPar1) | 🔵 Built, dryrun-green, live GATED | Screen model verified live (single Date G:0 + Process G:1); target IWEL_DAY_STATUS 19,659 P rows (data EXISTS); suite `monthly_status_process_run.robot` + thin T3; live behind `--variable LIVE_OK:yes` (no-WHERE → large reversible mutation; confirm blast radius + oracle grain on first observed run) | 15 Jun |
 
 ### Key Learnings
 - **UI↔DB unit conversion**: UI(psi) ↔ DB(bar), factor ~14.5038. Naive "DB == typed" oracle fails on pressure/rate cols.

@@ -290,3 +290,23 @@ Recon for the daily V→A build (`tmp/scripts/n3_va_daily_recon*.py`, `n3_va_sti
 - **If revisited:** seed a few `STIM_DAY_VALUE` provisional rows on a date, then the chain is trivial
   (reuse `status_process_run.resource` + the proven snapshot→restore); add a generic
   `record_status_count(table, daytime, status)` to DbVerify for the A-level oracle on STIM_DAY_VALUE.
+
+## N3 MONTHLY approve — BUILT (dryrun-green, live GATED) 2026-06-15
+Took build path 2 (monthly grain). Recon `tmp/scripts/n3_monthly_*` (read-only):
+- **Screen model verified live** (`n3_monthly_screen_recon.py`): "Monthly Data Status Processes" is a
+  SEPARATE non-iframed screen with a DIFFERENT nav from daily — SINGLE Date `nav:form:G:0:R:1:C:0:da_input`
+  + Process selector at **G:1** (`nav:form:G:1:R:1:C:0:dd`), NOT From/To + G:2. GO `button:form:B`,
+  Run `RunProcessButton:form`. Process dd lists the monthly set incl. **"P1 Parent1 Forward Status
+  Update"** (P1_FwdUpdPar1, →A) + its reverse. (Confirming this first avoided a guessed-nav T3.)
+- **Data EXISTS (not blocked):** `P1_FwdUpdPar1` (FROM=null→TO=A, MTH) → `STAT_PROCESS_TASK` targets
+  `IWEL_DAY_STATUS_AIR`/`_CO2` (EC logical ids → physical `IWEL_DAY_STATUS`, **19,659 'P' rows**, no
+  WHERE filter). So there's liftable data — contrast the daily V→A pair (empty STIM_DAY_VALUE).
+- **Built:** T2 append `Submit Monthly Status Process Run` (single date + G:1 process); thin T3
+  `mh_monthly_status_process_page.resource` (A-level oracle, reuses DbVerify `record_status_family_count`/
+  `restore_record_status_family`); suite `monthly_status_process_run.robot`. robocop clean, dryrun 2/2.
+- **Live GATED (`--variable LIVE_OK:yes`):** the no-WHERE monthly approve can lift a LARGE row set — a
+  big, DB-restore-reversible mutation. `Monthly Live Run Gate` Skips TC01 unless opted in, so
+  canary/random/unattended runs never trigger it. Two confirms on the first OBSERVED run:
+  (1) blast radius (pick a modest-volume month first); (2) oracle grain — the exact-equality
+  data-count==ROWS_UPDATED uses a single-date family count; if the lift spans the month, add a
+  month-range DbVerify helper. Robust gating proof = ROWS_UPDATED>0 + Approved-family delta>0.
