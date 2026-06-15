@@ -13,6 +13,8 @@ Documentation       EC N-notify Test — "Send Freetext Message" (MHM) → Messa
 ...                 real email can ever be sent). Also confirm the template:form compose field ids live
 ...                 on first run. Outbound email is an external action — run live only when safe/approved.
 ...                 Layered: this test → send_freetext_message_page (T3) → message_send (T2) + DbVerify.
+...                 Pattern + verified sandbox transmission posture (outbound=PREPARED-only, no sender
+...                 node) + the two paths to the live proof: docs/pattern_n_notify_mhm_design.md.
 
 Resource            ../../pageobjects/Production/send_freetext_message_page.resource
 
