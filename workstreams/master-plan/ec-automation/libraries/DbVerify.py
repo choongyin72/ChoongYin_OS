@@ -606,3 +606,69 @@ def code_should_be_absent_in_view(view, code):
     """Fail if ``code`` appears in any string column of ``view`` (DB ground truth)."""
     if _code_present(view, code):
         raise AssertionError(f"DB check FAILED: {code} still present in {view} (expected absent)")
+
+
+# --- N-notify: MHM message-journal oracle (notification tests) -----------------------------------
+# Stock EC MHM journals every handled message in MHM_MSG (DIRECTION I/O, MSG_TYPE, STATUS, SUBJECT,
+# SENDER, RECIPIENT). A notification test sends/triggers a message then asserts a NEW MHM_MSG row for
+# the message type (delta over a captured baseline — MHM_MSG is append-only, like STAT_PROCESS_STATUS).
+# See DeepDiveLearnings/ec-mhm/ for the model + the AOPA/CLP client contrasts.
+
+def message_journal_count(msg_type, direction="O"):
+    """COUNT(*) of MHM_MSG journal rows for ``msg_type`` (and DIRECTION, default 'O' outbound).
+
+    The append-only baseline: capture this before a send, then a +1 delta proves a fresh message was
+    journaled. ``msg_type`` matches MHM_MSG.MSG_TYPE (the message-definition code).
+    """
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        sql = "SELECT COUNT(*) FROM MHM_MSG WHERE MSG_TYPE = :t"
+        binds = {"t": msg_type}
+        if direction is not None:
+            sql += " AND DIRECTION = :d"
+            binds["d"] = direction
+        cur.execute(sql, binds)
+        return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def message_journal_latest(msg_type, direction="O"):
+    """Return the newest MHM_MSG journal row for ``msg_type`` as a dict (or None).
+
+    Keys: STATUS, SUBJECT, SENDER, RECIPIENT, MESSAGE_ID. The trustworthy oracle for a notification
+    send: after the send, assert this row exists with the expected SUBJECT/RECIPIENT/STATUS.
+    """
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        sql = (
+            "SELECT STATUS, SUBJECT, SENDER, RECIPIENT, MESSAGE_ID FROM MHM_MSG "
+            "WHERE MSG_TYPE = :t"
+        )
+        binds = {"t": msg_type}
+        if direction is not None:
+            sql += " AND DIRECTION = :d"
+            binds["d"] = direction
+        sql += " ORDER BY CREATED_DATE DESC FETCH FIRST 1 ROWS ONLY"
+        cur.execute(sql, binds)
+        row = cur.fetchone()
+        if not row:
+            return None
+        return {"STATUS": row[0], "SUBJECT": row[1], "SENDER": row[2], "RECIPIENT": row[3], "MESSAGE_ID": row[4]}
+    finally:
+        cur.close()
+        conn.close()
+
+
+def message_journal_new_row_should_exist(msg_type, baseline_count, direction="O"):
+    """Fail unless MHM_MSG has MORE rows for ``msg_type`` than ``baseline_count`` (a fresh message was
+    journaled by the send). The delta oracle — robust to the append-only journal's pre-existing rows."""
+    now = message_journal_count(msg_type, direction)
+    if int(now) <= int(baseline_count):
+        raise AssertionError(
+            f"MHM check FAILED: MHM_MSG for MSG_TYPE={msg_type} (DIRECTION={direction}) = {now} rows, "
+            f"expected > baseline {baseline_count} (no new message journaled by the send)"
+        )
