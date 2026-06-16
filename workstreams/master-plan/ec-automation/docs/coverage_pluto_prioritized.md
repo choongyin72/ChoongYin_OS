@@ -64,6 +64,40 @@ the governance spine (backlog P2).
 4. N2 allocation run (HA.0002) — once sandbox scheduler/app healthy.
 Hold: ECIS-adjacent (CO.0130/IS.0006/IS.0001 — set aside), reporting RP.* (after N1/N2).
 
+## 2026-06-16 audit — what's now built vs the gaps above
+Re-cross-referenced the prioritized list against the live `tests/` + `pageobjects/` tree.
+
+**Now DONE since this doc was written (2026-06-13):**
+- N1 daily-status grids: WR.0001 Daily Prod Well · PO.0002 Daily Gas Stream · CO.0011 Daily
+  Equipment · Daily Production Flowline (pflw) · Water Injection Well (iwel) · **Gas + Water
+  Injection Flowline (giflw/iflw)**. Sub-daily N1: **Sub-Daily Gas Stream + Sub-Daily Well**.
+- N2: HA.0002 Daily Allocation (`daily_allocation_run`).
+- N3: HA.0001 Daily (P→V) + **HA.0004 Monthly (month-grain)** status-process suites.
+- N-notify: MHM Send-Freetext → Message Journal.
+→ The N1/N2/N3/N-notify T2 patterns all exist and are live-proven. The framework is mature.
+
+**Highest-value N1 gaps STILL open (sibling builds — near-turnkey):**
+The Daily Gas Stream suite exists but its measured-stream siblings + tank do NOT:
+| Screen | DB table (verified 2026-06-16) | Navigator scope (Finder-resolved 2026-06-16) |
+|---|---|---|
+| **PO.0001 Daily Liquid Stream Status** | `STRM_DAY_STREAM_MEAS_OIL` | Pluto Scarborough / Burrup LNG Park / **LNG Train 1** |
+| **PO.0003 Daily Water Stream Status** | `STRM_DAY_STREAM_MEAS_WAT` | Pluto Scarborough / Upstream / **Pluto A** |
+| **PO.0066 Daily Electrical Stream Status** | `STRM_DAY_STREAM_MEAS_ELE` | Pluto Scarborough / Burrup LNG Park / **Fuel** |
+| **PO.0005.02 Daily Tank Status (VCF)** | `DV_TANK_DAY_DIP_STATUS` (data ~2026-05-26) | Pluto Scarborough / Burrup LNG Park / **Storage and Loading** |
+
+These reuse the existing `daily_status_grid` T2 + the gas-stream T3 as a template → thin per-screen
+T3 page + test, no new pattern work. Scopes/tables/columns already captured during the Issue
+1004/1067 V2 work (see `workstreams/issue-1004-1067-manual-data-upload/` + `business-domains/
+PLUTO-CONTRACT-ACCOUNTS.md`).
+
+**Recommended NEXT build slice:** PO.0001 **Daily Liquid Stream Status** (sibling of the gas suite;
+scope LNG Train 1; table `STRM_DAY_STREAM_MEAS_OIL`), then PO.0003 / PO.0066 / PO.0005.02 in turn.
+
+**Still open beyond these:** monthly stream/well variants; component-analysis screens (Stream/Well
+Gas Comp — no copy-to-clipboard, different grid); contract-account status screens (SA.0008/0009/0019
+— deep ownership-cascade navigator, see PLUTO-CONTRACT-ACCOUNTS.md). N2 monthly allocation (HA.0003)
++ reporting (RP.*) still held.
+
 ## Note
 This supersedes "next alphabetical Assets section" as the coverage strategy — Pluto value lives
 in the transactional/status screens (As-Built 02 §2.3), not more master-data OV. The master-data
