@@ -28,16 +28,16 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
-| `ab76172` | 2026-06-15 | process: rules changelog + reviewer self-assessment + automated review hardening |
-| `3a88111` | 2026-06-15 | rules: add R8 — sync feature branch with master before every push |
-| `2c2e848` | 2026-06-15 | scorecard: mark N1 sub-daily STRM as Live 3/3 after PR #12 merge |
-| `e7fb75a` | 2026-06-15 | merge PR #12: N1 sub-daily STRM gas stream status edit suite (live 3/3) |
-| `7614d88` | 2026-06-15 | merge: resolve conflict — keep both STRM sub-daily and PFLW sections |
-| `fb85f41` | 2026-06-15 | docs: fix PR #12 MUST-FIX — correct docstrings to C2/GRS_VOL (were stale C1/ON_S… |
-| `8e444c5` | 2026-06-15 | feat: N1 PFLW (Daily Production Flowline) suite — live 3/3 (6th N1 object class) |
-| `f4449d0` | 2026-06-15 | recon: N2 sum-to-total re-checked (ec-worker up) — still data-blocked |
-| `6199623` | 2026-06-15 | review: catch-up quality feedback 2026-06-15 (PRs #10, #11, #12) |
-| `bb37e2c` | 2026-06-15 | fix: scheduled reviewer must list ALL open PRs before starting review |
+| `08fc271` | 2026-06-16 | fix: backfill R9â€“R13 to master (lost when PR #28 closed) |
+| `3d1b078` | 2026-06-16 | fix: backfill R9-R13 to master (PR #28 was closed, not merged) |
+| `055ba9b` | 2026-06-16 | N3 Monthly: status-process approve suite (built, dryrun-green, live gated) |
+| `e9fb3e8` | 2026-06-16 | fix(n3-monthly): address PR #22 NICE-TO-HAVE â€” month-range oracle/teardown + r… |
+| `ed17d6d` | 2026-06-16 | N1: Daily Gas Injection Flowline screen â€” RF suite + Bank-style bundle (live 4… |
+| `84f19cf` | 2026-06-16 | RF infra: EC_SLOWMO â€” env-gated slow-motion for headed runs |
+| `ba932ba` | 2026-06-16 | Skill: ec-screen-automation â€” reusable EC web automation cookbook (Playwright … |
+| `c893ce7` | 2026-06-16 | N1: Daily Water Injection Flowline screen â€” RF suite + Bank-style bundle (live… |
+| `2856992` | 2026-06-16 | docs(rf): correct ROBOT_CLAUDE.md to match the real ec-automation project |
+| `fa9e4b3` | 2026-06-16 | SME capstone: client-agnostic N-notify verification pattern |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
