@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v13** (R9–R13 added 2026-06-15; backfilled to master 2026-06-16 — PR #28 was closed before merging)
+> **Current rule version: v14** (R14 added 2026-06-17)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -21,6 +21,7 @@ _Worker sessions: read this before starting any automation work._
 | v11 | R11 | Declare CONTENT dependencies (`depends on #N`) even when the PR merges without a git conflict | 2026-06-15 |
 | v12 | R12 | Shared T1/T2 edit ⇒ run canary + 1 random sibling suite and cite it; never claim "no shared-file changes" | 2026-06-15 |
 | v13 | R13 | State ONE live N/N equal to the test-case count, identical across title/body/scorecard/README/SOW | 2026-06-15 |
+| v14 | R14 | Skip-day check must verify BOTH < 3 new commits AND 0 open PRs; open PRs alone trigger a full review | 2026-06-17 |
 
 ---
 
@@ -258,5 +259,33 @@ _Live-validated: #24 added `Clear Daily Status Cell` to `daily_status_grid.resou
 **R13 — One consistent live N/N, equal to the test-case count, everywhere**
 The live pass count in the PR title, PR body, scorecard row, README, and SOW must be identical and must equal the number of test cases in the suite. Reconcile before raising the PR.
 _Live-validated: #24 said "3/3" in title/body over a 4-test suite that scorecard/README/SOW called "4/4". Fixed by worker via commit `aa9306f`._
+
+---
+
+## 2026-06-17 — Automated Review (06:00 AWST, 4 open PRs #34–#37)
+
+_Initially skipped by the scheduled task due to 0 new master commits — blind spot in the skip logic (see R14). Caught and reviewed manually in-session._
+
+### Rules (apply immediately, no exceptions)
+
+**R14 — Skip-day check must verify BOTH < 3 new commits AND 0 open PRs**
+Before issuing a skip (step 5 of the scheduled task), call `list_pull_requests(state=open)`. Skip only if BOTH conditions hold: fewer than 3 new master commits AND zero open PRs. If there are open PRs, proceed to step 6 regardless of commit count — the review exists to catch PRs, not just master commits.
+_Live-validated: 4 PRs (#34–#37, N1 stream siblings + gap audit) were missed by today's 06:00 run because the skip check only counted master commits (0) without checking open PRs (4)._
+
+### Observations
+
+- **N1 T2 reuse confirmed across ALL stream types:** PRs #35/#36/#37 prove the `daily_status_grid` T2 reuses verbatim for Oil/Water/Electrical stream siblings. The only per-screen change is in the T3 Variables section (column index, DB column, scope date, target stream name). This is the N1 pattern working as designed.
+- **First non-GRS_VOL column (POWER_CONSUMPTION):** Electrical streams have no volume — PO.0066 correctly uses `POWER_CONSUMPTION` as the DB oracle column. Worker identified this from recon before building, did not assume GRS_VOL. Good recon-first discipline.
+- **Stacked PR chain properly declared (R11):** #35 (base=master) → #36 (base=#35) → #37 (base=#36). Each PR explicitly declares its dependency. Clean chain.
+- **Gap audit (PR #34) led directly to 3 built suites:** The audit on Jun 16 correctly prioritised PO.0001/0003/0066; all 3 were live-proven and submitted the same day. Audit-to-build turnaround = same session. High efficiency.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| N1 Tank Status (PO.0005.02 VCF) — scope/table verified (PR #34); not yet built | Worker | 🟡 Medium |
+| Scheduled task step 5 — skip logic now fixed (R14 + task update this PR) | Reviewer | ✅ Fixed |
+| Monthly stream/well N1 variants — not attempted | Worker | 🟢 Low |
+| Folder-split (legacy flat `Production/` vs menu-mirrored `EC_Production/`) — #35/#36/#37 use flat `Production/` (consistent with existing siblings, not new menu convention) | Worker (follow-up migration) | 🟢 Low |
 
 ---
