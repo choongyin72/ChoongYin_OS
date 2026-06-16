@@ -180,3 +180,48 @@ When a rule is derived from code-reading only (not validated against live system
 Before the PR review loop, scan open gaps in the table and mark any that are now closed. A gap that was resolved mid-session should be closed before posting new ones.
 
 ---
+
+## 2026-06-16 — Automated Review (06:00 AWST, 14 open PRs #15–#28)
+
+_No new executable rules this run. R9–R13 are documented in PR #28 (open, not yet on master) — merge PR #28 to activate them for workers._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #15 | Clear (doc/SME — no MUST-FIX from concurrent reviewer) | ✅ Clear |
+| #16 | **MUST-FIX open** — body claims "not stacked on #15" but references `ec-mhm-sme.md` (only on #15's branch, not master). Worker must update body to `depends on #15`. | ⛔ Blocked |
+| #17 | Clear (doc/SME) | ✅ Clear |
+| #18 | Clear (doc/SME) | ✅ Clear |
+| #19 | Clear (MUST-FIX from prior run resolved: all 6 body fields now present) | ✅ Clear |
+| #20 | Clear (doc/SME) | ✅ Clear |
+| #21 | Clear (SME capstone) | ✅ Clear |
+| #22 | Clear, gated (N3 Monthly, LIVE_OK gate in place) | ✅ Clear (gated) |
+| #23 | Clear (doc correction) | ✅ Clear |
+| #24 | Both MUST-FIX **resolved**: body drops false "no shared-file" claim (R12); worker pushed commit `aa9306f` fixing SOW 3/3→4/4 (R13). Clearing comment posted. | ✅ Clear |
+| #25 | Clear. NICE-TO-HAVE posted: skill doc says `backup_keyword_file.py` is missing — **file EXISTS** at `tmp/scripts/backup_keyword_file.py` (filesystem-verified). | ✅ Clear (NICE-TO-HAVE) |
+| #26 | Clear (EC_SLOWMO infra) | ✅ Clear |
+| #27 | Clear, stacked on #24 | ✅ Clear (merge after #24) |
+| #28 | Concurrent reviewer PR — contains R9–R13 + review-log entry + STATUS. For user to decide which review PR to merge. | Human gate |
+
+### Gap correction (MR1 — verify before publishing)
+
+**`backup_keyword_file.py` EXISTS (corrects PR #28 gap entry)**
+PR #28 (concurrent reviewer) has a gap entry "backup_keyword_file.py MISSING (verified absent)." This is **incorrect** — the file exists at `tmp/scripts/backup_keyword_file.py` (verified via filesystem Glob on 2026-06-16). The skill doc (PR #25) should reference it as available. The concurrent reviewer likely searched a different path. This is a case of MR1 failing in a concurrent session — corroborates the need for independent cross-check.
+
+### Observations
+
+- **Independent second-pass value confirmed (again):** The concurrent reviewer's run cleared PR #24 initially, then self-corrected; this run confirmed the resolution. Two passes caught the SOW 4/4 fix commit.
+- **PR #16 is the only blocking MUST-FIX**: The fix is trivial (add "depends on #15" to body). Worker should resolve before next merge cycle.
+- **R9–R13 in PR #28**: No conflict to create here — just note they are pending. Do NOT increment version in this file until PR #28 merges (to avoid conflict).
+
+### Recommended merge sequence
+
+```
+#15 → #16 (after worker fixes body) → #17 → #18 → #19 → #20 → #21 → #23
+→ #28 (after user approves — activates R9–R13 on master)
+→ #24 → #25 → #26 → #27 (retarget to master after #24 merges)
+→ #22 (user-observed live run required before merge due to LIVE_OK gate)
+```
+
+---
