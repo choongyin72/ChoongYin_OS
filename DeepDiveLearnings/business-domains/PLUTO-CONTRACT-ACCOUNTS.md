@@ -62,9 +62,21 @@ render on an empty grid (captured for the V2 template; rows pending a confirmed 
    (or whichever company the DV row shows).
 3. GO. If still empty, the chosen account isn't under the picked Contract — walk the Contract/Contract
    Area level to the one that lists that account.
-4. **Open question / next step:** confirm whether a **"Contract Account Finder"** exists (analogous to
-   Stream/Well/Tank Finder) — it would resolve an account/object code → its full navigator path in one
-   step, the cleanest recipe. Not yet verified.
+4. **Finder follow-up — RESOLVED (2026-06-16):** there is **NO "Contract Account Finder"**. The EC
+   Finder family is **physical-asset only** — Stream / Well / Tank / Equipment / Document / Truck Ticket
+   / Cargo Planning Forecast / Test Device Finder. So the one-step "code → navigator path" trick that
+   works for streams/wells/tanks is **not available** for contract accounts. Resolve the scope instead by:
+   (a) **DB-first** — read the data-bearing `(DAYTIME, account, company)` combo straight from the
+   `DV_SCTR_ACC_*` view (the reliable method, §3), or (b) the **Contract Account / Contract Account List**
+   master screens (the config layer that lists accounts + their contract/owner attributes; the List
+   screen needs a navigator + GO to populate — not an auto-loading grid).
+
+## 4a. The wider result-screen family (scope context)
+The 4 screens in the 1004 pack are a **subset** — EC also exposes the daily result sliced by other
+dimensions: **Result – Dataset**, **Result – Profit Centre**, **Result – Profit Centre and Company**,
+**Result – Profit Centre and Dataset**, plus **Cargo Contract Account Status**, **Daily/Monthly/Yearly
+Contract Account Events**, and **Forecast –** variants. Confirm with the business whether any of these
+additional slices also need an upload tab (Question A in the validation email).
 
 ## 5. Structural (config) tables seen on COPSDEV
 `CNTRACC_PER_CPY_STATUS` (15,005), `CNTR_ACC_PERIOD_STATUS` (5,416), `CNTR_ACCOUNT_EVENT` (456),
