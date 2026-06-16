@@ -28,16 +28,16 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
-| `08fc271` | 2026-06-16 | fix: backfill R9â€“R13 to master (lost when PR #28 closed) |
+| `f74b987` | 2026-06-16 | chore: update scheduled_tasks.json lastFiredAt after 2026-06-17 06:00 review run |
+| `ae1af8b` | 2026-06-16 | review-log: 2026-06-17 skip — no new work |
+| `b5202e4` | 2026-06-16 | review: automated quality feedback 2026-06-16 (later run — PR #32) |
+| `3420920` | 2026-06-16 | docs(deep-dive): Pluto Sales Contract Account (SCTR_ACC) model + screen scoping |
+| `aa665ed` | 2026-06-16 | review: automated quality feedback 2026-06-16 (later run — PR #32) |
+| `f3dd809` | 2026-06-16 | docs(deep-dive): close the Contract Account Finder follow-up + result-family con… |
+| `1e66d37` | 2026-06-16 | docs(deep-dive): Pluto Sales Contract Account (SCTR_ACC) model + screen scoping |
+| `08fc271` | 2026-06-16 | fix: backfill R9–R13 to master (lost when PR #28 closed) |
 | `3d1b078` | 2026-06-16 | fix: backfill R9-R13 to master (PR #28 was closed, not merged) |
 | `055ba9b` | 2026-06-16 | N3 Monthly: status-process approve suite (built, dryrun-green, live gated) |
-| `e9fb3e8` | 2026-06-16 | fix(n3-monthly): address PR #22 NICE-TO-HAVE â€” month-range oracle/teardown + r… |
-| `ed17d6d` | 2026-06-16 | N1: Daily Gas Injection Flowline screen â€” RF suite + Bank-style bundle (live 4… |
-| `84f19cf` | 2026-06-16 | RF infra: EC_SLOWMO â€” env-gated slow-motion for headed runs |
-| `ba932ba` | 2026-06-16 | Skill: ec-screen-automation â€” reusable EC web automation cookbook (Playwright … |
-| `c893ce7` | 2026-06-16 | N1: Daily Water Injection Flowline screen â€” RF suite + Bank-style bundle (live… |
-| `2856992` | 2026-06-16 | docs(rf): correct ROBOT_CLAUDE.md to match the real ec-automation project |
-| `fa9e4b3` | 2026-06-16 | SME capstone: client-agnostic N-notify verification pattern |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
