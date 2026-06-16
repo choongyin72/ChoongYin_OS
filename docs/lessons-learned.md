@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v8** (R8 added 2026-06-15)
+> **Current rule version: v13** (R9–R13 added 2026-06-15; backfilled to master 2026-06-16 — PR #28 was closed before merging)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -16,6 +16,11 @@ _Worker sessions: read this before starting any automation work._
 | v6 | R6 | Check STAT_PROCESS_TASK.TABLE_ID + WHERE_FORMULA before claiming V→A testable | 2026-06-15 |
 | v7 | R7 | Page-object class docstrings must match the Variables section | 2026-06-15 |
 | v8 | R8 | Sync feature branch with master before every push (git merge origin/master) | 2026-06-15 |
+| v9 | R9 | PR body MUST use the EXACT 6 field headers; non-DB work → "DB ground-truth evidence: N/A (reason)" | 2026-06-15 |
+| v10 | R10 | Check toolbar New/Delete enabled-state BEFORE claiming Insert/Delete; disabled = UPDATE-ONLY screen | 2026-06-15 |
+| v11 | R11 | Declare CONTENT dependencies (`depends on #N`) even when the PR merges without a git conflict | 2026-06-15 |
+| v12 | R12 | Shared T1/T2 edit ⇒ run canary + 1 random sibling suite and cite it; never claim "no shared-file changes" | 2026-06-15 |
+| v13 | R13 | State ONE live N/N equal to the test-case count, identical across title/body/scorecard/README/SOW | 2026-06-15 |
 
 ---
 
@@ -223,5 +228,35 @@ PR #28 (concurrent reviewer) has a gap entry "backup_keyword_file.py MISSING (ve
 → #24 → #25 → #26 → #27 (retarget to master after #24 merges)
 → #22 (user-observed live run required before merge due to LIVE_OK gate)
 ```
+
+_Note: All PRs above have now been merged (2026-06-16). #22 merged with LIVE_OK gate intact. R9–R13 backfilled in this section below._
+
+---
+
+## 2026-06-15 — Rules R9–R13 (backfilled 2026-06-16)
+
+_These rules were validated during the 2026-06-15 afternoon review sessions (PRs #15–#27) but were only on the PR #28 branch, which was closed rather than merged. Backfilled directly to master 2026-06-16 to unblock the worker who was already applying them._
+
+### Rules (apply immediately, no exceptions)
+
+**R9 — PR body MUST use the EXACT 6 field headers**
+The headers must read literally: **What was built / Files touched / DB ground-truth evidence / Self-clean confirmed / Rules applied / Base branch**. Variant wording (`## What`, `## Files (GI-only delta)`, `## Verification`) fails the automated 6-field gate. For non-DB work (infra/docs), write `DB ground-truth evidence: N/A (<reason + the proof you do have>)`.
+_Live-validated: #19 missing 4 fields caught and fixed; #26 and #27 had header drift._
+
+**R10 — Check the toolbar New/Delete enabled-state BEFORE claiming or building Insert/Delete**
+If New and Delete are disabled, the screen is **UPDATE-ONLY** — the (object×day) row is pre-instantiated by EC batch processes. Never relabel value set/clear as record insert/delete. Build only the edit gestures; name test cases Set/Change/Clear, not Insert/Update/Delete.
+_Live-validated: IFLW (#24) was first built as "IUD" then corrected to update-only after user verified the disabled toolbar on-screen._
+
+**R11 — Declare CONTENT dependencies, not only git-conflict ones**
+If your doc/suite references a file (or keyword/table) that another OPEN PR introduces and that is not yet on master, mark **`depends on #N — merge after`** in the title/body — even when the two PRs merge without a git conflict. Verify by checking the referenced path exists on master; if it only exists on a sibling branch, the dependency is real.
+_Live-validated: #16 referenced `ec-mhm-sme.md` (introduced by #15) while explicitly claiming "not stacked."_
+
+**R12 — A shared-resource edit forces a canary + sibling run; never claim "no shared-file changes"**
+Run `git diff --stat` before writing the PR body. If it lists a shared T1/T2 file (`resources/*.resource`, `libraries/DbVerify.py`), you may **not** write "no shared-file changes / no canary needed" — even for a purely additive keyword. Run the canary pack PLUS one randomly chosen sibling suite live and cite both results.
+_Live-validated: #24 added `Clear Daily Status Cell` to `daily_status_grid.resource` while claiming the file was reused verbatim._
+
+**R13 — One consistent live N/N, equal to the test-case count, everywhere**
+The live pass count in the PR title, PR body, scorecard row, README, and SOW must be identical and must equal the number of test cases in the suite. Reconcile before raising the PR.
+_Live-validated: #24 said "3/3" in title/body over a 4-test suite that scorecard/README/SOW called "4/4". Fixed by worker via commit `aa9306f`._
 
 ---
