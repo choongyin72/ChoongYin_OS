@@ -1,0 +1,65 @@
+name: Daily Automated Review (06:00 AWST)
+
+# Fires at 22:00 UTC = 06:00 AWST (Perth, UTC+8)
+on:
+  schedule:
+    - cron: '0 22 * * *'
+  workflow_dispatch:          # Manual trigger from GitHub Actions UI
+
+permissions:
+  contents: write             # push review branch + commit docs
+  pull-requests: write        # post PR comments
+
+jobs:
+  daily-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # full history for git log in review
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "Automated Reviewer"
+          git config user.email "choong-yin.lee@quorumsoftware.com"
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Run daily review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN:       ${{ secrets.GITHUB_TOKEN }}
+          # Claude Code picks up GITHUB_TOKEN automatically for the GitHub MCP server
+        run: |
+          claude --dangerously-skip-permissions --print -p "$(cat <<'PROMPT'
+          Automated daily code review session (06:00 AWST). Review recent automation work and update lessons-learned.md.
+
+          Steps:
+          1. Run: git log --oneline -20 to see recent commits
+          2. Check the last entry date in docs/lessons-learned.md
+          3. Count commits since that date
+          4. Append a one-liner to docs/review-log.md in this format (always, even on skip days):
+             | YYYY-MM-DD 06:00 AWST | <N> new commits | <action: reviewed PRs / skipped — no new work> |
+          5. If fewer than 3 new commits: commit review-log.md with message 'review-log: YYYY-MM-DD skip — no new work', push, then stop.
+          6. Otherwise, use GitHub MCP list_pull_requests (state=open) to get ALL open PRs. Print the full list with PR numbers and titles before starting any review — confirm you have listed every open PR. Then review EACH one (do not skip any):
+             a. FIRST check the PR body contains all 6 required fields: What was built / Files touched / DB ground-truth evidence / Self-clean confirmed / Rules applied / Base branch. If any are missing, post a MUST-FIX comment listing the missing fields — do this before reading the diff.
+             b. Read the diff — if it is a trivial change (rename, config tweak, doc update) use low effort; if it contains logic changes use high effort
+             c. Before adding any gap entry, verify it against the actual filesystem (Glob/Grep) — do NOT infer from stale doc text. Mark unverified claims as 'unverified' rather than asserting them as fact.
+             d. Post findings as a review comment on that PR (MUST-FIX / NICE-TO-HAVE tagged)
+             e. Repeat for the next PR before moving on
+          7. After PR inline comments are posted, extract ACTIONABLE rules from the findings. New rules must be validated (code-derived rules must be marked ⚠️ code-derived, not live-validated).
+          8. Update the rules changelog table at the top of docs/lessons-learned.md (increment version, add new row). Then append a new dated section following the same format as existing entries (Rules, Observations, Gaps)
+          9. Update docs/automation-scorecard.md if any new patterns are now live or parked
+          10. Run: python scripts/update_status.py
+          11. Create a feature branch: git checkout -b review/feedback-YYYY-MM-DD
+          12. Commit all changed files with message: 'review: automated quality feedback YYYY-MM-DD'
+          13. Push branch and raise a PR targeting master
+          14. Do NOT merge — wait for user approval
+
+          Be specific and direct. Rules must be actionable — not 'consider X' but 'always do X' or 'never do Y'.
+          PROMPT
+          )"
