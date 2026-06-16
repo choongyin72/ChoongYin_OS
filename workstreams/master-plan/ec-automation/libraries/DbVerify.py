@@ -596,6 +596,54 @@ def restore_record_status_family(daytime, from_status="V", to_status="P"):
         conn.close()
 
 
+def record_status_family_count_month(month_date, status):
+    """MONTH-grain counterpart of record_status_family_count: total day-status rows whose DAYTIME
+    falls in the WHOLE calendar month of ``month_date`` (YYYY-MM-DD) with RECORD_STATUS = ``status``
+    across the day-status family. Use for MONTH-grain status processes whose lift has no WHERE filter
+    and may span every day of the month (a single-day count would miss the rest of the month). Day-
+    grain suites keep using record_status_family_count."""
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        total = 0
+        for t in _status_family_tables(cur):
+            cur.execute(
+                f"SELECT COUNT(*) FROM {t} "
+                f"WHERE TRUNC(DAYTIME,'MM') = TRUNC(TO_DATE(:d,'YYYY-MM-DD'),'MM') "
+                f"AND RECORD_STATUS = :s",
+                d=str(month_date), s=status,
+            )
+            total += cur.fetchone()[0]
+        return total
+    finally:
+        cur.close()
+        conn.close()
+
+
+def restore_record_status_family_month(month_date, from_status="A", to_status="P"):
+    """TEST-TEARDOWN ONLY (MONTH grain): restore RECORD_STATUS across EVERY day of the calendar month
+    of ``month_date`` over the day-status family — the month-grain counterpart of
+    restore_record_status_family, for a monthly status process whose lift may span the whole month
+    (a single-day restore would leave residual 'A' on the other days). Returns rows restored."""
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        total = 0
+        for t in _status_family_tables(cur):
+            cur.execute(
+                f"UPDATE {t} SET RECORD_STATUS = :ts "
+                f"WHERE TRUNC(DAYTIME,'MM') = TRUNC(TO_DATE(:d,'YYYY-MM-DD'),'MM') "
+                f"AND RECORD_STATUS = :fs",
+                ts=to_status, d=str(month_date), fs=from_status,
+            )
+            total += cur.rowcount
+        conn.commit()
+        return total
+    finally:
+        cur.close()
+        conn.close()
+
+
 def code_should_be_present_in_view(view, code):
     """Fail unless ``code`` appears in any string column of ``view`` (DB ground truth)."""
     if not _code_present(view, code):

@@ -5,6 +5,9 @@ import time
 import json
 from playwright.sync_api import sync_playwright
 
+# NOTE: this is the LOCAL SANDBOX host (ap-f0a7g341jn6d...), NOT the canonical app URL — this is a
+# read-only recon throwaway, so the sandbox host is intentional. The RF suite resolves its URL from
+# environment.py (EC_URL) per the repo convention; do not treat this literal as the app URL.
 URL = "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/"
 SCREEN = "Monthly Data Status Processes"
 

@@ -20,10 +20,11 @@ Documentation       T3 (screen) — "Monthly Data Status Processes" page object 
 ...                 worth of rows may lift; a large state change, reversible via DB-restore A→P):
 ...                   1. BLAST RADIUS — how many rows P1_FwdUpdPar1 lifts for the chosen month, and at
 ...                      which DAYTIME(s). Pick a scoped month with modest P volume first.
-...                   2. ORACLE GRAIN — the exact-equality check (data A-count == engine ROWS_UPDATED)
-...                      uses the single-date family count; if the lift spans a month, swap to a
-...                      month-range DbVerify helper. The ROBUST assertions below (ROWS_UPDATED>0 +
-...                      A-family delta>0) hold regardless and are the gating proof.
+...                   2. ORACLE GRAIN — RESOLVED: the baseline, A-delta oracle and teardown now use the
+...                      MONTH-range family helpers (Record/Restore ...Family Month), so they are correct
+...                      whether the no-WHERE lift spans one day or the whole month. The ROBUST assertions
+...                      (ROWS_UPDATED>0 + A-family delta>0) remain the gating proof. Still confirm the
+...                      BLAST RADIUS (#1) on the first observed run before claiming live N/N.
 ...                 Self-clean = DB-restore A→P across the day-status family (proven teardown pattern).
 
 Library             Browser
@@ -59,13 +60,14 @@ Monthly Live Run Gate
     ...    Monthly live run is GATED — rerun with --variable LIVE_OK:yes (observed; blast radius confirmed)
 
 Monthly Process Day Should Be Clean
-    [Documentation]    Baseline guard (DB ground truth): NO Approved ('A') rows exist on ${date}
-    ...    across the day-status family before the run, so the A-count delta after the run is exactly
-    ...    the monthly lift. A dirty baseline (leftover A) fails fast and honestly.
+    [Documentation]    Baseline guard (DB ground truth): NO Approved ('A') rows exist anywhere in
+    ...    ${date}'s MONTH across the day-status family before the run, so the A-count delta after the
+    ...    run is exactly the monthly lift — correct whether the no-WHERE monthly process lifts one day
+    ...    or the whole month. A dirty baseline (leftover A) fails fast and honestly.
     [Arguments]    ${date}=${STATUS_RUN_DATE}
-    ${a}=    Record Status Family Count    ${date}    A
+    ${a}=    Record Status Family Count Month    ${date}    A
     Should Be Equal As Integers    ${a}    ${0}
-    ...    msg=Expected 0 Approved rows on ${date} before the run (dirty baseline — a prior run left A)
+    ...    msg=Expected 0 Approved rows in ${date}'s month before the run (dirty baseline — a prior run left A)
 
 Run Monthly Forward Status Process
     [Documentation]    Capture the STAT_PROCESS_STATUS baseline (append-only log → a fresh run is a +1
@@ -73,7 +75,7 @@ Run Monthly Forward Status Process
     [Arguments]    ${date}=${STATUS_RUN_DATE}    ${process}=${STATUS_PROCESS_NAME}
     ${baseline}=    Status Process Run Count    ${STATUS_PROCESS_ID}    ${date}
     VAR    ${STATUS_RUN_BASELINE}    ${baseline}    scope=SUITE
-    ${a_base}=    Record Status Family Count    ${date}    A
+    ${a_base}=    Record Status Family Count Month    ${date}    A
     VAR    ${STATUS_A_BASELINE}    ${a_base}    scope=SUITE
     Submit Monthly Status Process Run    ${date}    ${process}
 
@@ -95,25 +97,27 @@ A New Monthly Run Should Be Logged
 Monthly Lift Should Approve
     [Documentation]    The N3 oracle at month grain (DB ground truth, robust): the engine lifted rows
     ...    (ROWS_UPDATED > 0) AND the data agrees — Approved ('A') rows across the day-status family
-    ...    INCREASED over the captured baseline. (Exact-equality data-count == ROWS_UPDATED uses the
-    ...    single-date family count; confirm/refine to a month-range count on the first observed live
-    ...    run — see the screen-doc gate. ROWS_UPDATED>0 + A delta>0 are the trustworthy gating proof.)
+    ...    INCREASED over the captured baseline. The A-count uses the MONTH-range family count, so it
+    ...    holds whether the no-WHERE monthly process lifts one day or the whole month. ROWS_UPDATED>0
+    ...    + A delta>0 are the trustworthy gating proof.
     [Arguments]    ${date}=${STATUS_RUN_DATE}
     ${rows}=    Latest Status Process Rows Updated    ${STATUS_PROCESS_ID}    ${date}
     Should Not Be Equal    ${rows}    ${None}
     ...    msg=No STAT_PROCESS_STATUS run row for ${STATUS_PROCESS_ID} on ${date} (the run never logged)
     Should Be True    ${rows} > 0
     ...    msg=STAT_PROCESS_STATUS ROWS_UPDATED=${rows} for ${STATUS_PROCESS_ID} on ${date} (expected > 0)
-    ${approved}=    Record Status Family Count    ${date}    A
+    ${approved}=    Record Status Family Count Month    ${date}    A
     Should Be True    ${approved} > ${STATUS_A_BASELINE}
     ...    msg=Approved count (${approved}) did not increase over baseline (${STATUS_A_BASELINE}) — no lift to A
 
 Restore Monthly Status Process Day
-    [Documentation]    Self-clean teardown (DB-restore A→P across the day-status family on ${date}) so
-    ...    the suite leaves the sandbox as found, then assert ZERO residual Approved rows. Idempotent.
+    [Documentation]    Self-clean teardown (DB-restore A→P across the day-status family for the WHOLE
+    ...    month of ${date}) so the suite leaves the sandbox as found even if the no-WHERE monthly
+    ...    process lifted every day of the month, then assert ZERO residual Approved rows in the month.
+    ...    Idempotent.
     [Arguments]    ${date}=${STATUS_RUN_DATE}
-    ${n}=    Restore Record Status Family    ${date}    A    P
-    Log    Self-clean: restored ${n} row(s) A→P on ${date}
-    ${residual}=    Record Status Family Count    ${date}    A
+    ${n}=    Restore Record Status Family Month    ${date}    A    P
+    Log    Self-clean: restored ${n} row(s) A→P across ${date}'s month
+    ${residual}=    Record Status Family Count Month    ${date}    A
     Should Be Equal As Integers    ${residual}    ${0}
-    ...    msg=Residual Approved rows on ${date} after self-clean (expected 0)
+    ...    msg=Residual Approved rows in ${date}'s month after self-clean (expected 0)
