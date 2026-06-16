@@ -78,6 +78,19 @@ Save Daily Status
     ...    the DB assertion — the spinner/optimistic grid is not proof.
     Save
 
+Clear Daily Status Cell
+    [Documentation]    Clear a measured cell (focus → select-all → Delete → Tab) so its change event
+    ...    stages an EMPTY value — the UI-driven DELETE of a daily value. After `Save Daily Status` this
+    ...    nulls the DB column (DB-proven on IFLW 2026-06-15: clear + Save → ON_STREAM_HRS NULL).
+    ...    The cell must currently hold a value (else no change event fires).
+    [Arguments]    ${cell_id}
+    Click    css=[id="${cell_id}"]
+    Keyboard Key    press    Control+A
+    Keyboard Key    press    Delete
+    Keyboard Key    press    Tab
+    Wait For Load State    networkidle    timeout=12s
+    Sleep    0.6s
+
 # GROUND-TRUTH DB assertion: each T3 resolves its object's OBJECT_ID via the DbVerify library
 # keyword `Object Id By Name  <name_source>  <name>` (WELL_VERSION / OV_STREAM / ...), then calls
 # `Day Status Value Should Be  <table>  <oid>  <date>  <column>  <expected>`. Kept in the T3 (not a
