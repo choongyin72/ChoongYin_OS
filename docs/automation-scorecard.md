@@ -7,6 +7,7 @@ _Last updated: 2026-06-15_
 |---------|---------|-------------|--------|-------|------|
 | N1 | Daily status edit-in-place | PWEL (WR.0001) | ✅ Live 3/3 | Reference impl | - |
 | N1 | Daily status edit-in-place | STRM (PO.0002) | ✅ Live 3/3 | | - |
+| N1 | Daily status edit-in-place | STRM-OIL (PO.0001) | ✅ Live 3/3 | Sibling of gas stream; "Oil"=generic-EC name for Pluto "Daily Liquid Stream Status"; C5=GRS_VOL; scope P1 @ 2023-01-01 (P1 Cond); reuses T2 verbatim (no shared-file change) | 16 Jun |
 | N1 | Daily status edit-in-place | IWEL | ✅ Live 3/3 | | - |
 | N1 | Daily status edit-in-place | EQPM | ✅ Live 3/3 | Non-iframed; C4=AVG_PRESS | 14 Jun |
 | N1 | Sub-daily status edit | PWEL | ✅ Live 3/3 | Datetime-keyed PK; UI↔DB unit conversion (~14.5x pressure) | 14 Jun |
