@@ -22,6 +22,7 @@ _Last updated: 2026-06-15_
 | N3 | Status process V→A | HA.0001 Daily | ⏸ Parked | STIM_DAY_VALUE empty (0 rows); WELL_FLUID_ANALYSIS needs WHERE vars + data/SME — next: seed data | 15 Jun |
 | N3 | Status process V→A | HA.0001 Monthly | 🔵 Build-ready | Thin new T3 for Monthly Data Status Processes screen | 14 Jun |
 | N3 | Status process →A (month) | Monthly Data Status Processes (P1_FwdUpdPar1) | 🔵 Built, dryrun-green, live GATED | Screen model verified live (single Date G:0 + Process G:1); target IWEL_DAY_STATUS 19,659 P rows (data EXISTS); suite `monthly_status_process_run.robot` + thin T3; live behind `--variable LIVE_OK:yes` (no-WHERE → large reversible mutation; confirm blast radius + oracle grain on first observed run) | 15 Jun |
+| N1 | Composition edit (per-component) | STRM-GAS-COMP (PO.0020) | ✅ Live 3/3 | NEW pattern: per-COMPONENT rows (not object×day); 8-field nav + `go_button:form:B`; grid loads on Analysis Status=Approved + Sampling=*Spot; edit Methane MOL_PCT (COMPONENT_NO=C1) → `DV_STRM_COMP_ANALYSIS`; Ethane(C2) guard proves no normalize-on-save; new append-only DbVerify `component_value_should_be`; target P1 S038_AGA3_1985_AGA8_Y_1 @ 2011-11-01 | 17 Jun |
 
 ### Key Learnings
 - **UI↔DB unit conversion**: UI(psi) ↔ DB(bar), factor ~14.5038. Naive "DB == typed" oracle fails on pressure/rate cols.
