@@ -13,7 +13,7 @@ $trigger  = New-ScheduledTaskTrigger -Daily -At "06:00"
 $settings = New-ScheduledTaskSettingsSet `
     -ExecutionTimeLimit  (New-TimeSpan -Minutes 60) `
     -StartWhenAvailable `
-    -WakeToRun $false
+    -WakeToRun:$false
 
 Register-ScheduledTask `
     -TaskName "ClaudeOS-DailyReview" `
