@@ -9,9 +9,10 @@ $action     = New-ScheduledTaskAction `
 
 # 06:00 daily (machine must be set to AWST / Perth timezone)
 $trigger  = New-ScheduledTaskTrigger -Daily -At "06:00"
+# -StartWhenAvailable: run ASAP if the machine was off at the scheduled trigger time
 $settings = New-ScheduledTaskSettingsSet `
     -ExecutionTimeLimit  (New-TimeSpan -Minutes 60) `
-    -StartWhenAvailable              `   # run ASAP if machine was off at trigger time
+    -StartWhenAvailable `
     -WakeToRun $false
 
 Register-ScheduledTask `
