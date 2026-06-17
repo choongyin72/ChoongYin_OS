@@ -95,3 +95,33 @@ Daily Water Injection Flowline → `EC_Production/Well_and_Reservoir/Daily/Group
 ## 8. Git
 Feature-branch + PR into master; never commit to master or self-merge; stage only this session's files
 by explicit path. Client repos under `C:\DEV\GIT\` are READ-ONLY.
+
+## 9. Recurring problems → proven fix (SME troubleshooting matrix)
+The situations that recur on EC screens and their already-solved fix — reach for these instead of
+re-discovering. Sourced from the live-proven PRs (#9–#40) + rules R1–R14. **Don't re-derive a fix that
+is already here.**
+
+| # | Symptom (what you see) | Cause | Proven fix | Source |
+|---|---|---|---|---|
+| 1 | Navigator GO loads an **empty grid** though the filters look set | A filter dropdown sits on the first/default option (e.g. composition Analysis Status `*New`) or doesn't match the real record | Query the target record's real attributes from the DB first, then set EVERY filter to MATCH (composition: Analysis Status=**Approved**, Sampling=**\*Spot**) before GO | comp recon 2026-06-17; navigator-GO |
+| 2 | GO click does nothing / hits the wrong element | The GO id varies by screen; a hidden default-submit can also match | GO ids seen: `button:form:B` (daily-status), **`go_button:form:B`** (composition), `navButton:form:B` (object/Stream Finders). Confirm the **visible** GO; recon dumps visible `a[id$=':B']` | reference navigator-GO; verify-visible-locator |
+| 3 | Cell edit doesn't persist after Save | `fill()`/synthetic events don't fire the change/partial-submit; an unchanged value stages nothing | Real keystrokes + **Tab** (`Type Cell By Id`); the value MUST differ from what the cell shows | T2; #11/#12 |
+| 4 | The first editable-looking column won't persist (DB unchanged) | It's a **derived/calculated** cell (e.g. C1 "On Strm[hr]" on sub-daily) | Edit→diff per screen; switch to the proven-editable measured column, confirm by DB **before** building | #12; R7 |
+| 5 | Typed value ≠ DB value (off by ~14.5 or a ratio) | UI shows CONFIGURED units; DB stores SI/base (pressure psi↔bar ×14.5038, rates) | Derive factor = UI_before/DB_before; assert DB≈typed/factor. **Multiplicative only** (temp/offset needs the formula). Unitless (ON_STREAM_HRS, GRS_VOL) = direct equality | R1; ui-db-unit-conversion; #11/#12 |
+| 6 | A reference dropdown is empty mid-flow (but not standalone) | The form's **Start Date predates the seed objects** (object-start-date = version filter) | Use a data-bearing date (e.g. 2003-01-01+) on screens with reference dropdowns | object-start-date-version |
+| 7 | Dropdown pick flaky / typed value rejected | Autocomplete dd; labels can have leading/double spaces; a re-render closes the panel | Click chevron → pick `tr[data-item-label]` by **normalize-space**; one Escape+reopen retry; never type | T1 Select EC Dropdown Option |
+| 8 | Targeting the wrong grid row | Grid row order is not predictable | Resolve the row by object **NAME** → 0-based index; never hardcode the row | T2 |
+| 9 | Save says success but data didn't persist | UI is optimistic / silently rejects; status processes are **async** | Always assert the **DB** after Save; for N3 poll `STAT_PROCESS_STATUS` | independent-proof; N3 |
+| 10 | About to label a screen IUD / build insert+delete | Daily-status & similar grids are **UPDATE-ONLY** (New/Delete disabled; row batch-instantiated) | Check the toolbar New/Delete enabled-state FIRST; build set/change/clear only; clear+Save = NULL (update-to-null, not a record delete) | R10; #24/#27 |
+| 11 | Numeric compare fails on a formatted cell | EC formats with thousands separators (`2,949.9`) | Strip commas before compare / before re-typing on revert | T2 |
+| 12 | DB verify fails "table not found" | Some objects have **no base table, only a `DV_` view** (e.g. TANK_DAY_DIP_STATUS) | Verify through the `DV_` view (SELECT works) | #39 |
+| 13 | `Get Table Rows` returns empty though the grid has data | The grid's cells are all inputs (no text nodes) | Count `<tr>` directly / read input values for presence | #12 |
+| 14 | A status process "did nothing" | Down: **silent WAITING** (no error, no `STAT_PROCESS_STATUS` row) = worker down/STANDBY; **ORA-06569** = worker ran, empty scope | Distinguish the two; ORA-06569 ⇒ fix scope/date, not infra | R5 |
+| 15 | A status process has **no WHERE filter** | It can lift a large set (whole month) | Gate the live run behind a flag (`LIVE_OK`), observe the first run, DB-restore (reversible) teardown; match oracle grain (month vs day) | #22; R4 |
+| 16 | Screen content cramped / treeview blocks the view | — | After the screen loads, click `screenToolbar:form:minmaxMenu` to expand; launch maximised | skill §2 |
+| 17 | Playwright can't find the nav fields | They're inside a content iframe | Poll frames for the one containing `nav:form:G:0:R:1:C:0:da_input` (`dashboard.jsf?top=false`) | skill §2 |
+| 18 | Object/Stream Finder returns empty scope (PU/Area/Facility) | Finder scrape is flaky | Resolve via the Finder; on empty, fall back to the known scope for that family (e.g. P1 → P1 Production Unit/Area/Facility 1) | comp recon 2026-06-17 |
+| 19 | Console crashes / UnicodeEncodeError on Windows | cp1252 can't encode `→` etc. | ASCII only in prints (`->` not `→`); run scripts with `py -X utf8` | skill §2 |
+| 20 | Editing a shared T1/T2/`DbVerify.py` file | Risk of breaking other suites + merge conflicts | Back up to `.keyword_backups/`; **append-only** (no signature change); dryrun ALL + canary + 1 random sibling, cite both | R12; #24/#26 |
+| 21 | Self-clean for a **null-original** cell | A UI "revert to empty" can pop a save-confirm modal | Use the `DbVerify` reset/restore teardown (the only DB write) to return to the known state; the UI→DB write stays the proof | #11; DbVerify |
+| 22 | Two PRs touch the same shared doc (scorecard/registry/lessons) | Merge collision | **APPEND-ONLY** (new rows/sections at the end); stack dependent PRs (`depends on #N`) | R11/R12; #35→#37 |
