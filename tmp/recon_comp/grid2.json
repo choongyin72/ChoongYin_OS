@@ -1,0 +1,781 @@
+{
+  "scope": {
+    "Production Unit": "P1 Production Unit",
+    "Area": "P1 Area",
+    "Facility Class 1": "P1 Facility 1"
+  },
+  "status_opts": [
+    "*New",
+    "Approved",
+    "Rejected",
+    "Information"
+  ],
+  "sampling_opts": [
+    "*Spot",
+    "Day Sampler",
+    "Month Sampler",
+    "Calc Monthly Composite Analysis",
+    "Calculated comp"
+  ],
+  "tried": [
+    {
+      "status": "*New",
+      "go": "go_button:form:B",
+      "rows_with_inputs": 0,
+      "cells": 0
+    },
+    {
+      "status": "Approved",
+      "go": "go_button:form:B",
+      "rows_with_inputs": 14,
+      "cells": 96
+    }
+  ],
+  "loaded": {
+    "status": "Approved",
+    "rows": [
+      {
+        "label": "",
+        "inputs": [
+          {
+            "id": "analysis:form:T:0:C0_in",
+            "type": "text",
+            "val": "1000",
+            "ro": true,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C1_in",
+            "type": "text",
+            "val": "P1 S038_AGA3_1985_AGA8_Y_1",
+            "ro": true,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C2_in",
+            "type": "text",
+            "val": "2011-11-01 00:00",
+            "ro": true,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C3_da_input",
+            "type": "text",
+            "val": "2011-11-01",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C4_dd_input",
+            "type": "text",
+            "val": "Approved",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C5_dd_input",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C6_in",
+            "type": "text",
+            "val": "Spot",
+            "ro": true,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C7_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C8_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C9_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C10_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C11_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C12_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C13_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C14_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C15_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C16_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C17_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C18_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C19_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C20_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C21_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C22_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C23_in",
+            "type": "text",
+            "val": "50.62",
+            "ro": true,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C24_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C25_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C26_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C27_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C28_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C29_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C30_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C31_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "analysis:form:T:0:C32_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "Nitrogen",
+        "inputs": [
+          {
+            "id": "component_set:form:T:0:C1_in",
+            "type": "text",
+            "val": "1.84",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:0:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:0:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:0:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:0:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "Carbon Dioxide",
+        "inputs": [
+          {
+            "id": "component_set:form:T:1:C1_in",
+            "type": "text",
+            "val": "0.00",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:1:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:1:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:1:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:1:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "Hydrogen Sulfide",
+        "inputs": [
+          {
+            "id": "component_set:form:T:2:C1_in",
+            "type": "text",
+            "val": "2.60",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:2:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:2:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:2:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:2:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "Methane",
+        "inputs": [
+          {
+            "id": "component_set:form:T:3:C1_in",
+            "type": "text",
+            "val": "70.68",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:3:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:3:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:3:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:3:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "Ethane",
+        "inputs": [
+          {
+            "id": "component_set:form:T:4:C1_in",
+            "type": "text",
+            "val": "14.14",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:4:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:4:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:4:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:4:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "Propane",
+        "inputs": [
+          {
+            "id": "component_set:form:T:5:C1_in",
+            "type": "text",
+            "val": "6.74",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:5:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:5:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:5:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:5:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "i-Butane",
+        "inputs": [
+          {
+            "id": "component_set:form:T:6:C1_in",
+            "type": "text",
+            "val": "0.81",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:6:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:6:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:6:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:6:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "n-Butane",
+        "inputs": [
+          {
+            "id": "component_set:form:T:7:C1_in",
+            "type": "text",
+            "val": "1.90",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:7:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:7:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:7:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:7:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "i-Pentane",
+        "inputs": [
+          {
+            "id": "component_set:form:T:8:C1_in",
+            "type": "text",
+            "val": "0.38",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:8:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:8:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:8:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:8:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "n-Pentane",
+        "inputs": [
+          {
+            "id": "component_set:form:T:9:C1_in",
+            "type": "text",
+            "val": "0.43",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:9:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:9:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:9:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:9:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "Hexane",
+        "inputs": [
+          {
+            "id": "component_set:form:T:10:C1_in",
+            "type": "text",
+            "val": "0.26",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:10:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:10:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:10:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:10:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "C7+",
+        "inputs": [
+          {
+            "id": "component_set:form:T:11:C1_in",
+            "type": "text",
+            "val": "0.22",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:11:C2_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:11:C3_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:11:C4_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:11:C5_in",
+            "type": "text",
+            "val": "",
+            "ro": false,
+            "dis": false
+          }
+        ]
+      },
+      {
+        "label": "Sum:",
+        "inputs": [
+          {
+            "id": "component_set:form:T:ft_COMP_MOL_PCT_in",
+            "type": "text",
+            "val": "100.00",
+            "ro": true,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:ft_COMP_WT_PCT_in",
+            "type": "text",
+            "val": "0.00",
+            "ro": true,
+            "dis": false
+          },
+          {
+            "id": "component_set:form:T:ft_COMP_MOL_ENERGY_in",
+            "type": "text",
+            "val": "0.00",
+            "ro": true,
+            "dis": false
+          }
+        ]
+      }
+    ]
+  }
+}
