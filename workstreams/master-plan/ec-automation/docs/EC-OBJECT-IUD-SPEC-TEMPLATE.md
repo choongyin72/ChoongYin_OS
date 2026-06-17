@@ -10,8 +10,10 @@
 ---
 
 ## 0. How to use (the procedure this template drives)
-1. **DB-first:** find the screen's view + base table, row count, and whether it is **date-effective**
-   (has `OBJECT_START_DATE`/`END_DATE`/`OBJECT_ID` ⇒ **OV**; a flat physical table with a numeric PK ⇒ **TV**).
+1. **INPUT = the screen name.** Run `SCREEN="<name>" py tmp/scripts/resolve_ec_screen.py` (or the §1
+   queries) to **auto-derive** class_name, screen type (`OBJECT`→OV / `TABLE`→TV), date-effective +
+   delete method (`VERSIONED`→End=Start / else physical), and base/version/view — from EC config tables.
+   No hand-entry of metadata.
 2. **Finder/Toolbar/Nav recon (live):** confirm the navigator (none / date / cascade / BU+GO), the
    **mandatory (yellow) fields**, and the **toolbar New/Delete enabled state** (R10 — disabled Delete ⇒
    delete via End=Start for OV).
@@ -20,20 +22,36 @@
 
 ---
 
-## 1. Screen identity
-| Field | Value |
+## 1. Screen identity — INPUT = the screen name ONLY; everything else is DERIVED
+**The single manual input is the EC screen name (the on-screen LABEL).** Run
+`SCREEN="<screen name>" py tmp/scripts/resolve_ec_screen.py` (or the two SQL queries below) to auto-derive
+the rest from EC's config tables — do NOT hand-enter them.
+
+| Field | How it's derived |
 |---|---|
-| Screen name (search/tv-link text) | `[Screen Name]` |
-| Treeview path (Maintain Treeview / tooltip) | `Configuration > [Group] > [Screen]` |
-| Screen code (As-Built, if any) | `[CO.xxxx / —]` |
-| **Screen type** | `[OV (Manage-Object) | OV-GM (groupmodel+nav) | TV (Table-class) | PC (parent-child)]` |
-| DB view (for verify) | `[OV_xxx / ctrl_xxx / t_xxx]` |
-| Base table(s) | `[XXX / XXX_VERSION]` |
-| Screen URL fragment | `[…/manage_object_nav/CLASS_NAME/XXX.jsf  | …/<module>/<screen>]` |
-| Date-effective? | `[yes ⇒ OV delete = End=Start | no ⇒ TV physical delete]` |
+| **Screen name** (LABEL) | **← your only input** (e.g. `Contract Area`) |
+| class_name | `class_property_cnfg.LABEL` (query 1). If several rows return, pick the real class — skip `_ROWSORT` / `_TEST` / `AUTOSAVE` variants |
+| **Screen type** | `class_cnfg.CLASS_TYPE` → **`OBJECT` ⇒ OV (Manage-Object)** · **`TABLE` ⇒ TV (Table-class)** |
+| **Date-effective? + DELETE method** | `class_cnfg.TIME_SCOPE_CODE` → **`VERSIONED` ⇒ date-effective ⇒ DELETE = End Date = Start Date**; `EVENT`/`NONE` ⇒ **physical** row delete |
+| Base table / version table | `class_cnfg.DB_OBJECT_NAME` / `DB_OBJECT_ATTRIBUTE` |
+| DB view (for verify) | `OV_<class_name>` for OV (convention; resolver confirms via `all_views`) · the base table for TV |
+| Treeview path (folder placement only) | from the **Maintain Treeview** screen / tv-link tooltip — the only non-DB lookup |
+
+**The two derivation queries** (exactly what `resolve_ec_screen.py` runs):
+```sql
+-- (1) screen LABEL -> class_name
+SELECT t.class_name FROM class_property_cnfg t
+ WHERE t.property_code = 'LABEL' AND lower(t.property_value) = '<screen name>';
+-- (2) class -> CLASS_TYPE (OV/TV) / TIME_SCOPE_CODE (date-effective) / base + version table
+SELECT t.* FROM class_cnfg t WHERE t.class_name IN (
+  SELECT class_name FROM class_property_cnfg
+   WHERE property_code = 'LABEL' AND lower(property_value) = '<screen name>');
+```
+_(No "Screen URL fragment" — the screen is opened by name via the search box, never by URL, so it's dropped.)_
 
 ## 2. Recon checklist (record the answers)
-- [ ] DB view + base table found; **row count** = `[n]`; date-effective = `[yes/no]`.
+- [x] **Auto-derived from the screen name** (§1 resolver): class_name · type (OV/TV) · date-effective + delete method · base/version table · verify view. **No hand-entry.**
+- [ ] **row count** of the verify view = `[n]` (resolver / DbVerify).
 - [ ] **Toolbar New enabled?** `[yes/no]`  · **Toolbar Delete enabled?** `[yes/no]` (disabled ⇒ OV End=Start).
 - [ ] Navigator: `[none | date filter | cascade PU→Area→… | Business Unit + GO]`. GO id = `[button:form:B | go_button:form:B | navButton:form:B | n/a]`.
 - [ ] **Mandatory (yellow) fields** on the insert form/row: `[list]` (yellow `rgb(252,249,192)`).

@@ -26,8 +26,11 @@ may already be characterised).
 **1. Branch + scope.** `git checkout -b feature/<screen-slug>-iud origin/master`. Read the registry row if present.
 
 **2. Recon → fill the spec template (§1–§6).** DB-first → Finder/Toolbar/Nav → DOM:
-   - DB: view + base table, row count, **date-effective?** (`OBJECT_START_DATE/END_DATE/OBJECT_ID` ⇒ **OV**;
-     flat PK table ⇒ **TV**). Pick the **type** → choose the IUD block.
+   - **DB metadata is auto-derived from the screen NAME only** — run
+     `SCREEN="<name>" py tmp/scripts/resolve_ec_screen.py` (queries `class_property_cnfg` LABEL → class_name,
+     then `class_cnfg`): **CLASS_TYPE `OBJECT`⇒OV / `TABLE`⇒TV**; **TIME_SCOPE_CODE `VERSIONED`⇒date-effective
+     (End=Start delete) / else physical**; base=`DB_OBJECT_NAME`, version=`DB_OBJECT_ATTRIBUTE`, view=`OV_<class>`.
+     Pick the **type** → IUD block. Then row count + the LIVE recon below.
    - Live: **toolbar New/Delete enabled** (R10); navigator (none/date/cascade/BU+GO); **mandatory (yellow)
      fields**; reference dds + sources; grid id + row-cell pattern + form/field ids.
    - Write the filled spec as `screens/<menu path>/<Screen>/<screen>_sow.md`.
