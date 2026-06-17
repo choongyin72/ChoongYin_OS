@@ -25,8 +25,8 @@ ${SENTINEL_VALUE}       1234.5
 TC01 Grid Loads For Scope
     [Documentation]    The cascade + GO renders the pre-instantiated tank rows for the day.
     [Tags]    smoke
-    ${rows}=    Get Table Rows    ${STREAM_STATUS_GRID}
-    Should Not Be Empty    ${rows}    msg=No tank rows rendered for the navigator scope/date
+    ${n}=    Tank Grid Row Count
+    Should Be True    ${n} > 0    msg=No tank rows rendered for the navigator scope/date
     Capture Step    po000502_tc01_grid_loaded
 
 TC02 Edit Liquid Dip And Persist

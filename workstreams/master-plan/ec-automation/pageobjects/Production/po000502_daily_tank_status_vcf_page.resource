@@ -30,13 +30,14 @@ ${NAV_PU}                   G:1
 ${NAV_AREA}                 G:2
 ${NAV_FCTY_CLASS_1}         G:3
 # Working test scope (sandbox P1 demo; renders the tank rows on this date)
-${SCOPE_DATE}               2014-01-01
+${SCOPE_DATE}               2011-01-01
 ${SCOPE_PU}                 P1 Production Unit
 ${SCOPE_AREA}               P1 Area
 ${SCOPE_FCTY_CLASS_1}       P1 Facility 1
 # Target tank (resolved by NAME -> row) + cell column + DB column.
-# VERIFIED LIVE 2026-06-17: C4 = Liquid Dip = DV_TANK_DAY_DIP_STATUS.LIQUID_DIP_LEVEL (P1 VCF-CTSh T14 = 476.707).
-${TARGET_STREAM}            P1 VCF-CTSh T14 12.1.1
+# VERIFIED LIVE 2026-06-17: C4 = Liquid Dip = DV_TANK_DAY_DIP_STATUS.LIQUID_DIP_LEVEL.
+# P1 T006 PO.0005.02 renders at row 0 of this scope/date with dip 150.000 (the screen's demo tank).
+${TARGET_STREAM}            P1 T006 PO.0005.02
 ${CELL_COLUMN}              C4
 ${TARGET_DB_COLUMN}         LIQUID_DIP_LEVEL
 ${TARGET_CELL}              ${EMPTY}
@@ -54,15 +55,31 @@ Open Daily Tank Status VCF Screen
     Set Navigator Filter    ${NAV_AREA}    ${SCOPE_AREA}
     Set Navigator Filter    ${NAV_FCTY_CLASS_1}    ${SCOPE_FCTY_CLASS_1}
     Reload Daily Status Grid
-    ${idx}=    Daily Status Row Index For    ${STREAM_STATUS_GRID}    ${TARGET_STREAM}
+    ${idx}=    Tank Row Index By Name    ${TARGET_STREAM}
     Should Be True    ${idx} >= 0    msg=Tank '${TARGET_STREAM}' not found in the loaded grid
     VAR    ${TARGET_CELL}    dip_table:form:T:${idx}:${CELL_COLUMN}_in    scope=SUITE
+
+Tank Grid Row Count
+    [Documentation]    Count the rendered tank rows by their C1 (Tank Name) input — the grid renders
+    ...    names as inputs, so a textContent-based row count (Get Table Rows) reports 0 falsely.
+    ${n}=    Evaluate JavaScript    ${None}
+    ...    () => document.querySelectorAll("input[id*='dip_table:form:T:'][id$=':C1_in']").length
+    RETURN    ${n}
+
+Tank Row Index By Name
+    [Documentation]    Tank-specific row resolver: the tank grid renders the Tank Name as an EDITABLE
+    ...    INPUT (C1), so `tr.textContent` (used by the shared Daily Status Row Index For) can't see it.
+    ...    Match the ${name} against the C1 input VALUE instead. Returns the 0-based row index, or -1.
+    [Arguments]    ${name}
+    ${idx}=    Evaluate JavaScript    ${None}
+    ...    () => { let i=-1; document.querySelectorAll("input[id*='dip_table:form:T:'][id$=':C1_in']").forEach(inp=>{ const m=inp.id.match(/:T:(\\d+):C1_in$/); if(m && (inp.value||'').includes('${name}')) i=parseInt(m[1]); }); return i; }
+    RETURN    ${idx}
 
 Reload And Find Target Stream
     [Documentation]    Re-GO and re-resolve the tank's cell (use between Save and the next edit;
     ...    a fresh grid avoids the post-commit state where Save won't re-arm).
     Reload Daily Status Grid
-    ${idx}=    Daily Status Row Index For    ${STREAM_STATUS_GRID}    ${TARGET_STREAM}
+    ${idx}=    Tank Row Index By Name    ${TARGET_STREAM}
     Should Be True    ${idx} >= 0    msg=Tank '${TARGET_STREAM}' not found after reload
     VAR    ${TARGET_CELL}    dip_table:form:T:${idx}:${CELL_COLUMN}_in    scope=SUITE
 
