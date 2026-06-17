@@ -68,12 +68,14 @@ with sync_playwright() as p:
     if mm.count() and mm.first.is_visible():
         mm.first.click(); ajax(page)
 
-    # 1) toolbar New/Delete enabled-state (default expectation: enabled)
-    tb = page.evaluate("""() => { const out={}; document.querySelectorAll('li.ui-menu-parent, a.ui-menuitem-link').forEach(li=>{
-        const t=(li.innerText||li.title||'').toLowerCase(); const cls=li.className+' '+(li.querySelector('*')?li.className:'');
-        const disabled=/ui-state-disabled|ui-submenu-state-disabled/.test(li.outerHTML);
-        if(/insert|new/.test(t)) out.insert = disabled?'DISABLED':'enabled';
-        if(/delete/.test(t))     out.delete = disabled?'DISABLED':'enabled'; }); return out; }""")
+    # 1) toolbar New/Delete enabled-state (detect by ICON class - works for text menus AND icon-only buttons)
+    tb = page.evaluate("""() => { const out={};
+        const find = (...cs) => { for(const c of cs){ const e=document.querySelector('span.'+c)||document.querySelector('.'+c); if(e) return e; } return null; };
+        const dis = e => { const li=e&&e.closest('li,a'); return li ? /ui-state-disabled|ui-submenu-state-disabled/.test(li.outerHTML) : false; };
+        const ins=find('ui-icon-insert','ui-icon-add'); const del=find('ui-icon-delete','ui-icon-remove','ui-icon-trash');
+        if(ins) out.insert = dis(ins)?'DISABLED':'enabled';
+        if(del) out.delete = dis(del)?'DISABLED':'enabled';
+        return out; }""")
     print("toolbar:", tb, " (default assumption: enabled; only flag the rare DISABLED)")
 
     # 2) navigator fields + which are mandatory (yellow) + GO button
@@ -119,8 +121,33 @@ with sync_playwright() as p:
         except Exception as e:
             print("  insert-form scan err:", str(e)[:70])
     else:
-        print("\nTV grid cells (row 0):")
+        # TV: existing row 0 = column pattern + sample values (these are FILLED -> white, correctly not mandatory)
+        print("\nTV existing row 0 (column pattern + sample values; filled = white, expected):")
         for f in dump_inputs(page, ":form:T:0:C"):
-            print(f"   {f['id']:45s} mand={f['mandatory']!s:5s} val={f['val']}")
+            print(f"   {f['id']:45s} val={f['val']}")
+        # to read MANDATORY: click Insert '+' -> a fresh BLANK row (yellow = mandatory & empty)
+        cell_prefix = (grid or "table:form:T_data").replace("_data", "")  # 'table:form:T'
+        try:
+            page.locator("xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]").first.hover()
+            page.wait_for_timeout(900)
+            links = page.locator("xpath=//ul[contains(@class,'ui-menu-child')]//li//a")
+            for i in range(links.count()):
+                if links.nth(i).is_visible() and (links.nth(i).text_content(timeout=800) or "").strip():
+                    links.nth(i).click(); break
+            ajax(page)
+        except Exception as e:
+            print("  TV insert err:", str(e)[:70])
+        blank = page.evaluate("""(args) => { const [pfx,Y]=args; const rows={};
+            document.querySelectorAll("[id^='"+pfx+":'][id$='_in']").forEach(e=>{
+              const m=e.id.match(/T:(\\d+):C(\\d+)/); if(!m) return;
+              (rows[+m[1]] ||= []).push({id:e.id, col:+m[2], val:e.value, mandatory:getComputedStyle(e).backgroundColor===Y}); });
+            for(const r of Object.keys(rows)){ if(rows[r].every(c=>c.val==='')) return rows[r]; } return null; }""",
+            [cell_prefix, YELLOW])
+        print("\nTV blank Insert row (yellow = mandatory & empty):")
+        if blank:
+            for c in blank:
+                print(f"   {c['id']:45s} mand={c['mandatory']!s:5s}")
+        else:
+            print("   (no blank insert row captured)")
     b.close()
 print("\nDONE (read-only scan; nothing saved). Fills spec sec.2/sec.3.")
