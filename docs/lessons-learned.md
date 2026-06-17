@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v14** (R14 added 2026-06-17)
+> **Current rule version: v15** (R15 added 2026-06-17)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -22,6 +22,7 @@ _Worker sessions: read this before starting any automation work._
 | v12 | R12 | Shared T1/T2 edit ⇒ run canary + 1 random sibling suite and cite it; never claim "no shared-file changes" | 2026-06-15 |
 | v13 | R13 | State ONE live N/N equal to the test-case count, identical across title/body/scorecard/README/SOW | 2026-06-15 |
 | v14 | R14 | Skip-day check must verify BOTH < 3 new commits AND 0 open PRs; open PRs alone trigger a full review | 2026-06-17 |
+| v15 | R15 | PowerShell backtick line-continuation must be the LAST character on the line — no trailing space, comment, or text | 2026-06-17 |
 
 ---
 
@@ -287,5 +288,35 @@ _Live-validated: 4 PRs (#34–#37, N1 stream siblings + gap audit) were missed b
 | Scheduled task step 5 — skip logic now fixed (R14 + task update this PR) | Reviewer | ✅ Fixed |
 | Monthly stream/well N1 variants — not attempted | Worker | 🟢 Low |
 | Folder-split (legacy flat `Production/` vs menu-mirrored `EC_Production/`) — #35/#36/#37 use flat `Production/` (consistent with existing siblings, not new menu convention) | Worker (follow-up migration) | 🟢 Low |
+
+---
+
+## 2026-06-17 — Manual Review (7 open PRs #39–#45)
+
+_User-triggered manual review mid-session (Windows Task Scheduler alternative being discussed). Reviewed 7 open PRs: #39 N1 Tank VCF, #40 Comp SME doc, #41 SME troubleshooting matrix, #42 Comp Phase 1 recon, #43 Comp suite (PO.0020), #44 remove GH Actions, #45 Lab lineage. One MUST-FIX found and fixed (PR #44)._
+
+### Rules (apply immediately, no exceptions)
+
+**R15 — PowerShell backtick line-continuation must be the LAST character on the line** ⚠️ _code-derived — caught in PR #44 diff review; not live-tested on Windows_
+In PowerShell, the backtick `` ` `` only acts as a line-continuation when it is followed immediately by a newline — no trailing space, no inline comment (`# ...`), nothing. Any character after the backtick makes it a literal character, silently breaking the continuation. The `New-ScheduledTaskSettingsSet` call in `install-daily-review-task.ps1` had `-StartWhenAvailable \`   # comment` which broke the parameter chain; fixed by moving the comment to its own line above the command.
+
+### Observations
+
+- **N1 Tank variant (PR #39):** Tank Name is an INPUT (not textContent) so `Get Table Rows` counts 0 falsely. Two new T3-only keywords (`Tank Row Index By Name`, `Tank Grid Row Count`) solve it using JS against C1 input values. Pattern: when the row-identifier column is an editable input, resolve by input VALUE not textContent.
+- **Composition is a new pattern grain (PR #43):** Per-COMPONENT rows (not object×day). Requires a component-keyed DbVerify keyword (`component_value_should_be`). The navigator has 8 fields; the grid only loads when Analysis Status + Sampling Method MATCH the analysis. Pattern is now live-proven; PO.0019 / WR.0010.01 are near-turnkey T3 reuse.
+- **Ethane guard pattern (PR #43):** Asserting a SECOND untouched component after Save proves the screen did NOT silently run Normalize-on-save. Use this guard for any composition edit suite.
+- **SME troubleshooting matrix (PR #41):** 22-row matrix added to ec-screen-automation skill. Every previously re-discovered EC problem now has a one-line proven fix + source citation. Reach for it before re-deriving.
+- **Lab/sample lineage (PR #45):** The composition screens are the consuming end; `SAMPLE_REGISTRATION` is the upstream hub (all `LAB_*` FK→ it). P→V→A lifecycle here = same lifecycle as N3 status-process suites.
+- **GH Actions reviewer dropped (PR #44):** Company policy disallows extra API spend. Daily reviews continue via `.claude/scheduled_tasks.json` (subscription-based) + Windows Task Scheduler script as an unattended alternative.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| PO.0019 Stream Oil Component Analysis — near-turnkey T3 reuse from #43 | Worker | 🟡 Medium |
+| WR.0010.01 Well Gas Component Analysis — same composition pattern | Worker | 🟡 Medium |
+| N1 Tank VCF (PO.0005.02) monthly variant — not yet attempted | Worker | 🟢 Low |
+| Scorecard `_Last updated_` header (stale at 2026-06-15) — pre-existing | Worker | 🟢 Low |
+| Windows Task Scheduler one-time setup not yet run (pending tomorrow morning) | User | 🟡 Medium |
 
 ---
