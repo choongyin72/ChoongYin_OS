@@ -720,3 +720,54 @@ def message_journal_new_row_should_exist(msg_type, baseline_count, direction="O"
             f"MHM check FAILED: MHM_MSG for MSG_TYPE={msg_type} (DIRECTION={direction}) = {now} rows, "
             f"expected > baseline {baseline_count} (no new message journaled by the send)"
         )
+
+
+# --- N1 composition: per-component analysis value (component-keyed) -------------------------------
+# Composition screens (Stream/Well Gas/Oil Component Analysis: PO.0020 / PO.0019 / WR.0010.01) store
+# ONE row per COMPONENT: key = (OBJECT_ID, DAYTIME, COMPONENT_NO) on the view DV_STRM_COMP_ANALYSIS,
+# with measured columns MOL_PCT / WT_PCT. The daily helpers key only (object, date) -> they would match
+# ALL ~12 component rows; these add the COMPONENT_NO filter so the oracle pins exactly one component.
+
+def component_value(view, object_id, daytime, component_no, column):
+    """Return a single per-component measured value (DB ground truth) from a composition analysis.
+
+    ``view`` = e.g. DV_STRM_COMP_ANALYSIS; key = (OBJECT_ID, DAYTIME date, COMPONENT_NO). ``column`` = a
+    measured column (e.g. MOL_PCT, WT_PCT). ``component_no`` = the component code ('C1','C2','CO2',...).
+    Returns None if the (object, day, component) row is absent."""
+    _safe(view)
+    _safe(column)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            f"SELECT {column} FROM {view} "
+            f"WHERE OBJECT_ID = :o AND TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD') AND COMPONENT_NO = :n",
+            o=object_id, d=str(daytime), n=component_no,
+        )
+        row = cur.fetchone()
+        return row[0] if row else None
+    finally:
+        cur.close()
+        conn.close()
+
+
+def component_value_should_be(view, object_id, daytime, component_no, column, expected):
+    """Fail unless a per-component composition value equals ``expected`` (numeric-tolerant; None = NULL).
+
+    The trustworthy oracle for the composition edit-in-place pattern: after the screen Save, assert the
+    edited component's value really persisted to the (object, day, component) row — and, used on a
+    second untouched component, that Save did NOT silently normalize/rescale the whole set."""
+    actual = component_value(view, object_id, daytime, component_no, column)
+    expected_is_null = expected is None or (isinstance(expected, str) and expected.strip() == "")
+    if expected_is_null:
+        ok = actual is None
+    else:
+        try:
+            ok = actual is not None and float(actual) == float(expected)
+        except (TypeError, ValueError):
+            ok = str(actual) == str(expected)
+    if not ok:
+        raise AssertionError(
+            f"DB check FAILED: {view}.{column} for OBJECT_ID={object_id} COMPONENT_NO={component_no} "
+            f"on {daytime} = {actual!r}, expected {expected!r}"
+        )
