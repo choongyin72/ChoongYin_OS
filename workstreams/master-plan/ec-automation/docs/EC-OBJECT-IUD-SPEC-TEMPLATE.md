@@ -14,11 +14,13 @@
    queries) to **auto-derive** class_name, screen type (`OBJECT`→OV / `TABLE`→TV), date-effective +
    delete method (`VERSIONED`→End=Start / else physical), and base/version/view — from EC config tables.
    No hand-entry of metadata.
-2. **Finder/Toolbar/Nav recon (live):** confirm the navigator (none / date / cascade / BU+GO), the
-   **mandatory (yellow) fields**, and the **toolbar New/Delete enabled state** (R10 — disabled Delete ⇒
-   delete via End=Start for OV).
-3. **DOM recon (live):** capture the grid id, row-cell pattern, form ids, and field ids.
-4. Fill §1–§6 below. Then build §7 deliverables, run §8 acceptance, raise the PR.
+2. **Live recon = ONE read-only scan.** Run `SCREEN="<name>" py tmp/scripts/scan_ec_screen.py` — it opens
+   the screen (never Saves) and prints, keyed by the name: navigator shape + **which nav fields are
+   mandatory (yellow)** + GO id, **toolbar New/Delete state** (default = enabled — it only flags the rare
+   DISABLED; R10 — disabled Delete ⇒ OV End=Start), the grid id, and the form/field ids with mandatory
+   flags + labels (OV: `updateAttributes` + `objectdates` End-Date C:3 + `objectForm`; TV: the grid cells).
+   This fills §2 **and** §3 in one pass. Only reference-dd *sources* need an eye if the scan can't infer them.
+3. Fill §1–§6 below. Then build §7 deliverables, run §8 acceptance, raise the PR.
 
 ---
 

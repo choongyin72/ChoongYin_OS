@@ -36,8 +36,13 @@ may already be characterised).
      then `class_cnfg`): **CLASS_TYPE `OBJECT`⇒OV / `TABLE`⇒TV**; **TIME_SCOPE_CODE `VERSIONED`⇒date-effective
      (End=Start delete) / else physical**; base=`DB_OBJECT_NAME`, version=`DB_OBJECT_ATTRIBUTE`, view=`OV_<class>`.
      Pick the **type** → IUD block. Then row count + the LIVE recon below.
-   - Live: **toolbar New/Delete enabled** (R10); navigator (none/date/cascade/BU+GO); **mandatory (yellow)
-     fields**; reference dds + sources; grid id + row-cell pattern + form/field ids.
+   - **Live recon is ONE read-only scan** — run `SCREEN="<name>" py tmp/scripts/scan_ec_screen.py`
+     (opens the screen, never Saves). It returns, keyed by name: type (OV/TV, from the DB), **toolbar
+     New/Delete state** (default = enabled; it only flags the rare DISABLED — R10), navigator shape +
+     **which nav fields are mandatory (yellow)** + the GO id, the grid id, and the form/field ids with
+     mandatory flags + labels — for OV it drives row-select (`updateAttributes` + `objectdates` End-Date
+     C:3) and New-Object (`objectForm`); for TV it dumps the grid cells. Add reference-dd sources by eye
+     only if the scan can't.
    - Write the filled spec as `screens/<menu path>/<Screen>/<screen>_sow.md`.
 
 **3. Build the Playwright bundle** under `screens/<menu path>/<Screen>/`:
