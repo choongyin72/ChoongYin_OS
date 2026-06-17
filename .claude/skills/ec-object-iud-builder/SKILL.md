@@ -5,6 +5,11 @@ description: Use when building Insert/Update/Delete (IUD) automation END-TO-END 
 
 # EC Object IUD Builder — autonomous end-to-end workflow
 
+> **INPUT CONTRACT: the user provides ONLY the EC screen name.** Claude does EVERYTHING else —
+> Step 1 (resolve metadata via `resolve_ec_screen.py`) through Step 7 (PR), hands-off. Do NOT ask the
+> user for screen type, tables, delete method, field ids, etc. — derive/recon them yourself. The only
+> times to come back to the user: a genuine blocker unresolved after ≤6 tries, or a real decision.
+
 Build a new OV/TV IUD screen the **exact same way** as Bank/Language, hands-off. Fill the spec template
 (`workstreams/master-plan/ec-automation/docs/EC-OBJECT-IUD-SPEC-TEMPLATE.md`) by recon, then deliver the
 Playwright bundle + RF suite, live + DB-verified + self-cleaning, and raise the PR. For the exact click
