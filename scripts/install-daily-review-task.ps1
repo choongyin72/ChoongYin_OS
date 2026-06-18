@@ -3,9 +3,12 @@
 # Run once as Administrator.
 
 $scriptPath = "$PSScriptRoot\daily-review.ps1"
+# -WindowStyle Hidden: run with no visible PowerShell window (claude --print works silently, so the
+# window would otherwise just sit blank for the whole run and look hung). Keeps InteractiveToken logon
+# (so git/gh network access still works without storing a password).
 $action     = New-ScheduledTaskAction `
     -Execute  "powershell.exe" `
-    -Argument "-NonInteractive -ExecutionPolicy Bypass -File `"$scriptPath`""
+    -Argument "-NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$scriptPath`""
 
 # 06:00 daily (machine must be set to AWST / Perth timezone)
 $trigger  = New-ScheduledTaskTrigger -Daily -At "06:00"
