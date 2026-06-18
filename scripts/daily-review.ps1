@@ -30,7 +30,15 @@ if (-not $prompt) {
 
 Set-Location $RepoRoot
 
-# Pipe prompt via stdin so special characters (backticks, $, quotes) are safe
-$prompt | claude --dangerously-skip-permissions --print 2>&1 | Tee-Object -FilePath $LogFile -Append
+# Write prompt to a temp file and redirect as stdin.
+# The PowerShell pipe operator does not deliver stdin reliably in non-interactive
+# Task Scheduler sessions — file redirect is the safe alternative.
+$tempPrompt = Join-Path $env:TEMP "claude-daily-review-prompt.txt"
+[System.IO.File]::WriteAllText($tempPrompt, $prompt, (New-Object System.Text.UTF8Encoding $false))
+
+cmd /c "claude --dangerously-skip-permissions --print < `"$tempPrompt`"" 2>&1 |
+    Tee-Object -FilePath $LogFile -Append
+
+Remove-Item $tempPrompt -ErrorAction SilentlyContinue
 
 Write-Log "=== Daily review finished ==="
