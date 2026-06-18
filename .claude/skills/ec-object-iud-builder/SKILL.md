@@ -83,7 +83,8 @@ At these three points: slow down, recon first, verify against ground truth — d
    false-fails if the row hasn't rendered yet. Keep this wrapper in T3 only; do not modify shared T1/T2.
 
 **5. Verify.** robocop clean → `robot --dryrun` the suite + full `tests/` → **live headed run**
-   (`EC_HEADLESS=false`) N/N PASS → DbVerify each op → **independent DB re-read = clean**.
+   (`EC_HEADLESS=false`) N/N PASS → DbVerify each op → **independent DB re-read = clean** →
+   **`py scripts/check_bundle_hygiene.py` must PASS** (R16 guard — no hardcoded creds in the bundle).
 
 **6. Package.** Append a row to `docs/ec_screen_registry.md` + `docs/automation-scorecard.md` (append-only).
 
