@@ -30,15 +30,20 @@ if (-not $prompt) {
 
 Set-Location $RepoRoot
 
-# Write prompt to a temp file and redirect as stdin.
-# The PowerShell pipe operator does not deliver stdin reliably in non-interactive
-# Task Scheduler sessions — file redirect is the safe alternative.
-$tempPrompt = Join-Path $env:TEMP "claude-daily-review-prompt.txt"
-[System.IO.File]::WriteAllText($tempPrompt, $prompt, (New-Object System.Text.UTF8Encoding $false))
+# Feed the prompt to claude via stdin. Two gotchas under Task Scheduler (both fixed here):
+#   1. PowerShell resolves `claude` to claude.ps1, which is BLOCKED by the execution policy
+#      ("running scripts is disabled on this system").
+#   2. The .cmd shim's `< file` stdin redirect does NOT deliver input to claude.exe — the original
+#      failure: "Input must be provided either through stdin or as a prompt argument when using --print".
+# Fix: call claude.exe DIRECTLY (bypasses the blocked .ps1) and pipe the prompt natively — a real
+# PowerShell pipe DOES deliver stdin to the .exe (verified). Resolve the exe relative to the .cmd shim.
+$claudeExe = Join-Path (Split-Path (Get-Command claude.cmd).Source) 'node_modules\@anthropic-ai\claude-code\bin\claude.exe'
+if (-not (Test-Path $claudeExe)) {
+    Write-Log "ERROR: claude.exe not found at $claudeExe — aborting."
+    exit 1
+}
 
-cmd /c "claude --dangerously-skip-permissions --print < `"$tempPrompt`"" 2>&1 |
+$prompt | & $claudeExe --dangerously-skip-permissions --print 2>&1 |
     Tee-Object -FilePath $LogFile -Append
-
-Remove-Item $tempPrompt -ErrorAction SilentlyContinue
 
 Write-Log "=== Daily review finished ==="
