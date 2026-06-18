@@ -16,6 +16,22 @@ Playwright bundle + RF suite, live + DB-verified + self-cleaning, and raise the 
 gestures use the **`ec-screen-automation`** skill. Consult `docs/ec_screen_registry.md` first (the screen
 may already be characterised).
 
+## Template trust boundary — where you must think, not clone
+
+The skill is a force-multiplier, not autopilot. Cloning a known-good exemplar is fast — but it silently
+replicates the exemplar's defects too (R16 was discovered this way). Three points where the template
+**cannot protect you** and where real judgment is always required:
+
+1. **First-contact recon on a gated navigator (OV-GM screens):** the BU/PU cascade fields, their exact
+   IDs, mandatory yellow fields, and GO button id must be derived fresh from the live DOM — the exemplar's
+   IDs will differ. Never copy navigator locators blindly.
+2. **Treeview path:** always verify the path by opening the screen and reading the breadcrumb / treeview
+   node. Don't infer from the menu text in the spec template — it may differ from the actual node label.
+3. **Grid redraw timing (OV-GM):** even with R17 now in the template, the exact CSS selector for the
+   `Wait For Elements State` call must be derived from this screen's grid, not copied from the exemplar.
+
+At these three points: slow down, recon first, verify against ground truth — do not trust the clone.
+
 ## Standing guardrails (apply throughout — non-negotiable)
 - **Branch FIRST** off master before any repo edit; reuse a fitting empty branch; one screen per PR.
 - **AUTOTEST_ prefix** on all test data; **never touch existing rows**.
