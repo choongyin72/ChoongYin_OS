@@ -336,6 +336,33 @@ _No new executable rules this run. All 7 PRs clear — no MUST-FIX. R1–R15 rem
 
 ---
 
+## 2026-06-18 — Automated Review (second run, 1 open PR #57)
+
+_No new executable rules this run. Single open PR (#57) reviewed under R14 (open PR ⇒ full review regardless of commit count). R1–R15 remain current; no version bump._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #57 | Clear — ChoongYin_OS `check_scheduler.py` + `session_checkpoint.py` diagnostic tools. All 6 body fields present. Both scripts read-only (git/gh/schtasks/CSV/JSON reads); UTC→AWST `+8h` correct; self-clean holds. **NICE-TO-HAVE:** `check_scheduler.py` reads a hardcoded `tmp/schtasks_dump.csv` that is neither committed nor produced by the script (filesystem-verified: `git ls-files tmp/schtasks_dump.csv` → empty) — `FileNotFoundError` on a fresh checkout. Suggested fix: put the producing command in the docstring or generate the dump in-script. | ✅ Clear (NICE-TO-HAVE) |
+
+### Observations
+
+- **Diagnostic-tool reproducibility gap (MR1-style, verified):** A read-only diagnostic that depends on an out-of-band artifact (`schtasks_dump.csv`) is only reproducible if the artifact-producing step is documented in the script itself. Confirmed against the filesystem rather than inferred — the CSV is genuinely untracked. Worth folding into the canonical resume/checkpoint tooling as it matures.
+- **Context-loss insurance tooling (item #3):** `session_checkpoint.py` emits a paste-ready CHECKPOINT block (git branch/ahead/sync + recent commits + tracked-dirty + open PRs) so a post-`/clear` session can fast-forward. Complements the live resume-log discipline; the canonical resume-log structure + reviewer-freshness validation are a declared follow-up.
+- **Body discipline holding:** PR #57 used the exact 6 field headers including `DB ground-truth evidence — N/A (read-only, ...)` per R9. No header drift.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `check_scheduler.py` — document or in-script-generate `tmp/schtasks_dump.csv` (currently untracked; FileNotFoundError on fresh checkout) | Worker (follow-up) | 🟢 Low |
+| Canonical resume-log structure + reviewer-freshness validation (declared follow-up to #57) | Worker | 🟡 Medium |
+| WR.0010.02 Well Oil Comp — not yet attempted (WT_PCT variant of WR.0010.01) | Worker | 🟢 Low |
+| N1 Tank VCF (PO.0005.02) monthly variant — not yet attempted | Worker | 🟢 Low |
+
+---
+
 ## 2026-06-17 — Manual Review (7 open PRs #39–#45)
 
 _User-triggered manual review mid-session (Windows Task Scheduler alternative being discussed). Reviewed 7 open PRs: #39 N1 Tank VCF, #40 Comp SME doc, #41 SME troubleshooting matrix, #42 Comp Phase 1 recon, #43 Comp suite (PO.0020), #44 remove GH Actions, #45 Lab lineage. One MUST-FIX found and fixed (PR #44)._
