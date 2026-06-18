@@ -1,18 +1,18 @@
 {
-  "_comment": "Curated FAMILY index for tooling (read by resolve_ec_screen.py for the sibling/golden-exemplar hint). NOT a full mirror of ec_screen_registry.md — it covers the IUD families (OV / TV / PC) plus their golden exemplars and representative members. Run-only patterns (N1/N2/N3/RUN-verify) live in the markdown's 'Screen TYPES' section. KEEP IN SYNC: when a new family or a new golden exemplar appears, update this file and the markdown's 'Screen families & golden exemplars' table together.",
+  "_comment": "Curated FAMILY index for tooling (read by resolve_ec_screen.py for the sibling/golden-exemplar hint). NOT a full mirror of ec_screen_registry.md - it covers the IUD families (OV / TV / PC) plus their golden exemplars and representative members. Run-only patterns (N1/N2/N3/RUN-verify) live in the markdown's 'Screen TYPES' section. KEEP IN SYNC: when a new family or a new golden exemplar appears, update this file and the markdown's 'Screen families & golden exemplars' table together.",
   "schema": {
     "key": "stable family id",
     "class_type": "DB class_cnfg.CLASS_TYPE that the resolver can match on (OBJECT / TABLE / null=either)",
     "time_scope": "DB class_cnfg.TIME_SCOPE_CODE (VERSIONED / null)",
     "discriminator": "what the LIVE scan must show to confirm this family (the resolver is DB-only, so it offers candidates; the scan disambiguates)",
-    "golden_exemplar": "the canonical screen to CLONE — held to a higher bar",
+    "golden_exemplar": "the canonical screen to CLONE - held to a higher bar",
     "page_object": "T3 page object of the golden exemplar",
     "t2": "shared T2 resource the family delegates to"
   },
   "families": [
     {
       "key": "OV",
-      "label": "OV — Manage-Object (date-effective)",
+      "label": "OV - Manage-Object (date-effective)",
       "class_type": "OBJECT",
       "time_scope": "VERSIONED",
       "discriminator": "navigator is a date / plain manage-object with NO mandatory nav dropdown; grid id manage_object_nav_nav:form:T_data",
@@ -24,7 +24,7 @@
     },
     {
       "key": "OV_CUSTOM_URL",
-      "label": "OV — custom-URL (no navigator GO; reload via toolbar Refresh)",
+      "label": "OV - custom-URL (no navigator GO; reload via toolbar Refresh)",
       "class_type": "OBJECT",
       "time_scope": "VERSIONED",
       "discriminator": "no navigator GO button; grid nav:form:T_data (or manageObject:form:T_data); Save And Refresh List falls back to toolbar Refresh",
@@ -36,7 +36,7 @@
     },
     {
       "key": "OV_GM_GROUPMODEL",
-      "label": "OV-GM — groupmodel (PU / PU-Area cascade)",
+      "label": "OV-GM - groupmodel (PU / PU-Area cascade)",
       "class_type": "OBJECT",
       "time_scope": "VERSIONED",
       "discriminator": "mandatory PU (-> Area) cascade nav dropdown(s) + GO; insert sets the Op-parent dd = the nav value; grid manageObject:form:T_data; grid redraws lazily",
@@ -48,7 +48,7 @@
     },
     {
       "key": "OV_GM_BU_GATED",
-      "label": "OV-GM — Business-Unit-gated",
+      "label": "OV-GM - Business-Unit-gated",
       "class_type": "OBJECT",
       "time_scope": "VERSIONED",
       "discriminator": "mandatory Business Unit nav dropdown (nav:form:G:0:R:1:C:1:dd) + GO; the insert form's parent dd (Business Unit Name / Contract / Pipeline / Transport System) must equal the nav scope or the row never lists; grid manageObject:form:T_data; lazy redraw -> T3 Row Should Exist must wait (R17)",
@@ -72,7 +72,7 @@
     },
     {
       "key": "TV",
-      "label": "TV — Table class (inline-editable grid, physical delete)",
+      "label": "TV - Table class (inline-editable grid, physical delete)",
       "class_type": "TABLE",
       "time_scope": null,
       "discriminator": "no navigator; paginated inline grid; cells {grid}:form:T:{row}:C{col}_in; mandatory cells render yellow; commit with real keystrokes + Tab (not fill())",
@@ -84,7 +84,7 @@
     },
     {
       "key": "PC",
-      "label": "PC — parent-child setup (count-delta DB oracle)",
+      "label": "PC - parent-child setup (count-delta DB oracle)",
       "class_type": null,
       "time_scope": null,
       "discriminator": "navigator picks a PARENT (class + object) + GO; the parent's items show in an inline grid; insert/delete toolbar entries are named for the item",
@@ -96,7 +96,7 @@
     }
   ],
   "parked_or_excluded": [
-    {"screen": "Sub Field", "reason": "groupmodel not enabled — inserts persist but the grid never lists them"},
+    {"screen": "Sub Field", "reason": "groupmodel not enabled - inserts persist but the grid never lists them"},
     {"screen": "Production Sub Unit", "reason": "operational groupmodel not enabled in this environment"},
     {"screen": "Pipeline", "reason": "Op PU lives in the groupmodel layer; insert leaves NULL op-PU = invisible in every PU filter"}
   ]
