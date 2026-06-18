@@ -28,6 +28,8 @@ def _repo_root() -> Path:
 
 ROOT          = _repo_root()
 EC_URL        = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
+EC_USER       = os.environ.get('EC_USER', 'sysadmin')   # R16: creds from env, never hardcoded
+EC_PASS       = os.environ.get('EC_PASS', 'sysadmin')
 SS_DIR        = str(ROOT / 'docs' / 'EC' / 'screenshots' / 'iud_bank')
 LOG_PATH      = str(ROOT / 'tmp' / 'logs' / 'ec_iud_bank_final.json')
 
@@ -186,8 +188,8 @@ with sync_playwright() as p:
     # ── LOGIN ────────────────────────────────────────────────────────────────
     print('=== LOGIN ===')
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin')
-    page.fill('#password', 'sysadmin')
+    page.fill('#username', EC_USER)
+    page.fill('#password', EC_PASS)
     page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000)
     wait_ajax(page)

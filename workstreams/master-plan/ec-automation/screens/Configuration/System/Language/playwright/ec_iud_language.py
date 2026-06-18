@@ -15,6 +15,8 @@ def _repo_root():
     return here.parents[3]
 
 EC_URL = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
+EC_USER = os.environ.get('EC_USER', 'sysadmin')   # R16: creds from env, never hardcoded
+EC_PASS = os.environ.get('EC_PASS', 'sysadmin')
 HEADED = os.environ.get('EC_HEADED', '0') == '1'
 SLOWMO = int(os.environ.get('EC_SLOWMO', '0')) if HEADED else 0
 CODE = os.environ.get('EC_CODE', 'ZZ')
@@ -92,7 +94,7 @@ with sync_playwright() as p:
     ctx = b.new_context(ignore_https_errors=True, viewport={'width': 1680, 'height': 1050})
     page = ctx.new_page()
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin'); page.fill('#password', 'sysadmin'); page.click('#kc-login')
+    page.fill('#username', EC_USER); page.fill('#password', EC_PASS); page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000); wait_ajax(page)
     si = page.locator('#menu\\:searchForm\\:searchTxt'); si.wait_for(state='visible')
     si.clear(); si.type('Language', delay=50); page.wait_for_load_state('networkidle', timeout=8000); page.wait_for_timeout(600)
