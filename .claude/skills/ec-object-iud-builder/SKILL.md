@@ -43,17 +43,28 @@ may already be characterised).
      mandatory flags + labels — for OV it drives row-select (`updateAttributes` + `objectdates` End-Date
      C:3) and New-Object (`objectForm`); for TV it dumps the grid cells. Add reference-dd sources by eye
      only if the scan can't.
+   - **OV-GM pre-flight check (N3):** if this is an OV-GM screen (BU/PU navigator required), add a note to the
+     SOW §4 (Known Risks): _"OV-GM lazy redraw — grid redraws asynchronously after Save+GO; T3 `Row Should
+     Exist` MUST await the row element before asserting."_ This is a known risk on all OV-GM screens; flag
+     it in the SOW before building, not after a TC02 live failure.
    - Write the filled spec as `screens/<menu path>/<Screen>/<screen>_sow.md`.
 
 **3. Build the Playwright bundle** under `screens/<menu path>/<Screen>/`:
    `playwright/ec_iud_<slug>.py` (clone Bank's `ec_iud_bank.py` for OV or Language's `ec_iud_language.py`
    for TV — swap field ids/view/type per the spec; env-controlled EC_HEADED/SLOWMO/CODE; screenshots per
    step), `investigation/` (the recon scripts), `evidence/` (after a full run), `README.md`.
+   **Credential rule (N1):** always read EC credentials from env vars — `os.environ.get("EC_USER", "sysadmin")`
+   and `os.environ.get("EC_PASS", "Sysadmin@01")` — never hardcode strings in the bundle. Match the pattern
+   already used in all investigation scripts.
 
 **4. Build the RF** (treeview-mirrored): T3 `pageobjects/<path>/<screen>_page.resource` (locators in
    Variables; docstring matches Variables — R7) + suite `tests/<path>/<screen>_iud.robot`
    (clean→insert→update→delete→cleanup, in-suite DB asserts). **Reuse T2** `manage_object.resource` (OV) or
    `table_class.resource` (TV) + T1 + DbVerify; a shared-file edit ⇒ R12 (backup + canary + random sibling).
+   **OV-GM wait wrapper (N2):** for any OV-GM screen (BU navigator required), the T3 MUST define its own
+   `<Screen> Row Should Exist` keyword that calls `Wait For Elements State    css=...    visible    20s`
+   before the T1 `Row Should Exist` — the OV-GM grid redraws lazily after Save+GO and the instant T1 assert
+   false-fails if the row hasn't rendered yet. Keep this wrapper in T3 only; do not modify shared T1/T2.
 
 **5. Verify.** robocop clean → `robot --dryrun` the suite + full `tests/` → **live headed run**
    (`EC_HEADLESS=false`) N/N PASS → DbVerify each op → **independent DB re-read = clean**.
@@ -72,7 +83,7 @@ may already be characterised).
 | DELETE | **End Date = Start Date** (objectdates) → true delete (toolbar Delete disabled) | select row→Delete→"<label>"→Save → **physical** |
 | Test data | unique-per-run code (codes linger) | fixed code (physical delete self-cleans) |
 | Verify | absent in `OV_*` after End=Start | physically gone from base table |
-| OV-GM variant | + Business Unit / PU cascade + GO first | — |
+| OV-GM variant | + Business Unit / PU cascade + GO first; T3 MUST define `<Screen> Row Should Exist` with `Wait For Elements State visible 20s` before T1 assert (lazy redraw) | — |
 
 ## Done = a screen is "covered" when
 RF suite (robocop-clean, dryrun, **live + DB-verified, self-cleaning**) + Playwright bundle + filled SOW +
