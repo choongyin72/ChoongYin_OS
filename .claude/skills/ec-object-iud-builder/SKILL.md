@@ -70,8 +70,8 @@ At these three points: slow down, recon first, verify against ground truth — d
    for TV — swap field ids/view/type per the spec; env-controlled EC_HEADED/SLOWMO/CODE; screenshots per
    step), `investigation/` (the recon scripts), `evidence/` (after a full run), `README.md`.
    **Credential rule (N1):** always read EC credentials from env vars — `os.environ.get("EC_USER", "sysadmin")`
-   and `os.environ.get("EC_PASS", "Sysadmin@01")` — never hardcode strings in the bundle. Match the pattern
-   already used in all investigation scripts.
+   and `os.environ.get("EC_PASS", "sysadmin")` — never hardcode strings in the bundle (the local sandbox
+   is `sysadmin`/`sysadmin`; matches `tmp/scripts/ec_session.py`). Match the pattern in the recon scripts.
 
 **4. Build the RF** (treeview-mirrored): T3 `pageobjects/<path>/<screen>_page.resource` (locators in
    Variables; docstring matches Variables — R7) + suite `tests/<path>/<screen>_iud.robot`
@@ -83,7 +83,8 @@ At these three points: slow down, recon first, verify against ground truth — d
    false-fails if the row hasn't rendered yet. Keep this wrapper in T3 only; do not modify shared T1/T2.
 
 **5. Verify.** robocop clean → `robot --dryrun` the suite + full `tests/` → **live headed run**
-   (`EC_HEADLESS=false`) N/N PASS → DbVerify each op → **independent DB re-read = clean**.
+   (`EC_HEADLESS=false`) N/N PASS → DbVerify each op → **independent DB re-read = clean** →
+   **`py scripts/check_bundle_hygiene.py` must PASS** (R16 guard — no hardcoded creds in the bundle).
 
 **6. Package.** Append a row to `docs/ec_screen_registry.md` + `docs/automation-scorecard.md` (append-only).
 
