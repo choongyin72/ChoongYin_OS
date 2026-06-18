@@ -1,0 +1,103 @@
+{
+  "_comment": "Curated FAMILY index for tooling (read by resolve_ec_screen.py for the sibling/golden-exemplar hint). NOT a full mirror of ec_screen_registry.md — it covers the IUD families (OV / TV / PC) plus their golden exemplars and representative members. Run-only patterns (N1/N2/N3/RUN-verify) live in the markdown's 'Screen TYPES' section. KEEP IN SYNC: when a new family or a new golden exemplar appears, update this file and the markdown's 'Screen families & golden exemplars' table together.",
+  "schema": {
+    "key": "stable family id",
+    "class_type": "DB class_cnfg.CLASS_TYPE that the resolver can match on (OBJECT / TABLE / null=either)",
+    "time_scope": "DB class_cnfg.TIME_SCOPE_CODE (VERSIONED / null)",
+    "discriminator": "what the LIVE scan must show to confirm this family (the resolver is DB-only, so it offers candidates; the scan disambiguates)",
+    "golden_exemplar": "the canonical screen to CLONE — held to a higher bar",
+    "page_object": "T3 page object of the golden exemplar",
+    "t2": "shared T2 resource the family delegates to"
+  },
+  "families": [
+    {
+      "key": "OV",
+      "label": "OV — Manage-Object (date-effective)",
+      "class_type": "OBJECT",
+      "time_scope": "VERSIONED",
+      "discriminator": "navigator is a date / plain manage-object with NO mandatory nav dropdown; grid id manage_object_nav_nav:form:T_data",
+      "delete": "End Date = Start Date (true delete from OV_* view)",
+      "golden_exemplar": "Bank",
+      "page_object": "Configuration/Assets/Financial_Objects/bank_page.resource",
+      "t2": "manage_object.resource",
+      "members": ["Bank", "Production Unit", "Business Unit", "Country", "State", "County", "Region", "Object List", "Functional Area", "Currency", "DOA Credit Limit", "Exchange Rate Source", "Payment Scheme", "Product Description", "Sales Order", "VAT Code", "Bank Account", "Cost Object Mapping", "Company", "Customer", "Vendor", "Licence", "MMS Lease", "State Lease", "Operator Lease", "Field Group", "Equipment"]
+    },
+    {
+      "key": "OV_CUSTOM_URL",
+      "label": "OV — custom-URL (no navigator GO; reload via toolbar Refresh)",
+      "class_type": "OBJECT",
+      "time_scope": "VERSIONED",
+      "discriminator": "no navigator GO button; grid nav:form:T_data (or manageObject:form:T_data); Save And Refresh List falls back to toolbar Refresh",
+      "delete": "End Date = Start Date",
+      "golden_exemplar": "Account",
+      "page_object": "Configuration/Assets/Financial_Objects/account_page.resource",
+      "t2": "manage_object.resource",
+      "members": ["Account", "Cost Centre", "Revenue Order", "WBS", "Account Mapping", "Commercial Entity", "Company Contact", "Regulatory Permits"]
+    },
+    {
+      "key": "OV_GM_GROUPMODEL",
+      "label": "OV-GM — groupmodel (PU / PU-Area cascade)",
+      "class_type": "OBJECT",
+      "time_scope": "VERSIONED",
+      "discriminator": "mandatory PU (-> Area) cascade nav dropdown(s) + GO; insert sets the Op-parent dd = the nav value; grid manageObject:form:T_data; grid redraws lazily",
+      "delete": "End Date = Start Date (+ one extra Apply Navigator)",
+      "golden_exemplar": "Area",
+      "page_object": "Configuration/Assets/Basic_Objects/area_page.resource",
+      "t2": "manage_object.resource",
+      "members": ["Area", "Sub Area", "Field"]
+    },
+    {
+      "key": "OV_GM_BU_GATED",
+      "label": "OV-GM — Business-Unit-gated",
+      "class_type": "OBJECT",
+      "time_scope": "VERSIONED",
+      "discriminator": "mandatory Business Unit nav dropdown (nav:form:G:0:R:1:C:1:dd) + GO; the insert form's parent dd (Business Unit Name / Contract / Pipeline / Transport System) must equal the nav scope or the row never lists; grid manageObject:form:T_data; lazy redraw -> T3 Row Should Exist must wait (R17)",
+      "delete": "End Date = Start Date",
+      "golden_exemplar": "Transport System",
+      "page_object": "Configuration/Assets/Dispatching_Objects/transport_system_page.resource",
+      "t2": "manage_object.resource",
+      "members": ["Transport System", "Delivery Point", "Delivery Stream", "Nomination Point", "Pipeline Segment", "Transport Zone", "Contract Area"]
+    },
+    {
+      "key": "OV_GM_POPUP",
+      "label": "OV-GM + EC-object popup picker",
+      "class_type": "OBJECT",
+      "time_scope": "VERSIONED",
+      "discriminator": "BU-gated, plus a reference chosen via an EC object POPUP (Pick From EC Object Popup) rather than a dropdown; the BU also gates the popup list",
+      "delete": "End Date = Start Date",
+      "golden_exemplar": "Meter",
+      "page_object": "Configuration/Assets/Dispatching_Objects/meter_page.resource",
+      "t2": "manage_object.resource + popup.resource",
+      "members": ["Meter"]
+    },
+    {
+      "key": "TV",
+      "label": "TV — Table class (inline-editable grid, physical delete)",
+      "class_type": "TABLE",
+      "time_scope": null,
+      "discriminator": "no navigator; paginated inline grid; cells {grid}:form:T:{row}:C{col}_in; mandatory cells render yellow; commit with real keystrokes + Tab (not fill())",
+      "delete": "PHYSICAL row delete (Delete > <item label>)",
+      "golden_exemplar": "Language",
+      "page_object": "Configuration/System/language_page.resource",
+      "t2": "table_class.resource",
+      "members": ["Language", "MIME Type Mapping", "Nomination Cycle"]
+    },
+    {
+      "key": "PC",
+      "label": "PC — parent-child setup (count-delta DB oracle)",
+      "class_type": null,
+      "time_scope": null,
+      "discriminator": "navigator picks a PARENT (class + object) + GO; the parent's items show in an inline grid; insert/delete toolbar entries are named for the item",
+      "delete": "physical (Delete > <item label>)",
+      "golden_exemplar": "Object List Setup",
+      "page_object": "Configuration/Assets/Basic_Objects/object_list_setup_page.resource",
+      "t2": "manage_object.resource + table.resource",
+      "members": ["Object List Setup"]
+    }
+  ],
+  "parked_or_excluded": [
+    {"screen": "Sub Field", "reason": "groupmodel not enabled — inserts persist but the grid never lists them"},
+    {"screen": "Production Sub Unit", "reason": "operational groupmodel not enabled in this environment"},
+    {"screen": "Pipeline", "reason": "Op PU lives in the groupmodel layer; insert leaves NULL op-PU = invisible in every PU filter"}
+  ]
+}
