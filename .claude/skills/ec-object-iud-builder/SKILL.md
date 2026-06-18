@@ -70,8 +70,8 @@ At these three points: slow down, recon first, verify against ground truth — d
    for TV — swap field ids/view/type per the spec; env-controlled EC_HEADED/SLOWMO/CODE; screenshots per
    step), `investigation/` (the recon scripts), `evidence/` (after a full run), `README.md`.
    **Credential rule (N1):** always read EC credentials from env vars — `os.environ.get("EC_USER", "sysadmin")`
-   and `os.environ.get("EC_PASS", "Sysadmin@01")` — never hardcode strings in the bundle. Match the pattern
-   already used in all investigation scripts.
+   and `os.environ.get("EC_PASS", "sysadmin")` — never hardcode strings in the bundle (the local sandbox
+   is `sysadmin`/`sysadmin`; matches `tmp/scripts/ec_session.py`). Match the pattern in the recon scripts.
 
 **4. Build the RF** (treeview-mirrored): T3 `pageobjects/<path>/<screen>_page.resource` (locators in
    Variables; docstring matches Variables — R7) + suite `tests/<path>/<screen>_iud.robot`
