@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v15** (R15 added 2026-06-17)
+> **Current rule version: v17** (R16–R17 added 2026-06-18)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -23,6 +23,8 @@ _Worker sessions: read this before starting any automation work._
 | v13 | R13 | State ONE live N/N equal to the test-case count, identical across title/body/scorecard/README/SOW | 2026-06-15 |
 | v14 | R14 | Skip-day check must verify BOTH < 3 new commits AND 0 open PRs; open PRs alone trigger a full review | 2026-06-17 |
 | v15 | R15 | PowerShell backtick line-continuation must be the LAST character on the line — no trailing space, comment, or text | 2026-06-17 |
+| v16 | R16 | Playwright bundle credentials MUST use env vars (`EC_USER`/`EC_PASS`) — never hardcode strings | 2026-06-18 |
+| v17 | R17 | OV-GM T3 MUST define `<Screen> Row Should Exist` with `Wait For Elements State visible 20s` before T1 assert (lazy redraw) | 2026-06-18 |
 
 ---
 
@@ -390,5 +392,40 @@ In PowerShell, the backtick `` ` `` only acts as a line-continuation when it is 
 | N1 Tank VCF (PO.0005.02) monthly variant — not yet attempted | Worker | 🟢 Low |
 | Scorecard `_Last updated_` header (stale at 2026-06-15) — pre-existing | Worker | 🟢 Low |
 | Windows Task Scheduler one-time setup not yet run (pending tomorrow morning) | User | 🟡 Medium |
+
+---
+
+## 2026-06-18 — Manual Review (PR #68, Contract Area IUD — ec-object-iud-builder first application)
+
+_User-triggered review: PR #68 (Contract Area IUD, skill stress-test, live 4/4). Two new rules extracted from retrospective (R16, R17). Skill template (PR #69) updated to embed both. R1–R15 remain current._
+
+### Rules (apply immediately, no exceptions)
+
+**R16 — Playwright bundle credentials MUST use env vars — never hardcode strings**
+`ec_iud_<slug>.py` (and any other Playwright bundle) must read credentials from environment variables:
+`os.environ.get("EC_USER", "sysadmin")` and `os.environ.get("EC_PASS", "Sysadmin@01")`.
+Never use `page.fill('#username', 'sysadmin')` or any hardcoded string — investigation scripts already follow this pattern and the bundle must match. Hardcoded credentials are unsafe to commit and break portability across environments.
+_Live-validated: PR #68 Playwright bundle had hardcoded `sysadmin`; investigation scripts in the same PR used `os.environ.get`. Inconsistency caught in retrospective._
+
+**R17 — OV-GM T3 MUST define `<Screen> Row Should Exist` with a grid-redraw wait**
+On any OV-GM screen (Business Unit / PU navigator required), the OV grid redraws lazily after Save+GO. The T1 `Row Should Exist` keyword fires instantly and false-fails before the row renders — the insert actually persisted. Fix: define a T3-level wrapper keyword `<Screen> Row Should Exist` that calls `Wait For Elements State    css=<row locator>    visible    20s` before delegating to T1. Keep this wrapper in T3 only — do not modify shared T1/T2. This pattern is now embedded in the `ec-object-iud-builder` skill (PR #69).
+_Live-validated: PR #68 TC02 false-failed on fresh run; OV-GM lazy redraw diagnosed and fixed in T3. Applicable to all OV-GM siblings (Transport System, Contract Type, etc.)._
+
+### Observations
+
+- **ec-object-iud-builder skill: first real application (Contract Area, PR #68):** Skill autonomously derived VERSIONED time scope (End Date = Start Date delete) from DB config tables, identified OV-GM as the screen type, built all 5 recon scripts + T3 + RF suite + Playwright bundle + SOW. 4/4 live PASS. Only post-hoc finding: credentials not env-var'd in the bundle (R16) and OV-GM wait wrapper not pre-known to the skill (R17). Both now embedded in skill v2 (PR #69).
+- **OV-GM lazy redraw is a class-wide bug:** The wait-wrapper pattern will be needed on every OV-GM screen with a BU navigator. Worker should not rediscover it — the skill template now flags it pre-build (SOW Known Risks section) and the RF step prescribes the T3 wrapper.
+- **Skill retrospective → skill update loop working:** Three N-items from PR #68 retrospective were immediately embedded in the skill file (PR #69) and in this lessons-learned entry. Future IUD builds inherit the fixes without needing a human to rediscover them. This is the intended feedback loop.
+
+### Gaps (updated)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| EC Object IUD — Contract Area: ✅ live 4/4, merged PR #68 | — | ✅ Closed |
+| ec-object-iud-builder skill improvements (R16/R17/SOW) — ✅ embedded in skill via PR #69 | — | ✅ Closed |
+| Next OV-GM IUD screen (Transport System, Contract Type, or similar) — apply updated skill | Worker | 🟡 Medium |
+| WR.0010.02 Well Oil Comp — not yet attempted (WT_PCT variant of WR.0010.01) | Worker | 🟢 Low |
+| `check_scheduler.py` — document or in-script-generate `tmp/schtasks_dump.csv` | Worker | 🟢 Low |
+| Canonical resume-log structure + reviewer-freshness validation | Worker | 🟡 Medium |
 
 ---
