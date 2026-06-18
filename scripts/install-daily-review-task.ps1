@@ -1,35 +1,31 @@
 # install-daily-review-task.ps1
-# One-time setup: registers daily-review.ps1 in Windows Task Scheduler to run every hour.
+# One-time setup: registers daily-review.ps1 in Windows Task Scheduler to run twice daily.
+# Fires at 06:00 AWST and 14:00 AWST (machine must be set to AWST / Perth timezone).
 # Run once as Administrator. Re-run to update an existing registration (-Force overwrites in place).
 
 $scriptPath = "$PSScriptRoot\daily-review.ps1"
-# -WindowStyle Hidden: run with no visible PowerShell window (claude --print works silently, so the
-# window would otherwise just sit blank for the whole run and look hung). Keeps InteractiveToken logon
-# (so git/gh network access still works without storing a password).
 $action     = New-ScheduledTaskAction `
     -Execute  "powershell.exe" `
-    -Argument "-NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$scriptPath`""
+    -Argument "-NonInteractive -ExecutionPolicy Bypass -File `"$scriptPath`""
 
-# Hourly repetition starting from now (machine timezone must be AWST / Perth)
-$trigger  = New-ScheduledTaskTrigger `
-    -Once `
-    -At (Get-Date) `
-    -RepetitionInterval (New-TimeSpan -Hours 1)
+# Two daily triggers: 06:00 AWST (morning) and 14:00 AWST (afternoon)
+$trigger06 = New-ScheduledTaskTrigger -Daily -At "06:00"
+$trigger14 = New-ScheduledTaskTrigger -Daily -At "14:00"
 # -StartWhenAvailable: run ASAP if machine was off at trigger time
 # MultipleInstances IgnoreNew: skip the new instance if a prior run is still in progress
-$settings = New-ScheduledTaskSettingsSet `
-    -ExecutionTimeLimit    (New-TimeSpan -Minutes 55) `
+$settings  = New-ScheduledTaskSettingsSet `
+    -ExecutionTimeLimit  (New-TimeSpan -Minutes 60) `
     -StartWhenAvailable `
-    -MultipleInstances     IgnoreNew `
+    -MultipleInstances   IgnoreNew `
     -WakeToRun:$false
 
 Register-ScheduledTask `
     -TaskName "ClaudeOS-DailyReview" `
     -Action   $action `
-    -Trigger  $trigger `
+    -Trigger  @($trigger06, $trigger14) `
     -Settings $settings `
     -RunLevel Highest `
     -Force
 
-Write-Host "Task registered: ClaudeOS-DailyReview (runs every hour)"
+Write-Host "Task registered: ClaudeOS-DailyReview (runs at 06:00 and 14:00 AWST)"
 Write-Host "Log output: $PSScriptRoot\daily-review.log"
