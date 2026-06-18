@@ -1,9 +1,13 @@
 """scan_ec_screen.py - Step-2 live DOM scan, keyed by SCREEN NAME only. READ-ONLY (opens forms, never
 Saves). Pairs with resolve_ec_screen.py (Step 1 / DB metadata). Captures the bits config tables don't
-carry: toolbar New/Delete enabled-state, navigator shape + which nav fields are mandatory (yellow), the
-grid id, and the form/field ids. For OV it drives New-Object + row-select to read objectForm/
-updateAttributes/objectdates ids; for TV it reads the grid cells. Usage:
+carry: the treeview menu path (from the tv-link title), toolbar New/Delete enabled-state, navigator
+shape + which nav fields are mandatory (yellow), the grid id, and the form/field ids. For GATED screens
+(a mandatory nav dropdown — OV-GM / BU-gated / cascade) it fills the mandatory dropdown(s) first-option
+in group order + clicks GO so the grid and forms actually load before capture (fills ONLY yellow dds —
+over-filling white nav fields empties the grid). For OV it then drives New-Object + row-select to read
+objectForm/updateAttributes/objectdates ids; for TV it reads the grid cells. READ-ONLY (never Saves). Usage:
    SCREEN="Bank" py tmp/scripts/scan_ec_screen.py        (EC_HEADED=1 to watch)
+   SCREEN="Contract Area" py tmp/scripts/scan_ec_screen.py   (gated: auto-fills the Business Unit dd + GO)
 """
 import os
 import oracledb
@@ -62,8 +66,17 @@ with sync_playwright() as p:
     page.fill("#username", "sysadmin"); page.fill("#password", "sysadmin"); page.click("#kc-login")
     page.wait_for_selector(css("menu:searchForm:searchTxt"), timeout=60000); ajax(page)
     box = page.locator(css("menu:searchForm:searchTxt")); box.click(); box.fill(""); box.type(SCREEN, delay=45); ajax(page, 7000)
-    page.locator(f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='{SCREEN}']").first.click()
+    tv_link = page.locator(f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='{SCREEN}']").first
+    # EC stores the full menu breadcrumb in title= on a tv-link (or a near ancestor). Search may render
+    # several tv-links with the same text; take the first whose title actually holds a '>'-path.
+    tv_path = page.evaluate("""(name) => {
+        const ls=[...document.querySelectorAll('.tv-link')].filter(e=>(e.textContent||'').trim()===name);
+        for(const e of ls){ const t=((e.getAttribute('title')||e.getAttribute('data-tooltip')||'')).trim(); if(t.includes('>')) return t; }
+        for(const e of ls){ let n=e; for(let i=0;i<4&&n;i++){ n=n.parentElement; if(n&&n.getAttribute){ const t=(n.getAttribute('title')||'').trim(); if(t.includes('>')) return t; } } }
+        return ''; }""", SCREEN).strip()
+    tv_link.click()
     ajax(page)
+    print("treeview path:", tv_path or "(not in title attr - capture via hover/Maintain Treeview)")
     mm = page.locator(css("screenToolbar:form:minmaxMenu"))
     if mm.count() and mm.first.is_visible():
         mm.first.click(); ajax(page)
@@ -78,16 +91,39 @@ with sync_playwright() as p:
         return out; }""")
     print("toolbar:", tb, " (default assumption: enabled; only flag the rare DISABLED)")
 
-    # 2) navigator fields + which are mandatory (yellow) + GO button
+    # 2) navigator fields (FULL id) + which are mandatory (yellow) + GO button
     nav = page.evaluate("""() => { const out=[]; document.querySelectorAll("[id^='nav:form:G:']").forEach(e=>{
         const m=e.id.match(/nav:form:(G:\\d+):R:\\d+:C:\\d+:(da_input|dd_input|in)/); if(!m) return;
         const y=getComputedStyle(e).backgroundColor==='""" + YELLOW + """';
-        out.push({grp:m[1], kind:m[2], mandatory:y}); });
+        out.push({id:e.id, grp:m[1], kind:m[2], mandatory:y}); });
         const go=['go_button:form:B','button:form:B','navButton:form:B'].filter(id=>document.getElementById(id));
-        return {fields:[...new Map(out.map(o=>[o.grp,o])).values()], go}; }""")
-    print("navigator:", nav)
+        return {fields:[...new Map(out.map(o=>[o.id,o])).values()], go}; }""")
+    print("navigator:", {"fields": [{k: f[k] for k in ("grp", "kind", "mandatory")} for f in nav["fields"]], "go": nav["go"]})
 
-    # 3) grid id
+    # 2b) GATED screen: fill the mandatory nav dropdown(s) first-option (in group order) + GO, so the grid
+    #     and forms actually load. Fill ONLY yellow/mandatory dds — over-filling white nav fields empties the grid.
+    go_id = nav["go"][0] if nav["go"] else "button:form:B"
+    mand_dds = [f for f in nav["fields"] if f["kind"] == "dd_input" and f["mandatory"]]
+    if mand_dds:
+        print(f"gated nav: filling {len(mand_dds)} mandatory dropdown(s) first-option + GO")
+        for f in sorted(mand_dds, key=lambda x: x["grp"]):
+            ddp = f["id"][:-len("_input")]   # ...:dd_input -> ...:dd
+            try:
+                page.locator(css(ddp + "_button")).first.click(); page.wait_for_timeout(900)
+                opt = page.locator(f"xpath=//*[@id='{ddp}_panel']//tr[@data-item-label]").first
+                opt.wait_for(state="visible", timeout=6000)
+                picked = (opt.get_attribute("data-item-label") or "").strip()
+                opt.click(); ajax(page, 12000)
+                print(f"   {f['grp']} <- '{picked}'")
+            except Exception as e:
+                print(f"   {f['grp']} fill err: {str(e)[:60]}")
+        try:
+            page.locator(css(go_id)).first.click(); ajax(page, 20000)
+            print("   GO clicked")
+        except Exception as e:
+            print("   GO err:", str(e)[:60])
+
+    # 3) grid id (now populated, post-GO for gated screens)
     grid = page.evaluate("""() => { const t=[...document.querySelectorAll("[id$=':T_data']")].filter(e=>e.offsetParent||e.querySelector('tr'));
         return t.length? t[0].id : null; }""")
     print("grid id:", grid)
