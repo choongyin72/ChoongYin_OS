@@ -1,6 +1,6 @@
 # install-daily-review-task.ps1
-# One-time setup: registers daily-review.ps1 in Windows Task Scheduler to run at 06:00 AWST.
-# Run once as Administrator.
+# One-time setup: registers daily-review.ps1 in Windows Task Scheduler to run every hour.
+# Run once as Administrator. Re-run to update an existing registration (-Force overwrites in place).
 
 $scriptPath = "$PSScriptRoot\daily-review.ps1"
 # -WindowStyle Hidden: run with no visible PowerShell window (claude --print works silently, so the
@@ -10,12 +10,17 @@ $action     = New-ScheduledTaskAction `
     -Execute  "powershell.exe" `
     -Argument "-NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$scriptPath`""
 
-# 06:00 daily (machine must be set to AWST / Perth timezone)
-$trigger  = New-ScheduledTaskTrigger -Daily -At "06:00"
-# -StartWhenAvailable: run ASAP if the machine was off at the scheduled trigger time
+# Hourly repetition starting from now (machine timezone must be AWST / Perth)
+$trigger  = New-ScheduledTaskTrigger `
+    -Once `
+    -At (Get-Date) `
+    -RepetitionInterval (New-TimeSpan -Hours 1)
+# -StartWhenAvailable: run ASAP if machine was off at trigger time
+# MultipleInstances IgnoreNew: skip the new instance if a prior run is still in progress
 $settings = New-ScheduledTaskSettingsSet `
-    -ExecutionTimeLimit  (New-TimeSpan -Minutes 60) `
+    -ExecutionTimeLimit    (New-TimeSpan -Minutes 55) `
     -StartWhenAvailable `
+    -MultipleInstances     IgnoreNew `
     -WakeToRun:$false
 
 Register-ScheduledTask `
@@ -26,5 +31,5 @@ Register-ScheduledTask `
     -RunLevel Highest `
     -Force
 
-Write-Host "Task registered: ClaudeOS-DailyReview (runs daily at 06:00 AWST)"
+Write-Host "Task registered: ClaudeOS-DailyReview (runs every hour)"
 Write-Host "Log output: $PSScriptRoot\daily-review.log"
