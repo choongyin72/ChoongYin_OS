@@ -1,5 +1,5 @@
 # EC Automation Scorecard
-_Last updated: 2026-06-15_
+_Last updated: 2026-06-19_
 
 ## N-Series Patterns (Production Data Interaction)
 
@@ -64,6 +64,8 @@ _Last updated: 2026-06-15_
 | maximize-browser + expand-screen | ✅ Shared | Adopted across all suites |
 | WR.0001 canary | ✅ Running | Used as regression check after each new suite |
 | DB restore / teardown | ✅ Pattern established | All suites self-cleaning |
+| R16 bundle-credential guard | ✅ Live (2026-06-19) | `scripts/check_bundle_hygiene.py` FAILs on hardcoded creds in `screens/**/playwright/*.py`; wired into ec-object-iud-builder Step-5 verify (PR #77/#78); shared `tmp/scripts/ec_session.py` login helper |
+| EC screen-family registry (machine-readable) | ✅ Live (2026-06-19) | `ec_screen_registry.json` (7 IUD families + golden exemplars); `resolve_ec_screen.py` prints CLONE hint; `scan_ec_screen.py` auto-fills gated nav dd + GO (PR #74/#75/#76) |
 
 ---
 

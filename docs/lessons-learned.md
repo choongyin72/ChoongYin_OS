@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v17** (R16–R17 added 2026-06-18)
+> **Current rule version: v18** (R18 added 2026-06-19)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -25,6 +25,7 @@ _Worker sessions: read this before starting any automation work._
 | v15 | R15 | PowerShell backtick line-continuation must be the LAST character on the line — no trailing space, comment, or text | 2026-06-17 |
 | v16 | R16 | Playwright bundle credentials MUST use env vars (`EC_USER`/`EC_PASS`) — never hardcode strings | 2026-06-18 |
 | v17 | R17 | OV-GM T3 MUST define `<Screen> Row Should Exist` with `Wait For Elements State visible 20s` before T1 assert (lazy redraw) | 2026-06-18 |
+| v18 | R18 | Files printed to a Windows console or parsed by PowerShell MUST be ASCII-only — no em-dash/smart-quotes/non-breaking-space | 2026-06-19 |
 
 ---
 
@@ -427,5 +428,37 @@ _Live-validated: PR #68 TC02 false-failed on fresh run; OV-GM lazy redraw diagno
 | WR.0010.02 Well Oil Comp — not yet attempted (WT_PCT variant of WR.0010.01) | Worker | 🟢 Low |
 | `check_scheduler.py` — document or in-script-generate `tmp/schtasks_dump.csv` | Worker | 🟢 Low |
 | Canonical resume-log structure + reviewer-freshness validation | Worker | 🟡 Medium |
+
+---
+
+## 2026-06-19 — Automated Review (06:00 AWST, 7 open PRs #71/#72/#74/#75/#76/#77/#78)
+
+_Open PRs trigger a full review (R14) despite only 1 new master commit (#73). All 7 PRs CLEAR — zero MUST-FIX — and all 7 merged (squash). One new rule extracted (R18). R1–R17 remain current._
+
+### Rules (apply immediately, no exceptions)
+
+**R18 — Files printed to a Windows console or parsed by PowerShell MUST be ASCII-only** ✅ _live-validated this cycle (merge conflict) + prior precedent (#59 PowerShell parse error)_
+Any file whose content is `print()`ed to a Windows `cp1252` console (Python recon/resolver tools), embedded in a console string, or parsed by PowerShell (Task Scheduler scripts) must use plain ASCII: hyphen `-` not em-dash `—`, straight quotes `'`/`"` not smart quotes, regular space not non-breaking space. Non-ASCII renders as mojibake on `cp1252` and an em-dash inside a PowerShell here-string/comment already broke the daily-review script (#59). It also creates avoidable merge friction: #76's only conflict this cycle was em-dash (#75) vs ASCII hyphen (#76) on the SAME `ec_screen_registry.json` labels. **Reserve non-ASCII for pure-Markdown docs that are never printed or parsed** (this lessons-learned file is fine). When a JSON/Python/PS1 file will be consoled or parsed, write ASCII at authoring time — don't rely on a later "tidy" pass.
+_Live-validated: #76 add/add conflict resolved by keeping the ASCII-hyphen version; the worker had already converted the labels to ASCII precisely because em-dash printed as mojibake on the cp1252 console._
+
+### Observations (good patterns to keep)
+
+- **R16 went from prose to a machine gate (#77):** `scripts/check_bundle_hygiene.py` scans `screens/**/playwright/*.py`, FAILS (exit 1) on any bundle credential not resolved from env, and WARNs (non-gating) on `investigation/` recon scripts — the correct severity split for R16's bundle scope. `main()` returns 1 and `sys.exit(main())` propagates it, so it genuinely gates. The `ENV_OK` skip-list prevents false positives on `os.environ.get('EC_USER','sysadmin')` default lines (verified: PASS on all bundles). #78 then wired it into the skill's Step-5 verify chain — a rule is now enforced, not just documented. This is the model: when a rule can be mechanically checked, build the checker and wire it into the build loop.
+- **R16 fully remediated (#72):** all 5 canonical bundles (Contract Area / Equipment / Bank / Language / MIME) now read `EC_USER`/`EC_PASS` from env. Sandbox default `sysadmin`/`sysadmin` is the verified working login for the `ap-f0a7g341jn6d.corp.quorumsoftware.com` env (distinct from plutodev's `Sysadmin@01`) — live re-run ALL PASS, 0 AUTOTEST residue.
+- **Registry made machine-queryable (#75/#76):** `ec_screen_registry.json` curates 7 IUD families (OV / OV-custom-URL / OV-GM-groupmodel / OV-GM-BU-gated / OV-GM-popup / TV / PC) with class_type/time_scope/discriminator/golden_exemplar/page_object/t2/members. `resolve_ec_screen.py` now prints a CLONE suggestion (REGISTRY MATCH → exact exemplar; else candidate families by CLASS_TYPE for the live scan to disambiguate). Read-only, degrades quietly if the JSON is absent. Turns "which screen do I clone?" from a manual scan into an automatic hint.
+- **Recon scanner now handles gated screens (#74):** `scan_ec_screen.py` fills ONLY yellow/mandatory nav dropdowns (over-filling white fields empties the grid — finder-first rule), in group order, + GO, so OV-GM/BU-gated grids actually load before capture. Each dd fill is try/except-guarded; still read-only (never Saves). Closes the gap that forced a hand-written recon on Contract Area.
+
+### Reviewer process note (stacked-PR add/add conflict)
+
+- **Content-stacked PRs that both ADD the same new file will add/add-conflict after the parent squash-merges.** #76 was stacked on #75 and carried its own copy of `ec_screen_registry.json`; once #75 squash-merged to master, #76's identical-but-for-em-dash copy conflicted. Resolution that worked: `git checkout --ours` on the child branch (the child's version was the intended final), re-validate the JSON, commit the merge, push, retry the squash. For future stacks, prefer a `git rebase` of the child onto the merged parent, or have the child only ADD files that the parent does not.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `scan_ec_screen.py` still hardcodes `sysadmin` login (`tmp/scripts/`, outside R16 bundle scope + outside the hygiene-guard glob) — could import `tmp/scripts/ec_session.py` | Worker | 🟢 Low |
+| `check_bundle_hygiene.py` docstring says it scans `ec_iud_*.py` but the glob is `**/playwright/*.py` (broader) — align docstring to glob | Worker | 🟢 Low |
+| Next OV-GM IUD screen (Transport System / Contract Type) — apply skill + new resolver/scan tooling | Worker | 🟡 Medium |
+| WR.0010.02 Well Oil Comp — not yet attempted (WT_PCT variant of WR.0010.01) | Worker | 🟢 Low |
 
 ---
