@@ -28,16 +28,16 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
-| `0ce2b88` | 2026-06-17 | merge: #47 fix PS1 -WakeToRun switch syntax (colon form) |
-| `92abc97` | 2026-06-17 | fix(scripts): install-daily-review-task.ps1 -WakeToRun switch syntax |
-| `36092e0` | 2026-06-17 | merge: #43 N1-composition Stream Gas Comp Analysis (PO.0020) live 3/3 |
-| `ded2416` | 2026-06-17 | merge: #45 Lab/Sample Analysis lineage deep-dive |
-| `fc7b6e6` | 2026-06-17 | merge: #44 remove GH Actions reviewer + add PS1 Task Scheduler scripts |
-| `6dc7a19` | 2026-06-17 | merge: #42 Comp Phase 1 recon + design doc (PO.0020) |
-| `4d3646f` | 2026-06-17 | merge: #41 EC SME troubleshooting matrix (skill §9) |
-| `1ad44dc` | 2026-06-17 | merge: #40 Comp Analysis SME deep-dive (PO.0020 pre-build) |
-| `d67ed96` | 2026-06-17 | merge: #39 N1 Tank Status VCF (PO.0005.02) live 3/3 |
-| `0f62b80` | 2026-06-17 | merge: #46 review feedback 2026-06-17 manual run (R15) |
+| `fe3b5d9` | 2026-06-18 | fix(daily-review): make script ASCII-only (fixes em-dash parse error) (#59) |
+| `8ee1a59` | 2026-06-18 | fix(daily-review): call claude.exe directly + native pipe (stdin delivery) (#58) |
+| `797e3a1` | 2026-06-18 | fix(daily-review): temp-file stdin redirect for Task Scheduler (#56) |
+| `4e3a96e` | 2026-06-18 | review: 2026-06-18 06:00 AWST â€” 7 PRs clear, no MUST-FIX (#55) |
+| `d3c497a` | 2026-06-18 | feat(process): EC Object IUD spec template + ec-object-iud-builder skill (#54) |
+| `335c877` | 2026-06-18 | feat(n1-comp): Well Gas Component Analysis (WR.0010.01) edit suite â€” live 3/3 … |
+| `371bda3` | 2026-06-18 | feat(n1-comp): Stream Oil Component Analysis (PO.0019) edit suite â€” live 3/3 (… |
+| `4a46a32` | 2026-06-18 | recon(well-gas-comp): Phase 1 â€” WR.0010.01 nav + cell map (#52) |
+| `1227d16` | 2026-06-18 | recon(oil-comp): Phase 1 â€” PO.0019 grid map + wt% gesture proof (#49) |
+| `89b7fe8` | 2026-06-18 | docs(deep-dive): Well Gas Component Analysis (WR.0010.01) SME â€” Phase 0 (#51) |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
