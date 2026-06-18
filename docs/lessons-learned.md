@@ -291,6 +291,51 @@ _Live-validated: 4 PRs (#34–#37, N1 stream siblings + gap audit) were missed b
 
 ---
 
+## 2026-06-18 — Automated Review (06:00 AWST, 7 open PRs #48–#54)
+
+_No new executable rules this run. All 7 PRs clear — no MUST-FIX. R1–R15 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #48 | Clear — PO.0019 Stream Oil Comp SME doc. Oil uses WT_PCT (`C2_in`); `C1_in` (MOL_PCT) exists but is empty/read-only for oil. | ✅ Clear |
+| #49 | Clear — PO.0019 Phase 1 recon. Editable cell = `C2_in` (WT_PCT). Facility = "P1 Facility Allocation". Two dirty-cell incidents transparently documented + cleaned (restore scripts committed). | ✅ Clear |
+| #50 | Clear — PO.0019 live 3/3 suite. T3 correctly substitutes WT_PCT/C2_in/P1 Facility Allocation vs gas. TC03 reload-before-revert guard present. R12 N/A cited (no shared-file changes). | ✅ Clear |
+| #51 | Clear — WR.0010.01 Well Gas Comp SME doc. MOL_PCT (same unit as stream gas). 9-field navigator. New interaction: analysis header row select before component grid loads. | ✅ Clear |
+| #52 | Clear — WR.0010.01 Phase 1 recon. Mandatory = yellow (`rgb(252,249,192)`) fields only (Date+PU+Area+Facility). Well field optional — filling it FIRST causes 0-row result. TC03 reload + RE-SELECT documented. `WELL_SOURCE=WELL_VERSION`. | ✅ Clear |
+| #53 | Clear — WR.0010.01 live 3/3 suite. `Select Analysis Row` uses JS to find header row by well name, clicks `C0_in`. TC03 `Reload And Find Target Component` = re-nav + RE-SELECT + re-cache. R12 N/A. | ✅ Clear |
+| #54 | Clear — EC Object IUD spec template + `ec-object-iud-builder` skill. Read-only scripts (`resolve_ec_screen.py`, `scan_ec_screen.py`). Binary screenshots in `tmp/` acceptable. No shared resources modified. | ✅ Clear |
+
+### Observations
+
+- **Oil comp cell column is WT_PCT, not MOL_PCT (PO.0019):** Stream gas and well gas use MOL_PCT (`C0_in`). Oil uses WT_PCT (`C2_in`) — the MOL_PCT column exists on the oil grid but is empty/read-only. Future workers: don't probe `C1_in` for oil comp; go directly to `C2_in`.
+- **Well comp has an extra interaction step (WR.0010.01):** After GO, a list of analyses loads in a header grid. The component grid only appears AFTER clicking a header row. This means TC03 (revert) must reload + RE-SELECT the analysis header row before re-caching the component cell — stream/oil don't have this step.
+- **Dirty-cell transparency is working (R7):** Worker documented two recon dirty-cell incidents in #49 with cleanup restore scripts. No attempt to hide the misfires. Pattern is embedded.
+- **IUD skill scaffolding (PR #54):** `ec-object-iud-builder` provides a reusable recon→build→live→bundle→PR workflow. `resolve_ec_screen.py` derives IUD metadata from DB config tables. `scan_ec_screen.py` scans live DOM read-only. Together they reduce per-screen effort for OV/TV screens.
+- **Merge chains clear:** #48→#49→#50 (oil comp) and #51→#52→#53 (well gas comp) are fully independent of each other. #54 is independent. No cross-chain dependencies.
+
+### Gaps (updated)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| PO.0019 Stream Oil Comp — ✅ Built and merged (3/3 live) | — | ✅ Closed |
+| WR.0010.01 Well Gas Comp — ✅ Built and merged (3/3 live) | — | ✅ Closed |
+| WR.0010.02 Well Oil Comp — not yet attempted (similar pattern to WR.0010.01 with WT_PCT) | Worker | 🟢 Low |
+| EC Object IUD (OV/TV screens) — skill + spec template now in place; first application pending | Worker | 🟡 Medium |
+| N1 Tank VCF (PO.0005.02) monthly variant — not yet attempted | Worker | 🟢 Low |
+| Windows Task Scheduler — one-time setup run and confirmed firing at 06:00 AWST | ✅ Confirmed | ✅ Done |
+
+### Recommended merge sequence
+
+```
+#48 → #49 → #50  (oil comp chain — merge in order)
+#51 → #52 → #53  (well gas comp chain — merge in order; independent of oil comp chain)
+#54              (independent — can merge any time)
+```
+
+---
+
 ## 2026-06-17 — Manual Review (7 open PRs #39–#45)
 
 _User-triggered manual review mid-session (Windows Task Scheduler alternative being discussed). Reviewed 7 open PRs: #39 N1 Tank VCF, #40 Comp SME doc, #41 SME troubleshooting matrix, #42 Comp Phase 1 recon, #43 Comp suite (PO.0020), #44 remove GH Actions, #45 Lab lineage. One MUST-FIX found and fixed (PR #44)._
