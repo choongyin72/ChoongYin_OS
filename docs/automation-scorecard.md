@@ -1,5 +1,5 @@
 # EC Automation Scorecard
-_Last updated: 2026-06-19_
+_Last updated: 2026-06-20_
 
 ## N-Series Patterns (Production Data Interaction)
 
@@ -69,6 +69,8 @@ _Last updated: 2026-06-19_
 | DB restore / teardown | ✅ Pattern established | All suites self-cleaning |
 | R16 bundle-credential guard | ✅ Live (2026-06-19) | `scripts/check_bundle_hygiene.py` FAILs on hardcoded creds in `screens/**/playwright/*.py`; wired into ec-object-iud-builder Step-5 verify (PR #77/#78); shared `tmp/scripts/ec_session.py` login helper |
 | EC screen-family registry (machine-readable) | ✅ Live (2026-06-19) | `ec_screen_registry.json` (7 IUD families + golden exemplars); `resolve_ec_screen.py` prints CLONE hint; `scan_ec_screen.py` auto-fills gated nav dd + GO (PR #74/#75/#76) |
+| EVENT_LOG family (code-less event rows) | ✅ Live (2026-06-20) | New family in `ec_screen_registry.json`; golden exemplar Alarms (`FCTY_DAY_ALARM`/`DV_ALARMS`); marker oracle + physical delete (R19); next clone = Reported Alarms (PR #84) |
+| Bundle/recon ASCII hygiene | 🟡 Gap (R20) | All 3 bundles this cycle shipped an em-dash in the FAIL-branch print string; skill template + `check_bundle_hygiene.py` static-ASCII check pending |
 
 ---
 
