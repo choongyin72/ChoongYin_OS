@@ -49,6 +49,7 @@ _Last updated: 2026-06-19_
 | Dispatching Objects — slice 1 | 24/24 | ✅ Complete | 6 BU-gated OV-GM screens |
 | Dispatching Objects — slice 2 | Nomination (TV) + Meter (popup) | ✅ Live 4/4 | Pipeline parked |
 | Contract Objects | Contract Area (OV-GM, BU-gated) | ✅ Live 4/4 (2026-06-18) | 1st Contract Objects screen; built by ec-object-iud-builder; sibling of Transport System |
+| Laboratory Objects | Analysis Point (OV-GM, 3-level cascade) | ✅ Live 4/4 (2026-06-19) | 1st Laboratory Objects screen; built by ec-object-iud-builder; clean OV-GM (Op PU/Area/Facility settable in form) |
 | ECIS Excel Upload | End-to-end | ✅ Complete | Own interface + schedule, ran live |
 | Assets | Recon | ✅ Scanned | Registry complete |
 
