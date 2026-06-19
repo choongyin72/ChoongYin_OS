@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v18** (R18 added 2026-06-19)
+> **Current rule version: v20** (R19, R20 added 2026-06-20)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -26,6 +26,8 @@ _Worker sessions: read this before starting any automation work._
 | v16 | R16 | Playwright bundle credentials MUST use env vars (`EC_USER`/`EC_PASS`) — never hardcode strings | 2026-06-18 |
 | v17 | R17 | OV-GM T3 MUST define `<Screen> Row Should Exist` with `Wait For Elements State visible 20s` before T1 assert (lazy redraw) | 2026-06-18 |
 | v18 | R18 | Files printed to a Windows console or parsed by PowerShell MUST be ASCII-only — no em-dash/smart-quotes/non-breaking-space | 2026-06-19 |
+| v19 | R19 | Code-less event-log screens: use a unique per-run marker oracle via `view_count_where_should_be`; prove PHYSICAL delete = marker count 0 in BOTH the OV view AND the base table | 2026-06-20 |
+| v20 | R20 | Author every bundle/recon `.py` ASCII at authoring time — a green run never catches an em-dash in a FAIL-only branch; extend the hygiene guard to flag non-ASCII statically | 2026-06-20 |
 
 ---
 
@@ -459,6 +461,46 @@ _Live-validated: #76 add/add conflict resolved by keeping the ASCII-hyphen versi
 | `scan_ec_screen.py` still hardcodes `sysadmin` login (`tmp/scripts/`, outside R16 bundle scope + outside the hygiene-guard glob) — could import `tmp/scripts/ec_session.py` | Worker | 🟢 Low |
 | `check_bundle_hygiene.py` docstring says it scans `ec_iud_*.py` but the glob is `**/playwright/*.py` (broader) — align docstring to glob | Worker | 🟢 Low |
 | Next OV-GM IUD screen (Transport System / Contract Type) — apply skill + new resolver/scan tooling | Worker | 🟡 Medium |
+| WR.0010.02 Well Oil Comp — not yet attempted (WT_PCT variant of WR.0010.01) | Worker | 🟢 Low |
+
+---
+
+## 2026-06-20 — Automated Review (06:00 AWST, 3 open PRs #83/#84/#85)
+
+_Open PRs trigger a full review (R14). All 3 CLEAR — zero MUST-FIX — all 3 squash-merged. Two new rules (R19, R20). R1–R18 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #83 | Clear — Carrier IUD, plain OV (Cargo Objects). 1st Cargo Objects screen. Toolbar New/Delete enabled → full IUD. R17 correctly N/A (plain-OV family, no groupmodel). Live 4/4; `OV_CARRIER` residue 0 ×2. NICE-TO-HAVE: R18 em-dash in bundle FAIL-branch print string + recon-script docstrings. | ✅ Clear (NICE-TO-HAVE) |
+| #84 | Clear — Alarms IUD, **NEW EVENT-LOG pattern** (code-less event rows, marker oracle, physical delete). `view_count_where_should_be` confirmed pre-existing on master (not a shared-file edit → R12 N/A holds). Live 4/4; residue 0 in both `DV_ALARMS` and base `FCTY_DAY_ALARM`. NICE-TO-HAVE: R18 em-dash in bundle FAIL string; base-table assertion is recon-only (not in-suite). | ✅ Clear (NICE-TO-HAVE) |
+| #85 | Clear — Analysis Point IUD, OV-GM 3-level cascade (Laboratory Objects). 1st Laboratory Objects screen. **R17 wrapper present and correct** (`Analysis Point Row Should Exist` waits `visible 20s` before T1 assert). Live 4/4; `OV_ANALYSIS_POINT` residue 0 ×2. add/add conflict on `automation-scorecard.md` (vs #83, same insert region) resolved keeping BOTH rows. NICE-TO-HAVE: R18 em-dash in bundle FAIL string. | ✅ Clear (NICE-TO-HAVE) |
+
+### Rules (apply immediately, no exceptions)
+
+**R19 — Code-less event-log screens use a marker oracle + dual-location physical-delete proof** ✅ _live-validated (PR #84, Alarms, 4/4)_
+For event-log / inline-grid screens that render a `DATA`/DAY class as addable rows with **no object code** (rows identified only by a free-text cell — e.g. Alarms `FCTY_DAY_ALARM`, REASON), the DB oracle MUST be a unique per-run marker value (`AUTOTEST_<screen>_<timestamp>` written into that free-text column) asserted via `view_count_where_should_be <view> <column> <marker> <n>`. This makes INSERT/UPDATE/DELETE count-delta-safe against shared seed data (never rely on absolute row counts). For screens whose delete is **PHYSICAL** (not date-effective End=Start), prove deletion two ways: marker count = 0 in the OV **view** AND in the **base table** — a view can mask base-table residue. Distinguish at recon time: PHYSICAL-delete screens have no End Date column; do not relabel them as End-Date deletes (cf. R10). Golden exemplar registered as the `EVENT_LOG` family (`ec_screen_registry.json`); next clone = Reported Alarms (`SR_MD_REPORTED_ALARMS`, same base table).
+
+**R20 — Author bundle/recon `.py` ASCII at authoring time; a green run cannot enforce R18** ✅ _live-validated (3-for-3 recurrence this cycle)_ ⚠️ _the static-guard extension is code-derived — not yet built_
+R18 (ASCII-only for console-printed/PowerShell-parsed files) cannot be left to a passing test run, because the most common violation hides where a green run never executes: the **em-dash in the FAIL-only branch** of a bundle's delete-result string (`results['delete'] = 'PASS' if ... else 'FAIL — still present'`, then `print()`ed). It ships silently and raises `UnicodeEncodeError` on a cp1252 (redirected/captured) stream the first time a regression actually trips the FAIL path — i.e. the proof bundle crashes instead of reporting the failure, exactly when the diagnostic matters. All three IUD bundles this cycle (#83/#84/#85) shipped the identical em-dash because the `ec-object-iud-builder` bundle template emits it by default. Therefore: (1) **never** write a non-ASCII char in any `screens/**/playwright/*.py` or `investigation/*.py` file, including docstrings/comments and untaken branches — these files are not "pure-Markdown docs" and are out of R18's exemption; (2) sanitise the skill's bundle/recon templates so future files are born ASCII-clean; (3) extend `scripts/check_bundle_hygiene.py` to FAIL on any non-ASCII byte in those globs — a static scan, not a runtime check — and wire it into the skill Step-5 verify next to the existing R16 credential gate.
+
+### Observations (good patterns to keep)
+
+- **First-of-kind coverage, three sections in one cycle:** Carrier (1st Cargo Objects), Alarms (1st event-log), Analysis Point (1st Laboratory Objects) — all built autonomously via `ec-object-iud-builder`, all live 4/4 first try. The skill's recon→build→live→DB-verify→bundle→PR loop is generalising cleanly across screen types.
+- **R17 wrapper now applied pre-emptively (PR #85):** the OV-GM lazy-redraw wrapper was present in the T3 from the first run (not rediscovered after a false-fail) — the R17 → skill-template feedback loop from the Contract Area retrospective worked as intended.
+- **Append-only discipline held under a real cross-PR collision:** #83 and #85 independently added a Section-Coverage row at the same scorecard line; the merge kept both rows with no data loss. This is exactly the append-only conflict R18's reviewer note (last cycle) anticipated for content-stacked PRs.
+- **OV-GM 3-level cascade nav gotcha (PR #85, worth remembering):** cascade nav dds sit at C:1–C:3 (Date at C:0) so they need `Select EC Dropdown Option`, not `Set Navigator Filter`; and the groupmodel **link fields (Op PU/Area/Facility) are required for grid visibility even when not yellow** — set them = nav scope or the inserted row never lists. This is the line between a "clean" settable OV-GM and a parked one (cf. Pipeline).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `ec-object-iud-builder` bundle/recon templates emit em-dashes by default — sanitise to ASCII (R20 root cause) | Worker | 🟡 Medium |
+| Extend `check_bundle_hygiene.py` to statically FAIL on non-ASCII in `screens/**/playwright/*.py` + `investigation/*.py` (R20) | Worker | 🟡 Medium |
+| Reported Alarms (`SR_MD_REPORTED_ALARMS`) — clone the new EVENT_LOG family (same base table as Alarms) | Worker | 🟢 Low |
+| #84 base-table (`FCTY_DAY_ALARM`) zero-residue check is recon-only — fold a base-table count assertion into the suite | Worker | 🟢 Low |
+| Next OV-GM IUD screen (Transport System / Contract Type) — apply skill + new tooling | Worker | 🟡 Medium |
 | WR.0010.02 Well Oil Comp — not yet attempted (WT_PCT variant of WR.0010.01) | Worker | 🟢 Low |
 
 ---
