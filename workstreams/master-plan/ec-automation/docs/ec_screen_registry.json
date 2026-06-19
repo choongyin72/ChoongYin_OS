@@ -44,7 +44,7 @@
       "golden_exemplar": "Area",
       "page_object": "Configuration/Assets/Basic_Objects/area_page.resource",
       "t2": "manage_object.resource",
-      "members": ["Area", "Sub Area", "Field"]
+      "members": ["Area", "Sub Area", "Field", "Analysis Point"]
     },
     {
       "key": "OV_GM_BU_GATED",
