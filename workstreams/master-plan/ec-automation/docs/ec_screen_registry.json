@@ -20,7 +20,7 @@
       "golden_exemplar": "Bank",
       "page_object": "Configuration/Assets/Financial_Objects/bank_page.resource",
       "t2": "manage_object.resource",
-      "members": ["Bank", "Production Unit", "Business Unit", "Country", "State", "County", "Region", "Object List", "Functional Area", "Currency", "DOA Credit Limit", "Exchange Rate Source", "Payment Scheme", "Product Description", "Sales Order", "VAT Code", "Bank Account", "Cost Object Mapping", "Company", "Customer", "Vendor", "Licence", "MMS Lease", "State Lease", "Operator Lease", "Field Group", "Equipment"]
+      "members": ["Bank", "Production Unit", "Business Unit", "Country", "State", "County", "Region", "Object List", "Functional Area", "Currency", "DOA Credit Limit", "Exchange Rate Source", "Payment Scheme", "Product Description", "Sales Order", "VAT Code", "Bank Account", "Cost Object Mapping", "Company", "Customer", "Vendor", "Licence", "MMS Lease", "State Lease", "Operator Lease", "Field Group", "Equipment", "Carrier"]
     },
     {
       "key": "OV_CUSTOM_URL",
@@ -93,6 +93,18 @@
       "page_object": "Configuration/Assets/Basic_Objects/object_list_setup_page.resource",
       "t2": "manage_object.resource + table.resource",
       "members": ["Object List Setup"]
+    },
+    {
+      "key": "EVENT_LOG",
+      "label": "EVENT-LOG - gated inline event grid (DATA/DAY class)",
+      "class_type": "DATA",
+      "time_scope": "DAY",
+      "discriminator": "DATA/DAY class shown as a gated inline grid; cascade nav (Date + PU/Area/Facility Class 1) + GO before the grid loads; ADD event rows; no object code (identify by a unique free-text marker cell); physical delete",
+      "delete": "PHYSICAL (Delete > <label>)",
+      "golden_exemplar": "Alarms",
+      "page_object": "EC_Production/Production_Operations/Event/alarms_page.resource",
+      "t2": "table_class.resource + navigator",
+      "members": ["Alarms"]
     }
   ],
   "parked_or_excluded": [
