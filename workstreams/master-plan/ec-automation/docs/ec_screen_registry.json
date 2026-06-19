@@ -20,7 +20,7 @@
       "golden_exemplar": "Bank",
       "page_object": "Configuration/Assets/Financial_Objects/bank_page.resource",
       "t2": "manage_object.resource",
-      "members": ["Bank", "Production Unit", "Business Unit", "Country", "State", "County", "Region", "Object List", "Functional Area", "Currency", "DOA Credit Limit", "Exchange Rate Source", "Payment Scheme", "Product Description", "Sales Order", "VAT Code", "Bank Account", "Cost Object Mapping", "Company", "Customer", "Vendor", "Licence", "MMS Lease", "State Lease", "Operator Lease", "Field Group", "Equipment"]
+      "members": ["Bank", "Production Unit", "Business Unit", "Country", "State", "County", "Region", "Object List", "Functional Area", "Currency", "DOA Credit Limit", "Exchange Rate Source", "Payment Scheme", "Product Description", "Sales Order", "VAT Code", "Bank Account", "Cost Object Mapping", "Company", "Customer", "Vendor", "Licence", "MMS Lease", "State Lease", "Operator Lease", "Field Group", "Equipment", "Carrier"]
     },
     {
       "key": "OV_CUSTOM_URL",
