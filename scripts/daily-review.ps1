@@ -1,15 +1,21 @@
 # daily-review.ps1
-# Called by Windows Task Scheduler daily at 06:00 AWST.
-# Reads the review prompt from .claude/scheduled_tasks.json and pipes it to the claude CLI.
+# Called by Windows Task Scheduler at 06:00 and 14:00 AWST.
+# Reads the review prompt from .claude/review-prompt.txt and pipes it to the claude CLI.
 # Output is appended to scripts/daily-review.log.
+#
+# WHY review-prompt.txt and not scheduled_tasks.json:
+#   scheduled_tasks.json is intentionally left empty (tasks: []) so the Claude Code
+#   cloud harness does NOT fire the review prompt into an active Worker session.
+#   Task Scheduler is the sole trigger -- it always spawns a fresh claude.exe with
+#   no Worker context, ensuring genuine reviewer independence.
 #
 # KEEP THIS FILE ASCII-ONLY. Non-ASCII chars (e.g. an em-dash) break PowerShell 5.1 parsing when the
 # file has no UTF-8 BOM: the multi-byte char is misread and can decode to a quote, giving
 # "The string is missing the terminator" / "Missing closing '}'". Use plain ASCII hyphens instead.
 
-$RepoRoot  = Split-Path $PSScriptRoot   # scripts/ -> repo root
-$LogFile   = "$PSScriptRoot\daily-review.log"
-$TasksFile = "$RepoRoot\.claude\scheduled_tasks.json"
+$RepoRoot   = Split-Path $PSScriptRoot   # scripts/ -> repo root
+$LogFile    = "$PSScriptRoot\daily-review.log"
+$PromptFile = "$RepoRoot\.claude\review-prompt.txt"
 
 function Write-Log($msg) {
     $line = "$(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')  $msg"
@@ -18,17 +24,16 @@ function Write-Log($msg) {
 
 Write-Log "=== Daily review started ==="
 
-if (-not (Test-Path $TasksFile)) {
-    Write-Log "ERROR: $TasksFile not found - aborting."
+if (-not (Test-Path $PromptFile)) {
+    Write-Log "ERROR: $PromptFile not found - aborting."
     exit 1
 }
 
-# Extract the first task's prompt (index 0 = the daily review task)
-$tasks  = Get-Content $TasksFile -Raw | ConvertFrom-Json
-$prompt = $tasks.tasks[0].prompt
+# Read the review prompt from its dedicated file.
+$prompt = Get-Content $PromptFile -Raw
 
 if (-not $prompt) {
-    Write-Log "ERROR: No prompt found in scheduled_tasks.json - aborting."
+    Write-Log "ERROR: review-prompt.txt is empty - aborting."
     exit 1
 }
 
