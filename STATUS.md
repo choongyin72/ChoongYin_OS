@@ -28,16 +28,16 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `f3f2001` | 2026-06-19 | review: 2026-06-19 later run — stood down, #79 already complete (#80) |
+| `f7a717a` | 2026-06-19 | review: automated quality feedback 2026-06-19 (#79) |
 | `7e1abd2` | 2026-06-19 | feat(resolve): sibling/golden-exemplar hint from registry JSON (#76) |
 | `ef22b28` | 2026-06-19 | skill(iud-builder): wire R16 hygiene guard into Step-5 verify (#78) |
 | `8028a3e` | 2026-06-19 | feat(guard): check_bundle_hygiene.py (R16 enforcement) + shared ec_session.py lo… |
 | `a1fb495` | 2026-06-19 | docs(registry): family + golden-exemplar index + machine-readable JSON companion… |
 | `08c7750` | 2026-06-19 | feat(scan): fill mandatory nav dropdown + GO on gated screens, capture treeview … |
-| `7915fcd` | 2026-06-19 | fix(ec-iud): R16 â€” Playwright bundle creds from env (EC_USER/EC_PASS), never h… |
-| `01e744f` | 2026-06-19 | review-log: 2026-06-18 (later run) â€” already reviewed by #70, no new work (#71… |
-| `31e4c2c` | 2026-06-19 | skill(ec-object-iud-builder): add template trust boundary â€” 3 points where clo… |
-| `94639b6` | 2026-06-18 | review: 2026-06-18-b â€” R16/R17 extracted from Contract Area IUD retrospective … |
-| `c58b736` | 2026-06-18 | skill(ec-object-iud-builder): embed N1/N2/N3 improvements from Contract Area ret… |
+| `7915fcd` | 2026-06-19 | fix(ec-iud): R16 — Playwright bundle creds from env (EC_USER/EC_PASS), never har… |
+| `01e744f` | 2026-06-19 | review-log: 2026-06-18 (later run) — already reviewed by #70, no new work (#71) |
+| `31e4c2c` | 2026-06-19 | skill(ec-object-iud-builder): add template trust boundary — 3 points where cloni… |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
