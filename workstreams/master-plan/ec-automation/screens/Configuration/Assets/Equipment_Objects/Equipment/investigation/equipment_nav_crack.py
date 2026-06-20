@@ -1,5 +1,5 @@
 """
-Phase 0d — crack the cascading navigator by driving each field as a DROPDOWN
+Phase 0d - crack the cascading navigator by driving each field as a DROPDOWN
 (click chevron trigger -> pick from populated panel) with cascade waits.
 Lists real option values at each step, then Go and find the result table id. READ-ONLY.
 """

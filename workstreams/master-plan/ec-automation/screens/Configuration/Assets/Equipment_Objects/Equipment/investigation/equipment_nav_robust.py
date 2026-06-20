@@ -1,5 +1,5 @@
 """
-Phase 0e — robust cascading-navigator setter with per-field verify + diagnostics.
+Phase 0e - robust cascading-navigator setter with per-field verify + diagnostics.
 Type -> wait for suggestions -> click exact suggestion -> wait cascade -> verify stuck.
 Then Go and locate the result table. READ-ONLY.
 """
@@ -64,7 +64,7 @@ def set_field(page, group, want, retries=2):
                 if got.strip():
                     return got
         else:
-            # no suggestions yet (cascade not ready) — wait and retry
+            # no suggestions yet (cascade not ready) - wait and retry
             page.keyboard.press('Escape')
             page.wait_for_timeout(1200)
     print(f'  {group} FAILED to set "{want}"')

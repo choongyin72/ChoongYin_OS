@@ -70,7 +70,7 @@ with sync_playwright() as p:
             autotest_row = r
 
     if not autotest_row:
-        print(f'\n{TEST_CODE} not found in table — abort')
+        print(f'\n{TEST_CODE} not found in table - abort')
         ctx.close(); browser.close()
         exit(1)
 

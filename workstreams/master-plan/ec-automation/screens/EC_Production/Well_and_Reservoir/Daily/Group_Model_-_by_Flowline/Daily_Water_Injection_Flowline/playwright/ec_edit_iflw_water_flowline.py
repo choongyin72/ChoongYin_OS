@@ -1,5 +1,5 @@
-"""EC N1 EDIT prototype (freestyle Playwright) — Daily Water Injection Flowline, by Flowline.
-This screen is UPDATE-ONLY (New/Delete toolbar disabled — the daily row is batch-instantiated, not
+"""EC N1 EDIT prototype (freestyle Playwright) - Daily Water Injection Flowline, by Flowline.
+This screen is UPDATE-ONLY (New/Delete toolbar disabled - the daily row is batch-instantiated, not
 created/deleted on the screen). So this demos the full EDIT capability of the cell On Strm[hr]
 (= ON_STREAM_HRS) for P1 F003 WI on 2019-12-20, DB-verifying IFLW_DAY_STATUS at each step:
   SET (empty->18, save) -> CHANGE (18->24, save) -> CLEAR (->NULL, save).
@@ -103,7 +103,7 @@ def main():
         page.locator('[id="menu:searchForm:searchTxt"]').type(SCREEN, delay=20); time.sleep(1.3)
         page.locator(f'xpath=//*[contains(@class,"tv-link") and normalize-space(text())="{SCREEN}"]').first.click()
         page.wait_for_load_state("networkidle", timeout=30000); time.sleep(2.0)
-        try:  # expand to full page (hide treeview) — matches RF screen.resource
+        try:  # expand to full page (hide treeview) - matches RF screen.resource
             page.click('[id="screenToolbar:form:minmaxMenu"]', timeout=10000)
             page.wait_for_load_state("networkidle", timeout=15000); time.sleep(0.6)
         except Exception as e:
@@ -116,13 +116,13 @@ def main():
         page.screenshot(path=str(EVID / "01_grid_loaded.png"))
         set_cell(fr, SET_VALUE); save(page, fr); reload_go(page, fr)
         res["set"] = val(o); page.screenshot(path=str(EVID / "02_value_set.png"))
-        print(f"  [SET] cell={SET_VALUE}, DB={res['set']} — holding {HOLD}s"); time.sleep(HOLD)
+        print(f"  [SET] cell={SET_VALUE}, DB={res['set']} - holding {HOLD}s"); time.sleep(HOLD)
         set_cell(fr, CHANGE_VALUE); save(page, fr); reload_go(page, fr)
         res["change"] = val(o); page.screenshot(path=str(EVID / "03_value_changed.png"))
-        print(f"  [CHANGE] cell={CHANGE_VALUE}, DB={res['change']} — holding {HOLD}s"); time.sleep(HOLD)
+        print(f"  [CHANGE] cell={CHANGE_VALUE}, DB={res['change']} - holding {HOLD}s"); time.sleep(HOLD)
         set_cell(fr, ""); save(page, fr); reload_go(page, fr)
         res["clear"] = val(o); page.screenshot(path=str(EVID / "04_value_cleared.png"))
-        print(f"  [CLEAR] cell cleared, DB={res['clear']} — holding {HOLD * 2}s (watch the empty cell)")
+        print(f"  [CLEAR] cell cleared, DB={res['clear']} - holding {HOLD * 2}s (watch the empty cell)")
         time.sleep(HOLD * 2)
         b.close()
     print(f"SET    DB={res['set']} -> {'PASS' if str(res['set']) == SET_VALUE else 'FAIL'}")

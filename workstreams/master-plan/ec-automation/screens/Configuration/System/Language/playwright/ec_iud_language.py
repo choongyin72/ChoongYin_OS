@@ -1,4 +1,4 @@
-"""EC IUD — Language (Table class / TV). Playwright (Python).
+"""EC IUD - Language (Table class / TV). Playwright (Python).
 Inline-editable paginated grid, no navigator, PHYSICAL delete (base T_BASIS_LANGUAGE).
 Cells: table:form:T:{row}:C0_in (Id, auto) / C1_in (LANGUAGE code) / C2_in (NAME).
 Commit cells with real keys + Tab (onchange->PrimeFaces.ab). NEVER touch existing rows.
@@ -21,7 +21,7 @@ HEADED = os.environ.get('EC_HEADED', '0') == '1'
 SLOWMO = int(os.environ.get('EC_SLOWMO', '0')) if HEADED else 0
 CODE = os.environ.get('EC_CODE', 'ZZ')
 NAME = os.environ.get('EC_NAME', 'Autotest Lang')
-LANG_ID = os.environ.get('EC_ID', '999')  # Id/LANGUAGE_ID — required (yellow) field
+LANG_ID = os.environ.get('EC_ID', '999')  # Id/LANGUAGE_ID - required (yellow) field
 INSERT_ONLY = os.environ.get('EC_INSERT_ONLY', '0') == '1'
 DELETE_ONLY = os.environ.get('EC_DELETE_ONLY', '0') == '1'
 SS = _repo_root() / 'docs' / 'EC' / 'screenshots' / 'iud_language'
@@ -117,7 +117,7 @@ with sync_playwright() as p:
         wait_ajax(page); page.wait_for_timeout(1000)
         blank = find_blank(page)
         print(f'blank row: {blank}')
-        type_cell(page, blank, 0, LANG_ID)   # Id — required (yellow) field
+        type_cell(page, blank, 0, LANG_ID)   # Id - required (yellow) field
         type_cell(page, blank, 1, CODE)
         type_cell(page, blank, 2, NAME)
         shot(page, '02_insert_filled')

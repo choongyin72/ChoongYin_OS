@@ -1,7 +1,7 @@
 """
-EC IUD MIME Type Mapping — Playwright (Table class / TV view, inline editable grid, paginated).
+EC IUD MIME Type Mapping - Playwright (Table class / TV view, inline editable grid, paginated).
 Screen: Configuration > System > MIME Type Mapping (mime_type_table:form, no navigator, 5-page grid).
-Cells: mime_type_table:form:T:{row}:C0_in (MIME Type), C1_in (File Extensions) — both {mandatory:true}.
+Cells: mime_type_table:form:T:{row}:C0_in (MIME Type), C1_in (File Extensions) - both {mandatory:true}.
 Cell commit: each input fires onchange -> PrimeFaces.ab partial-submit -> stages value server-side.
   => MUST type with real keys + Tab to fire onchange, then wait for the AJAX, before Save.
 Verify after Save by RELOADING (Refresh) so the grid reflects the DB, then page-search.
@@ -184,7 +184,7 @@ with sync_playwright() as p:
             print(f'  after reload, found in grid: {found}')
             results['insert'] = 'PASS' if found else f'FAIL err={err or "not persisted after reload"}'
         else:
-            results['insert'] = 'FAIL — no blank row'
+            results['insert'] = 'FAIL - no blank row'
     else:
         results['insert'] = 'SKIP'
     print(f'  INSERT: {results["insert"]}')
@@ -204,7 +204,7 @@ with sync_playwright() as p:
             print(f'  row after update: {r2}')
             results['update'] = 'PASS' if ok else f'FAIL ext={r2}'
         else:
-            results['update'] = 'FAIL — row not found'
+            results['update'] = 'FAIL - row not found'
     else:
         results['update'] = 'SKIP'
     print(f'  UPDATE: {results["update"]}')
@@ -230,11 +230,11 @@ with sync_playwright() as p:
                 do_save(page); reload_grid(page); ss(page, 'del_saved')
                 gone = find_row_paged(page, TEST_MIME) is None
                 print(f'  gone after delete+reload: {gone}')
-                results['delete'] = 'PASS' if gone else 'FAIL — still present'
+                results['delete'] = 'PASS' if gone else 'FAIL - still present'
             else:
-                results['delete'] = 'ABORT — active row not test row (safety)'
+                results['delete'] = 'ABORT - active row not test row (safety)'
         else:
-            results['delete'] = 'FAIL — row not found'
+            results['delete'] = 'FAIL - row not found'
     else:
         results['delete'] = 'SKIP'
     print(f'  DELETE: {results["delete"]}')

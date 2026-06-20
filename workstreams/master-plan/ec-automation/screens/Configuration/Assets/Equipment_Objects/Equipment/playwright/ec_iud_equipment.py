@@ -1,5 +1,5 @@
 """
-EC IUD Equipment — Playwright (Manage Object screen, screen 2 of 2).
+EC IUD Equipment - Playwright (Manage Object screen, screen 2 of 2).
 Navigator (cascading dropdowns, EXACT values per screenshot):
   Production Unit | Offshore area | Offshore facility | Compressor  -> Go
 Field IDs (from Phase 0 deep-dive scan):
@@ -183,7 +183,7 @@ with sync_playwright() as p:
     # CLEAN STATE
     print('\n=== CLEAN STATE ===')
     if check_row(page, TEST_CODE):
-        print(f'  [WARN] {TEST_CODE} already present — use a fresh code')
+        print(f'  [WARN] {TEST_CODE} already present - use a fresh code')
         results['clean'] = 'PRE-EXISTS'
     else:
         results['clean'] = 'CLEAN'
@@ -238,12 +238,12 @@ with sync_playwright() as p:
             print(f'  Row: {sel_again}')
             results['update'] = 'PASS' if ok else f'FAIL row={sel_again}'
         else:
-            results['update'] = 'FAIL — row not found'
+            results['update'] = 'FAIL - row not found'
     else:
         results['update'] = 'SKIP'
     print(f'  UPDATE: {results["update"]}')
 
-    # DELETE — try - button, else End=Start
+    # DELETE - try - button, else End=Start
     print('\n=== DELETE (try - button, else End=Start) ===')
     if SKIP_DELETE:
         results['delete'] = 'SKIP (skip-delete mode)'
@@ -253,14 +253,14 @@ with sync_playwright() as p:
         delbtn = page.locator("xpath=//a[(@title='Delete [Ctrl+d]' or .//span[contains(@class,'ui-icon-delete')]) and not(ancestor::li[contains(@class,'ui-submenu-state-disabled')]) and not(contains(@class,'ui-state-disabled'))]")
         used = ''
         if delbtn.count() > 0 and delbtn.first.is_visible():
-            print('  - button appears enabled — clicking it')
+            print('  - button appears enabled - clicking it')
             delbtn.first.click(); wait_ajax(page)
             confirm = page.locator("button:has-text('Yes'), #confirmationForm\\:yes")
             if confirm.count() > 0 and confirm.first.is_visible():
                 confirm.first.click(); wait_ajax(page)
             do_save(page); used = '-button'
         else:
-            print('  - button disabled (as expected) — using End Date = Start Date')
+            print('  - button disabled (as expected) - using End Date = Start Date')
             fill_date(page, DEL_END, END_DATE); print(f'  End Date = {END_DATE}')
             ss(page, 'del_enddate')
             do_save(page); used = 'end=start'

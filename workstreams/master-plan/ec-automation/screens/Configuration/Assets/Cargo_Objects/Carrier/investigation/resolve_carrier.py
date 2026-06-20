@@ -1,7 +1,7 @@
-"""resolve_ec_screen.py — INPUT = an EC screen name only; derive its IUD metadata from EC config tables.
+"""resolve_ec_screen.py - INPUT = an EC screen name only; derive its IUD metadata from EC config tables.
 Usage:  SCREEN="contract area" py tmp/scripts/resolve_ec_screen.py
 Derives: class_name, screen type (OV vs TV), date-effective?, base/version table, verify view, delete
-method — so the IUD spec template needs only the screen name. SELECT only (read-only)."""
+method - so the IUD spec template needs only the screen name. SELECT only (read-only)."""
 import os
 import json
 import oracledb

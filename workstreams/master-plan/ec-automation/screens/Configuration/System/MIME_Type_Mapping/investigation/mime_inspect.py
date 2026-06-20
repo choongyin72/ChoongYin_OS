@@ -1,5 +1,5 @@
 """
-Phase scan — DOM deep-dive of MIME Type Mapping (READ-ONLY, never saves).
+Phase scan - DOM deep-dive of MIME Type Mapping (READ-ONLY, never saves).
 Captures: grid structure + existing rows, cell input IDs, toolbar, Insert submenu,
 and the new-row cell IDs after clicking Insert (no Save, so no data change).
 """
@@ -70,7 +70,7 @@ with sync_playwright() as p:
         ins.first.hover(); page.wait_for_timeout(900)
         items = page.evaluate("""()=>{const o=[];document.querySelectorAll('.ui-menu-child a').forEach(a=>{if(a.offsetParent)o.push((a.textContent||'').trim());});return o;}""")
         print(f'  submenu items: {items}')
-        # click first visible submenu item (New row) — NO SAVE
+        # click first visible submenu item (New row) - NO SAVE
         sub = page.locator("xpath=//ul[contains(@class,'ui-menu-child')]//li//a")
         for i in range(sub.count()):
             if sub.nth(i).is_visible():

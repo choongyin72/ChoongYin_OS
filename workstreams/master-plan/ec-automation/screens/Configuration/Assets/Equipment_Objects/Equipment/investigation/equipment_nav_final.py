@@ -1,5 +1,5 @@
 """
-Phase 0g — DEFINITIVE navigator setter (click dd_button chevron -> click option in dd_panel),
+Phase 0g - DEFINITIVE navigator setter (click dd_button chevron -> click option in dd_panel),
 then complete the scan: result-table id, row-select labeled forms, delete-button behaviour. READ-ONLY.
 """
 from playwright.sync_api import sync_playwright

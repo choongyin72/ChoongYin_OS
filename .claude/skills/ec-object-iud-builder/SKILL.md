@@ -84,7 +84,10 @@ At these three points: slow down, recon first, verify against ground truth — d
 
 **5. Verify.** robocop clean → `robot --dryrun` the suite + full `tests/` → **live headed run**
    (`EC_HEADLESS=false`) N/N PASS → DbVerify each op → **independent DB re-read = clean** →
-   **`py scripts/check_bundle_hygiene.py` must PASS** (R16 guard — no hardcoded creds in the bundle).
+   **`py scripts/check_bundle_hygiene.py` must PASS** (R16 guard — no hardcoded creds in the bundle; **R20
+   guard — fails statically on ANY non-ASCII char in `playwright/*.py` or `investigation/*.py`**, so author
+   every bundle/recon `.py` ASCII-clean: use `-` not em-dash, `->` not arrow, `OK`/`X` not check/cross, plain
+   quotes — including in docstrings/comments and untaken FAIL-branch strings).
 
 **6. Package.** Append a row to `docs/ec_screen_registry.md` + `docs/automation-scorecard.md` (append-only).
 

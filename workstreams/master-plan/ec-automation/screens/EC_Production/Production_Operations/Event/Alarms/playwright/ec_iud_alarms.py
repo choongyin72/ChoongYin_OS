@@ -1,8 +1,8 @@
 """
-EC IUD Alarms — freestyle Playwright proof. Screen: EC Production > Production Operations > Event > Alarms.
+EC IUD Alarms - freestyle Playwright proof. Screen: EC Production > Production Operations > Event > Alarms.
 EVENT-LOG pattern: a DATA/DAY class (FCTY_DAY_ALARM) shown as a GATED inline grid. The PU/Area/Facility
 cascade navigator (+ Date) + GO must be applied before the grid loads; then you ADD alarm rows. No object
-code — rows are identified by a unique REASON marker. Insert/Delete are PHYSICAL.
+code - rows are identified by a unique REASON marker. Insert/Delete are PHYSICAL.
 
 Inline-grid cells (recon 2026-06-19): C0_da_input Time / C1_dd Area / C2_dd Type-of-Alarm (MANDATORY) /
 C3_in Reason (marker) / C4_cb Report / C5_in Duration.   DB verify: DV_ALARMS by REASON marker.
@@ -157,7 +157,7 @@ with sync_playwright() as p:
     if r >= 0:
         page.locator(esc(f'{CELL}:{r}:C3_in')).click(); page.wait_for_timeout(800)
         delete_selected(page); do_save(page); click_go(page)
-        results['delete'] = 'PASS' if row_by_reason(page, REASON_UPD) < 0 else 'FAIL — still present'
+        results['delete'] = 'PASS' if row_by_reason(page, REASON_UPD) < 0 else 'FAIL - still present'
     else:
         results['delete'] = 'SKIP'
     ss(page, 'delete_result'); print(f'  DELETE: {results["delete"]}')
