@@ -536,3 +536,27 @@ R9 mandates the six field *headers* exist; R21 mandates their *content* is true 
 | Carry-over from #86 (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
 
 ---
+
+## 2026-06-20 — Manual Review (PR #89, grid-menu deep-dive)
+
+_1 open PR (#89) reviewed after the scheduled 14:00 AWST run did not fire. PR CLEAR — squash-merged. One reviewer error self-corrected (see MR4 below). No new executable rules._
+
+### PR Status
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #89 | Clear — NEW additive `grid_menu.resource` (8 T2 keywords: filtering + reset-personalisation), `grid_menu_smoke.robot` (live 4/4 read-only, self-cleaning teardown), `ec-table-column-menu.md` (all 8 [V]). R12 N/A correct (brand-new file, nothing imports it). DB ground-truth N/A justified (view-only). 6 body fields present. NICE-TO-HAVE posted then immediately self-corrected (reviewer error — see MR4). | ✅ Clear — merged |
+
+### Reviewer process rules (added)
+
+**MR4 — Re-read `lessons-learned.md` after any context compaction; never trust a pre-compaction cached read**
+After context compression the reviewer's in-memory version of `lessons-learned.md` may be stale: new rules added by earlier sessions in the same day will be absent from the cached summary. In this session the reviewer saw v18 (pre-compaction) while the file was at v21 (R19/R20/R21 added by the 06:00 and 14:00 AWST runs today). This caused the reviewer to flag R20/R21 in PR #89 as "phantom rules" — a false NICE-TO-HAVE that had to be publicly corrected with a follow-up comment. Fix: after resuming from compaction, ALWAYS open `docs/lessons-learned.md` explicitly with the Read tool before writing any review comment that references rule numbers. Do not infer the current version from the compaction summary.
+
+### Gaps (updated)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| grid_menu.resource is brand-new and not yet imported by any suite — first real use will be the next filtering-heavy screen | Worker | 🟢 Low |
+| Carry-over from #88 (still open): Reported Alarms EVENT_LOG clone; #84 base-table count; next OV-GM IUD; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+---
