@@ -1,4 +1,4 @@
-"""EC IUD — Business Unit (Playwright reference).
+"""EC IUD - Business Unit (Playwright reference).
 Thin config over the shared engine: ../_shared/iud_engine.py.
 See business_unit_sow.md for the screen analysis and README.md for run instructions."""
 import sys

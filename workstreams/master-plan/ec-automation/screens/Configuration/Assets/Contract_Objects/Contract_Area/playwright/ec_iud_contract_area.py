@@ -1,5 +1,5 @@
 """
-EC IUD Contract Area — freestyle Playwright proof (sibling of Transport System; OV-GM, BU-gated).
+EC IUD Contract Area - freestyle Playwright proof (sibling of Transport System; OV-GM, BU-gated).
 Screen: Configuration > Assets > Contract Objects > Contract Area.
 
 OV-GM behaviour (recon 2026-06-18):
@@ -42,7 +42,7 @@ _CODE     = os.environ.get('EC_CODE', 'AUTOTEST_CA_PWDEMO')
 TEST_CODE = _CODE
 TEST_NAME = f'AUTOTEST Contract Area {_CODE}'
 TEST_NAME_UPD = f'{TEST_NAME} UPDATED'
-START_DATE = '2003-01-01'          # ref-dd screen — date must post-date the seed Business Units
+START_DATE = '2003-01-01'          # ref-dd screen - date must post-date the seed Business Units
 END_DATE   = '2003-01-01'          # DELETE: End Date = Start Date (zero-length window = true delete)
 BU_LABEL   = os.environ.get('EC_BU', 'ECP Norway')
 
@@ -200,7 +200,7 @@ with sync_playwright() as p:
         fill(page, DEL_END, END_DATE, date=True); ss(page, 'delete_end_date_set')
         do_save(page); click_go(page); click_go(page)
         still = check_row(page, TEST_CODE)
-        results['delete'] = f'PASS (true delete: EndDate=StartDate={END_DATE})' if not still else 'FAIL — still visible'
+        results['delete'] = f'PASS (true delete: EndDate=StartDate={END_DATE})' if not still else 'FAIL - still visible'
     else:
         results['delete'] = 'SKIP'
     ss(page, 'delete_result'); print(f'  DELETE: {results["delete"]}')

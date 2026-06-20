@@ -1,4 +1,4 @@
-"""READ-ONLY: confirm 'Daily Gas Injection Flowline, by Flowline' — cascade P1 Facility 1 -> P1 F004 GI,
+"""READ-ONLY: confirm 'Daily Gas Injection Flowline, by Flowline' - cascade P1 Facility 1 -> P1 F004 GI,
 GO, dump grid id + C2 cell (expect daily_flowline_status:form, C2=On Strm[hr]). Also check flowline-name
 uniqueness (the WI '0600' trap). NO save."""
 import time, json

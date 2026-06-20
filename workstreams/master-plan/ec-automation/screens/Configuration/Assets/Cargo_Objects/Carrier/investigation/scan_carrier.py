@@ -2,8 +2,8 @@
 Saves). Pairs with resolve_ec_screen.py (Step 1 / DB metadata). Captures the bits config tables don't
 carry: the treeview menu path (from the tv-link title), toolbar New/Delete enabled-state, navigator
 shape + which nav fields are mandatory (yellow), the grid id, and the form/field ids. For GATED screens
-(a mandatory nav dropdown — OV-GM / BU-gated / cascade) it fills the mandatory dropdown(s) first-option
-in group order + clicks GO so the grid and forms actually load before capture (fills ONLY yellow dds —
+(a mandatory nav dropdown - OV-GM / BU-gated / cascade) it fills the mandatory dropdown(s) first-option
+in group order + clicks GO so the grid and forms actually load before capture (fills ONLY yellow dds -
 over-filling white nav fields empties the grid). For OV it then drives New-Object + row-select to read
 objectForm/updateAttributes/objectdates ids; for TV it reads the grid cells. READ-ONLY (never Saves). Usage:
    SCREEN="Bank" py tmp/scripts/scan_ec_screen.py        (EC_HEADED=1 to watch)
@@ -101,7 +101,7 @@ with sync_playwright() as p:
     print("navigator:", {"fields": [{k: f[k] for k in ("grp", "kind", "mandatory")} for f in nav["fields"]], "go": nav["go"]})
 
     # 2b) GATED screen: fill the mandatory nav dropdown(s) first-option (in group order) + GO, so the grid
-    #     and forms actually load. Fill ONLY yellow/mandatory dds — over-filling white nav fields empties the grid.
+    #     and forms actually load. Fill ONLY yellow/mandatory dds - over-filling white nav fields empties the grid.
     go_id = nav["go"][0] if nav["go"] else "button:form:B"
     mand_dds = [f for f in nav["fields"] if f["kind"] == "dd_input" and f["mandatory"]]
     if mand_dds:

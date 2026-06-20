@@ -1,5 +1,5 @@
-"""RECON (read-only): identify 'Contract Area' — its OV view / base table, whether it's OV (manage-object,
-date-effective) or TV (table-class), and row count — to anchor the spec-template worked example. SELECT only."""
+"""RECON (read-only): identify 'Contract Area' - its OV view / base table, whether it's OV (manage-object,
+date-effective) or TV (table-class), and row count - to anchor the spec-template worked example. SELECT only."""
 import os
 import oracledb
 

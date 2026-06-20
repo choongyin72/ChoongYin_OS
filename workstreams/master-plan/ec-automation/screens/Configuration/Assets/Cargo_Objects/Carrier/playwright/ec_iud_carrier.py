@@ -1,10 +1,10 @@
 """
-EC IUD Carrier — freestyle Playwright proof. Screen: Configuration > Assets > Cargo Objects > Carrier.
+EC IUD Carrier - freestyle Playwright proof. Screen: Configuration > Assets > Cargo Objects > Carrier.
 Manage-Object (OV), Bank-family grid (manage_object_nav_nav:form:T_data); NOT gated (nav = optional date).
 
 Field IDs (recon 2026-06-19):
   INSERT objectForm: Code R:0, Name R:1, Start Date R:4 (da_input), Unit R:9 (dd, MANDATORY).
-                     (Carrier Group R:2 / Carrier Type R:3 sit between Name and Start Date — both optional.)
+                     (Carrier Group R:2 / Carrier Type R:3 sit between Name and Start Date - both optional.)
   UPDATE updateAttributes: Name R:1.
   DELETE objectdates: End Date R:0:C:3 = Start Date (zero-length window = true delete from ov_carrier).
 NEVER TOUCH EXISTING DATA. Test data: AUTOTEST_CARR_* only; the referenced Unit is read-only seed.
@@ -27,7 +27,7 @@ _CODE     = os.environ.get('EC_CODE', 'AUTOTEST_CARR_PWDEMO')
 TEST_CODE = _CODE
 TEST_NAME = f'AUTOTEST Carrier {_CODE}'
 TEST_NAME_UPD = f'{TEST_NAME} UPDATED'
-START_DATE = '2003-01-01'          # ref-dd screen (Unit) — date must post-date seed reference objects
+START_DATE = '2003-01-01'          # ref-dd screen (Unit) - date must post-date seed reference objects
 END_DATE   = '2003-01-01'          # DELETE: End Date = Start Date (zero-length window = true delete)
 
 GRID      = 'manage_object_nav_nav:form:T_data'
@@ -184,7 +184,7 @@ with sync_playwright() as p:
         fill(page, DEL_END, END_DATE, date=True); ss(page, 'delete_end_date_set')
         do_save(page); click_go(page)
         still = check_row(page, TEST_CODE)
-        results['delete'] = f'PASS (true delete: EndDate=StartDate={END_DATE})' if not still else 'FAIL — still visible'
+        results['delete'] = f'PASS (true delete: EndDate=StartDate={END_DATE})' if not still else 'FAIL - still visible'
     else:
         results['delete'] = 'SKIP'
     ss(page, 'delete_result'); print(f'  DELETE: {results["delete"]}')

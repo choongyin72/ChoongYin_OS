@@ -1,6 +1,6 @@
 """
 Read-only query: SELECT * FROM ov_bank
-Target: LOCAL SANDBOX DB (localhost:1521/ORCL) — where AUTOTEST_BNK_* were created.
+Target: LOCAL SANDBOX DB (localhost:1521/ORCL) - where AUTOTEST_BNK_* were created.
 oracledb thin mode (no client needed).
 """
 import oracledb
@@ -42,7 +42,7 @@ print()
 rows = cur.fetchall()
 print(f'Fetched {len(rows)} row(s) (capped at 50):\n')
 
-# Print compactly — show first ~6 columns per row for readability
+# Print compactly - show first ~6 columns per row for readability
 show_cols = min(len(cols), 6)
 header = ' | '.join(f'{cols[i][:18]:<18}' for i in range(show_cols))
 print(header)

@@ -1,11 +1,11 @@
 """
-EC IUD Analysis Point — freestyle Playwright proof. Screen: Configuration > Assets > Laboratory Objects >
+EC IUD Analysis Point - freestyle Playwright proof. Screen: Configuration > Assets > Laboratory Objects >
 Analysis Point. OV-GM (groupmodel, 3-level cascade): the grid (manageObject:form:T_data) loads only after
 the PU -> Area -> Facility Class 1 navigator cascade (dds at nav:form:G:0:R:1:C:1/C:2/C:3) + GO.
 
 Field IDs (recon 2026-06-19):
   INSERT objectForm: Start Date R:0, Code R:2, Name R:3, Type R:4 (dd, MANDATORY),
-                     Op PU R:10 / Op Area R:11 / Op Facility Class 1 R:12 (dds — set = nav scope so the
+                     Op PU R:10 / Op Area R:11 / Op Facility Class 1 R:12 (dds - set = nav scope so the
                      row lists in the filtered grid; the groupmodel link).
   UPDATE updateAttributes: Name R:1.   DELETE objectdates: End Date R:0:C:3 = Start Date (true delete).
 NEVER TOUCH EXISTING DATA. Test data: AUTOTEST_AP_* only. Credentials from env (R16).
@@ -27,7 +27,7 @@ _CODE     = os.environ.get('EC_CODE', 'AUTOTEST_AP_PWDEMO')
 TEST_CODE = _CODE
 TEST_NAME = f'AUTOTEST Analysis Point {_CODE}'
 TEST_NAME_UPD = f'{TEST_NAME} UPDATED'
-START_DATE = '2003-01-01'          # ref-dd screen — date must post-date seed reference objects
+START_DATE = '2003-01-01'          # ref-dd screen - date must post-date seed reference objects
 END_DATE   = '2003-01-01'          # DELETE: End Date = Start Date (zero-length window = true delete)
 SCOPE = ['P1 Production Unit', 'P1 Area', 'P1 Facility 1']
 
@@ -188,7 +188,7 @@ with sync_playwright() as p:
     if results['insert'] == 'PASS' and select_row(page, TEST_CODE):
         fill(page, DEL_END, END_DATE, date=True); ss(page, 'delete_end_date_set')
         do_save(page); click_go(page); click_go(page)
-        results['delete'] = f'PASS (true delete: EndDate=StartDate={END_DATE})' if not check_row(page, TEST_CODE) else 'FAIL — still visible'
+        results['delete'] = f'PASS (true delete: EndDate=StartDate={END_DATE})' if not check_row(page, TEST_CODE) else 'FAIL - still visible'
     else:
         results['delete'] = 'SKIP'
     ss(page, 'delete_result'); print(f'  DELETE: {results["delete"]}')
