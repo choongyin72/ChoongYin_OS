@@ -1,8 +1,8 @@
 """
-Phase 0 — Deep-dive DOM scan of the EC Equipment screen (READ-ONLY).
+Phase 0 - Deep-dive DOM scan of the EC Equipment screen (READ-ONLY).
 Captures: navigator (5 filter dropdowns) IDs + current values, Go/arrow button,
 toolbar (incl. the - button), the equipment table, and the objectForm /
-updateAttributes / objectdates field IDs. NEVER saves — observation only.
+updateAttributes / objectdates field IDs. NEVER saves - observation only.
 """
 from playwright.sync_api import sync_playwright
 from pathlib import Path
@@ -54,7 +54,7 @@ with sync_playwright() as p:
     ctx = browser.new_context(ignore_https_errors=True, viewport={'width': 1920, 'height': 1080})
     page = ctx.new_page()
 
-    # ── LOGIN ──
+    # -- LOGIN --
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
     page.fill('#username', 'sysadmin'); page.fill('#password', 'sysadmin')
     page.click('#kc-login')
@@ -62,7 +62,7 @@ with sync_playwright() as p:
     page.wait_for_load_state('networkidle', timeout=30000)
     print('LOGIN OK')
 
-    # ── NAVIGATE TO EQUIPMENT ──
+    # -- NAVIGATE TO EQUIPMENT --
     si = page.locator('#menu\\:searchForm\\:searchTxt')
     si.wait_for(state='visible', timeout=10000)
     si.clear(); si.type('Equipment', delay=60)
@@ -93,7 +93,7 @@ with sync_playwright() as p:
     print(f'Screen label: {lbl}')
     page.screenshot(path=os.path.join(SS_DIR, 'scan_01_equipment_loaded.png'), full_page=True)
 
-    # ── ALL VISIBLE IDs ──
+    # -- ALL VISIBLE IDs --
     ids = page.evaluate("""() => {
         const out = [];
         document.querySelectorAll('[id]').forEach(el => {
@@ -102,13 +102,13 @@ with sync_playwright() as p:
         });
         return out;
     }""")
-    print(f'\n=== VISIBLE IDs ({len(ids)}) — screenlets/forms/buttons ===')
+    print(f'\n=== VISIBLE IDs ({len(ids)}) - screenlets/forms/buttons ===')
     for el in ids:
         if any(k in el['id'] for k in ['nav:form', 'button:form', 'manage_object', 'screenToolbar', 'tab:tabPanel']) \
            and not el['id'].count(':') > 6:
             print(f'  {el["id"]} ({el["tag"]}) {el["cls"][:35]}')
 
-    # ── NAVIGATOR (nav:form) ──
+    # -- NAVIGATOR (nav:form) --
     print('\n=== NAVIGATOR nav:form ===')
     nav = dump_form(page, 'nav:form')
     if nav.get('found'):
@@ -117,7 +117,7 @@ with sync_playwright() as p:
             if f['visible']:
                 print(f'  {f["id"]}  <{f["tag"]}/{f["type"]}> val="{f["val"]}" cls={f["cls"][:30]}')
 
-    # ── TOOLBAR (find + and - buttons) ──
+    # -- TOOLBAR (find + and - buttons) --
     print('\n=== TOOLBAR (menuBar) ===')
     tb = page.evaluate("""() => {
         const items = [];
@@ -136,7 +136,7 @@ with sync_playwright() as p:
     for it in tb:
         print(f'  {it["title"][:22]:<22} icon={it["icon"]:<18} disabled={it["disabled"]}')
 
-    # ── GO / ARROW button ──
+    # -- GO / ARROW button --
     print('\n=== GO / ARROW button candidates ===')
     go = page.evaluate("""() => {
         const out = [];
@@ -148,7 +148,7 @@ with sync_playwright() as p:
     for g in go:
         print(f'  {g["id"]} <{g["tag"]}> title="{g["title"]}" vis={g["vis"]} cls={g["cls"][:30]}')
 
-    # ── CLICK GO (▶) to load the equipment list ──
+    # -- CLICK GO (>) to load the equipment list --
     print('\n=== CLICK GO (load list) ===')
     clicked_go = False
     for sel in ['#button\\:form\\:B', '#button\\:form button', "xpath=//div[contains(@class,'goButtonScreenlet')]//button"]:
@@ -162,7 +162,7 @@ with sync_playwright() as p:
     page.wait_for_timeout(1500)
     page.screenshot(path=os.path.join(SS_DIR, 'scan_02_after_go.png'), full_page=True)
 
-    # ── EQUIPMENT TABLE ──
+    # -- EQUIPMENT TABLE --
     print('\n=== EQUIPMENT TABLE (manage_object_nav_nav:form:T_data) ===')
     rows = page.evaluate("""() => {
         const tbody = document.getElementById('manage_object_nav_nav:form:T_data');
@@ -182,7 +182,7 @@ with sync_playwright() as p:
     else:
         print('  Table not found (filters may need setting).')
 
-    # ── ROW SELECT (existing row, READ-ONLY) to capture updateAttributes/objectdates ──
+    # -- ROW SELECT (existing row, READ-ONLY) to capture updateAttributes/objectdates --
     print('\n=== ROW SELECT (read-only, first existing row) ===')
     first_span = page.locator("css=#manage_object_nav_nav\\:form\\:T_data span").first
     if first_span.count() > 0:
@@ -216,8 +216,8 @@ with sync_playwright() as p:
     else:
         print('  No rows to select.')
 
-    # ── INSERT → NEW OBJECT (capture objectForm, READ-ONLY, no save) ──
-    print('\n=== INSERT → NEW OBJECT (capture objectForm fields, no save) ===')
+    # -- INSERT -> NEW OBJECT (capture objectForm, READ-ONLY, no save) --
+    print('\n=== INSERT -> NEW OBJECT (capture objectForm fields, no save) ===')
     try:
         insert_li = page.locator("xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]")
         if insert_li.count() > 0:

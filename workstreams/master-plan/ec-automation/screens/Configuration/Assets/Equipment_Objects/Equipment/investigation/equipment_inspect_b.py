@@ -1,5 +1,5 @@
 """
-Phase 0b — drive the Equipment cascading navigator, then capture LABELED field maps.
+Phase 0b - drive the Equipment cascading navigator, then capture LABELED field maps.
 READ-ONLY (no save). Learns: how to set the 5 autocomplete filters, the labeled
 objectForm / updateAttributes / objectdates fields, and the - delete button behaviour.
 """
@@ -138,7 +138,7 @@ with sync_playwright() as p:
     }""")
     print(f'\n=== TABLE ===\n  found={rows.get("found")}, rows={rows.get("rows")}')
 
-    # row select (existing, read-only) → updateAttributes + objectdates labeled
+    # row select (existing, read-only) -> updateAttributes + objectdates labeled
     if rows.get('found') and rows.get('rows'):
         first_span = page.locator("css=#manage_object_nav_nav\\:form\\:T_data span").first
         first_span.click()
@@ -164,8 +164,8 @@ with sync_playwright() as p:
         }""")
         print(f'\n=== DELETE BUTTON after row-select ===\n  {delbtn}')
 
-    # Insert → New Object → objectForm labeled
-    print('\n=== INSERT → New Object → objectForm (labeled) ===')
+    # Insert -> New Object -> objectForm labeled
+    print('\n=== INSERT -> New Object -> objectForm (labeled) ===')
     insert_li = page.locator("xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]")
     insert_li.first.hover(); page.wait_for_timeout(900)
     sub = page.locator("xpath=//ul[contains(@class,'ui-menu-child')]//li//a")

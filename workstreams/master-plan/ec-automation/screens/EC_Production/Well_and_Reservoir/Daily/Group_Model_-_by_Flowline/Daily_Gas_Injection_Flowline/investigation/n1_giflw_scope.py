@@ -1,4 +1,4 @@
-"""READ-ONLY: lock the Gas Injection (GI) flowline scope for the next screen — GI flowlines on a
+"""READ-ONLY: lock the Gas Injection (GI) flowline scope for the next screen - GI flowlines on a
 data-bearing date with names + facility cascade + current ON_STREAM_HRS. Mirrors the IFLW recon."""
 import os, oracledb
 con=oracledb.connect(user=os.environ.get("EC_DB_USER","ECKERNEL_EC"),password=os.environ.get("EC_DB_PASS","energy"),dsn=os.environ.get("EC_DB_DSN","localhost:1521/ORCL"),tcp_connect_timeout=15)

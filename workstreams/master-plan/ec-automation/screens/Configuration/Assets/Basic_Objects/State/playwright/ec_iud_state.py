@@ -1,4 +1,4 @@
-"""EC IUD — State (Playwright reference).
+"""EC IUD - State (Playwright reference).
 Thin config over the shared engine: ../_shared/iud_engine.py.
 See state_sow.md for the screen analysis and README.md for run instructions."""
 import sys

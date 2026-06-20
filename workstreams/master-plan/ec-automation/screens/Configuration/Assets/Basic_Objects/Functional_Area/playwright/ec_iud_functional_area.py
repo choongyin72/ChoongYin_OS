@@ -1,4 +1,4 @@
-"""EC IUD — Functional Area (Playwright reference).
+"""EC IUD - Functional Area (Playwright reference).
 Thin config over the shared engine: ../_shared/iud_engine.py.
 See functional_area_sow.md for the screen analysis and README.md for run instructions."""
 import sys

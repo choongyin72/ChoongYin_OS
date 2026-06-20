@@ -40,7 +40,7 @@ if hits:
         e = r[3].strftime('%Y-%m-%d') if r[3] else 'None'
         print(f'  code={r[0]}  name="{r[1]}"  start={s}  end={e}  rev={r[4]}')
 else:
-    print(f'  (0 rows — {CODE} not present)')
+    print(f'  (0 rows - {CODE} not present)')
 
 print('\n=== Existing AUTOTEST_EQP_* still present ===')
 cur.execute(f"SELECT code, object_end_date FROM {view} WHERE code LIKE 'AUTOTEST_EQP_%' ORDER BY code")

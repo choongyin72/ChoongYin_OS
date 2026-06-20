@@ -1,4 +1,4 @@
-"""EC IUD — Sub Area (Playwright reference).
+"""EC IUD - Sub Area (Playwright reference).
 Thin config over the shared engine: ../_shared/iud_engine.py.
 See sub_area_sow.md for the screen analysis and README.md for run instructions."""
 import sys

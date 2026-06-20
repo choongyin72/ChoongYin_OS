@@ -1,4 +1,4 @@
-"""EC IUD — Country (Playwright reference).
+"""EC IUD - Country (Playwright reference).
 Thin config over the shared engine: ../_shared/iud_engine.py.
 See country_sow.md for the screen analysis and README.md for run instructions."""
 import sys
