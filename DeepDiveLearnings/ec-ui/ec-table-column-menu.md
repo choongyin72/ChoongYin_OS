@@ -88,23 +88,32 @@ not the underlying data — except **Paste from clipboard**, which can write int
   hover, or drive the `:tfo` toggle directly); scrollbar/frozen grids duplicate the DOM (target the right copy);
   filter inputs may need a real keypress/Enter to trigger the PrimeFaces filter AJAX.
 
-## Source-derived automation hooks (the 5 items) — **[S]** (confirm live)
-Reverse-engineered 2026-06-20 from `ec-application` (read-only). Component XHTML:
+## Automation hooks (the 5 items) — **[V]** (source + live agree)
+Reverse-engineered 2026-06-20 from `ec-application` (read-only), then **confirmed live** by the RF suite
+`tests/Framework/grid_menu_smoke.robot` + keywords `resources/grid_menu.resource`. Component XHTML:
 `ec-web/src/main/webapp/resources/screenlet/tableScreenlet.xhtml`; backing bean
 `frmw-pf-jsf/.../screenlet/table/TableScreenlet.java` (+ `AbstractTableScreenlet`, util `TableScreenletUtils`).
-The menu items are children of the column menu `{screenlet}:form:cm_menu`; the hamburger button is `{screenlet}:form:cm`
-(hover-installed via JS `EC.table.installOnHoverMenuHandler`). Leaf ids (full id = `{screenlet-id}:form:cm_menu:{leaf}`):
+In the SOURCE the items belong to a column menu `cm`/`cm_menu`, but the **live-rendered PrimeFaces clientIds
+nest the menu under the table** - ✅ verified: every item renders as **`{form}:T:{leaf}`** (e.g. `bf:form:T:rpc`,
+`bf:form:T:tfo`), text filters as `{form}:T:sfilterN_ft_filter`, grid body `{form}:T_data`, and data rows carry
+`data-ri` (count those - the cells are `<input>` so `tr.textContent` is empty). ⚠️ EC screens render inside a
+content **iframe**: Browser-library `css=` selectors pierce it, but raw `Evaluate JavaScript` runs in the TOP
+frame - anchor JS to an in-frame element via a `css=` selector + `el.ownerDocument`. Leaf ids (full id =
+`{form}:T:{leaf}`):
 - **Use scrollbar:** item `ups` → `togglePager()`.
 - **Freeze columns:** item `fc` opens overlay `freezePanel` (widgetVar `{uid}_fp_wv`); spinner `fcNum`, Ok `fcNumOk`, Clear `fcNumClear`.
 - **Copy to clipboard:** item `ctc` → JS `EC.clipboard.copyToClipboard` (TSV).
 - **Paste from clipboard:** item `pfc` → JS `EC.clipboard.pasteToTableScreenlet` → remoteCommand `{id}_sendPasteData` (param `clipData`).
 - **Reset personalisation:** item `rpc` → `resetPersonalisationForScreenlet()`; persisted in DB `CTRL_PERSONALISATION`.
 
-## TODO — flip [S]->[V] via the live you-drive / I-capture demo (Business Function)
-All 5 remaining items (2,3,5,6,8) are now **[S]** (source-derived). Live-confirm each in the demo: Use scrollbar,
-Freeze columns (spinner overlay), **Copy + Paste as a pair** (Paste = observe-only, NEVER Save, reload-verify
-clean), Reset personalisation (run last). THEN the GATED decision: convert proven items into reusable RF common
-keywords with honest per-keyword confidence (not committed until genuinely confident).
+## RF keywords (delivered) + what's next
+**Delivered (live 4/4 on Business Function):** `resources/grid_menu.resource` - filtering + reset:
+`Turn Grid Filtering On/Off`, `Clear Grid Filters`, `Filter Grid Text Column By Value`,
+`Clear Grid Text Column Filter`, `Grid Data Row Count`, `Grid Filtering Is On`, `Click Grid Menu Item`,
+`Reset Grid Personalisation`. Proven by `tests/Framework/grid_menu_smoke.robot` (read-only).
+**Held (lower value / clipboard-env or write-risk):** Copy/Paste/Freeze/Use-scrollbar/rows-page/show-hide -
+documented above; build as keywords only on demand (ids are all captured here).
 
 _Created 2026-06-19 (3/8 live). Updated 2026-06-20: items 2,3,5,6,8 reverse-engineered from `ec-application`
-source (read-only) -> [S], THEN live-verified via the user-driven demo -> **all 8 now [V]**. Source + live agree._
+source (read-only) -> [S], THEN live-verified via the user-driven demo -> **all 8 now [V]**; filtering + reset
+promoted to RF keywords (grid_menu.resource), proven live 4/4. Source + live agree._
