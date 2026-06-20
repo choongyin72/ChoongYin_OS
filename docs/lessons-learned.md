@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v20** (R19, R20 added 2026-06-20)
+> **Current rule version: v21** (R21 added 2026-06-20)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -28,6 +28,7 @@ _Worker sessions: read this before starting any automation work._
 | v18 | R18 | Files printed to a Windows console or parsed by PowerShell MUST be ASCII-only — no em-dash/smart-quotes/non-breaking-space | 2026-06-19 |
 | v19 | R19 | Code-less event-log screens: use a unique per-run marker oracle via `view_count_where_should_be`; prove PHYSICAL delete = marker count 0 in BOTH the OV view AND the base table | 2026-06-20 |
 | v20 | R20 | Author every bundle/recon `.py` ASCII at authoring time — a green run never catches an em-dash in a FAIL-only branch; extend the hygiene guard to flag non-ASCII statically | 2026-06-20 |
+| v21 | R21 | PR-body content must match the final diff: list EVERY touched file under "Files touched", and never leave a stale "blocked/not done/pending" note for work the PR actually includes | 2026-06-20 |
 
 ---
 
@@ -502,5 +503,36 @@ R18 (ASCII-only for console-printed/PowerShell-parsed files) cannot be left to a
 | #84 base-table (`FCTY_DAY_ALARM`) zero-residue check is recon-only — fold a base-table count assertion into the suite | Worker | 🟢 Low |
 | Next OV-GM IUD screen (Transport System / Contract Type) — apply skill + new tooling | Worker | 🟡 Medium |
 | WR.0010.02 Well Oil Comp — not yet attempted (WT_PCT variant of WR.0010.01) | Worker | 🟢 Low |
+
+---
+
+## 2026-06-20 — Automated Review (14:00 AWST, 1 open PR #87)
+
+_Open PR triggers a full review (R14). #87 CLEAR — no MUST-FIX — squash-merged (1ae4960). One new rule (R21). R1–R20 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #87 | Clear — worker actioning #86's two R20 Medium gaps: ASCII-normalised 40 bundle/recon `.py` + extended `check_bundle_hygiene.py` with a static non-ASCII gate over `playwright/*.py` + `investigation/*.py`. Verified on the PR head tree (worktree off `pr87`, merge-base = master so R8 holds): guard → `RESULT: PASS (R16 + R20)`, exit 0, scanned 48 bundles + 121 recon; ripgrep `[^\x00-\x7F]` over both globs → 0 matches. **R20's static-guard is now built and live-validated** (was code-derived/"not yet built" at #86) — the two #86 Medium gaps are closed. NICE-TO-HAVE: PR-body content drift (see R21). | ✅ Clear (NICE-TO-HAVE) |
+
+### Rules (apply immediately, no exceptions)
+
+**R21 — PR-body content must match the final diff (not just carry the 6 headers)** ✅ _live-validated (PR #87, verified against the actual diff)_
+R9 mandates the six field *headers* exist; R21 mandates their *content* is true to the diff that's being merged. Two concrete failure modes, both seen in #87 (the change was correct — the body was not): (1) **"Files touched" must enumerate every file in the diff** — #87 edited `.claude/skills/ec-object-iud-builder/SKILL.md` but omitted it from the list, so a reviewer parsing the body alone would miss a skill-definition change; (2) **never leave a stale "blocked / not done / pending" note for work the PR actually includes** — #87's "Not done (blocked)" claimed the SKILL.md Step-5 wiring was still pending due to the auto-mode self-modification classifier, yet that exact edit was present and complete in the diff. Before pushing, re-diff (`git diff --stat origin/master...HEAD`) and reconcile the body against it: add any missing file, and delete or correct any "blocked/pending" line that the final diff has since resolved. A body that *under-claims* is still a defect — it erodes the reviewer's ability to trust the body as the parse surface.
+
+### Observations (good patterns to keep)
+
+- **Reviewer-flagged gaps closed in one cycle:** #86 logged two Medium gaps (sanitise the builder templates' em-dashes; extend the hygiene guard to a static non-ASCII scan) and marked R20's guard "code-derived — not yet built." #87 closed both the next cycle and the guard is now live-validated (PASS over 48+121 files). The gaps-table → next-PR loop is working.
+- **Hygiene guard now enforces R16 + R20 together:** `check_bundle_hygiene.py` is a single static gate (no live env needed) wired into skill Step-5; reviewer reproduced PASS independently. This is the right shape for a CI-style guard — deterministic, offline, fast.
+- **The em-dash root cause is fixed at the source:** normalising the 40 already-merged exemplars (not just the guard) means future clones from Bank/Language/etc. are born ASCII-clean, so the guard stays green rather than red against legacy debt.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `tmp/scripts/ascii_sanitise_bundles.py` and `tmp/scripts/ec_session.py` sit outside the hygiene-guard glob (`tmp/scripts/`, not `screens/**`) — one-off/shared tooling not ASCII-gated; acceptable but note if promoted into `scripts/` | Worker | 🟢 Low |
+| PR-body content fidelity (R21) is reviewer-caught, not machine-checked — a pre-push `git diff --stat` reconcile step in the worker routine would catch it earlier | Worker | 🟢 Low |
+| Carry-over from #86 (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
 
 ---

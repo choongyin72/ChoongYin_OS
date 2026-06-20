@@ -71,6 +71,7 @@ _Last updated: 2026-06-20_
 | EC screen-family registry (machine-readable) | ✅ Live (2026-06-19) | `ec_screen_registry.json` (7 IUD families + golden exemplars); `resolve_ec_screen.py` prints CLONE hint; `scan_ec_screen.py` auto-fills gated nav dd + GO (PR #74/#75/#76) |
 | EVENT_LOG family (code-less event rows) | ✅ Live (2026-06-20) | New family in `ec_screen_registry.json`; golden exemplar Alarms (`FCTY_DAY_ALARM`/`DV_ALARMS`); marker oracle + physical delete (R19); next clone = Reported Alarms (PR #84) |
 | Bundle/recon ASCII hygiene | 🟡 Gap (R20) | All 3 bundles this cycle shipped an em-dash in the FAIL-branch print string; skill template + `check_bundle_hygiene.py` static-ASCII check pending |
+| Bundle/recon ASCII hygiene | ✅ Live (2026-06-20) | CLOSES the row above: PR #87 ASCII-normalised 40 bundle/recon `.py` + extended `check_bundle_hygiene.py` with a static non-ASCII gate over `playwright/*.py` + `investigation/*.py` (FAIL on any non-ASCII byte). Reviewer reproduced PASS (R16 + R20) over 48 bundles + 121 recon; 0 non-ASCII in either glob. Wired into skill Step-5 verify |
 
 ---
 
