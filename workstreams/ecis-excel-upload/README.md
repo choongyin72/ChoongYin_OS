@@ -29,6 +29,14 @@ Excel -> **Upload Files** -> `IMP_SOURCE_INTERFACE_FILE` (DB blob, `FILE_DROP_SE
   (path -> target -> mapping -> interface), scoped to the interface by linkage (handles duplicates/leftovers),
   PRODUCTS UNTOUCHED, idempotent, no COMMIT in file. Proven: CLAUDE -> 0, product mappings unchanged. Run it
   before a clean re-create.
+- **`create_ClaudeExcelImport_schedule.sql`** + **`delete_ClaudeExcelImport_schedule.sql`** — the SCHEDULE task
+  that *runs* the import (runtime counterpart of the interface config). Modelled on the live **AudreyExcelImport**
+  schedule: one schedule, two `ECISAction` instances (exec 10 → `ClaudeJobID` file→staging; exec 20 →
+  `ClaudeReadFromStaging` staging→target), `INTERFACE_CODE='CLAUDE_WELL_TEST'`, `FILE_DROP_SERVICE='DB'`,
+  `ENABLED='N'` (manual RUN NOW, no cron — like Audrey). Same house style (constants, `IF SQL%ROWCOUNT=0`
+  update-insert, `REV_TEXT`, local `upsert_*` procs). Proven: delete→create→re-run = sched + 2 instances +
+  13/4 job-config rows both runs, idempotent. **Writes the `jobid` to the `ACTION_INSTANCE_VALUE` base table**
+  (sidesteps the `TV_ACTION_INSTANCE_PARAM` join-view `ORA-01779`).
 - Recon helper: `scripts/ecis_dump_config.py` (dumps the live rows of the 4 tables).
 
 ## scripts/  (run with `py -X utf8 workstreams/ecis-excel-upload/scripts/<name>`)
@@ -50,9 +58,11 @@ Excel -> **Upload Files** -> `IMP_SOURCE_INTERFACE_FILE` (DB blob, `FILE_DROP_SE
 > Note: scripts write scratch output to `tmp/ecis_recon/` (test xlsx + run screenshots); the committed proof is in `evidence/`.
 
 ## 2 SME lessons (full detail in the runbook)
-1. **DB-direct schedule build is walled** - `TV_ACTION_INSTANCE_PARAM` INSTEAD-OF trigger inserts into the
-   `V_ACTION_VALUE` join-view -> ORA-01779. Build schedules on the **Schedules screen** or via **Flyway SQL**,
-   not raw SQL. (The `ACTION_JOB_CONFIG` chain clones fine; only the TV param insert is blocked.)
+1. **DB-direct schedule build IS achievable** (earlier "walled" finding corrected). The `ORA-01779` only hits
+   when the `jobid` is written through the **`TV_ACTION_INSTANCE_PARAM` view** (a join-view). Writing it to the
+   **`ACTION_INSTANCE_VALUE` base table** (the AudreyExcelImport / Pluto pattern) works — see
+   `sql/create_ClaudeExcelImport_schedule.sql`. The `TV_SCHEDULE` view + `ACTION_INSTANCE` base table also
+   insert fine. (Screen / Flyway remain valid too.)
 2. **RUN NOW** - decide enable-state from the **DB read** (`tv_schedule_list.enabled`; the UI checkbox isn't
    readable), and it's **async** (run _1, await staging, then _2).
 
