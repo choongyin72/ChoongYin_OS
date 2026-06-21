@@ -1,6 +1,8 @@
 """PWEL day-status BEFORE/AFTER on the EC screen for AS1_Well_001/002/003, fresh date 2003-01-10.
 Deterministically finds the Facility whose Well list contains AS1_Well_001 (the wells are split across
 facilities). Shows the well-status grid BEFORE (empty) and AFTER (filled by the ECIS upload). Headed.
+SELF-CLEANING: pre-cleans the baseline and reverts the demo avg_bh_temp to NULL on teardown, so every run is
+empty -> upload -> filled -> reverted-to-empty (zero residue) and is safely re-runnable any number of times.
 py -X utf8 tmp/scripts/ecis_pwel_beforeafter.py
 """
 import datetime
@@ -45,7 +47,21 @@ def staging_for(d):
     c = db().cursor(); c.execute("SELECT COUNT(*) FROM imp_staging WHERE interface_code='EXCEL_IMPORT' AND key_2 LIKE :x", x=d + "%"); return c.fetchone()[0]
 
 
+def revert_data():
+    """Self-clean: NULL the demo avg_bh_temp for our 3 wells on DATESTR (idempotent). Reverts only my writes."""
+    c = db(); cu = c.cursor()
+    cu.execute("SELECT object_id FROM ov_well WHERE code IN ('AS1_Well_001','AS1_Well_002','AS1_Well_003')")
+    oids = [r[0] for r in cu.fetchall()]
+    if oids:
+        ph = ",".join(f"'{o}'" for o in oids)
+        cu.execute(f"UPDATE pwel_day_status SET avg_bh_temp=NULL WHERE object_id IN ({ph}) "
+                   "AND daytime=TO_DATE(:d,'YYYY-MM-DD') AND avg_bh_temp IS NOT NULL", d=DATESTR)
+        c.commit()
+    c.close()
+
+
 con = db(); cur = con.cursor(); cur.execute("DELETE FROM imp_staging WHERE interface_code='EXCEL_IMPORT'"); con.commit(); con.close()
+revert_data()  # PRE-CLEAN: guarantee an empty baseline (idempotent; also cleans up any crashed prior run)
 log(f"BASELINE {DATESTR}: {landed()}")
 
 wb = Workbook(); ws = wb.active; ws.title = "Sheet1"; ws.append(["Well", "Date", "Temperature"])
@@ -184,5 +200,6 @@ with sync_playwright() as p:
                 page.wait_for_load_state("networkidle", timeout=20000); time.sleep(2)
     b.close()
 
-log(f"FINAL dv {DATESTR}: {landed()}")
+revert_data()  # TEARDOWN: self-clean so every run leaves ZERO residue (empty -> upload -> filled -> empty)
+log(f"TEARDOWN: reverted demo data; dv {DATESTR} now {landed()}")
 log("DONE")
