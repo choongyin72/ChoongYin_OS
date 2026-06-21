@@ -43,13 +43,20 @@ begin
    WHERE name = v_sched;
   IF SQL%ROWCOUNT = 0 THEN
     INSERT INTO TV_SCHEDULE (name, enabled, functional_area_id, description, pin_to, start_date, rev_text)
-    VALUES (v_sched, 'N', v_fa, 'Claude Excel Import', 'EC-Cluster:ECDS', ecdp_timestamp.getcurrentsysdate, v_rev);
+    VALUES (v_sched, 'N', v_fa, 'Claude Excel Import', 'EC-Cluster:ECDS', to_date('2000-01-01','YYYY-MM-DD'), v_rev);
   END IF;
   SELECT schedule_no INTO v_sno FROM tv_schedule WHERE name = v_sched;
 
   -- 2) SCHEDULE DETAILS (auto-created by the TV_SCHEDULE insert trigger) ---------------------------
   UPDATE TV_SCHEDULE_DETAILS SET username = 'sysadmin', log_level = 'INFO', ignore_misfire = 'Y',
          retain_count = 10, rev_text = v_rev
+   WHERE name = v_sched;
+
+  -- 2b) JOB SCHEDULE (Schedule tab) - set Valid From + Schedule Type so the control is not left blank.
+  --     (START_DATE + SCHEDULE_TYPE persist via this view; STATUS/NEXT_FIRE_TIME are derived from the
+  --      QRTZ trigger which is created when the schedule is saved/armed in the app.)
+  UPDATE TV_JOB_SCHEDULE SET start_date = to_date('2000-01-01','YYYY-MM-DD'),
+         schedule_type = 'ONCE', schedule_when_class = 'SCHEDULE_ONCE'
    WHERE name = v_sched;
 
   -- 3) ECISAction INSTANCE exec 10 -> jobid ClaudeJobID --------------------------------------------

@@ -39,10 +39,12 @@ begin
    WHERE schedule_no IN (SELECT schedule_no FROM tv_schedule WHERE name = v_sched);
 
   -- 5) quartz trigger rows  -- BASE (no view); defensive
-  DELETE FROM QRTZ_CRON_TRIGGERS  WHERE trigger_name = v_sched;
-  DELETE FROM QRTZ_FIRED_TRIGGERS WHERE trigger_name = v_sched;
-  DELETE FROM QRTZ_TRIGGERS       WHERE trigger_name = v_sched;
-  DELETE FROM QRTZ_JOB_DETAILS    WHERE job_name = v_sched;
+  DELETE FROM QRTZ_SIMPLE_TRIGGERS WHERE trigger_name = v_sched;  -- ONCE schedule -> simple trigger
+  DELETE FROM QRTZ_CRON_TRIGGERS   WHERE trigger_name = v_sched;
+  DELETE FROM QRTZ_BLOB_TRIGGERS   WHERE trigger_name = v_sched;
+  DELETE FROM QRTZ_FIRED_TRIGGERS  WHERE trigger_name = v_sched;
+  DELETE FROM QRTZ_TRIGGERS        WHERE trigger_name = v_sched;
+  DELETE FROM QRTZ_JOB_DETAILS     WHERE job_name = v_sched;
 
   -- 6) schedule run-history  -- BASE (no view); child of schedule, remove before schedule
   DELETE FROM SCHEDULE_HISTORY WHERE schedule_no IN (SELECT schedule_no FROM tv_schedule WHERE name = v_sched);

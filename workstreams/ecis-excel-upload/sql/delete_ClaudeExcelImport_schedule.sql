@@ -26,10 +26,12 @@ begin
   DELETE FROM action_instance WHERE schedule_no IN (SELECT schedule_no FROM tv_schedule WHERE name = v_sched);
 
   -- 3) quartz trigger rows + schedule run history (defensive: a manual schedule has none until enabled/run)
-  DELETE FROM qrtz_cron_triggers  WHERE trigger_name = v_sched;
-  DELETE FROM qrtz_fired_triggers WHERE trigger_name = v_sched;
-  DELETE FROM qrtz_triggers       WHERE trigger_name = v_sched;
-  DELETE FROM qrtz_job_details    WHERE job_name = v_sched;
+  DELETE FROM qrtz_simple_triggers WHERE trigger_name = v_sched;  -- ONCE schedule -> simple trigger
+  DELETE FROM qrtz_cron_triggers   WHERE trigger_name = v_sched;
+  DELETE FROM qrtz_blob_triggers   WHERE trigger_name = v_sched;
+  DELETE FROM qrtz_fired_triggers  WHERE trigger_name = v_sched;
+  DELETE FROM qrtz_triggers        WHERE trigger_name = v_sched;
+  DELETE FROM qrtz_job_details     WHERE job_name = v_sched;
   DELETE FROM schedule_history WHERE schedule_no IN (SELECT schedule_no FROM tv_schedule WHERE name = v_sched);
 
   -- 4) the schedule itself
