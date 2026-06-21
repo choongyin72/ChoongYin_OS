@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v21** (R21 added 2026-06-20)
+> **Current rule version: v22** (R22 added 2026-06-22)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -29,6 +29,7 @@ _Worker sessions: read this before starting any automation work._
 | v19 | R19 | Code-less event-log screens: use a unique per-run marker oracle via `view_count_where_should_be`; prove PHYSICAL delete = marker count 0 in BOTH the OV view AND the base table | 2026-06-20 |
 | v20 | R20 | Author every bundle/recon `.py` ASCII at authoring time — a green run never catches an em-dash in a FAIL-only branch; extend the hygiene guard to flag non-ASCII statically | 2026-06-20 |
 | v21 | R21 | PR-body content must match the final diff: list EVERY touched file under "Files touched", and never leave a stale "blocked/not done/pending" note for work the PR actually includes | 2026-06-20 |
+| v22 | R22 | Never ship the literal `REV_TEXT='ECPR-XXXX'` placeholder; set the governing ticket, or `'ECPR-DEMO'` for demo/sandbox objects with no client ECPR | 2026-06-22 |
 
 ---
 
@@ -558,5 +559,39 @@ After context compression the reviewer's in-memory version of `lessons-learned.m
 |-----|-------|----------|
 | grid_menu.resource is brand-new and not yet imported by any suite — first real use will be the next filtering-heavy screen | Worker | 🟢 Low |
 | Carry-over from #88 (still open): Reported Alarms EVENT_LOG clone; #84 base-table count; next OV-GM IUD; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+---
+
+## 2026-06-22 — Automated Review (06:00 AWST, 2 open PRs #93/#94)
+
+_Open PRs trigger a full review (R14). Both CLEAR — zero MUST-FIX — both squash-merged. One new rule (R22). R1–R21 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #94 | Clear (low effort — single-line, non-logic). Adds Step 15 to `.claude/review-prompt.txt`: the reviewer must remove its own `C:/tmp/wt-review-*` worktrees at session end (even on skip runs) so a stale worktree holding `master` no longer blocks the Worker's `git checkout master`. ASCII-only (R18), Files-touched maps 1:1 to the diff (R21), 6 body fields present. Real reproducible blocker fixed. | ✅ Clear — merged |
+| #93 | Clear (HIGH effort — SQL logic + 2 skills + 30+ scripts). ECIS Excel-upload: re-runnable config/scheduler SQL, manually-verified live DB demo, page-broken evidence doc, `ec-sql-script-builder` + `ecis-excel-upload-builder` skills. Idempotency pattern correct (`UPDATE; IF SQL%ROWCOUNT=0 THEN INSERT`, no MERGE). R12 N/A correct (no shared T1/T2/DbVerify edits). R18/R20 clean across all 30+ workstream scripts. Known automation gap (`upload -> RUN NOW` timing flakiness) transparently disclosed, root cause unconfirmed — does NOT gate (deliverable is the SQL+skills+manual-verified demo, no over-claim of full automation; correct R3-style blocker handling). **2 NICE-TO-HAVE** (R18 em-dash in the skill's `sql_idempotency_check.py` print strings — one on the happy path; `REV_TEXT='ECPR-XXXX'` placeholder → R22). | ✅ Clear (NICE-TO-HAVE) — merged |
+
+### Rules (apply immediately, no exceptions)
+
+**R22 — Never ship the literal `REV_TEXT='ECPR-XXXX'` placeholder** ⚠️ _code-derived — caught in PR #93 diff review; not live-validated_
+Every DB script sets `REV_TEXT` for audit ([[feedback_db_script_rerunnable_revtext]] / the standing user directive). The value MUST be a real, meaningful ticket — the **governing ECPR** for client work, or `'ECPR-DEMO'` for demo/sandbox objects that have no client ECPR. Never leave the template placeholder `'ECPR-XXXX'` in a script that will actually run: a run then writes a non-meaningful audit value, which is worse than no audit because it looks intentional. PR #93's create SQL shipped `v_rev constant varchar2(30) := 'ECPR-XXXX'` for the demo objects `CLAUDE_WELL_TEST`/`ClaudeExcelImport`; the skill's own checklist already prescribes the real-ticket-or-`ECPR-DEMO` rule — follow it before raising the PR. Before pushing any `.sql`, grep for `ECPR-XXXX` and replace it.
+
+### Observations (good patterns to keep)
+
+- **R18/R20 applied to net-new workstream scripts:** all 30+ `workstreams/ecis-excel-upload/scripts/*.py` are ASCII-clean — the worker carried the ASCII-at-authoring discipline (R20) into a non-`screens/` tree without being told. Only the skill utility slipped (see gap below).
+- **Idempotency proven the right way:** `delete -> create -> create-again = identical counts, no dups` is the correct re-runnability proof for a config-build script, and the `sql_idempotency_check.py` harness re-runs the block twice and diffs counts — exactly the standing re-runnable directive made mechanical. (Fix its 2 em-dashes and it is a clean reusable template.)
+- **Transparent automation-gap disclosure:** #93 explicitly told the reviewer "do not treat as fully-automated" and documented the `upload -> RUN NOW` flakiness as a KNOWN OPEN ISSUE with an *unconfirmed* root cause (no fabricated cause — honest reporting). This is the correct way to ship a partially-working capability: prove what works (manual + DB-verified), park what doesn't (R3), never over-claim.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `scripts/check_bundle_hygiene.py` ASCII gate globs only `screens/**/playwright/*.py` + `screens/**/investigation/*.py` — console-printed Python OUTSIDE the screens tree (`.claude/skills/**/*.py`, `workstreams/**/scripts/*.py`) is NOT machine-checked. This is exactly how the R18 em-dash in `sql_idempotency_check.py` slipped through. Extend the static non-ASCII scan to cover those globs (verified: guard source has no `skills`/`workstreams` glob). | Worker | 🟡 Medium |
+| `sql_idempotency_check.py` — 2 em-dashes (U+2014) in `print()` strings (R18); one on the PASS/happy path | Worker | 🟢 Low |
+| `ec-sql-script-builder` create-SQL ships `REV_TEXT='ECPR-XXXX'` placeholder for demo objects — change to `'ECPR-DEMO'` (R22) | Worker | 🟢 Low |
+| ECIS `upload -> RUN NOW` automation timing flakiness — root cause unconfirmed; documented as KNOWN OPEN ISSUE in README + skill | Worker (when resumed) | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
 
 ---

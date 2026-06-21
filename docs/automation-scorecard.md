@@ -1,5 +1,5 @@
 # EC Automation Scorecard
-_Last updated: 2026-06-20_
+_Last updated: 2026-06-22_
 
 ## N-Series Patterns (Production Data Interaction)
 
@@ -53,6 +53,7 @@ _Last updated: 2026-06-20_
 | Cargo Objects | Carrier (OV, plain) | ✅ Live 4/4 (2026-06-19) | 1st Cargo Objects screen; built by ec-object-iud-builder; Bank-family grid + mandatory Unit ref dd |
 | Laboratory Objects | Analysis Point (OV-GM, 3-level cascade) | ✅ Live 4/4 (2026-06-19) | 1st Laboratory Objects screen; built by ec-object-iud-builder; clean OV-GM (Op PU/Area/Facility settable in form) |
 | ECIS Excel Upload | End-to-end | ✅ Complete | Own interface + schedule, ran live |
+| ECIS Excel Upload | Re-runnable SQL + skills + evidence | ✅ Merged (2026-06-22, PR #93) | `workstreams/ecis-excel-upload/`: idempotent create/delete SQL (update-insert, no MERGE), live DB-verified demo (`AVG_BH_PRESS` NULL→210.5/215/220.3 @ 2003-01-10, self-cleaned), page-broken evidence doc, + `ec-sql-script-builder` & `ecis-excel-upload-builder` skills. KNOWN OPEN: automated `upload→RUN NOW` timing flakiness (root cause unconfirmed) |
 | Assets | Recon | ✅ Scanned | Registry complete |
 
 ---
