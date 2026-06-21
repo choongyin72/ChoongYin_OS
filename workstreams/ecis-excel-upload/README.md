@@ -13,6 +13,12 @@ Excel -> **Upload Files** -> `IMP_SOURCE_INTERFACE_FILE` (DB blob, `FILE_DROP_SE
 (file->`IMP_STAGING`) -> **EXCEL_IMPORT_2** (staging->EC) -> `PWEL_DAY_STATUS.AVG_BH_TEMP`, visible on the
 *Daily Prod Well Status 1, by Well* screen (DHT [degC] cell). Wells `AS1_Well_001/002/003`.
 
+**Fully self-contained path also proven (2026-06-21, live + DB-verified):** the same Excel through our OWN
+objects — `ClaudeExcelImport` schedule (`sql/create_ClaudeExcelImport_schedule.sql`) running the `CLAUDE_WELL_TEST`
+interface (`sql/create_CLAUDE_WELL_TEST_interface.sql`) -> `PWEL_DAY_STATUS.AVG_BH_PRESS` = 210.5/215/220.3 for
+the 3 wells @ 2003-01-10 (DB stores raw bar; screen shows psi). ⚠️ The worksheet **must be named `Data`** (the
+interface's `PATH_ORIGIN = Data.A1`); a `Sheet1` file fails with *"configured sheet Data could not be found"*.
+
 ## evidence/
 - `config_mapping_configuration.png` - the ECIS **config** (Mapping Configuration: CLAUDE_WELL_TEST interface + source/target mappings)
 - `pwel_BEFORE.png` / `pwel_AFTER.png` - the well-status screen **before (empty) -> after (filled)**
