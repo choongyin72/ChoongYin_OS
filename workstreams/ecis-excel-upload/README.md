@@ -33,8 +33,8 @@ Excel -> **Upload Files** -> `IMP_SOURCE_INTERFACE_FILE` (DB blob, `FILE_DROP_SE
   that *runs* the import (runtime counterpart of the interface config). Modelled on the live **AudreyExcelImport**
   schedule: one schedule, two `ECISAction` instances (exec 10 → `ClaudeJobID` file→staging; exec 20 →
   `ClaudeReadFromStaging` staging→target), `INTERFACE_CODE='CLAUDE_WELL_TEST'`, `FILE_DROP_SERVICE='DB'`,
-  `ENABLED='N'` (manual RUN NOW, no cron — like Audrey). Same house style (constants, `IF SQL%ROWCOUNT=0`
-  update-insert, `REV_TEXT`, local `upsert_*` procs). Proven: delete→create→re-run = sched + 2 instances +
+  `ENABLED='N'` (manual RUN NOW, no cron — like Audrey). Same flat house style as the interface SQL (constants,
+  plain `IF SQL%ROWCOUNT=0` update-insert per row, `REV_TEXT`, no procedures). Proven: delete→create→re-run = sched + 2 instances +
   13/4 job-config rows both runs, idempotent. **Writes the `jobid` to the `ACTION_INSTANCE_VALUE` base table**
   (sidesteps the `TV_ACTION_INSTANCE_PARAM` join-view `ORA-01779`).
 - Recon helper: `scripts/ecis_dump_config.py` (dumps the live rows of the 4 tables).

@@ -6,12 +6,11 @@
 --   exec 20 -> jobid ClaudeReadFromStaging : StagingJobActionSource (IMP_STAGING -> target) + TargetMappingJobAction
 -- both job chains carry INTERFACE_CODE = 'CLAUDE_WELL_TEST', FILE_DROP_SERVICE = 'DB'.
 --
--- Style (per the Pluto 050_Interfaces SCHEDULE files + house rules):
---   * DECLARE constants (schedule/interface/jobids/REV_TEXT) + class-name constants - reuse, no inline repeats.
---   * Update-insert: UPDATE ...; IF SQL%ROWCOUNT = 0 THEN INSERT ...; END IF;  (idempotent / re-runnable) - NO MERGE.
+-- Style (same as create_CLAUDE_WELL_TEST_interface.sql + the Pluto 050_Interfaces SCHEDULE files):
+--   * DECLARE constants (schedule / interface / jobids / REV_TEXT) + class-name constants - no inline repeats.
+--   * Flat update-insert per row: UPDATE ...; IF SQL%ROWCOUNT = 0 THEN INSERT ...; END IF;  (idempotent) - NO MERGE.
 --   * REV_TEXT = 'ECPR-XXXX' on every INSERT/UPDATE for audit (replace with the real ECPR ticket).
---   * Local procedures upsert_instance / upsert_cfg = the reused update-insert logic.
---   * One declare..begin..end; - NO exception block, NO COMMIT in the file (caller / Flyway commits).
+--   * One declare..begin..end; - NO procedures, NO exception block, NO COMMIT in the file (caller / Flyway commits).
 --
 -- The jobid parameter is written to the ACTION_INSTANCE_VALUE *base table* (the AudreyExcelImport / Pluto
 -- pattern) - NOT through the TV_ACTION_INSTANCE_PARAM view, which is a join-view that raises ORA-01779.
@@ -31,44 +30,8 @@ declare
   v_ba    number;   -- ECISAction business_action_no
   v_jp    number;   -- ECISAction 'jobid' action_parameter_no
   v_sno   number;   -- schedule_no
+  v_ai    number;   -- current action_instance_no
   v_cfg   number;   -- running ACTION_JOB_CONFIG.job_config_no
-
-  -- reuse: one ECISAction instance (exec_order) + its jobid parameter value
-  procedure upsert_instance(p_exec number, p_jobid varchar2) is
-    l_ai number;
-  begin
-    UPDATE action_instance SET description = v_sched, isolated_tx_ind = 'N', rev_text = v_rev
-     WHERE schedule_no = v_sno AND business_action_no = v_ba AND exec_order = p_exec;
-    IF SQL%ROWCOUNT = 0 THEN
-      INSERT INTO action_instance (business_action_no, description, exec_order, schedule_no, isolated_tx_ind, rev_text)
-      VALUES (v_ba, v_sched, p_exec, v_sno, 'N', v_rev);
-    END IF;
-    SELECT action_instance_no INTO l_ai
-      FROM action_instance WHERE schedule_no = v_sno AND business_action_no = v_ba AND exec_order = p_exec;
-
-    UPDATE action_instance_value SET parameter_value = p_jobid, rev_text = v_rev
-     WHERE action_instance_no = l_ai AND action_parameter_no = v_jp;
-    IF SQL%ROWCOUNT = 0 THEN
-      INSERT INTO action_instance_value (action_instance_no, action_parameter_no, parameter_value, rev_text)
-      VALUES (l_ai, v_jp, p_jobid, v_rev);
-    END IF;
-  end;
-
-  -- reuse: one ACTION_JOB_CONFIG row (job-action step or its parameter); param name/value may be NULL
-  procedure upsert_cfg(p_job varchar2, p_no number, p_class varchar2, p_name varchar2, p_val varchar2) is
-  begin
-    UPDATE action_job_config
-       SET job_action_class = p_class, param_value = p_val, transport_component_ind = 'N', rev_text = v_rev
-     WHERE job_id = p_job AND job_action_no = p_no
-       AND (param_name = p_name OR (param_name IS NULL AND p_name IS NULL));
-    IF SQL%ROWCOUNT = 0 THEN
-      v_cfg := v_cfg + 1;
-      INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class,
-             param_name, param_value, transport_component_ind, rev_text)
-      VALUES (v_cfg, p_job, p_no, p_class, p_name, p_val, 'N', v_rev);
-    END IF;
-  end;
-
 begin
   v_fa := EcDp_Objects.GetObjIDFromCode('FUNCTIONAL_AREA', 'ECIS');
   SELECT business_action_no INTO v_ba FROM business_action WHERE name = 'ECISAction';
@@ -89,33 +52,177 @@ begin
          retain_count = 10, rev_text = v_rev
    WHERE name = v_sched;
 
-  -- 3) TWO ECISAction INSTANCES (+ jobid each) -----------------------------------------------------
-  upsert_instance(10, v_job1);
-  upsert_instance(20, v_job2);
+  -- 3) ECISAction INSTANCE exec 10 -> jobid ClaudeJobID --------------------------------------------
+  UPDATE action_instance SET description = v_sched, isolated_tx_ind = 'N', rev_text = v_rev
+   WHERE schedule_no = v_sno AND business_action_no = v_ba AND exec_order = 10;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO action_instance (business_action_no, description, exec_order, schedule_no, isolated_tx_ind, rev_text)
+    VALUES (v_ba, v_sched, 10, v_sno, 'N', v_rev);
+  END IF;
+  SELECT action_instance_no INTO v_ai FROM action_instance WHERE schedule_no = v_sno AND business_action_no = v_ba AND exec_order = 10;
+  UPDATE action_instance_value SET parameter_value = v_job1, rev_text = v_rev
+   WHERE action_instance_no = v_ai AND action_parameter_no = v_jp;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO action_instance_value (action_instance_no, action_parameter_no, parameter_value, rev_text)
+    VALUES (v_ai, v_jp, v_job1, v_rev);
+  END IF;
 
-  -- 4) JOB CHAINS (ACTION_JOB_CONFIG) --------------------------------------------------------------
+  -- 4) ECISAction INSTANCE exec 20 -> jobid ClaudeReadFromStaging ----------------------------------
+  UPDATE action_instance SET description = v_sched, isolated_tx_ind = 'N', rev_text = v_rev
+   WHERE schedule_no = v_sno AND business_action_no = v_ba AND exec_order = 20;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO action_instance (business_action_no, description, exec_order, schedule_no, isolated_tx_ind, rev_text)
+    VALUES (v_ba, v_sched, 20, v_sno, 'N', v_rev);
+  END IF;
+  SELECT action_instance_no INTO v_ai FROM action_instance WHERE schedule_no = v_sno AND business_action_no = v_ba AND exec_order = 20;
+  UPDATE action_instance_value SET parameter_value = v_job2, rev_text = v_rev
+   WHERE action_instance_no = v_ai AND action_parameter_no = v_jp;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO action_instance_value (action_instance_no, action_parameter_no, parameter_value, rev_text)
+    VALUES (v_ai, v_jp, v_job2, v_rev);
+  END IF;
+
+  -- 5) JOB CHAIN for ClaudeJobID : file -> IMP_STAGING ---------------------------------------------
   SELECT NVL(MAX(job_config_no), 0) INTO v_cfg FROM action_job_config;
 
-  -- 4a) ClaudeJobID : file -> IMP_STAGING
-  upsert_cfg(v_job1, 10, c_adv, 'COMPLETED_FOLDER', NULL);
-  upsert_cfg(v_job1, 10, c_adv, 'CONFIG_VALIDATION', 'Y');
-  upsert_cfg(v_job1, 10, c_adv, 'DROP_FOLDER',       NULL);
-  upsert_cfg(v_job1, 10, c_adv, 'ERROR_FOLDER',      NULL);
-  upsert_cfg(v_job1, 10, c_adv, 'FILE_DROP_SERVICE', 'DB');
-  upsert_cfg(v_job1, 10, c_adv, 'FILE_FILTER',       '*');
-  upsert_cfg(v_job1, 10, c_adv, 'FTP_PASSWORD',      NULL);
-  upsert_cfg(v_job1, 10, c_adv, 'FTP_PORT',          NULL);
-  upsert_cfg(v_job1, 10, c_adv, 'FTP_REMOVE_FILE',   'N');
-  upsert_cfg(v_job1, 10, c_adv, 'FTP_SERVER_NAME',   NULL);
-  upsert_cfg(v_job1, 10, c_adv, 'FTP_USER_NAME',     NULL);
-  upsert_cfg(v_job1, 10, c_adv, 'INTERFACE_CODE',    v_iface);
-  upsert_cfg(v_job1, 20, c_sgt, NULL,                NULL);
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = NULL, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'COMPLETED_FOLDER';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'COMPLETED_FOLDER', NULL, 'N', v_rev);
+  END IF;
 
-  -- 4b) ClaudeReadFromStaging : IMP_STAGING -> target class
-  upsert_cfg(v_job2, 10, c_sgs, 'CONFIG_VALIDATION', 'Y');
-  upsert_cfg(v_job2, 10, c_sgs, 'FILE_NAME',         '*');
-  upsert_cfg(v_job2, 10, c_sgs, 'INTERFACE_CODE',    v_iface);
-  upsert_cfg(v_job2, 20, c_tgt, NULL,                NULL);
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = 'Y', transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'CONFIG_VALIDATION';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'CONFIG_VALIDATION', 'Y', 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = NULL, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'DROP_FOLDER';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'DROP_FOLDER', NULL, 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = NULL, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'ERROR_FOLDER';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'ERROR_FOLDER', NULL, 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = 'DB', transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'FILE_DROP_SERVICE';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'FILE_DROP_SERVICE', 'DB', 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = '*', transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'FILE_FILTER';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'FILE_FILTER', '*', 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = NULL, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'FTP_PASSWORD';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'FTP_PASSWORD', NULL, 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = NULL, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'FTP_PORT';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'FTP_PORT', NULL, 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = 'N', transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'FTP_REMOVE_FILE';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'FTP_REMOVE_FILE', 'N', 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = NULL, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'FTP_SERVER_NAME';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'FTP_SERVER_NAME', NULL, 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = NULL, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'FTP_USER_NAME';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'FTP_USER_NAME', NULL, 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_adv, param_value = v_iface, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 10 AND param_name = 'INTERFACE_CODE';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 10, c_adv, 'INTERFACE_CODE', v_iface, 'N', v_rev);
+  END IF;
+
+  -- ClaudeJobID action 20: StagingJobActionTarget (no parameters)
+  UPDATE action_job_config SET job_action_class = c_sgt, param_value = NULL, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job1 AND job_action_no = 20 AND param_name IS NULL;
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job1, 20, c_sgt, NULL, NULL, 'N', v_rev);
+  END IF;
+
+  -- 6) JOB CHAIN for ClaudeReadFromStaging : IMP_STAGING -> target class ---------------------------
+  UPDATE action_job_config SET job_action_class = c_sgs, param_value = 'Y', transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job2 AND job_action_no = 10 AND param_name = 'CONFIG_VALIDATION';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job2, 10, c_sgs, 'CONFIG_VALIDATION', 'Y', 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_sgs, param_value = '*', transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job2 AND job_action_no = 10 AND param_name = 'FILE_NAME';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job2, 10, c_sgs, 'FILE_NAME', '*', 'N', v_rev);
+  END IF;
+
+  UPDATE action_job_config SET job_action_class = c_sgs, param_value = v_iface, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job2 AND job_action_no = 10 AND param_name = 'INTERFACE_CODE';
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job2, 10, c_sgs, 'INTERFACE_CODE', v_iface, 'N', v_rev);
+  END IF;
+
+  -- ClaudeReadFromStaging action 20: TargetMappingJobAction (no parameters)
+  UPDATE action_job_config SET job_action_class = c_tgt, param_value = NULL, transport_component_ind = 'N', rev_text = v_rev
+   WHERE job_id = v_job2 AND job_action_no = 20 AND param_name IS NULL;
+  IF SQL%ROWCOUNT = 0 THEN
+    v_cfg := v_cfg + 1;
+    INSERT INTO action_job_config (job_config_no, job_id, job_action_no, job_action_class, param_name, param_value, transport_component_ind, rev_text)
+    VALUES (v_cfg, v_job2, 20, c_tgt, NULL, NULL, 'N', v_rev);
+  END IF;
 
 end;
 /
