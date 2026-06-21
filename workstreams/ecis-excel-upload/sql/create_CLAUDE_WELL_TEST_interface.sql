@@ -1,0 +1,134 @@
+-- =====================================================================================================
+-- ECIS Excel-upload interface config: CLAUDE_WELL_TEST   (sandbox demo)
+-- Style mirrors Pluto 050_Interfaces: writes through the OV_* object views, FK by business CODE
+-- (no hardcoded GUIDs), one begin..end; block, NO MERGE, NO EXCEPTION handling, NO COMMIT in the file.
+-- UPDATE-INSERT (re-runnable): UPDATE; IF SQL%ROWCOUNT=0 THEN INSERT VALUES; END IF;  (REV_TEXT on every DML).
+-- Constants in DECLARE: v_code (interface code), v_rev (REV_TEXT = change ticket), v_sd (object start date).
+-- Dependency order: INTERFACE -> SOURCE_MAPPING -> SOURCE_PATH (parent by subquery) -> TARGET_MAPPING.
+-- Maps Excel sheet 'Data' (Well | Date | Pressure) -> PWEL_DAY_STATUS.AVG_BH_PRESS keyed by well + date.
+--
+-- STATUS: VERIFIED re-runnable + idempotent (2026-06-21) - delete -> create -> re-create = 3 mappings /
+-- 6 paths / 1 target both runs, no duplicates, REV_TEXT set, products untouched.
+-- ROOT-CAUSE FIX (path collision): the OV_IMP_SOURCE_PATH UPDATE WHERE must use **IMP_SOURCE_MAPPING** (holds
+-- the mapping CODE, e.g. 'WELL') - NOT IMP_SOURCE_MAPPING_CODE, which on OV_IMP_SOURCE_PATH holds the mapping's
+-- OBJECT_ID (a GUID). Using the wrong column made every UPDATE match 0 rows, so IF SQL%ROWCOUNT=0 always fired
+-- the INSERT, which then collided on UK_IMP_SOURCE_PATH_1 (IMP_SOURCE_MAPPING_ID, TYPE, SORT_ORDER).
+-- =====================================================================================================
+declare
+  v_code  constant varchar2(30)  := 'CLAUDE_WELL_TEST';
+  v_rev   constant varchar2(30)  := 'ECPR-XXXX';
+  v_sd    constant date          := to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss');
+begin
+
+  -- 1) INTERFACE -----------------------------------------------------------------------------------
+  UPDATE OV_IMP_SOURCE_INTERFACE SET NAME = 'Claude Well Test', FUNCTIONAL_AREA_CODE = 'ECIS',
+         INTERFACE_TYPE = 'INSERT_UPDATE', TRANSACTION_TYPE = 'ROW', SOURCE_TYPE = 'EXCEL',
+         STAGING_VALIDATION_IND = 'N', EC_VALID_LEVEL = 'P', EC_DATA_LEVEL = 'P', OVERWRITE = 'FULL',
+         REV_TEXT = v_rev
+   WHERE CODE = v_code;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_SOURCE_INTERFACE (CODE, OBJECT_START_DATE, NAME, FUNCTIONAL_AREA_CODE, INTERFACE_TYPE,
+           TRANSACTION_TYPE, SOURCE_TYPE, STAGING_VALIDATION_IND, EC_VALID_LEVEL, EC_DATA_LEVEL, OVERWRITE, REV_TEXT)
+    VALUES (v_code, v_sd, 'Claude Well Test', 'ECIS', 'INSERT_UPDATE', 'ROW', 'EXCEL', 'N', 'P', 'P', 'FULL', v_rev);
+  END IF;
+
+  -- 2) SOURCE MAPPINGS -----------------------------------------------------------------------------
+  -- WELL (key)
+  UPDATE OV_IMP_SOURCE_MAPPING SET NAME = 'Well', SORT_ORDER = '10', PATH_ORIGIN = 'Data.A1',
+         TYPE = 'KEY_LIST', VALUE_TYPE = 'STRING', REV_TEXT = v_rev
+   WHERE MAPPING_CODE = 'WELL' AND IMP_SOURCE_INTERFACE_CODE = v_code;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_SOURCE_MAPPING (OBJECT_START_DATE, SORT_ORDER, MAPPING_CODE, NAME, PATH_ORIGIN, TYPE,
+           VALUE_TYPE, IMP_SOURCE_INTERFACE_CODE, REV_TEXT)
+    VALUES (v_sd, '10', 'WELL', 'Well', 'Data.A1', 'KEY_LIST', 'STRING', v_code, v_rev);
+  END IF;
+
+  -- DATE (key)
+  UPDATE OV_IMP_SOURCE_MAPPING SET NAME = 'Date', SORT_ORDER = '20', PATH_ORIGIN = 'Data.A1',
+         TYPE = 'KEY_LIST', VALUE_TYPE = 'DATE', REV_TEXT = v_rev
+   WHERE MAPPING_CODE = 'DATE' AND IMP_SOURCE_INTERFACE_CODE = v_code;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_SOURCE_MAPPING (OBJECT_START_DATE, SORT_ORDER, MAPPING_CODE, NAME, PATH_ORIGIN, TYPE,
+           VALUE_TYPE, IMP_SOURCE_INTERFACE_CODE, REV_TEXT)
+    VALUES (v_sd, '20', 'DATE', 'Date', 'Data.A1', 'KEY_LIST', 'DATE', v_code, v_rev);
+  END IF;
+
+  -- PRESSURE (data value -> AVG_BH_PRESS)
+  UPDATE OV_IMP_SOURCE_MAPPING SET NAME = 'Pressure', SORT_ORDER = '30', PATH_ORIGIN = 'Data.A1',
+         TYPE = 'DATA', VALUE_TYPE = 'NUMBER', EC_KEY = 'claudePress', KEY_1 = 'ROWS:WELL', KEY_2 = 'ROWS:DATE',
+         REV_TEXT = v_rev
+   WHERE MAPPING_CODE = 'PRESSURE' AND IMP_SOURCE_INTERFACE_CODE = v_code;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_SOURCE_MAPPING (OBJECT_START_DATE, SORT_ORDER, MAPPING_CODE, NAME, PATH_ORIGIN, TYPE,
+           VALUE_TYPE, EC_KEY, KEY_1, KEY_2, IMP_SOURCE_INTERFACE_CODE, REV_TEXT)
+    VALUES (v_sd, '30', 'PRESSURE', 'Pressure', 'Data.A1', 'DATA', 'NUMBER', 'claudePress', 'ROWS:WELL',
+           'ROWS:DATE', v_code, v_rev);
+  END IF;
+
+  -- 3) SOURCE MAPPING COMMANDS (paths) -- parent mapping resolved by subquery on its business code ----
+  -- WELL : Move(0,1) .. FindVertical("")
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH = 'Move', PATH_PARAM_1 = '0', PATH_PARAM_2 = '1', REV_TEXT = v_rev
+   WHERE IMP_SOURCE_INTERFACE_CODE = v_code AND IMP_SOURCE_MAPPING = 'WELL' AND SOURCE_TYPE = 'UPPER_LEFT' AND SORT_ORDER = 10;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1,
+           PATH_PARAM_2, IMP_SOURCE_MAPPING_ID, REV_TEXT)
+    VALUES (v_sd, 10, 'UPPER_LEFT', 'Move', '0', '1',
+           (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE = 'WELL' AND IMP_SOURCE_INTERFACE_CODE = v_code), v_rev);
+  END IF;
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH = 'FindVertical', PATH_PARAM_1 = '""', PATH_PARAM_2 = null, REV_TEXT = v_rev
+   WHERE IMP_SOURCE_INTERFACE_CODE = v_code AND IMP_SOURCE_MAPPING = 'WELL' AND SOURCE_TYPE = 'LOWER_RIGHT' AND SORT_ORDER = 20;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1,
+           IMP_SOURCE_MAPPING_ID, REV_TEXT)
+    VALUES (v_sd, 20, 'LOWER_RIGHT', 'FindVertical', '""',
+           (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE = 'WELL' AND IMP_SOURCE_INTERFACE_CODE = v_code), v_rev);
+  END IF;
+
+  -- DATE : Move(1,1) .. FindVertical("")
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH = 'Move', PATH_PARAM_1 = '1', PATH_PARAM_2 = '1', REV_TEXT = v_rev
+   WHERE IMP_SOURCE_INTERFACE_CODE = v_code AND IMP_SOURCE_MAPPING = 'DATE' AND SOURCE_TYPE = 'UPPER_LEFT' AND SORT_ORDER = 10;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1,
+           PATH_PARAM_2, IMP_SOURCE_MAPPING_ID, REV_TEXT)
+    VALUES (v_sd, 10, 'UPPER_LEFT', 'Move', '1', '1',
+           (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE = 'DATE' AND IMP_SOURCE_INTERFACE_CODE = v_code), v_rev);
+  END IF;
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH = 'FindVertical', PATH_PARAM_1 = '""', PATH_PARAM_2 = null, REV_TEXT = v_rev
+   WHERE IMP_SOURCE_INTERFACE_CODE = v_code AND IMP_SOURCE_MAPPING = 'DATE' AND SOURCE_TYPE = 'LOWER_RIGHT' AND SORT_ORDER = 20;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1,
+           IMP_SOURCE_MAPPING_ID, REV_TEXT)
+    VALUES (v_sd, 20, 'LOWER_RIGHT', 'FindVertical', '""',
+           (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE = 'DATE' AND IMP_SOURCE_INTERFACE_CODE = v_code), v_rev);
+  END IF;
+
+  -- PRESSURE : Move(2,1) .. FindVertical("")
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH = 'Move', PATH_PARAM_1 = '2', PATH_PARAM_2 = '1', REV_TEXT = v_rev
+   WHERE IMP_SOURCE_INTERFACE_CODE = v_code AND IMP_SOURCE_MAPPING = 'PRESSURE' AND SOURCE_TYPE = 'UPPER_LEFT' AND SORT_ORDER = 10;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1,
+           PATH_PARAM_2, IMP_SOURCE_MAPPING_ID, REV_TEXT)
+    VALUES (v_sd, 10, 'UPPER_LEFT', 'Move', '2', '1',
+           (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE = 'PRESSURE' AND IMP_SOURCE_INTERFACE_CODE = v_code), v_rev);
+  END IF;
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH = 'FindVertical', PATH_PARAM_1 = '""', PATH_PARAM_2 = null, REV_TEXT = v_rev
+   WHERE IMP_SOURCE_INTERFACE_CODE = v_code AND IMP_SOURCE_MAPPING = 'PRESSURE' AND SOURCE_TYPE = 'LOWER_RIGHT' AND SORT_ORDER = 20;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1,
+           IMP_SOURCE_MAPPING_ID, REV_TEXT)
+    VALUES (v_sd, 20, 'LOWER_RIGHT', 'FindVertical', '""',
+           (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE = 'PRESSURE' AND IMP_SOURCE_INTERFACE_CODE = v_code), v_rev);
+  END IF;
+
+  -- 4) TARGET MAPPING : claudePress -> PWEL_DAY_STATUS.AVG_BH_PRESS (Class Key 1=KEY_1, Key 2=KEY_2) -----
+  UPDATE OV_IMP_TARGET_MAPPING SET CLASS = 'PWEL_DAY_STATUS', ATTRIBUTE = 'AVG_BH_PRESS', CLASS_KEY_1 = 'KEY_1',
+         CLASS_KEY_2 = 'KEY_2', REV_TEXT = v_rev
+   WHERE EC_KEY = 'claudePress' AND IMP_SOURCE_INTERFACE_CODE = v_code;
+  IF SQL%ROWCOUNT = 0 THEN
+    INSERT INTO OV_IMP_TARGET_MAPPING (CLASS, OBJECT_START_DATE, ATTRIBUTE, EC_KEY, CLASS_KEY_1, CLASS_KEY_2,
+           IMP_SOURCE_INTERFACE_CODE, REV_TEXT)
+    VALUES ('PWEL_DAY_STATUS', v_sd, 'AVG_BH_PRESS', 'claudePress', 'KEY_1', 'KEY_2', v_code, v_rev);
+  END IF;
+
+end;
+/
