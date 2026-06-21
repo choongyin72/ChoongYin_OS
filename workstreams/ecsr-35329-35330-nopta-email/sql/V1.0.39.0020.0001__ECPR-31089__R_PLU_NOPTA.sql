@@ -201,15 +201,11 @@ BEGIN
   END IF;
 
   --Message Format  [decision 1: TEXT] 
-  -- Convert existing R_PLU_NOPTA from REPORT/XML to TEXT. FORMAT_CODE is keyed/FK'd
-  -- (FK_MESSAGE_DISTRIBUTION_3) so it cannot be UPDATEd in place -> drop the format-dependent chain
-  -- child-first, then the sections below rebuild it as TEXT. (No-op on a fresh install.)
-  DELETE FROM TV_MESSAGE_DISTR_CONN  WHERE MESSAGE_DISTRIBUTION_NO IN (SELECT MESSAGE_DISTRIBUTION_NO FROM DV_MESSAGE_DISTRIBUTION WHERE OBJECT_CODE = 'R_PLU_NOPTA');
-  DELETE FROM TV_MESSAGE_DISTR_PARAM WHERE MESSAGE_DISTRIBUTION_NO IN (SELECT MESSAGE_DISTRIBUTION_NO FROM DV_MESSAGE_DISTRIBUTION WHERE OBJECT_CODE = 'R_PLU_NOPTA');
-  DELETE FROM DV_MESSAGE_DISTRIBUTION    WHERE OBJECT_CODE = 'R_PLU_NOPTA';
-  DELETE FROM TV_DISTRIBUTION_SET_CONTACT WHERE CODE = 'R_PLU_NOPTA';
-  -- NOTE: do NOT delete DV_MESSAGE_FORMAT - the existing XML format row is referenced by historical
-  -- outgoing messages (FK_MESSAGE_OUT_4). Keep XML for history; make TEXT the default format instead.
+  -- Convert R_PLU_NOPTA from REPORT/XML to TEXT WITHOUT deleting anything (non-destructive):
+  -- the DV_MESSAGE_FORMAT row's FORMAT_CODE can't be flipped in place (keyed, and the old XML row is pinned by
+  -- historical outgoing messages - FK_MESSAGE_OUT_4) -> KEEP the XML format row for history, add TEXT as the
+  -- default format, and the distribution + recipients sections below switch their FORMAT_CODE to TEXT in place
+  -- (there FORMAT_CODE is an FK attribute, not the identity, so an in-place UPDATE is allowed).
 
   -- demote the existing (XML) format from default
   UPDATE DV_MESSAGE_FORMAT
