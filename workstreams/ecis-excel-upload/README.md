@@ -25,6 +25,10 @@ Excel -> **Upload Files** -> `IMP_SOURCE_INTERFACE_FILE` (DB blob, `FILE_DROP_SE
   GUIDs. Mirrors the Pluto `050_Interfaces/V*__ZWP_INTERIM_DATA_UPLOAD.sql` template + **dependency order**
   (parent→child). Proven: delete→run→re-run = 3 mappings / 6 paths / 1 target both times, no dups
   (`scripts/ecis_apply_sql.py`). For COPSDEV: rename to a versioned Flyway file under Pluto_Config/.../050_Interfaces/.
+- **`delete_CLAUDE_WELL_TEST_interface.sql`** — TEARDOWN: clears the whole interface config child-first
+  (path -> target -> mapping -> interface), scoped to the interface by linkage (handles duplicates/leftovers),
+  PRODUCTS UNTOUCHED, idempotent, no COMMIT in file. Proven: CLAUDE -> 0, product mappings unchanged. Run it
+  before a clean re-create.
 - Recon helper: `scripts/ecis_dump_config.py` (dumps the live rows of the 4 tables).
 
 ## scripts/  (run with `py -X utf8 workstreams/ecis-excel-upload/scripts/<name>`)
