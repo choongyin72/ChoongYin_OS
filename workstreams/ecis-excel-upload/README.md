@@ -17,6 +17,16 @@ Excel -> **Upload Files** -> `IMP_SOURCE_INTERFACE_FILE` (DB blob, `FILE_DROP_SE
 - `config_mapping_configuration.png` - the ECIS **config** (Mapping Configuration: CLAUDE_WELL_TEST interface + source/target mappings)
 - `pwel_BEFORE.png` / `pwel_AFTER.png` - the well-status screen **before (empty) -> after (filled)**
 
+## sql/ — re-runnable create-config SQL (the delivery artifact)
+- **`create_CLAUDE_WELL_TEST_interface.sql`** — recreates the ECIS interface config
+  (`IMP_SOURCE_INTERFACE` → `IMP_SOURCE_MAPPING` + `IMP_SOURCE_PATH` per column → `IMP_TARGET_MAPPING`) as one
+  PL/SQL block. **Update-insert (idempotent / re-runnable)**, `REV_TEXT='ECPR-XXXX'` on every DML (replace with
+  the real ECPR ticket), FK resolved by business key (`ec_functional_area.object_id_by_uk('ECIS')`), no hardcoded
+  GUIDs. Mirrors the Pluto `050_Interfaces/V*__ZWP_INTERIM_DATA_UPLOAD.sql` template + **dependency order**
+  (parent→child). Proven: delete→run→re-run = 3 mappings / 6 paths / 1 target both times, no dups
+  (`scripts/ecis_apply_sql.py`). For COPSDEV: rename to a versioned Flyway file under Pluto_Config/.../050_Interfaces/.
+- Recon helper: `scripts/ecis_dump_config.py` (dumps the live rows of the 4 tables).
+
 ## scripts/  (run with `py -X utf8 workstreams/ecis-excel-upload/scripts/<name>`)
 **Turnkey demo (self-cleaning - empty -> upload -> filled -> reverted):**
 - `ecis_pwel_beforeafter.py` - **the demo to run**: config-aware before/after on the EC screen, auto-reverts on teardown.
