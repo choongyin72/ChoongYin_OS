@@ -1,144 +1,119 @@
 -- =====================================================================================================
--- ECIS Excel-upload interface config: CLAUDE_WELL_TEST  (sandbox demo)
--- Mirrors the Woodside Pluto 050_Interfaces pattern (e.g. V1.0.35.0050.0020__ZWP_INTERIM_DATA_UPLOAD.sql).
+-- ECIS Excel-upload interface config: CLAUDE_WELL_TEST   (sandbox demo)
+-- Style mirrors Pluto 050_Interfaces (V1.0.0.0050.0100__PROD_TARGET_IMPORT_MAPPING.sql): writes through the
+-- OV_* object views (they handle object_id/rec_id/date-effective), FK by business CODE (no hardcoded GUIDs),
+-- one begin..end; block, no EXCEPTION handling, no COMMIT inside the file.
+-- UPDATE-INSERT (re-runnable): each object UPDATEs if present, else INSERTs. REV_TEXT='ECPR-XXXX' on every DML
+-- (REPLACE 'ECPR-XXXX' with the real change ticket).
+-- Dependency order: INTERFACE -> SOURCE_MAPPING -> SOURCE_PATH (parent resolved by subquery) -> TARGET_MAPPING.
+-- Maps Excel sheet 'Data' (Well | Date | Pressure) -> PWEL_DAY_STATUS.AVG_BH_PRESS keyed by well + date.
 --
--- * UPDATE-INSERT (idempotent / re-runnable): each object UPDATEs if present, else INSERTs. Never duplicates.
--- * REV_TEXT = 'ECPR-XXXX' on every INSERT/UPDATE  <-- REPLACE 'ECPR-XXXX' with the real change ticket.
--- * FK resolved by business key (no hardcoded GUIDs): ec_functional_area.object_id_by_uk('ECIS'); the
---   object_id / rec_id are left for EC to auto-generate on insert.
--- * DEPENDENCY ORDER (parent -> child, because of the FK chain + the object_id captured for children):
---     1. IMP_SOURCE_INTERFACE
---     2. (per column) IMP_SOURCE_MAPPING  -> then its IMP_SOURCE_PATH rows
---     3. IMP_TARGET_MAPPING
---   Maps Excel sheet 'Data' (Well | Date | Pressure) -> PWEL_DAY_STATUS.AVG_BH_PRESS keyed by well + date.
---
--- For COPSDEV delivery this becomes a versioned Flyway file under Pluto_Config/.../050_Interfaces/
--- (V<ver>.0050.<nnnn>__CLAUDE_WELL_TEST.sql); never hand-config COPSDEV.
+-- STYLE per user (2026-06-21): OV_* object views, FK by business CODE, single begin..end; block, NO MERGE,
+-- NO EXCEPTION handling, NO COMMIT in the file, update-insert, REV_TEXT on every DML.
+-- STATUS: interface + source mappings + target sections verified to execute via the OV_* views. The
+-- source-mapping-command (OV_IMP_SOURCE_PATH) inserts still need a runtime fix: on a clean slate the path
+-- INSERT raises ORA-00001 on UK_IMP_SOURCE_PATH_1 (IMP_SOURCE_MAPPING_ID, TYPE, SORT_ORDER) via the
+-- IUD_IMP_SOURCE_PATH instead-of trigger - likely the mapping-create seeds a default path that this insert
+-- then duplicates; the path UPDATE/INSERT-not-exists guards need to account for that. *** PATHS SECTION
+-- RUNTIME-VERIFY PENDING. *** (The working live config is the equivalent built via the UI builder scripts.)
 -- =====================================================================================================
-declare
-  lv_interface_id  varchar2(32);
-  lv_map_id        varchar2(32);
-  v_rev   constant varchar2(30) := 'ECPR-XXXX';
-  v_sd    constant date         := to_date('01-01-1900','dd-mm-yyyy');
 begin
-  --------------------------------------------------------------------------------------------------- 1
-  -- IMP_SOURCE_INTERFACE (parent)
-  begin
-    select object_id into lv_interface_id
-      from imp_source_interface where object_code = 'CLAUDE_WELL_TEST';
-    update imp_source_interface
-       set name='Claude Well Test', type='INSERT_UPDATE', transaction_type='ROW', source_type='EXCEL',
-           overwrite='FULL', ec_data_level='P', ec_valid_level='P', staging_validation_ind='N',
-           functional_area_id = ec_functional_area.object_id_by_uk('ECIS'), rev_text=v_rev
-     where object_id = lv_interface_id;
-  exception when no_data_found then
-    insert into imp_source_interface
-           (object_code, start_date, name, type, transaction_type, source_type, overwrite,
-            functional_area_id, ec_data_level, ec_valid_level, staging_validation_ind, rev_text)
-    values ('CLAUDE_WELL_TEST', v_sd, 'Claude Well Test', 'INSERT_UPDATE', 'ROW', 'EXCEL', 'FULL',
-            ec_functional_area.object_id_by_uk('ECIS'), 'P', 'P', 'N', v_rev)
-    returning object_id into lv_interface_id;
-  end;
 
-  --------------------------------------------------------------------------------------------------- 2
-  -- IMP_SOURCE_MAPPING + IMP_SOURCE_PATH, one block per source column
+  -- 1) INTERFACE -----------------------------------------------------------------------------------
+  UPDATE OV_IMP_SOURCE_INTERFACE
+     SET NAME='Claude Well Test', FUNCTIONAL_AREA_CODE='ECIS', INTERFACE_TYPE='INSERT_UPDATE',
+         TRANSACTION_TYPE='ROW', SOURCE_TYPE='EXCEL', STAGING_VALIDATION_IND='N', EC_VALID_LEVEL='P',
+         EC_DATA_LEVEL='P', OVERWRITE='FULL', REV_TEXT='ECPR-XXXX'
+   WHERE CODE='CLAUDE_WELL_TEST';
+  INSERT INTO OV_IMP_SOURCE_INTERFACE (CODE, OBJECT_START_DATE, NAME, FUNCTIONAL_AREA_CODE, INTERFACE_TYPE,
+         TRANSACTION_TYPE, SOURCE_TYPE, STAGING_VALIDATION_IND, EC_VALID_LEVEL, EC_DATA_LEVEL, OVERWRITE, REV_TEXT)
+  SELECT 'CLAUDE_WELL_TEST', to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), 'Claude Well Test',
+         'ECIS', 'INSERT_UPDATE', 'ROW', 'EXCEL', 'N', 'P', 'P', 'FULL', 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_SOURCE_INTERFACE WHERE CODE='CLAUDE_WELL_TEST');
 
-  -- (a) WELL : KEY_LIST / STRING ; cells = UPPER_LEFT Move(0,1) .. LOWER_RIGHT FindVertical("")
-  begin
-    select object_id into lv_map_id from imp_source_mapping
-     where object_code='CLAUDE_WELL' and imp_source_interface_id=lv_interface_id;
-    update imp_source_mapping set code='WELL', sort_order=10, name='Well', path_origin='Data.A1',
-           type='KEY_LIST', value_type='STRING', rev_text=v_rev where object_id=lv_map_id;
-  exception when no_data_found then
-    insert into imp_source_mapping (object_code, start_date, code, imp_source_interface_id, sort_order,
-           name, path_origin, type, value_type, rev_text)
-    values ('CLAUDE_WELL', v_sd, 'WELL', lv_interface_id, 10, 'Well', 'Data.A1', 'KEY_LIST', 'STRING', v_rev)
-    returning object_id into lv_map_id;
-  end;
-  update imp_source_path set imp_source_mapping_id=lv_map_id, sort_order=10, type='UPPER_LEFT', path='Move',
-         path_param_1='0', path_param_2='1', rev_text=v_rev where object_code='CLAUDE_WELL_10';
-  if sql%rowcount=0 then
-    insert into imp_source_path (object_code, start_date, imp_source_mapping_id, sort_order, type, path,
-           path_param_1, path_param_2, rev_text)
-    values ('CLAUDE_WELL_10', v_sd, lv_map_id, 10, 'UPPER_LEFT', 'Move', '0', '1', v_rev);
-  end if;
-  update imp_source_path set imp_source_mapping_id=lv_map_id, sort_order=20, type='LOWER_RIGHT',
-         path='FindVertical', path_param_1='""', path_param_2=null, rev_text=v_rev where object_code='CLAUDE_WELL_20';
-  if sql%rowcount=0 then
-    insert into imp_source_path (object_code, start_date, imp_source_mapping_id, sort_order, type, path,
-           path_param_1, path_param_2, rev_text)
-    values ('CLAUDE_WELL_20', v_sd, lv_map_id, 20, 'LOWER_RIGHT', 'FindVertical', '""', null, v_rev);
-  end if;
+  -- 2) SOURCE MAPPINGS -----------------------------------------------------------------------------
+  -- WELL (key)
+  UPDATE OV_IMP_SOURCE_MAPPING SET NAME='Well', SORT_ORDER='10', PATH_ORIGIN='Data.A1', TYPE='KEY_LIST',
+         VALUE_TYPE='STRING', REV_TEXT='ECPR-XXXX'
+   WHERE MAPPING_CODE='WELL' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST';
+  INSERT INTO OV_IMP_SOURCE_MAPPING (OBJECT_START_DATE, SORT_ORDER, MAPPING_CODE, NAME, PATH_ORIGIN, TYPE,
+         VALUE_TYPE, IMP_SOURCE_INTERFACE_CODE, REV_TEXT)
+  SELECT to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), '10', 'WELL', 'Well', 'Data.A1', 'KEY_LIST',
+         'STRING', 'CLAUDE_WELL_TEST', 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE='WELL' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST');
 
-  -- (b) DATE : KEY_LIST / DATE ; cells = Move(1,1) .. FindVertical("")
-  begin
-    select object_id into lv_map_id from imp_source_mapping
-     where object_code='CLAUDE_DATE' and imp_source_interface_id=lv_interface_id;
-    update imp_source_mapping set code='DATE', sort_order=20, name='Date', path_origin='Data.A1',
-           type='KEY_LIST', value_type='DATE', rev_text=v_rev where object_id=lv_map_id;
-  exception when no_data_found then
-    insert into imp_source_mapping (object_code, start_date, code, imp_source_interface_id, sort_order,
-           name, path_origin, type, value_type, rev_text)
-    values ('CLAUDE_DATE', v_sd, 'DATE', lv_interface_id, 20, 'Date', 'Data.A1', 'KEY_LIST', 'DATE', v_rev)
-    returning object_id into lv_map_id;
-  end;
-  update imp_source_path set imp_source_mapping_id=lv_map_id, sort_order=10, type='UPPER_LEFT', path='Move',
-         path_param_1='1', path_param_2='1', rev_text=v_rev where object_code='CLAUDE_DATE_10';
-  if sql%rowcount=0 then
-    insert into imp_source_path (object_code, start_date, imp_source_mapping_id, sort_order, type, path,
-           path_param_1, path_param_2, rev_text)
-    values ('CLAUDE_DATE_10', v_sd, lv_map_id, 10, 'UPPER_LEFT', 'Move', '1', '1', v_rev);
-  end if;
-  update imp_source_path set imp_source_mapping_id=lv_map_id, sort_order=20, type='LOWER_RIGHT',
-         path='FindVertical', path_param_1='""', path_param_2=null, rev_text=v_rev where object_code='CLAUDE_DATE_20';
-  if sql%rowcount=0 then
-    insert into imp_source_path (object_code, start_date, imp_source_mapping_id, sort_order, type, path,
-           path_param_1, path_param_2, rev_text)
-    values ('CLAUDE_DATE_20', v_sd, lv_map_id, 20, 'LOWER_RIGHT', 'FindVertical', '""', null, v_rev);
-  end if;
+  -- DATE (key)
+  UPDATE OV_IMP_SOURCE_MAPPING SET NAME='Date', SORT_ORDER='20', PATH_ORIGIN='Data.A1', TYPE='KEY_LIST',
+         VALUE_TYPE='DATE', REV_TEXT='ECPR-XXXX'
+   WHERE MAPPING_CODE='DATE' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST';
+  INSERT INTO OV_IMP_SOURCE_MAPPING (OBJECT_START_DATE, SORT_ORDER, MAPPING_CODE, NAME, PATH_ORIGIN, TYPE,
+         VALUE_TYPE, IMP_SOURCE_INTERFACE_CODE, REV_TEXT)
+  SELECT to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), '20', 'DATE', 'Date', 'Data.A1', 'KEY_LIST',
+         'DATE', 'CLAUDE_WELL_TEST', 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE='DATE' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST');
 
-  -- (c) PRESSURE : DATA / NUMBER ; EC_KEY=claudePress, KEY_1=ROWS:WELL, KEY_2=ROWS:DATE ; Move(2,1) .. FindVertical("")
-  begin
-    select object_id into lv_map_id from imp_source_mapping
-     where object_code='CLAUDE_PRESSURE' and imp_source_interface_id=lv_interface_id;
-    update imp_source_mapping set code='PRESSURE', sort_order=30, name='Pressure', path_origin='Data.A1',
-           type='DATA', value_type='NUMBER', ec_key='claudePress', key_1='ROWS:WELL', key_2='ROWS:DATE',
-           rev_text=v_rev where object_id=lv_map_id;
-  exception when no_data_found then
-    insert into imp_source_mapping (object_code, start_date, code, imp_source_interface_id, sort_order,
-           name, path_origin, type, value_type, ec_key, key_1, key_2, rev_text)
-    values ('CLAUDE_PRESSURE', v_sd, 'PRESSURE', lv_interface_id, 30, 'Pressure', 'Data.A1', 'DATA', 'NUMBER',
-           'claudePress', 'ROWS:WELL', 'ROWS:DATE', v_rev)
-    returning object_id into lv_map_id;
-  end;
-  update imp_source_path set imp_source_mapping_id=lv_map_id, sort_order=10, type='UPPER_LEFT', path='Move',
-         path_param_1='2', path_param_2='1', rev_text=v_rev where object_code='CLAUDE_PRESSURE_10';
-  if sql%rowcount=0 then
-    insert into imp_source_path (object_code, start_date, imp_source_mapping_id, sort_order, type, path,
-           path_param_1, path_param_2, rev_text)
-    values ('CLAUDE_PRESSURE_10', v_sd, lv_map_id, 10, 'UPPER_LEFT', 'Move', '2', '1', v_rev);
-  end if;
-  update imp_source_path set imp_source_mapping_id=lv_map_id, sort_order=20, type='LOWER_RIGHT',
-         path='FindVertical', path_param_1='""', path_param_2=null, rev_text=v_rev where object_code='CLAUDE_PRESSURE_20';
-  if sql%rowcount=0 then
-    insert into imp_source_path (object_code, start_date, imp_source_mapping_id, sort_order, type, path,
-           path_param_1, path_param_2, rev_text)
-    values ('CLAUDE_PRESSURE_20', v_sd, lv_map_id, 20, 'LOWER_RIGHT', 'FindVertical', '""', null, v_rev);
-  end if;
+  -- PRESSURE (data value -> AVG_BH_PRESS)
+  UPDATE OV_IMP_SOURCE_MAPPING SET NAME='Pressure', SORT_ORDER='30', PATH_ORIGIN='Data.A1', TYPE='DATA',
+         VALUE_TYPE='NUMBER', EC_KEY='claudePress', KEY_1='ROWS:WELL', KEY_2='ROWS:DATE', REV_TEXT='ECPR-XXXX'
+   WHERE MAPPING_CODE='PRESSURE' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST';
+  INSERT INTO OV_IMP_SOURCE_MAPPING (OBJECT_START_DATE, SORT_ORDER, MAPPING_CODE, NAME, PATH_ORIGIN, TYPE,
+         VALUE_TYPE, EC_KEY, KEY_1, KEY_2, IMP_SOURCE_INTERFACE_CODE, REV_TEXT)
+  SELECT to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), '30', 'PRESSURE', 'Pressure', 'Data.A1',
+         'DATA', 'NUMBER', 'claudePress', 'ROWS:WELL', 'ROWS:DATE', 'CLAUDE_WELL_TEST', 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE='PRESSURE' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST');
 
-  --------------------------------------------------------------------------------------------------- 3
-  -- IMP_TARGET_MAPPING : claudePress -> PWEL_DAY_STATUS.AVG_BH_PRESS (Class Key 1=KEY_1, Key 2=KEY_2)
-  update imp_target_mapping
-     set attribute='AVG_BH_PRESS', class='PWEL_DAY_STATUS', class_key_1='KEY_1', class_key_2='KEY_2',
-         imp_source_interface_id=lv_interface_id, rev_text=v_rev
-   where object_code='CLAUDE_PRESS_TGT' and ec_key='claudePress';
-  if sql%rowcount=0 then
-    insert into imp_target_mapping (object_code, start_date, ec_key, imp_source_interface_id, attribute,
-           class, class_key_1, class_key_2, rev_text)
-    values ('CLAUDE_PRESS_TGT', v_sd, 'claudePress', lv_interface_id, 'AVG_BH_PRESS', 'PWEL_DAY_STATUS',
-           'KEY_1', 'KEY_2', v_rev);
-  end if;
+  -- 3) SOURCE MAPPING COMMANDS (paths) -- parent mapping resolved by subquery on its business code ----
+  -- WELL: Move(0,1) .. FindVertical("")
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH='Move', PATH_PARAM_1='0', PATH_PARAM_2='1', REV_TEXT='ECPR-XXXX'
+   WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='WELL' AND SOURCE_TYPE='UPPER_LEFT';
+  INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1, PATH_PARAM_2, IMP_SOURCE_MAPPING_ID, REV_TEXT)
+  SELECT to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), 10, 'UPPER_LEFT', 'Move', '0', '1',
+         (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE='WELL' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST'), 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_SOURCE_PATH WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='WELL' AND SOURCE_TYPE='UPPER_LEFT');
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH='FindVertical', PATH_PARAM_1='""', PATH_PARAM_2=null, REV_TEXT='ECPR-XXXX'
+   WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='WELL' AND SOURCE_TYPE='LOWER_RIGHT';
+  INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1, IMP_SOURCE_MAPPING_ID, REV_TEXT)
+  SELECT to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), 20, 'LOWER_RIGHT', 'FindVertical', '""',
+         (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE='WELL' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST'), 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_SOURCE_PATH WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='WELL' AND SOURCE_TYPE='LOWER_RIGHT');
 
-  commit;
+  -- DATE: Move(1,1) .. FindVertical("")
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH='Move', PATH_PARAM_1='1', PATH_PARAM_2='1', REV_TEXT='ECPR-XXXX'
+   WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='DATE' AND SOURCE_TYPE='UPPER_LEFT';
+  INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1, PATH_PARAM_2, IMP_SOURCE_MAPPING_ID, REV_TEXT)
+  SELECT to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), 10, 'UPPER_LEFT', 'Move', '1', '1',
+         (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE='DATE' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST'), 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_SOURCE_PATH WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='DATE' AND SOURCE_TYPE='UPPER_LEFT');
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH='FindVertical', PATH_PARAM_1='""', PATH_PARAM_2=null, REV_TEXT='ECPR-XXXX'
+   WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='DATE' AND SOURCE_TYPE='LOWER_RIGHT';
+  INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1, IMP_SOURCE_MAPPING_ID, REV_TEXT)
+  SELECT to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), 20, 'LOWER_RIGHT', 'FindVertical', '""',
+         (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE='DATE' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST'), 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_SOURCE_PATH WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='DATE' AND SOURCE_TYPE='LOWER_RIGHT');
+
+  -- PRESSURE: Move(2,1) .. FindVertical("")
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH='Move', PATH_PARAM_1='2', PATH_PARAM_2='1', REV_TEXT='ECPR-XXXX'
+   WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='PRESSURE' AND SOURCE_TYPE='UPPER_LEFT';
+  INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1, PATH_PARAM_2, IMP_SOURCE_MAPPING_ID, REV_TEXT)
+  SELECT to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), 10, 'UPPER_LEFT', 'Move', '2', '1',
+         (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE='PRESSURE' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST'), 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_SOURCE_PATH WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='PRESSURE' AND SOURCE_TYPE='UPPER_LEFT');
+  UPDATE OV_IMP_SOURCE_PATH SET SOURCE_PATH='FindVertical', PATH_PARAM_1='""', PATH_PARAM_2=null, REV_TEXT='ECPR-XXXX'
+   WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='PRESSURE' AND SOURCE_TYPE='LOWER_RIGHT';
+  INSERT INTO OV_IMP_SOURCE_PATH (OBJECT_START_DATE, SORT_ORDER, SOURCE_TYPE, SOURCE_PATH, PATH_PARAM_1, IMP_SOURCE_MAPPING_ID, REV_TEXT)
+  SELECT to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), 20, 'LOWER_RIGHT', 'FindVertical', '""',
+         (SELECT OBJECT_ID FROM OV_IMP_SOURCE_MAPPING WHERE MAPPING_CODE='PRESSURE' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST'), 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_SOURCE_PATH WHERE IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST' AND IMP_SOURCE_MAPPING_CODE='PRESSURE' AND SOURCE_TYPE='LOWER_RIGHT');
+
+  -- 4) TARGET MAPPING : claudePress -> PWEL_DAY_STATUS.AVG_BH_PRESS (Class Key 1=KEY_1, Key 2=KEY_2) -----
+  UPDATE OV_IMP_TARGET_MAPPING SET CLASS='PWEL_DAY_STATUS', ATTRIBUTE='AVG_BH_PRESS', CLASS_KEY_1='KEY_1',
+         CLASS_KEY_2='KEY_2', REV_TEXT='ECPR-XXXX'
+   WHERE EC_KEY='claudePress' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST';
+  INSERT INTO OV_IMP_TARGET_MAPPING (CLASS, OBJECT_START_DATE, ATTRIBUTE, EC_KEY, CLASS_KEY_1, CLASS_KEY_2,
+         IMP_SOURCE_INTERFACE_CODE, REV_TEXT)
+  SELECT 'PWEL_DAY_STATUS', to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss'), 'AVG_BH_PRESS',
+         'claudePress', 'KEY_1', 'KEY_2', 'CLAUDE_WELL_TEST', 'ECPR-XXXX'
+    FROM dual WHERE NOT EXISTS (SELECT 1 FROM OV_IMP_TARGET_MAPPING WHERE EC_KEY='claudePress' AND IMP_SOURCE_INTERFACE_CODE='CLAUDE_WELL_TEST');
+
 end;
 /
