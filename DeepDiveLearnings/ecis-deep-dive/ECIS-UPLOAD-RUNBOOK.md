@@ -140,6 +140,27 @@ job), `TV_ACTION_INSTANCE_HISTORY` (run_status OK per ECISAction).
 
 ---
 
+## END-TO-END PROVEN LIVE (2026-06-21) - data landed, DB-verified
+Ran the full **product `EXCEL_IMPORT`** pipeline headless and watched the data land:
+uploaded `prod_excel_import_test.xlsx` (3 wells, 2003-01-05, temps 44.1/45.3/46.5) -> `IMP_SOURCE_INTERFACE_FILE`
+(`UPLOADED_INTO_EC_IND=Y`) -> **`EXCEL_IMPORT_1`** (file->staging) => `IMP_STAGING` 3 rows -> **`EXCEL_IMPORT_2`**
+(staging->EC, ECISAction OK 03:13:11) => **`dv_pwel_day_status.AVG_BH_TEMP` = 44.1 / 45.3 / 46.5** (baseline was
+empty). Schedules restored to disabled (as-found). The uploaded temps are left on the Daily well-status screen as
+the visible proof (revertable to NULL).
+
+**Two SME lessons banked (this is why it took a while):**
+1. **DB-direct schedule build is BLOCKED via the TV views.** `TV_ACTION_INSTANCE_PARAM`'s INSTEAD-OF trigger does
+   `INSERT INTO V_ACTION_VALUE` (a join-view) -> **ORA-01779** ("non key-preserved table"). So schedule *parameters*
+   cannot be created by raw SQL through these views. Build schedules on the **Schedules screen** (the app uses a
+   working API/context) or deliver via **Flyway SQL** the EC team validates - NOT hand-rolled DB inserts. (The
+   `ACTION_JOB_CONFIG` job-action chain *does* clone fine via SQL; only the TV-view param insert is walled.)
+2. **RUN NOW: drive the enable-state from the DB read, and respect async ordering.** The PrimeFaces "Enabled"
+   checkbox state is not reliably readable from the DOM, so unconditional UI toggling silently *disabled* an
+   already-enabled schedule -> RUN NOW then refused ("enable before you run"). Fix: read `tv_schedule_list.enabled`
+   to decide; only tick when the DB says `N`. Also RUN NOW is **async** - run `_1`, wait for `IMP_STAGING` to
+   populate, THEN run `_2` (otherwise `_2` processes empty staging and logs a benign Warning). Scripts:
+   `ecis_run_stage2.py` (DB-driven enable), `ecis_run_both.py`, `ecis_disable_schedules.py` (restore).
+
 ## Current live status (2026-06-20, this session)
 - **Part A DONE + DB-verified live:** `CLAUDE_WELL_TEST` interface + all source/target mappings rebuilt via the
   Mapping Configuration UI (scripts `build_claude_interface.py`, `build_claude_children.py`). Baseline
