@@ -82,7 +82,26 @@ interface's `PATH_ORIGIN = Data.A1`); a `Sheet1` file fails with *"configured sh
 2. **RUN NOW** - decide enable-state from the **DB read** (`tv_schedule_list.enabled`; the UI checkbox isn't
    readable), and it's **async** (run _1, await staging, then _2).
 
+## Reusable skills (2026-06-21)
+This build was distilled into skills so an agent/sub-agent can reproduce it from a clear requirement:
+- **`.claude/skills/ecis-excel-upload-builder/`** — the end-to-end playbook (WHAT, in order) + input contract.
+- **`.claude/skills/ec-sql-script-builder/`** — EC SQL house style + `sql_idempotency_check.py` harness +
+  pre-commit checklist + EC config-tables glossary (VERSIONED vs INVARIANT, delete methods, gotchas).
+- **`.claude/skills/ec-screen-automation/`** — the UI gestures.
+
+## Evidence
+`evidence/ClaudeExcelImport_upload_demo_evidence_v2.docx` — page-broken, DB-verified end-to-end run
+(BEFORE NULL → AFTER 210.5/215/220.3; schedule log OK; file WRITTEN_TO_EC; value visible on the screen).
+
+## ⚠️ KNOWN OPEN ISSUE — upload→RUN NOW timing
+The end-to-end run is proven LIVE (the manual run we did), but the **automated** `upload → RUN NOW` is **not
+yet reliable**: clicking RUN NOW seconds after an automated upload reproducibly fails ("Could not find any
+files in the filedrop area / 0 staging rows"), even with the file confirmed committed. The proven success had
+a ~minutes gap upload→RUN NOW. Root cause **not confirmed** (leading hypothesis: a delay before EC makes the
+file processable). For now: leave a real gap and verify data actually lands — do not trust the run blindly.
+
 ## TODO when next touched (per standing rules)
+- Resolve the upload→RUN NOW timing (above) so the demo automates reliably end-to-end.
 - Retrofit `build_claude_*` / `ecis_build_claude_schedule_db.py` to be **upsert (re-runnable)** + set
   **`REV_TEXT = ECPR-XXXX`** on every INSERT/UPDATE (see memory `feedback_db_script_rerunnable_revtext`).
 - Excel-file touch-ups (user, 2026-06-21).
