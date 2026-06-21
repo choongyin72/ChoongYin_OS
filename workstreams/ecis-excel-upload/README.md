@@ -35,6 +35,11 @@ interface's `PATH_ORIGIN = Data.A1`); a `Sheet1` file fails with *"configured sh
   (path -> target -> mapping -> interface), scoped to the interface by linkage (handles duplicates/leftovers),
   PRODUCTS UNTOUCHED, idempotent, no COMMIT in file. Proven: CLAUDE -> 0, product mappings unchanged. Run it
   before a clean re-create.
+- **`delete_CLAUDE_WELL_TEST_interface_ov.sql`** — same teardown but **through the OV_ object views** (DELETE on
+  `OV_IMP_SOURCE_PATH`/`_MAPPING`/`OV_IMP_TARGET_MAPPING`/`OV_IMP_SOURCE_INTERFACE`); the views' INSTEAD-OF-DELETE
+  triggers do the physical delete + registry cleanup. NOTE: the "End Date = Start Date" logical-delete does NOT
+  work here — these classes are `TIME_SCOPE_CODE=INVARIANT` (not VERSIONED), so the OV view doesn't filter on
+  END_DATE and end-dating leaves the rows visible (verified 2026-06-21). View-level removal must be a DELETE.
 - **`create_ClaudeExcelImport_schedule.sql`** + **`delete_ClaudeExcelImport_schedule.sql`** — the SCHEDULE task
   that *runs* the import (runtime counterpart of the interface config). Modelled on the live **AudreyExcelImport**
   schedule: one schedule, two `ECISAction` instances (exec 10 → `ClaudeJobID` file→staging; exec 20 →
