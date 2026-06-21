@@ -48,6 +48,11 @@ interface's `PATH_ORIGIN = Data.A1`); a `Sheet1` file fails with *"configured sh
   plain `IF SQL%ROWCOUNT=0` update-insert per row, `REV_TEXT`, no procedures). Proven: delete→create→re-run = sched + 2 instances +
   13/4 job-config rows both runs, idempotent. **Writes the `jobid` to the `ACTION_INSTANCE_VALUE` base table**
   (sidesteps the `TV_ACTION_INSTANCE_PARAM` join-view `ORA-01779`).
+- **`delete_ClaudeExcelImport_schedule_ov.sql`** — schedule teardown preferring the TV_ object **views**, base
+  fallback only where a view can't delete. Verified child-first: job chains via `TV_ECIS_ACTION_JOB_PARAM`
+  (view), jobid **values** via base `ACTION_INSTANCE_VALUE` (its `TV_ACTION_INSTANCE_PARAM` is a non-deletable
+  join-view → `ORA-01752`), instances via `TV_ACTION_INSTANCE` (view), schedule via `TV_SCHEDULE` (view);
+  QRTZ/history via base (no views). Proven idempotent: present `1/2/17` → `0/0/0` → re-run `0/0/0` → restored.
 - Recon helper: `scripts/ecis_dump_config.py` (dumps the live rows of the 4 tables).
 
 ## scripts/  (run with `py -X utf8 workstreams/ecis-excel-upload/scripts/<name>`)
