@@ -1,5 +1,8 @@
 # ECIS Excel Upload - Runbook (local sandbox, end-to-end)
 
+> **Reusable bundle:** [`workstreams/ecis-excel-upload/`](../../workstreams/ecis-excel-upload/) - all scripts
+> (`scripts/`), the proof screenshots (`evidence/`), and a README index. Start there for any ECIS Excel task.
+
 **Goal:** upload a simple Excel file into EC via ECIS and see the data appear on an EC screen.
 **Environment:** local sandbox `https://ap-f0a7g341jn6d...` (sysadmin/sysadmin); DB `localhost:1521/ORCL`
 (ECKERNEL_EC/energy). **Demo data:** wells `AS1_Well_001/002/003`, date `2003-01-05`, a Pressure value per
