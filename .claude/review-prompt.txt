@@ -26,5 +26,6 @@ Steps:
 12. Create a feature branch: git checkout -b review/feedback-YYYY-MM-DD
 13. Commit all changed files with message: 'review: automated quality feedback YYYY-MM-DD'
 14. Push branch, raise a PR targeting master, and merge it immediately (review PR is docs-only -- no risk)
+15. Clean up reviewer worktrees: run `git worktree list` and remove any C:/tmp/wt-review-* worktree directories using `git worktree remove "<path>" --force` for each one found. This must run AFTER the PR is pushed/merged -- do not skip even if no PRs were reviewed. Stale worktrees block the Worker from running `git checkout master`.
 
 Be specific and direct. Rules must be actionable -- not 'consider X' but 'always do X' or 'never do Y'.
