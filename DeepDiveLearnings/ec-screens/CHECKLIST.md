@@ -6,14 +6,14 @@ Status key: `[ ]` ready · `[x]` done (note written) · `[~]` in progress · `[-
 Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, screen type) + live recon. Notes in `notes/<BF_CODE>.md`.
 
 ## CO — Core / Common Config  (368)
-- [ ] **CO.0001** — Production Unit
-- [ ] **CO.0003** — Area
-- [ ] **CO.0005** — Country
-- [ ] **CO.0007** — Product
-- [ ] **CO.0010** — Hydrocarbon Component
-- [ ] **CO.0011** — Licence
-- [ ] **CO.0013** — Company
-- [ ] **CO.0015** — Field
+- [x] **CO.0001** — Production Unit -> notes/CO.0001.md
+- [x] **CO.0003** — Area -> notes/CO.0003.md
+- [x] **CO.0005** — Country -> notes/CO.0005.md
+- [x] **CO.0007** — Product -> notes/CO.0007.md
+- [x] **CO.0010** — Hydrocarbon Component -> notes/CO.0010.md
+- [x] **CO.0011** — Licence -> notes/CO.0011.md
+- [x] **CO.0013** — Company -> notes/CO.0013.md
+- [x] **CO.0015** — Field -> notes/CO.0015.md
 - [ ] **CO.0018** — Maintain Equity Share
 - [ ] **CO.0019** — Facility Class 1
 - [ ] **CO.0021** — Facility Class 2
