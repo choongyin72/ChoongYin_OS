@@ -19,3 +19,36 @@
 [2026-06-06 08:12:39] Session ET-C completed successfully
 [2026-06-06 10:40:00] Starting Session ET-D
 [2026-06-06 10:42:59] Session ET-D completed successfully
+[2026-06-06 13:40:00] Starting Session ET-E
+[2026-06-22 20:38:39] EC-screen learn: starting unattended batch (worktree-isolated)
+[2026-06-22 20:38:44] worktree created at C:\tmp\wt-ec-learn
+[2026-06-22 20:46:51] EC-screen learn: finished (exit 0)
+[2026-06-22 21:29:28] EC-screen learn: starting unattended batch (worktree-isolated)
+[2026-06-22 21:29:31] worktree refreshed (detached) to EC-screen bundle tip
+[2026-06-22 21:46:25] EC-screen learn (deterministic): start, max=2, push=False
+[2026-06-22 21:46:28] worktree ready (detached) at EC-screen bundle tip
+[2026-06-22 21:46:28] screens this run: CO.0001, CO.0003
+[2026-06-22 21:46:43]   CO.0001: FULL (1 class)
+[2026-06-22 21:46:49]   CO.0003: FULL (1 class)
+[2026-06-22 21:46:50] TEST MODE: committed locally, not pushed
+[2026-06-22 21:46:50] EC-screen learn (deterministic): done - 2 full + 0 DB-only
+[2026-06-22 21:48:06] EC-screen learn (deterministic): start, max=2, push=False
+[2026-06-22 21:48:08] worktree ready (detached) at EC-screen bundle tip
+[2026-06-22 21:48:09] screens this run: CO.0001, CO.0003
+[2026-06-22 21:48:18]   CO.0001: FULL (1 class)
+[2026-06-22 21:48:23]   CO.0003: FULL (1 class)
+[2026-06-22 21:48:24] TEST MODE: committed locally, not pushed
+[2026-06-22 21:48:24] EC-screen learn (deterministic): done - 2 full + 0 DB-only
+[2026-06-22 21:55:53] EC-screen learn (deterministic): start, max=8, push=True
+[2026-06-22 21:55:56] worktree ready (detached) at EC-screen bundle tip
+[2026-06-22 21:55:57] screens this run: CO.0001, CO.0003, CO.0005, CO.0007, CO.0010, CO.0011, CO.0013, CO.0015
+[2026-06-22 21:56:10]   CO.0001: FULL (1 class)
+[2026-06-22 21:56:15]   CO.0003: FULL (1 class)
+[2026-06-22 21:56:19]   CO.0005: FULL (1 class)
+[2026-06-22 21:56:24]   CO.0007: FULL (1 class)
+[2026-06-22 21:56:30]   CO.0010: FULL (2 class)
+[2026-06-22 21:56:35]   CO.0011: FULL (1 class)
+[2026-06-22 21:56:40]   CO.0013: FULL (1 class)
+[2026-06-22 21:56:45]   CO.0015: FULL (1 class)
+[2026-06-22 21:56:48] pushed
+[2026-06-22 21:56:48] EC-screen learn (deterministic): done - 8 full + 0 DB-only
