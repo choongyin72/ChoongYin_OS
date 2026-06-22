@@ -626,3 +626,35 @@ _Open PRs trigger a full review (R14). Both CLEAR — zero MUST-FIX — both squ
 | Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
 
 ---
+
+## 2026-06-23 — Automated Review (06:00 AWST, 1 open PR #100 — STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). The only open PR is the long-lived **STANDING/DRAFT** EC Screen Deep-Dive PR (#100) on the Worker's permanent branch. Reviewed at the branch tip — **CLEAR, no MUST-FIX, NOT merged** (owner-merge-only at milestones by design). **No new executable rules** — R1–R22 cover every finding; version stays **v22**._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #100 | Clear — STANDING/DRAFT EC Screen Deep-Dive program (12/1457 screens; +2260/-21; 32 files). The deterministic runner `tools/deep-dive-scheduler/run_ec_screen_learn.py` is read-only on the live EC (recon + in-session `openOnlineHelp()` only — no Save, no DB mutation), no-LLM/no-improvising, hard-timeout-guarded so it cannot hang, env-var credentials (R16), and `_ascii()`-sanitises Help text so committed notes are ASCII-clean (R18/R20 — verified). Partials honestly marked `[~]` with the missing component named (R3 — e.g. CO.0018 records "(no class resolved from URL/LABEL)" rather than fabricating a binding). Metadata-only DB queries → no ORA-06569. **NOT merged** — it is a draft the owner merges at milestones; the reviewer never auto-merges it. 3 NICE-TO-HAVE posted (see below). | ✅ Clear (NICE-TO-HAVE) — **left open (owner-merge-only)** |
+
+### Observations (good patterns to keep)
+
+- **Deterministic runner beats an LLM-improvising one for an unattended program.** The rewrite runs the *proven* recipe directly in Python (read CHECKLIST → metadata DB resolve → best-effort Help → write note → commit/push on an isolated worktree) with a per-screen try/except and timeouts, so it can never flail (the prior LLM version logged ORA-06569 ×24, timeouts, 30 min, 0 commits). For repeatable unattended capture, hard-code the verified gestures; reserve the model for genuinely novel screens.
+- **Honest partial marking is the right shape for a coverage program.** `[~]` + the named missing component (DB binding and/or Help) + a note that still records whatever WAS captured is far more useful than skipping the screen or fabricating a binding. CO.0018 (Help captured, class unresolved) is the model — transparent and resumable (R3).
+- **Read-only by construction.** The runner has no Save/write path against the live EC and queries only metadata tables (`business_function`, `class_cnfg`, `class_property_cnfg`, `all_views`) — so it cannot dirty shared sandbox state, the recurring risk on write-capable recon (cf. the probe-write self-clean lessons).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `tools/deep-dive-scheduler/run_ec_screen_learn.py` has functional non-ASCII source bytes (verified lines 60, 120-121, 160 — em-dash in the `pick_screens` regex + `_ascii` map keys + em-dash written to CHECKLIST). Never `print()`ed → no cp1252 crash, but R20 asks for ASCII-at-authoring: express the map keys + regex alternation as `\uXXXX` escapes. File is OUTSIDE the `check_bundle_hygiene.py` glob → not machine-checked | Worker | 🟢 Low |
+| Commit-message label "{done_partial} DB-only" is inaccurate — `done_partial` counts ANY partial (missing DB **or** Help; e.g. CO.0018 is Help-present/DB-missing). Use the neutral word "partial" to avoid a misleading audit trail | Worker | 🟢 Low |
+| PR #100 body header drift from the exact R9 headers ("What this is/Files/Evidence" vs "What was built/Files touched/DB ground-truth evidence/Self-clean confirmed") — harmless for a never-auto-merged draft; align at the next milestone edit | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (this run adds `tools/**` to the list); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` → `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+### Reviewer process note (dirty main checkout on a permanent Worker branch)
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with an active, dirty working tree (the deep-dive autopilot runs there). Steps 4b/5/18 of the review prompt assume operating on `master` in the main checkout — that is **unsafe here** (it would stash/disrupt the parallel Worker session). Following the 2026-06-22 14:00 precedent, ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-23-0600` worktree off `origin/master`; the main checkout was never touched. Final master clean-up (step 18) was scoped to verifying the main checkout was left exactly as the Worker had it, NOT forcing `git checkout master`.
+
+---
