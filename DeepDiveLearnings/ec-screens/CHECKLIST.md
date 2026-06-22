@@ -376,13 +376,13 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [ ] **CO.3101** — Analytics Manager
 
 ## PO — Production Operations (stream status)  (149)
-- [ ] **PO.0001** — Daily Oil Stream Status
+- [x] **PO.0001** — Daily Oil Stream Status -> notes/PO.0001.md (N1 daily-status; STRM_DAY_STREAM)
 - [ ] **PO.0001.03** — Daily Oil Stream Status - Mass
 - [x] **PO.0002** — Daily Gas Stream Status → `notes/PO.0002.md` (N1 daily-status; STRM_DAY_STREAM)
 - [ ] **PO.0002.04** — Daily Gas Stream Status - Run Hours and Rate
-- [ ] **PO.0003** — Daily Water Stream Status
+- [x] **PO.0003** — Daily Water Stream Status -> notes/PO.0003.md (N1 daily-status; STRM_DAY_STREAM)
 - [ ] **PO.0004** — Daily Water Overboard Status
-- [ ] **PO.0005** — Daily Tank Status
+- [x] **PO.0005** — Daily Tank Status -> notes/PO.0005.md (N1 hybrid; TANK_MEASUREMENT, EVENT-tanks insertable)
 - [ ] **PO.0005.01** — Daily Tank Status - Mass
 - [ ] **PO.0005.02** — Daily Tank Status - VCF Calc
 - [ ] **PO.0006** — Monthly Tank Status
