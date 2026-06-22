@@ -62,7 +62,10 @@ For each screen, produce `notes/<BF_CODE>.md` capturing:
 
 
 ## Delivery model (standing PR)
-The branch carries ONE STANDING, **DRAFT** PR to master (PR #100). The daily runner's commits accumulate into it.
-It is kept a DRAFT on purpose so the automated reviewer does NOT auto-merge it. The **owner merges it at a
-milestone** (e.g. once a module is fully covered); after a merge, re-open a fresh standing draft PR and the runner
-keeps going on the next module. **Do not merge without the owner's explicit go.**
+- The branch **`feature/ec-screen-deepdive` is PERMANENT** for the whole program — it always exists and is
+  **never deleted** (including on merge: uncheck "delete branch" in the GitHub merge dialog).
+- There is **always ONE open, DRAFT PR** from it to master (currently **PR #100**). The daily runner's commits
+  accumulate into it. It's kept a DRAFT on purpose so the automated reviewer does **not** auto-merge it.
+- The **owner merges it at a milestone** (e.g. once a module is fully covered). After a merge the PR closes, so a
+  **fresh standing draft PR is re-opened immediately** from the same branch — so an open PR always exists, and
+  the runner keeps going on the next module. **Never merge without the owner's explicit go.**
