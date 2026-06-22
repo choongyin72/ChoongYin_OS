@@ -58,9 +58,9 @@ def main():
         if a != b:
             ok = False; print("FAIL: counts differ between run 1 and run 2 (NOT idempotent):", a, "vs", b)
         elif any(v == 0 for v in a):
-            ok = False; print("FAIL: a count is 0 after create — create did not produce the expected rows:", a)
+            ok = False; print("FAIL: a count is 0 after create - create did not produce the expected rows:", a)
         else:
-            print("PASS: idempotent — identical counts both runs, no duplicates, no error.")
+            print("PASS: idempotent - identical counts both runs, no duplicates, no error.")
     except Exception as e:
         ok = False; print("FAIL: error while running scripts ->", str(e).splitlines()[0])
     finally:

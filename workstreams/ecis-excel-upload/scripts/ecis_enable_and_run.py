@@ -1,5 +1,5 @@
 """Enable EXCEL_IMPORT_1 (DETAILS tab checkbox + Save), RUN NOW, verify staging at DB.
-Restores nothing yet — disable again later after the whole pipeline works."""
+Restores nothing yet - disable again later after the whole pipeline works."""
 import os
 import sys
 import time

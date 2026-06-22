@@ -1,5 +1,5 @@
 """Screen recon: Mapping Configuration (load AUDREY) + Schedules (find AudreyExcelImport)
-+ Upload Files screen. Read-only — screenshots + structure dumps for the learning doc."""
++ Upload Files screen. Read-only - screenshots + structure dumps for the learning doc."""
 import json
 import os
 import time

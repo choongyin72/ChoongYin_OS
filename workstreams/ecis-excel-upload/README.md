@@ -26,8 +26,9 @@ interface's `PATH_ORIGIN = Data.A1`); a `Sheet1` file fails with *"configured sh
 ## sql/ — re-runnable create-config SQL (the delivery artifact)
 - **`create_CLAUDE_WELL_TEST_interface.sql`** — recreates the ECIS interface config
   (`IMP_SOURCE_INTERFACE` → `IMP_SOURCE_MAPPING` + `IMP_SOURCE_PATH` per column → `IMP_TARGET_MAPPING`) as one
-  PL/SQL block. **Update-insert (idempotent / re-runnable)**, `REV_TEXT='ECPR-XXXX'` on every DML (replace with
-  the real ECPR ticket), FK resolved by business key (`ec_functional_area.object_id_by_uk('ECIS')`), no hardcoded
+  PL/SQL block. **Update-insert (idempotent / re-runnable)**, `REV_TEXT='ECPR-DEMO'` on every DML (sandbox demo
+  objects with no client ECPR; use the real ECPR ticket for client work — R22), FK resolved by business key
+  (`ec_functional_area.object_id_by_uk('ECIS')`), no hardcoded
   GUIDs. Mirrors the Pluto `050_Interfaces/V*__ZWP_INTERIM_DATA_UPLOAD.sql` template + **dependency order**
   (parent→child). Proven: delete→run→re-run = 3 mappings / 6 paths / 1 target both times, no dups
   (`scripts/ecis_apply_sql.py`). For COPSDEV: rename to a versioned Flyway file under Pluto_Config/.../050_Interfaces/.
@@ -103,5 +104,5 @@ file processable). For now: leave a real gap and verify data actually lands — 
 ## TODO when next touched (per standing rules)
 - Resolve the upload→RUN NOW timing (above) so the demo automates reliably end-to-end.
 - Retrofit `build_claude_*` / `ecis_build_claude_schedule_db.py` to be **upsert (re-runnable)** + set
-  **`REV_TEXT = ECPR-XXXX`** on every INSERT/UPDATE (see memory `feedback_db_script_rerunnable_revtext`).
+  **`REV_TEXT = ECPR-DEMO`** on every INSERT/UPDATE (sandbox demo; see memory `feedback_db_script_rerunnable_revtext`).
 - Excel-file touch-ups (user, 2026-06-21).

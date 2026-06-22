@@ -53,4 +53,4 @@ cur.execute(block)
 counts("after run2")
 
 conn.close()
-print("DONE (expect: iface=Y, rev_text='ECPR-XXXX', mappings=3, paths=6, targets=1 after BOTH runs)")
+print("DONE (expect: iface=Y, rev_text='ECPR-DEMO', mappings=3, paths=6, targets=1 after BOTH runs)")

@@ -16,7 +16,7 @@
 -- =====================================================================================================
 declare
   v_code  constant varchar2(30)  := 'CLAUDE_WELL_TEST';
-  v_rev   constant varchar2(30)  := 'ECPR-XXXX';
+  v_rev   constant varchar2(30)  := 'ECPR-DEMO';   -- sandbox demo objects: no client ECPR (R22)
   v_sd    constant date          := to_date('1900-01-01T00:00:00','yyyy-mm-dd"T"hh24:mi:ss');
 begin
 

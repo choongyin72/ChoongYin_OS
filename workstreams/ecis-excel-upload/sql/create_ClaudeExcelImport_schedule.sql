@@ -9,7 +9,7 @@
 -- Style (same as create_CLAUDE_WELL_TEST_interface.sql + the Pluto 050_Interfaces SCHEDULE files):
 --   * DECLARE constants (schedule / interface / jobids / REV_TEXT) + class-name constants - no inline repeats.
 --   * Flat update-insert per row: UPDATE ...; IF SQL%ROWCOUNT = 0 THEN INSERT ...; END IF;  (idempotent) - NO MERGE.
---   * REV_TEXT = 'ECPR-XXXX' on every INSERT/UPDATE for audit (replace with the real ECPR ticket).
+--   * REV_TEXT = 'ECPR-DEMO' on every INSERT/UPDATE for audit (sandbox demo objects; use the real ECPR for client work).
 --   * One declare..begin..end; - NO procedures, NO exception block, NO COMMIT in the file (caller / Flyway commits).
 --
 -- The jobid parameter is written to the ACTION_INSTANCE_VALUE *base table* (the AudreyExcelImport / Pluto
@@ -21,7 +21,7 @@ declare
   v_iface constant varchar2(30)  := 'CLAUDE_WELL_TEST';
   v_job1  constant varchar2(100) := 'ClaudeJobID';            -- file  -> staging
   v_job2  constant varchar2(100) := 'ClaudeReadFromStaging';  -- staging -> target
-  v_rev   constant varchar2(30)  := 'ECPR-XXXX';
+  v_rev   constant varchar2(30)  := 'ECPR-DEMO';   -- sandbox demo objects: no client ECPR (R22)
   c_adv   constant varchar2(150) := 'com.ec.ecdm.is.advancedexcel.sourcemapping.jobaction.AdvancedExcelJobAction';
   c_sgt   constant varchar2(150) := 'com.ec.ecdm.is.advancedexcel.staging.jobaction.StagingJobActionTarget';
   c_sgs   constant varchar2(150) := 'com.ec.ecdm.is.advancedexcel.staging.jobaction.StagingJobActionSource';
