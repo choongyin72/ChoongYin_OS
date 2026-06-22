@@ -41,6 +41,21 @@ For each screen, produce `notes/<BF_CODE>.md` capturing:
    (OV / OV-GM / TV / N1 status / N2 calc / N3 process / MHM), and one screenshot.
 5. **Business purpose** — 2–4 lines: what it's for, where it sits in the EC data flow, key related tables.
 
+## Note requirements (Definition of Done) — every worker must meet this
+A `notes/<BF_CODE>.md` may be marked **`[x]` FULL only when ALL of these are present and DB-verified:**
+1. **Identity** — BF_CODE, screen name, `URL` (from `BUSINESS_FUNCTION`).
+2. **DB binding** — at least one backing class resolved with **CLASS_TYPE, TIME_SCOPE, base table, and an existing
+   `OV_/TV_/DV_` view**. If the screen genuinely has no data class (a generic/navigator screen), state that
+   explicitly ("no data class — generic screen") — that counts as resolved.
+3. **Screen type** — derived from the class metadata (OV / TV / N1 daily-status / N monthly / N2 calc / N3 / MHM).
+4. **Help description** — the real in-session Help prose (non-blank), ASCII-only.
+
+Status rules (enforced by the runner, not just convention):
+- **`[~]` PARTIAL** — a mandatory item (DB binding **or** Help) is missing. The note MUST name WHICH is missing
+  and the next step. The runner re-picks `[~]` notes on later runs to complete them.
+- **`[-]` SKIP** — project-customised / non-business screen; one-line reason.
+- **NEVER** mark `[x]` with a "TBD"/blank DB binding or empty Help. (Optional extras: business purpose, cross-refs.)
+
 ## Cadence & prioritisation
 - **Start ~5 screens / idle session** (hard cap ≤15/day per the user). Increase the rate as fluency grows.
 - **Priority order** (most useful to our automation first): PO → WR → PO-allocation/HA → CD (Node/Stream) →

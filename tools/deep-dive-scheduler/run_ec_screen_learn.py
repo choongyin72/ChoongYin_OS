@@ -54,13 +54,15 @@ def ensure_worktree():
     log('worktree ready (detached) at EC-screen bundle tip'); return True
 
 def pick_screens(checklist_path, n):
-    out = []
+    """Complete [~] partials FIRST (DoD backfill), then new [ ] screens, in file/priority order."""
+    todo, partial = [], []
     for ln in Path(checklist_path).read_text(encoding='utf-8').splitlines():
-        m = re.match(r'- \[ \] \*\*([A-Z0-9.]+)\*\* (?:—|-) (.+)', ln)
-        if m:
-            out.append((m.group(1), m.group(2).strip()))
-            if len(out) >= n: break
-    return out
+        m = re.match(r'- \[([ ~])\] \*\*([A-Z0-9.]+)\*\* (?:—|-) (.+)', ln)
+        if not m: continue
+        status, code, rest = m.group(1), m.group(2), m.group(3)
+        name = rest.split(' -> ')[0].split(' (')[0].strip()
+        (partial if status == '~' else todo).append((code, name))
+    return (partial + todo)[:n]
 
 def db_resolve(cur, bf_code, name):
     info = {'url': None, 'classes': []}
@@ -143,15 +145,20 @@ _Deep-dive {datetime.now().strftime('%Y-%m-%d')} (deterministic runner). Module:
 ## Help (description)
 {help_desc if help_desc else '_(not captured this run - DB binding above is verified; Help to backfill)_'}
 """
+    has_db = any(c.get('view') for c in info['classes'])
+    missing = []
+    if not has_db: missing.append('DB binding')
+    if not help_desc: missing.append('Help')
     (nd / f'{bf_code}.md').write_text(body, encoding='utf-8')
-    return help_desc is not None
+    return (not missing), ', '.join(missing)
 
-def mark_checklist(wt, bf_code, name, full):
+def mark_checklist(wt, bf_code, name, full, missing):
     p = Path(wt) / 'DeepDiveLearnings' / 'ec-screens' / 'CHECKLIST.md'
     s = p.read_text(encoding='utf-8')
     mark = '[x]' if full else '[~]'
-    tag = '' if full else ' (DB done; Help to backfill)'
-    s = s.replace(f'- [ ] **{bf_code}** — {name}', f'- {mark} **{bf_code}** — {name} -> notes/{bf_code}.md{tag}', 1)
+    suffix = '' if full else f' (partial: missing {missing})'
+    newline = f'- {mark} **{bf_code}** — {name} -> notes/{bf_code}.md{suffix}'
+    s = re.sub(r'(?m)^- \[[ x~\-]\] \*\*' + re.escape(bf_code) + r'\*\* .*$', newline, s, count=1)
     p.write_text(s, encoding='utf-8')
 
 def main():
@@ -178,10 +185,10 @@ def main():
             try:
                 info = db_resolve(cur, bf_code, name)
                 hd = help_text(page, name)
-                full = write_note(WT, bf_code, name, info, hd)
-                mark_checklist(WT, bf_code, name, full)
+                full, missing = write_note(WT, bf_code, name, info, hd)
+                mark_checklist(WT, bf_code, name, full, missing)
                 done_full += int(full); done_partial += int(not full)
-                log(f'  {bf_code}: {"FULL" if full else "DB-only"} ({len(info["classes"])} class)')
+                log(f'  {bf_code}: {"FULL" if full else "PARTIAL["+missing+"]"} ({len(info["classes"])} class)')
             except Exception as e:
                 log(f'  {bf_code}: skipped ({str(e)[:60]})')
         br.close()
