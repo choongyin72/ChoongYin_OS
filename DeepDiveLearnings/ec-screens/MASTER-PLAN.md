@@ -59,3 +59,10 @@ For each screen, produce `notes/<BF_CODE>.md` capturing:
 - Read-only on the live sandbox (recon/Help only); never Save/mutate during a learning dive.
 - ASCII-only in scripts/notes. Re-runnable generator. Honest status (don't mark `[x]` without a written note).
 - Seek the user's advice only on a genuine blocker (per [[feedback_debug_logs_and_ask_early]]).
+
+
+## Delivery model (standing PR)
+The branch carries ONE STANDING, **DRAFT** PR to master (PR #100). The daily runner's commits accumulate into it.
+It is kept a DRAFT on purpose so the automated reviewer does NOT auto-merge it. The **owner merges it at a
+milestone** (e.g. once a module is fully covered); after a merge, re-open a fresh standing draft PR and the runner
+keeps going on the next module. **Do not merge without the owner's explicit go.**
