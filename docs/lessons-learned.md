@@ -595,3 +595,34 @@ Every DB script sets `REV_TEXT` for audit ([[feedback_db_script_rerunnable_revte
 | Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
 
 ---
+
+## 2026-06-22 — Automated Review (14:00 AWST, 2 open PRs #96/#97)
+
+_Open PRs trigger a full review (R14). Both CLEAR — zero MUST-FIX — both squash-merged. **No new executable rules** — R1–R22 cover every finding; version stays v22._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #97 | Clear (low effort — `.claude/review-prompt.txt` process reorder, no executable logic). The change is sound: it moves the reviewer's branch creation ahead of all doc edits and adds a MANDATORY MR4 re-read, a pre-flight discard of stale reviewer-owned files, a review-log dedup guard, a post-merge review-branch sync, and a final master clean-up (step 18) — directly fixing the dirty-working-tree blocker that stops the Worker's `git checkout master`. Adopted the ordering for this run. **NICE-TO-HAVE (R21):** title/"Files touched" say *"moved branch creation from step 12 to step 9; renumbered steps 10–14"* but the diff moves it to **step 5** and renumbers through **18**, adding the four steps above — body materially under-claims the change. | ✅ Clear (NICE-TO-HAVE) — merged |
+| #96 | Clear (HIGH effort — SQL config logic, ECPR-31089 R_PLU_NOPTA + ECPR-31090 R_SCA_NOPTA email-send enablement). Both `.sql` files: idempotent upsert (`UPDATE; IF SQL%ROWCOUNT=0 THEN INSERT`), **non-destructive (0 `DELETE` statements, grep-verified)**, `REV_TEXT` driven by `lv_rev_text := 'ECPR-31089'`/`'ECPR-31090'` — real governing tickets, **no `ECPR-XXXX` placeholder anywhere (R22 clean)**, ASCII-clean (R18/R20, Grep `[^\x00-\x7F]` → no matches). R8 merge deferred per body but every file is a NEW addition in an isolated `workstreams/ecsr-35329-35330-nopta-email/` tree → GitHub `MERGEABLE`, conflict-free. DB ground-truth (MESSAGE_OUT 407/408 = TEXT, recipient `prodreporting@woodside.com`, `TRANSMIT_STATUS='ERROR'` by-design no-SMTP) taken as worker-attested, not reviewer-re-run on the live DB. | ✅ Clear — merged |
+
+### Observations (good patterns to keep)
+
+- **R22 honoured on first client SQL since it was minted:** R22 (no `ECPR-XXXX` placeholder) was extracted only this morning from PR #93's demo SQL; PR #96 — the next SQL delivery — set the real governing tickets (`ECPR-31089`/`ECPR-31090`) on every DML via a single `lv_rev_text` constant. The standing re-runnable+REV_TEXT directive is now reflexive, not reminded.
+- **Non-destructive format conversion done right:** the Pluto NOPTA SQL converts REPORT/XML → TEXT by *demoting* the old format and adding the TEXT default in place (0 `DELETE`s), so the migration is reversible and idempotent on re-run — the correct shape for a live client-config change (cf. R3 blocker handling / [[feedback_db_script_rerunnable_revtext]]).
+- **Reviewer self-isolation via worktree (R-process):** this run consumed PR #97's own fix — created the review-doc branch in a clean `C:/tmp/wt-review-2026-06-22-1400` worktree off `origin/master` and left the Worker's dirty main checkout (27 unrelated uncommitted files) entirely untouched. The merged review-prompt now mandates this branch-before-edits ordering; this is the first run to follow it.
+
+### Reviewer process note (local-checkout-on-merge)
+
+- **`gh pr merge --delete-branch` while standing on the merged branch fails locally, not remotely.** Merging #96 (whose head branch was the current checkout) succeeded on the remote (`218eb97`) but `gh` then aborted the local `git checkout master` because the shared working tree was dirty (`STATUS.md`, `docs/lessons-learned.md`, `docs/automation-scorecard.md`, `docs/review-log.md` modified). The remote merge is unaffected — verify with `gh pr view <n> --json state,mergedAt` rather than trusting the CLI's non-zero exit. PR #97's new step 18 (final master clean-up) is the durable fix; until then, do reviewer doc work in an isolated worktree (as this run did).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `.claude/review-prompt.txt` step-6 format string still embeds an em-dash (`skipped — no new work`) and the title carried one — harmless (the prompt file is read by Claude, not console-printed/PS-parsed, so outside R18 scope) but worth normalising on the next prompt edit for consistency | Reviewer | 🟢 Low |
+| Carry-over from #93/#95 (still open): extend the `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py`; fix `sql_idempotency_check.py` em-dashes; change `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` → `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+---

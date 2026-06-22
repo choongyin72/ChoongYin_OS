@@ -28,16 +28,16 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
-| `63212d9` | 2026-06-22 | refactor(ecsr-35329): ECPR-31089 no-DELETE format conversion (non-destructive) -… |
-| `9f8a8cd` | 2026-06-22 | fix(ecsr-35329): ECPR-31089 format XML->TEXT conversion (keyed/FK column) - veri… |
-| `4826029` | 2026-06-21 | wip(ecsr-35329): ECPR-31089 R_PLU_NOPTA email-send config + analysis (NOT delive… |
+| `218eb97` | 2026-06-22 | ECSR-35329/35330: NOPTA reports email-send enablement (ECPR-31089 R_PLU_NOPTA + … |
+| `fbe9967` | 2026-06-22 | fix(reviewer): move branch creation to step 9 â€” before any doc file edits (#97… |
+| `0436c0c` | 2026-06-22 | review: automated quality feedback 2026-06-22 (#95) |
+| `05b877f` | 2026-06-22 | ECIS Excel upload: re-runnable SQL + live-verified demo + evidence doc + reusabl… |
+| `32fc957` | 2026-06-22 | fix(reviewer): add step 15 to clean up stale C:/tmp/wt-review-* worktrees after … |
 | `a715a9c` | 2026-06-21 | review-log: 2026-06-21 skip - no new work (#92) |
 | `8ad0e64` | 2026-06-21 | review-log: 2026-06-20 skip â€” no new work (#91) |
 | `b45fd5e` | 2026-06-20 | review: 2026-06-20 manual â€” PR #89 grid-menu CLEAR merged; MR4 added (re-read … |
 | `75ff1b7` | 2026-06-20 | feat(grid-menu): EC table column-menu deep-dive + reusable filtering/reset RF ke… |
 | `4516982` | 2026-06-20 | review: automated quality feedback 2026-06-20 (#88) |
-| `1ae4960` | 2026-06-20 | chore(R20): ASCII-normalise bundle/recon .py + static non-ASCII hygiene gate (#8… |
-| `1d53dfc` | 2026-06-20 | review: automated quality feedback 2026-06-20 (#86) |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
