@@ -20,10 +20,10 @@ Steps:
    d. If a merge fails due to conflict: fetch master, resolve the conflict (keep both sides for append-only files), push, retry
    e. PRs with MUST-FIX stay open -- note them in the review PR body so the user knows action is needed
 8. After PR inline comments are posted, extract ACTIONABLE rules from the findings. New rules must be validated (code-derived rules must be marked warning code-derived, not live-validated).
-9. Update the rules changelog table at the top of docs/lessons-learned.md (increment version, add new row). Then append a new dated section following the same format as existing entries (Rules, Observations, Gaps)
-10. Update docs/automation-scorecard.md if any new patterns are now live or parked
-11. Run: python scripts/update_status.py
-12. Create a feature branch: git checkout -b review/feedback-YYYY-MM-DD
+9. Create a feature branch BEFORE editing any docs: git checkout -b review/feedback-YYYY-MM-DD (MUST happen before steps 10-12 -- this keeps the shared working directory clean and prevents blocking the Worker with uncommitted changes if the session ends early)
+10. Update the rules changelog table at the top of docs/lessons-learned.md (increment version, add new row). Then append a new dated section following the same format as existing entries (Rules, Observations, Gaps)
+11. Update docs/automation-scorecard.md if any new patterns are now live or parked
+12. Run: python scripts/update_status.py
 13. Commit all changed files with message: 'review: automated quality feedback YYYY-MM-DD'
 14. Push branch, raise a PR targeting master, and merge it immediately (review PR is docs-only -- no risk)
 15. Clean up reviewer worktrees: run `git worktree list` and remove any C:/tmp/wt-review-* worktree directories using `git worktree remove "<path>" --force` for each one found. This must run AFTER the PR is pushed/merged -- do not skip even if no PRs were reviewed. Stale worktrees block the Worker from running `git checkout master`.
