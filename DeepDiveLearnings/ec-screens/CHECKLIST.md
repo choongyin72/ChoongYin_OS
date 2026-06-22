@@ -14,8 +14,8 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0011** — Licence -> notes/CO.0011.md
 - [x] **CO.0013** — Company -> notes/CO.0013.md
 - [x] **CO.0015** — Field -> notes/CO.0015.md
-- [ ] **CO.0018** — Maintain Equity Share
-- [ ] **CO.0019** — Facility Class 1
+- [~] **CO.0018** — Maintain Equity Share -> notes/CO.0018.md (partial: missing DB binding)
+- [x] **CO.0019** — Facility Class 1 -> notes/CO.0019.md
 - [ ] **CO.0021** — Facility Class 2
 - [ ] **CO.0027** — Stream - by Group Model
 - [ ] **CO.0028** — Maintain Streams
@@ -387,10 +387,10 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [ ] **PO.0005.02** — Daily Tank Status - VCF Calc
 - [ ] **PO.0006** — Monthly Tank Status
 - [ ] **PO.0007** — Daily Safety,  Health and Environment
-- [~] **PO.0008** — Operational Comments -> notes/PO.0008.md (Help done; DB view pending recon)
-- [~] **PO.0009** — Environmental Events -> notes/PO.0009.md (Help done; DB view pending recon)
+- [~] **PO.0008** — Operational Comments -> notes/PO.0008.md (partial: missing DB binding)
+- [x] **PO.0009** — Environmental Events -> notes/PO.0009.md
 - [ ] **PO.0010** — Daily Personnel Onboard
-- [~] **PO.0011** — Daily Equipment Status -> notes/PO.0011.md (Help done; DB view pending recon)
+- [x] **PO.0011** — Daily Equipment Status -> notes/PO.0011.md
 - [ ] **PO.0012** — Alarms
 - [ ] **PO.0013** — Marine Logistics
 - [ ] **PO.0014** — Daily Weather Status

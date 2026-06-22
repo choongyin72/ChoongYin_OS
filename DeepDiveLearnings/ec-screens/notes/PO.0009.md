@@ -1,19 +1,19 @@
-# PO.0009 — Environmental Events
+# PO.0009 - Environmental Events
 
-_Deep-dive 2026-06-22 (partial: Help captured; DB view pending a recon pass). Module: PO._
+_Deep-dive 2026-06-22 (deterministic runner). Module: PO._
 
 ## Identity
-- BF_CODE: PO.0009 · URL: /com.ec.prod.po.screens/environmental_events
-- Treeview: EC Production > Production Operations > Environmental Events
+- BF_CODE: PO.0009 - URL: `/com.ec.prod.po.screens/environmental_events`
+
+## DB binding (metadata-resolved)
+| Class | Type/Scope | Base table | View |
+|---|---|---|---|
+| `FCTY_SPILL_EVENT` | DATA/DAY | `FCTY_SPILL_EVENT` | `DV_FCTY_SPILL_EVENT` |
+
+## Screen type
+N1 daily-status grid
 
 ## Help (description)
-Track environmental events; event types configurable; many events per production day. Per-event "include in daily report" checkbox. Event-log pattern (cf. PO.0012 Alarms / Reported Alarms EVENT_LOG family).
+This BF is used to keep track of environmental events. Event types are configurable and the user can create as many events as needed within a production day.
 
-## Type
-EVENT/log.
-
-## DB binding
-View/table: TBD on recon (environmental event table).
-
-## Status
-[~] Help + purpose captured. Next: live recon to resolve the backing class/view (OV_/TV_/DV_) + confirm grid/nav + insert/update capability.
+The user can also decide whether the event should be included in the daily report or not by ticking off the report check box.
