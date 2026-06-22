@@ -1,31 +1,39 @@
 Automated code review session (06:00 / 14:00 AWST). Review recent automation work, update lessons-learned.md, and merge all CLEAR PRs autonomously.
 
+MANDATORY FIRST ACTION: Re-read docs/lessons-learned.md in full before doing anything else. Context compaction silently invalidates cached reads -- always load the live file (MR4). Do not proceed until this is done.
+
 Steps:
 1. Run: git log --oneline -20 to see recent commits
 2. Check the last entry date in docs/review-log.md
 3. Count commits since that date
-4. Append a one-liner to docs/review-log.md in this format (always, even on skip runs):
+4. Pre-flight -- run these before touching any file:
+   a. `git fetch origin master && git merge origin/master` -- ensure local master is current before branching
+   b. `git status` -- if any of these reviewer-owned files are already modified (STATUS.md, docs/lessons-learned.md, docs/automation-scorecard.md, docs/review-log.md), discard them with `git checkout -- <file>` (they are stale leftovers from a previous crashed session, already captured in a prior review PR). Do NOT touch any other files -- they belong to the Worker.
+5. Create the review branch: `git checkout -b review/feedback-YYYY-MM-DD-HH00` (include the run hour -- 06 or 14 -- to prevent collision when both daily runs share the same date). If the branch already exists (session crashed and restarted same hour), use `git checkout review/feedback-YYYY-MM-DD-HH00` instead of -b. All file edits in steps 6-14 happen on this branch -- master is never left dirty.
+6. Append a one-liner to docs/review-log.md (always, even on skip runs):
    `| YYYY-MM-DD HH:00 AWST | <N> new commits | <action: reviewed PRs / skipped — no new work> |`
-5. Call list_pull_requests(state=open) and count open PRs. If fewer than 3 new commits AND zero open PRs: commit review-log.md with message 'review-log: YYYY-MM-DD skip — no new work', push, then stop. If there are open PRs (even with fewer than 3 new commits), proceed to step 6 regardless of commit count.
-6. Use GitHub MCP list_pull_requests (state=open) to get ALL open PRs. Print the full list with PR numbers and titles before starting any review -- confirm you have listed every open PR. Then review EACH one (do not skip any):
+   Before appending, check the last entry in review-log.md -- if it already contains today's date and this run hour (duplicate from a crashed+restarted session), skip the append to avoid duplicate rows.
+7. Call list_pull_requests(state=open) and count open PRs. If fewer than 3 new commits AND zero open PRs: commit review-log.md with message 'review-log: YYYY-MM-DD skip -- no new work', push branch, merge it, then jump to step 17.
+8. Use GitHub MCP list_pull_requests (state=open) to get ALL open PRs. Print the full list with PR numbers and titles before starting any review -- confirm you have listed every open PR. Then review EACH one (do not skip any):
    a. FIRST check the PR body contains all 6 required fields: What was built / Files touched / DB ground-truth evidence / Self-clean confirmed / Rules applied / Base branch. If any are missing, post a MUST-FIX comment listing the missing fields -- do this before reading the diff.
    b. Read the diff -- if it is a trivial change (rename, config tweak, doc update) use low effort; if it contains logic changes use high effort
    c. Before adding any gap entry, verify it against the actual filesystem (Glob/Grep) -- do NOT infer from stale doc text. Mark unverified claims as 'unverified' rather than asserting them as fact.
    d. Post findings as a review comment on that PR (MUST-FIX / NICE-TO-HAVE tagged)
    e. Repeat for the next PR before moving on
-7. MERGE CLEAR PRs -- after ALL review comments are posted, merge every PR you marked CLEAR (no MUST-FIX):
+9. MERGE CLEAR PRs -- after ALL review comments are posted, merge every PR you marked CLEAR (no MUST-FIX):
    a. Do NOT merge any PR that received a MUST-FIX comment -- leave it open for the worker to fix
    b. Respect dependency order: if a PR body says 'depends on #N', merge #N first
    c. Use merge_method=squash for all merges
    d. If a merge fails due to conflict: fetch master, resolve the conflict (keep both sides for append-only files), push, retry
    e. PRs with MUST-FIX stay open -- note them in the review PR body so the user knows action is needed
-8. After PR inline comments are posted, extract ACTIONABLE rules from the findings. New rules must be validated (code-derived rules must be marked warning code-derived, not live-validated).
-9. Update the rules changelog table at the top of docs/lessons-learned.md (increment version, add new row). Then append a new dated section following the same format as existing entries (Rules, Observations, Gaps)
-10. Update docs/automation-scorecard.md if any new patterns are now live or parked
-11. Run: python scripts/update_status.py
-12. Create a feature branch: git checkout -b review/feedback-YYYY-MM-DD
-13. Commit all changed files with message: 'review: automated quality feedback YYYY-MM-DD'
-14. Push branch, raise a PR targeting master, and merge it immediately (review PR is docs-only -- no risk)
-15. Clean up reviewer worktrees: run `git worktree list` and remove any C:/tmp/wt-review-* worktree directories using `git worktree remove "<path>" --force` for each one found. This must run AFTER the PR is pushed/merged -- do not skip even if no PRs were reviewed. Stale worktrees block the Worker from running `git checkout master`.
+10. Sync review branch with master after Worker PR merges: run `git merge origin/master` on the review branch. Worker PRs just merged into master may have updated the same doc files -- syncing now prevents conflicts when the review PR is pushed in step 15.
+11. After PR inline comments are posted, extract ACTIONABLE rules from the findings. New rules must be validated (code-derived rules must be marked warning code-derived, not live-validated).
+12. Update the rules changelog table at the top of docs/lessons-learned.md (increment version, add new row). Then append a new dated section following the same format as existing entries (Rules, Observations, Gaps)
+13. Update docs/automation-scorecard.md if any new patterns are now live or parked
+14. Run: python scripts/update_status.py
+15. Commit all changed files with message: 'review: automated quality feedback YYYY-MM-DD'
+16. Push branch, raise a PR targeting master, and merge it immediately (review PR is docs-only -- no risk). Include a MUST-FIX summary section in the PR body listing every PR that received a MUST-FIX comment (PR number + title + what to fix) so the user can see the Worker's action items at a glance.
+17. Clean up reviewer worktrees: run `git worktree list` and remove any C:/tmp/wt-review-* worktree directories using `git worktree remove "<path>" --force` for each one found. Do not skip even if no PRs were reviewed.
+18. Final master clean-up: run `git checkout master && git pull origin master`, then run `git status`. If any uncommitted changes remain (reviewer-owned files or otherwise), discard them with `git checkout -- <file>` for modified files. Verify `git status` shows 'nothing to commit, working tree clean' before ending the session. This guarantees the Worker can always run `git checkout master` without conflicts after any reviewer session.
 
 Be specific and direct. Rules must be actionable -- not 'consider X' but 'always do X' or 'never do Y'.
