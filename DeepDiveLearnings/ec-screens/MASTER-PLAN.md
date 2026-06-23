@@ -79,8 +79,17 @@ Status rules (enforced by the runner, not just convention):
 ## Delivery model (standing PR)
 - The branch **`feature/ec-screen-deepdive` is PERMANENT** for the whole program — it always exists and is
   **never deleted** (including on merge: uncheck "delete branch" in the GitHub merge dialog).
-- There is **always ONE open, DRAFT PR** from it to master (currently **PR #100**). The daily runner's commits
+- There is **always ONE open, DRAFT PR** from it to master. The daily runner's commits
   accumulate into it. It's kept a DRAFT on purpose so the automated reviewer does **not** auto-merge it.
 - The **owner merges it at a milestone** (e.g. once a module is fully covered). After a merge the PR closes, so a
   **fresh standing draft PR is re-opened immediately** from the same branch — so an open PR always exists, and
   the runner keeps going on the next module. **Never merge without the owner's explicit go.**
+- **Squash-merge note:** a squash-merge leaves this long-lived branch diverged from master (identical content,
+  different history) — PR *diffs* stay correct, but commit *lists* grow over time. Tidying it needs
+  `reset --hard origin/master` + **force-push**, which rewrites history on the protected permanent branch, so it
+  **requires the owner's explicit authorization**. By default we just continue on the existing branch (harmless).
+  (Verified empirically 2026-06-23: a squash-merge without `--delete-branch` keeps the branch — it is never auto-deleted.)
+
+### Merge log
+- **#100** — squash-merged to master by the owner on **2026-06-23**. Delivered the first batch: **15 full + 2
+  partial** screen notes. Fresh standing draft PR re-opened from the same branch to continue.
