@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v22** (R22 added 2026-06-22)
+> **Current rule version: v23** (R23 added 2026-06-23)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -30,6 +30,7 @@ _Worker sessions: read this before starting any automation work._
 | v20 | R20 | Author every bundle/recon `.py` ASCII at authoring time — a green run never catches an em-dash in a FAIL-only branch; extend the hygiene guard to flag non-ASCII statically | 2026-06-20 |
 | v21 | R21 | PR-body content must match the final diff: list EVERY touched file under "Files touched", and never leave a stale "blocked/not done/pending" note for work the PR actually includes | 2026-06-20 |
 | v22 | R22 | Never ship the literal `REV_TEXT='ECPR-XXXX'` placeholder; set the governing ticket, or `'ECPR-DEMO'` for demo/sandbox objects with no client ECPR | 2026-06-22 |
+| v23 | R23 | A long-lived/permanent Worker branch must keep reviewer-owned append-only docs in sync — `git diff origin/master...HEAD` must show NO `-` lines on lessons-learned.md / review-log.md / automation-scorecard.md / STATUS.md | 2026-06-23 |
 
 ---
 
@@ -656,5 +657,37 @@ _Open PR triggers a full review (R14). The only open PR is the long-lived **STAN
 ### Reviewer process note (dirty main checkout on a permanent Worker branch)
 
 - The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with an active, dirty working tree (the deep-dive autopilot runs there). Steps 4b/5/18 of the review prompt assume operating on `master` in the main checkout — that is **unsafe here** (it would stash/disrupt the parallel Worker session). Following the 2026-06-22 14:00 precedent, ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-23-0600` worktree off `origin/master`; the main checkout was never touched. Final master clean-up (step 18) was scoped to verifying the main checkout was left exactly as the Worker had it, NOT forcing `git checkout master`.
+
+---
+
+## 2026-06-23 — Automated Review (14:00 AWST, 1 open PR #103 — STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). The only open PR is the re-opened **STANDING/DRAFT** EC Screen Deep-Dive PR (#103) on the Worker's permanent branch — #100 (the prior draft) was owner-milestone-merged (`661e90b`) and the 06:00 review merged via #101 (`56c58c1`). Reviewed #103 at branch tip: **NOT merged** (owner-merge-only by design). **1 MUST-FIX** (stale reviewer-owned docs — clobber risk). **One new rule (R23).** R1–R22 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #103 | **MUST-FIX** — the branch is behind master on reviewer-owned append-only docs. The only new commit since 06:00 is `2cc15cf` (merge-log + re-open standing draft), and its re-sync was taken from a master state *before* #101 (06:00 review) landed, so `git diff --stat origin/master...HEAD` shows `docs/lessons-learned.md \| 32 ---` and `docs/review-log.md \| 1 -`. Those `-` lines are the entire **2026-06-23 06:00 review (#101)** entry — merging #103 as-is would clobber it. Deep-dive *content* (read-only metadata recon + Help capture, ASCII notes, honest `[~]` partials) was already reviewed CLEAR at 06:00; no new content findings. NICE-TO-HAVE carry-overs: R9 header drift (harmless for a never-auto-merged draft); runner-source non-ASCII (R20, `tools/**`); `"{done_partial} DB-only"` label → `"partial"`. | ⛔ MUST-FIX open — **left open (owner-merge-only)** |
+
+### Rules (apply immediately, no exceptions)
+
+**R23 — A long-lived/permanent Worker branch must keep reviewer-owned append-only docs in sync** ✅ _live-validated (PR #103 diff vs master)_
+The reviewer owns four append-only files: `docs/lessons-learned.md`, `docs/review-log.md`, `docs/automation-scorecard.md`, and `STATUS.md`. On a normal short-lived feature branch R8 (sync before push) is enough, but a **permanent / long-lived** branch (e.g. `feature/ec-screen-deepdive`, which is never deleted and is re-opened as a fresh draft after each milestone merge) silently drifts behind master on these files every time the reviewer appends an entry. If the branch is then milestone-merged, the squash **reverts** the reviewer entries it never re-absorbed. Therefore: before any milestone push/merge of a permanent branch, `git fetch origin master && git merge origin/master`, and verify `git diff --stat origin/master...HEAD` shows **NO `-` (deletion) lines** on any of the four reviewer-owned files — a `-` line on them is a clobber-on-merge defect, not a real change. **Better still:** do not track local edits to these four files on a permanent Worker branch at all — let the reviewer own them on master so they can never drift.
+_Live-validated: #103's `2cc15cf` re-sync (taken pre-#101) presented `lessons-learned.md -32` + `review-log.md -1` = the full 06:00 review entry; merging as-is would have deleted #101's record._
+
+### Observations (good patterns to keep)
+
+- **The standing-draft model is working as intended, with one sharp edge.** Keeping the permanent branch behind a never-auto-merged DRAFT (owner merges at milestones) correctly stops the reviewer from auto-merging accumulating learning notes. The one edge — reviewer-owned docs drifting on the long-lived branch (R23) — is structural, not a one-off; the durable fix is to keep those four files off the permanent branch entirely.
+- **Reviewer self-isolation held again.** This run created `review/feedback-2026-06-23-1400` in an isolated `C:/tmp/wt-review-2026-06-23-1400` worktree off `origin/master`; the Worker's dirty permanent checkout (and its `wt-ec-learn` runner worktree) were never touched. The `wt-ec-learn` worktree is the Worker's runner workspace — NOT a `wt-review-*` reviewer worktree — so step 17 cleanup correctly left it alone.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **#103 MUST-FIX:** re-sync the permanent branch with master (`git merge origin/master`) before the owner milestone-merges, OR stop carrying the four reviewer-owned docs on it (R23) | Worker | 🔴 High |
+| Runner source `run_ec_screen_learn.py` non-ASCII (R20) + outside the hygiene glob (`tools/**` not scanned); `"{done_partial} DB-only"` commit label should read `"partial"` | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` → `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
 
 ---
