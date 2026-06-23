@@ -57,7 +57,7 @@ def pick_screens(checklist_path, n):
     """Complete [~] partials FIRST (DoD backfill), then new [ ] screens, in file/priority order."""
     todo, partial = [], []
     for ln in Path(checklist_path).read_text(encoding='utf-8').splitlines():
-        m = re.match(r'- \[([ ~])\] \*\*([A-Z0-9.]+)\*\* (?:—|-) (.+)', ln)
+        m = re.match(r'- \[([ ~])\] \*\*([A-Z0-9.]+)\*\* (?:' + chr(0x2014) + r'|-) (.+)', ln)
         if not m: continue
         status, code, rest = m.group(1), m.group(2), m.group(3)
         name = rest.split(' -> ')[0].split(' (')[0].strip()
@@ -117,9 +117,10 @@ def help_text(page, name, timeout_ms=45000):
 def _ascii(s):
     """Force ASCII (R18/R20) - EC help text often has smart quotes / dashes."""
     if not s: return s
-    for k, v in {'’': "'", '‘': "'", '“': '"', '”': '"',
-                 '—': '-', '–': '-', '…': '...', ' ': ' '}.items():
-        s = s.replace(k, v)
+    repl = {0x2019: "'", 0x2018: "'", 0x201c: '"', 0x201d: '"',
+            0x2014: '-', 0x2013: '-', 0x2026: '...', 0x00a0: ' '}
+    for cp, v in repl.items():
+        s = s.replace(chr(cp), v)
     return s.encode('ascii', 'ignore').decode('ascii')
 
 def write_note(wt, bf_code, name, info, help_desc):
@@ -157,7 +158,7 @@ def mark_checklist(wt, bf_code, name, full, missing):
     s = p.read_text(encoding='utf-8')
     mark = '[x]' if full else '[~]'
     suffix = '' if full else f' (partial: missing {missing})'
-    newline = f'- {mark} **{bf_code}** — {name} -> notes/{bf_code}.md{suffix}'
+    newline = f'- {mark} **{bf_code}** {chr(0x2014)} {name} -> notes/{bf_code}.md{suffix}'
     s = re.sub(r'(?m)^- \[[ x~\-]\] \*\*' + re.escape(bf_code) + r'\*\* .*$', newline, s, count=1)
     p.write_text(s, encoding='utf-8')
 
@@ -194,14 +195,14 @@ def main():
         br.close()
     con.close()
     git(['add', 'DeepDiveLearnings/ec-screens/'], cwd=WT)
-    msg = f'learn(ec-screens): {", ".join(c for c,_ in screens)} ({done_full} full, {done_partial} DB-only)'
+    msg = f'learn(ec-screens): {", ".join(c for c,_ in screens)} ({done_full} full, {done_partial} partial)'
     git(['commit', '-m', msg], cwd=WT)
     if DO_PUSH:
         r = git(['push', 'origin', 'HEAD:' + BRANCH], cwd=WT)
         log('pushed' if r.returncode == 0 else 'push failed: ' + (r.stderr or r.stdout)[:100])
     else:
         log('TEST MODE: committed locally, not pushed')
-    log(f'EC-screen learn (deterministic): done - {done_full} full + {done_partial} DB-only')
+    log(f'EC-screen learn (deterministic): done - {done_full} full + {done_partial} partial')
     return 0
 
 if __name__ == '__main__':
