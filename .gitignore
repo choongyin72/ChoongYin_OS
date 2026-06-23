@@ -1,0 +1,3 @@
+# Runtime log appended by the EC-screen deep-dive runner on every run (operational, not a deliverable).
+# The real records are CHECKLIST.md + notes/. Keeping this untracked stops it dirtying the tree each run.
+tools/deep-dive-scheduler/session_log.txt
