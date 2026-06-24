@@ -66,15 +66,36 @@ def pick_screens(checklist_path, n):
         (partial if status == '~' else todo).append((code, name))
     return (partial + todo)[:n]
 
+def _class_exists(cur, cn):
+    cur.execute("SELECT 1 FROM class_cnfg WHERE class_name=:c", [cn])
+    return cur.fetchone() is not None
+
 def db_resolve(cur, bf_code, name):
-    info = {'url': None, 'classes': []}
+    """Resolve the screen's data class via layered HIGH-CONFIDENCE strategies (metadata tables only -> safe).
+    Order: (1) explicit CLASS_NAME tokens in the URL; (2) the URL's last path-segment as a class token,
+    verb-prefix stripped, only if it IS a real class (e.g. maintain_equity_share -> EQUITY_SHARE);
+    (3) a case-insensitive EXACT label match, only when UNIQUE. Ambiguous/none -> left unresolved
+    (honest [~] partial; never guess a binding)."""
+    info = {'url': None, 'classes': [], 'resolved_by': None}
     cur.execute("SELECT url FROM business_function WHERE bf_code=:c", [bf_code])
     r = cur.fetchone(); info['url'] = r[0] if r else None
-    classes = re.findall(r'CLASS_NAME[^/]*/([A-Z0-9_]+)', info['url'] or '')
-    if not classes:  # fall back to LABEL lookup (metadata table, safe)
-        cur.execute("""SELECT class_name FROM class_property_cnfg
-                       WHERE property_code='LABEL' AND property_value=:n""", [name])
-        classes = [row[0] for row in cur.fetchall()]
+    url = info['url'] or ''
+    classes = re.findall(r'CLASS_NAME[^/]*/([A-Z0-9_]+)', url)
+    if classes:
+        info['resolved_by'] = 'url CLASS_NAME'
+    else:  # (2) URL last path-segment token
+        tok = url.rstrip('/').split('/')[-1].upper()
+        for cand in dict.fromkeys([tok, re.sub(r'^(MAINTAIN|MANAGE|EDIT|VIEW|CREATE)_', '', tok)]):
+            if cand and _class_exists(cur, cand):
+                classes = [cand]; info['resolved_by'] = 'url path token'; break
+    if not classes:  # (3) case-insensitive EXACT label, only if unambiguous
+        cur.execute("""SELECT DISTINCT class_name FROM class_property_cnfg
+                       WHERE property_code='LABEL' AND UPPER(property_value)=UPPER(:n)""", [name])
+        labs = [row[0] for row in cur.fetchall()]
+        if len(labs) == 1:
+            classes = labs; info['resolved_by'] = 'label (exact, unique)'
+        elif len(labs) > 1:
+            info['resolved_by'] = f'ambiguous label ({len(labs)} candidates) - left unresolved'
     for cn in classes:
         cur.execute("""SELECT class_type, time_scope_code, db_object_name
                        FROM class_cnfg WHERE class_name=:c""", [cn])
@@ -97,6 +118,18 @@ def screen_type(info):
     if c0['type'] == 'DATA' and c0['scope'] == 'DAY':   return 'N1 daily-status grid'
     if c0['type'] == 'DATA' and c0['scope'] == 'MONTH': return 'N monthly-status grid'
     return f"{c0['type']}/{c0['scope']}"
+
+def _clip(s, limit=2400):
+    """Trim to <=limit chars but cut on a sentence/paragraph boundary so text never ends mid-word."""
+    s = (s or '').strip()
+    if len(s) <= limit:
+        return s or None
+    cut = s[:limit]
+    for sep in ('\n\n', '. ', '.\n', '\n'):
+        i = cut.rfind(sep)
+        if i > limit * 0.6:
+            return cut[:i + 1].strip() + ' [...]'
+    return cut.rstrip() + ' [...]'
 
 def help_text(page, name, shot_path=None, timeout_ms=45000):
     """Open the screen, trigger in-session openOnlineHelp(); return (description_text, screenshot_saved).
@@ -121,7 +154,7 @@ def help_text(page, name, shot_path=None, timeout_ms=45000):
                 shot_ok = False  # screenshot is a bonus; never fail the screen on it
         h.close()
         m = re.search(r'Description\s*(.+?)(?:Business Function|Screenshots|$)', body, re.S)
-        text = (m.group(1).strip()[:900] if m else body[:500].strip()) or None
+        text = _clip(m.group(1), 2400) if m else _clip(body, 600)
         return text, shot_ok
     except Exception:
         return None, False
@@ -151,6 +184,8 @@ _Deep-dive {datetime.now().strftime('%Y-%m-%d')} (deterministic runner). Module:
 | Class | Type/Scope | Base table | View |
 |---|---|---|---|
 {rows}
+
+_Resolved by: {info.get('resolved_by') or 'not resolved'}_
 
 ## Screen type
 {screen_type(info)}
