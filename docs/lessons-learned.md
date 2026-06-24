@@ -691,3 +691,31 @@ _Live-validated: #103's `2cc15cf` re-sync (taken pre-#101) presented `lessons-le
 | Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
 
 ---
+
+
+## 2026-06-24 - Automated Review (06:00 AWST, 1 open PR #103, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). #103's head (`c32cec2`) is unchanged since the 2026-06-23 14:00 re-verify that cleared it - no new pushed content this run. **Re-confirmed CLEAR; NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v23.** R1-R23 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #103 | Clear (re-confirmation). Head `c32cec2` is byte-identical to the commit cleared at the 2026-06-23 14:00 re-verify - no new pushed content (`git log c32cec2..origin/feature/ec-screen-deepdive` empty; PR `headRefOid` = `c32cec2`). **R23 stays satisfied:** `git diff --stat origin/master...origin/feature/ec-screen-deepdive` lists only the 8 deep-dive note/doc files, with ZERO `-` (deletion) lines on any of the four reviewer-owned files - the 14:00 MUST-FIX remains resolved. Two prior NICE-TO-HAVEs are now CLOSED in-PR (commit `1312bcc`, which is an ancestor of `c32cec2`): the runner `run_ec_screen_learn.py` is ASCII-clean (`rg [^\x00-\x7F]` -> 0 matches), and the `"DB-only"` commit label now reads `"partial"` (`run_ec_screen_learn.py:198`). **NOT merged** (owner-merge-only standing draft, still DRAFT). | OK Clear (NICE-TO-HAVE) - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **An unchanged open-PR head is a re-confirmation, not a re-review of the same diff.** #103's head has not moved since the 14:00 re-verify, so the deep-dive *content* (already CLEAR twice) was not re-litigated; the run instead verified (a) the never-auto-merge invariant still holds, (b) R23 is still satisfied vs the now-further-advanced master, and (c) prior NICE-TO-HAVEs actually landed. This is the correct shape for a standing-draft PR that the reviewer is forbidden to merge: confirm the safety invariants, don't re-score frozen content.
+- **NICE-TO-HAVE -> next-commit loop closed for the runner.** The 06:00/14:00 runs flagged the runner source's functional non-ASCII (R20) and the inaccurate `"DB-only"` commit label; commit `1312bcc` ("runner source ASCII-clean (R20) + 'DB-only' -> 'partial' wording [reviewer NICE-TO-HAVE #100]") fixed both, and the fix is in the PR. The advisory-comment -> Worker-fix loop is working even for a never-merged draft.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `DeepDiveLearnings/ec-screens/gen_checklist.py:33` `print("wrote CHECKLIST.md -...",...)` emits a U+2014 em-dash to stdout (R18/R20 - `UnicodeEncodeError` on a cp1252 redirected/captured console). Pre-existing on master (merged via #100), outside the hygiene-guard glob, non-gating. The markdown `out`-list lines (23-30) are written via `.write_text(...,encoding="utf-8")` and are exempt; only the `print` on line 33 needs ASCII. | Worker | 🟢 Low |
+| ~~#103 MUST-FIX (R23 clobber risk)~~ - **RESOLVED** at the 2026-06-23 14:00 re-verify (`df45d58` re-absorbed #101/#104); re-confirmed still zero `-` lines on reviewer docs this run (MR3 staleness sweep). | - | OK Closed |
+| ~~Runner `run_ec_screen_learn.py` non-ASCII (R20) + `"{done_partial} DB-only"` label~~ - **RESOLVED** in-PR via `1312bcc` (runner ASCII-clean; label now `"partial"`). The hygiene guard still does not scan `tools/**` (or `.claude/skills/**` / `workstreams/**/scripts/*.py`) - that broadening remains open below. | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+---
