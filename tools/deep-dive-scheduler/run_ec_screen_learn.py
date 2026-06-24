@@ -7,8 +7,10 @@ in Python, per screen, with a hard timeout + best-effort fallback so it can neve
   1) read CHECKLIST.md -> next N unfinished screens (priority/file order)
   2) DB (metadata tables only -> no ORA-06569): BUSINESS_FUNCTION + class_cnfg/class_property_cnfg
      -> class, CLASS_TYPE, TIME_SCOPE, base table, OV_/TV_/DV_ view, screen type
-  3) Help: login once, then per screen open it + openOnlineHelp() -> description (best-effort, timeout-guarded)
-  4) write notes/<BF_CODE>.md, mark [x] (full = DB+Help) or [~] (DB only, Help not captured)
+  3) Help: login once, then per screen open it + openOnlineHelp() -> description text AND a full-page
+     screenshot of the Help popup saved to notes/<BF_CODE>_help.png (both best-effort, timeout-guarded)
+  4) write notes/<BF_CODE>.md (incl. the screenshot reference), mark [x] (full = DB+Help text) or
+     [~] (DB only, Help not captured); the screenshot is a bonus and does not change the full/partial threshold
   5) commit on the detached worktree HEAD; push unless EC_LEARN_PUSH=0
 
 Isolated git worktree (C:\\tmp\\wt-ec-learn) so it never touches the user's main checkout.
@@ -96,23 +98,33 @@ def screen_type(info):
     if c0['type'] == 'DATA' and c0['scope'] == 'MONTH': return 'N monthly-status grid'
     return f"{c0['type']}/{c0['scope']}"
 
-def help_text(page, name, timeout_ms=45000):
-    """Open the screen, trigger in-session openOnlineHelp(), return description text. Best-effort."""
+def help_text(page, name, shot_path=None, timeout_ms=45000):
+    """Open the screen, trigger in-session openOnlineHelp(); return (description_text, screenshot_saved).
+    Both best-effort + timeout-guarded. If shot_path is given, save a full-page PNG of the Help popup
+    (which itself includes the screen's own Screenshots section) so the note carries a visual reference."""
     try:
         box = page.locator('[id="menu:searchForm:searchTxt"]'); box.fill(''); box.type(name, delay=25)
         page.wait_for_timeout(1200)
         link = page.locator(f'xpath=//*[self::label or self::span][contains(@class,"tv-link") and normalize-space(text())="{name}"]')
-        if not link.count(): return None
+        if not link.count(): return None, False
         link.first.click(); page.wait_for_load_state('networkidle', timeout=timeout_ms); page.wait_for_timeout(1500)
         ctx = page.context
         with ctx.expect_page(timeout=10000) as np:
             page.evaluate('openOnlineHelp()')
         h = np.value; h.wait_for_load_state('domcontentloaded', timeout=15000); h.wait_for_timeout(1500)
-        body = h.inner_text('body'); h.close()
+        body = h.inner_text('body')
+        shot_ok = False
+        if shot_path:
+            try:
+                h.screenshot(path=shot_path, full_page=True); shot_ok = True
+            except Exception:
+                shot_ok = False  # screenshot is a bonus; never fail the screen on it
+        h.close()
         m = re.search(r'Description\s*(.+?)(?:Business Function|Screenshots|$)', body, re.S)
-        return (m.group(1).strip()[:900] if m else body[:500].strip()) or None
+        text = (m.group(1).strip()[:900] if m else body[:500].strip()) or None
+        return text, shot_ok
     except Exception:
-        return None
+        return None, False
 
 def _ascii(s):
     """Force ASCII (R18/R20) - EC help text often has smart quotes / dashes."""
@@ -123,7 +135,7 @@ def _ascii(s):
         s = s.replace(chr(cp), v)
     return s.encode('ascii', 'ignore').decode('ascii')
 
-def write_note(wt, bf_code, name, info, help_desc):
+def write_note(wt, bf_code, name, info, help_desc, help_shot=False):
     help_desc = _ascii(help_desc); name = _ascii(name)
     nd = Path(wt) / 'DeepDiveLearnings' / 'ec-screens' / 'notes'; nd.mkdir(parents=True, exist_ok=True)
     rows = '\n'.join(f"| `{c['class']}` | {c['type']}/{c['scope']} | `{c['base']}` | `{c['view'] or '(none)'}` |"
@@ -145,6 +157,9 @@ _Deep-dive {datetime.now().strftime('%Y-%m-%d')} (deterministic runner). Module:
 
 ## Help (description)
 {help_desc if help_desc else '_(not captured this run - DB binding above is verified; Help to backfill)_'}
+
+## Help (screenshot)
+{f'![{bf_code} Help screenshot]({bf_code}_help.png)' if help_shot else '_(no Help screenshot captured this run)_'}
 """
     has_db = any(c.get('view') for c in info['classes'])
     missing = []
@@ -185,11 +200,14 @@ def main():
         for bf_code, name in screens:
             try:
                 info = db_resolve(cur, bf_code, name)
-                hd = help_text(page, name)
-                full, missing = write_note(WT, bf_code, name, info, hd)
+                notes_dir = Path(WT) / 'DeepDiveLearnings' / 'ec-screens' / 'notes'
+                notes_dir.mkdir(parents=True, exist_ok=True)
+                shot_path = str(notes_dir / f'{bf_code}_help.png')
+                hd, shot_ok = help_text(page, name, shot_path)
+                full, missing = write_note(WT, bf_code, name, info, hd, shot_ok)
                 mark_checklist(WT, bf_code, name, full, missing)
                 done_full += int(full); done_partial += int(not full)
-                log(f'  {bf_code}: {"FULL" if full else "PARTIAL["+missing+"]"} ({len(info["classes"])} class)')
+                log(f'  {bf_code}: {"FULL" if full else "PARTIAL["+missing+"]"} ({len(info["classes"])} class{", +shot" if shot_ok else ""})')
             except Exception as e:
                 log(f'  {bf_code}: skipped ({str(e)[:60]})')
         br.close()
