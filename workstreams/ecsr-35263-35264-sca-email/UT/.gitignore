@@ -1,0 +1,5 @@
+# Word lock/temp files
+~$*.docx
+# UT capture run artifacts (the committed evidence is the .docx files)
+capture/shots/
+capture/content.json
