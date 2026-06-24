@@ -1,6 +1,6 @@
 # CO.0018 - Maintain Equity Share
 
-_Deep-dive 2026-06-22 (deterministic runner). Module: CO._
+_Deep-dive 2026-06-24 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0018 - URL: `/com.ec.prod.co.screens/maintain_equity_share`
