@@ -16,7 +16,7 @@
 | # | Screen | Frame module | FA dropdown button | GO | Primary filter id (column) | Key buttons |
 |---|---|---|---|---|---|---|
 | 1 | **Maintain Message Type** | `co.screens/manage_object` | `nav:form:G:0:R:1:C:1:dd_button` | `button:form:B` | `manageObject:form:T:sfilter0_ft_filter` (Message Type Code) | NEW VERSION |
-| 2 | **Message Format** | `mhm.screens/message_format` | `nav:form:G:0:R:1:C:1:dd_button` | `button:form:B` | grid loads on FA+GO; (select msg-type row) | — |
+| 2 | **Message Format** | `mhm.screens/message_format` | `nav:form:G:0:R:1:C:1:dd_button` | `button:form:B` | **Message Type is a MANDATORY navigator dropdown** `nav:form:G:0:R:1:C:2:dd_button` — set it to the message-def CODE (open dd, pick the row containing the code) BEFORE GO, else "Required fields are empty: Message Type [MESSAGE_TYPE_POPUP]". Grid then shows Format Code=Text | — |
 | 3 | **Freetext Message Template** | `mhm.screens/free_text_templ` | `nav:form:G:0:R:1:C:1:dd_button` | `button:form:B` | `subject:form:T:sfilter0_cb_filter` (Message Type, combo) | — |
 | 4 | **Maintain Contact Group Set** | `co.screens/manage_object` | `nav:form:G:0:R:1:C:1:dd_button` | `button:form:B` | `manageObject:form:T:sfilter0_ft_filter` (Contact Group Set Code) | NEW VERSION |
 | 5 | **Actor Maintenance** | `mhm.screens/actor_maintenance` | `nav:form:G:1:R:1:C:0:dd_button` | `button:form:B` | grid loads after FA+GO (no sfilter pre-load; pick a contact group first) | — |
