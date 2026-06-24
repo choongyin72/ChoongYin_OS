@@ -28,6 +28,9 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `903b719` | 2026-06-24 | ECSR-35263 (date fix) + ECSR-35264 (Burrup email config split) â€” SQL + UT evid… |
+| `a8122ac` | 2026-06-24 | EC Screen Deep-Dive batch 2: 11 new full + 1 partial (26 total done) |
+| `b721278` | 2026-06-24 | review: automated quality feedback 2026-06-24 (#106) |
 | `4815f2b` | 2026-06-23 | review: automated quality feedback 2026-06-23 (14:00 re-verify â€” #103 MUST-FIX… |
 | `41fd8ae` | 2026-06-23 | review: automated quality feedback 2026-06-23 (#104) |
 | `661e90b` | 2026-06-23 | [STANDING/DRAFT] EC Screen Deep-Dive â€” accumulating learning notes (owner merg… |
@@ -35,9 +38,6 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 | `6000e6a` | 2026-06-22 | review: automated quality feedback 2026-06-22 (#98) |
 | `218eb97` | 2026-06-22 | ECSR-35329/35330: NOPTA reports email-send enablement (ECPR-31089 R_PLU_NOPTA + … |
 | `fbe9967` | 2026-06-22 | fix(reviewer): move branch creation to step 9 â€” before any doc file edits (#97… |
-| `0436c0c` | 2026-06-22 | review: automated quality feedback 2026-06-22 (#95) |
-| `05b877f` | 2026-06-22 | ECIS Excel upload: re-runnable SQL + live-verified demo + evidence doc + reusabl… |
-| `32fc957` | 2026-06-22 | fix(reviewer): add step 15 to clean up stale C:/tmp/wt-review-* worktrees after … |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
