@@ -22,12 +22,12 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0029** — Stream Set -> notes/CO.0029.md
 - [x] **CO.0030** — Stream Set List -> notes/CO.0030.md
 - [x] **CO.0031** — Flowline -> notes/CO.0031.md
-- [ ] **CO.0033** — Area Codes
-- [ ] **CO.0034** — Storage
-- [ ] **CO.0035** — Maintain Storages
-- [ ] **CO.0036** — Tank
-- [ ] **CO.0037** — Maintain Tanks
-- [ ] **CO.0038** — Tank Usage
+- [x] **CO.0033** — Area Codes -> notes/CO.0033.md
+- [x] **CO.0034** — Storage -> notes/CO.0034.md
+- [x] **CO.0035** — Maintain Storages -> notes/CO.0035.md
+- [x] **CO.0036** — Tank -> notes/CO.0036.md
+- [x] **CO.0037** — Maintain Tanks -> notes/CO.0037.md
+- [~] **CO.0038** — Tank Usage -> notes/CO.0038.md (partial: missing DB binding)
 - [ ] **CO.0039** — Tank Strapping
 - [ ] **CO.0040** — Test Separator
 - [ ] **CO.0042** — Production Separator
