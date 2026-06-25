@@ -1,5 +1,5 @@
 """
-Phase 0c — find the real Equipment result-table element id + the working filter combo.
+Phase 0c - find the real Equipment result-table element id + the working filter combo.
 READ-ONLY.
 """
 from playwright.sync_api import sync_playwright

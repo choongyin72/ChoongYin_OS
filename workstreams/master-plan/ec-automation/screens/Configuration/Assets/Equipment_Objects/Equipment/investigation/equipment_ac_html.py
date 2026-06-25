@@ -1,4 +1,4 @@
-"""Phase 0f — dump the FULL HTML of a navigator autocomplete + its panel after trigger click. READ-ONLY."""
+"""Phase 0f - dump the FULL HTML of a navigator autocomplete + its panel after trigger click. READ-ONLY."""
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 import os

@@ -1,4 +1,4 @@
-"""EC IUD — County (Playwright reference).
+"""EC IUD - County (Playwright reference).
 Thin config over the shared engine: ../_shared/iud_engine.py.
 See county_sow.md for the screen analysis and README.md for run instructions."""
 import sys

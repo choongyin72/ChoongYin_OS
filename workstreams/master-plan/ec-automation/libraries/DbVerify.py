@@ -596,6 +596,54 @@ def restore_record_status_family(daytime, from_status="V", to_status="P"):
         conn.close()
 
 
+def record_status_family_count_month(month_date, status):
+    """MONTH-grain counterpart of record_status_family_count: total day-status rows whose DAYTIME
+    falls in the WHOLE calendar month of ``month_date`` (YYYY-MM-DD) with RECORD_STATUS = ``status``
+    across the day-status family. Use for MONTH-grain status processes whose lift has no WHERE filter
+    and may span every day of the month (a single-day count would miss the rest of the month). Day-
+    grain suites keep using record_status_family_count."""
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        total = 0
+        for t in _status_family_tables(cur):
+            cur.execute(
+                f"SELECT COUNT(*) FROM {t} "
+                f"WHERE TRUNC(DAYTIME,'MM') = TRUNC(TO_DATE(:d,'YYYY-MM-DD'),'MM') "
+                f"AND RECORD_STATUS = :s",
+                d=str(month_date), s=status,
+            )
+            total += cur.fetchone()[0]
+        return total
+    finally:
+        cur.close()
+        conn.close()
+
+
+def restore_record_status_family_month(month_date, from_status="A", to_status="P"):
+    """TEST-TEARDOWN ONLY (MONTH grain): restore RECORD_STATUS across EVERY day of the calendar month
+    of ``month_date`` over the day-status family — the month-grain counterpart of
+    restore_record_status_family, for a monthly status process whose lift may span the whole month
+    (a single-day restore would leave residual 'A' on the other days). Returns rows restored."""
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        total = 0
+        for t in _status_family_tables(cur):
+            cur.execute(
+                f"UPDATE {t} SET RECORD_STATUS = :ts "
+                f"WHERE TRUNC(DAYTIME,'MM') = TRUNC(TO_DATE(:d,'YYYY-MM-DD'),'MM') "
+                f"AND RECORD_STATUS = :fs",
+                ts=to_status, d=str(month_date), fs=from_status,
+            )
+            total += cur.rowcount
+        conn.commit()
+        return total
+    finally:
+        cur.close()
+        conn.close()
+
+
 def code_should_be_present_in_view(view, code):
     """Fail unless ``code`` appears in any string column of ``view`` (DB ground truth)."""
     if not _code_present(view, code):
@@ -606,3 +654,120 @@ def code_should_be_absent_in_view(view, code):
     """Fail if ``code`` appears in any string column of ``view`` (DB ground truth)."""
     if _code_present(view, code):
         raise AssertionError(f"DB check FAILED: {code} still present in {view} (expected absent)")
+
+
+# --- N-notify: MHM message-journal oracle (notification tests) -----------------------------------
+# Stock EC MHM journals every handled message in MHM_MSG (DIRECTION I/O, MSG_TYPE, STATUS, SUBJECT,
+# SENDER, RECIPIENT). A notification test sends/triggers a message then asserts a NEW MHM_MSG row for
+# the message type (delta over a captured baseline — MHM_MSG is append-only, like STAT_PROCESS_STATUS).
+# See DeepDiveLearnings/ec-mhm/ for the model + the AOPA/CLP client contrasts.
+
+def message_journal_count(msg_type, direction="O"):
+    """COUNT(*) of MHM_MSG journal rows for ``msg_type`` (and DIRECTION, default 'O' outbound).
+
+    The append-only baseline: capture this before a send, then a +1 delta proves a fresh message was
+    journaled. ``msg_type`` matches MHM_MSG.MSG_TYPE (the message-definition code).
+    """
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        sql = "SELECT COUNT(*) FROM MHM_MSG WHERE MSG_TYPE = :t"
+        binds = {"t": msg_type}
+        if direction is not None:
+            sql += " AND DIRECTION = :d"
+            binds["d"] = direction
+        cur.execute(sql, binds)
+        return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def message_journal_latest(msg_type, direction="O"):
+    """Return the newest MHM_MSG journal row for ``msg_type`` as a dict (or None).
+
+    Keys: STATUS, SUBJECT, SENDER, RECIPIENT, MESSAGE_ID. The trustworthy oracle for a notification
+    send: after the send, assert this row exists with the expected SUBJECT/RECIPIENT/STATUS.
+    """
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        sql = (
+            "SELECT STATUS, SUBJECT, SENDER, RECIPIENT, MESSAGE_ID FROM MHM_MSG "
+            "WHERE MSG_TYPE = :t"
+        )
+        binds = {"t": msg_type}
+        if direction is not None:
+            sql += " AND DIRECTION = :d"
+            binds["d"] = direction
+        sql += " ORDER BY CREATED_DATE DESC FETCH FIRST 1 ROWS ONLY"
+        cur.execute(sql, binds)
+        row = cur.fetchone()
+        if not row:
+            return None
+        return {"STATUS": row[0], "SUBJECT": row[1], "SENDER": row[2], "RECIPIENT": row[3], "MESSAGE_ID": row[4]}
+    finally:
+        cur.close()
+        conn.close()
+
+
+def message_journal_new_row_should_exist(msg_type, baseline_count, direction="O"):
+    """Fail unless MHM_MSG has MORE rows for ``msg_type`` than ``baseline_count`` (a fresh message was
+    journaled by the send). The delta oracle — robust to the append-only journal's pre-existing rows."""
+    now = message_journal_count(msg_type, direction)
+    if int(now) <= int(baseline_count):
+        raise AssertionError(
+            f"MHM check FAILED: MHM_MSG for MSG_TYPE={msg_type} (DIRECTION={direction}) = {now} rows, "
+            f"expected > baseline {baseline_count} (no new message journaled by the send)"
+        )
+
+
+# --- N1 composition: per-component analysis value (component-keyed) -------------------------------
+# Composition screens (Stream/Well Gas/Oil Component Analysis: PO.0020 / PO.0019 / WR.0010.01) store
+# ONE row per COMPONENT: key = (OBJECT_ID, DAYTIME, COMPONENT_NO) on the view DV_STRM_COMP_ANALYSIS,
+# with measured columns MOL_PCT / WT_PCT. The daily helpers key only (object, date) -> they would match
+# ALL ~12 component rows; these add the COMPONENT_NO filter so the oracle pins exactly one component.
+
+def component_value(view, object_id, daytime, component_no, column):
+    """Return a single per-component measured value (DB ground truth) from a composition analysis.
+
+    ``view`` = e.g. DV_STRM_COMP_ANALYSIS; key = (OBJECT_ID, DAYTIME date, COMPONENT_NO). ``column`` = a
+    measured column (e.g. MOL_PCT, WT_PCT). ``component_no`` = the component code ('C1','C2','CO2',...).
+    Returns None if the (object, day, component) row is absent."""
+    _safe(view)
+    _safe(column)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(
+            f"SELECT {column} FROM {view} "
+            f"WHERE OBJECT_ID = :o AND TRUNC(DAYTIME) = TO_DATE(:d,'YYYY-MM-DD') AND COMPONENT_NO = :n",
+            o=object_id, d=str(daytime), n=component_no,
+        )
+        row = cur.fetchone()
+        return row[0] if row else None
+    finally:
+        cur.close()
+        conn.close()
+
+
+def component_value_should_be(view, object_id, daytime, component_no, column, expected):
+    """Fail unless a per-component composition value equals ``expected`` (numeric-tolerant; None = NULL).
+
+    The trustworthy oracle for the composition edit-in-place pattern: after the screen Save, assert the
+    edited component's value really persisted to the (object, day, component) row — and, used on a
+    second untouched component, that Save did NOT silently normalize/rescale the whole set."""
+    actual = component_value(view, object_id, daytime, component_no, column)
+    expected_is_null = expected is None or (isinstance(expected, str) and expected.strip() == "")
+    if expected_is_null:
+        ok = actual is None
+    else:
+        try:
+            ok = actual is not None and float(actual) == float(expected)
+        except (TypeError, ValueError):
+            ok = str(actual) == str(expected)
+    if not ok:
+        raise AssertionError(
+            f"DB check FAILED: {view}.{column} for OBJECT_ID={object_id} COMPONENT_NO={component_no} "
+            f"on {daytime} = {actual!r}, expected {expected!r}"
+        )

@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v25** (R25 added 2026-06-25)
+> **Current rule version: v24** (R24 added 2026-06-25)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -826,16 +826,3 @@ _Live-validated: reproduced PR #113's exact step 18 in a detached worktree off `
 - Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** dirty `feature/ec-screen-deepdive` (493 files) plus Worker runner worktrees (`wt-ec-learn`, `wt-ecsr`, `wt-ecsr35236`). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-25-1400` worktree off `origin/master`; the Worker's checkout and runner worktrees were never touched. The deep-dive auto-sync (step 18) is **not in this run's review prompt** (the prompt predates #111's step-18) and, regardless, is the very flow #113 fixes — left for the corrected #113 to land. The empirical push test used a throwaway `wt-test-push-refspec` worktree, removed immediately after.
 
 ---
-
-## 2026-06-25 (Reviewer conduct note — R25)
-
-**R25 — When a tool or connection breaks, OWN the troubleshooting — never treat it as someone else's problem**
-
-When any tool, MCP server, or external connection fails mid-session (GitHub MCP disconnect, DB connection lost, browser not launching, etc.), the correct response is:
-1. **Diagnose immediately** — what broke, why, and what state we are in
-2. **Give the user clear actionable steps** to fix it — even if the fix requires action on their machine/browser/phone
-3. **Keep moving** — do not stall, wait, or redirect the user to figure it out alone
-
-It does not matter whether the reviewer/assistant set up the connection. If it is broken and the user needs it to work, it is the reviewer's problem to guide through resolution. Saying "I can't access it" without following up with "here is how to fix it" is a bad attitude and a failure to serve the user.
-
-_Added 2026-06-25 after reviewer failed to guide user through GitHub MCP reconnection — treated it as outside scope instead of taking ownership of the troubleshooting._

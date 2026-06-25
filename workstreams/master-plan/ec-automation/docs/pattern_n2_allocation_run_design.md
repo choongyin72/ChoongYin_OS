@@ -136,3 +136,21 @@ Tried to extend the conservation oracle beyond no-negatives. **Not feasible on e
   remains the shippable oracle until a complete real allocation result exists.
 - **To revisit when:** Process Automation / a working non-simulate run is available (then run a full
   allocation, and add sum-to-total via `ALLOC_NETWORK_JOB_CONN` network→members + the stream totals).
+
+## Sum-to-total oracle — re-checked 2026-06-15 (ec-worker up); STILL data-blocked
+Re-assessed now that ec-worker executes (it unblocked N3 P→V). Recon: `tmp/scripts/n2_sumtotal_recon{2,3}.py`.
+- A sum-to-total (conservation) oracle needs, on ONE date for ONE network: the member allocations
+  (`PWEL_DAY_ALLOC`) **AND** the total they sum to (a `STRM_DAY_ALLOC`/measured-stream total).
+- Sandbox reality: the only date with co-present `PWEL_DAY_ALLOC` + `STRM_DAY_ALLOC` is **2011-01-01
+  (1 well, 8 strm rows)** — too thin. The richest member day **2021-10-01** has 22 wells with real
+  allocations (SUM ALLOC_GAS_VOL=59,443; oil/water populated too) but **no co-present total**
+  (`STRM_DAY_ALLOC`=0 that day; `STRM_DAY_STREAM` gas totals NULL). So a READ-ONLY sum-to-total can't
+  pair members with a total.
+- ec-worker being up does NOT help here: the blocker is **missing complete network input→allocate→total
+  data**, not the executor. The only path is a fresh **non-simulate** run that persists both member +
+  total — an uncertain, mutating calc experiment (prior P1 Dashboard run Failed on equation errors;
+  "Testing allocation RUN_NO" only Simulate-succeeded = no DB write). Not pursued (no-loop; would also
+  mutate allocation data with uncertain payoff).
+- **Verdict:** sum-to-total stays parked pending seeded complete allocation data or an SME-provided
+  known-good non-simulate network/date. The shipped N2 oracle (no-negatives, on real persisted results)
+  remains the proven conservation check.

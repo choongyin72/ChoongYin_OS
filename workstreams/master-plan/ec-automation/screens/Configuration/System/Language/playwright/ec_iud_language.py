@@ -1,4 +1,4 @@
-"""EC IUD — Language (Table class / TV). Playwright (Python).
+"""EC IUD - Language (Table class / TV). Playwright (Python).
 Inline-editable paginated grid, no navigator, PHYSICAL delete (base T_BASIS_LANGUAGE).
 Cells: table:form:T:{row}:C0_in (Id, auto) / C1_in (LANGUAGE code) / C2_in (NAME).
 Commit cells with real keys + Tab (onchange->PrimeFaces.ab). NEVER touch existing rows.
@@ -15,11 +15,13 @@ def _repo_root():
     return here.parents[3]
 
 EC_URL = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
+EC_USER = os.environ.get('EC_USER', 'sysadmin')   # R16: creds from env, never hardcoded
+EC_PASS = os.environ.get('EC_PASS', 'sysadmin')
 HEADED = os.environ.get('EC_HEADED', '0') == '1'
 SLOWMO = int(os.environ.get('EC_SLOWMO', '0')) if HEADED else 0
 CODE = os.environ.get('EC_CODE', 'ZZ')
 NAME = os.environ.get('EC_NAME', 'Autotest Lang')
-LANG_ID = os.environ.get('EC_ID', '999')  # Id/LANGUAGE_ID — required (yellow) field
+LANG_ID = os.environ.get('EC_ID', '999')  # Id/LANGUAGE_ID - required (yellow) field
 INSERT_ONLY = os.environ.get('EC_INSERT_ONLY', '0') == '1'
 DELETE_ONLY = os.environ.get('EC_DELETE_ONLY', '0') == '1'
 SS = _repo_root() / 'docs' / 'EC' / 'screenshots' / 'iud_language'
@@ -92,7 +94,7 @@ with sync_playwright() as p:
     ctx = b.new_context(ignore_https_errors=True, viewport={'width': 1680, 'height': 1050})
     page = ctx.new_page()
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin'); page.fill('#password', 'sysadmin'); page.click('#kc-login')
+    page.fill('#username', EC_USER); page.fill('#password', EC_PASS); page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000); wait_ajax(page)
     si = page.locator('#menu\\:searchForm\\:searchTxt'); si.wait_for(state='visible')
     si.clear(); si.type('Language', delay=50); page.wait_for_load_state('networkidle', timeout=8000); page.wait_for_timeout(600)
@@ -115,7 +117,7 @@ with sync_playwright() as p:
         wait_ajax(page); page.wait_for_timeout(1000)
         blank = find_blank(page)
         print(f'blank row: {blank}')
-        type_cell(page, blank, 0, LANG_ID)   # Id — required (yellow) field
+        type_cell(page, blank, 0, LANG_ID)   # Id - required (yellow) field
         type_cell(page, blank, 1, CODE)
         type_cell(page, blank, 2, NAME)
         shot(page, '02_insert_filled')

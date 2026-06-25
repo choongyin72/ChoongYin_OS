@@ -95,8 +95,8 @@ with sync_playwright() as p:
                 ul_found: !!del_ul, items: items
             };
         }""")
-        print(f'  After hover — li_cls: {del_state2["li_cls"]}')
-        print(f'  After hover — ul_found: {del_state2["ul_found"]}, items: {del_state2["items"]}')
+        print(f'  After hover - li_cls: {del_state2["li_cls"]}')
+        print(f'  After hover - ul_found: {del_state2["ul_found"]}, items: {del_state2["items"]}')
     else:
         print('  Delete LI not found!')
 

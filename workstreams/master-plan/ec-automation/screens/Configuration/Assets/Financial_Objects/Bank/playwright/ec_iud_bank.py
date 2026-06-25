@@ -1,5 +1,5 @@
 """
-EC IUD Bank — FINAL.
+EC IUD Bank - FINAL.
 Correct field IDs from deep DOM inspection:
   INSERT  : objectForm:form G:0:R:0=Code, R:1=Name, R:2:da_input=StartDate
   UPDATE  : updateAttributes:form G:0:R:1=Name  (Code is read-only after creation)
@@ -28,6 +28,8 @@ def _repo_root() -> Path:
 
 ROOT          = _repo_root()
 EC_URL        = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
+EC_USER       = os.environ.get('EC_USER', 'sysadmin')   # R16: creds from env, never hardcoded
+EC_PASS       = os.environ.get('EC_PASS', 'sysadmin')
 SS_DIR        = str(ROOT / 'docs' / 'EC' / 'screenshots' / 'iud_bank')
 LOG_PATH      = str(ROOT / 'tmp' / 'logs' / 'ec_iud_bank_final.json')
 
@@ -183,18 +185,18 @@ with sync_playwright() as p:
     ctx = browser.new_context(ignore_https_errors=True, viewport={'width': 1920, 'height': 1080})
     page = ctx.new_page()
 
-    # ── LOGIN ────────────────────────────────────────────────────────────────
+    # -- LOGIN ----------------------------------------------------------------
     print('=== LOGIN ===')
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin')
-    page.fill('#password', 'sysadmin')
+    page.fill('#username', EC_USER)
+    page.fill('#password', EC_PASS)
     page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000)
     wait_ajax(page)
     results['login'] = 'PASS'
     print('  OK')
 
-    # ── NAVIGATE TO BANK ────────────────────────────────────────────────────
+    # -- NAVIGATE TO BANK ----------------------------------------------------
     print('\n=== NAVIGATE TO BANK ===')
     si = page.locator('#menu\\:searchForm\\:searchTxt')
     si.wait_for(state='visible', timeout=10000)
@@ -210,13 +212,13 @@ with sync_playwright() as p:
     print(f'  Screen: {lbl}')
     ss(page, 'bank_loaded')
 
-    # ── CLEAN STATE / PRE-CLEANUP ────────────────────────────────────────────
+    # -- CLEAN STATE / PRE-CLEANUP --------------------------------------------
     print('\n=== CLEAN STATE ===')
     rows0 = get_table_rows(page)
     print(f'  Banks: {[r[0] for r in rows0]}')
 
     if check_row(page, TEST_CODE):
-        print(f'  Pre-existing AUTOTEST found — expiring to clean up')
+        print(f'  Pre-existing AUTOTEST found - expiring to clean up')
         ok = select_row(page, TEST_CODE)
         if ok:
             fill_date(page, DEL_ENDDATE_ID, END_DATE)
@@ -243,18 +245,18 @@ with sync_playwright() as p:
         wait_ajax(page)
         print('  Screen refreshed after pre-cleanup')
 
-    # ── INSERT ───────────────────────────────────────────────────────────────
+    # -- INSERT ---------------------------------------------------------------
     print('\n=== INSERT ===')
 
-    # Click "New Object" via JS eval of onclick — bypasses hover state issues in headless mode
-    # Hover Insert → click "New Object"
+    # Click "New Object" via JS eval of onclick - bypasses hover state issues in headless mode
+    # Hover Insert -> click "New Object"
     # XPath uses normalize-space(.) to match descendant text (text is in child <span>)
     insert_li = page.locator(
         "xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]"
     )
     insert_li.first.hover()
     page.wait_for_timeout(1000)
-    # All submenu links — click the one whose descendant text = "New Object"
+    # All submenu links - click the one whose descendant text = "New Object"
     sub_links = page.locator("xpath=//ul[contains(@class,'ui-menu-child')]//li//a")
     sub_count = sub_links.count()
     print(f'  Submenu links found: {sub_count}')
@@ -310,7 +312,7 @@ with sync_playwright() as p:
     ss(page, 'insert_result')
     print(f'  INSERT: {results["insert"]}')
 
-    # ── UPDATE ───────────────────────────────────────────────────────────────
+    # -- UPDATE ---------------------------------------------------------------
     print('\n=== UPDATE ===')
     if results.get('insert') == 'PASS':
         ok = select_row(page, TEST_CODE)
@@ -339,15 +341,15 @@ with sync_playwright() as p:
             print(f'  UPDATE: {"PASS" if upd_ok else "FAIL"}')
             results['update'] = 'PASS' if upd_ok else f'FAIL row={upd_row} err={err_u or "none"}'
         else:
-            results['update'] = 'FAIL — row not found'
+            results['update'] = 'FAIL - row not found'
     else:
         results['update'] = 'SKIP'
     ss(page, 'update_result')
 
-    # ── DELETE (End Date = Start Date → true delete) ─────────────────────────
-    print('\n=== DELETE (End Date = Start Date → true delete) ===')
+    # -- DELETE (End Date = Start Date -> true delete) -------------------------
+    print('\n=== DELETE (End Date = Start Date -> true delete) ===')
     print('  NOTE: EC Bank toolbar Delete is disabled. EC-correct delete = End Date = Start Date.')
-    print(f'  Set End Date={END_DATE} (= Start Date) → zero-length window → object removed from ov_bank.')
+    print(f'  Set End Date={END_DATE} (= Start Date) -> zero-length window -> object removed from ov_bank.')
     if results.get('insert') == 'PASS':
         ok = select_row(page, TEST_CODE)
         if ok:
@@ -377,9 +379,9 @@ with sync_playwright() as p:
                 results['delete'] = f'PASS (true delete: EndDate=StartDate={END_DATE})'
             else:
                 print(f'  DELETE FAIL: bank still visible after End Date set')
-                results['delete'] = f'FAIL — still visible err={err_d or "none"}'
+                results['delete'] = f'FAIL - still visible err={err_d or "none"}'
         else:
-            results['delete'] = 'FAIL — row not found'
+            results['delete'] = 'FAIL - row not found'
     else:
         results['delete'] = 'SKIP'
     ss(page, 'delete_result')
@@ -402,7 +404,7 @@ print('='*60)
 all_pass = True
 for k, v in results.items():
     ok = v in ('PASS', 'CLEAN', 'done') or v.startswith('PASS') or v.startswith('PRE-')
-    sym = '✓' if ok else '✗'
+    sym = 'OK' if ok else 'X'
     if not ok and k not in ('pre_cleanup', 'clean'): all_pass = False
     print(f'  {sym} {k:<15} : {v}')
 print(f'\nOverall: {"ALL PASS" if all_pass else "SOME FAILURES"}')

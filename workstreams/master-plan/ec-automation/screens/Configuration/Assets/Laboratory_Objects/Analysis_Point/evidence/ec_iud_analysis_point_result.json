@@ -1,0 +1,8 @@
+{
+  "login": "PASS",
+  "navigate": "PASS",
+  "clean": "CLEAN",
+  "insert": "PASS",
+  "update": "PASS",
+  "delete": "PASS (true delete: EndDate=StartDate=2003-01-01)"
+}

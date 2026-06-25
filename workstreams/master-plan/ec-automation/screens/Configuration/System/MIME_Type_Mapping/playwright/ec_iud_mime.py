@@ -1,7 +1,7 @@
 """
-EC IUD MIME Type Mapping — Playwright (Table class / TV view, inline editable grid, paginated).
+EC IUD MIME Type Mapping - Playwright (Table class / TV view, inline editable grid, paginated).
 Screen: Configuration > System > MIME Type Mapping (mime_type_table:form, no navigator, 5-page grid).
-Cells: mime_type_table:form:T:{row}:C0_in (MIME Type), C1_in (File Extensions) — both {mandatory:true}.
+Cells: mime_type_table:form:T:{row}:C0_in (MIME Type), C1_in (File Extensions) - both {mandatory:true}.
 Cell commit: each input fires onchange -> PrimeFaces.ab partial-submit -> stages value server-side.
   => MUST type with real keys + Tab to fire onchange, then wait for the AJAX, before Save.
 Verify after Save by RELOADING (Refresh) so the grid reflects the DB, then page-search.
@@ -26,6 +26,8 @@ def _repo_root() -> Path:
 
 ROOT       = _repo_root()
 EC_URL     = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
+EC_USER    = os.environ.get('EC_USER', 'sysadmin')   # R16: creds from env, never hardcoded
+EC_PASS    = os.environ.get('EC_PASS', 'sysadmin')
 SS_DIR     = str(ROOT / 'docs' / 'EC' / 'screenshots' / 'iud_mime')
 LOG_PATH   = str(ROOT / 'tmp' / 'logs' / 'ec_iud_mime.json')
 HEADED     = os.environ.get('EC_HEADED', '0') == '1'
@@ -143,7 +145,7 @@ with sync_playwright() as p:
 
     print('=== LOGIN + NAVIGATE ===')
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin'); page.fill('#password', 'sysadmin'); page.click('#kc-login')
+    page.fill('#username', EC_USER); page.fill('#password', EC_PASS); page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000); wait_ajax(page)
     si = page.locator('#menu\\:searchForm\\:searchTxt'); si.wait_for(state='visible', timeout=10000)
     si.clear(); si.type('MIME Type Mapping', delay=50); page.wait_for_load_state('networkidle', timeout=8000); page.wait_for_timeout(500)
@@ -182,7 +184,7 @@ with sync_playwright() as p:
             print(f'  after reload, found in grid: {found}')
             results['insert'] = 'PASS' if found else f'FAIL err={err or "not persisted after reload"}'
         else:
-            results['insert'] = 'FAIL — no blank row'
+            results['insert'] = 'FAIL - no blank row'
     else:
         results['insert'] = 'SKIP'
     print(f'  INSERT: {results["insert"]}')
@@ -202,7 +204,7 @@ with sync_playwright() as p:
             print(f'  row after update: {r2}')
             results['update'] = 'PASS' if ok else f'FAIL ext={r2}'
         else:
-            results['update'] = 'FAIL — row not found'
+            results['update'] = 'FAIL - row not found'
     else:
         results['update'] = 'SKIP'
     print(f'  UPDATE: {results["update"]}')
@@ -228,11 +230,11 @@ with sync_playwright() as p:
                 do_save(page); reload_grid(page); ss(page, 'del_saved')
                 gone = find_row_paged(page, TEST_MIME) is None
                 print(f'  gone after delete+reload: {gone}')
-                results['delete'] = 'PASS' if gone else 'FAIL — still present'
+                results['delete'] = 'PASS' if gone else 'FAIL - still present'
             else:
-                results['delete'] = 'ABORT — active row not test row (safety)'
+                results['delete'] = 'ABORT - active row not test row (safety)'
         else:
-            results['delete'] = 'FAIL — row not found'
+            results['delete'] = 'FAIL - row not found'
     else:
         results['delete'] = 'SKIP'
     print(f'  DELETE: {results["delete"]}')

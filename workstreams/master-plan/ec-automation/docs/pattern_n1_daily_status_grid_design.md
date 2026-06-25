@@ -377,3 +377,51 @@ the **wrong cell** (C3 "On Strm[hr]" is derived/non-persisting) — NOT the save
   known baseline (210 bar). **robocop clean, dryrun 3/3, live 3/3, DB clean after (210), WR.0001
   canary 3/3.** N1 sub-daily = the 5th proven N1 object/grain (PWEL/STRM/IWEL/EQPM + sub-daily) and
   the FIRST with a datetime key + unit-robust write-verify.
+
+### ✅ Sub-daily GENERALIZES to a 2nd object class — STRM gas stream, live 3/3 (2026-06-15)
+Proves the datetime-keyed sub-daily pattern is not a one-off. "Sub Daily Gas Stream Status - by Stream":
+- **DB:** `STRM_SUB_DAY_STATUS`, PK (OBJECT_ID, DAYTIME[+time], SUMMER_TIME) — same as PWEL sub-daily.
+  Name source `OV_STREAM`. Scope: 2011-01-01, P1 Production Unit/P1 Area/P1 Facility 1/**P1 S059 M GAS
+  PO.0028** (hourly, SUMMER_TIME single value).
+- **Grid:** `subDailyGasStreamStatusTable:form:T_data`; **C0=Daytime (input — resolve row by its
+  value), C2 = Grs Vol[Sm³] = GRS_VOL** (proven-editable, unitless → direct equality). ⚠️ **C1 "On
+  Strm[hr]" is DERIVED/non-persisting** (an edit to it doesn't commit — same trap as PWEL sub-daily's
+  On Strm; the live edit→diff caught it, then I switched to GRS_VOL). Lesson reaffirmed: edit→diff per
+  screen to find the writable column.
+- **Suite:** `tests/Production/sub_daily_gas_stream_status_edit.robot` + T3
+  `subdaily_gas_stream_status_page.resource`. TC01 grid loads (counts `<tr>` directly — this grid's
+  cells are all inputs, so the text-based Get Table Rows sees none); TC02 distinct hours→distinct
+  rows; TC03 edit GRS_VOL 1000→1500 → Save → DB-verified → restore to 1000. robocop clean, dryrun 3/3,
+  LIVE headed 3/3, DB clean after, WR.0001 canary 3/3. Reuses sub-daily DbVerify (`sub_day_status_*`)
+  + N1 T2 VERBATIM. **Sub-daily now spans 2 object classes: PWEL + STRM.**
+
+## PFLW (Production Flowline) N1 clone — build-ready recon (2026-06-15)
+6th N1 object class (flowline). DB side fully scoped; UI confirmed to use the standard N1 nav+grid
+pattern; remaining = finish the nav/grid/cell crack + build the suite. Recon: `tmp/scripts/n1_pflw_*`.
+- **DB target:** `PFLW_DAY_STATUS`, key **(OBJECT_ID, DAYTIME)** (simple daily — not sub-daily).
+  Measured cols: ON_STREAM_HRS, AVG_CHOKE_SIZE, AVG_FLWL_PRESS/TEMP, AVG_OIL_MASS, … Name source =
+  **`OV_FLOWLINE`** (37 rows). Data: 7 flowlines/7 P rows on **2003-09-20** (+ many other 2003/2004 dates).
+- **Screen:** "Daily Production Flowline, by Flowline". **Non-iframed** (content in `dashboard.jsf?top=false`).
+  Navigator IS the standard `nav:form:G:*` (32 elements) + GO `button:form:B`. **Divergence:** it has
+  **TWO date fields** (G:0 + G:1 = From/To range), unlike the single-date well grids — so the nav is a
+  date-range + a flowline/scope cascade. (First crack returned nav={} due to a frame-detach race on
+  load; the diagnostic `n1_pflw_diag.py` confirmed the nav is present once the frame settles — re-crack
+  with a longer settle + re-select the dashboard frame.)
+- **Remaining to build:** (1) re-crack the nav (set From/To date 2003-09-20, dump+pick the cascade dds,
+  GO) → grid id + cell ids; (2) edit→diff one measured cell↔column (e.g. ON_STREAM_HRS) per the
+  per-screen rule; (3) T3 `pflw_flowline_status_page.resource` + suite (mirror IWEL/EQPM, reuse N1 T2
+  `daily_status_grid.resource`); (4) dryrun→live→DB-verify→self-clean→canary→PR. Reuses the proven N1
+  T2 + DbVerify day-status helpers verbatim.
+
+### ✅ PFLW BUILT + live 3/3 (2026-06-15)
+Cracked the nav (targeted PU-by-area search) + grid + column map, then built and live-verified.
+- **Scope:** "Daily Production Flowline, by Flowline"; date-range From G:0 + To G:1 = 2003-09-20;
+  cascade **Production Unit → Onshore area → Onshore facility → PRD_FLUID_ADFAY_54401** (G:2..G:5).
+  (Area name has a leading space in the DB; `Select EC Dropdown Option` normalize-space match handles it.)
+- **Grid:** `daily_flowline_status:form:T_data`; cells `…:T:0:C{c}_in`. **C2 = On Strm[hr] =
+  ON_STREAM_HRS** (DB-proven by the live edit→diff; unitless → direct equality, no UI/DB conversion).
+- **Suite:** `tests/Production/daily_production_flowline_status_edit.robot` + T3
+  `pflw_flowline_status_page.resource`. TC01 grid loads; TC02 edit ON_STREAM_HRS=18 → Save → UI + DB
+  verified; TC03 DB-restore NULL (null-original). robocop clean, dryrun 3/3, LIVE headed 3/3, DB clean
+  after, WR.0001 canary 3/3. Reuses N1 T2 `daily_status_grid` + DbVerify VERBATIM (zero shared-file
+  change). **N1 now spans 6 object classes:** PWEL / STRM / IWEL / EQPM / sub-daily PWEL / PFLW.

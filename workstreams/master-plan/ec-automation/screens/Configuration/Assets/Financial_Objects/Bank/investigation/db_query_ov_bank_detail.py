@@ -1,6 +1,6 @@
 """
 Detail probe for AUTOTEST_BNK_003 (which the UI UPDATE changed to '...UPDATED').
-ov_bank showed the base name — investigate why (date-effective versioning).
+ov_bank showed the base name - investigate why (date-effective versioning).
 Read-only.
 """
 import oracledb
@@ -31,7 +31,7 @@ if hits:
     for r in hits:
         print(f'  {r[0]:<20} | {r[1]:<28} | {r[2]} | {r[3]}')
 else:
-    print('  (none — updated name not present in ov_bank)')
+    print('  (none - updated name not present in ov_bank)')
 
 cur.close()
 conn.close()

@@ -1,14 +1,3 @@
 {
-  "tasks": [
-    {
-      "id": "c7e83a1f",
-      "cron": "0 22 * * *",
-      "prompt": "Automated daily code review session (06:00 AWST). Review recent automation work and update lessons-learned.md.\n\nSteps:\n1. Run: git log --oneline -20 to see recent commits\n2. Check the last entry date in docs/lessons-learned.md\n3. Count commits since that date\n4. Append a one-liner to docs/review-log.md in this format (always, even on skip days):\n   `| YYYY-MM-DD 06:00 AWST | <N> new commits | <action: reviewed PRs / skipped — no new work> |`\n5. If fewer than 3 new commits: commit review-log.md with message 'review-log: YYYY-MM-DD skip — no new work', push, then stop.\n6. Otherwise, find open PRs from worker sessions using GitHub MCP tools (search_pull_requests). For each open PR:\n   a. Read the diff — if it is a trivial change (rename, config tweak, doc update) use low effort; if it contains logic changes use /code-review --comment at high effort\n   b. Post findings as inline PR comments\n7. After PR inline comments are posted, extract ACTIONABLE rules from the findings\n8. Append a new dated section to docs/lessons-learned.md following the same format as existing entries (Rules, Observations, Gaps)\n9. Update docs/automation-scorecard.md if any new patterns are now live or parked\n10. Run: python scripts/update_status.py\n11. Create a feature branch: git checkout -b review/feedback-YYYY-MM-DD\n12. Commit all changed files with message: 'review: automated quality feedback YYYY-MM-DD'\n13. Push branch and raise a PR targeting master\n14. Do NOT merge — wait for user approval\n\nBe specific and direct. Rules must be actionable — not 'consider X' but 'always do X' or 'never do Y'.",
-      "createdAt": 1781442885957,
-      "recurring": true,
-      "createdBySessionId": "session_015WrEUnys44EY3y6B2xvBYA",
-      "createdByPid": 0,
-      "createdByProcStart": "0"
-    }
-  ]
+  "tasks": []
 }

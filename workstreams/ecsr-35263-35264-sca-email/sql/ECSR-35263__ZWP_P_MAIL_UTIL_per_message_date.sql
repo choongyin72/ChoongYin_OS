@@ -1,0 +1,48 @@
+-- ECSR-35263 - FIX: email subject/body production-date != the attached report's date.
+-- ============================================================================================
+-- ROOT CAUSE (validated 2026-06-24 with live data):
+--   ZWP_P_MAIL_UTIL.getReportDate(p_message_code) resolves the date by TEMPLATE TYPE:
+--     SELECT report_date FROM tv_report_generated WHERE zwp_template_code = p_message_code
+--      AND send_date IS NOT NULL ORDER BY created_date DESC  (ROWNUM=1)  -> latest-created report of the type.
+--   The scheduled business action ZWP_UPD_MHM_SUBJECT_AND_BODY (-> updateMsgOutFromMsgTemplate /
+--   updateMHMFromMsgTemplate) stamps that ONE date into {production_day} in the SUBJECT/BODY of EVERY READY
+--   message of that type. Each attachment keeps its own (correct) date -> subject date != attachment date when
+--   2+ dates of the same report are in play.
+--   PROOF (ECaaS TEST): MESSAGE_OUT 372 -> own report = 15 May 26, but SUBJECT stamped 16 May 26.
+--
+-- FIX (no schema change): the link table REPORT_SEND_LOG already maps MESSAGE_NO -> REPORT_NO. Resolve the date
+--   PER MESSAGE via REPORT_SEND_LOG -> TV_REPORT_GENERATED.report_date, falling back to the old by-type logic
+--   only when a message has no send-log row (backward compatible). Fixes ALL report emails (Pluto/SCA/Burrup/NOPTA).
+-- DELIVERY: edits to the repeatable package files R__0400_ZWP_P_MAIL_UTIL_head.sql + R__0500_..._body.sql.
+-- TEST: repro on plutodev/COPSDEV (R_PLU_DAILY_PARTNER, 2 dates) -> distinct subjects matching each attachment.
+-- ============================================================================================
+
+-- ---- (1) HEAD (R__0400_ZWP_P_MAIL_UTIL_head.sql) - add the per-message overload ----
+--     FUNCTION getReportDate(p_message_no NUMBER) RETURN VARCHAR2;
+
+-- ---- (2) BODY (R__0500_ZWP_P_MAIL_UTIL_body.sql) - new overload beside the existing getReportDate ----
+--   FUNCTION getReportDate(p_message_no NUMBER) RETURN VARCHAR2
+--   IS
+--       lv_return_value VARCHAR2(12);
+--   BEGIN
+--       SELECT TO_CHAR(report_date, 'DD Mon YYYY') INTO lv_return_value
+--         FROM ( SELECT rg.report_date
+--                  FROM report_send_log sl
+--                  JOIN tv_report_generated rg ON rg.report_no = sl.report_no
+--                 WHERE sl.message_no = p_message_no
+--                 ORDER BY sl.daytime DESC, rg.created_date DESC )
+--        WHERE ROWNUM = 1;
+--       RETURN lv_return_value;
+--   EXCEPTION WHEN NO_DATA_FOUND THEN
+--       RETURN NULL;   -- caller falls back to the by-type resolution
+--   END getReportDate;
+
+-- ---- (3) BODY - resolve PER MESSAGE in BOTH refresh procedures (backward-compatible NVL fallback) ----
+-- updateMsgOutFromMsgTemplate (~line 429):
+--   BEFORE:  lv_report_date := getReportDate(lv_msg_type);
+--   AFTER:   lv_report_date := NVL(getReportDate(rec.MESSAGE_NO), getReportDate(lv_msg_type));
+-- updateMHMFromMsgTemplate (~lines 384-385): same NVL(getReportDate(<that loop's message id>),
+--   getReportDate(MSG_TYPE)) pattern for both the SUBJECT and MESSAGE_ORIGINAL updates.
+--
+-- NOTE: also corrects the attachment-filename date (line ~433 uses the same lv_report_date), so the
+--   attachment file name will carry each message's OWN date too.

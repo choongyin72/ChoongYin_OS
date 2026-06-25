@@ -1,0 +1,443 @@
+{
+ "Message Format": {
+  "navlabels": [
+   "Message Format",
+   "Dashboard",
+   "x"
+  ],
+  "dds": [
+   "nav:form:G:0:R:1:C:1:dd",
+   "nav:form:G:0:R:1:C:2:dd"
+  ],
+  "dateflds": [
+   "nav:form:G:0:R:1:C:0:da_input"
+  ],
+  "go": [
+   "button:form:B"
+  ],
+  "grids": [],
+  "tabs": [
+   "Search",
+   "Favorites",
+   "Menu",
+   "Record Status",
+   "Revision Info",
+   "Approval Status",
+   "Hints & Tips",
+   "Validation",
+   "Trending",
+   "Attachments"
+  ],
+  "btns": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go..."
+  ],
+  "status": "OK"
+ },
+ "Freetext Message Template": {
+  "navlabels": [
+   "Dashboard",
+   "x"
+  ],
+  "dds": [
+   "nav:form:G:0:R:1:C:1:dd"
+  ],
+  "dateflds": [
+   "nav:form:G:0:R:1:C:0:da_input"
+  ],
+  "go": [
+   "button:form:B"
+  ],
+  "grids": [],
+  "tabs": [
+   "Search",
+   "Favorites",
+   "Menu",
+   "Record Status",
+   "Revision Info",
+   "Approval Status",
+   "Hints & Tips",
+   "Validation",
+   "Trending",
+   "Attachments"
+  ],
+  "btns": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go..."
+  ],
+  "status": "OK"
+ },
+ "Maintain Contact Group Set": {
+  "navlabels": [
+   "Dashboard",
+   "x"
+  ],
+  "dds": [
+   "nav:form:G:0:R:1:C:1:dd"
+  ],
+  "dateflds": [
+   "nav:form:G:0:R:1:C:0:da_input"
+  ],
+  "go": [
+   "button:form:B"
+  ],
+  "grids": [
+   "manageObject:form:T_data"
+  ],
+  "tabs": [
+   "Search",
+   "Favorites",
+   "Menu",
+   "Record Status",
+   "Revision Info",
+   "Approval Status",
+   "Hints & Tips",
+   "Validation",
+   "Trending",
+   "Attachments"
+  ],
+  "btns": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go...",
+   "Options"
+  ],
+  "status": "OK"
+ },
+ "Actor Maintenance": {
+  "navlabels": [
+   "Actor Maintenance",
+   "Dashboard",
+   "x",
+   "x"
+  ],
+  "dds": [
+   "nav:form:G:1:R:1:C:0:dd",
+   "nav:form:G:2:R:1:C:0:dd"
+  ],
+  "dateflds": [
+   "nav:form:G:0:R:1:C:0:da_input"
+  ],
+  "go": [
+   "button:form:B"
+  ],
+  "grids": [],
+  "tabs": [
+   "Search",
+   "Favorites",
+   "Menu",
+   "Record Status",
+   "Revision Info",
+   "Approval Status",
+   "Hints & Tips",
+   "Validation",
+   "Trending",
+   "Attachments"
+  ],
+  "btns": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go..."
+  ],
+  "status": "OK"
+ },
+ "Distribution List": {
+  "navlabels": [
+   "Distribution List",
+   "Dashboard",
+   "x",
+   "x"
+  ],
+  "dds": [
+   "nav:form:G:1:R:1:C:0:dd"
+  ],
+  "dateflds": [
+   "nav:form:G:0:R:1:C:0:da_input"
+  ],
+  "go": [
+   "button:form:B"
+  ],
+  "grids": [],
+  "tabs": [
+   "Search",
+   "Favorites",
+   "Menu",
+   "Record Status",
+   "Revision Info",
+   "Approval Status",
+   "Hints & Tips",
+   "Validation",
+   "Trending",
+   "Attachments"
+  ],
+  "btns": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go..."
+  ],
+  "status": "OK"
+ },
+ "Message Distribution": {
+  "navlabels": [
+   "Message Distribution",
+   "Dashboard",
+   "x",
+   "x",
+   "x",
+   "x"
+  ],
+  "dds": [
+   "nav:form:G:1:R:1:C:0:dd",
+   "nav:form:G:2:R:1:C:0:dd"
+  ],
+  "dateflds": [
+   "nav:form:G:0:R:1:C:0:da_input"
+  ],
+  "go": [
+   "button:form:B"
+  ],
+  "grids": [],
+  "tabs": [
+   "Search",
+   "Favorites",
+   "Menu",
+   "Record Status",
+   "Revision Info",
+   "Approval Status",
+   "Hints & Tips",
+   "Validation",
+   "Trending",
+   "Attachments"
+  ],
+  "btns": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go..."
+  ],
+  "status": "OK"
+ },
+ "Report Administration": {
+  "navlabels": [
+   "Report Administration",
+   "Dashboard",
+   "x",
+   "x",
+   "x"
+  ],
+  "dds": [
+   "nav:form:G:0:R:1:C:1:dd"
+  ],
+  "dateflds": [
+   "nav:form:G:0:R:1:C:0:da_input"
+  ],
+  "go": [
+   "buttonNav:form:B",
+   "runable_tab:tabPanel:generate_report_btn:form:B",
+   "runable_tab:tabPanel:buttonGenRepNav:form:B",
+   "runable_tab:tabPanel:view_report_btn:form:B"
+  ],
+  "grids": [
+   "runable_reports:form:T_data",
+   "runable_tab:tabPanel:runable_report_params:form:T_data",
+   "runable_tab:tabPanel:generated_reports:form:T_data"
+  ],
+  "tabs": [
+   "Search",
+   "Favorites",
+   "Menu",
+   "Generation",
+   "Archive",
+   "Distribution Configuration",
+   "Record Status",
+   "Revision Info",
+   "Approval Status",
+   "Hints & Tips",
+   "Validation",
+   "Trending",
+   "Attachments"
+  ],
+  "btns": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go...",
+   "Options",
+   "Options",
+   "ui-button",
+   "Generate",
+   "Options"
+  ],
+  "status": "OK"
+ },
+ "Schedules": {
+  "navlabels": [
+   "Schedules",
+   "Schedules",
+   "Dashboard",
+   "x"
+  ],
+  "dds": [
+   "nav:form:G:0:R:0:C:1:dd"
+  ],
+  "dateflds": [],
+  "go": [
+   "button:form:B",
+   "runNowButton:form:B"
+  ],
+  "grids": [
+   "schedule:form:T_data"
+  ],
+  "tabs": [
+   "Search",
+   "Favorites",
+   "Menu",
+   "Details",
+   "Business Action",
+   "Schedule",
+   "Event subscriptions",
+   "Monitor",
+   "Record Status",
+   "Revision Info",
+   "Approval Status",
+   "Hints & Tips",
+   "Validation",
+   "Trending"
+  ],
+  "btns": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Go...",
+   "Options",
+   "Run Now"
+  ],
+  "status": "OK"
+ },
+ "Outgoing Messages": {
+  "navlabels": [
+   "Manage Outgoing Messages",
+   "Outgoing Messages",
+   "Dashboard",
+   "x",
+   "x"
+  ],
+  "dds": [],
+  "dateflds": [],
+  "go": [
+   "SelectAllMessages:form:B",
+   "viewMessageButton:form:B",
+   "viewAttachmentButton:form:B",
+   "validateButton:form:B"
+  ],
+  "grids": [
+   "outmess:form:T_data",
+   "reclist:form:T_data"
+  ],
+  "tabs": [
+   "Search",
+   "Favorites",
+   "Menu",
+   "Record Status",
+   "Revision Info",
+   "Approval Status",
+   "Hints & Tips",
+   "Validation",
+   "Trending",
+   "Attachments"
+  ],
+  "btns": [
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "ui-button",
+   "Options",
+   "Select all",
+   "View",
+   "View Attachment",
+   "Validate",
+   "Send",
+   "Options"
+  ],
+  "status": "OK"
+ }
+}

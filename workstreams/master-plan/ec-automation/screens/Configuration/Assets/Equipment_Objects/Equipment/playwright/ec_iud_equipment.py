@@ -1,5 +1,5 @@
 """
-EC IUD Equipment — Playwright (Manage Object screen, screen 2 of 2).
+EC IUD Equipment - Playwright (Manage Object screen, screen 2 of 2).
 Navigator (cascading dropdowns, EXACT values per screenshot):
   Production Unit | Offshore area | Offshore facility | Compressor  -> Go
 Field IDs (from Phase 0 deep-dive scan):
@@ -29,6 +29,8 @@ def _repo_root() -> Path:
 
 ROOT          = _repo_root()
 EC_URL        = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
+EC_USER       = os.environ.get('EC_USER', 'sysadmin')   # R16: creds from env, never hardcoded
+EC_PASS       = os.environ.get('EC_PASS', 'sysadmin')
 SS_DIR        = str(ROOT / 'docs' / 'EC' / 'screenshots' / 'iud_equipment')
 LOG_PATH      = str(ROOT / 'tmp' / 'logs' / 'ec_iud_equipment.json')
 
@@ -152,7 +154,7 @@ with sync_playwright() as p:
     # LOGIN
     print('=== LOGIN ===')
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin'); page.fill('#password', 'sysadmin'); page.click('#kc-login')
+    page.fill('#username', EC_USER); page.fill('#password', EC_PASS); page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000); wait_ajax(page)
     results['login'] = 'PASS'; print('  OK')
 
@@ -181,7 +183,7 @@ with sync_playwright() as p:
     # CLEAN STATE
     print('\n=== CLEAN STATE ===')
     if check_row(page, TEST_CODE):
-        print(f'  [WARN] {TEST_CODE} already present — use a fresh code')
+        print(f'  [WARN] {TEST_CODE} already present - use a fresh code')
         results['clean'] = 'PRE-EXISTS'
     else:
         results['clean'] = 'CLEAN'
@@ -236,12 +238,12 @@ with sync_playwright() as p:
             print(f'  Row: {sel_again}')
             results['update'] = 'PASS' if ok else f'FAIL row={sel_again}'
         else:
-            results['update'] = 'FAIL — row not found'
+            results['update'] = 'FAIL - row not found'
     else:
         results['update'] = 'SKIP'
     print(f'  UPDATE: {results["update"]}')
 
-    # DELETE — try - button, else End=Start
+    # DELETE - try - button, else End=Start
     print('\n=== DELETE (try - button, else End=Start) ===')
     if SKIP_DELETE:
         results['delete'] = 'SKIP (skip-delete mode)'
@@ -251,14 +253,14 @@ with sync_playwright() as p:
         delbtn = page.locator("xpath=//a[(@title='Delete [Ctrl+d]' or .//span[contains(@class,'ui-icon-delete')]) and not(ancestor::li[contains(@class,'ui-submenu-state-disabled')]) and not(contains(@class,'ui-state-disabled'))]")
         used = ''
         if delbtn.count() > 0 and delbtn.first.is_visible():
-            print('  - button appears enabled — clicking it')
+            print('  - button appears enabled - clicking it')
             delbtn.first.click(); wait_ajax(page)
             confirm = page.locator("button:has-text('Yes'), #confirmationForm\\:yes")
             if confirm.count() > 0 and confirm.first.is_visible():
                 confirm.first.click(); wait_ajax(page)
             do_save(page); used = '-button'
         else:
-            print('  - button disabled (as expected) — using End Date = Start Date')
+            print('  - button disabled (as expected) - using End Date = Start Date')
             fill_date(page, DEL_END, END_DATE); print(f'  End Date = {END_DATE}')
             ss(page, 'del_enddate')
             do_save(page); used = 'end=start'
