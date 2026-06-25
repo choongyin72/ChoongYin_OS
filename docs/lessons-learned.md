@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v23** (R23 added 2026-06-23)
+> **Current rule version: v24** (R24 added 2026-06-25)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -31,6 +31,7 @@ _Worker sessions: read this before starting any automation work._
 | v21 | R21 | PR-body content must match the final diff: list EVERY touched file under "Files touched", and never leave a stale "blocked/not done/pending" note for work the PR actually includes | 2026-06-20 |
 | v22 | R22 | Never ship the literal `REV_TEXT='ECPR-XXXX'` placeholder; set the governing ticket, or `'ECPR-DEMO'` for demo/sandbox objects with no client ECPR | 2026-06-22 |
 | v23 | R23 | A long-lived/permanent Worker branch must keep reviewer-owned append-only docs in sync — `git diff origin/master...HEAD` must show NO `-` lines on lessons-learned.md / review-log.md / automation-scorecard.md / STATUS.md | 2026-06-23 |
+| v24 | R24 | Pushing from a detached/throwaway worktree MUST use `push origin HEAD:refs/heads/<branch>` — a bare `push origin <branch>` resolves to the shared local branch ref (another worktree's tip), NOT the detached HEAD | 2026-06-25 |
 
 ---
 
@@ -784,5 +785,44 @@ _Open PRs trigger a full review (R14) even at an off-schedule hour (run fired 01
 ### Reviewer process note (deep-dive sync deferred; isolated worktree)
 
 - The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty tree (493 files) plus two Worker runner worktrees (`wt-ec-learn`, `wt-ecsr`). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-25-0100` worktree off `origin/master`; the Worker's checkout and runner worktrees were never touched. The newly-merged step 18 (deep-dive auto-sync) was **not executed** — branch-checkout collision + dirty Worker tree make it unsafe this run (logged as the #111 gap above).
+
+---
+
+## 2026-06-25 14:00 AWST — Automated Review (2 open PRs #113/#114)
+
+_Open PRs trigger a full review (R14); run fired ~16:00 AWST (late 14:00 slot). 0 new master commits since the 01:00 run (#112/`dcc77b3`) but 2 open PRs. **#114 CLEAR — squash-merged (`5e1649a`); #113 MUST-FIX — left open.** Both PRs directly action the 01:00 run's #110/#111 gaps. **One new executable rule (R24).** R1–R23 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #114 | Clear (HIGH effort — runner control-flow, +16/-6). Wraps the two uncaught crash points in `run_ec_screen_learn.py` — `oracledb.connect()`+`cur`, and the Playwright `launch`/`new_context`/`goto`/login block — in `try/except` that log `ABORTED: DB connect failed (...)` / `ABORTED: browser/login failed (...)` to `session_log.txt` and `return 1`, so the 2026-06-25 13:30 silent-truncation crash is diagnosable next time. Verified: resource cleanup correct (`br=None` guard + `if br: br.close()` then `con.close()` on the browser-failure path; `con` opened before the `with sync_playwright()` block so closing it there is right); **ASCII-clean** (full-file byte scan → 0 non-ASCII, R18/R20); `str(e)[:120]` is runtime-dynamic (out of R18's authored-char scope) and `log()` writes the file `encoding='utf-8'`. R9 (6 fields), R21 (Files-touched = the one diff file), R16 (creds untouched). | ✅ Clear — squash-merged (`5e1649a`) |
+| #113 | **MUST-FIX** (HIGH effort — reviewer-process change that runs `git push` unattended, +8/-3). Rewrites step 18 to do the deep-dive sync in a `--detach` throwaway worktree instead of `git checkout feature/ec-screen-deepdive` — **correctly fixes the dirty-checkout collision** flagged in the 01:00 #111 gap. But the push command `git push origin feature/ec-screen-deepdive` from the detached worktree pushes the **local branch ref** (`refs/heads/feature/ec-screen-deepdive` = the Worker's dirty main-checkout tip), **NOT** the detached merge HEAD — so the merge result is discarded and the sync silently fails (or non-fast-forward-rejects). **Empirically proven** this run (see R24). Fix is one line: `git -C C:/tmp/wt-review-deepdive-sync push origin HEAD:refs/heads/feature/ec-screen-deepdive`. Otherwise clean (R9/R18/R21). NICE-TO-HAVE: worktree named `wt-review-deepdive-sync` matches step 17's `wt-review-*` sweep but step 17 runs before step 18 same-run, so only the *next* run cleans it. | ⛔ MUST-FIX open — left open for Worker |
+
+### Rules (apply immediately, no exceptions)
+
+**R24 — Pushing from a detached/throwaway worktree MUST use an explicit `HEAD:refs/heads/<branch>` refspec** ✅ _live-validated this run (dry-run reproduction)_
+When you `git worktree add --detach <tmp> origin/<branch>`, do work on the detached HEAD, then push, a bare `git push origin <branch>` does **not** push the detached HEAD. The positional refspec `<branch>` resolves its *source* to the shared local ref `refs/heads/<branch>` — i.e. whatever tip another worktree (e.g. the Worker's main checkout) has that branch checked out at — not the current worktree's `HEAD`. So a "merge-in-a-throwaway-worktree then push" flow silently pushes the wrong commit (or fails non-fast-forward) while the merge you just made is thrown away. **Always push the detached HEAD explicitly:** `git -C <tmp> push origin HEAD:refs/heads/<branch>`. This applies to the reviewer's own step-18 deep-dive sync and to any Worker flow that builds a commit in a throwaway/detached worktree.
+_Live-validated: reproduced PR #113's exact step 18 in a detached worktree off `origin/feature/ec-screen-deepdive`, merged `origin/master`, then `git push --dry-run origin feature/ec-screen-deepdive` reported source `feature/ec-screen-deepdive` (local `a7a0a3d`) → `! [rejected] (non-fast-forward)` against origin `cb5bdbf` — i.e. it tried to push the stale local branch ref, not the detached merge HEAD (`cb5bdbf`, which would have reported "Everything up-to-date")._
+
+### Observations (good patterns to keep)
+
+- **Gap → next-PR loop closed in one cycle, again.** The 01:00 run logged two gaps: the runner needs error logging on its crash points (implied by #110's "silent truncation" risk) and step 18's checkout-collision (#111 gap). #114 and #113 are the Worker's direct response the same day. #114 lands clean; #113 is the right *approach* with one wrong refspec — the advisory→fix loop is working, the MUST-FIX just sharpens the last 5%.
+- **Diagnosability-first error handling (#114).** Wrapping the connect + browser-launch in try/except that writes a precise `ABORTED:` line to the runner's own log (not just Task Scheduler's stdout capture) is the correct fix for a silently-truncated session log — the next failure self-documents its root cause. Returning `1` (not raising) keeps the scheduler's exit-code contract.
+- **A reviewer-process change that runs `git push` unattended deserves the same rigor as code.** #113's defect would never surface in a green run (it only bites when the local branch diverges from origin) — exactly the FAIL-only-branch class R20 warns about, but for git plumbing. Verifying it required reproducing the command, not reading it. Reach for empirical reproduction on any unattended git-mutation step.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **#113 MUST-FIX:** step 18 push pushes the local branch ref, not the detached HEAD — change to `git -C C:/tmp/wt-review-deepdive-sync push origin HEAD:refs/heads/feature/ec-screen-deepdive` (R24). Re-push the one-line fix to clear. | Worker | 🔴 High |
+| #113 NICE-TO-HAVE: throwaway worktree `wt-review-deepdive-sync` matches step 17's `wt-review-*` glob but step 17 runs before step 18 in the same run — rename outside the glob (e.g. `wt-deepdive-sync`) or accept the cross-run cleanup as the backstop. | Worker | 🟢 Low |
+| Carry-over from 01:00 (#110): ~1 GB of per-screen Help PNGs into git history over ~1457 screens — downscale/JPEG/LFS/out-of-repo. | Worker | 🟡 Medium |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+### Reviewer process note (isolated worktree; deep-dive sync deferred)
+
+- Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** dirty `feature/ec-screen-deepdive` (493 files) plus Worker runner worktrees (`wt-ec-learn`, `wt-ecsr`, `wt-ecsr35236`). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-25-1400` worktree off `origin/master`; the Worker's checkout and runner worktrees were never touched. The deep-dive auto-sync (step 18) is **not in this run's review prompt** (the prompt predates #111's step-18) and, regardless, is the very flow #113 fixes — left for the corrected #113 to land. The empirical push test used a throwaway `wt-test-push-refspec` worktree, removed immediately after.
 
 ---

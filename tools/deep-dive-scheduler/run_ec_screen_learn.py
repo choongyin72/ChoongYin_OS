@@ -224,14 +224,24 @@ def main():
     screens = pick_screens(checklist, MAXN)
     if not screens: log('nothing to do (no [ ] screens found)'); return 0
     log(f'screens this run: {", ".join(c for c,_ in screens)}')
-    con = oracledb.connect(user=DB_USER, password=DB_PASS, dsn=DB_DSN, tcp_connect_timeout=15); cur = con.cursor()
+    try:
+        con = oracledb.connect(user=DB_USER, password=DB_PASS, dsn=DB_DSN, tcp_connect_timeout=15)
+        cur = con.cursor()
+    except Exception as e:
+        log(f'ABORTED: DB connect failed ({str(e)[:120]})'); return 1
     done_full = done_partial = 0
     with sync_playwright() as p:
-        br = p.chromium.launch(headless=True)
-        page = br.new_context(ignore_https_errors=True, viewport={'width': 1500, 'height': 1000}).new_page()
-        page.goto(EC_URL, wait_until='domcontentloaded', timeout=60000)
-        page.fill('#username', EC_USER); page.fill('#password', EC_PASS); page.click('#kc-login')
-        page.wait_for_selector('[id="menu:searchForm:searchTxt"]', timeout=60000); page.wait_for_timeout(1200)
+        br = None
+        try:
+            br = p.chromium.launch(headless=True)
+            page = br.new_context(ignore_https_errors=True, viewport={'width': 1500, 'height': 1000}).new_page()
+            page.goto(EC_URL, wait_until='domcontentloaded', timeout=60000)
+            page.fill('#username', EC_USER); page.fill('#password', EC_PASS); page.click('#kc-login')
+            page.wait_for_selector('[id="menu:searchForm:searchTxt"]', timeout=60000); page.wait_for_timeout(1200)
+        except Exception as e:
+            log(f'ABORTED: browser/login failed ({str(e)[:120]})')
+            if br: br.close()
+            con.close(); return 1
         for bf_code, name in screens:
             try:
                 info = db_resolve(cur, bf_code, name)
