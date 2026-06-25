@@ -16,7 +16,7 @@ in Python, per screen, with a hard timeout + best-effort fallback so it can neve
 Isolated git worktree (C:\\tmp\\wt-ec-learn) so it never touches the user's main checkout.
 Env knobs: EC_LEARN_MAX (screen cap, default 8); EC_LEARN_PUSH=0 (commit locally, no push).
 """
-import os, re, sys, subprocess
+import os, re, sys, subprocess, time
 from datetime import datetime
 from pathlib import Path
 
@@ -26,6 +26,8 @@ BRANCH = 'feature/ec-screen-deepdive'
 LOG    = Path(REPO) / 'tools' / 'deep-dive-scheduler' / 'session_log.txt'
 MAXN   = int(os.environ.get('EC_LEARN_MAX', '8'))
 DO_PUSH= os.environ.get('EC_LEARN_PUSH', '1') != '0'
+DB_RETRIES    = int(os.environ.get('EC_LEARN_DB_RETRIES', '3'))       # DB pre-flight: attempts before aborting
+DB_RETRY_WAIT = int(os.environ.get('EC_LEARN_DB_RETRY_WAIT', '20'))   # seconds between DB connect attempts (sandbox may still be starting)
 
 EC_URL  = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
 EC_USER = os.environ.get('EC_USER', 'sysadmin')
@@ -224,11 +226,19 @@ def main():
     screens = pick_screens(checklist, MAXN)
     if not screens: log('nothing to do (no [ ] screens found)'); return 0
     log(f'screens this run: {", ".join(c for c,_ in screens)}')
-    try:
-        con = oracledb.connect(user=DB_USER, password=DB_PASS, dsn=DB_DSN, tcp_connect_timeout=15)
-        cur = con.cursor()
-    except Exception as e:
-        log(f'ABORTED: DB connect failed ({str(e)[:120]})'); return 1
+    # DB pre-flight with retry/backoff -- the local sandbox Oracle may still be starting (e.g. Docker just brought up)
+    con = None; last_err = ''
+    for attempt in range(1, DB_RETRIES + 1):
+        try:
+            con = oracledb.connect(user=DB_USER, password=DB_PASS, dsn=DB_DSN, tcp_connect_timeout=15)
+            cur = con.cursor(); break
+        except Exception as e:
+            last_err = str(e)[:90]; log(f'DB connect attempt {attempt}/{DB_RETRIES} failed ({last_err})')
+            if attempt < DB_RETRIES: time.sleep(DB_RETRY_WAIT)
+    if con is None:
+        log(f'ABORTED: EC-screen Help extract job aborted due to DB connection issue -- could not connect to '
+            f'metadata DB {DB_DSN} after {DB_RETRIES} attempts ({last_err}). Is the local sandbox Oracle up?')
+        return 1
     done_full = done_partial = 0
     with sync_playwright() as p:
         br = None
@@ -239,7 +249,7 @@ def main():
             page.fill('#username', EC_USER); page.fill('#password', EC_PASS); page.click('#kc-login')
             page.wait_for_selector('[id="menu:searchForm:searchTxt"]', timeout=60000); page.wait_for_timeout(1200)
         except Exception as e:
-            log(f'ABORTED: browser/login failed ({str(e)[:120]})')
+            log(f'ABORTED: EC-screen Help extract job aborted -- browser/EC sandbox login failed ({str(e)[:110]})')
             if br: br.close()
             con.close(); return 1
         for bf_code, name in screens:
