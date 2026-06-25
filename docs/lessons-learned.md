@@ -876,3 +876,43 @@ _Added 2026-06-25 after reviewer failed to guide user through GitHub MCP reconne
 
 - All 6 PR comment postings used `mcp__github__add_issue_comment` (plain comment) after APPROVE was rejected with "Cannot approve your own pull request." This is the correct workaround -- use COMMENT not APPROVE when reviewer == author.
 - Review-doc edits committed on `claude/repo-review-f21x0s` and will be raised as a PR targeting master.
+
+---
+
+## 2026-06-26 -- Automated Review (06:00 AWST, 7 worker PRs + 1 orphan review PR)
+
+_1 new master commit (#113/`f80b2b4`) since the 06-25 14:00 run; 8 open PRs (7 worker + the orphan review #123) + 1 standing draft (#118). Open PRs trigger a full review (R14). **All 7 worker PRs CLEAR -- zero MUST-FIX.** One live reviewer-process MUST-FIX found and fixed in this PR (step-18 push refspec). **No new executable rule -- R1-R25 cover every finding; version stays v25.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #123 | Orphan review PR from the 06-25 06:00 session (created `claude/repo-review-f21x0s` but never self-merged -- the session crashed before its merge step, stranding 6 cleared worker PRs). Content sound: bumps v24->v25 + R25 (own the troubleshooting), clears #116-#122, appends the 06:00 review-log entry. Docs-only/append-only. **Squash-merged FIRST** to preserve R25 + the review record before merging the workers it cleared. | OK -- merged |
+| #116 | Clear (runner DB pre-flight retry +31/-2). `con=None` sentinel + `EC_LEARN_DB_RETRIES`/`_WAIT` env knobs + `tcp_connect_timeout=15`; abort log names DSN+count; `return 1` propagates to Task Scheduler. ASCII (R18/R20), env creds (R16). | OK -- merged (before #117) |
+| #117 | Clear (6 runner robustness fixes +61/-18). fetch-warn non-fatal; XPath quote-switch for names with `"`; ASCII hyphen via `_ascii()`; no-op `re.sub` warns; empty-commit guard; push retry via fetch+rebase+re-push using `HEAD:refs/heads/<branch>` (R24-compliant). Disjoint `main()` hunks vs #116 -> merged clean. | OK -- merged |
+| #119-#122 | Clear (Royalty Owner / Depositor / Product Group / Unit Agreement -- Bank-family OV clones). `ov_<class>` view asserts, End=Start delete, env-var creds, R9 6-field bodies, **no shared T1/T2 edits** (reuse `manage_object.resource`), append-only scorecard/registry rows. #122's `gen_ov_iud_bundle.py` is already under `tools/generators/` (the #123 NICE-TO-HAVE was actioned in-stack). | OK -- merged (stack, in order) |
+| #124 | Clear (Tract -- 1st OV-GM in Royalty Objects). Gated by Unit Agreement nav dd + GO; insert parent dd R3 = nav scope; **R17 lazy-redraw** extra `Apply Navigator` after insert/delete; **date-effective parent gotcha solved** (UA parents effective 2010-01-01 -> form date 2011-01-01); cloned the Transport System OV-GM exemplar (not Bank); RF-only per OV-GM precedent; no shared-file edits. 1 NICE-TO-HAVE (R21 doc drift: SOW says `${TEST_START_DATE_REFDD}`, suite hardcodes 2011-01-01). | OK -- merged (top of stack) |
+
+### Rules (apply immediately, no exceptions)
+
+_None new this cycle. R1-R25 cover every finding. Version stays **v25**._
+
+### Observations (good patterns to keep)
+
+- **The Bank-family OV IUD pattern is fully copy-stable, and the OV-GM variant is now a clean clone too.** #119-#122 are 4 textbook Bank clones with zero intervention; #124 extended the same folder into its first OV-GM (gated) screen and reused the Transport System exemplar's two well-known gotchas (R17 lazy redraw + date-effective parent) *pre-emptively* -- the gotchas were in the T3 from the first run, not rediscovered after a false-fail. The exemplar-clone + registry feedback loop is working as designed.
+- **Reviewer must apply its own ratified rules to its own tooling.** R24 (extracted from #113's detached-worktree push bug) was still being violated by the *merged* step 18 itself: line 42 pushed the bare `push origin feature/ec-screen-deepdive` from a `--detach` worktree. #113 fixed the worktree-isolation half but shipped the refspec half still broken, and the merge masked it (the merge log shows the fix commit title, not that the body was only half-applied). Caught by reading the live prompt during step-18 prep rather than trusting the #113 merge title (MR3 staleness sweep + verify-before-trust). Fixed in this PR; step 18 executed with the correct `HEAD:refs/heads/...` refspec.
+- **Orphan-review-PR recovery.** A prior session that creates its review PR but crashes before the self-merge leaves a docs-only PR plus all the worker PRs it cleared, unmerged. The correct recovery is to independently re-verify the workers (don't blind-trust the orphan's verdicts), then merge the orphan FIRST (so its R25 + review-log entry land before the workers it references), then merge the workers. This preserves attribution + rule numbering and avoids a duplicate R25.
+
+### Reviewer process note (stacked-squash append-conflict resolution)
+
+- **Every PR in a content-stack that appends to the same shared doc add/add-conflicts at squash-merge time, by construction.** Once the parent is squash-merged, master holds the parent's rows as a *new* commit that is not in the child's ancestry; the child branch still carries the parent's *original* commits, so the merge-base is pre-stack master and git flags the adjacent row insertions as a conflict. For these four PRs the child branch is always a **strict superset** of master on `automation-scorecard.md` + `ec_screen_registry.md` (it has every prior row plus its own), so the deterministic resolution is `git checkout --ours <both files>` -> verify the expected N rows are present -> commit -> `push origin HEAD:refs/heads/<branch>` (R24). Done in a throwaway `C:/tmp/wt-stack` detached worktree because the stack branches are checked out in the Worker's own worktrees and must not be touched. (Future option: have the Worker base the stack so only the top PR carries the doc rows, or rebase children onto the squashed parent before merge -- but the `--ours` superset resolution is safe and fast as-is.)
+
+### Gaps (verified against filesystem / PRs)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| ~~#113 MUST-FIX (step 18 push refspec)~~ -- **RESOLVED this run** (`.claude/review-prompt.txt:42` now pushes `HEAD:refs/heads/feature/ec-screen-deepdive`, R24) | Reviewer | OK Closed |
+| #124 SOW date wording (`${TEST_START_DATE_REFDD}`) does not match the suite's hardcoded `2011-01-01` (R21 doc drift) -- align the SOW to the actual value | Worker | Low |
+| Remaining 3 Royalty Object screens (RC.0054/0057/0058) not yet started (Tract RC.0056 now done) | Worker | Medium |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_ov_iud_bundle.py`/`gen_checklist.py`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
