@@ -36,10 +36,11 @@ Steps:
 17. Clean up reviewer worktrees: run `git worktree list` and remove any C:/tmp/wt-review-* worktree directories using `git worktree remove "<path>" --force` for each one found. Do not skip even if no PRs were reviewed.
 18. Sync feature/ec-screen-deepdive with master: after the review PR is merged, use a THROWAWAY WORKTREE -- never `git checkout feature/ec-screen-deepdive` directly because the Worker's main checkout is permanently on that branch and is always dirty (checkout will fail or discard Worker changes):
    `git fetch origin feature/ec-screen-deepdive`
-   `git worktree add C:/tmp/wt-deepdive-sync origin/feature/ec-screen-deepdive`
-   `git -C C:/tmp/wt-deepdive-sync merge origin/master --no-edit`
-   `git -C C:/tmp/wt-deepdive-sync push origin feature/ec-screen-deepdive`
-   `git worktree remove C:/tmp/wt-deepdive-sync --force`
+   `git worktree prune && rm -rf C:/tmp/wt-review-deepdive-sync`   (clear any leftover dir from a prior run whose --force removal was blocked by a Windows file lock -- else the next `worktree add` fails with 'already exists')
+   `git worktree add --detach C:/tmp/wt-review-deepdive-sync origin/feature/ec-screen-deepdive`
+   `git -C C:/tmp/wt-review-deepdive-sync merge origin/master --no-edit`
+   `git -C C:/tmp/wt-review-deepdive-sync push origin feature/ec-screen-deepdive`
+   `git worktree remove C:/tmp/wt-review-deepdive-sync --force`   (best-effort; named wt-review-* so step 17's sweep + the prune above also clean it even if the lock blocks removal)
    If the branch is already current (merge says 'Already up to date'), the push is a no-op. Use merge (NOT force-push) -- force-push would destroy runner-committed screen notes. Do not skip even if no Worker PRs were merged today.
 19. Final master clean-up: run `git checkout master && git pull origin master`, then run `git status`. If any uncommitted changes remain (reviewer-owned files or otherwise), discard them with `git checkout -- <file>` for modified files. Verify `git status` shows 'nothing to commit, working tree clean' before ending the session. This guarantees the Worker can always run `git checkout master` without conflicts after any reviewer session.
 
