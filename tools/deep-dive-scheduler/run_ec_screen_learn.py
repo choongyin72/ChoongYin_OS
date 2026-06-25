@@ -44,7 +44,10 @@ def git(args, cwd=REPO):
     return subprocess.run(['git', '-C', cwd] + args, capture_output=True, text=True)
 
 def ensure_worktree():
-    git(['fetch', 'origin', BRANCH]); git(['worktree', 'prune'])
+    rf = git(['fetch', 'origin', BRANCH])
+    if rf.returncode:
+        log(f'WARNING: git fetch failed ({(rf.stderr or rf.stdout)[:80].strip()}) -- using cached refs')
+    git(['worktree', 'prune'])
     if not Path(WT, '.git').exists():
         r = git(['worktree', 'add', '--detach', WT, f'origin/{BRANCH}'])
         if r.returncode: log('worktree add failed: ' + (r.stderr or r.stdout)[:120]); return False
@@ -138,7 +141,8 @@ def help_text(page, name, shot_path=None, timeout_ms=45000):
     try:
         box = page.locator('[id="menu:searchForm:searchTxt"]'); box.fill(''); box.type(name, delay=25)
         page.wait_for_timeout(1200)
-        link = page.locator(f'xpath=//*[self::label or self::span][contains(@class,"tv-link") and normalize-space(text())="{name}"]')
+        q = "'" if '"' in name else '"'
+        link = page.locator(f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())={q}{name}{q}]")
         if not link.count(): return None, False
         link.first.click(); page.wait_for_load_state('networkidle', timeout=timeout_ms); page.wait_for_timeout(1500)
         ctx = page.context
@@ -208,8 +212,11 @@ def mark_checklist(wt, bf_code, name, full, missing):
     s = p.read_text(encoding='utf-8')
     mark = '[x]' if full else '[~]'
     suffix = '' if full else f' (partial: missing {missing})'
-    newline = f'- {mark} **{bf_code}** {chr(0x2014)} {name} -> notes/{bf_code}.md{suffix}'
+    newline = f'- {mark} **{bf_code}** - {_ascii(name)} -> notes/{bf_code}.md{suffix}'
+    orig = s
     s = re.sub(r'(?m)^- \[[ x~\-]\] \*\*' + re.escape(bf_code) + r'\*\* .*$', newline, s, count=1)
+    if s == orig:
+        log(f'  WARNING: {bf_code} not found in CHECKLIST.md -- mark skipped')
     p.write_text(s, encoding='utf-8')
 
 def main():
@@ -258,13 +265,26 @@ def main():
         br.close()
     con.close()
     git(['add', 'DeepDiveLearnings/ec-screens/'], cwd=WT)
-    msg = f'learn(ec-screens): {", ".join(c for c,_ in screens)} ({done_full} full, {done_partial} partial)'
-    git(['commit', '-m', msg], cwd=WT)
-    if DO_PUSH:
-        r = git(['push', 'origin', 'HEAD:' + BRANCH], cwd=WT)
-        log('pushed' if r.returncode == 0 else 'push failed: ' + (r.stderr or r.stdout)[:100])
+    if done_full + done_partial == 0:
+        log('nothing committed (all screens skipped -- no notes written)')
     else:
-        log('TEST MODE: committed locally, not pushed')
+        msg = f'learn(ec-screens): {", ".join(c for c,_ in screens)} ({done_full} full, {done_partial} partial)'
+        git(['commit', '-m', msg], cwd=WT)
+        if DO_PUSH:
+            r = git(['push', 'origin', 'HEAD:' + BRANCH], cwd=WT)
+            if r.returncode:
+                log('push failed (non-fast-forward?), retrying after rebase: ' + (r.stderr or r.stdout)[:80].strip())
+                git(['fetch', 'origin', BRANCH], cwd=WT)
+                rb = git(['rebase', f'origin/{BRANCH}'], cwd=WT)
+                if rb.returncode:
+                    log('rebase failed -- committed notes NOT pushed (will retry next run): ' + (rb.stderr or rb.stdout)[:80].strip())
+                else:
+                    r2 = git(['push', 'origin', 'HEAD:' + BRANCH], cwd=WT)
+                    log('pushed after rebase' if r2.returncode == 0 else 'push still failed: ' + (r2.stderr or r2.stdout)[:80].strip())
+            else:
+                log('pushed')
+        else:
+            log('TEST MODE: committed locally, not pushed')
     log(f'EC-screen learn (deterministic): done - {done_full} full + {done_partial} partial')
     return 0
 
