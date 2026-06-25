@@ -719,3 +719,70 @@ _Open PR triggers a full review (R14). #103's head (`c32cec2`) is unchanged sinc
 | Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
 
 ---
+
+## 2026-06-24 - Automated Review (14:00 AWST, 1 open PR #107)
+
+_Open PR triggers a full review (R14). #107 CLEAR - no MUST-FIX - squash-merged (`903b719`). The standing deep-dive draft (#103) was owner-milestone-MERGED since the 06:00 run, so it is no longer open. **No new executable rules - version stays v23.** R1-R23 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #107 | Clear (HIGH effort - client SQL logic + Oracle/Playwright capture scripts). ECSR-35263 (per-message report-date fix for `ZWP_P_MAIL_UTIL.getReportDate`, resolving via `REPORT_SEND_LOG`->`TV_REPORT_GENERATED` with an NVL fallback to the old by-type logic) + ECSR-35264 (split the shared Burrup Daily Production email config into dedicated `_PLUTO` / `_SCA` ACTOR-Maintenance sets). Both forward `.sql`: idempotent upsert (`UPDATE; IF SQL%ROWCOUNT=0 INSERT`, no MERGE); **0 `DELETE`** (new objects CREATED + message-def/connection RE-POINTED, old shared objects left intact - correctly avoids ORA-02292 since Oracle can't UPDATE a child-referenced CODE; the `ROLLBACK__...PLUTO.sql` DELETEs are intentional baseline-restore); **R22 clean** (`REV_TEXT='ECSR-35264'` real ticket, no `ECPR-XXXX`/`ECSR-XXXX` placeholder); **R18/R20 clean** (`rg [^\x00-\x7F]` over all `.py`+`.sql` -> 0 matches; non-ASCII only in `ANALYSIS.md`/`README.md` pure-MD docs, exempt; SQL uses `chr(123)/chr(64)/chr(38)/chr(91)` to keep braces/@/&/[] sqlplus-encoding-safe); **R16 clean** (web `EC_USER`/`EC_PASS` + DB `EC_DB_USER`/`EC_DB_PASS` all env-var with empty-string defaults, zero hardcoded secrets); **R8/R23** (924 ins / 0 del, isolated `workstreams/ecsr-35263-35264-sca-email/` tree, no reviewer-owned/shared file touched, GitHub MERGEABLE). ECSR-35263 `.sql` is honestly a delivery NOTE (commented patch spec for the repeatable `R__0400/R__0500_ZWP_P_MAIL_UTIL` package files, not standalone Flyway) - correctly disclosed, not over-claimed. DB ground-truth (MESSAGE_OUT 414 Pluto / 410 Scarborough = TEXT, REV_TEXT=ECSR-35264, Status=ERROR by-design no-SMTP on COPSDEV) taken as worker-attested (COPSDEV read-only policy, not reviewer-re-run). | OK Clear (NICE-TO-HAVE) - merged |
+
+### Rules (apply immediately, no exceptions)
+
+_None this run. Every finding is covered by the existing R1-R23 - notably R22 (real `REV_TEXT`), R18/R20 (ASCII in console/parse-bound files), R16 (env-var creds), R8/R23 (sync + no `-` on reviewer docs). Version stays v23._
+
+### Observations (good patterns to keep)
+
+- **Non-destructive live-config change done right (second client SQL since R22 minted).** The `_PLUTO`/`_SCA` split CREATES new consistently-named objects and RE-POINTS the message-def `COMPANY_CONTACT_CODE` + distribution connection, leaving the old shared objects intact (historical messages still reference them). The header explicitly reasons why a CODE rename would fail (ORA-02292, no ON-UPDATE-CASCADE) - this is the correct, reversible, idempotent shape for a client-config migration, and it shipped with a matching ROLLBACK baseline-restore script (cf. R3 / [[feedback_db_script_rerunnable_revtext]]).
+- **R22 now reflexive on every client SQL delivery.** Both #96 (NOPTA) and now #107 set the real governing ticket via a single `lv_rev_text` constant on every DML - no `ECPR-XXXX` placeholder has appeared in a client SQL since R22 was extracted from #93's demo SQL.
+- **R20 carried into a non-`screens/` tree unprompted.** All four `.py` capture/build scripts (outside the hygiene-guard glob) are ASCII-clean by authoring - the Worker applied the ASCII-at-authoring discipline to a workstream tree the static guard doesn't even scan. This is exactly the gap the standing "extend the guard to `workstreams/**`" item exists to backstop; the Worker pre-empted it.
+- **Credential hygiene beyond R16's letter.** R16 mandates env-var creds in Playwright bundles; #107's capture scripts go further - empty-string defaults (not a baked-in `sysadmin` default), so a misconfigured run fails closed rather than silently using a default login. Good pattern for any net-new EC-touching script.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| #107 NICE-TO-HAVE (R21): "Files touched" lists 7 of 14 diff files - omits `ANALYSIS.md`, `UT/.gitignore`, and the whole `UT/capture/` toolchain (`README.md`, `build_ut_docs.py`, `capture_ut_screens.py`, `fetch_message_content.py`). Body under-claims a correct change; reconcile via `git diff --stat origin/master...HEAD` before pushing. Non-gating (already merged). | Worker | 🟢 Low |
+| #107 `ROLLBACK__...PLUTO.sql` mixes `_PLU` (30-char truncated) and `_PLUTO` CODEs in its defensive cleanup list - harmless (forward run committed nothing; the DELETEd codes were never inserted) but align if the rollback is ever exercised. | Worker | 🟢 Low |
+| ECSR-35263: the SCA Upstream Daily Partner email config was NOT found on plutodev (only `R_PLU_DAILY_PARTNER` reference exists) - per the PR's own ANALYSIS.md the 18/12-Jun date bug repro lives on ECaaS TEST; the `getReportDate(p_message_no)` overload is the code fix but needs an ECaaS TEST repro to confirm. Worker-disclosed open question, not a defect in this PR. | Worker (when resumed) | 🟡 Medium |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+---
+
+## 2026-06-25 01:00 AWST — Automated Review (off-schedule early run, 3 open PRs #109/#110/#111)
+
+_Open PRs trigger a full review (R14) even at an off-schedule hour (run fired 01:22 AWST). 0 new master commits since #108/`a092ac6` but 3 open PRs. **All 3 CLEAR — zero MUST-FIX — all 3 squash-merged**; 0 PRs left open afterward. **No new executable rules** — R1–R23 cover every finding; version stays **v23**._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #109 | Clear (low effort — config-only, +10/-1). Promotes 9 allow-list MCP/tool permission entries into the shared `.claude/settings.json` (Atlassian/playwright/ec-mcp read tools + `openspec status/config/instructions`). Independently verified on the PR head: `py -m json.tool` parses clean; ASCII-clean (R18); Files-touched maps 1:1 to the diff (only `settings.json`); `settings.local.json` (carries creds) and 25 regenerated screenshots correctly excluded from the stage (stage-own-files-by-path). No security-sensitive grants. | ✅ Clear — squash-merged (`b9ab709`) |
+| #110 | Clear (HIGH effort — runner logic, +71/-18). Three EC-screen-runner improvements: (1) best-effort full-page Help-popup screenshot per screen; (2) **layered HIGH-confidence DB-class resolution** — URL `CLASS_NAME` → URL last-path-token *only if it is a real class* (`_class_exists` vs `class_cnfg`) → case-insensitive EXACT `LABEL` *only when unique*; ambiguous/none stays an honest `[~]` partial (never guesses a binding); a `_Resolved by:` provenance line is added per note; (3) `_clip` trims Help text on a sentence/paragraph boundary instead of a hard `[:900]`. Independently verified: `py_compile` OK; **ASCII-clean (R20)** — 0 non-ASCII bytes over the whole file; `help_text` now returns a 2-tuple `(text, shot_ok)` with all three return paths and the `main` unpack consistent (no arity bug); queries are metadata-read-only; screenshot is nested-try/except so it never fails a screen; full/partial threshold unchanged (full = DB + Help text). DB-recovery claims (CO.0018→EQUITY_SHARE, CO.0038→TANK_USAGE, PO.0008→OBJECT_ITEM_COMMENT recovered; known-good screens unregressed) taken as worker-attested (sandbox not reviewer-re-run). 3 NICE-TO-HAVE. | ✅ Clear (NICE-TO-HAVE) — squash-merged (`0a5aa42`) |
+| #111 | Clear (low effort — reviewer-prompt process, +4/-1). Adds a new step 18 to `.claude/review-prompt.txt` so the reviewer auto-merges master **INTO** `feature/ec-screen-deepdive` after each run (`git merge origin/master --no-edit` — **not** force-push), then renumbers the old step 18→19. Sound structural fix for the R23 drift problem (keeps the permanent branch synced with master each run, including reviewer-owned docs). Body matches the diff (R21). The diff is ASCII; the only non-ASCII byte in the file is a pre-existing em-dash on line 14 (the step-6 format string) — outside this diff and outside R18 scope (the prompt is read by Claude, not console/PS-parsed). 1 NICE-TO-HAVE. | ✅ Clear (NICE-TO-HAVE) — squash-merged (`9ce47bd`) |
+
+### Observations (good patterns to keep)
+
+- **Accuracy-first DB resolution is the right shape for an unattended coverage runner (#110).** Each new fallback either binds a *verified-real* class or refuses and leaves an honest `[~]` partial with a `_Resolved by:` provenance line — it never fabricates a binding to make a screen look "full." This is the same discipline R19/R3 reward (honest partials over plausible-but-wrong data) carried into the runner's own resolution logic.
+- **Best-effort enrichment must never gate the core capture.** The Help screenshot is wrapped so a screenshot failure degrades to "no screenshot this run" rather than failing the whole screen, and it explicitly does not move the full/partial threshold. Correct severity split — the bonus data can't regress the proven metadata+Help baseline.
+- **Reviewer-owned-doc drift on the permanent branch is being fixed structurally, not by reminder (#111).** R23 (2026-06-23) flagged the drift as structural; #111 turns the "merge master before milestone" guidance into an automatic per-run reviewer step. The remaining edge is purely operational (see gap) — the *intent* and the no-force-push safety are correct.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| #110: committing a full-page Help PNG per screen (~735 KB each per the PR body) across ~1457 screens is ~1 GB of binaries into git history — repo-health risk (cf. standing maintainability concern). Consider downscale/JPEG-quality, a max-dimension cap, or storing screenshots out-of-repo (LFS/external) with only the `.md` reference committed. | Worker | 🟡 Medium |
+| #110 (minor): strategy-(2) URL token `url.rstrip('/').split('/')[-1].upper()` does not strip a trailing query/fragment — harmless (the `_class_exists` gate just won't match → falls through to label) but a `split('?')[0].split('#')[0]` first would let path-token resolution fire on more screens. Also `notes_dir.mkdir` is now redundantly done in both `main()` and `write_note()`. | Worker | 🟢 Low |
+| #111: the new step 18 cannot run as written in this environment — `git checkout feature/ec-screen-deepdive` fails when that branch is already checked out (dirty) in the Worker's main checkout, and forcing it would disrupt the Worker. Harden: do the merge in a dedicated throwaway worktree (`git worktree add <tmp> feature/ec-screen-deepdive && git merge origin/master --no-edit && git push && git worktree remove <tmp>`), or guard/skip when the branch is checked out elsewhere or its tree is dirty. **This run deferred the deep-dive sync for exactly this reason** (Worker's permanent checkout dirty — 493 files). | Reviewer/Worker | 🟡 Medium |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+### Reviewer process note (deep-dive sync deferred; isolated worktree)
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty tree (493 files) plus two Worker runner worktrees (`wt-ec-learn`, `wt-ecsr`). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-25-0100` worktree off `origin/master`; the Worker's checkout and runner worktrees were never touched. The newly-merged step 18 (deep-dive auto-sync) was **not executed** — branch-checkout collision + dirty Worker tree make it unsafe this run (logged as the #111 gap above).
+
+---
