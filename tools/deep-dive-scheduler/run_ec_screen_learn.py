@@ -16,7 +16,7 @@ in Python, per screen, with a hard timeout + best-effort fallback so it can neve
 Isolated git worktree (C:\\tmp\\wt-ec-learn) so it never touches the user's main checkout.
 Env knobs: EC_LEARN_MAX (screen cap, default 8); EC_LEARN_PUSH=0 (commit locally, no push).
 """
-import os, re, sys, subprocess
+import os, re, sys, subprocess, time
 from datetime import datetime
 from pathlib import Path
 
@@ -26,6 +26,8 @@ BRANCH = 'feature/ec-screen-deepdive'
 LOG    = Path(REPO) / 'tools' / 'deep-dive-scheduler' / 'session_log.txt'
 MAXN   = int(os.environ.get('EC_LEARN_MAX', '8'))
 DO_PUSH= os.environ.get('EC_LEARN_PUSH', '1') != '0'
+DB_RETRIES    = int(os.environ.get('EC_LEARN_DB_RETRIES', '3'))       # DB pre-flight: attempts before aborting
+DB_RETRY_WAIT = int(os.environ.get('EC_LEARN_DB_RETRY_WAIT', '20'))   # seconds between DB connect attempts (sandbox may still be starting)
 
 EC_URL  = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
 EC_USER = os.environ.get('EC_USER', 'sysadmin')
@@ -44,7 +46,10 @@ def git(args, cwd=REPO):
     return subprocess.run(['git', '-C', cwd] + args, capture_output=True, text=True)
 
 def ensure_worktree():
-    git(['fetch', 'origin', BRANCH]); git(['worktree', 'prune'])
+    rf = git(['fetch', 'origin', BRANCH])
+    if rf.returncode:
+        log(f'WARNING: git fetch failed ({(rf.stderr or rf.stdout)[:80].strip()}) -- using cached refs')
+    git(['worktree', 'prune'])
     if not Path(WT, '.git').exists():
         r = git(['worktree', 'add', '--detach', WT, f'origin/{BRANCH}'])
         if r.returncode: log('worktree add failed: ' + (r.stderr or r.stdout)[:120]); return False
@@ -138,7 +143,8 @@ def help_text(page, name, shot_path=None, timeout_ms=45000):
     try:
         box = page.locator('[id="menu:searchForm:searchTxt"]'); box.fill(''); box.type(name, delay=25)
         page.wait_for_timeout(1200)
-        link = page.locator(f'xpath=//*[self::label or self::span][contains(@class,"tv-link") and normalize-space(text())="{name}"]')
+        q = "'" if '"' in name else '"'
+        link = page.locator(f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())={q}{name}{q}]")
         if not link.count(): return None, False
         link.first.click(); page.wait_for_load_state('networkidle', timeout=timeout_ms); page.wait_for_timeout(1500)
         ctx = page.context
@@ -208,8 +214,11 @@ def mark_checklist(wt, bf_code, name, full, missing):
     s = p.read_text(encoding='utf-8')
     mark = '[x]' if full else '[~]'
     suffix = '' if full else f' (partial: missing {missing})'
-    newline = f'- {mark} **{bf_code}** {chr(0x2014)} {name} -> notes/{bf_code}.md{suffix}'
+    newline = f'- {mark} **{bf_code}** - {_ascii(name)} -> notes/{bf_code}.md{suffix}'
+    orig = s
     s = re.sub(r'(?m)^- \[[ x~\-]\] \*\*' + re.escape(bf_code) + r'\*\* .*$', newline, s, count=1)
+    if s == orig:
+        log(f'  WARNING: {bf_code} not found in CHECKLIST.md -- mark skipped')
     p.write_text(s, encoding='utf-8')
 
 def main():
@@ -224,11 +233,19 @@ def main():
     screens = pick_screens(checklist, MAXN)
     if not screens: log('nothing to do (no [ ] screens found)'); return 0
     log(f'screens this run: {", ".join(c for c,_ in screens)}')
-    try:
-        con = oracledb.connect(user=DB_USER, password=DB_PASS, dsn=DB_DSN, tcp_connect_timeout=15)
-        cur = con.cursor()
-    except Exception as e:
-        log(f'ABORTED: DB connect failed ({str(e)[:120]})'); return 1
+    # DB pre-flight with retry/backoff -- the local sandbox Oracle may still be starting (e.g. Docker just brought up)
+    con = None; last_err = ''
+    for attempt in range(1, DB_RETRIES + 1):
+        try:
+            con = oracledb.connect(user=DB_USER, password=DB_PASS, dsn=DB_DSN, tcp_connect_timeout=15)
+            cur = con.cursor(); break
+        except Exception as e:
+            last_err = str(e)[:90]; log(f'DB connect attempt {attempt}/{DB_RETRIES} failed ({last_err})')
+            if attempt < DB_RETRIES: time.sleep(DB_RETRY_WAIT)
+    if con is None:
+        log(f'ABORTED: EC-screen Help extract job aborted due to DB connection issue -- could not connect to '
+            f'metadata DB {DB_DSN} after {DB_RETRIES} attempts ({last_err}). Is the local sandbox Oracle up?')
+        return 1
     done_full = done_partial = 0
     with sync_playwright() as p:
         br = None
@@ -239,7 +256,7 @@ def main():
             page.fill('#username', EC_USER); page.fill('#password', EC_PASS); page.click('#kc-login')
             page.wait_for_selector('[id="menu:searchForm:searchTxt"]', timeout=60000); page.wait_for_timeout(1200)
         except Exception as e:
-            log(f'ABORTED: browser/login failed ({str(e)[:120]})')
+            log(f'ABORTED: EC-screen Help extract job aborted -- browser/EC sandbox login failed ({str(e)[:110]})')
             if br: br.close()
             con.close(); return 1
         for bf_code, name in screens:
@@ -258,13 +275,26 @@ def main():
         br.close()
     con.close()
     git(['add', 'DeepDiveLearnings/ec-screens/'], cwd=WT)
-    msg = f'learn(ec-screens): {", ".join(c for c,_ in screens)} ({done_full} full, {done_partial} partial)'
-    git(['commit', '-m', msg], cwd=WT)
-    if DO_PUSH:
-        r = git(['push', 'origin', 'HEAD:' + BRANCH], cwd=WT)
-        log('pushed' if r.returncode == 0 else 'push failed: ' + (r.stderr or r.stdout)[:100])
+    if done_full + done_partial == 0:
+        log('nothing committed (all screens skipped -- no notes written)')
     else:
-        log('TEST MODE: committed locally, not pushed')
+        msg = f'learn(ec-screens): {", ".join(c for c,_ in screens)} ({done_full} full, {done_partial} partial)'
+        git(['commit', '-m', msg], cwd=WT)
+        if DO_PUSH:
+            r = git(['push', 'origin', 'HEAD:' + BRANCH], cwd=WT)
+            if r.returncode:
+                log('push failed (non-fast-forward?), retrying after rebase: ' + (r.stderr or r.stdout)[:80].strip())
+                git(['fetch', 'origin', BRANCH], cwd=WT)
+                rb = git(['rebase', f'origin/{BRANCH}'], cwd=WT)
+                if rb.returncode:
+                    log('rebase failed -- committed notes NOT pushed (will retry next run): ' + (rb.stderr or rb.stdout)[:80].strip())
+                else:
+                    r2 = git(['push', 'origin', 'HEAD:' + BRANCH], cwd=WT)
+                    log('pushed after rebase' if r2.returncode == 0 else 'push still failed: ' + (r2.stderr or r2.stdout)[:80].strip())
+            else:
+                log('pushed')
+        else:
+            log('TEST MODE: committed locally, not pushed')
     log(f'EC-screen learn (deterministic): done - {done_full} full + {done_partial} partial')
     return 0
 
