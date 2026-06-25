@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v24** (R24 added 2026-06-25)
+> **Current rule version: v25** (R25 added 2026-06-25)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -31,7 +31,8 @@ _Worker sessions: read this before starting any automation work._
 | v21 | R21 | PR-body content must match the final diff: list EVERY touched file under "Files touched", and never leave a stale "blocked/not done/pending" note for work the PR actually includes | 2026-06-20 |
 | v22 | R22 | Never ship the literal `REV_TEXT='ECPR-XXXX'` placeholder; set the governing ticket, or `'ECPR-DEMO'` for demo/sandbox objects with no client ECPR | 2026-06-22 |
 | v23 | R23 | A long-lived/permanent Worker branch must keep reviewer-owned append-only docs in sync — `git diff origin/master...HEAD` must show NO `-` lines on lessons-learned.md / review-log.md / automation-scorecard.md / STATUS.md | 2026-06-23 |
-| v24 | R24 | Pushing from a detached/throwaway worktree MUST use `push origin HEAD:refs/heads/<branch>` — a bare `push origin <branch>` resolves to the shared local branch ref (another worktree's tip), NOT the detached HEAD | 2026-06-25 |
+| v24 | R24 | Pushing from a detached/throwaway worktree MUST use `push origin HEAD:refs/heads/<branch>` -- a bare `push origin <branch>` resolves to the shared local branch ref (another worktree's tip), NOT the detached HEAD | 2026-06-25 |
+| v25 | R25 | When any tool/MCP/connection breaks, OWN the troubleshooting -- diagnose, give actionable fix steps, keep moving; never say "I can't" without following up with "here is how to fix it" | 2026-06-25 |
 
 ---
 
@@ -826,3 +827,52 @@ _Live-validated: reproduced PR #113's exact step 18 in a detached worktree off `
 - Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** dirty `feature/ec-screen-deepdive` (493 files) plus Worker runner worktrees (`wt-ec-learn`, `wt-ecsr`, `wt-ecsr35236`). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-25-1400` worktree off `origin/master`; the Worker's checkout and runner worktrees were never touched. The deep-dive auto-sync (step 18) is **not in this run's review prompt** (the prompt predates #111's step-18) and, regardless, is the very flow #113 fixes — left for the corrected #113 to land. The empirical push test used a throwaway `wt-test-push-refspec` worktree, removed immediately after.
 
 ---
+
+## 2026-06-25 06:00 AWST -- Automated Review (6 open PRs #116-#122)
+
+_1 new master commit since the 14:00 run (`5b47ce5` review #115); 6 open non-draft PRs (#116, #117, #119, #120, #121, #122) + 1 standing draft (#118). Open PRs trigger a full review (R14). **All 6 CLEAR -- zero MUST-FIX.** One new rule (R25). R1-R24 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #116 | Clear (runner DB retry loop, +31/-2). `EC_LEARN_DB_RETRIES`/`EC_LEARN_DB_RETRY_WAIT` env-configurable; `tcp_connect_timeout=15` prevents hang; abort log names DSN+retry count; `return 1` propagates non-zero exit to Task Scheduler; R16/R20 clean. **Merge before #117.** | OK -- CLEAR |
+| #117 | Clear (6 robustness fixes, +61/-18). `git fetch` warning non-fatal; XPath quote-switching handles names containing double-quotes; ASCII hyphen in checklist line (_ascii(), R20); no-op detection warns rather than silently skipping; empty-commit guard; push retry via rebase then re-push using `HEAD:refs/heads/<branch>` (R24). **Depends on #116.** | OK -- CLEAR |
+| #119 | Clear (Royalty Owner IUD, T3 + robot + Playwright bundle). TC02/TC04 use `ov_royalty_owner`; End-Date=Start-Date delete pattern; R16/R20 clean. **Base of 4-deep stack.** | OK -- CLEAR |
+| #120 | Clear (Royalty Depositor IUD). TC02/TC04 use `ov_royalty_depositor`; same pattern. Depends on #119. | OK -- CLEAR |
+| #121 | Clear (Product Group IUD). TC02/TC04 use `ov_product_group`; same pattern. Depends on #120. | OK -- CLEAR |
+| #122 | Clear (Unit Agreement IUD + `gen_ov_iud_bundle.py` generator). TC02/TC04 use `ov_unit_agreement`; same pattern. NICE-TO-HAVE: move `gen_ov_iud_bundle.py` from `tmp/scripts/` to `tools/generators/`. Depends on #121. | OK -- CLEAR (NICE-TO-HAVE) |
+
+### Merge order constraint
+
+`#116` then `#117` (conflict if out of order), then `#119` -> `#120` -> `#121` -> `#122` (stacked -- scorecard append conflict if out of order).
+
+### Rules (apply immediately, no exceptions)
+
+**R25 -- When a tool or connection breaks, OWN the troubleshooting -- never treat it as someone else's problem**
+When any tool, MCP server, or external connection fails mid-session (GitHub MCP disconnect, DB connection lost, browser not launching, etc.), the correct response is:
+1. Diagnose immediately -- what broke, why, and what state we are in
+2. Give the user clear actionable steps to fix it -- even if the fix requires action on their machine/browser/phone
+3. Keep moving -- do not stall, wait, or redirect the user to figure it out alone
+It does not matter whether the reviewer/assistant set up the connection. If it is broken and the user needs it to work, it is the reviewer's problem to guide through resolution. Saying "I can't access it" without following up with "here is how to fix it" is a bad attitude and a failure to serve the user.
+_Added 2026-06-25 after reviewer failed to guide user through GitHub MCP reconnection -- treated it as outside scope instead of taking ownership of the troubleshooting._
+
+### Observations (good patterns to keep)
+
+- **Bank-family IUD pattern is now well-established.** PRs #119-#122 are the 3rd-through-6th applications of the End-Date=Start-Date delete + `ov_<class>` view assertion pattern (R1-R2-Bank family). The pattern is copy-stable -- all 4 PRs are clean without intervention.
+- **Generator scripts accelerate the stack (#122).** `gen_ov_iud_bundle.py` scaffolded the #122 bundle directly, cutting authoring time for the 4th-in-stack. Moving it to `tools/generators/` makes it first-class tooling (NICE-TO-HAVE).
+- **DB retry loop addresses the real root cause (#116).** The Oracle Docker sandbox goes down after laptop restarts; the retry loop + configurable wait (default 3 tries, 20s apart) makes the runner self-healing for transient Docker startup delays -- a correct fix at the right layer.
+
+### Gaps (verified against PRs)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `gen_ov_iud_bundle.py` lives in `tmp/scripts/` -- move to `tools/generators/` for permanence and hygiene-guard coverage (NICE-TO-HAVE from #122) | Worker | Low |
+| Remaining 4 Royalty Object screens (RC.0054, RC.0056, RC.0057, RC.0058) -- not yet started; blocked on Oracle sandbox restart + IUD stack merge | Worker | Medium |
+| Carry-over (still open): #113 MUST-FIX (step 18 push refspec) | Worker | High |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS upload flakiness | Worker | Medium |
+
+### Reviewer process note
+
+- All 6 PR comment postings used `mcp__github__add_issue_comment` (plain comment) after APPROVE was rejected with "Cannot approve your own pull request." This is the correct workaround -- use COMMENT not APPROVE when reviewer == author.
+- Review-doc edits committed on `claude/repo-review-f21x0s` and will be raised as a PR targeting master.
