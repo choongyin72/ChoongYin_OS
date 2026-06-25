@@ -28,6 +28,8 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `5e1649a` | 2026-06-25 | fix(runner): log DB connect and browser/login failures instead of crashing silen… |
+| `dcc77b3` | 2026-06-25 | review: automated quality feedback 2026-06-25 (#112) |
 | `9ce47bd` | 2026-06-25 | fix(reviewer): add step 18 to auto-sync feature/ec-screen-deepdive after each ru… |
 | `0a5aa42` | 2026-06-25 | feat(ec-screens): runner extraction improvements â€” Help screenshot + DB-resolu… |
 | `b9ab709` | 2026-06-25 | chore(settings): add 9 MCP/tool permissions to shared settings.json (#109) |
@@ -36,8 +38,6 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 | `a8122ac` | 2026-06-24 | EC Screen Deep-Dive batch 2: 11 new full + 1 partial (26 total done) |
 | `b721278` | 2026-06-24 | review: automated quality feedback 2026-06-24 (#106) |
 | `4815f2b` | 2026-06-23 | review: automated quality feedback 2026-06-23 (14:00 re-verify â€” #103 MUST-FIX… |
-| `41fd8ae` | 2026-06-23 | review: automated quality feedback 2026-06-23 (#104) |
-| `661e90b` | 2026-06-23 | [STANDING/DRAFT] EC Screen Deep-Dive â€” accumulating learning notes (owner merg… |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
