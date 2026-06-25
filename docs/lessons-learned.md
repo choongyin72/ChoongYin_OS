@@ -752,3 +752,37 @@ _None this run. Every finding is covered by the existing R1-R23 - notably R22 (r
 | Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
 
 ---
+
+## 2026-06-25 01:00 AWST — Automated Review (off-schedule early run, 3 open PRs #109/#110/#111)
+
+_Open PRs trigger a full review (R14) even at an off-schedule hour (run fired 01:22 AWST). 0 new master commits since #108/`a092ac6` but 3 open PRs. **All 3 CLEAR — zero MUST-FIX — all 3 squash-merged**; 0 PRs left open afterward. **No new executable rules** — R1–R23 cover every finding; version stays **v23**._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #109 | Clear (low effort — config-only, +10/-1). Promotes 9 allow-list MCP/tool permission entries into the shared `.claude/settings.json` (Atlassian/playwright/ec-mcp read tools + `openspec status/config/instructions`). Independently verified on the PR head: `py -m json.tool` parses clean; ASCII-clean (R18); Files-touched maps 1:1 to the diff (only `settings.json`); `settings.local.json` (carries creds) and 25 regenerated screenshots correctly excluded from the stage (stage-own-files-by-path). No security-sensitive grants. | ✅ Clear — squash-merged (`b9ab709`) |
+| #110 | Clear (HIGH effort — runner logic, +71/-18). Three EC-screen-runner improvements: (1) best-effort full-page Help-popup screenshot per screen; (2) **layered HIGH-confidence DB-class resolution** — URL `CLASS_NAME` → URL last-path-token *only if it is a real class* (`_class_exists` vs `class_cnfg`) → case-insensitive EXACT `LABEL` *only when unique*; ambiguous/none stays an honest `[~]` partial (never guesses a binding); a `_Resolved by:` provenance line is added per note; (3) `_clip` trims Help text on a sentence/paragraph boundary instead of a hard `[:900]`. Independently verified: `py_compile` OK; **ASCII-clean (R20)** — 0 non-ASCII bytes over the whole file; `help_text` now returns a 2-tuple `(text, shot_ok)` with all three return paths and the `main` unpack consistent (no arity bug); queries are metadata-read-only; screenshot is nested-try/except so it never fails a screen; full/partial threshold unchanged (full = DB + Help text). DB-recovery claims (CO.0018→EQUITY_SHARE, CO.0038→TANK_USAGE, PO.0008→OBJECT_ITEM_COMMENT recovered; known-good screens unregressed) taken as worker-attested (sandbox not reviewer-re-run). 3 NICE-TO-HAVE. | ✅ Clear (NICE-TO-HAVE) — squash-merged (`0a5aa42`) |
+| #111 | Clear (low effort — reviewer-prompt process, +4/-1). Adds a new step 18 to `.claude/review-prompt.txt` so the reviewer auto-merges master **INTO** `feature/ec-screen-deepdive` after each run (`git merge origin/master --no-edit` — **not** force-push), then renumbers the old step 18→19. Sound structural fix for the R23 drift problem (keeps the permanent branch synced with master each run, including reviewer-owned docs). Body matches the diff (R21). The diff is ASCII; the only non-ASCII byte in the file is a pre-existing em-dash on line 14 (the step-6 format string) — outside this diff and outside R18 scope (the prompt is read by Claude, not console/PS-parsed). 1 NICE-TO-HAVE. | ✅ Clear (NICE-TO-HAVE) — squash-merged (`9ce47bd`) |
+
+### Observations (good patterns to keep)
+
+- **Accuracy-first DB resolution is the right shape for an unattended coverage runner (#110).** Each new fallback either binds a *verified-real* class or refuses and leaves an honest `[~]` partial with a `_Resolved by:` provenance line — it never fabricates a binding to make a screen look "full." This is the same discipline R19/R3 reward (honest partials over plausible-but-wrong data) carried into the runner's own resolution logic.
+- **Best-effort enrichment must never gate the core capture.** The Help screenshot is wrapped so a screenshot failure degrades to "no screenshot this run" rather than failing the whole screen, and it explicitly does not move the full/partial threshold. Correct severity split — the bonus data can't regress the proven metadata+Help baseline.
+- **Reviewer-owned-doc drift on the permanent branch is being fixed structurally, not by reminder (#111).** R23 (2026-06-23) flagged the drift as structural; #111 turns the "merge master before milestone" guidance into an automatic per-run reviewer step. The remaining edge is purely operational (see gap) — the *intent* and the no-force-push safety are correct.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| #110: committing a full-page Help PNG per screen (~735 KB each per the PR body) across ~1457 screens is ~1 GB of binaries into git history — repo-health risk (cf. standing maintainability concern). Consider downscale/JPEG-quality, a max-dimension cap, or storing screenshots out-of-repo (LFS/external) with only the `.md` reference committed. | Worker | 🟡 Medium |
+| #110 (minor): strategy-(2) URL token `url.rstrip('/').split('/')[-1].upper()` does not strip a trailing query/fragment — harmless (the `_class_exists` gate just won't match → falls through to label) but a `split('?')[0].split('#')[0]` first would let path-token resolution fire on more screens. Also `notes_dir.mkdir` is now redundantly done in both `main()` and `write_note()`. | Worker | 🟢 Low |
+| #111: the new step 18 cannot run as written in this environment — `git checkout feature/ec-screen-deepdive` fails when that branch is already checked out (dirty) in the Worker's main checkout, and forcing it would disrupt the Worker. Harden: do the merge in a dedicated throwaway worktree (`git worktree add <tmp> feature/ec-screen-deepdive && git merge origin/master --no-edit && git push && git worktree remove <tmp>`), or guard/skip when the branch is checked out elsewhere or its tree is dirty. **This run deferred the deep-dive sync for exactly this reason** (Worker's permanent checkout dirty — 493 files). | Reviewer/Worker | 🟡 Medium |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+### Reviewer process note (deep-dive sync deferred; isolated worktree)
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty tree (493 files) plus two Worker runner worktrees (`wt-ec-learn`, `wt-ecsr`). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-25-0100` worktree off `origin/master`; the Worker's checkout and runner worktrees were never touched. The newly-merged step 18 (deep-dive auto-sync) was **not executed** — branch-checkout collision + dirty Worker tree make it unsafe this run (logged as the #111 gap above).
+
+---
