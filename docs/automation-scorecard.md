@@ -52,6 +52,7 @@ _Last updated: 2026-06-22_
 | Contract Objects | Contract Area (OV-GM, BU-gated) | ✅ Live 4/4 (2026-06-18) | 1st Contract Objects screen; built by ec-object-iud-builder; sibling of Transport System |
 | Cargo Objects | Carrier (OV, plain) | ✅ Live 4/4 (2026-06-19) | 1st Cargo Objects screen; built by ec-object-iud-builder; Bank-family grid + mandatory Unit ref dd |
 | Laboratory Objects | Analysis Point (OV-GM, 3-level cascade) | ✅ Live 4/4 (2026-06-19) | 1st Laboratory Objects screen; built by ec-object-iud-builder; clean OV-GM (Op PU/Area/Facility settable in form) |
+| Royalty Objects | Royalty Owner (OV, plain) — 1/8 | ✅ Live 4/4 (2026-06-25) | 1st of 8 Royalty Objects screens; built by ec-object-iud-builder; straight Bank-family clone (`OV_ROYALTY_OWNER`, no nav dd, End=Start delete); no shared-file edits; DB-verified + self-cleaning |
 | ECIS Excel Upload | End-to-end | ✅ Complete | Own interface + schedule, ran live |
 | ECIS Excel Upload | Re-runnable SQL + skills + evidence | ✅ Merged (2026-06-22, PR #93) | `workstreams/ecis-excel-upload/`: idempotent create/delete SQL (update-insert, no MERGE), live DB-verified demo (`AVG_BH_PRESS` NULL→210.5/215/220.3 @ 2003-01-10, self-cleaned), page-broken evidence doc, + `ec-sql-script-builder` & `ecis-excel-upload-builder` skills. KNOWN OPEN: automated `upload→RUN NOW` timing flakiness (root cause unconfirmed) |
 | Assets | Recon | ✅ Scanned | Registry complete |
