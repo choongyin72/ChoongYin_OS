@@ -28,14 +28,14 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0036** — Tank -> notes/CO.0036.md
 - [x] **CO.0037** — Maintain Tanks -> notes/CO.0037.md
 - [x] **CO.0038** — Tank Usage -> notes/CO.0038.md
-- [ ] **CO.0039** — Tank Strapping
-- [ ] **CO.0040** — Test Separator
-- [ ] **CO.0042** — Production Separator
-- [ ] **CO.0044** — Vessel
-- [ ] **CO.0045** — Weather Site
-- [ ] **CO.0049** — Well
-- [ ] **CO.0050** — Maintain Wells
-- [ ] **CO.0051** — Well Hole
+- [x] **CO.0039** — Tank Strapping -> notes/CO.0039.md
+- [x] **CO.0040** — Test Separator -> notes/CO.0040.md
+- [x] **CO.0042** — Production Separator -> notes/CO.0042.md
+- [x] **CO.0044** — Vessel -> notes/CO.0044.md
+- [x] **CO.0045** — Weather Site -> notes/CO.0045.md
+- [x] **CO.0049** — Well -> notes/CO.0049.md
+- [x] **CO.0050** — Maintain Wells -> notes/CO.0050.md
+- [x] **CO.0051** — Well Hole -> notes/CO.0051.md
 - [ ] **CO.0054** — Well Bore
 - [ ] **CO.0055** — Well Bore Split
 - [ ] **CO.0057** — Well Bore Interval
