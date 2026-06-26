@@ -916,3 +916,38 @@ _None new this cycle. R1-R25 cover every finding. Version stays **v25**._
 | Remaining 3 Royalty Object screens (RC.0054/0057/0058) not yet started (Tract RC.0056 now done) | Worker | Medium |
 | Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_ov_iud_bundle.py`/`gen_checklist.py`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause | Worker | Medium |
 | Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
+
+---
+
+## 2026-06-26 -- Automated Review (14:00 AWST, 1 worker PR + 1 standing draft)
+
+_No new master commits since the 06:00 run (#125/`327e769`) other than what this run merges; 2 open PRs -- #126 (ECSR-35236 PHD check-rule scoping SQL, NOT draft) and #118 (the standing deep-dive draft). Open PRs trigger a full review (R14). **#126 CLEAR -- zero MUST-FIX -- squash-merged (`b991897`).** #118 left open (owner-merge-only standing draft). **No new executable rule -- R1-R25 cover every finding; version stays v25.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #126 | Clear (HIGH effort -- client check-rule config SQL + paired rollback). Scopes 8 PHD validation rules (tank GRS_MASS/STD_DENS = MEASURED; stream DENSITY/GCV = COMP_ANALYSIS; 4x PWEL no-data temp/press = ON_STREAM_HRS > 0) by appending a method/on-stream criterion to each WHERE_FORMULA + an ATTRIBUTE method var, mirroring the live `PHD_STREAM_LIQUID_MEAS_VAL2` rule. Apply SQL: idempotent upsert (`UPDATE; IF SQL%ROWCOUNT=0 THEN INSERT`, no MERGE), **targets by CHECK_NAME** (CHECK_ID env-local, resolved at runtime), `REV_TEXT='ECSR-35236'` real ticket (**R22 clean -- no `ECPR-XXXX`**), **0 DELETE** (non-destructive), per-rule `check_id` keying so shared var names (`ConstMEASURED`/`ConstCOMP`/`OnStrmHrs`) never collide across rules. Rollback SQL: restores original value-only formulas, DELETE precisely guarded by `rev_text='ECSR-35236'` + the 7 net-new var names + the 8 target check_ids; net-new status cross-checked vs pristine ECAASTEST (the key safety proof for a stamp-guarded delete). Full apply->rollback->re-apply cycle is clean. R8 satisfied (branch merged origin/master `306d2f55`/`0c15c32`). DB ground-truth (round-trip S0==S2, behavioural before/after counts, Validation Overview screen 20->12 Errors) + self-clean taken as worker-attested (plutodev read-write-with-rollback, not reviewer-re-run). **1 NICE-TO-HAVE (R18/R20):** `investigation/compare_check_rules.py` has em-dashes in its docstring/comments (lines 3/5/13) -- only in docstring/comments (not `print()` strings) so no cp1252 runtime crash, and the file is outside the `check_bundle_hygiene.py` glob (`workstreams/**` not scanned) so the static gate misses it. Exactly the still-open "broaden the hygiene glob to `workstreams/**`" carry-over. | OK Clear (NICE-TO-HAVE) -- merged |
+| #118 | STANDING/DRAFT EC Screen Deep-Dive (draft=true). Reviewer leaves it alone by design (draft = skip; owner milestone-merges). Not reviewed for content this run. | -- left open (owner-merge-only) |
+
+### Rules (apply immediately, no exceptions)
+
+_None new this cycle. R1-R25 cover every finding. Version stays **v25**._
+
+### Observations (good patterns to keep)
+
+- **Paired apply/rollback with asymmetric audit stamps is the right shape.** #126's rollback audit-stamps the rule rows with a distinct `'ECSR-35236-ROLLBACK'` REV_TEXT while keying the variable DELETE off the apply's `'ECSR-35236'` stamp -- so the currently-applied-vs-rolled-back state is legible straight from REV_TEXT, and the deletion still targets exactly what apply wrote. The stamp-guarded delete is only safe because the worker proved the 7 vars are net-new via a pristine-ECAASTEST cross-check ([[feedback_clone_full_row_diff]] / R2 verify-before-assume) -- that cross-check is what turns "DELETE WHERE rev_text=mine" from risky into precise.
+- **R22 is now reflexive on client SQL.** Every SQL delivery since R22 was minted (#96 NOPTA, #107 SCA-email, now #126) has set the real governing ticket on every DML via a single `lv_rev_text` constant with zero `ECPR-XXXX`/`ECSR-XXXX` placeholder. The standing re-runnable+REV_TEXT directive needs no reminder.
+- **Per-branch JOURNAL.md habit landed.** #126's `a757ba5` adds a committed `JOURNAL.md` (built / done-wrong / done-well / improve / blockers+resolution / decisions) -- the first instance of the standing per-feature-branch journal habit. Good for handover/resumability; keep it.
+
+### Gaps (verified against filesystem / PRs)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `workstreams/ecsr-35236-phd-validations/investigation/compare_check_rules.py` em-dashes (lines 3/5/13) -- ASCII-normalise (R18/R20). Reinforces the open carry-over to broaden `check_bundle_hygiene.py` to `workstreams/**/**.py` so these are machine-caught | Worker | Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/**.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): #124 SOW date wording vs hardcoded `2011-01-01` (R21); remaining 3 Royalty Object screens (RC.0054/0057/0058); Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
+
+### Reviewer process note
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent `feature/ec-screen-deepdive` branch with a dirty working tree (and many active sibling IUD worktrees: `wt-royalty*`/`wt-tract`/`wt-prodgrp`/`wt-unitagr`/`wt-ecsr*`/`wt-ec-learn`). That branch was behind master at **v23** while master is **v25** -- the exact R23/MR4 drift. All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-26-1400` worktree off `origin/master`; the Worker's checkout and every sibling worktree were never touched. The current `lessons-learned.md` state (v25, R24/R25) was re-read from the master copy in the worktree, not the stale v23 main-checkout copy (MR4).
