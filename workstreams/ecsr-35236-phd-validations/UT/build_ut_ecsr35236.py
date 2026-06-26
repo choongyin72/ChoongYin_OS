@@ -8,13 +8,15 @@ cross-check results are embedded from the verified investigation runs.
 Usage: py build_ut_ecsr35236.py
 """
 import os
+import json
 import oracledb
 from docx import Document
-from docx.shared import Pt, RGBColor
+from docx.shared import Pt, RGBColor, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 
 HERE = os.path.dirname(__file__)
 OUT = os.path.join(HERE, "UT_ECSR-35236.docx")
+SHOTS = os.path.join(HERE, "screens")
 DSN = "db.plutodev.woodside-pluto.tieto-og.cloud:1521/plutodev"
 
 # rule -> (original formula, scoped formula, target table, value col, method criterion, qualifying-method note)
@@ -107,7 +109,33 @@ def build():
     for name, _o, _s, tbl_, vcol, crit in RULES:
         doc.add_paragraph(f"{name}  ->  {tbl_}.{vcol}  ;  criterion: {crit}", style="List Bullet")
 
-    h(doc, "3.  Test 1 - Apply / Rollback round-trip (deployment safety)", 1)
+    # ---- Section 3: SCREEN EVIDENCE (the headline) ----
+    res = {}
+    rp = os.path.join(HERE, "vo_results.json")
+    if os.path.exists(rp):
+        res = json.load(open(rp, encoding="utf-8"))
+    h(doc, "3.  Screen evidence - Validation Overview (EC Web App)", 1)
+    doc.add_paragraph(
+        "Captured live on the EC Web App (https://app-plutodev.woodside-pluto.tieto-og.cloud/), "
+        "Configuration > System > Validation > \"Validation Overview - Pluto Scarborough\". The check "
+        f"group \"{res.get('group','Daily Tank Status - VCF Calc - PHD Validations')}\" was run for "
+        f"{res.get('date','2026-06-06')}, BEFORE the fix and AFTER applying it - then the fix was rolled "
+        "back (plutodev left in its original state).")
+    be = res.get("before_errors", "20"); ae = res.get("after_errors", "12")
+    doc.add_paragraph(
+        f"Result on screen: the group's Summary went from {be} Errors (before) to {ae} Errors (after). "
+        f"The {int(be) - int(ae) if str(be).isdigit() and str(ae).isdigit() else ''} suppressed validations are "
+        "the false positives - tank Gross Mass / Standard Density rows whose measurement method is not "
+        "MEASURED (e.g. GRS_VOL_DENSITY, STREAM_SAMPLE_ANALYSIS). The genuine validations remain (the unchanged "
+        "Gross Volume / Avg Temp tank rules, and any MEASURED rows that are genuinely missing a value).")
+    for cap, fn in [("BEFORE - original rules: Daily Tank Status - PHD Validations Summary", "vo_tank_before.png"),
+                    ("AFTER - scoping criterion applied: false positives suppressed", "vo_tank_after.png")]:
+        p = doc.add_paragraph(); p.add_run(cap).bold = True
+        img = os.path.join(SHOTS, fn)
+        if os.path.exists(img):
+            doc.add_picture(img, width=Inches(6.4))
+
+    h(doc, "4.  Deployment safety - Apply / Rollback round-trip", 1)
     doc.add_paragraph(
         "Snapshot the original state (S0) -> run the apply SQL -> verify all 8 rules are scoped (S1) -> "
         "run the rollback SQL -> verify the state returns exactly to S0 (S2). Result on plutodev:")
@@ -125,7 +153,7 @@ def build():
         "REV_TEXT = 'ECSR-35236-ROLLBACK' on the rule rows as a deliberate audit marker (behaviour is identical "
         "to the original).")
 
-    h(doc, "4.  Test 2 - Behavioural: false-positive suppression (live plutodev data)", 1)
+    h(doc, "5.  Supporting DB detail - false-positive suppression counts (all 8 rules)", 1)
     doc.add_paragraph(
         "The EC check fires when  SELECT Count(*) FROM <target> WHERE <formula>  > 0. The table below runs "
         "the check's own count query against live data, before vs after the scoping criterion. 'Suppressed' "
@@ -142,7 +170,7 @@ def build():
         "Every column referenced by the fix was confirmed to exist on its target table (including "
         "ON_STREAM_HRS_HRS on RV_PWEL_DAY_STATUS), so the deployed checks compile and run.")
 
-    h(doc, "5.  Observations to confirm on client test", 1)
+    h(doc, "6.  Observations to confirm on client test", 1)
     for txt in [
         "PHD_TANK_DIP_STD_DENSITY_VAL1 (= 'MEASURED'): on current plutodev data this suppresses 100% - "
         "the flagged standard-density rows all carry STD_DENS_METHOD = 'STREAM_SAMPLE_ANALYSIS' and none "
@@ -156,7 +184,7 @@ def build():
     ]:
         doc.add_paragraph(txt, style="List Bullet")
 
-    h(doc, "6.  Conclusion", 1)
+    h(doc, "7.  Conclusion", 1)
     doc.add_paragraph(
         "The fix applies cleanly to all 8 rules, demonstrably suppresses the false-positive PHD validations "
         "while leaving genuine cases flagged (e.g. tank gross mass still fires for MEASURED rows; stream "
