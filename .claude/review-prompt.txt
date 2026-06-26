@@ -39,7 +39,7 @@ Steps:
    `git worktree prune && rm -rf C:/tmp/wt-review-deepdive-sync`   (clear any leftover dir from a prior run whose --force removal was blocked by a Windows file lock -- else the next `worktree add` fails with 'already exists')
    `git worktree add --detach C:/tmp/wt-review-deepdive-sync origin/feature/ec-screen-deepdive`
    `git -C C:/tmp/wt-review-deepdive-sync merge origin/master --no-edit`
-   `git -C C:/tmp/wt-review-deepdive-sync push origin feature/ec-screen-deepdive`
+   `git -C C:/tmp/wt-review-deepdive-sync push origin HEAD:refs/heads/feature/ec-screen-deepdive`   (R24: the worktree is --detach, so a BARE `push origin feature/ec-screen-deepdive` pushes the shared LOCAL branch ref (Worker's stale main-checkout tip), NOT the detached merge HEAD -- always push the explicit `HEAD:refs/heads/<branch>` refspec)
    `git worktree remove C:/tmp/wt-review-deepdive-sync --force`   (best-effort; named wt-review-* so step 17's sweep + the prune above also clean it even if the lock blocks removal)
    If the branch is already current (merge says 'Already up to date'), the push is a no-op. Use merge (NOT force-push) -- force-push would destroy runner-committed screen notes. Do not skip even if no Worker PRs were merged today.
 19. Final master clean-up: run `git checkout master && git pull origin master`, then run `git status`. If any uncommitted changes remain (reviewer-owned files or otherwise), discard them with `git checkout -- <file>` for modified files. Verify `git status` shows 'nothing to commit, working tree clean' before ending the session. This guarantees the Worker can always run `git checkout master` without conflicts after any reviewer session.
