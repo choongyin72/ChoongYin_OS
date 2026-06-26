@@ -951,3 +951,34 @@ _None new this cycle. R1-R25 cover every finding. Version stays **v25**._
 ### Reviewer process note
 
 - The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent `feature/ec-screen-deepdive` branch with a dirty working tree (and many active sibling IUD worktrees: `wt-royalty*`/`wt-tract`/`wt-prodgrp`/`wt-unitagr`/`wt-ecsr*`/`wt-ec-learn`). That branch was behind master at **v23** while master is **v25** -- the exact R23/MR4 drift. All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-26-1400` worktree off `origin/master`; the Worker's checkout and every sibling worktree were never touched. The current `lessons-learned.md` state (v25, R24/R25) was re-read from the master copy in the worktree, not the stale v23 main-checkout copy (MR4).
+
+---
+
+## 2026-06-27 06:00 AWST -- Automated Review (1 worker PR #128 + 1 standing draft #118)
+
+_0 new master commits since #127/`1aa08e0` (the 06-26 14:00 review); 1 non-draft worker PR (#128) + the standing deep-dive draft (#118). Open PRs trigger a full review (R14). **#128 content CLEAR but has 1 MUST-FIX (R9 body header drift) -- left OPEN.** #118 = owner-merge-only standing draft, **NOT merged**, R23 satisfied. **No new executable rules** -- R1-R25 cover every finding; version stays **v25**._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #128 | **MUST-FIX (R9)** -- ECSR-35333 RAU report read-only fact-finding (Issue 1 root cause proven, no fix, awaiting client re-test). The diff is clean and high quality, independently verified: 8 `investigation/*.py` are **read-only** (0 INSERT/UPDATE/DELETE/MERGE/commit, grep-verified), env-var creds `EC_DB_USER`/`EC_DB_PWD`/`EC_DB_DSN` (R16), ASCII-clean `.py` (R18/R20 -- `[^\x00-\x7F]` -> 0 matches; em-dash only in pure-MD `FINDINGS.md`/`JOURNAL.md`, exempt), isolated `workstreams/ecsr-35333-rau-report/` tree, **0 deletions** anywhere (R8/R23 trivially clean), root cause proven four independent ways (As-Built DDS 4.1.6 + `ZWP_P_DEF_RAU_CALC` gate code + live 120/150 `P` unverified + the calc's own revision text). DB ground-truth taken as worker-attested (ECAASDEV read-only, not reviewer-re-run). **But the PR body is missing 4 of the 6 literal R9 headers:** "What was built" (present only as "What this is"), "DB ground-truth evidence", "Self-clean confirmed", and "Rules applied" (entirely absent). Format-only fix -- no code change needed. | MUST-FIX open -- left for Worker |
+| #118 | Clear (re-confirmation) -- standing DRAFT EC Screen Deep-Dive; reviewer never auto-merges (owner milestone-merges). Increment since the last cleared head `c32cec2` = `39fb078` (CO.0018/CO.0038/PO.0008) + `12eaad8` (CO.0039/0040/0042/0044/0045/0049/0050/0051) = 11 new screen notes, all **full** (DB binding + Help both present). Bindings spot-checked real (CO.0049 Well->`WELL`/OBJECT/VERSIONED->`OV_WELL`; CO.0039 Tank Strapping->`TANK_STRAPPING`/DATA/EVENT->`DV_TANK_STRAPPING`), genuine EC config-manual Help text, ASCII-clean, honest marking. **R23 satisfied:** `git diff --stat origin/master...origin/feature/ec-screen-deepdive` shows ZERO `-` lines on the four reviewer-owned docs (the 21 deletions are CHECKLIST `[ ]`->`[x]` flips + note re-enrichment). | OK Clear -- left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **A content-clean PR can still earn a MUST-FIX purely on body discipline -- and should.** #128's *change* is exemplary (read-only, env creds, ASCII, isolated tree, 4-way-proven root cause), yet the body is missing 4 of the 6 literal R9 headers. R9 exists precisely so the body is a trustworthy parse surface; "What this is" is not "What was built", and "Rules applied" being absent means the reviewer cannot see which rules the worker claims to have honoured. Holding the line here is consistent (cf. #19 missing-fields MUST-FIX) and the fix is format-only -- low cost to the worker, high value to the merge gate.
+- **R23 holds on the permanent branch this run without intervention.** The deep-dive branch has re-absorbed master (now v25) via its own `git merge origin/master` commits (`3d9aa78`), so the four reviewer-owned docs show zero `-` lines vs master -- a milestone-merge will not clobber any review record. The standing-draft + branch-self-syncs model is working as designed (cf. R23 + the step-18 sync).
+- **Read-only fact-finding is the correct deliverable shape for a critical client bug awaiting re-test.** #128 proves the root cause and stops (no fix, no client-repo touch, no DB write) -- the operational fix (verify the outstanding June deferment events, re-run `ZWP_RAU_CALC_PLUSCA`) is handed back for the client to action. This is exactly R3-style "prove what works, park what requires the other party, never over-claim" applied to investigation work.
+
+### Gaps (verified against filesystem / PRs)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **#128 MUST-FIX:** add the 4 missing literal R9 headers to the PR body ("What was built" / "DB ground-truth evidence" / "Self-clean confirmed" / "Rules applied"); push the body fix to clear (format-only, no code change) | Worker | High |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/**.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): #124 SOW date wording vs hardcoded `2011-01-01` (R21); remaining 3 Royalty Object screens (RC.0054/0057/0058); Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
+
+### Reviewer process note
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent `feature/ec-screen-deepdive` branch with a dirty working tree (sibling IUD worktrees `wt-royalty*`/`wt-tract`/`wt-prodgrp`/`wt-unitagr`/`wt-uws2`/`wt-ecsr*`/`wt-ec-learn` all present). The main checkout sits at `a7a0a3d` (v23) while master is `1aa08e0` (v25) -- the R23/MR4 drift; the *committed* deep-dive branch tip (`origin/feature/ec-screen-deepdive` = `12eaad8`) has re-absorbed master, so R23 is green at the branch tip even though the dirty checkout is behind. All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-27-0600` worktree off `origin/master`; the Worker's checkout and every sibling worktree were never touched. Current v25 state (R24/R25) re-read from the master copy in the worktree, not the stale v23 main-checkout copy (MR4).
