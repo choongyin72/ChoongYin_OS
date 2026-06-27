@@ -28,16 +28,16 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `0028225` | 2026-06-27 | feat(ec-automation): Product Group Setup IUD (RC.0054, 3-tier) â€” full I-U-D x3… |
+| `c2e9a49` | 2026-06-27 | feat(ec-automation): Tract - Well Setup IUD (RC.0057, PC) â€” full I-U-D, live 4… |
+| `a556cbc` | 2026-06-27 | docs(ecsr-35333): RAU report fact-finding - Issue 1 root cause + read-only repro… |
+| `eb97d9f` | 2026-06-27 | review: automated quality feedback 2026-06-27 (06:00 AWST -- #128 ECSR-35333 MUS… |
 | `1aa08e0` | 2026-06-26 | review: automated quality feedback 2026-06-26 (14:00 AWST -- #126 ECSR-35236 PHD… |
 | `b991897` | 2026-06-26 | ECSR-35236: scope 8 PHD check rules by method / on-stream (SQL + UT evidence) (#… |
 | `327e769` | 2026-06-26 | review: automated quality feedback 2026-06-26 (#125) |
 | `ec9f9aa` | 2026-06-26 | feat(ec-iud): Tract IUD suite (OV-GM, Unit-Agreement-gated) - live 4/4 DB-verifi… |
 | `c9978bc` | 2026-06-26 | feat(ec-iud): Unit Agreement IUD suite (OV, Bank family) - live 4/4 DB-verified … |
 | `01da326` | 2026-06-26 | feat(ec-iud): Product Group IUD suite (OV, Bank family) - live 4/4 DB-verified (… |
-| `7f256f9` | 2026-06-26 | feat(ec-iud): Royalty Depositor IUD suite (OV, Bank family) - live 4/4 DB-verifi… |
-| `32a8ad7` | 2026-06-26 | feat(ec-iud): Royalty Owner IUD suite (OV, Bank family) - live 4/4 DB-verified (… |
-| `0906711` | 2026-06-26 | fix(runner): 6 robustness fixes -- fetch logging, XPath safety, em-dash, checkli… |
-| `0ecbbae` | 2026-06-26 | feat(runner): DB pre-flight retry + explicit job-aborted-on-DB log (#116) |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
