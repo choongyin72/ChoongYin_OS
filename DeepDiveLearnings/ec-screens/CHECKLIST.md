@@ -36,14 +36,14 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0049** — Well -> notes/CO.0049.md
 - [x] **CO.0050** — Maintain Wells -> notes/CO.0050.md
 - [x] **CO.0051** — Well Hole -> notes/CO.0051.md
-- [ ] **CO.0054** — Well Bore
-- [ ] **CO.0055** — Well Bore Split
-- [ ] **CO.0057** — Well Bore Interval
-- [ ] **CO.0058** — Well Bore Interval Split
-- [ ] **CO.0060** — Maintain Equipment
-- [ ] **CO.0067** — Flowline Well Connection
-- [ ] **CO.0068** — Cargo Activity
-- [ ] **CO.0069** — Cargo Account
+- [x] **CO.0054** — Well Bore -> notes/CO.0054.md
+- [x] **CO.0055** — Well Bore Split -> notes/CO.0055.md
+- [x] **CO.0057** — Well Bore Interval -> notes/CO.0057.md
+- [x] **CO.0058** — Well Bore Interval Split -> notes/CO.0058.md
+- [~] **CO.0060** — Maintain Equipment -> notes/CO.0060.md (partial: missing DB binding)
+- [x] **CO.0067** — Flowline Well Connection -> notes/CO.0067.md
+- [x] **CO.0068** — Cargo Activity -> notes/CO.0068.md
+- [x] **CO.0069** — Cargo Account -> notes/CO.0069.md
 - [ ] **CO.0070** — Chemical Tank
 - [ ] **CO.0072** — Chemical Product
 - [ ] **CO.0074** — Chemical Tank Product Combination
