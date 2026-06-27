@@ -39,6 +39,30 @@ Product Group (top grid nav:form:T_data — click a row to select; NO date/dd/GO
 - Cost: select the product → COSTS tab → insert a cost row (Cost Type + unique COMMENTS sentinel) → update → delete.
 - Date 2011-01-01. Independent DB re-read confirms existing group rows intact.
 
+## BUILD STATUS (2026-06-27, WIP checkpoint)
+All 3 entities mapped + DB-backed (SCC un-parked: backing = **`PRODUCT_STRM_BAL_CAT`**, verify via
+COMMENTS sentinel; label "Stream Calculation Category" != table "Stream Balance Category").
+Built T3 `product_group_setup_page.resource` (generic keywords + per-entity dicts &{SETUP_E}/&{COST_E}/
+&{SCC_E}) + suite `product_group_setup_iud.robot` (10 TCs, nested I-U-D under a test product
+'Chemical Product' in ALL_GENERAL; oracle = COMMENTS sentinel present-in-view). robocop clean, dryrun 10/10.
+
+**Live progress:** run #2 = **TC01-04 PASS** (Setup INSERT + Setup UPDATE + Cost INSERT, all DB-verified).
+Fixes applied + verified:
+- **Silent reject** on Setup/Cost inserts -> fill UI-yellow / DB-NOT-NULL mandatory cells:
+  Setup C2_in (Sort Order); Cost C2_in (Sort) + C4_in (Cost Column). (`Fill New Row Fields` keyword.)
+- **2nd-Save-no-rearm** on sub-tab updates -> `Enter Setup Context` / `Enter Sub Context` re-select
+  group+product+tab before each U/D op (added; NOT yet validated live).
+
+**REMAINING (resume here):**
+1. Validate the reload (`Enter * Context`) fix end-to-end with a clean full live run (was about to run #3).
+2. **Flaky toolbar DELETE gesture** - the Delete submenu click intermittently fails ("a menu item
+   intercepts pointer events"; seen in run #2 cascade + the UI cleanup). The 6 delete-related TCs need
+   this resolved (e.g. dismiss the intercepting menuitem / click the submenu via JS / wait for stable).
+3. Then: evidence run + bundle (SOW/README/JOURNAL) + registry/scorecard + PR.
+
+**Self-clean note:** run #2 left 1 Setup + 1 Cost AUTOTEST row; cleaned via targeted DB delete on the
+LOCAL sandbox (UI delete was flaky) - ALL_GENERAL verified back to its original 7 products, all sentinels 0.
+
 ## Key ids (for the build)
 - top grid `nav:form:T_data` (click row by group code) · middle `prod_group_setup:form:T_data`
 - tabs `product_group_sub:tabPanel:tab1_header` (COSTS) / `tab2_header` (SCC)
