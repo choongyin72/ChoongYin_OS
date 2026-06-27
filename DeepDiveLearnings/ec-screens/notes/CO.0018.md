@@ -1,6 +1,6 @@
 # CO.0018 - Maintain Equity Share
 
-_Deep-dive 2026-06-24 (deterministic runner). Module: CO._
+_Deep-dive 2026-06-25 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0018 - URL: `/com.ec.prod.co.screens/maintain_equity_share`
@@ -8,10 +8,12 @@ _Deep-dive 2026-06-24 (deterministic runner). Module: CO._
 ## DB binding (metadata-resolved)
 | Class | Type/Scope | Base table | View |
 |---|---|---|---|
-| (no class resolved from URL/LABEL) | | | |
+| `EQUITY_SHARE` | DATA/EVENT | `EQUITY_SHARE` | `DV_EQUITY_SHARE` |
+
+_Resolved by: url path token_
 
 ## Screen type
-unknown (no class resolved)
+DATA/EVENT
 
 ## Help (description)
 The equity share defines the companies' roles and ownership percentages to a commercial entity.
@@ -27,3 +29,6 @@ CONFIGURATION IN MAINTAIN SYSTEM SETTINGS (CO.1006)
 Copy Current Split - Confirmation Message
 
 Choose the setting between Yes or No. Setting to Yes will display a confirmation message upon creating a new split based on the selected date in the navigator.
+
+## Help (screenshot)
+![CO.0018 Help screenshot](CO.0018_help.png)
