@@ -30,6 +30,7 @@ UNIT_AGREEMENT = "Unit Agreement 3"
 PERF_INTERVAL = "108_WB1-1_PF1"
 FORM_DATE = "2011-01-01"
 START_DATE = "2011-01-01"
+UPD_COMMENT = "AUTOTEST_UWS_UPD"
 GRID = "well_setup:form:T_data"
 PREFIX = "well_setup:form:T"
 NAV_DATE = "nav:form:G:0:R:1:C:0:da_input"
@@ -50,6 +51,21 @@ def db_count():
     try:
         cur.execute("SELECT COUNT(*) FROM DV_UNIT_WELL_SETUP WHERE PERF_INTERVAL_CODE = :c", c=PERF_INTERVAL)
         return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def db_comment():
+    conn = oracledb.connect(user=os.environ.get("EC_DB_USER", "ECKERNEL_EC"),
+                            password=os.environ.get("EC_DB_PASS", "energy"),
+                            dsn=DB_DSN, tcp_connect_timeout=15)
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT COMMENTS FROM DV_UNIT_WELL_SETUP WHERE OBJECT_CODE = 'UNIT_3' "
+                    "AND PERF_INTERVAL_CODE = :c", c=PERF_INTERVAL)
+        r = cur.fetchone()
+        return r[0] if r else None
     finally:
         cur.close()
         conn.close()
@@ -164,8 +180,25 @@ with sync_playwright() as p:
     ss("insert_result")
     print(f"  INSERT: {results['insert']}")
 
-    print("=== DELETE WELL SETUP (physical) ===")
+    print("=== UPDATE WELL SETUP (comments) ===")
     if results["insert"] == "PASS":
+        row = find_row(PERF_INTERVAL)
+        cid = f"{PREFIX}:{row}:C3_in"   # C3_in maps to COMMENTS (recon-confirmed)
+        page.click(_css(cid))
+        page.fill(_css(cid), "")
+        page.type(_css(cid), UPD_COMMENT, delay=40)
+        page.keyboard.press("Tab")
+        ajax(12000)
+        save()
+        refresh()
+        results["update"] = "PASS" if db_comment() == UPD_COMMENT else f"FAIL comment={db_comment()!r}"
+    else:
+        results["update"] = "SKIP"
+    ss("update_result")
+    print(f"  UPDATE: {results['update']}")
+
+    print("=== DELETE WELL SETUP (physical) ===")
+    if results["update"].startswith("PASS"):
         row = find_row(PERF_INTERVAL)
         # a SAVED row's start-date is a TEXT cell C0_in (new rows show calendar C0_da_input)
         page.click(_css(f"{PREFIX}:{row}:C0_in"))

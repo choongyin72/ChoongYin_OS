@@ -3,5 +3,6 @@
   "navigate": "PASS",
   "clean": "CLEAN",
   "insert": "PASS",
+  "update": "PASS",
   "delete": "PASS (physical)"
 }

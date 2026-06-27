@@ -16,7 +16,8 @@ physically deleted again; the chosen parent (Unit Agreement 3) is EMPTY before a
 | Operation | Pass condition | Status |
 |---|---|---|
 | INSERT membership | row in grid AND `DV_UNIT_WELL_SETUP` count = baseline+1 | PASS |
-| DELETE membership | row gone AND count back to baseline | PASS |
+| UPDATE membership | edit COMMENTS (`C3_in`) → sentinel present in `DV_UNIT_WELL_SETUP` | PASS |
+| DELETE membership | row gone AND count back to baseline (sentinel gone) | PASS |
 | CLEANUP | zero leftover rows (delta oracle proves it) | PASS |
 
 ## 2. DESIGN
@@ -62,15 +63,22 @@ Row SELECT (for delete) clicks the SAVED row's C0_in (text), NOT C0_da_input.
   dedicated cleanup pass (DB 1 → 0) before re-running, so the sandbox was never left dirty.
 - Count-delta oracle: the member starts at 0 rows anywhere, so the +1 / back-to-baseline deltas
   are unambiguous and pre-existing data in other agreements is irrelevant.
+- **UPDATE added after user feedback** (initial ship was Insert/Delete only — wrongly inherited from
+  the Object List Setup exemplar's scope; IUD requires all three). A self-cleaning recon probe mapped
+  the saved-row cells: **`C3_in` -> COMMENTS (text)**, **`C4_in` -> SORT_ORDER (numeric)** — and showed
+  these cells appear ONLY after the row is saved (a NEW blank row exposes just C0/C1/C2). UPDATE edits
+  COMMENTS to a unique sentinel and verifies with the existing `Code Should Be Present In View`
+  (string-column scan) — no shared-file/DbVerify edit needed.
 
 ## 4. TEST EXECUTION
 | Run | Mode | Result |
 |---|---|---|
 | robocop lint | — | No issues found |
-| RF dryrun | — | 3/3 PASS |
-| RF live #1 | HEADED | TC01-02 PASS, TC03 FAIL (saved-row select-cell) → fixed |
-| RF live #2 | HEADED | TC01-TC03 3/3 PASS, count-delta verified |
-| Playwright reference | headless | see `evidence/unit_well_setup_results.json` |
+| RF dryrun | — | 4/4 PASS |
+| RF live #1 | HEADED | TC01-02 PASS, delete FAIL (saved-row select-cell) → fixed |
+| RF live #2 | HEADED | I/D 3/3 PASS, count-delta verified |
+| RF live #3 (full I-U-D) | HEADED | **TC01-TC04 4/4 PASS** — UPDATE (COMMENTS) added after user feedback; DB-verified |
+| Playwright reference | headless | INSERT+UPDATE+DELETE ALL PASS — see `evidence/unit_well_setup_results.json` |
 
 ## 5. DELIVERABLES
 | Deliverable | Where |

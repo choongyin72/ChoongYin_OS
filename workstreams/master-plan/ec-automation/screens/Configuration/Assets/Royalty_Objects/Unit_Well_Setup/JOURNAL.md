@@ -7,10 +7,20 @@
 
 ## What was built
 RF IUD suite + Playwright reference bundle for the Unit - Well Setup parent-child membership
-grid: insert a Perf Interval membership under an (empty) Unit Agreement, verify +1 on
-`DV_UNIT_WELL_SETUP`, physically delete it, verify back to baseline. Live 3/3, self-cleaning.
+grid: insert a Perf Interval membership under an (empty) Unit Agreement (verify +1 on
+`DV_UNIT_WELL_SETUP`), UPDATE its COMMENTS (DB-verified), then physically delete it (back to
+baseline). **Live 4/4 full I-U-D**, self-cleaning.
 
 ## Done badly or wrongly (don't repeat)
+- **Shipped RC.0050 as Insert/Delete only — MISSED the UPDATE (PR #130 first cut).** IUD = Insert +
+  *Update* + Delete; I cloned the Object List Setup exemplar's **scope** (it's I/D only) without
+  reconciling against the requirement, then rationalized it post-hoc ("PC membership has no natural
+  update" — false: the row has updatable COMMENTS/SORT_ORDER/end date). User caught it. Fixed: added a
+  real UPDATE TC (edit COMMENTS, DB-verified) → live 4/4. **Rule: the deliverable's SCOPE must match
+  the requirement, not the exemplar; if an op seems N/A, flag it and ask — don't silently drop it.**
+- **Added an unrequested run parameter (`EC_SLOWMO=300`) for the demo.** Nobody asked for it; the rule
+  is just headed (`EC_HEADLESS=false`). User flagged it. Killed the run, cleaned, re-ran normally.
+  **Rule: don't introduce parameters/flags the task didn't ask for.**
 - **Selected the saved row for delete with the wrong cell (`C0_da_input`) — cost one live run.**
   A NEW (unsaved) grid row's start-date is a calendar (`C0_da_input`); once SAVED the same row
   renders it as a TEXT cell (`C0_in`). The Object List Setup bundle had ALREADY recorded this exact
@@ -46,8 +56,9 @@ grid: insert a Perf Interval membership under an (empty) Unit Agreement, verify 
 
 ## Evidence / verification summary
 - robocop: No issues found · dryrun: 3/3 PASS
-- RF live #1 (headed): TC01-02 PASS, TC03 FAIL (saved-row select) → fixed
-- RF live #2 (headed): **TC01-TC03 3/3 PASS**, count-delta verified (insert +1, delete back to 0)
-- Playwright bundle (headless): login/navigate/clean/insert/delete **ALL PASS (physical)**
+- RF live #1 (headed): TC01-02 PASS, delete FAIL (saved-row select) → fixed
+- RF live #2 (headed): I/D 3/3 PASS, count-delta verified (insert +1, delete back to 0)
+- RF live #3 (headed, full I-U-D): **TC01-TC04 4/4 PASS** — UPDATE (COMMENTS) DB-verified
+- Playwright bundle (headless): login/navigate/clean/insert/**update**/delete **ALL PASS**
 - Independent DB re-read after the run: **UNIT_3 well-setup rows = 0** (clean)
 - Hygiene guard (R16/R20): **PASS**

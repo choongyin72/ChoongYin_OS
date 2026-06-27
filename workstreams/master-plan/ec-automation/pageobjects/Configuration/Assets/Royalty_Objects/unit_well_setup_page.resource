@@ -65,6 +65,28 @@ Insert Well Setup
     Save
     Refresh Screen
 
+Update Well Setup Comments
+    [Documentation]    UPDATE: on the SAVED membership row (found by Perf Interval), type a
+    ...    new value into the COMMENTS cell (C3_in maps to DV_UNIT_WELL_SETUP.COMMENTS,
+    ...    confirmed by recon) -> Save -> Refresh.
+    [Arguments]    ${perf_value}    ${comment}
+    ${row}=    Find Grid Row By Cell Input Value    ${UWS_TABLE}    ${UWS_PI_CELL_SUFFIX}    ${perf_value}
+    Should Be True    ${row} >= 0    msg=Well-setup row ${perf_value} not found to update
+    Type Cell By Id    ${UWS_CELL_PREFIX}:${row}:C3_in    ${comment}
+    Save
+    Refresh Screen
+
+Comment Should Be Present In DB
+    [Documentation]    Assert the updated COMMENTS value persisted in DV_UNIT_WELL_SETUP
+    ...    (scans the view's string columns - the sentinel is unique to COMMENTS).
+    [Arguments]    ${comment}
+    Code Should Be Present In View    ${UWS_DB_VIEW}    ${comment}
+
+Comment Should Be Absent In DB
+    [Documentation]    Assert the COMMENTS sentinel is NOT present in DV_UNIT_WELL_SETUP.
+    [Arguments]    ${comment}
+    Code Should Be Absent In View    ${UWS_DB_VIEW}    ${comment}
+
 Select Well Setup Row
     [Documentation]    Click the row whose Perf Interval cell shows ${perf_value} so the
     ...    toolbar Delete acts on it. Fails if the row is not found.

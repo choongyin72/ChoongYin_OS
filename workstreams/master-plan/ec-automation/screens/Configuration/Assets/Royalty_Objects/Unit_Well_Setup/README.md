@@ -17,7 +17,7 @@ inline membership grid; Insert/Delete toolbar acts on "Well Setup". Each row lin
 ## Maintained RF suite (the canonical test)
 - Suite: `tests/Configuration/Assets/Royalty_Objects/unit_well_setup_iud.robot`
 - Page object (T3): `pageobjects/Configuration/Assets/Royalty_Objects/unit_well_setup_page.resource`
-- TC01 clean state · TC02 insert (+1) · TC03 delete (back to baseline) — all DB-verified.
+- TC01 clean state · TC02 insert (+1) · TC03 update (COMMENTS, present-in-view) · TC04 delete (back to baseline) — all DB-verified.
 
 ## Run
 ```bash
@@ -34,6 +34,8 @@ EC_HEADED=1 py screens/Configuration/Assets/Royalty_Objects/Unit_Well_Setup/play
 - Member: Perf Interval **108_WB1-1_PF1** — effective 2003-01-01, baseline 0 rows anywhere.
 - Form date / membership start: **2011-01-01** (inside both windows).
 
-## Gotcha (cost one live run)
-A NEW (unsaved) grid row's start-date cell is a calendar (`C0_da_input`); once SAVED the
-same row renders it as a text cell (`C0_in`). Select the persisted row for delete via `C0_in`.
+## Gotchas
+- A NEW (unsaved) grid row's start-date cell is a calendar (`C0_da_input`); once SAVED the
+  same row renders it as a text cell (`C0_in`). Select the persisted row for delete via `C0_in`.
+- The COMMENTS/SORT_ORDER cells (`C3_in` / `C4_in`) appear **only after the row is saved** — a NEW
+  blank row exposes just C0/C1/C2. So UPDATE edits a *saved* row. `C3_in`=COMMENTS, `C4_in`=SORT_ORDER.

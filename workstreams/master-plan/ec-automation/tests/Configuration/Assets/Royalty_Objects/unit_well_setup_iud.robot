@@ -23,15 +23,17 @@ ${UNIT_AGREEMENT}       Unit Agreement 3
 ${PERF_INTERVAL}        108_WB1-1_PF1
 ${FORM_DATE}            2011-01-01
 ${START_DATE}           2011-01-01
+${UPD_COMMENT}          AUTOTEST_UWS_UPD
 ${BASE_COUNT}           ${EMPTY}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
     [Documentation]    Record the DB baseline for the member code and confirm the row is
-    ...    not currently in the chosen agreement's grid.
+    ...    not currently in the chosen agreement's grid (and the update sentinel is absent).
     [Tags]    clean-state
     Well Setup Row Should Not Exist    ${PERF_INTERVAL}
+    Comment Should Be Absent In DB    ${UPD_COMMENT}
     Capture Step    unit_well_setup_tc01_clean
 
 TC02 Insert Well Setup
@@ -43,13 +45,24 @@ TC02 Insert Well Setup
     Perf Interval Count In DB Should Be    ${PERF_INTERVAL}    ${expected}
     Capture Step    unit_well_setup_tc02_inserted
 
-TC03 Delete Well Setup
-    [Documentation]    Physically delete the membership row and confirm grid + DB (back to baseline).
+TC03 Update Well Setup
+    [Documentation]    Edit the membership row's COMMENTS and confirm the new value
+    ...    persisted in DV_UNIT_WELL_SETUP (DB ground truth, not just the grid).
+    [Tags]    update
+    Update Well Setup Comments    ${PERF_INTERVAL}    ${UPD_COMMENT}
+    Comment Should Be Present In DB    ${UPD_COMMENT}
+    Well Setup Row Should Exist    ${PERF_INTERVAL}
+    Capture Step    unit_well_setup_tc03_updated
+
+TC04 Delete Well Setup
+    [Documentation]    Physically delete the membership row and confirm grid + DB (back to
+    ...    baseline, and the update sentinel gone with the row).
     [Tags]    delete    cleanup
     Delete Well Setup    ${PERF_INTERVAL}
     Well Setup Row Should Not Exist    ${PERF_INTERVAL}
     Perf Interval Count In DB Should Be    ${PERF_INTERVAL}    ${BASE_COUNT}
-    Capture Step    unit_well_setup_tc03_deleted
+    Comment Should Be Absent In DB    ${UPD_COMMENT}
+    Capture Step    unit_well_setup_tc04_deleted
 
 
 *** Keywords ***
