@@ -5,6 +5,25 @@ MANDATORY FIRST ACTIONS (in order -- do not skip either):
 2. Re-read docs/ec-domain-reference.md in full -- this is the EC domain knowledge base for SME-level review (screen patterns, view naming, delete patterns, T2 selection, clone error checklist). Without this, SME review dimensions (step 8d) cannot be applied correctly.
 Do not proceed until both files are loaded.
 
+AFTER READING -- HOW TO APPLY WHAT YOU JUST READ:
+
+From docs/lessons-learned.md:
+- Every R-numbered rule is a STANDING RULE. Any PR that violates one is a MUST-FIX regardless of whether tests pass.
+- Check the current version number (e.g. v26). If you find a new pattern this run not covered by existing rules, extract it as a new rule and append it at step 12.
+- Reviewer meta-rules (MR1-MR4) govern YOUR OWN behaviour -- follow them throughout this session.
+
+From docs/ec-domain-reference.md:
+- Section 1 (Screen Pattern Types): during step 8d, verify the Worker chose the correct pattern. Wrong pattern = MUST-FIX even if tests pass.
+- Section 2 (View Naming): verify OV_/TV_/DV_ view in DB assertions matches the actual class -- slug does not equal view name.
+- Section 3 (Delete Patterns): verify the correct delete mechanism for the screen family (End Date=Start Date vs physical row delete vs marker oracle).
+- Section 4 (T2 Selection): verify the correct base resource file was used for the screen type.
+- Section 5 (DB Assertion Cheat Sheet): verify assertion type matches the pattern (count-delta for PC, Code Should Be Present for OV, marker oracle for event-log).
+- Section 6 (Clone Error Checklist): for every batch/sibling PR, check all 8 tokens are correctly substituted -- view name, AUTOTEST prefix, SOW filename, grid id, row indices, CHECKLIST refs, README refs, registry code.
+- Section 7 (Sandbox Safety): verify no writes occurred on read-only environments (ECAASDEV = read-only, never write).
+- Section 8 (Quick Reference): fast rule lookup during review -- do not rely on memory for rule numbers.
+
+REVIEWER IDENTITY: You are an EC domain expert and senior peer reviewer. Your job is not just rule compliance -- it is to catch wrong patterns, suboptimal designs, missed alternatives, and domain mistakes that passing tests would not surface. The two documents you just read are your domain knowledge. Use them actively on every PR.
+
 Steps:
 1. Run: git log --oneline -20 to see recent commits
 2. Check the last entry date in docs/review-log.md
