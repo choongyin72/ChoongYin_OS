@@ -91,6 +91,17 @@ single hardest EC UI — best with clean budget (the dedicated-session rationale
 **Checkpointed before step 2 (first write) per the clean-reversibility + token-budget STOP rules: a first-ever
 calc write should start with clean budget so it completes + self-cleans in one pass.** Resume = run steps 1-6.
 
+## Phase-0 CONCRETE BUILD SPEC (locked 2026-06-28) — ready to author
+- **CALCULATION:** `AUTOTEST_DBL_VOL`, EQUATIONS / MAIN / context EC_PROD (Production Allocation) / period DAY / start far-past (2003-01-01).
+- **Read var `GrossVol`** -> `CALC_VAR_READ_MAPPING` cls `PWEL_DAY_DATA`, attr (`SQL_SYNTAX`) **`THEOR_GAS_RATE`** (a real readable dataset attribute; mapping SQL_SYNTAX = the attribute name).
+- **Write var `DblVol`** -> `CALC_VAR_WRITE_MAPPING` cls `PWEL_DAY_ALLOC`, attr **`VALUE_1`** (generic scratch column — NOT a real allocation result; safe to write + null).
+- **Equation:** `DblVol = round(GrossVol * 2)`.
+- **Test scope:** a PWEL well + day **2003-01-01** (PWEL_DAY_STATUS/PWEL_DAY_DATA has data there; PWEL_DAY_ALLOC has rows).
+- **Feasibility (good):** `PWEL_DAY_ALLOC` = 120 rows -> the alloc/calc engine HAS run on this sandbox (the empty CALC_*_LOG were just purged/never-for-EQUATIONS). Phase 3 run is plausible.
+- **Reversibility:** build via UI -> UI delete; OR DB-config -> delete exactly my rows by OBJECT_CODE + CALC_VAR_SIGNATURE; Flashback net. Gate satisfiable either way.
+- **Build approach:** **UI first** (Create Calculation + Equation Editor — handles EC's REC_ID/signature keying correctly + clean UI delete); DB-config `CALC_*` SQL fallback if the UI blocks.
+- Recon scripts: `recon11_binding_recipe.py`, `recon12_targets.py`, `recon13_concrete.py`. Recon DB creds now env-var'd (EC_DB_USER/PASS/DSN, sandbox defaults).
+
 ## Resume plan
 Dedicated focused session -> (a) crack the RUN-PATH gate first; (b) build via Equation Editor UI (DB-config
 fallback); (c) run + DB-verify output = 2x input + read clean log; (d) inject fault -> trace via

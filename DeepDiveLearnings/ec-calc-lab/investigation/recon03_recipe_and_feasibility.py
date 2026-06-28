@@ -1,6 +1,6 @@
 """Phase-1 recon (READ-ONLY): exemplar 01_TEST_CALCULATION recipe (eqn+vars+mappings) + RUN feasibility."""
-import oracledb, re
-cur=oracledb.connect(user="ECKERNEL_EC",password="energy",dsn="localhost:1521/ORCL").cursor()
+import oracledb, os, re
+cur=oracledb.connect(user=os.environ.get("EC_DB_USER","ECKERNEL_EC"),password=os.environ.get("EC_DB_PASS","energy"),dsn=os.environ.get("EC_DB_DSN","localhost:1521/ORCL")).cursor()
 def c(v):
     v=v.read() if hasattr(v,'read') else v; return v or ''
 def deml(x):

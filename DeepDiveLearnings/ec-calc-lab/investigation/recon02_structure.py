@@ -1,6 +1,6 @@
 """Phase-1 recon (READ-ONLY): template equations + variable linkage + EC_PROD EQUATIONS exemplars."""
-import oracledb, re
-cur=oracledb.connect(user="ECKERNEL_EC",password="energy",dsn="localhost:1521/ORCL").cursor()
+import oracledb, os, re
+cur=oracledb.connect(user=os.environ.get("EC_DB_USER","ECKERNEL_EC"),password=os.environ.get("EC_DB_PASS","energy"),dsn=os.environ.get("EC_DB_DSN","localhost:1521/ORCL")).cursor()
 TPL='96D793BCA1230AE5E053020011ACDFC8'
 EC_PROD='96D6E0ED1D5A0571E053020011ACE2E9'
 def c(v):

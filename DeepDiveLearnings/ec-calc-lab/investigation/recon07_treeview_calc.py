@@ -1,6 +1,6 @@
 """Phase-1 (READ-ONLY): pull exact calc screen labels + paths from the treeview JSON."""
-import oracledb, json
-cur=oracledb.connect(user="ECKERNEL_EC",password="energy",dsn="localhost:1521/ORCL").cursor()
+import oracledb, os, json
+cur=oracledb.connect(user=os.environ.get("EC_DB_USER","ECKERNEL_EC"),password=os.environ.get("EC_DB_PASS","energy"),dsn=os.environ.get("EC_DB_DSN","localhost:1521/ORCL")).cursor()
 row=cur.execute("""SELECT configuration FROM TV_CTRL_CONFIGURATION_STORAGE WHERE name='DefaultScreenTreeview'""").fetchone()
 cfg=row[0].read() if hasattr(row[0],'read') else row[0]
 data=json.loads(cfg)

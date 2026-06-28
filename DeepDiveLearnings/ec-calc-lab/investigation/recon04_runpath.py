@@ -1,6 +1,6 @@
 """Phase-1 run-path probe (READ-ONLY): how is a calc actually run here? Sandbox only."""
-import oracledb
-cur=oracledb.connect(user="ECKERNEL_EC",password="energy",dsn="localhost:1521/ORCL").cursor()
+import oracledb, os
+cur=oracledb.connect(user=os.environ.get("EC_DB_USER","ECKERNEL_EC"),password=os.environ.get("EC_DB_PASS","energy"),dsn=os.environ.get("EC_DB_DSN","localhost:1521/ORCL")).cursor()
 def has(t):
     try: return cur.execute(f"SELECT COUNT(*) FROM {t}").fetchone()[0]
     except Exception as e: return f"ERR {str(e)[:35]}"
