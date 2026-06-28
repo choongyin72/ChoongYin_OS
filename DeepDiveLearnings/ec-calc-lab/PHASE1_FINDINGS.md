@@ -51,6 +51,25 @@ env. **This is the make-or-break; do it before authoring config.**
 - The **run trigger** (per the gate above) + that it writes `CALC_PROCESS_DETAIL_LOG` (needed for the debug drill).
 - Clean-delete path for a calc (CALCULATION + equations + vars + mappings) — confirm fully reversible before build.
 
+## RUN-PATH GATE — RESOLVED (read-only, 2026-06-28)
+The run path exists and is UI/collection-based (not a standalone proc). Confirmed live menu screens:
+- **Build:** `Create Calculation` + `Maintain Calculation` (+ `Calculation Equation` = the Equation Editor),
+  `Calculation Context`, `Calculation Library`, `Calculation Group Setup` / `Calculation Group Context`.
+- **Run:** per-context calc screens — e.g. production/contract/financial run screens + the Calculation
+  Set/Group framework (`CALC_COLLECTION`, 53 sets; `CALC_BATCH_LOG` keys on collection). `Calculate Forecast`,
+  `Period Process Calculations` etc. are run actions.
+- **Result/log:** `Calculation Log` screen; EC_PROD calc results/log land in **`ALLOC_JOB_LOG`** (class
+  `CALC_DAY_PROD_LOG` = "Daily Production Calculation Log"). `CALC_PROCESS_*_LOG` empty = those are for
+  PROCESS-type calcs; EQUATIONS-calc runs in EC_PROD log to ALLOC_JOB_LOG.
+=> Engine is present + runnable here; the trigger is the EC web UI. **Phase-4 trace target = `ALLOC_JOB_LOG`
++ `CALC_BATCH_LOG` (+ the Calculation Log screen), not CALC_PROCESS_DETAIL_LOG, for an EC_PROD EQUATIONS calc.**
+
+## NEXT ACTION = Phase 2 build (a WRITE, hardest EC UI = Equation Editor)
+Recon is COMPLETE. The remaining work is the live build in `Create Calculation`/`Maintain Calculation` +
+Equation Editor (author the calc, vars, read/write mappings), then run via the production calc/Set screen,
+verify ALLOC_JOB_LOG + the output `_ALLOC`, then the inject-fault debug drill. This is the write half and the
+single hardest EC UI — best with clean budget (the dedicated-session rationale; NOT a blocker).
+
 ## Resume plan
 Dedicated focused session -> (a) crack the RUN-PATH gate first; (b) build via Equation Editor UI (DB-config
 fallback); (c) run + DB-verify output = 2x input + read clean log; (d) inject fault -> trace via
