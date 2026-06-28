@@ -4,7 +4,7 @@ Configuration > Assets > Date Objects > Calendar Collection. Manage-Object (OV, 
 screen. Full Insert / Update / Delete, DB-verified and self-cleaning.
 
 ## Files
-- `calendar_sow.md` -- SOW (classification, form layout, test data, dev story).
+- `calendar_collection_sow.md` -- SOW (classification, form layout, test data, dev story).
 - `CHECKLIST.md` -- the 19-item IUD deliverable checklist, ticked with evidence.
 - `JOURNAL.md` -- per-branch work journal.
 - `playwright/ec_iud_calendar_collection.py` -- freestyle reference flow (screenshots + results.json).
@@ -36,5 +36,5 @@ py workstreams/.../Calendar Collection/investigation/recon_method_dropdown.py
 Read from env (`EC_USER`/`EC_PASS`, default `sysadmin`/`sysadmin`). Never hardcoded (R16).
 
 ## DB ground truth
-`OV_DOC_DATE_TERM` (`Code Should Be Present/Absent In View`). DELETE = End Date = Start Date
+`OV_CALENDAR_COLLECTION` (`Code Should Be Present/Absent In View`). DELETE = End Date = Start Date
 removes the object from the OV view (verified). Base `DOC_DATE_TERM` retains expired rows by design.

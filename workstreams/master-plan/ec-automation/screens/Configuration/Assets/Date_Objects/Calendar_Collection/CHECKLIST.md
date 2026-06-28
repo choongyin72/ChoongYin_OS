@@ -3,7 +3,7 @@
 Per canonical `docs/IUD-DELIVERABLE-CHECKLIST.md` (19 items, all hard gates). Each ticked with evidence.
 
 ## A. Bundle artifacts
-- [x] **1. `calendar_sow.md`** -- classification (OV date-eff), form layout, test data, dev story, lessons.
+- [x] **1. `calendar_collection_sow.md`** -- classification (OV date-eff), form layout, test data, dev story, lessons.
 - [x] **2. `README.md`** -- bundle overview + exact run commands.
 - [x] **3. `JOURNAL.md`** -- built / done-well / done-wrong / improve / blockers / decisions / evidence.
 - [x] **4. `playwright/ec_iud_calendar_collection.py`** -- env-var creds, ASCII-clean, full I-U-D flow.
@@ -21,7 +21,7 @@ Per canonical `docs/IUD-DELIVERABLE-CHECKLIST.md` (19 items, all hard gates). Ea
 - [x] **12. LIVE headed run N/N PASS** -- `EC_HEADLESS=false` -> 4 tests, 4 passed (`/c/tmp/cc_live`).
 - [x] **13. DB ground-truth** -- in-suite: TC02 `Code Should Be Present In View ov_calendar_collection <code>`; TC04 `Code Should Be Absent In View ov_calendar_collection <code>`.
 - [x] **14. FULL I-U-D scope** -- TC02 Insert + TC03 Update (Name) + TC04 Delete (End=Start), all present.
-- [x] **15. Self-clean confirmed** -- independent DB re-read: `AUTOTEST_CAL%` in `OV_DOC_DATE_TERM` = 0 rows; existing rows untouched.
+- [x] **15. Self-clean confirmed** -- independent DB re-read: `AUTOTEST_CAL%` in `OV_CALENDAR_COLLECTION` = 0 rows; existing rows untouched.
 - [x] **16. Hygiene PASS** -- `py scripts/check_bundle_hygiene.py` -> RESULT: PASS (R16 env creds, R20 ASCII).
 
 ## D. Delivery
