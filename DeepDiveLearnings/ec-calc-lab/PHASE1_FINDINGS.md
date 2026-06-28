@@ -70,6 +70,27 @@ Equation Editor (author the calc, vars, read/write mappings), then run via the p
 verify ALLOC_JOB_LOG + the output `_ALLOC`, then the inject-fault debug drill. This is the write half and the
 single hardest EC UI — best with clean budget (the dedicated-session rationale; NOT a blocker).
 
+## Phase-2 ENTRY mapped (read-only) — BUILD IS TEED UP
+`Create Calculation` screen = context-gated multi-panel:
+- Navigator: date `nav:form:G:0:R:1:C:0:da_input` + **context dd `nav:form:G:1:R:1:C:0:dd`** + GO `button:form:B`.
+  **Context dd option for EC_PROD = `'Production Allocation'`** (the 14 options map to the 14 CALC_CONTEXTs).
+- After GO: panels `calculation:form` (the calc header), `calculation_version:form` (versions),
+  `static_param:form` (static params). The **Equation Editor** is a deeper screen (`Calculation Equation` /
+  `Maintain Calculation`) for authoring the equation + variable read/write mappings.
+
+### First build steps (resume here)
+1. Open `Create Calculation` -> set a far-past date + context `Production Allocation` -> GO.
+2. Create the calc header in `calculation:form` (code `AUTOTEST_DBL_VOL`, type EQUATIONS, scope MAIN, period DAY).
+3. Add the equation (`Calculation Equation`/Equation Editor): `DblVol = round(GrossVol * 2)`.
+4. Define input var `GrossVol` + `CALC_VAR_READ_MAPPING` (a measured gross-vol source for a test well/day);
+   output var `DblVol` + `CALC_VAR_WRITE_MAPPING` (scratch `_ALLOC`).
+5. **Confirm clean-delete path for the calc BEFORE step 2** (so it's reversible). If UI authoring of the
+   equation/mappings proves impractical, fall back to DB-config `CALC_*` SQL (user-approved option 2).
+6. Run via a Production Allocation run screen / Calculation Set -> verify `ALLOC_JOB_LOG` + output -> debug drill.
+
+**Checkpointed before step 2 (first write) per the clean-reversibility + token-budget STOP rules: a first-ever
+calc write should start with clean budget so it completes + self-cleans in one pass.** Resume = run steps 1-6.
+
 ## Resume plan
 Dedicated focused session -> (a) crack the RUN-PATH gate first; (b) build via Equation Editor UI (DB-config
 fallback); (c) run + DB-verify output = 2x input + read clean log; (d) inject fault -> trace via
