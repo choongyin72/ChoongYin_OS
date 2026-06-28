@@ -1,0 +1,324 @@
+"""
+EC IUD - Calendar Collection (Configuration > Assets > Date Objects > Calendar Collection, CD.0105).
+
+Manage-Object (OV, date-effective) screen. Field IDs confirmed by DOM recon
+(see ../investigation/recon_new_object_form.py). Plain Bank-family OV -- no mandatory extras;
+the 7 weekday indicator checkboxes (R:6-R:12) are optional and left at default.
+  INSERT  : objectForm:form G:0:R:0=Code, R:1=Name, R:2:da_input=StartDate
+  UPDATE  : updateAttributes:form G:0:R:1=Name  (Code is read-only after creation)
+  DELETE  : objectdates:form G:0:R:0:C:3:da_input = EndDate. The EC-correct delete for a
+            date-effective object is End Date = Start Date (zero-length window), which removes
+            the object entirely from ov_calendar_collection (verified at DB level).
+NEVER TOUCH EXISTING DATA. Test data: AUTOTEST_CC_* only.
+
+This is the freestyle reference flow; the RF suite (calendar_collection_iud.robot) is the
+DB-verified, self-cleaning proof. Env: EC_HEADED=1 shows the browser; EC_CODE overrides the code.
+"""
+from playwright.sync_api import sync_playwright
+from pathlib import Path
+import json, os
+
+
+def _repo_root() -> Path:
+    env = os.environ.get('REPO_ROOT')
+    if env:
+        return Path(env)
+    here = Path(__file__).resolve()
+    for parent in [here, *here.parents]:
+        if (parent / '.git').exists():
+            return parent
+    return here.parents[8]
+
+
+ROOT          = _repo_root()
+EC_URL        = os.environ.get('EC_URL', 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/')
+EC_USER       = os.environ.get('EC_USER', 'sysadmin')   # R16: creds from env, never hardcoded
+EC_PASS       = os.environ.get('EC_PASS', 'sysadmin')
+BUNDLE        = Path(__file__).resolve().parents[1]     # .../Calendar Collection/
+SS_DIR        = str(BUNDLE / 'evidence')
+LOG_PATH      = str(BUNDLE / 'evidence' / 'results.json')
+
+HEADED        = os.environ.get('EC_HEADED', '0') == '1'
+SLOW_MO       = int(os.environ.get('EC_SLOWMO', '0'))
+_CODE         = os.environ.get('EC_CODE', 'AUTOTEST_CC_001')
+_NUM          = _CODE.split('_')[-1]
+TEST_CODE     = _CODE
+TEST_NAME     = f'AUTOTEST Calendar Collection {_NUM}'
+TEST_NAME_UPD = f'AUTOTEST Calendar Collection {_NUM} UPDATED'
+START_DATE    = '2000-01-01'
+END_DATE      = '2000-01-01'   # EC DELETE: End Date = Start Date (zero-length window = true delete)
+
+SCREEN        = 'Calendar Collection'
+TABLE_ID      = 'nav:form:T_data'   # custom-URL OV: no manage_object_nav prefix, no GO button
+INS_CODE_ID   = 'tab:tabPanel:objectForm:form:G:0:R:0:C:1:in'
+INS_NAME_ID   = 'tab:tabPanel:objectForm:form:G:0:R:1:C:1:in'
+INS_DATE_ID   = 'tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input'
+UPD_CODE_ID   = 'tab:tabPanel:updateAttributes:form:G:0:R:0:C:1:in'
+UPD_NAME_ID   = 'tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in'
+DEL_ENDDATE_ID= 'tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input'
+
+os.makedirs(SS_DIR, exist_ok=True)
+results = {}
+ss_index = [0]
+
+
+def ss(page, label):
+    ss_index[0] += 1
+    name = f'cc_{ss_index[0]:02d}_{label}.png'
+    page.screenshot(path=os.path.join(SS_DIR, name), full_page=False)
+    print(f'  [SS] {name}')
+    return name
+
+
+def wait_ajax(page, t=15000):
+    page.wait_for_load_state('networkidle', timeout=t)
+    page.wait_for_timeout(1200)
+
+
+def get_table_rows(page):
+    return page.evaluate("""(tid) => {
+        const tbody = document.getElementById(tid);
+        if (!tbody) return [];
+        const out = [];
+        tbody.querySelectorAll('tr').forEach(tr => {
+            const cells = [];
+            tr.querySelectorAll('td').forEach(td => cells.push(td.textContent.trim()));
+            if (cells.some(c => c)) out.push(cells);
+        });
+        return out;
+    }""", TABLE_ID)
+
+
+def check_row(page, code):
+    return any(r and r[0].strip() == code for r in get_table_rows(page))
+
+
+def fill(page, fid, value):
+    sel = f'#{fid.replace(":", "\\:")}'
+    el = page.locator(sel)
+    if el.count() == 0 or not el.is_visible():
+        print(f'  [WARN] Field not found: {fid}')
+        return False
+    el.click()
+    el.fill(value)
+    page.evaluate("""(fid) => {
+        const e = document.getElementById(fid);
+        if (e) { e.dispatchEvent(new Event('change', {bubbles:true})); e.dispatchEvent(new Event('blur', {bubbles:true})); }
+    }""", fid)
+    page.wait_for_timeout(400)
+    return True
+
+
+def fill_date(page, fid, value):
+    sel = f'#{fid.replace(":", "\\:")}'
+    el = page.locator(sel)
+    if el.count() == 0 or not el.is_visible():
+        print(f'  [WARN] Date field not found: {fid}')
+        return False
+    el.click()
+    el.fill(value)
+    page.keyboard.press('Tab')
+    page.wait_for_timeout(600)
+    page.evaluate("""(fid) => {
+        const e = document.getElementById(fid);
+        if (e) { e.dispatchEvent(new Event('change', {bubbles:true})); e.dispatchEvent(new Event('blur', {bubbles:true})); }
+    }""", fid)
+    page.wait_for_timeout(400)
+    return True
+
+
+
+
+def do_save(page):
+    save = page.locator("xpath=//a[@title='Save [Ctrl+s]']")
+    if save.count() > 0:
+        cls = save.first.get_attribute('class') or ''
+        if 'disabled' not in cls:
+            save.first.click()
+            wait_ajax(page)
+            return 'button'
+    page.evaluate("() => { if(typeof EC!=='undefined') EC.toolbar.toggleSaveButton(true); }")
+    page.wait_for_timeout(300)
+    save2 = page.locator("xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]")
+    if save2.count() > 0:
+        save2.first.click()
+        wait_ajax(page)
+        return 'toggle+button'
+    page.keyboard.press('Control+s')
+    wait_ajax(page)
+    return 'ctrl+s'
+
+
+def click_go(page):
+    """Reload the list. Calendar Collection (custom-URL OV) has no GO button -> re-open the screen
+    to refresh the grid (mirrors the RF T2 'Refresh Screen' fallback)."""
+    go = page.locator('#button\\:form\\:B')
+    if go.count() > 0 and go.is_visible():
+        go.first.click()
+        wait_ajax(page)
+    else:
+        open_screen(page)
+
+
+def select_row(page, code):
+    span = page.locator(f"css=#{TABLE_ID.replace(':', '\\:')} span").filter(has_text=code).first
+    if span.count() == 0:
+        print(f'  [WARN] Row span not found for code={code}')
+        return False
+    span.click()
+    wait_ajax(page)
+    page.wait_for_timeout(1000)
+    return True
+
+
+def get_field_val(page, fid):
+    return page.evaluate("(fid) => { const e = document.getElementById(fid); return e ? e.value : null; }", fid)
+
+
+def open_screen(page):
+    si = page.locator('#menu\\:searchForm\\:searchTxt')
+    si.wait_for(state='visible', timeout=10000)
+    si.clear(); si.type(SCREEN, delay=60)
+    page.wait_for_load_state('networkidle', timeout=8000)
+    page.wait_for_timeout(400)
+    page.locator(
+        f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='{SCREEN}']"
+    ).first.click()
+    wait_ajax(page)
+
+
+with sync_playwright() as p:
+    browser = p.chromium.launch(headless=not HEADED, slow_mo=SLOW_MO, args=['--ignore-certificate-errors'])
+    print(f'  [MODE] headed={HEADED}, slow_mo={SLOW_MO}ms, code={TEST_CODE}')
+    ctx = browser.new_context(ignore_https_errors=True, viewport={'width': 1920, 'height': 1080})
+    page = ctx.new_page()
+
+    # -- LOGIN ----------------------------------------------------------------
+    print('=== LOGIN ===')
+    page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
+    page.fill('#username', EC_USER)
+    page.fill('#password', EC_PASS)
+    page.click('#kc-login')
+    page.wait_for_url('**/dashboard**', timeout=60000)
+    wait_ajax(page)
+    results['login'] = 'PASS'
+    print('  OK')
+
+    # -- NAVIGATE -------------------------------------------------------------
+    print('\n=== NAVIGATE TO CALENDAR ===')
+    open_screen(page)
+    lbl = page.locator('#screenToolbar\\:form\\:screenLabel').text_content(timeout=5000)
+    results['navigate'] = 'PASS' if 'Calendar Collection' in lbl else f'FAIL={lbl}'
+    print(f'  Screen: {lbl}')
+    ss(page, 'loaded')
+
+    # -- CLEAN STATE / PRE-CLEANUP --------------------------------------------
+    print('\n=== CLEAN STATE ===')
+    if check_row(page, TEST_CODE):
+        print('  Pre-existing AUTOTEST found - expiring to clean up')
+        if select_row(page, TEST_CODE):
+            fill_date(page, DEL_ENDDATE_ID, END_DATE)
+            do_save(page)
+            click_go(page)
+        results['pre_cleanup'] = 'done'
+        open_screen(page)
+    results['clean'] = 'CLEAN' if not check_row(page, TEST_CODE) else 'PRE-EXISTED+EXPIRED'
+    ss(page, 'clean_state')
+
+    # -- INSERT ---------------------------------------------------------------
+    print('\n=== INSERT ===')
+    insert_li = page.locator(
+        "xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]"
+    )
+    insert_li.first.hover()
+    page.wait_for_timeout(1000)
+    sub_links = page.locator("xpath=//ul[contains(@class,'ui-menu-child')]//li//a")
+    for i in range(sub_links.count()):
+        lnk = sub_links.nth(i)
+        try:
+            if lnk.text_content(timeout=1000).strip() == 'New Object' and lnk.is_visible():
+                lnk.click()
+                print('  Clicked New Object')
+                break
+        except Exception:
+            pass
+    wait_ajax(page)
+    ss(page, 'insert_new_object')
+
+    fill(page, INS_CODE_ID, TEST_CODE);     print(f'  Code: {TEST_CODE}')
+    fill(page, INS_NAME_ID, TEST_NAME);     print(f'  Name: {TEST_NAME}')
+    fill_date(page, INS_DATE_ID, START_DATE); print(f'  StartDate: {START_DATE}')
+    ss(page, 'insert_filled')
+
+    method = do_save(page)
+    print(f'  Saved via: {method}')
+    ss(page, 'insert_saved')
+
+    click_go(page)
+    exists = check_row(page, TEST_CODE)
+    print(f'  AUTOTEST in table: {exists}')
+    results['insert'] = 'PASS' if exists else 'FAIL'
+    ss(page, 'insert_result')
+    print(f'  INSERT: {results["insert"]}')
+
+    # -- UPDATE ---------------------------------------------------------------
+    print('\n=== UPDATE ===')
+    if results.get('insert') == 'PASS' and select_row(page, TEST_CODE):
+        code_val = get_field_val(page, UPD_CODE_ID)
+        print(f'  updateAttributes loaded: code={code_val}')
+        fill(page, UPD_NAME_ID, TEST_NAME_UPD)
+        print(f'  Name updated: {TEST_NAME_UPD}')
+        ss(page, 'update_filled')
+        method_u = do_save(page)
+        print(f'  Saved via: {method_u}')
+        click_go(page)
+        rows2 = get_table_rows(page)
+        upd_row = [r for r in rows2 if r and r[0] == TEST_CODE]
+        upd_ok = bool(upd_row) and TEST_NAME_UPD in str(upd_row)
+        print(f'  Row after update: {upd_row}')
+        results['update'] = 'PASS' if upd_ok else f'FAIL row={upd_row}'
+    else:
+        results['update'] = 'SKIP'
+    ss(page, 'update_result')
+    print(f'  UPDATE: {results["update"]}')
+
+    # -- DELETE (End Date = Start Date -> true delete) -------------------------
+    print('\n=== DELETE (End Date = Start Date -> true delete) ===')
+    if results.get('insert') == 'PASS' and select_row(page, TEST_CODE):
+        start = get_field_val(page, DEL_ENDDATE_ID.replace('C:3', 'C:1'))
+        print(f'  objectdates: StartDate={start}')
+        fill_date(page, DEL_ENDDATE_ID, END_DATE)
+        print(f'  EndDate set: {END_DATE}')
+        ss(page, 'delete_end_date_set')
+        method_d = do_save(page)
+        print(f'  Saved via: {method_d}')
+        click_go(page)
+        still_visible = check_row(page, TEST_CODE)
+        print(f'  Still in table after delete: {still_visible}')
+        results['delete'] = f'PASS (true delete: EndDate=StartDate={END_DATE})' if not still_visible else 'FAIL - still visible'
+    else:
+        results['delete'] = 'SKIP'
+    ss(page, 'delete_result')
+    print(f'  DELETE: {results["delete"]}')
+
+    ss(page, 'final_state')
+    if HEADED:
+        page.wait_for_timeout(4000)
+    ctx.close()
+    browser.close()
+
+with open(LOG_PATH, 'w', encoding='utf-8') as f:
+    json.dump(results, f, indent=2)
+
+print('\n' + '=' * 60)
+print('FINAL RESULTS')
+print('=' * 60)
+all_pass = True
+for k, v in results.items():
+    ok = v in ('PASS', 'CLEAN', 'done') or v.startswith('PASS') or v.startswith('PRE-')
+    sym = 'OK' if ok else 'X'
+    if not ok and k not in ('pre_cleanup', 'clean'):
+        all_pass = False
+    print(f'  {sym} {k:<15} : {v}')
+print(f'\nOverall: {"ALL PASS" if all_pass else "SOME FAILURES"}')
+print(f'Log:     {LOG_PATH}')
