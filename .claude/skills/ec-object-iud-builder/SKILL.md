@@ -105,7 +105,12 @@ At these three points: slow down, recon first, verify against ground truth — d
 | Verify | absent in `OV_*` after End=Start | physically gone from base table |
 | OV-GM variant | + Business Unit / PU cascade + GO first; T3 MUST define `<Screen> Row Should Exist` with `Wait For Elements State visible 20s` before T1 assert (lazy redraw) | — |
 
-## Done = a screen is "covered" when
-RF suite (robocop-clean, dryrun, **live + DB-verified, self-cleaning**) + Playwright bundle + filled SOW +
-registry row + scorecard row + PR raised. Reference exemplars: `screens/.../Financial_Objects/Bank/` (OV),
-`screens/.../System/Language/` (TV).
+## Done = ALL 19 items of `docs/IUD-DELIVERABLE-CHECKLIST.md` are green
+A screen is "covered" ONLY when every item of the canonical **`docs/IUD-DELIVERABLE-CHECKLIST.md`** is done
+with evidence. **Mandatory: copy that file into the bundle as `CHECKLIST.md` and tick each item** as you go
+(artifacts: SOW + README + JOURNAL + playwright + investigation + evidence; RF: T3 + suite; gates: robocop +
+dryrun + **live N/N** + **DB ground-truth** + **full I-U-D** + self-clean + hygiene; delivery: registry row +
+scorecard row + R9 PR). **Raise the PR only when all 19 are green** — the automated reviewer enforces this
+list as HARD GATES and will MUST-FIX (not merge) any PR with gaps. Reference exemplars:
+`screens/.../Financial_Objects/Bank/` (OV), `screens/.../System/Language/` (TV),
+`screens/.../Royalty_Objects/Product_Group_Setup/` (3-tier PC).
