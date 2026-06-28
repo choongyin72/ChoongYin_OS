@@ -1,5 +1,5 @@
 # EC Automation Scorecard
-_Last updated: 2026-06-26_
+_Last updated: 2026-06-28_
 
 ## N-Series Patterns (Production Data Interaction)
 
@@ -68,6 +68,22 @@ _Last updated: 2026-06-26_
 | ECIS Excel Upload | End-to-end | ✅ Complete | Own interface + schedule, ran live |
 | ECIS Excel Upload | Re-runnable SQL + skills + evidence | ✅ Merged (2026-06-22, PR #93) | `workstreams/ecis-excel-upload/`: idempotent create/delete SQL (update-insert, no MERGE), live DB-verified demo (`AVG_BH_PRESS` NULL→210.5/215/220.3 @ 2003-01-10, self-cleaned), page-broken evidence doc, + `ec-sql-script-builder` & `ecis-excel-upload-builder` skills. KNOWN OPEN: automated `upload→RUN NOW` timing flakiness (root cause unconfirmed) |
 | Assets | Recon | ✅ Scanned | Registry complete |
+
+---
+
+## Coverage Strategy (Phased Rollout)
+
+| Phase | Scope | Target | Status |
+|-------|-------|--------|--------|
+| Phase 1 | Configuration screens (objects, lookups, setups) | All Config sections complete | 🟡 In progress |
+| Phase 2 | Operation screens (production data, allocations, status processes) | N1/N3/EVENT patterns | 🔵 Next |
+| Phase 3 | Transaction screens (contracts, invoices, nominations, liftings) | TBC after Phase 2 | ⏳ Future |
+
+**Runner batch size target:** 25–50 screens/day (current default: 8). Increase via `EC_LEARN_MAX_SCREENS` env var.
+
+**Phase 1 priority order:** Basic Objects → Financial Objects → Commercial Objects → Royalty Objects (✅ 8/8) → Date Objects (✅ 5/5) → remaining config sections (Account Mapping, MIME, Equipment, Language, Dispatching, Contract, Cargo, Laboratory Objects).
+
+**Phase 2 entry criteria:** All Phase 1 config sections ✅ Complete in Section Coverage table above.
 
 ---
 
