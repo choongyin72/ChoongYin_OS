@@ -14,7 +14,7 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0011** — Licence -> notes/CO.0011.md
 - [x] **CO.0013** — Company -> notes/CO.0013.md
 - [x] **CO.0015** — Field -> notes/CO.0015.md
-- [~] **CO.0018** — Maintain Equity Share -> notes/CO.0018.md (partial: missing DB binding)
+- [x] **CO.0018** — Maintain Equity Share -> notes/CO.0018.md
 - [x] **CO.0019** — Facility Class 1 -> notes/CO.0019.md
 - [x] **CO.0021** — Facility Class 2 -> notes/CO.0021.md
 - [x] **CO.0027** — Stream - by Group Model -> notes/CO.0027.md
@@ -27,23 +27,23 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0035** — Maintain Storages -> notes/CO.0035.md
 - [x] **CO.0036** — Tank -> notes/CO.0036.md
 - [x] **CO.0037** — Maintain Tanks -> notes/CO.0037.md
-- [~] **CO.0038** — Tank Usage -> notes/CO.0038.md (partial: missing DB binding)
-- [ ] **CO.0039** — Tank Strapping
-- [ ] **CO.0040** — Test Separator
-- [ ] **CO.0042** — Production Separator
-- [ ] **CO.0044** — Vessel
-- [ ] **CO.0045** — Weather Site
-- [ ] **CO.0049** — Well
-- [ ] **CO.0050** — Maintain Wells
-- [ ] **CO.0051** — Well Hole
-- [ ] **CO.0054** — Well Bore
-- [ ] **CO.0055** — Well Bore Split
-- [ ] **CO.0057** — Well Bore Interval
-- [ ] **CO.0058** — Well Bore Interval Split
-- [ ] **CO.0060** — Maintain Equipment
-- [ ] **CO.0067** — Flowline Well Connection
-- [ ] **CO.0068** — Cargo Activity
-- [ ] **CO.0069** — Cargo Account
+- [x] **CO.0038** — Tank Usage -> notes/CO.0038.md
+- [x] **CO.0039** — Tank Strapping -> notes/CO.0039.md
+- [x] **CO.0040** — Test Separator -> notes/CO.0040.md
+- [x] **CO.0042** — Production Separator -> notes/CO.0042.md
+- [x] **CO.0044** — Vessel -> notes/CO.0044.md
+- [x] **CO.0045** — Weather Site -> notes/CO.0045.md
+- [x] **CO.0049** — Well -> notes/CO.0049.md
+- [x] **CO.0050** — Maintain Wells -> notes/CO.0050.md
+- [x] **CO.0051** — Well Hole -> notes/CO.0051.md
+- [x] **CO.0054** — Well Bore -> notes/CO.0054.md
+- [x] **CO.0055** — Well Bore Split -> notes/CO.0055.md
+- [x] **CO.0057** — Well Bore Interval -> notes/CO.0057.md
+- [x] **CO.0058** — Well Bore Interval Split -> notes/CO.0058.md
+- [~] **CO.0060** — Maintain Equipment -> notes/CO.0060.md (partial: missing DB binding)
+- [x] **CO.0067** — Flowline Well Connection -> notes/CO.0067.md
+- [x] **CO.0068** — Cargo Activity -> notes/CO.0068.md
+- [x] **CO.0069** — Cargo Account -> notes/CO.0069.md
 - [ ] **CO.0070** — Chemical Tank
 - [ ] **CO.0072** — Chemical Product
 - [ ] **CO.0074** — Chemical Tank Product Combination
@@ -387,7 +387,7 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [ ] **PO.0005.02** — Daily Tank Status - VCF Calc
 - [ ] **PO.0006** — Monthly Tank Status
 - [ ] **PO.0007** — Daily Safety,  Health and Environment
-- [~] **PO.0008** — Operational Comments -> notes/PO.0008.md (partial: missing DB binding)
+- [x] **PO.0008** — Operational Comments -> notes/PO.0008.md
 - [x] **PO.0009** — Environmental Events -> notes/PO.0009.md
 - [ ] **PO.0010** — Daily Personnel Onboard
 - [x] **PO.0011** — Daily Equipment Status -> notes/PO.0011.md
