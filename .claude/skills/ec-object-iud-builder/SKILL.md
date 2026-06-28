@@ -19,7 +19,7 @@ may already be characterised).
 ## Template trust boundary — where you must think, not clone
 
 The skill is a force-multiplier, not autopilot. Cloning a known-good exemplar is fast — but it silently
-replicates the exemplar's defects too (R16 was discovered this way). Three points where the template
+replicates the exemplar's defects too (R16 was discovered this way). Four points where the template
 **cannot protect you** and where real judgment is always required:
 
 1. **First-contact recon on a gated navigator (OV-GM screens):** the BU/PU cascade fields, their exact
@@ -29,8 +29,16 @@ replicates the exemplar's defects too (R16 was discovered this way). Three point
    node. Don't infer from the menu text in the spec template — it may differ from the actual node label.
 3. **Grid redraw timing (OV-GM):** even with R17 now in the template, the exact CSS selector for the
    `Wait For Elements State` call must be derived from this screen's grid, not copied from the exemplar.
+4. **Grid id + GO presence are PER-SCREEN — never inherited from a sibling.** An OV can be either a
+   **manage-object OV** (grid `manage_object_nav_nav:form:T_data` + a GO button `button:form:B`) **or** a
+   **custom-URL OV** (grid `nav:form:T_data`, **NO GO**, reload via toolbar Refresh — e.g. Calendar,
+   Account, Regulatory Permits). They look identical until you check. Take the grid id + GO presence from
+   **THIS screen's scan output** and paste them into the T3 verbatim. (Real failure, CD.0024 Calendar
+   2026-06-28: a sibling's `manage_object_nav_` grid id was assumed; the insert persisted but the UI
+   row-check failed confusingly. This is now gated — see Step 5 pre-flight.) **When a UI assert fails,
+   check the DB first: if the row persisted, it is a locator bug, not an insert bug.**
 
-At these three points: slow down, recon first, verify against ground truth — do not trust the clone.
+At these four points: slow down, recon first, verify against ground truth — do not trust the clone.
 
 ## Standing guardrails (apply throughout — non-negotiable)
 - **Branch FIRST** off master before any repo edit; reuse a fitting empty branch; one screen per PR.
@@ -59,6 +67,10 @@ At these three points: slow down, recon first, verify against ground truth — d
      mandatory flags + labels — for OV it drives row-select (`updateAttributes` + `objectdates` End-Date
      C:3) and New-Object (`objectForm`); for TV it dumps the grid cells. Add reference-dd sources by eye
      only if the scan can't.
+   - **Grid id + GO come from THIS scan, pasted verbatim into the T3 — never from a sibling/exemplar.**
+     The scan prints the real grid id + GO id for this screen. An OV is EITHER manage-object
+     (`manage_object_nav_nav:form:T_data` + GO `button:form:B`) OR custom-URL (`nav:form:T_data`, NO GO,
+     toolbar Refresh). Do not infer from a sibling — they look identical until checked (trust-boundary #4).
    - **OV-GM pre-flight check (N3):** if this is an OV-GM screen (BU/PU navigator required), add a note to the
      SOW §4 (Known Risks): _"OV-GM lazy redraw — grid redraws asynchronously after Save+GO; T3 `Row Should
      Exist` MUST await the row element before asserting."_ This is a known risk on all OV-GM screens; flag
@@ -82,7 +94,14 @@ At these three points: slow down, recon first, verify against ground truth — d
    before the T1 `Row Should Exist` — the OV-GM grid redraws lazily after Save+GO and the instant T1 assert
    false-fails if the row hasn't rendered yet. Keep this wrapper in T3 only; do not modify shared T1/T2.
 
-**5. Verify.** robocop clean → `robot --dryrun` the suite + full `tests/` → **live headed run**
+**5. Verify.** robocop clean → `robot --dryrun` the suite + full `tests/` →
+   **MANDATORY grid-locator pre-flight (R-gridid guard) BEFORE the live run** —
+   `SCREEN="<name>" GRID_ID="<the T3 ${X_TABLE} value>" EXPECT_GO="<true|false>" py tmp/scripts/preflight_grid_locator.py`
+   must print `RESULT: PASS`. It opens the screen and asserts the T3's declared grid id actually exists in
+   the live DOM (and that GO presence matches), FAILING LOUD with the real grid id if a sibling's id was
+   assumed. **Do not proceed to the live run until this passes** — this is the hard gate that makes the
+   CD.0024 Calendar class of mistake (assumed `manage_object_nav_` on a custom-URL OV) un-shippable. →
+   **live headed run**
    (`EC_HEADLESS=false`) N/N PASS → DbVerify each op → **independent DB re-read = clean** →
    **`py scripts/check_bundle_hygiene.py` must PASS** (R16 guard — no hardcoded creds in the bundle; **R20
    guard — fails statically on ANY non-ASCII char in `playwright/*.py` or `investigation/*.py`**, so author
@@ -104,6 +123,7 @@ At these three points: slow down, recon first, verify against ground truth — d
 | Test data | unique-per-run code (codes linger) | fixed code (physical delete self-cleans) |
 | Verify | absent in `OV_*` after End=Start | physically gone from base table |
 | OV-GM variant | + Business Unit / PU cascade + GO first; T3 MUST define `<Screen> Row Should Exist` with `Wait For Elements State visible 20s` before T1 assert (lazy redraw) | — |
+| OV custom-URL variant | grid `nav:form:T_data` (NOT `manage_object_nav_`), **NO GO button** → T2 `Save And Refresh List` falls back to toolbar Refresh (e.g. Calendar, Account, Regulatory Permits). **Set `${X_TABLE}` from the scan, confirm via the Step-5 pre-flight guard.** | — |
 
 ## Done = ALL 19 items of `docs/IUD-DELIVERABLE-CHECKLIST.md` are green
 A screen is "covered" ONLY when every item of the canonical **`docs/IUD-DELIVERABLE-CHECKLIST.md`** is done
