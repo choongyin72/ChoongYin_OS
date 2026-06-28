@@ -1,6 +1,9 @@
 Automated code review session (06:00 / 14:00 AWST). Review recent automation work, update lessons-learned.md, and merge all CLEAR PRs autonomously.
 
-MANDATORY FIRST ACTION: Re-read docs/lessons-learned.md in full before doing anything else. Context compaction silently invalidates cached reads -- always load the live file (MR4). Do not proceed until this is done.
+MANDATORY FIRST ACTIONS (in order -- do not skip either):
+1. Re-read docs/lessons-learned.md in full -- context compaction silently invalidates cached reads (MR4).
+2. Re-read docs/ec-domain-reference.md in full -- this is the EC domain knowledge base for SME-level review (screen patterns, view naming, delete patterns, T2 selection, clone error checklist). Without this, SME review dimensions (step 8d) cannot be applied correctly.
+Do not proceed until both files are loaded.
 
 Steps:
 1. Run: git log --oneline -20 to see recent commits
