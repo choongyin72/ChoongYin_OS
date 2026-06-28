@@ -90,3 +90,14 @@ existing lines. This keeps parallel PRs auto-mergeable and safe for an automated
 ## Recommended wiring (not done in this PR)
 Add this file to `CLAUDE.md`'s "On session start (mandatory)" reading list so both sessions load it.
 (Left to the reviewer/human who own `CLAUDE.md`, to keep this PR single-purpose.)
+
+## IUD PR gate (added 2026-06-28 — owner-directed; all items hard-gated)
+Every **EC Object IUD** PR is checked against the canonical **`docs/IUD-DELIVERABLE-CHECKLIST.md`** (19 items:
+artifacts SOW/README/JOURNAL/playwright/investigation/evidence/CHECKLIST · RF T3+suite · gates robocop/dryrun/
+**live N/N**/**DB ground-truth**/**full I-U-D**/self-clean/hygiene · delivery registry+scorecard rows + R9 PR).
+- The worker ships the bundle's `CHECKLIST.md` (copied from the canonical list) with every item ticked + evidence.
+- **Reviewer:** verify each item against the PR (spot-check substance, not just the tick). **ALL 19 are HARD GATES** —
+  any missing/failing item ⇒ **MUST-FIX: do not approve/merge, leave the PR open, post the note-back** (template in
+  the checklist doc) listing the exact gaps; re-review next run after the worker pushes fixes to the same branch.
+- This sits alongside the existing R-rules (R7/R9/R12/R13/R16/R20/R21/R23…); the reviewer may formalise it as an
+  R# at its next run. Doc-only gaps need no code change.
