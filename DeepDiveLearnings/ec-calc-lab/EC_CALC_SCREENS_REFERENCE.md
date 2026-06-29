@@ -21,10 +21,29 @@ Allocation with Simulate (4) → read the log. To RUN a calc it MUST be connecte
 - ⚠️ A from-base calc has **NO equation** — it exists but produces nothing on a run until an equation is authored
   in the canvas editor (`mathEqEditor`, not headless-typable). Author it manually when a runnable calc is needed.
 
-## 2. Maintain Calculation (equation editor)
-- Nav: Date `nav:form:G:0:R:1:C:0:da_input` · Context dd `nav:form:G:1:R:1:C:0:dd` · **Calculation dd `nav:form:G:2:R:1:C:0:dd`** (pick by NAME, e.g. "AUTOTEST Calc Test") · GO.
-- EQUATIONS tab grid `maintab:tabPanel:equations:form:T_data`, row cols: C0=Eqn# · C1_cb=Disable · C2=Doc · C3=Iterations(matheq) · C4=Condition(matheq) · **C5=Equation(matheq)**. Each math cell has button **`maintab:tabPanel:equations:form:T:0:C5_b`** = open Equation editor.
-- ⚠️ Equation editor `mathEqEditor:mathEqDialog` is a **CANVAS math widget** (Calc.MathEqReg) — NO DOM-editable input (MathML stored hidden in `mathEqEditor:form:editor:mathml`). OK=`mathEqEditor:form:ok` · Cancel=`mathEqEditor:form:cancel`. **NOT headless-typable** — author manually, or keep the donor's inherited equation.
+## 2. Maintain Calculation — author equation on a PROCESS DIAGRAM calc  ✅ steps 4-7 verified 2026-06-29
+- Nav: Date `nav:form:G:0:R:1:C:0:da_input` · Calculation Context dd `nav:form:G:1:R:1:C:0:dd` (e.g. Production
+  Allocation) · **Calculation dd `nav:form:G:2:R:1:C:0:dd`** (pick by NAME) · GO `button:form:B`.
+- **FLOWCHART tab is a CANVAS** (svg=0, canvas=2); default Process-Diagram = **Start -> Step 1 -> Stop**. The
+  process boxes are canvas pixels (NOT DOM); on a maximised window the **Step 1 box centres ~viewport (1080,577)**.
+- **Step 5 - Implement Step 1 as Equations:** **right-click the Step 1 box** (canvas coords) -> a **DOM** context
+  menu appears (Copy/Paste/Delete/Edit label/Edit description/Edit iterations/Convert to Library/Add new
+  element... / **Implement as...**). Hover **"Implement as..."** -> submenu **Process / Equations / Excel
+  workbook / Library calculation** -> click **"Equations"** (plural!). Click **Save** -> Step 1 then shows a
+  **sigma (Σ) icon** = implemented as Equations.
+- **Step 6 - Drill into Step 1:** **double-click** the Step 1 box -> breadcrumb shows "<calc> └ Step 1", the
+  **EQUATIONS** sub-tab becomes active.
+- **Step 7 - Add an equation row:** toolbar **`+`** -> submenu lists the sub-grids (EQUATIONS / LOCAL SETS /
+  DB OBJECTS SET CONDITIONS / FILTER SET CONDITIONS / COMBINATION SET LIST / SET EQUATIONS / LOCAL VARIABLES)
+  -> click **"EQUATIONS"** -> new row in `maintab:tabPanel:equations:form:T_data` (cols: Eqn# / Disable / Doc /
+  Iterations `C3_b` / Condition `C4_b` / **Equation `C5_b`**). NOTE: this `+`+submenu is FLAKY under automation
+  (retry; or have the user click it).
+- ⚠️ **Step 8 - Enter the formula = PARKED, needs a dedicated walk-through.** Clicking the Equation cell
+  (`maintab:tabPanel:equations:form:T:0:C5_b`) opens the **EQUATION** editor dialog (`mathEqEditor`, with
+  OK/CANCEL). It is a **STRUCTURED math editor on canvas**: keystrokes map to math CONSTRUCTS, not free text
+  (typing "INFO" popped an **"Insert Iterator"** dialog). A plain `INFO = '...'` cannot be typed. Do NOT
+  trial-and-error this ([[feedback_no_trial_error_on_complex_tools]]) — learn its input grammar via a guided
+  walk-through + the online help, then capture the exact gestures here.
 
 ## 3. Calculation Group Setup (connect calc as a Job)  ✅ RESOLVED 2026-06-29
 - Nav: Date `nav:form:G:0:R:1:C:0:da_input` · Calculation Group Context dd `nav:form:G:0:R:1:C:1:dd` = **"Allocation Network Calculation"** · GO `button:form:B`.
