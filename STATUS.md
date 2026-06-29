@@ -28,6 +28,8 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `b1370fe` | 2026-06-29 | feat(runner): raise EC screen runner batch cap 8 -> 25, override via EC_LEARN_MA… |
+| `e4cb4d4` | 2026-06-29 | review: automated quality feedback 2026-06-29 (06:00 AWST -- #148/#149 CLEAR/mer… |
 | `8885201` | 2026-06-29 | improve(reviewer): add SME expert review dimensions to review prompt (#149) |
 | `15ead59` | 2026-06-29 | docs(iud): fix clone doc-drift in 4 Date Objects bundles (reviewer #147 NICE-TO-… |
 | `c8c1fa5` | 2026-06-28 | review: automated quality feedback 2026-06-28 (14:00 AWST -- #139-#146 CLEAR/mer… |
@@ -36,8 +38,6 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 | `d5bf18c` | 2026-06-28 | feat(iud): Payment Term (CD.0023) - OV IUD, live 4/4 DB-verified [depends on #14… |
 | `d06213f` | 2026-06-28 | feat(iud): Document Received Term (CD.0108) - OV IUD, live 4/4 DB-verified [depe… |
 | `d6e31ec` | 2026-06-28 | feat(iud): Document Date Term (CD.0107) - OV IUD, live 4/4 DB-verified (#141) |
-| `794274d` | 2026-06-28 | guard(iud): mandatory grid-locator pre-flight so a sibling grid-id can never shi… |
-| `86daf26` | 2026-06-28 | process(iud): canonical 19-item IUD deliverable checklist + skill mandate + revi… |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
