@@ -51,9 +51,9 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [~] **CO.0077** — Initiate Day -> notes/CO.0077.md (partial: missing DB binding)
 - [~] **CO.0078** — Check Rule -> notes/CO.0078.md (partial: missing DB binding, Help)
 - [x] **CO.0079** — Check Group -> notes/CO.0079.md
-- [ ] **CO.0080** — Rule Group Combination
-- [ ] **CO.0081** — Stream Formula Editor
-- [ ] **CO.0082** — Sub Area
+- [~] **CO.0080** — Rule Group Combination -> notes/CO.0080.md (partial: missing DB binding)
+- [~] **CO.0081** — Stream Formula Editor -> notes/CO.0081.md (partial: missing DB binding)
+- [x] **CO.0082** — Sub Area -> notes/CO.0082.md
 - [ ] **CO.0086** — Stream Reference Values
 - [ ] **CO.0087** — Component Set
 - [ ] **CO.0088** — Component Set List

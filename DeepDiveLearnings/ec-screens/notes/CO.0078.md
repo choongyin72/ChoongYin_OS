@@ -1,6 +1,6 @@
 # CO.0078 - Check Rule
 
-_Deep-dive 2026-06-28 (deterministic runner). Module: CO._
+_Deep-dive 2026-06-29 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0078 - URL: `/com.ec.frmw.co.screens/maintain_check_rules`
