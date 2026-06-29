@@ -18,18 +18,32 @@ Allocation with Simulate (4) → read the log. To RUN a calc it MUST be connecte
 - EQUATIONS tab grid `maintab:tabPanel:equations:form:T_data`, row cols: C0=Eqn# · C1_cb=Disable · C2=Doc · C3=Iterations(matheq) · C4=Condition(matheq) · **C5=Equation(matheq)**. Each math cell has button **`maintab:tabPanel:equations:form:T:0:C5_b`** = open Equation editor.
 - ⚠️ Equation editor `mathEqEditor:mathEqDialog` is a **CANVAS math widget** (Calc.MathEqReg) — NO DOM-editable input (MathML stored hidden in `mathEqEditor:form:editor:mathml`). OK=`mathEqEditor:form:ok` · Cancel=`mathEqEditor:form:cancel`. **NOT headless-typable** — author manually, or keep the donor's inherited equation.
 
-## 3. Calculation Group Setup (connect calc as a Job)  ⚠️ save did not persist last run
+## 3. Calculation Group Setup (connect calc as a Job)  ✅ RESOLVED 2026-06-29
 - Nav: Date `nav:form:G:0:R:1:C:0:da_input` · Calculation Group Context dd `nav:form:G:0:R:1:C:1:dd` = **"Allocation Network Calculation"** · GO `button:form:B`.
 - Network grid `nav_model:form:T_data` → click the network row (e.g. **P1_DAY_ALLOC**).
 - Bottom tabs: CALCULATION GROUP / LIST / **CALCULATION JOB CONNECTION** (match tab text containing "job connection", case-insensitive — NOT a `translate()` half-lowercase).
 - Job grid `tab:tabPanel:calc_group_conn_table:form:T_data`. ADD = hover Insert(+) toolbar (`//a[.//span[contains(@class,'ui-icon-insert')]]`) → click **"Calculation Job"** submenu (enabled only when this tab is active). New row cols: **C0=Start Date(da_input), C1=End Date(da_input), C2=Calculation Job dd (`…:T:0:C2_dd_button`), C3_cb=Block**. Pick the calc in C2 dd → Save.
-- ⚠️ **OPEN: last add showed "saved" but did NOT persist** (calc absent from Daily Allocation Calc-Job dd + DB). Silent reject — DIAGNOSE next: scan the new row for an unfilled mandatory/yellow cell, and check for a save-error notification, BEFORE re-trying. (Backing table for this grid still to confirm; DEPENDENT_CALC_JOB was the WRONG table to verify against.)
+- ✅ **ROOT CAUSE of the earlier silent-reject + FIX:** the Insert drops the new blank row in the **MIDDLE**
+  (existing rows shift to higher indices) — so filling a fixed index (e.g. T:2) left the *actual* new blank
+  row empty, and EC silently rejects the whole Save on that blank row's mandatory fields (banner: "Required
+  fields are empty … Start Date / Calculation Job on row N"). **FIX: after Insert, read every row's Start Date,
+  find the one that is EMPTY, and fill THAT row** (Start Date + Calculation Job dd). Then **click Save** (EC
+  never auto-saves) and DB-verify.
+- ✅ **Correct backing table = `tv_alloc_network_job_conn`** (keyed alloc_network_id + job_id; resolve codes
+  via `ecdp_objects.GetObjCode`). DEPENDENT_CALC_JOB is the WRONG table.
+- Eligibility note: NOT limited to PROCESS calcs — EQUATIONS calcs connect fine (11 EQUATIONS jobs already
+  connected across networks). So calc-type is not a connection blocker.
+- ✅ Proven: connected AUTOTEST_CALC_TEST to P1_DAY_ALLOC (CALC_TEST + EC_DAILY_VOLUME retained intact).
 
 ## 4. Daily Allocation (RUN a calc)  ✅ PROVEN 2026-06-29
 - Nav: From Date `nav:form:G:0:R:1:C:0:da_input` · **To Date `nav:form:G:1:R:1:C:0:da_input`** · Allocation Network Group/Network dd `nav:form:G:2:R:1:C:0:dd` (e.g. **"P1 Day Allocation"**) · Allocation Network dd `nav:form:G:3:R:1:C:0:dd` · **Calculation Job dd `nav:form:G:4:R:1:C:0:dd`** (the connected calc) · GO `button:form:B`.
 - Run panel: Log Level dd **`dateStartJob:form:G:0:R:1:C:1:dd`** (pick "Full") · **Simulate checkbox `dateStartJob:form:G:0:R:1:C:2:cb`** (an EC ECCheckboxCell — `.check()` it; Simulate = SAFE dry-run, no real write) · Run button = `get_by_role("button", name=/run calc/i)` · then OK = `get_by_role("button", name=/^ok$/i)`.
 - After run: click GO again → log grid shows the Run row (Exit Status **"Simulate Success"**) + the calc's log text. EC_PROD calc results/log land in **`ALLOC_JOB_LOG`** (the "Calculation Log" screen).
 - ✅ Proven: ran "Calculation Test" → Run No 2, Simulate Success, log "This is Simple Equation".
+- ✅ Proven (own calc): ran "AUTOTEST Calc Test" → Run No 3, **Simulate Success**, log INFO "Test: 3".
+- Note: a lingering autocomplete dd panel (`...dd_panel` ui-helper-hidden ui-connected-overlay-exit-active)
+  can invisibly intercept clicks on GO/Simulate — hide it (`display:none` on `.ui-autocomplete-panel`) or
+  use `force=True` / the GO shortcut `Control+g`.
 
 ## Delete a calc (cleanup)  ✅
 Create Calculation → select the calc row → **"Delete Calculation"** button → confirm "Yes". (Verified clean: 0 rows, 0 orphan equations.)
