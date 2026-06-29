@@ -131,6 +131,11 @@ No PR raised (lab incomplete by design — resumes at the equation-authoring ste
   fields before save. EC never auto-saves -> explicit Save click + DB-verify. (feedback_dont_trust_own_code_until_validated,
   feedback_ec_must_click_save, feedback_keep_referable_learnings, feedback_seek_help_clean_stop.)
 
-### Residue / state
-- AUTOTEST_CALC_TEST + its P1_DAY_ALLOC job connection currently REMAIN in the sandbox (Step 5 self-clean
-  pending user's go-ahead). DB otherwise intact.
+### Residue / state — SELF-CLEAN DONE (2026-06-29)
+- Step 5 complete + DB-verified: removed the AUTOTEST job connection from P1_DAY_ALLOC (red-strikethrough
+  mark-for-delete -> Save) and deleted the AUTOTEST_CALC_TEST calc (DELETE CALCULATION -> Yes). Verified:
+  CALCULATION rows AUTOTEST_CALC_TEST = 0; job connections = 0; controls RUN_NO_TEST + CALC_TEST intact;
+  P1_DAY_ALLOC still has CALC_TEST + EC_DAILY_VOLUME. Sandbox left exactly as found.
+- Cleanup mechanics learned: grid-row delete = select row -> toolbar delete (ui-icon-delete) submenu
+  "Calculation Job" -> row turns RED strikethrough (marked) -> **Save commits the delete**. Calc delete =
+  Create Calculation -> select row -> DELETE CALCULATION (`deletebutton:form:B`) -> Yes.
