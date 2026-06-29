@@ -5,7 +5,10 @@
 2. Read docs/PR-REVIEW-PROTOCOL.md → shared worker↔reviewer contract (mandatory)
 3. Read docs/automation-scorecard.md → current coverage + parked backlog
 4. Read STATUS.md → active Jira tickets + blockers
-5. Check all open PRs for reviewer comments before opening any new branch:
+5. Check all open GitHub Issues for tasks/instructions left by the Reviewer:
+   - Action any open issues assigned to Worker before starting new work
+   - Close the issue once actioned
+6. Check all open PRs for reviewer comments before opening any new branch:
    - Address MUST-FIX comments first — these gate the merge
    - NICE-TO-HAVE comments are advisory, merge can proceed without them
    - Push fixes to the existing PR branch, do not open a new PR

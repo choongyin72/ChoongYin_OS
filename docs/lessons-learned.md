@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v25** (R25 added 2026-06-25)
+> **Current rule version: v26** (R26 added 2026-06-28)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -33,6 +33,7 @@ _Worker sessions: read this before starting any automation work._
 | v23 | R23 | A long-lived/permanent Worker branch must keep reviewer-owned append-only docs in sync — `git diff origin/master...HEAD` must show NO `-` lines on lessons-learned.md / review-log.md / automation-scorecard.md / STATUS.md | 2026-06-23 |
 | v24 | R24 | Pushing from a detached/throwaway worktree MUST use `push origin HEAD:refs/heads/<branch>` -- a bare `push origin <branch>` resolves to the shared local branch ref (another worktree's tip), NOT the detached HEAD | 2026-06-25 |
 | v25 | R25 | When any tool/MCP/connection breaks, OWN the troubleshooting -- diagnose, give actionable fix steps, keep moving; never say "I can't" without following up with "here is how to fix it" | 2026-06-25 |
+| v26 | R26 | Every EC Object IUD PR is gated against the 19-item `docs/IUD-DELIVERABLE-CHECKLIST.md`; the bundle MUST carry a ticked `CHECKLIST.md`; reviewer spot-checks SUBSTANCE not just ticks; a missing/failing deliverable ⇒ MUST-FIX | 2026-06-28 |
 
 ---
 
@@ -1050,3 +1051,81 @@ _Open PRs trigger a full review (R14). All 3 worker PRs CLEAR -- zero MUST-FIX -
 ### Reviewer process note
 
 - The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent `feature/ec-screen-deepdive` branch with a dirty working tree (sibling IUD/runner worktrees `wt-ec-learn`/`wt-ecsr*`/`wt-ghaction`/`wt-pgs`/`wt-prodgrp`/`wt-royalty*`/`wt-tract`/`wt-tws`/`wt-unitagr`/`wt-uws2` all present); it sits at `a7a0a3d` (v23) while master is at v25 -- the standing R23/MR4 drift. **The session-start cached read was the stale v23 main-checkout copy; the live v25 state (R24/R25) was re-read from the master copy in the worktree (MR4).** All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-28-0600` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling worktree were never touched. Two CLEAR merges (#130 head branch in `wt-uws2`, #136 head branch in `wt-ghaction`) succeeded on the remote but `gh --delete-branch` could not delete the local branch (checked out in a Worker worktree) -- the remote merge is unaffected (verified `state=MERGED` via `gh pr view`), and the worktrees were correctly left untouched.
+
+---
+
+## 2026-06-28 - Automated Review (14:00 AWST, 8 worker PRs #139/#140/#141/#142/#143/#144/#145/#146 + 1 standing draft #135)
+
+_Open PRs trigger a full review (R14); run fired ~16:00 AWST (late 14:00 slot). All 8 worker PRs **CLEAR -- zero MUST-FIX -- all squash-merged**; #135 left open (owner-merge-only draft). **One new executable rule (R26)** formalises the owner-directed IUD deliverable gate that PR #140 introduced. R1-R25 remain current; version -> v26._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #139 | Clear (low effort, config). Adds Worker session-start step 5 (check open GitHub Issues), renumbers old 5 -> 6 in `CLAUDE.md`. Diff 1:1 to body (R21); 6 R9 fields; ASCII; single-purpose. | OK Clear -- merged |
+| #140 | Clear (process/docs). New `docs/IUD-DELIVERABLE-CHECKLIST.md` (19 hard gates, owner-locked) + `ec-object-iud-builder` SKILL.md "Done =" rewrite + `PR-REVIEW-PROTOCOL.md` "IUD PR gate" append -- all additive/append-only; **R23 respected** (`lessons-learned.md` untouched -- left for the reviewer to formalise); 6 R9 fields; Files-touched 1:1 to diff (R21). Per the PR's own note, formalised as **R26** this run. Merged FIRST so the gate doc is on master before the IUD stack. | OK Clear -- merged |
+| #141 | Clear (HIGH effort, new RF suite). **Pilot** for the 19-item standard (Document Date Term CD.0107, OV Bank-family, METHOD dd R:6 + numeric OFFSET R:7 filled-last). Internally consistent -- it IS Document Date Term, so `OV_DOC_DATE_TERM`/`AUTOTEST_DDT` are correct throughout. Live 4/4 = title/body/scorecard/README (R13); scorecard+registry append-only (R23); env creds (R16), ASCII (R20); CHECKLIST.md carries all 19. | OK Clear -- merged |
+| #142 | Clear (HIGH effort). Document Received Term (CD.0108), clone of #141. Suite + PR body name the correct view (`ov_doc_received_term`); R23/R16/R20 clean. **1 NICE-TO-HAVE** (clone copy-paste, doc-only): CHECKLIST item 15 + README "DB ground truth" still cite the pilot's `OV_DOC_DATE_TERM` instead of `OV_DOC_RECEIVED_TERM`. | OK Clear (NICE-TO-HAVE) -- merged |
+| #143 | Clear (HIGH effort). Payment Term (CD.0023). Good recon -- caught shifted field rows (Method R:7, mandatory DAY_VALUE R:8) instead of trusting the exemplar's R:6/R:7. Correct view in suite + body (`ov_payment_term`). **1 NICE-TO-HAVE**: same item-15/README `OV_DOC_DATE_TERM` copy-paste (-> `OV_PAYMENT_TERM`). | OK Clear (NICE-TO-HAVE) -- merged |
+| #144 | Clear (HIGH effort). Calendar (CD.0024), **custom-URL OV** (grid `nav:form:T_data`, no GO). Good diagnose-before-retry: first run's `Row Should Exist` failure diagnosed vs DB (insert had PERSISTED -- a UI-read bug not an insert bug), grid id fixed, 3 diagnostic residuals cleaned, re-run 4/4. Correct view in suite + body. **1 NICE-TO-HAVE**: item-15/README `OV_DOC_DATE_TERM` (-> `OV_CALENDAR`) + README recon list vs CHECKLIST item-5 mismatch. | OK Clear (NICE-TO-HAVE) -- merged |
+| #145 | Clear (HIGH effort). Calendar Collection (CD.0105), custom-URL OV; recon-first -> 4/4 first run. **Completes Date Objects 5/5.** T3+suite+playwright all use the correct `ov_calendar_collection`/`nav:form:T_data`; JOURNAL names the right view; R23/R16 clean. **1 NICE-TO-HAVE**: item-15 cites `AUTOTEST_CAL%` in `OV_DOC_DATE_TERM` (-> `AUTOTEST_CC%` in `OV_CALENDAR_COLLECTION`); item-1 `calendar_sow.md` (-> `calendar_collection_sow.md`); README "DB ground truth" `OV_DOC_DATE_TERM` (-> `OV_CALENDAR_COLLECTION`); README run-cmd path uses a space not underscore. | OK Clear (NICE-TO-HAVE) -- merged |
+| #146 | Clear. Read-only grid-locator pre-flight guard (`tmp/scripts/preflight_grid_locator.py`): opens the screen, asserts the T3's declared `GRID_ID` resolves in the live DOM + GO presence matches, FAILS LOUD (exit 1) printing the actual grid ids when a sibling id was assumed -- no Save/no DB mutation, env creds (R16), ASCII (R20). Validated both ways vs live Calendar. SKILL.md trust-boundary #4 + Step-5 mandatory pre-flight + custom-URL OV cheat-sheet row turn the CD.0024 lesson into an enforced gate (section-disjoint from #140's "Done =" edit -- merged cleanly after #140). **1 NICE-TO-HAVE** (R9): body header "Evidence (guard validated both ways)" instead of the literal "DB ground-truth evidence". | OK Clear (NICE-TO-HAVE) -- merged |
+| #135 | Clear -- standing deep-dive DRAFT, **NOT merged** (owner-merge-only). Increment since the 06:00 run: 7 new notes (CO.0070/0072/0074/0076/0077/0078/0079) + CO.0060 re-enrichment + `REVIEW-2026-06-27.md` + 1 LEARNING-SCORECARD row + CHECKLIST flips. Spot-checked bindings real & honest (CO.0070 `CHEM_TANK`->`OV_CHEM_TANK` OBJECT/VERSIONED; CO.0060 honestly "(no class resolved)" for generic `manage_copy_equipment`). **R23 satisfied** -- ZERO changes on the four reviewer-owned docs. | OK Clear -- left open (owner-merge-only) |
+
+### Rules (apply immediately, no exceptions)
+
+**R26 -- Every EC Object IUD PR is gated against the 19-item `docs/IUD-DELIVERABLE-CHECKLIST.md`** OK _live-validated (PR #140 introduced the gate; first applied to the #141-#145 batch this run)_
+Owner-locked 2026-06-28: an EC Object IUD screen is "covered" ONLY when all 19 deliverables are green -- artifacts (SOW/README/JOURNAL/playwright/investigation/evidence/`CHECKLIST.md`), RF (T3 + suite), gates (robocop/dryrun/**live N/N**/**DB ground-truth**/**full I-U-D**/self-clean/hygiene), delivery (registry row + scorecard row + R9 PR). The Worker MUST copy the canonical list into the bundle as `CHECKLIST.md` with every item ticked + evidence. **Reviewer: verify each item against the PR and spot-check the SUBSTANCE, not just the tick** -- item 12 has a real N/N, item 13's DbVerify assertion is real, items 17/18 are 0-deletion appends (R23). A genuinely missing or failing deliverable is a MUST-FIX (do not merge, leave open, post the note-back in the checklist doc, re-review next run). _Nuance from this run's application: a copy-paste error in the bundle's EVIDENCE PROSE (e.g. CHECKLIST item-15 / README naming the wrong `OV_*` view) where the underlying deliverable is independently proven correct (suite + PR body name the right view, live N/N DB-verified) is a NICE-TO-HAVE doc-accuracy fix, NOT a failing gate -- the gate tests whether the deliverable exists and is real, and here it does/is. Reserve MUST-FIX for an ABSENT or FALSE deliverable._
+
+### Observations (good patterns to keep)
+
+- **Recon-first paid off across the batch -- two genuine trust-boundary catches.** #143 (Payment Term) re-derived the shifted form rows from live DOM instead of cloning the exemplar's R:6/R:7; #144 (Calendar) caught the custom-URL OV (grid `nav:form:T_data`, no GO) and diagnosed the resulting UI-read failure against the DB (the insert had persisted) rather than assuming an insert bug. These are exactly the template-trust-boundary points the `ec-object-iud-builder` skill warns about. #146 then turned the #144 lesson into an enforced pre-flight guard, closing the loop the same day.
+- **Stacked-PR append-only conflicts resolved deterministically (R24).** The 4 children (#142-#145) each add/add-conflicted on `automation-scorecard.md` + `ec_screen_registry.md` after the parent's squash-merge (branch carries the parent's real commits; master has the squash). Each was resolved in a throwaway `--detach` worktree: retarget base->master, `git merge origin/master`, `git checkout --ours` on the two append-only docs (the branch is a strict superset = all prior rows + the new row), then `push origin HEAD:refs/heads/<branch>` (R24) -- never touching the Worker's worktrees. Verified post-merge: master's scorecard carries all 5 Date Objects rows (no row lost).
+- **Recurring clone-substitution gap worth a generator.** The same wrong-view (`OV_DOC_DATE_TERM`) crept into the item-15 self-clean line + README "DB ground truth" of all four clones (#142-#145) because the clone substitutes the code/screen name but not every embedded `OV_*`/base-table token in the evidence prose. Non-blocking here (R26 substance met), but a clone helper that takes a full token map (code + short label + view + base table + tag) -- which the Worker flagged in #145's own JOURNAL -- would eliminate this class of doc drift. Reinforces R7/R13/R21 (docs must match reality).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Batch-wide clone copy-paste (doc-only, R26-NICE-TO-HAVE): CHECKLIST item 15 + README "DB ground truth" cite the pilot view `OV_DOC_DATE_TERM` instead of this screen's view in #142 (`OV_DOC_RECEIVED_TERM`), #143 (`OV_PAYMENT_TERM`), #144 (`OV_CALENDAR`), #145 (`OV_CALENDAR_COLLECTION` + prefix `AUTOTEST_CC%` + `calendar_sow.md`->`calendar_collection_sow.md`). Suite + PR body are correct; fix the bundle docs in a follow-up (a token-map clone helper would prevent recurrence). | Worker | Low |
+| #146 PR body uses "Evidence (...)" not the literal R9 header "DB ground-truth evidence"; harmless (read-only work, evidence present) but drifts the 6-field gate -- write "DB ground-truth evidence -- N/A (read-only guard, validated live)". | Worker | Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/**.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause; #134 skill REVIEW reference is program-branch-only; #136 `--title` em-dash. | Worker | Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp. | Worker | Low |
+
+### Reviewer process note
+
+- Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent `feature/ec-screen-deepdive` branch, dirty, sitting at `a7a0a3d` (v23) while master is at v25 -- the standing R23/MR4 drift. The session-start cached read was the stale v23 copy; the live state (v25, R24/R25) was re-read from the master copy in the worktree (MR4) before extracting R26. All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-28-1400` worktree off `origin/master`; the stacked-PR conflict resolution used a throwaway `C:/tmp/wt-stack-0628` detached worktree (removed). The Worker's checkout and every `wt-*` sibling worktree were never touched.
+
+## 2026-06-29 -- Automated Review (06:00 AWST, 2 worker PRs #148/#149 + standing draft #135)
+
+_Open PRs trigger a full review (R14) despite 0 new master commits since #147/`c8c1fa5` (= master HEAD). Both worker PRs CLEAR -- zero MUST-FIX -- both squash-merged. #135 left open (owner-merge-only draft). **No new executable rules -- R1-R26 cover every finding; version stays v26.** R1-R26 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #148 | Clear (doc-only, low effort) -- closes the 06-28 14:00 (#147) batch-wide clone doc-drift NICE-TO-HAVE. All 4 Date Objects clones now cite their OWN OV view in CHECKLIST item-15 + README "DB ground truth" (`OV_CALENDAR`/`OV_CALENDAR_COLLECTION`/`OV_DOC_RECEIVED_TERM`/`OV_PAYMENT_TERM`), each cross-checked vs `ec_screen_registry.md:120-123`; SOW filename fix applied; `git grep OV_DOC_DATE_TERM` over the 4 clone dirs -> NONE. 6 body fields (R9); R23 trivially clean. **1 NICE-TO-HAVE (R7/R26-nuance):** the same README sentence's trailing `Base \`DOC_DATE_TERM\`` base-table clause was NOT corrected per-screen (each screen has its own base table per the registry) -- same drift class, automation DB-verified-correct, non-gating. | OK Clear (NICE-TO-HAVE) -- merged `15ead59` |
+| #149 | Clear (HIGH effort -- changes the reviewer's own operating contract). Adds step-8d SME review dimensions + REVIEWER MINDSET + mandatory `ec-domain-reference.md` read to `.claude/review-prompt.txt` (+71); new 245-line `docs/ec-domain-reference.md`; scorecard +`Coverage Strategy (Phased Rollout)` section. SME-verified the new reference vs live/merged ground truth -- §1.1-1.6 patterns match R17/R19/R26 + merged evidence; §2's worked example `OV_UNIT_AGR` (not `OV_UNIT_AGREEMENT`) confirmed correct against the merged live-4/4 #122 suite + registry (NOT a stale guess). 6 body fields (R9); R23 OK on scorecard (only `-` line = date bump). **1 NICE-TO-HAVE (R21):** body "Files touched" lists ONLY `review-prompt.txt`, omitting the new 245-line `ec-domain-reference.md` + the scorecard edit -- under-claim not over-claim, non-gating. | OK Clear (NICE-TO-HAVE) -- merged `8885201` |
+| #135 | Clear (re-confirmation) -- STANDING/DRAFT EC Screen Deep-Dive program. Head `48b8fa0` unchanged since the 06-28 14:00 review; increment is the already-reviewed CO.0070-0079 + CO.0060 fix + `REVIEW-2026-06-27.md`. R23 satisfied (0 changes on the four reviewer-owned docs); CO.0070 binding spot-checked real (`CHEM_TANK`->`OV_CHEM_TANK`), ASCII-clean. **NOT merged** (owner-merge-only, still DRAFT). | OK Clear -- left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **The reviewer SME-upgrade (#149) is sound, and verifying its own reference doc paid off immediately.** A mandatory-read knowledge base can propagate wrong domain claims if it ships an unverified "fact", so every concrete assertion in `ec-domain-reference.md` was checked against merged/live evidence before accepting -- the §2 worked example `OV_UNIT_AGR` looked like it might contradict the 06-25 review-log's loose paraphrase ("ov_unit_agreement"), but the actual merged #122 code/registry assert `ov_unit_agr`, so the doc is right and the review-log summary was the loose one. Lesson reaffirmed (MR1): verify the live artifact, not the prose summary of it -- in both directions.
+- **SME review caught a residual drift the doc-fix PR itself missed (#148).** #148 corrected the OV-view clause but left the adjacent `Base DOC_DATE_TERM` clause in the same README sentence pointing at the pilot across all 4 clones. A line-level clone substitution that fixes one token in a sentence and not its neighbour is exactly the failure mode a **token-map clone helper** (code + label + view + base table + tag) would eliminate -- now flagged for the 3rd time (#145 JOURNAL, #147 reviewer note, here). This is the strongest argument yet for building it before the next sibling batch.
+- **0-new-master-commit + open-PRs => still a full review (R14 working as designed).** Master HEAD was the previous review commit, yet two substantive PRs (created after the 14:00 run) needed review. The skip logic correctly did not fire.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Build a **token-map clone helper** (code + short label + OV/DV view + base table + AUTOTEST prefix + SOW filename + grid id + registry code) so sibling-batch evidence prose is fully substituted in one pass -- would have prevented BOTH the #147 OV-view drift and the #148 residual base-table drift. 3rd recurrence. | Worker | Medium |
+| #148 residual (doc-only): the 4 Date Objects clone READMEs still read `Base \`DOC_DATE_TERM\`` instead of each screen's own base table (`DOC_RECEIVED_TERM`/`PAYMENT_TERM`/`CALENDAR`/`CALENDAR_COLLECTION`). | Worker | Low |
+| #149 body under-claim (R21): future reviewer-prompt PRs must list every touched file (it added a 245-line `ec-domain-reference.md` + a scorecard edit not in "Files touched"). | Worker | Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/**.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause; ~1 GB Help-PNG history (downscale/JPEG/LFS). | Worker | Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp. | Worker | Low |
+
+### Reviewer process note
+
+- Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent dirty `feature/ec-screen-deepdive` branch, behind master on the reviewer-owned docs (R23/MR4 drift -- the session-start cached read was a stale v23 copy; live v26 + R24/R25/R26 were re-read from the master copy in the worktree per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-29-0600` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree (`wt-ec-learn`, `wt-ecsr*`, `wt-royalty*`, `wt-tract`, `wt-tws`, `wt-uws2`, `wt-pgs`, `wt-prodgrp`, `wt-unitagr`, `wt-iudchk`, `wt-ghaction`, `wt-calclab`, `wt-docdateterm`) were never touched. No reviewer worktree from this run (`wt-review-2026-06-29-0600`) is left behind after step 17.
+
+---
