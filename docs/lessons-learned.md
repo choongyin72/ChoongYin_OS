@@ -1159,3 +1159,32 @@ _Open PRs trigger a full review (R14); run fired ~16:00 AWST (late 14:00 slot). 
 - Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent dirty `feature/ec-screen-deepdive` branch, behind master on the reviewer-owned docs (R23/MR4 drift -- the session-start cached read was a stale v23 copy; live v26 + R24/R25/R26 were re-read from the master copy in the worktree per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-29-1400` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree (`wt-ec-learn`, `wt-ecsr*`, `wt-royalty*`, `wt-tract`, `wt-tws`, `wt-uws2`, `wt-pgs`, `wt-prodgrp`, `wt-unitagr`, `wt-iudchk`, `wt-ghaction`, `wt-calclab`, `wt-docdateterm`, `wt-runner`) were never touched. No reviewer worktree from this run (`wt-review-2026-06-29-1400`) is left behind after step 17.
 
 ---
+
+## 2026-06-30 - Automated Review (06:00 AWST, 1 open PR #135, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). The only open PR is the standing **EC Screen Deep-Dive** draft (#135) on the Worker's permanent branch. Its head `4081edb` is unchanged since the 2026-06-29 14:00 re-verify that cleared it - no new pushed content (0 new master commits since #153/`92a0302`). **Re-confirmed CLEAR; NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v26.** R1-R26 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #135 | Clear (re-confirmation). Head `4081edb` is byte-identical to the commit cleared at the 2026-06-29 14:00 review (`gh pr view 135 --json headRefOid` = `4081edb...`; 0 new master commits since #153). Per the unchanged-head pattern the already-cleared content is NOT re-litigated; the run instead verified the safety invariants: (a) the never-auto-merge invariant holds (still `DRAFT`); (b) **R23 satisfied vs the now-further-advanced master** - `git diff --stat origin/master...origin/feature/ec-screen-deepdive` over the FIVE reviewer-owned docs (`lessons-learned.md`/`review-log.md`/`automation-scorecard.md`/`STATUS.md`/`ec-domain-reference.md`) is EMPTY = ZERO `-` (deletion) lines; the 11 deletions in the full diff are all CHECKLIST `[ ]`->`[x]` flips + the CO.0060 note re-enrichment, none on reviewer docs; (c) substance spot-check - newest note CO.0082 (Sub Area) carries a real metadata binding `SUB_AREA -> OV_SUB_AREA` (OBJECT/VERSIONED, base `GEOGRAPHICAL_AREA`), correct OV typing, genuine captured Help, and all new notes (CO.0072/0074/0076/0077/0078/0079/0080/0081/0082) are ASCII-clean (R18/R20, `[^\x00-\x7F]` -> 0). **NOT merged** (owner-merge-only standing draft, still DRAFT). | OK Clear - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **An unchanged open-PR head is a re-confirmation, not a re-review of the same diff (4th consecutive standing-draft re-confirm).** #135's head has not moved since the 14:00 re-verify, so the deep-dive *content* (already CLEAR) was not re-scored; the run verified (a) the never-auto-merge invariant, (b) R23 still holds against a master that has advanced further (now +`ec-domain-reference.md` as a fifth reviewer-owned doc since #149), and (c) the prior pass's content is unchanged. This is the correct, low-cost shape for a standing-draft PR the reviewer is forbidden to merge: confirm invariants, don't re-litigate frozen content.
+- **The fifth reviewer-owned doc is now in the R23 check.** Since #149 added `docs/ec-domain-reference.md` as reviewer-owned, the R23 deletion-line sweep was run over all FIVE files (not the original four). The branch shows zero `-` lines on every one - the standing-draft "don't track reviewer-owned docs on the permanent branch" discipline (R23 better-still clause) is holding even as the reviewer-owned set grows.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `DeepDiveLearnings/ec-screens/gen_checklist.py:33` `print("wrote CHECKLIST.md -...",...)` emits a U+2014 em-dash to stdout (R18/R20 - `UnicodeEncodeError` on a cp1252 redirected/captured console). Pre-existing on master, outside the hygiene-guard glob, non-gating. Still open. | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33` and the runner); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | 🟢 Low |
+
+### Reviewer process note (standing-draft on a permanent Worker branch)
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty working tree, and is itself behind master on the reviewer-owned docs (R23/MR4 drift - it was at an older rule version locally; the live v26 + R23-R26 were re-read from the master copy in the isolated worktree per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-30-0600` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree were never touched. The reviewer worktree from this run is removed at step 17.
+
+---
