@@ -38,12 +38,14 @@ Allocation with Simulate (4) → read the log. To RUN a calc it MUST be connecte
   -> click **"EQUATIONS"** -> new row in `maintab:tabPanel:equations:form:T_data` (cols: Eqn# / Disable / Doc /
   Iterations `C3_b` / Condition `C4_b` / **Equation `C5_b`**). NOTE: this `+`+submenu is FLAKY under automation
   (retry; or have the user click it).
-- ⚠️ **Step 8 - Enter the formula = PARKED, needs a dedicated walk-through.** Clicking the Equation cell
-  (`maintab:tabPanel:equations:form:T:0:C5_b`) opens the **EQUATION** editor dialog (`mathEqEditor`, with
-  OK/CANCEL). It is a **STRUCTURED math editor on canvas**: keystrokes map to math CONSTRUCTS, not free text
-  (typing "INFO" popped an **"Insert Iterator"** dialog). A plain `INFO = '...'` cannot be typed. Do NOT
-  trial-and-error this ([[feedback_no_trial_error_on_complex_tools]]) — learn its input grammar via a guided
-  walk-through + the online help, then capture the exact gestures here.
+- ✅ **Step 8 - Enter the formula (gesture now understood — see [[EC_EQUATION_SYNTAX]]).** Clicking the Equation
+  cell (`maintab:tabPanel:equations:form:T:0:C5_b`) opens the **EQUATION** editor dialog (`mathEqEditor`, OK/CANCEL).
+  It is a **RIGHT-CLICK context-menu builder, NOT free text** — that's why typing "INFO" popped the Insert-Iterator
+  popup. **`?` = an unidentified placeholder**; you left-click a `?`/element then pick a menu action.
+  - **`INFO = 'text'`:** right-click empty Equation → **Log message → Insert 'INFO'** → left-click the `?` →
+    **Operands → Insert constant text...** → type the message → OK → Save.
+  - **`var = expr`:** **Operands → Insert variable...** → **Insert assignment** (=) → fill the RHS `?`s.
+  Full menu tree + syntax in [[EC_EQUATION_SYNTAX]]. (Remaining: just exercise it hands-on; no longer a grammar gap.)
 
 ## 3. Calculation Group Setup (connect calc as a Job)  ✅ RESOLVED 2026-06-29
 - Nav: Date `nav:form:G:0:R:1:C:0:da_input` · Calculation Group Context dd `nav:form:G:0:R:1:C:1:dd` = **"Allocation Network Calculation"** · GO `button:form:B`.
