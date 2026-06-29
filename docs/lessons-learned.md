@@ -1129,3 +1129,33 @@ _Open PRs trigger a full review (R14) despite 0 new master commits since #147/`c
 - Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent dirty `feature/ec-screen-deepdive` branch, behind master on the reviewer-owned docs (R23/MR4 drift -- the session-start cached read was a stale v23 copy; live v26 + R24/R25/R26 were re-read from the master copy in the worktree per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-29-0600` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree (`wt-ec-learn`, `wt-ecsr*`, `wt-royalty*`, `wt-tract`, `wt-tws`, `wt-uws2`, `wt-pgs`, `wt-prodgrp`, `wt-unitagr`, `wt-iudchk`, `wt-ghaction`, `wt-calclab`, `wt-docdateterm`) were never touched. No reviewer worktree from this run (`wt-review-2026-06-29-0600`) is left behind after step 17.
 
 ---
+
+## 2026-06-29 -- Automated Review (14:00 AWST, 1 worker PR #152 + standing draft #135)
+
+_Open PRs trigger a full review (R14); run fired ~16:00 AWST (late 14:00 slot). 0 new master commits since #151/`e4cb4d4` (the 06:00 review = master HEAD). **#152 CLEAR -- zero MUST-FIX -- squash-merged**; #135 standing draft re-confirmed CLEAR, NOT merged (owner-merge-only). **No new executable rules -- R1-R26 cover every finding; version stays v26.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #152 | Clear (low/medium effort -- a 1-line runner config change + a 1-line scorecard note). Raises the EC screen deep-dive runner's per-run batch cap **8 -> 25** (default), overridable via **`EC_LEARN_MAX_SCREENS`**; verified `MAXN = int(os.environ.get('EC_LEARN_MAX_SCREENS', os.environ.get('EC_LEARN_MAX', '25')))` meets all 4 acceptance criteria (no-env->25; `EC_LEARN_MAX_SCREENS=50`->50; legacy `EC_LEARN_MAX=8` alone->8 back-compat; both set->primary wins). Recon-first name reconciliation (issue/scorecard assumed `EC_LEARN_MAX_SCREENS`; real knob was `EC_LEARN_MAX`) handled by honouring the new name + keeping the legacy alias. R9 (6 fields), R21 (Files-touched 1:1 to the 2-file diff), R18/R20 (both added `.py` lines ASCII; runner is `tools/**`, outside the hygiene glob, noted), R8 (base = master HEAD). The single `-` line on `automation-scorecard.md` is a legitimate factual update of the runner-default note -- not a reviewer-entry clobber, so R23 not implicated. **2 NICE-TO-HAVE** (R21/doc): scorecard `_Last updated_` not bumped on the edited line; "increase up to 50" wording implies a hard cap the code does not enforce. | OK Clear (NICE-TO-HAVE) -- squash-merged (`b1370fe`) |
+| #135 | Clear re-confirmation -- standing deep-dive draft, **NOT merged** (owner-merge-only, still DRAFT). Head `48b8fa0`->`4081edb` (1 new commit: CO.0080/0081/0082 + 5 note re-touches, "1 full, 7 partial"). **R23 satisfied** -- `git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the four reviewer-owned docs = EMPTY (the 8 deletions are CHECKLIST `[ ]`->`[x]` flips + note re-enrichment). Spot-checked CO.0081 (Stream Formula Editor) + CO.0080 (Rule Group Combination): real captured Help, honest `(no class resolved from URL/LABEL)` partial marking (R3, not fabricated), pure-MD notes ASCII-clean. | OK Clear -- left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **Recon-first beat the issue's assumption.** #150 (and the scorecard) named the knob `EC_LEARN_MAX_SCREENS`, but the runner's existing env var was `EC_LEARN_MAX`; the worker located the real constant before editing rather than adding a second, dead knob. The fix honours the new name AND keeps the legacy one as a quiet alias -- the correct way to reconcile a doc/code name mismatch without breaking an existing caller. Reinforces the standing "REFER/recon before guessing" discipline.
+- **The standing-draft invariants held again.** #135's only safety obligations for a never-auto-merged draft -- (a) never merge it, (b) R23 zero `-` lines on the four reviewer-owned docs, (c) partials marked honestly not fabricated -- all held. An unchanged-content draft is a re-confirmation; here the head DID move (CO.0080-0082) so the increment's substance was spot-checked, not just the invariants.
+
+### Gaps (verified against filesystem / live diff)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| #152 scorecard edit did not bump `_Last updated_`; "increase up to 50" wording implies a hard cap the runner does not enforce (env accepts any int) -- doc-only, non-gating | Worker | Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch the runner + `gen_checklist.py:33`); `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
+
+### Reviewer process note
+
+- Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent dirty `feature/ec-screen-deepdive` branch, behind master on the reviewer-owned docs (R23/MR4 drift -- the session-start cached read was a stale v23 copy; live v26 + R24/R25/R26 were re-read from the master copy in the worktree per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-29-1400` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree (`wt-ec-learn`, `wt-ecsr*`, `wt-royalty*`, `wt-tract`, `wt-tws`, `wt-uws2`, `wt-pgs`, `wt-prodgrp`, `wt-unitagr`, `wt-iudchk`, `wt-ghaction`, `wt-calclab`, `wt-docdateterm`, `wt-runner`) were never touched. No reviewer worktree from this run (`wt-review-2026-06-29-1400`) is left behind after step 17.
+
+---
