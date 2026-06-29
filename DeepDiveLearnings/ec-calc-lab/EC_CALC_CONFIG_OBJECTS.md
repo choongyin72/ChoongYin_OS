@@ -87,7 +87,51 @@ Engine run: reads inputs via read-mappings -> evaluates equations -> writes outp
 `CALC_CONTEXT` (+ `_VERSION`, `_ATTRIBUTE`), `CALC_OBJECT_TYPE` (+ `_META`, `CALC_OBJECT_ATTRIBUTE`,
 `CALC_OBJECT_FILTER`), `CALC_VARIABLE` (+ `_LOCAL`, `_META`), `CALC_ATTRIBUTE_META`.
 
+## 5. Best-practice WHEN / HOW (ECpedia BPR — *Calculation Design* hub, read 2026-06-30)
+_This is the practitioner judgment layer — WHEN to create vs reuse, HOW to use each component well —
+from the SME-approved BPR best-practice pages (the "Calculation Data Model Best Practices",
+"Naming conventions variables", "Naming Conventions Sets and Iterators", "Generic vs specific")._
+
+### 5.1 Variable Definitions — THREE kinds, each with a distinct WHEN
+The best-practice page splits variables into three (this is the key clarification over "a variable is a value holder"):
+| Kind | WHEN to use | Naming / HOW |
+|---|---|---|
+| **Database variable** (the *Variable Definitions* screen) | the value must be **read from or written to the DB**. Product ships many; **projects routinely create new ones**. | prefix with extension code + **`r`** (read) or **`w`** (write): `ZXC_rDensity[Stream,Daytime]`, `ZXC_wYieldFactor[Stream,Daytime,Component]`. EC module vars use `EM_r`/`EM_w` etc. |
+| **Global variable** | a value to be **shared across equation blocks / levels / libraries**. Declare **as high as possible**. Best-practice flow: **read → assign to global → process on globals → assign back to write var**. | `gn`=global numeric, `gv`=global varchar, `gd`=global date (e.g. `gnNMass`, `gnNStdVol`). |
+| **Local variable** | hold an **intermediate result** (sum/avg) **inside ONE equation block** — never passed up/down. | `ln`/`lv`/`ld`/`ls` (local set). Clean up unused ones. |
+**Critical HOW rules for Database variables:**
+- **Either read OR write per data class — not both.** A var with both read+write mappings to the *same* data class risks cache-integrity bugs; if you must, the two mappings **must point to different classes**. Safest = don't.
+- **Consistent dimensions per class.** The engine builds the read WHERE-clause from the *first* variable seen on a class → **all variables on the same class must share the same dimensions in the same order** (always `(s,d,c)`, never a mix; always `OBJECT_ID`, never sometimes `OBJECT_CODE`).
+- **Consistent Validity Period Type per class** — mixing period types on one class **doubles** the read time.
+- **Process on date-dimensionless globals** (read into `gnInitialNStdVol(s)`, compute, then a library maps globals → day/month-indexed write vars) → same logic reused for sub-daily/daily/monthly.
+- **Engine is dynamically typed** — a var's type (num/string/date) is fixed at **first assignment**, not by the definition. (So the `CALC_VAR_DATA_TYPE` column is the definition hint; runtime is dynamic.)
+- **Honor-the-agreement** > technical elegance: for commercial calcs, name vars after the contract's own terms even if less efficient (transparency / no dispute), accepting it may block standard library reuse.
+
+### 5.2 Database Object Types — WHEN/HOW (via sets + iterators)
+You rarely "use" an object type directly; you **iterate a SET of its members** with a standard **iterator**:
+- **Build sets, don't hardcode objects.** Base set at calc root = `<Object>All` (e.g. `StreamsAll`, `NodesDB`); derive subsets with set operators (`StreamsGas`, `StreamsMeasured`, `WellNodes`). Make a set **only if used ≥2 times**.
+- **Standard iterator abbreviations (2–4 char, lowercase, used for BOTH set names and iterators):** `s`=Streams, `n`=Nodes, `c`=Hydrocarbon Components, `pc`=Profit Centres, `cntr`=Contracts, `acc`=Contract Account, `dp`=Delivery Point, `np`=Nomination Points, `stor`=Storages, `la`=Lifting Account, `pint`=Perf Interval, `p`=Phase, `prod`=Products… Reserve `d`/`m`/`h` for **date iterators only — never define a set `d`** (use `DaysInPeriod`/`DaysToIterate`/`Month`).
+- **Which set type:** prefer the simpler **Object-Type set combinations** over a set *equation* (easier to read); only use an equation for complex sets.
+- **Performance:** add **object-specific local sets** to avoid iterating huge sets with a condition; use **`args(...)`** to build **dynamic sets** of only the objects that actually have data (e.g. `lsProfitCentresUsed = args(gnNMass(s, pc in *), pc)`) — but only after the data is read.
+
+### 5.3 Simple Object Types — WHEN
+Use a **`LITERAL(...)`** simple type when the dimension key is **not a persisted EC entity** but a code/enum/classifier (phase, analysis code, offset, identifier). It gives you a non-DB dimension to index a variable by without standing up a DB class.
+
+### 5.4 Global Attributes — WHEN/HOW
+The product-predefined globals (`Period`, `Method`, `PeriodStartDate/EndDate`, `IncrementStartDate/EndDate`) drive **period/run context**. Best-practice usage shows up in the date sets: `DaysInPeriod` (1 day if daily, all days if monthly), `DaysToIterate` (1 day unless monthly `LOOP_DAYS`), `Month = toMonth(PeriodStartDate(global))`. So `Method` + `Period*` globals are what let ONE calc serve daily and monthly runs.
+
+### 5.5 The data-model rule that governs read/write mappings (the "create new vs reuse" answer)
+This was my biggest gap; the **Calculation Data Model Best Practices** page answers it directly:
+- **NEVER read/write screen classes directly** → severe performance hits. Bind variables to **dedicated allocation classes**: reads from **`_DATA`** classes (DB-view-based, read-only — `PWEL_DAY_DATA`, `STRM_DAY_STREAM_DATA`), writes to **`_ALLOC`** classes (own write tables — `PWEL_DAY_ALLOC`, `STRM_DAY_ALLOC`).
+- **Decision ladder (both read & write): reuse → extend → create new.**
+  1. **Reuse** an existing `_DATA`/`_ALLOC` class for existing attributes.
+  2. **Extend** an existing class via extensions for project-specific attributes — *never create a whole new class just for a new attribute*.
+  3. **Create new** only for genuinely new tables: read class = read-only, **based on a DB view**, suffixed `_DATA`; write class = on a **new base table**, suffixed `_ALLOC`.
+
 ## Further reading (ECpedia / docs — for best-practice depth)
-- ECpedia: *Calculation Framework*, *EC Calculation Overview*, *EC Calculation Architecture (Technical)*,
-  *EC Concepts - Calculations*, *Calculation Data Model Best Practices* (links in `docs/EC/EC Calculation/ec_calculation.md`).
+- **ECpedia BPR — *Calculation Design* hub** (id 279511052) and its children: *Naming conventions variables* (374866070),
+  *Naming Conventions Sets and Iterators* (297107526), *Equation Blocks, Equation standards, and logging* (297107563),
+  *Calculation Data Model Best Practices* (337051706), *Object versions in EC calculations* (374800538),
+  *Generic vs specific calculations* (374800456), *Library Calculations* set (290881537 + children). **These are the SME-approved practitioner rules.**
+- ECpedia EFK: *Calculation Framework*, *EC Calculation Overview* (mostly stubs); HYPAS *EC Calculation Architecture (Technical)*.
 - Local HTML docs: `docs/EC/EC Calculation/documentation-14.2.5/`. Online-help screens: `01 Calculation Objects` (CO_* codes).
