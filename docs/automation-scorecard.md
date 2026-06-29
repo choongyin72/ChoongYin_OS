@@ -79,7 +79,7 @@ _Last updated: 2026-06-28_
 | Phase 2 | Operation screens (production data, allocations, status processes) | N1/N3/EVENT patterns | 🔵 Next |
 | Phase 3 | Transaction screens (contracts, invoices, nominations, liftings) | TBC after Phase 2 | ⏳ Future |
 
-**Runner batch size target:** 25–50 screens/day (current default: 8). Increase via `EC_LEARN_MAX_SCREENS` env var.
+**Runner batch size target:** 25–50 screens/day (current default: 25, raised from 8 per #150). Increase up to 50 via `EC_LEARN_MAX_SCREENS` env var (legacy `EC_LEARN_MAX` still honoured).
 
 **Phase 1 priority order:** Basic Objects → Financial Objects → Commercial Objects → Royalty Objects (✅ 8/8) → Date Objects (✅ 5/5) → remaining config sections (Account Mapping, MIME, Equipment, Language, Dispatching, Contract, Cargo, Laboratory Objects).
 
