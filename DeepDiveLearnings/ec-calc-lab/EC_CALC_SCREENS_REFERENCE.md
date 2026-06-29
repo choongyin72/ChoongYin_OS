@@ -10,8 +10,16 @@ Allocation with Simulate (4) → read the log. To RUN a calc it MUST be connecte
 
 ## 1. Create Calculation  ✅
 - Nav: Date `nav:form:G:0:R:1:C:0:da_input` · Calculation Context dd `nav:form:G:1:R:1:C:0:dd` (e.g. **Production Allocation** = EC_PROD) · GO `button:form:B`.
-- Grid `calculation:form:T_data` cols: **C0=Code, C1=Name, C2=Start Date, C3=End Date(da_input), C4=Period, C5=Type** (existing rows: only C0/C3 editable).
-- CREATE is NOT the toolbar "+" (it does not add an inline row). Use the **VERSIONS area**: click a donor row (e.g. `RUN_NO_TEST`, an EQUATIONS calc) → fill New Code `copyCalculationForm:form:G:0:R:0:C:1:in`, New Name `…C:3:in`, New Start `…C:5:da_input` → click **"Copy To New Calculation"** = `copybutton:form:B`. (Copy inherits the donor's equations.)
+- Grid `calculation:form:T_data` cols: **C0=Code, C1=Name, C2=Start Date, C3=End Date, C4=Period, C5=Type**.
+- **CREATE (from base) = the toolbar `+` icon** → adds a new blank row in PUBLIC CALCULATIONS. Fill the new row
+  (verified ids, e.g. row index 1): Code `…:T:<r>:C0_in`, Name `…C1_in`, Start Date `…C2_da_input`,
+  **Calculation Period dd `…C4_dd_button`** (e.g. Day), **Calculation Type dd `…C5_dd_button`** (e.g. Equations)
+  → **Save**. Code/Name/Start/Period/Type are all mandatory (Period + Type render yellow). DB-verify the
+  `CALCULATION` row (e.g. `AUTOTEST_BASE_TEST | EQUATIONS | MAIN | EC_PROD | DAY | 2000-01-01`).
+- **CORRECTION (2026-06-29):** my earlier note "`+` does not create a calc" was a WRONG, unverified assumption.
+  `+` DOES create from base. Copy-To-New was discarded as the create method (per owner: "throw copy parts").
+- ⚠️ A from-base calc has **NO equation** — it exists but produces nothing on a run until an equation is authored
+  in the canvas editor (`mathEqEditor`, not headless-typable). Author it manually when a runnable calc is needed.
 
 ## 2. Maintain Calculation (equation editor)
 - Nav: Date `nav:form:G:0:R:1:C:0:da_input` · Context dd `nav:form:G:1:R:1:C:0:dd` · **Calculation dd `nav:form:G:2:R:1:C:0:dd`** (pick by NAME, e.g. "AUTOTEST Calc Test") · GO.

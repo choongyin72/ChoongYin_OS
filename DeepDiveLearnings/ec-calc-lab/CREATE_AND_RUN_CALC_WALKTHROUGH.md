@@ -14,13 +14,14 @@ engineParameter('run_no')`). Simulate = dry-run, no real allocation data written
 
 ## Step 1 — Create the calc  (screen: Create Calculation)
 - Date + Calculation Context = **Production Allocation** (EC_PROD) + GO.
-- Create = **Copy-To-New** from a donor (VERSIONS area): New Code `AUTOTEST_CALC_TEST`, New Name, New Start
-  Date → **"Copy To New Calculation"**. Donor `RUN_NO_TEST` (EQUATIONS) → inherits a valid logging equation.
-- DB-verify: row in `CALCULATION` (object_code=AUTOTEST_CALC_TEST, calc_type=EQUATIONS).
+- Create **from base** = toolbar **`+`** → new blank row in PUBLIC CALCULATIONS → fill **Code, Name, Start Date,
+  Calculation Period** (Day), **Calculation Type** (Equations) → **Save**. (Copy-To-New was discarded.)
+- DB-verify: row in `CALCULATION` (e.g. `AUTOTEST_BASE_TEST | EQUATIONS | MAIN | EC_PROD | DAY`).
 
 ## Step 2 — Equation  (screen: Maintain Calculation)
-- The copy already carries a valid equation (`INFO = 'Test: ' + engineParameter('run_no')`), so no authoring
-  needed for the demo. (Authoring from scratch needs the canvas math-editor — not headless-typable.)
+- A from-base calc has **no equation** yet, so to produce a run result you must **author one** — open the
+  Equation editor (`mathEqEditor`) and enter the expression (e.g. `INFO = 'Test: ' + engineParameter('run_no')`).
+  This canvas editor is **not headless-typable**, so this is the one manual step in an otherwise automatable cycle.
 
 ## Step 3 — Connect the calc as a job  (screen: Calculation Group Setup)  ← the hard part, now solved
 1. Date + **Calculation Group Context = "Allocation Network Calculation"** + GO.
