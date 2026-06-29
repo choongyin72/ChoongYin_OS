@@ -139,3 +139,19 @@ No PR raised (lab incomplete by design — resumes at the equation-authoring ste
 - Cleanup mechanics learned: grid-row delete = select row -> toolbar delete (ui-icon-delete) submenu
   "Calculation Job" -> row turns RED strikethrough (marked) -> **Save commits the delete**. Calc delete =
   Create Calculation -> select row -> DELETE CALCULATION (`deletebutton:form:B`) -> Yes.
+
+---
+
+## Milestone 2026-06-29 (eve) — EQUATION EDITOR CONQUERED + full self-authored cycle
+- Read the official doc `Part II - Basic Functionality inside Equation` (pypdf) -> [[EC_EQUATION_SYNTAX]];
+  it revealed the editor is a RIGHT-CLICK context-menu builder (not free text).
+- Then EXERCISED it end-to-end on the local sandbox (user gave R/W OK): created Process-Diagram
+  AUTOTEST_PROC_TEST -> Implement Step 1 as Equations -> **authored `INFO = 'AUTOTEST equation log'` via the
+  canvas right-click menu** (Log messages->Insert INFO->Insert assignment->Operands->Insert constant text) ->
+  connected as job -> Simulate-run -> **Run No 5, Simulate Success, log line "AUTOTEST equation log"** ->
+  self-cleaned (calc + connection deleted, DB-verified 0 residue; CALC_TEST/EC_DAILY_VOLUME/RUN_NO_TEST intact).
+- Two gotchas that cracked it: (1) the editor context menu is CANVAS-drawn -> navigate by mouse COORDINATES;
+  (2) menu labels are CSS-uppercased ("Equations" rendered as "EQUATIONS") -> the earlier "+ -> EQUATIONS"
+  row-add "failures" were a case-match bug, not a real block. Reference-first (doc) beat trial-and-error.
+- The whole create->equation->connect->run->clean cycle for a self-authored calc is now PROVEN. Calc SME: the
+  one remaining hands-on gap (equation editor) is closed.

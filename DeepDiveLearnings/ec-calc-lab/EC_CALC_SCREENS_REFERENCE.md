@@ -38,14 +38,18 @@ Allocation with Simulate (4) → read the log. To RUN a calc it MUST be connecte
   -> click **"EQUATIONS"** -> new row in `maintab:tabPanel:equations:form:T_data` (cols: Eqn# / Disable / Doc /
   Iterations `C3_b` / Condition `C4_b` / **Equation `C5_b`**). NOTE: this `+`+submenu is FLAKY under automation
   (retry; or have the user click it).
-- ✅ **Step 8 - Enter the formula (gesture now understood — see [[EC_EQUATION_SYNTAX]]).** Clicking the Equation
-  cell (`maintab:tabPanel:equations:form:T:0:C5_b`) opens the **EQUATION** editor dialog (`mathEqEditor`, OK/CANCEL).
-  It is a **RIGHT-CLICK context-menu builder, NOT free text** — that's why typing "INFO" popped the Insert-Iterator
-  popup. **`?` = an unidentified placeholder**; you left-click a `?`/element then pick a menu action.
-  - **`INFO = 'text'`:** right-click empty Equation → **Log message → Insert 'INFO'** → left-click the `?` →
-    **Operands → Insert constant text...** → type the message → OK → Save.
-  - **`var = expr`:** **Operands → Insert variable...** → **Insert assignment** (=) → fill the RHS `?`s.
-  Full menu tree + syntax in [[EC_EQUATION_SYNTAX]]. (Remaining: just exercise it hands-on; no longer a grammar gap.)
+- ✅✅ **Step 8 - Enter the formula = EXERCISED + DB-PROVEN end-to-end (2026-06-29).** Authored
+  `INFO = 'AUTOTEST equation log'` in the editor, ran it (Simulate Success, log line appeared), DB-verified in
+  CALC_EQUATION, then self-cleaned. The editor (`mathEqEditor`, OK/CANCEL) is a **RIGHT-CLICK context-menu
+  builder, NOT free text** (typing "INFO" pops Insert-Iterator). Two automation gotchas that cracked it:
+  1. **The context menu is CANVAS-drawn, not DOM** → navigate by **mouse COORDINATES** (right-click the `?`,
+     then click menu items by position), not by Playwright locators.
+  2. **Menu labels are CSS-uppercased** (rendered "EQUATIONS" but real text "Equations") → match
+     case-insensitively (this is why the earlier `+ → EQUATIONS` row-add kept "failing").
+  - **Proven path for `INFO = 'text'`:** open editor (`...:T:0:C5_b`) → right-click the `?` → **Log messages →
+    Insert 'INFO'** → right-click → **Insert assignment** (gives `INFO = ?`) → left-click the new `?` → right-click
+    → **Operands → Insert constant text...** → type in the popup → OK → **OK** (editor) → **Save** → DB-verify.
+  Full menu tree + syntax in [[EC_EQUATION_SYNTAX]]. **The equation editor is no longer a gap — proven hands-on.**
 
 ## 3. Calculation Group Setup (connect calc as a Job)  ✅ RESOLVED 2026-06-29
 - Nav: Date `nav:form:G:0:R:1:C:0:da_input` · Calculation Group Context dd `nav:form:G:0:R:1:C:1:dd` = **"Allocation Network Calculation"** · GO `button:form:B`.
