@@ -80,3 +80,12 @@ Allocation with Simulate (4) → read the log. To RUN a calc it MUST be connecte
 
 ## Delete a calc (cleanup)  ✅
 Create Calculation → select the calc row → **"Delete Calculation"** button → confirm "Yes". (Verified clean: 0 rows, 0 orphan equations.)
+
+## 5. Calculation Objects config grids (Simple/Database Object Types, Variable Definitions, Global Attributes)  ✅ Simple Object Types PROVEN 2026-06-30
+- **Common navigator:** Date `nav:form:G:0:R:1:C:0:da_input` + **Calculation Context dd `nav:form:G:1:R:1:C:0:dd_button`** (14 contexts; pick e.g. **Production Allocation** = EC_PROD) → GO `button:form:B`. (Database Object Types loads without a context dd.) Set the **date FIRST**, then open the dd (else the panel collapses).
+- **Frames:** `db_object_type` · `simple_predefined_object_type` · `variable_definition` · `global_attribute`.
+- **Simple Object Types grid** `tab:tabPanel:spObjectType:form:T_data`; cols **C0=Object Type code, C1=Label Override, C2=Object Type Label (readonly/derived), C3=Data Type dd (Date/Number/String)**. Only **C0 is mandatory**.
+- ✅ **INSERT gesture (verified):** **hover** the toolbar insert anchor `//a[.//span[contains(@class,'ui-icon-insert')]]` → a **flyout submenu** appears whose item is the **grid name** (e.g. "Simple Object Types") — **CSS-uppercased in render** ("SIMPLE OBJECT TYPES") so match the menuitem **case-insensitively** and click the **visible** one. Row inserts **mid-grid** → scan `…:T:<i>:C0_in` for the **empty** one and fill THAT. **Do NOT press Tab between cells** (Tab fires a row-commit AJAX that detaches sibling cells) — fill cells directly. Then **Save** (`//a[@title='Save [Ctrl+s]' and not(...ui-state-disabled)]`).
+- ✅ **DELETE gesture (verified):** select the row (click its C0 cell) → **hover** the delete anchor `//a[.//span[contains(@class,'ui-icon-delete')]]` → click the same case-insensitive flyout item → Save. (No confirm dialog appeared.)
+- ✅✅ **PROVEN end-to-end 2026-06-30:** created `AUTOTEST_PHASE` (DB `CALC_OBJECT_TYPE` category=SIMPLE, data_type=STRING) → deleted → DB clean (0 rows) → re-created. Scripts: `investigation/phase1a_create_simpletype.py` + `phase1a_delete_simpletype.py`.
+- 🔎 **Learning:** `CALC_OBJECT_TYPE.OBJECT_ID` = the **Calculation Context id** (AUTOTEST_PHASE got EC_PROD's id) → **object types are context-scoped**, created within the context picked in the navigator (corrects the earlier "object types are global" note in EC_CALC_CONFIG_OBJECTS).
