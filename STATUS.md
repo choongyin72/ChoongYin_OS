@@ -28,6 +28,7 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `cd9ebe4` | 2026-06-30 | review: automated quality feedback 2026-06-30 (06:00 AWST -- #135 standing draft… |
 | `92a0302` | 2026-06-29 | review: automated quality feedback 2026-06-29 (14:00 AWST -- #152 CLEAR/merged, … |
 | `b1370fe` | 2026-06-29 | feat(runner): raise EC screen runner batch cap 8 -> 25, override via EC_LEARN_MA… |
 | `e4cb4d4` | 2026-06-29 | review: automated quality feedback 2026-06-29 (06:00 AWST -- #148/#149 CLEAR/mer… |
@@ -37,7 +38,6 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 | `2e87ee9` | 2026-06-28 | feat(iud): Calendar Collection (CD.0105) - OV IUD, live 4/4 [depends on #144] - … |
 | `5ca108e` | 2026-06-28 | feat(iud): Calendar (CD.0024) - OV IUD, live 4/4 DB-verified [depends on #143] (… |
 | `d5bf18c` | 2026-06-28 | feat(iud): Payment Term (CD.0023) - OV IUD, live 4/4 DB-verified [depends on #14… |
-| `d06213f` | 2026-06-28 | feat(iud): Document Received Term (CD.0108) - OV IUD, live 4/4 DB-verified [depe… |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
