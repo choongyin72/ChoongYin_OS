@@ -54,7 +54,7 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [~] **CO.0080** — Rule Group Combination -> notes/CO.0080.md (partial: missing DB binding)
 - [~] **CO.0081** — Stream Formula Editor -> notes/CO.0081.md (partial: missing DB binding)
 - [x] **CO.0082** — Sub Area -> notes/CO.0082.md
-- [ ] **CO.0086** — Stream Reference Values
+- [~] **CO.0086** — Stream Reference Values -> notes/CO.0086.md (partial: missing DB binding)
 - [ ] **CO.0087** — Component Set
 - [ ] **CO.0088** — Component Set List
 - [ ] **CO.0089** — Orifice Plate

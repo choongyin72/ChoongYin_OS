@@ -1,6 +1,6 @@
 # CO.0080 - Rule Group Combination
 
-_Deep-dive 2026-06-29 (deterministic runner). Module: CO._
+_Deep-dive 2026-06-30 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0080 - URL: `/com.ec.prod.co.screens/check_rule_group_comb`
