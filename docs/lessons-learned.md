@@ -1216,3 +1216,32 @@ _Re-fire of the morning slot (clock ~08:00 AWST). The 06:00 run (#154/`cd9ebe4`)
 - Same posture as the 06:00 run: the main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty working tree, locally behind master on the reviewer-owned docs (R23/MR4 drift - the live v26 + R23-R26 were re-read from the master copy per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-30-0600r` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree were never touched. The reviewer worktree from this run is removed at step 17.
 
 ---
+
+## 2026-07-01 — Automated Review (14:00 AWST, 1 open PR #135 — STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). The only open PR is the long-lived **STANDING/DRAFT** EC Screen Deep-Dive program PR (#135) on the Worker's permanent branch. Its head `e63237e` is byte-identical to the commit cleared at the 2026-06-30 06:00 re-verify (0 new master commits since #155/`77f2abd`; no 2026-06-30 14:00 run was logged, so this is the next scheduled slot). **Re-confirmed CLEAR; NOT merged** (owner-merge-only standing draft). **No new executable rules — version stays v26.** R1–R26 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #135 | Clear (re-confirmation). Head `e63237e` unchanged since the 06-30 06:00 re-verify — no new pushed content. Per the unchanged-head standing-draft pattern, confirmed the safety invariants rather than re-litigating frozen content: (a) **never-auto-merge invariant holds** (still `draft: true`); (b) **R23 satisfied vs the further-advanced master** — `git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the FIVE reviewer-owned docs (`docs/lessons-learned.md`/`docs/review-log.md`/`docs/automation-scorecard.md`/`STATUS.md`/`docs/ec-domain-reference.md`) is EMPTY = ZERO `-` lines; the 12 deletions in the full diff are all CHECKLIST `[ ]`->`[x]`/`[~]` flips + note date-stamp/enrichment, none on reviewer docs; (c) **content spot-check** — newest notes (CO.0079/0080/0081/0082/0086) unchanged since the re-verify; CO.0086 (Stream Reference Values) remains an honest `[~]` partial (`no class resolved from URL/LABEL`, not fabricated — R3); new CO.* notes ASCII-clean. | OK Clear — left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **An unchanged open-PR head is a re-confirmation, not a re-review of the same diff.** #135's head has not moved since the 06-30 06:00 re-verify, so the deep-dive *content* (already CLEAR repeatedly) was not re-litigated; the run instead verified (a) the never-auto-merge invariant still holds, (b) R23 is still satisfied vs the now-further-advanced master, and (c) the newest notes remain ASCII-clean and honestly partial-marked. This is the correct shape for a standing-draft PR the reviewer is forbidden to merge: confirm the safety invariants, don't re-score frozen content.
+- **R18-exemption for markdown notes held under scrutiny.** An ASCII scan over all branch notes flagged PO.0001/0002/0003/0005 as containing non-ASCII bytes — but they are **pre-existing on master, identical, and NOT in this PR's diff**, and markdown notes are R18-exempt regardless (R18/R20 scope only to console-printed / PowerShell-parsed `.py` files, never `.write_text(encoding="utf-8")` notes). Verified before flagging (MR1) — not a finding.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `DeepDiveLearnings/ec-screens/gen_checklist.py:33` `print(...)` em-dash to stdout (R18/R20, cp1252 crash risk); pre-existing on master, outside the hygiene glob, non-gating | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+### Reviewer process note (standing-draft on a permanent Worker branch)
+
+- Same posture as every recent run: the main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty working tree, locally **55 commits behind master** on the reviewer-owned docs (R23/MR4 drift — the live v26 + R23–R26 were re-read from the master copy per MR4 before any review judgement; the local stale copy showed only v23). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-01-1400` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree were never touched. The reviewer worktree from this run is removed at step 17.
+
+---
