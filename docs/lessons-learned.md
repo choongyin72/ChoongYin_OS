@@ -1188,3 +1188,31 @@ _Open PR triggers a full review (R14). The only open PR is the standing **EC Scr
 - The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty working tree, and is itself behind master on the reviewer-owned docs (R23/MR4 drift - it was at an older rule version locally; the live v26 + R23-R26 were re-read from the master copy in the isolated worktree per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-30-0600` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree were never touched. The reviewer worktree from this run is removed at step 17.
 
 ---
+
+## 2026-06-30 - Automated Review (06:00 re-verify, late morning slot, 1 open PR #135 STANDING/DRAFT)
+
+_Re-fire of the morning slot (clock ~08:00 AWST). The 06:00 run (#154/`cd9ebe4`) already cleared #135 at head `4081edb`; this run fired with 1 genuinely new worker commit on the standing draft (`4081edb`->`e63237e`), so it is a distinct **re-verify** (per the 2026-06-23 precedent), not a crash-restart duplicate. Open PR triggers a full review (R14). #135 **re-confirmed CLEAR; NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v26.** R1-R26 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #135 | Clear (re-confirmation). New commit `e63237e` ("CO.0060, CO.0074, CO.0076, CO.0077, CO.0078, CO.0080, CO.0081, CO.0086 - 0 full, 8 partial") adds one new note (CO.0086 Stream Reference Values) + re-touches 7 existing notes (date-stamp bump) + a CHECKLIST flip. **R23 satisfied** - `git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the FIVE reviewer-owned docs is EMPTY (zero `-` lines); the 8 deletions in `4081edb..e63237e` are date bumps + the CO.0086 CHECKLIST `[ ]`->`[~]` flip, none on reviewer docs. **Content spot-check:** CO.0086 honestly marked `[~]` partial with `(no class resolved from URL/LABEL)` (R3) - correct for a generic-maintain/calc-type screen with no resolvable class; the "0 full, 8 partial" label is accurate; all 8 touched notes ASCII-clean (R18/R20, `[^\x00-\x7F]` -> 0). **NOT merged** (owner-merge-only standing draft, still DRAFT). | OK Clear - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **A re-fire with a genuinely-new head is a re-verify, not a duplicate skip.** #154 cleared head `4081edb`; this run saw `e63237e` (1 new commit), so it correctly logged a distinct re-verify row rather than skipping as a same-hour duplicate. The dedup guard (step 6) only suppresses a row when the date AND hour match AND there is no new content - new pushed content on the open PR is exactly what justifies a fresh review pass.
+- **Honest `[~]` partial marking continues to be the right shape.** A "0 full, 8 partial" batch (all missing DB binding) is a transparent, resumable outcome for calc/formula-editor/generic-maintain screens that have no resolvable class - far better than fabricating a binding to flip the box to `[x]`. CO.0086's `(no class resolved from URL/LABEL)` is the model (R3).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | 🟢 Low |
+
+### Reviewer process note (standing-draft on a permanent Worker branch)
+
+- Same posture as the 06:00 run: the main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty working tree, locally behind master on the reviewer-owned docs (R23/MR4 drift - the live v26 + R23-R26 were re-read from the master copy per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-30-0600r` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree were never touched. The reviewer worktree from this run is removed at step 17.
+
+---
