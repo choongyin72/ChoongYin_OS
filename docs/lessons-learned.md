@@ -1245,3 +1245,31 @@ _Open PR triggers a full review (R14). The only open PR is the long-lived **STAN
 - Same posture as every recent run: the main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty working tree, locally **55 commits behind master** on the reviewer-owned docs (R23/MR4 drift — the live v26 + R23–R26 were re-read from the master copy per MR4 before any review judgement; the local stale copy showed only v23). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-01-1400` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree were never touched. The reviewer worktree from this run is removed at step 17.
 
 ---
+
+## 2026-07-01 - Automated Review (14:00 re-verify, 1 open PR #135 - STANDING/DRAFT)
+
+_Re-fire of the 14:00 slot (clock ~16:00 AWST). The morning 14:00 run merged as #156 (`5107e44`, now master HEAD); since then the Worker pushed ONE new commit (`e63237e`->`e902713`) to the permanent branch, so this is a distinct follow-up row (not a crash-restart, not a duplicate) per the 2026-06-30 re-verify precedent. Open PR triggers a full review (R14). **#135 re-confirmed CLEAR; NOT merged** (owner-merge-only standing draft). **No new executable rules - R1-R26 cover all findings; version stays v26.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #135 | Clear (re-confirmation). Head advanced `e63237e`->`e902713` since #156; the sole new commit is labelled "0 full, 8 partial" and is accurate - it adds NO new DB bindings, only re-touches the deep-dive date-stamp (`2026-06-30`->`2026-07-01`) on 8 already-partial notes (CO.0060/0074/0076/0077/0078/0080/0081/0086). **R23 stays satisfied:** `git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the FIVE reviewer-owned docs (`docs/lessons-learned.md`/`docs/review-log.md`/`docs/automation-scorecard.md`/`STATUS.md`/`docs/ec-domain-reference.md`) is EMPTY = ZERO `-` lines; the 8 deletions in the new commit are all date-stamp single-line flips, none on reviewer docs. Content spot-check: CO.0086 (Stream Reference Values) + CO.0081 (Stream Formula Editor) remain honest `(no class resolved from URL/LABEL)` partials with genuine captured Help, not fabricated bindings (R3) - correct for generic-maintain/calc-editor screens with no OV/TV class. All 8 touched notes ASCII-clean (R18/R20, ripgrep `[^\x00-\x7F]` -> 0 matches). **NOT merged** (owner-merge-only standing draft, still DRAFT). | OK Clear - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **A re-touch-only advance is a re-confirmation, not a re-review.** The new commit changes nothing but the deep-dive date stamp on 8 partial notes, so the deep-dive content (already CLEAR across many prior runs) was not re-litigated; the run instead verified the three standing-draft safety invariants: (a) never-auto-merge holds (still DRAFT); (b) R23 satisfied vs the now-further-advanced master; (c) the "0 full, 8 partial" commit label is truthful and no partial was silently promoted to a fabricated binding. This is the correct shape for a standing-draft PR the reviewer is forbidden to merge.
+- **Honest partial marking still holding at re-visit.** CO.0086 and CO.0081 were re-visited by the runner and kept their `[~]`/`(no class resolved)` marking rather than being back-filled with a guessed class - the runner does not invent bindings on a second pass (R3).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | Medium |
+
+### Reviewer process note
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent, dirty `feature/ec-screen-deepdive`. Following the standing precedent, ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-01-1400r` worktree off `origin/master`; the main checkout and every `wt-*` sibling worktree (incl. the runner's `wt-ec-learn`) were never touched. `lessons-learned.md` was re-read live from the master copy at session start per MR4 (the Worker's branch copy is behind master = R23/MR4 drift, which is expected on the permanent branch and is why the four/five reviewer-owned docs are best kept off it entirely).
+
+---
