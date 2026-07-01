@@ -1,6 +1,6 @@
 # CO.0086 - Stream Reference Values
 
-_Deep-dive 2026-06-30 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-01 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0086 - URL: `/com.ec.prod.co.screens/stream_reference_value`

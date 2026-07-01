@@ -1,6 +1,6 @@
 # CO.0081 - Stream Formula Editor
 
-_Deep-dive 2026-06-30 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-01 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0081 - URL: `/com.ec.prod.co.screens/stream_formula_editor`
