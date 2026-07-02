@@ -274,6 +274,13 @@ def mark_checklist(wt, bf_code, name, full, missing):
         log(f'  WARNING: {bf_code} not found in CHECKLIST.md -- mark skipped')
     p.write_text(s, encoding='utf-8')
 
+def count_done(checklist):
+    """Number of screens marked complete ([x]) in the CHECKLIST -- the progress metric for the stall alarm."""
+    try:
+        return len(re.findall(r'(?m)^- \[x\] ', checklist.read_text(encoding='utf-8')))
+    except Exception:
+        return -1
+
 def main():
     log(f'EC-screen learn (deterministic): start, max={MAXN}, push={DO_PUSH}')
     if not ensure_worktree(): log('ABORTED: worktree not ready'); return 1
@@ -287,6 +294,7 @@ def main():
     screens = pick_screens(checklist, MAXN)
     if not screens: log('nothing to do (no [ ] screens found)'); return 0
     log(f'screens this run: {", ".join(c for c,_ in screens)}')
+    done_before = count_done(checklist)   # baseline completed-count for the no-progress alarm
     # DB pre-flight with retry/backoff -- the local sandbox Oracle may still be starting (e.g. Docker just brought up)
     con = None; last_err = ''
     for attempt in range(1, DB_RETRIES + 1):
@@ -315,6 +323,18 @@ def main():
         except Exception as e:
             log(f'  {bf_code}: skipped ({str(e)[:60]})')
     con.close()
+    # NO-PROGRESS ALARM: if screens were picked but the completed ([x]) count did not grow, the pipeline is
+    # stalled (screens not being marked complete / the same set re-picked every run -- the 06-30->07-01 silent
+    # loop). Surface it LOUDLY in the log so it can't go unnoticed for days again.
+    done_after = count_done(checklist)
+    if done_before >= 0 and done_after >= 0:
+        advanced = done_after - done_before
+        if advanced <= 0:
+            log(f'  *** NO-PROGRESS ALARM: {len(screens)} screens picked but completed-count did NOT increase '
+                f'({done_before} -> {done_after} [x]). Pipeline may be STALLED (marks not sticking / same set '
+                f're-picked). INVESTIGATE before relying on the next run. ***')
+        else:
+            log(f'  progress: +{advanced} newly completed this run ({done_before} -> {done_after} [x] of 1457)')
     git(['add', 'DeepDiveLearnings/ec-screens/'], cwd=WT)
     if done_full + done_partial == 0:
         log('nothing committed (all screens skipped -- no notes written)')
