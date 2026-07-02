@@ -36,5 +36,5 @@ py workstreams/.../Calendar/investigation/recon_method_dropdown.py
 Read from env (`EC_USER`/`EC_PASS`, default `sysadmin`/`sysadmin`). Never hardcoded (R16).
 
 ## DB ground truth
-`OV_DOC_DATE_TERM` (`Code Should Be Present/Absent In View`). DELETE = End Date = Start Date
+`OV_CALENDAR` (`Code Should Be Present/Absent In View`). DELETE = End Date = Start Date
 removes the object from the OV view (verified). Base `DOC_DATE_TERM` retains expired rows by design.

@@ -21,7 +21,7 @@ Per canonical `docs/IUD-DELIVERABLE-CHECKLIST.md` (19 items, all hard gates). Ea
 - [x] **12. LIVE headed run N/N PASS** -- `EC_HEADLESS=false` -> 4 tests, 4 passed (`/c/tmp/pt_live`).
 - [x] **13. DB ground-truth** -- in-suite: TC02 `Code Should Be Present In View ov_payment_term <code>`; TC04 `Code Should Be Absent In View ov_payment_term <code>`.
 - [x] **14. FULL I-U-D scope** -- TC02 Insert + TC03 Update (Name) + TC04 Delete (End=Start), all present.
-- [x] **15. Self-clean confirmed** -- independent DB re-read: `AUTOTEST_PT%` in `OV_DOC_DATE_TERM` = 0 rows; existing rows untouched.
+- [x] **15. Self-clean confirmed** -- independent DB re-read: `AUTOTEST_PT%` in `OV_PAYMENT_TERM` = 0 rows; existing rows untouched.
 - [x] **16. Hygiene PASS** -- `py scripts/check_bundle_hygiene.py` -> RESULT: PASS (R16 env creds, R20 ASCII).
 
 ## D. Delivery
