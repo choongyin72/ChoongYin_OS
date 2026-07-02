@@ -40,21 +40,21 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0055** — Well Bore Split -> notes/CO.0055.md
 - [x] **CO.0057** — Well Bore Interval -> notes/CO.0057.md
 - [x] **CO.0058** — Well Bore Interval Split -> notes/CO.0058.md
-- [~] **CO.0060** — Maintain Equipment -> notes/CO.0060.md (partial: missing DB binding)
+- [x] **CO.0060** - Maintain Equipment -> notes/CO.0060.md (note: class w/o view)
 - [x] **CO.0067** — Flowline Well Connection -> notes/CO.0067.md
 - [x] **CO.0068** — Cargo Activity -> notes/CO.0068.md
 - [x] **CO.0069** — Cargo Account -> notes/CO.0069.md
 - [x] **CO.0070** — Chemical Tank -> notes/CO.0070.md
 - [x] **CO.0072** — Chemical Product -> notes/CO.0072.md
-- [~] **CO.0074** — Chemical Tank Product Combination -> notes/CO.0074.md (partial: missing DB binding)
-- [~] **CO.0076** — Status Processes -> notes/CO.0076.md (partial: missing DB binding, Help)
-- [~] **CO.0077** — Initiate Day -> notes/CO.0077.md (partial: missing DB binding)
-- [~] **CO.0078** — Check Rule -> notes/CO.0078.md (partial: missing DB binding, Help)
+- [x] **CO.0074** - Chemical Tank Product Combination -> notes/CO.0074.md
+- [x] **CO.0076** - Status Processes -> notes/CO.0076.md
+- [x] **CO.0077** - Initiate Day -> notes/CO.0077.md
+- [x] **CO.0078** - Check Rule -> notes/CO.0078.md
 - [x] **CO.0079** — Check Group -> notes/CO.0079.md
-- [~] **CO.0080** — Rule Group Combination -> notes/CO.0080.md (partial: missing DB binding)
-- [~] **CO.0081** — Stream Formula Editor -> notes/CO.0081.md (partial: missing DB binding)
+- [x] **CO.0080** - Rule Group Combination -> notes/CO.0080.md
+- [x] **CO.0081** - Stream Formula Editor -> notes/CO.0081.md
 - [x] **CO.0082** — Sub Area -> notes/CO.0082.md
-- [~] **CO.0086** — Stream Reference Values -> notes/CO.0086.md (partial: missing DB binding)
+- [x] **CO.0086** - Stream Reference Values -> notes/CO.0086.md
 - [ ] **CO.0087** — Component Set
 - [ ] **CO.0088** — Component Set List
 - [ ] **CO.0089** — Orifice Plate

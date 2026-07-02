@@ -1,6 +1,6 @@
 # CO.0060 - Maintain Equipment
 
-_Deep-dive 2026-07-01 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-02 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0060 - URL: `/com.ec.frmw.co.screens/manage_copy_equipment`
@@ -8,12 +8,16 @@ _Deep-dive 2026-07-01 (deterministic runner). Module: CO._
 ## DB binding (metadata-resolved)
 | Class | Type/Scope | Base table | View |
 |---|---|---|---|
-| (no class resolved from URL/LABEL) | | | |
+| `EQUIPMENT` | INTERFACE/VERSIONED | `None` | `(none)` |
+
+_Resolved by: url path token_
 
 ## Screen type
-unknown (no class resolved)
+OV (interface/object screen)
 
-## Help (description)
-This is a generic screen; see description of generic screens in the beginning of the configuration manual.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0060 screenshot](CO.0060_shot_1.png)
+![CO.0060 screenshot](CO.0060_shot_2.png)
 
-This screen retrieves records from the Equipment class. The version that is valid within the specified values in the navigator will be displayed. It displays all enabled attributes of Equipment object based on which Equipment Type selected. The screen provides the ease to update more than one record at the same time. It also allows creation of new Equipment as a copy of existing Equipment. To copy equipment, select the equipment to copy from and then enter the new Equipment Name, Equipment Code, and Start Date, then hit create a Copy button.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_
