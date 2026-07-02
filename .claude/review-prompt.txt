@@ -1,9 +1,10 @@
 Automated code review session (06:00 / 14:00 AWST). Review recent automation work, update lessons-learned.md, and merge all CLEAR PRs autonomously.
 
-MANDATORY FIRST ACTIONS (in order -- do not skip either):
+MANDATORY FIRST ACTIONS (in order -- do not skip any):
 1. Re-read docs/lessons-learned.md in full -- context compaction silently invalidates cached reads (MR4).
 2. Re-read docs/ec-domain-reference.md in full -- this is the EC domain knowledge base for SME-level review (screen patterns, view naming, delete patterns, T2 selection, clone error checklist). Without this, SME review dimensions (step 8d) cannot be applied correctly.
-Do not proceed until both files are loaded.
+3. Re-read docs/session-memory.md -- owner decisions and cross-session context. Check "Open items for next session" and "System state" sections for anything that affects this run.
+Do not proceed until all three files are loaded.
 
 AFTER READING -- HOW TO APPLY WHAT YOU JUST READ:
 
