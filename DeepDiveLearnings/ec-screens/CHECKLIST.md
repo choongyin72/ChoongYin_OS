@@ -63,14 +63,14 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.00941** - Stream Node Diagram -> notes/CO.00941.md
 - [x] **CO.00942** - SND Production Data Menu -> notes/CO.00942.md
 - [x] **CO.0096** - Pipeline -> notes/CO.0096.md
-- [ ] **CO.0096.01** — Pipeline
-- [ ] **CO.0098** — Carrier
-- [ ] **CO.0100** — Production Sub Unit
-- [ ] **CO.0102** — Constant Standard
-- [ ] **CO.0103** — Component Constant
-- [ ] **CO.0105** — Sub Field
-- [ ] **CO.0108** — Well Hookup
-- [ ] **CO.0118** — Region
+- [x] **CO.0096.01** - Pipeline -> notes/CO.0096.01.md
+- [x] **CO.0098** - Carrier -> notes/CO.0098.md
+- [x] **CO.0100** - Production Sub Unit -> notes/CO.0100.md
+- [x] **CO.0102** - Constant Standard -> notes/CO.0102.md
+- [x] **CO.0103** - Component Constant -> notes/CO.0103.md
+- [x] **CO.0105** - Sub Field -> notes/CO.0105.md
+- [x] **CO.0108** - Well Hookup -> notes/CO.0108.md
+- [x] **CO.0118** - Region -> notes/CO.0118.md
 - [ ] **CO.0120** — Process Train
 - [ ] **CO.0122** — Stream PT Conversion Values
 - [ ] **CO.0123** — Test Device
