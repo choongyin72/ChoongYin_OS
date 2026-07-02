@@ -55,14 +55,14 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0081** - Stream Formula Editor -> notes/CO.0081.md
 - [x] **CO.0082** — Sub Area -> notes/CO.0082.md
 - [x] **CO.0086** - Stream Reference Values -> notes/CO.0086.md
-- [ ] **CO.0087** — Component Set
-- [ ] **CO.0088** — Component Set List
-- [ ] **CO.0089** — Orifice Plate
-- [ ] **CO.0091** — Meter Run
-- [ ] **CO.0093** — Meter Run and Orifice Plate Connection
-- [ ] **CO.00941** — Stream Node Diagram
-- [ ] **CO.00942** — SND Production Data Menu
-- [ ] **CO.0096** — Pipeline
+- [x] **CO.0087** - Component Set -> notes/CO.0087.md
+- [x] **CO.0088** - Component Set List -> notes/CO.0088.md
+- [x] **CO.0089** - Orifice Plate -> notes/CO.0089.md
+- [x] **CO.0091** - Meter Run -> notes/CO.0091.md
+- [x] **CO.0093** - Meter Run and Orifice Plate Connection -> notes/CO.0093.md
+- [x] **CO.00941** - Stream Node Diagram -> notes/CO.00941.md
+- [x] **CO.00942** - SND Production Data Menu -> notes/CO.00942.md
+- [x] **CO.0096** - Pipeline -> notes/CO.0096.md
 - [ ] **CO.0096.01** — Pipeline
 - [ ] **CO.0098** — Carrier
 - [ ] **CO.0100** — Production Sub Unit
