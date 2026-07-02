@@ -9,8 +9,9 @@ in Python, per screen, with a hard timeout + best-effort fallback so it can neve
      -> class, CLASS_TYPE, TIME_SCOPE, base table, OV_/TV_/DV_ view, screen type
   3) Help: login once, then per screen open it + openOnlineHelp() -> description text AND a full-page
      screenshot of the Help popup saved to notes/<BF_CODE>_help.png (both best-effort, timeout-guarded)
-  4) write notes/<BF_CODE>.md (incl. the screenshot reference), mark [x] (full = DB+Help text) or
-     [~] (DB only, Help not captured); the screenshot is a bonus and does not change the full/partial threshold
+  4) write notes/<BF_CODE>.md; mark [x] once the screen's STRUCTURE is resolved -- a data class (bound view
+     or interface) OR a process/config screen (no data class by design). Help text + screenshot are best-effort
+     enrichment and do NOT gate completeness (so process/config + help-less screens are never re-picked forever)
   5) commit on the detached worktree HEAD; push unless EC_LEARN_PUSH=0
 
 Isolated git worktree (C:\\tmp\\wt-ec-learn) so it never touches the user's main checkout.
@@ -88,10 +89,14 @@ def db_resolve(cur, bf_code, name):
     classes = re.findall(r'CLASS_NAME[^/]*/([A-Z0-9_]+)', url)
     if classes:
         info['resolved_by'] = 'url CLASS_NAME'
-    else:  # (2) URL last path-segment token
+    else:  # (2) URL last path-segment token (verb-prefix stripped; must be a REAL class -> high confidence)
         tok = url.rstrip('/').split('/')[-1].upper()
-        for cand in dict.fromkeys([tok, re.sub(r'^(MAINTAIN|MANAGE|EDIT|VIEW|CREATE)_', '', tok)]):
-            if cand and _class_exists(cur, cand):
+        cands = [tok,
+                 re.sub(r'^(MAINTAIN|MANAGE|EDIT|VIEW|CREATE|INITIATE)_', '', tok),
+                 re.sub(r'^MANAGE_COPY_', '', tok),   # e.g. manage_copy_equipment -> EQUIPMENT
+                 re.sub(r'S$', '', tok)]              # de-pluralise (e.g. ..._streams -> _STREAM)
+        for cand in dict.fromkeys(c for c in cands if c):
+            if _class_exists(cur, cand):
                 classes = [cand]; info['resolved_by'] = 'url path token'; break
     if not classes:  # (3) case-insensitive EXACT label, only if unambiguous
         cur.execute("""SELECT DISTINCT class_name FROM class_property_cnfg
@@ -116,8 +121,9 @@ def db_resolve(cur, bf_code, name):
 
 def screen_type(info):
     if not info['classes']:
-        return 'unknown (no class resolved)'
+        return 'process/config (no data class -- e.g. a process trigger, rule/formula editor or combination screen)'
     c0 = info['classes'][0]
+    if c0['type'] == 'INTERFACE': return 'OV (interface/object screen)'
     if c0['type'] == 'OBJECT':   return 'OV (master-data object)'
     if c0['type'] == 'TABLE':    return 'TV (table-class)'
     if c0['type'] == 'DATA' and c0['scope'] == 'DAY':   return 'N1 daily-status grid'
@@ -202,18 +208,26 @@ _Resolved by: {info.get('resolved_by') or 'not resolved'}_
 ## Help (screenshot)
 {f'![{bf_code} Help screenshot]({bf_code}_help.png)' if help_shot else '_(no Help screenshot captured this run)_'}
 """
+    is_process = not info['classes']                       # no data class => process/config screen (a valid terminal type)
     has_db = any(c.get('view') for c in info['classes'])
-    missing = []
-    if not has_db: missing.append('DB binding')
-    if not help_desc: missing.append('Help')
+    # COMPLETE once the screen's STRUCTURE is resolved: a data class (bound view, or interface w/o view) OR a
+    # process/config screen. Help/screenshot are best-effort enrichment and do NOT gate completeness -- this stops
+    # process/config + help-less screens being re-picked forever as perpetual partials (the old full=DB&Help loop).
+    full = has_db or bool(info['classes']) or is_process   # always resolvable -> never a perpetual partial
+    flags = []
+    if info['classes'] and not has_db: flags.append('class w/o view')
+    if not help_desc: flags.append('no Help')
     (nd / f'{bf_code}.md').write_text(body, encoding='utf-8')
-    return (not missing), ', '.join(missing)
+    return full, ', '.join(flags)
 
 def mark_checklist(wt, bf_code, name, full, missing):
     p = Path(wt) / 'DeepDiveLearnings' / 'ec-screens' / 'CHECKLIST.md'
     s = p.read_text(encoding='utf-8')
     mark = '[x]' if full else '[~]'
-    suffix = '' if full else f' (partial: missing {missing})'
+    if full:
+        suffix = f' (note: {missing})' if missing else ''
+    else:
+        suffix = f' (partial: missing {missing})'
     newline = f'- {mark} **{bf_code}** - {_ascii(name)} -> notes/{bf_code}.md{suffix}'
     orig = s
     s = re.sub(r'(?m)^- \[[ x~\-]\] \*\*' + re.escape(bf_code) + r'\*\* .*$', newline, s, count=1)
