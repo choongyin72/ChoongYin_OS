@@ -1307,3 +1307,31 @@ Standing-draft branches like `feature/ec-screen-deepdive` are milestone-merged i
 Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-03-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, still on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched. A stale, never-pushed `C:/tmp/wt-review-2026-07-02-0600` worktree (0 commits, crashed before any doc edit) was found and removed per step 17.
 
 ---
+
+## 2026-07-04 - Automated Review (06:00 AWST, 1 open PR #159, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14) despite 0 new master commits since #164/`ccfd603`. #159's head advanced `20d41a8` -> `d7e0c8d` (1 new Worker commit). **Re-confirmed CLEAR - zero MUST-FIX - NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v27.** R1-R27 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #159 | Clear. 1 new commit `d7e0c8d`: raise runner default batch size 8 -> 100 screens/run (`EC_LEARN_MAX` default + matching docstring line - a 2-line, ASCII-clean change with no R7 doc/code drift). Rationale sound: the already-reviewed 2026-07-03 corpus-Help refactor removed the browser bottleneck (~0.5s/screen), so the 8/day throttle was pacing the remaining ~1,377 screens at ~172 days; 100/day finishes in ~14. Per-screen try/except + hard timeout + NO-PROGRESS alarm unchanged, so a 100-screen batch cannot hang or flail any more than an 8-screen one. Safety invariants re-confirmed: never-auto-merge holds (still DRAFT); **R23 clean** (`git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the five reviewer-owned docs = EMPTY, zero `-` lines). 2 NICE-TO-HAVE posted (repo-growth pacing; R27 carry-over). | OK Clear (NICE-TO-HAVE) - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **Throttle removal follows the bottleneck, not the other way round.** The 8/day cap existed to bound a slow, fragile browser loop; once the corpus refactor made the loop fast and deterministic, the Worker raised the cap in a separate, minimal, well-argued commit (with the arithmetic in the commit message) rather than bundling it into the refactor. Change-one-thing discipline keeps each commit independently reviewable.
+- **Repo-growth math got cheaper than feared - measured, not assumed (MR1).** The notes tree measures ~140KB/screen actual (6.6MB over the current 138 note files, `git cat-file -s` summed), so full 1,457-screen coverage projects to roughly +190MB of committed corpus images - well under the earlier ~1GB live-capture projection. Acceptable as-is; but at 100/day the bulk lands within ~2 weeks, so if LFS/out-of-repo storage (open #110 carry-over) is ever going to happen, the economical moment is BEFORE the sweep completes, not after.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| PR #159 still `mergeable_state: dirty` (CONFLICTING) against master (R27, unchanged since 2026-07-03 06:00) - rebase onto master or `--no-ff` at the next milestone. At 100 screens/day the next milestone arrives fast; resolving NOW avoids a much larger conflict surface | Owner | 🔴 High |
+| Decide LFS/out-of-repo for corpus Help images BEFORE the 100/day sweep completes (~2 weeks); after that the ~190MB is permanently in history (revised down from the ~1GB #110 projection - measured ~140KB/screen) | Owner/Worker | 🟡 Medium |
+| `run_ec_screen_learn.py` dead code from the corpus-switch refactor (unused `EC_URL`/`EC_USER`/`EC_PASS` + `help_text()`) - untouched by `d7e0c8d`, still open | Worker (next runner touch) | 🟢 Low |
+| Carry-over (still open, unchanged this cycle): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-04-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched.
+
+---
