@@ -50,3 +50,37 @@ Set env then run any script: `EC_DB_DSN=dev.db.non-prod.plp.wde.ecaas.cloud:1521
 - `diag_calc_gate.py` — both trains: verified gate + Techmax capacity reference.
 - `diag_train_qty.py` — raw `RAU_*` event values per train (shows Train 2's 3130%).
 - `ecaasdev_rau_recon.py`, `check_june_target_actual.py`, `diag_train_eqpm_join.py`, `get_sub004_def.py`, `extract_cdefrau_dds.py` — supporting recon + the view DDL + DDS §4.1 extraction.
+
+---
+
+## ⭐ RE-OPENED RCA (2026-07-03) — THREE distinct root causes (supersedes the single-cause note above)
+
+**Context:** the ticket was closed 2026-06-29 with the "unverified deferments" cause; **re-opened 2026-06-30 by Swapnil Thakur** — he verified SCA's deferments and re-ran the RAU calc (ran clean, no error) but Issues 1/2/3 persisted. Re-investigation (read-only, ECAASDEV) shows the ticket has **three** distinct causes across facilities, not one. Report/views/Jasper are correct — all three are upstream data/calc conditions.
+
+**Per Equipment Facility (June 2026):**
+
+| Equipment Facility | Deferment verified | Capacity | RAU Actual written | Report Actual | Cause |
+|---|---|---|---|---|---|
+| PLU_LNG_TRAIN1 (LNG Train 1) | 30/150 (120 Pending) | 73,166 t ✅ | none | blank | **1** (+3 latent) |
+| PLU_PNI (Interconnector) | 30/116 (86 Pending) | ok | none | blank | 1 (+3) |
+| PLU_COND (Condensate) | 31/91 (60 Pending) | ok | none | blank | 1 (+3) |
+| PLU_DG (Pipeline Gas) | 31/61 (30 Pending) | ok | none | blank | 1 (+3) |
+| SCA_OFFSHORE (Scarborough) | 31/31 ✅ | **0** | none | blank | **2** |
+| PLU_LNG_TRAIN2 (LNG Train 2) | 30/30 ✅ | ok | garbage | Util 3127% | **3** |
+| PLA_OFFSHORE (Pluto A) | 62/62 ✅ | ok | valid | populated ✓ | healthy |
+
+**Cause 1 — Unverified deferments** (Train 1, Interconnector, Condensate, Pipeline Gas): calc verification gate (`ZWP_P_DEF_RAU_CALC` body line 137, `APPROVAL_STATUS != 'V'`) skips the actual write. 296 rows still Pending. Only SCA was verified in the 06-30 re-run, so these four were never addressed. **Fix:** verify the outstanding June deferment rows, then re-run `ZWP_RAU_CALC_PLUSCA`.
+
+**Cause 2 — Zero capacity** (Scarborough): deferments fully Verified and the calc runs clean, but `p_capacity = 0` → the write is skipped (body line 409). Root cause traced end-to-end: `ZWP_DEF_DAY_SUMMARY.CAPACITY` ← `zwp_p_defer_custom.getCapacity('EQPM',…)` = 0 for SCA. getCapacity → `getStreamReferCapacity` (SCA has no capacity stream ref) → fallback `GetPlannedVolumes` → `getGroupForecastId(SCA,'CAPACITY')` = **NULL**. SCA has forecast facility-day rows but **no `ZWP_*_CAPACITY` values loaded** (`ZWP_T_FCST_FCTY_DAY`), so no valid CAPACITY forecast group resolves → capacity 0 every June day → blank actuals AND the SCA negative auto-deferments (deferment = 0 − production). **Fix (data/config):** load Scarborough's CAPACITY forecast (`ZWP_LNG_CAPACITY`) as the other facilities have.
+
+**Cause 3 — Negative auto-deferments** (Train 2 = >100% garbage now; latent on all facilities, ~29 rows each): auto-variation deferments book *(reference − actual)*; on ambient-uprate days (LNG "Daily Variation (ambient temp/pressure)") and demand-driven export (gas/PNI/cond) actual exceeds reference, so `DEF_QTY_DER` is negative. The calc only **warns** ("There are negative auto deferments", lines 156–162) and still sums the negatives into `(Cap − Def)/Cap × 100` → **> 100%** (Train 2 Util 3127%) and skewed YEO (Issue 3). **Fix (calc logic — author Grant Hewton):** floor/exclude negative auto-deferments in the RAU actual calc, or in the auto-deferment derivation.
+
+**LNG Train 1 note:** capacity is **healthy** (73,166 t via the `LNG_TRAIN_1_DEF_CAP` techmax stream) — its blank actuals are **Cause 1**, not capacity. But it also has 29 negative-auto-def rows (June deferment total −373,416), so after verifying it will likely emit >100% inflated actuals like Train 2 → needs Cause 3 too.
+
+**Issue 2** = the same missing `_ACT`/`_ACT_YTD` writes (screen shows only TRGT/YEO). **Issue 3 (YEO)** = downstream of missing/garbage actuals + the two-source grain mismatch.
+
+**Deployed calc:** `ZWP_P_DEF_RAU_CALC` PACKAGE + BODY both VALID, body recompiled 2026-06-10 09:29; deployed source matches the client repo (mod history ECPR-30797 / 30901 / 31040).
+
+**Env & routing:** all analysis read-only on ECAASDEV. Fixes for Causes 1–2 are operational/data; Cause 3 is a calc-logic decision. Deploy env is NOT ECAASDEV — confirm target before any change.
+
+**New investigation scripts (this session):** `ecaasdev_rau_recon2`, `def_verify_check`, `neg_autodef_trace`/`_trace2`, `sca_capacity_trace`/`_alldays`, `sca_forecast_trace`, `sca_streamref_trace`, `fcst_setup_cmp`, `getcapacity_trace`/`_body`, `getcap_helpers`, `getgroupfcst_src`, `plannedvol_body`, `valid_group_trace`, `train1_capacity_trace`, `eqpm_type`, `fcty_names`, `pkg_details`. All read creds from env (no hardcoded credentials).

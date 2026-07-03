@@ -29,3 +29,25 @@ Root-caused **Issue 1** of the Pluto Hub Monthly Deferments & RAU Report (Period
 - Issue 1 = **operational/data** (unverified deferments block the calc), **not a report/code bug**. Fix = verify deferments → re-run `ZWP_RAU_CALC_PLUSCA`.
 - Issue 2 = same root cause. Issue 3 = deferred. Train-2 garbage capacity = separate defect, logged.
 - **Stop point:** fact-finding delivered; await client re-test after they receive the findings.
+
+---
+
+## Session 2 — 2026-07-03 (re-opened RCA)
+
+**Trigger:** ticket re-opened 2026-06-30 (Swapnil verified SCA + re-ran the calc clean, but Issues 1/2/3 persisted) and re-assigned to CY.
+
+### What was done
+Re-investigated read-only on ECAASDEV (VPN up). Established the ticket has **three distinct root causes** across facilities (not one). Corrected the earlier single-cause conclusion. Traced SCA's capacity all the way to source (`getCapacity → getStreamReferCapacity → GetPlannedVolumes → getGroupForecastId = NULL` → no capacity forecast loaded for Scarborough), and confirmed LNG Train 1's capacity is healthy (73,166 t via `LNG_TRAIN_1_DEF_CAP`) so its blank actuals are the verification gate, not capacity. Appended the full RE-OPENED RCA to `FINDINGS.md`; added read-only trace scripts.
+
+### Done badly / wrongly (don't repeat)
+- **Prematurely declared the verification gate "disproven"** after the re-open. Actually it's still the cause for 4 facilities; the re-open just exposed two *additional* causes (SCA capacity, Train 2 negatives). Should have said "the fix was only applied to SCA" before pivoting the whole theory.
+- **Investigated capacity=0 on SCA when the priority facility was LNG Train 1** (user corrected). Cost a detour — should have confirmed the target facility first.
+
+### Done well (keep)
+- Traced the capacity chain function-by-function to the exact missing config (forecast load), not just "capacity is 0".
+- Re-queried current data after the client's 06-30 re-run rather than trusting stale recon; owned the correction honestly.
+- Stayed read-only; all new scripts read creds from env.
+
+### Key outcome
+- **Cause 1** unverified deferments (Train 1/Cond/DG/PNI); **Cause 2** SCA no capacity forecast; **Cause 3** negative auto-deferments (Train 2 + latent). Fixes: #1 verify+re-run, #2 load SCA capacity forecast, #3 floor/exclude negatives (calc logic, Grant Hewton). Deploy env NOT ECAASDEV.
+- **Stop point (user):** work halted on ECSR-35333; findings backed up. RCA Jira comment drafted but not yet posted.
