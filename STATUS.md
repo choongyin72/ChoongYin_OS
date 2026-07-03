@@ -28,6 +28,7 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `dc94ab9` | 2026-07-03 | review: automated quality feedback 2026-07-03 (06:00 AWST -- #159 standing draft… |
 | `24d28de` | 2026-07-02 | config: wire session-memory.md into Worker + Reviewer mandatory first-reads |
 | `ff61401` | 2026-07-02 | docs(session-memory): backfill earlier sessions (2026-06-14 to 2026-07-01) |
 | `6e7537b` | 2026-07-02 | docs: add session-memory.md for owner chat cross-session continuity |
@@ -37,7 +38,6 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 | `5107e44` | 2026-07-01 | review: automated quality feedback 2026-07-01 (14:00 AWST -- #135 standing draft… |
 | `77f2abd` | 2026-06-30 | review: automated quality feedback 2026-06-30 (06:00 re-verify -- #135 standing … |
 | `cd9ebe4` | 2026-06-30 | review: automated quality feedback 2026-06-30 (06:00 AWST -- #135 standing draft… |
-| `92a0302` | 2026-06-29 | review: automated quality feedback 2026-06-29 (14:00 AWST -- #152 CLEAR/merged, … |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
