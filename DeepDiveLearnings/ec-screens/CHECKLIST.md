@@ -71,14 +71,14 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0105** - Sub Field -> notes/CO.0105.md
 - [x] **CO.0108** - Well Hookup -> notes/CO.0108.md
 - [x] **CO.0118** - Region -> notes/CO.0118.md
-- [ ] **CO.0120** — Process Train
-- [ ] **CO.0122** — Stream PT Conversion Values
-- [ ] **CO.0123** — Test Device
-- [ ] **CO.0125** — Commercial Entity
-- [ ] **CO.0127** — Business Actions
-- [ ] **CO.0130** — Schedules
-- [ ] **CO.0131** — Schedule History
-- [ ] **CO.0132** — Manage Scheduler
+- [x] **CO.0120** - Process Train -> notes/CO.0120.md
+- [x] **CO.0122** - Stream PT Conversion Values -> notes/CO.0122.md
+- [x] **CO.0123** - Test Device -> notes/CO.0123.md
+- [x] **CO.0125** - Commercial Entity -> notes/CO.0125.md
+- [x] **CO.0127** - Business Actions -> notes/CO.0127.md
+- [x] **CO.0130** - Schedules -> notes/CO.0130.md
+- [x] **CO.0131** - Schedule History -> notes/CO.0131.md
+- [x] **CO.0132** - Manage Scheduler -> notes/CO.0132.md
 - [ ] **CO.0133** — Reservoir Block
 - [ ] **CO.0135** — Reservoir Formation
 - [ ] **CO.0137** — Reservoir Block Formation
