@@ -29,6 +29,14 @@ Steps:
 1. Run: git log --oneline -20 to see recent commits
 2. Check the last entry date in docs/review-log.md
 3. Count commits since that date
+3a. CLAUDE.md size gate (R28): run `wc -l CLAUDE.md`. It is auto-injected in full into every
+    session's context (unlike lessons-learned.md/session-memory.md, which are read on demand), so
+    it must stay lean. If it exceeds 200 lines: post a NICE-TO-HAVE in the review PR body naming
+    the specific section(s) that are candidates to prune or move into a read-on-demand doc
+    (lessons-learned.md / session-memory.md / PR-REVIEW-PROTOCOL.md / automation-scorecard.md). If
+    it exceeds 400 lines, escalate to MUST-FIX -- do not let it grow unchecked just because no PR
+    directly touched it. Record the current line count in the review-log.md row (step 6) so growth
+    is trackable over time, e.g. "CLAUDE.md: 124 lines".
 4. Pre-flight -- run these before touching any file:
    a. `git fetch origin master && git merge origin/master` -- ensure local master is current before branching
    b. `git status` -- if any of these reviewer-owned files are already modified (STATUS.md, docs/lessons-learned.md, docs/automation-scorecard.md, docs/review-log.md), discard them with `git checkout -- <file>` (they are stale leftovers from a previous crashed session, already captured in a prior review PR). Do NOT touch any other files -- they belong to the Worker.
