@@ -28,6 +28,7 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `405c30f` | 2026-07-04 | review: automated quality feedback 2026-07-04 (06:00 AWST -- #159 standing draft… |
 | `ccfd603` | 2026-07-03 | review: automated quality feedback 2026-07-03 (14:00 AWST -- #159 standing draft… |
 | `dc94ab9` | 2026-07-03 | review: automated quality feedback 2026-07-03 (06:00 AWST -- #159 standing draft… |
 | `24d28de` | 2026-07-02 | config: wire session-memory.md into Worker + Reviewer mandatory first-reads |
@@ -37,7 +38,6 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 | `d0b7f33` | 2026-07-02 | docs(scorecard): add phased coverage strategy (Phase 1â†’2â†’3) and runner batch… |
 | `813d53f` | 2026-07-01 | review: automated quality feedback 2026-07-01 (14:00 re-verify) (#157) |
 | `5107e44` | 2026-07-01 | review: automated quality feedback 2026-07-01 (14:00 AWST -- #135 standing draft… |
-| `77f2abd` | 2026-06-30 | review: automated quality feedback 2026-06-30 (06:00 re-verify -- #135 standing … |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)

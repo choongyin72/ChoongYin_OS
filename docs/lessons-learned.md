@@ -1335,3 +1335,31 @@ _Open PR triggers a full review (R14) despite 0 new master commits since #164/`c
 Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-04-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched.
 
 ---
+
+## 2026-07-04 - Automated Review (14:00 AWST, 1 open PR #159, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14) despite 0 new master commits since #165/`405c30f`. #159's head advanced `d7e0c8d` -> `076f420` (1 new Worker commit). **Re-confirmed CLEAR - zero MUST-FIX - NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v27.** R1-R27 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #159 | Clear. 1 new commit `076f420`: the FIRST run at the raised 100-screen batch cap - 100 new full screens (CO.0133..CO.1003, 0 partial), 259 files +2360/-100. **Pure-data commit** verified against the diff: zero `.py`/`.ps1`/`.robot`/`.resource`/`.sql` changes; only 100 new `notes/*.md` + corpus screenshots + CHECKLIST flips (200 changed lines = exactly 100 `[ ]`->`[x]`; new-note file count = 100 = commit-message claim, R21 holds). CHECKLIST now 181 `[x]` / 1 `[~]`. **R23 clean** (diff vs master on the reviewer-owned docs = EMPTY). **R18/R20 clean** (zero non-ASCII bytes on ADDED lines; the 103 context-line em-dashes are pre-existing exempt markdown). **Honest classification:** CO.0500 (Keycloak account) / CO.1000-1003 (User Maintenance family) record "(no class resolved from URL/LABEL)" and are typed process/config - a valid terminal type per the runner logic cleared 2026-07-03; no fabricated bindings. 1 NICE-TO-HAVE posted (dead `PARTIAL` branch, below). | OK Clear (NICE-TO-HAVE) - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **The 100-screen cap raise performed exactly as argued.** The 06:00 review cleared the 8->100 cap raise on the arithmetic that the corpus refactor removed the browser bottleneck; this run is the empirical confirmation - 100 screens captured in one run, all with notes + flips consistent, zero code drift, zero partials fabricated to full (the no-class screens carry their honest "(no class resolved)" marker inside the note). Predict-then-confirm across two review cycles is the right cadence for a throughput change.
+- **"0 partial" is now structurally guaranteed, which weakens it as an audit signal.** `full = has_db or bool(info['classes']) or is_process` is tautologically True (`is_process = not info['classes']`), so `done_partial` and the `PARTIAL[...]` log branch are dead code. That is the documented intent (no perpetual-partial re-picks), but a reader of "(100 full, 0 partial)" may wrongly infer every binding resolved. NICE-TO-HAVE posted: simplify to `full = True` and log flag counts (e.g. "100 screens, N flagged no-corpus-Help / no-class") so the commit message keeps informational content.
+
+### Gaps (verified against filesystem / GitHub API)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| PR #159 still `mergeable_state: dirty` (CONFLICTING) against master (R27, unchanged since 2026-07-03 06:00) - re-confirmed via the GitHub API this run. At 100 screens/day the conflict surface compounds every run; rebase onto master or switch to `--no-ff` milestone merges NOW, before the next milestone | Owner | 🔴 High |
+| Runner `full` flag is tautologically True - dead `done_partial`/`PARTIAL` branch; replace "(N full, 0 partial)" with flag-count logging | Worker (next runner touch) | 🟢 Low |
+| Decide LFS/out-of-repo for corpus Help images BEFORE the 100/day sweep completes (~2 weeks at current pace; 181/1457 done) | Owner/Worker | 🟡 Medium |
+| Carry-over (still open, unchanged this cycle): `run_ec_screen_learn.py` dead corpus-switch code (`EC_URL`/`EC_USER`/`EC_PASS` + `help_text()`); extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-04-1400` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched.
+
+---
