@@ -15,7 +15,7 @@ in Python, per screen, with a hard timeout + best-effort fallback so it can neve
   5) commit on the detached worktree HEAD; push unless EC_LEARN_PUSH=0
 
 Isolated git worktree (C:\\tmp\\wt-ec-learn) so it never touches the user's main checkout.
-Env knobs: EC_LEARN_MAX (screen cap, default 100); EC_LEARN_PUSH=0 (commit locally, no push).
+Env knobs: EC_LEARN_MAX (screen cap, default 200); EC_LEARN_PUSH=0 (commit locally, no push).
 """
 import os, re, sys, subprocess, time
 from datetime import datetime
@@ -25,7 +25,7 @@ REPO   = r'C:\Projects\ChoongYin_OS'
 WT     = r'C:\tmp\wt-ec-learn'
 BRANCH = 'feature/ec-screen-deepdive'
 LOG    = Path(REPO) / 'tools' / 'deep-dive-scheduler' / 'session_log.txt'
-MAXN   = int(os.environ.get('EC_LEARN_MAX', '100'))
+MAXN   = int(os.environ.get('EC_LEARN_MAX', '200'))
 DO_PUSH= os.environ.get('EC_LEARN_PUSH', '1') != '0'
 DB_RETRIES    = int(os.environ.get('EC_LEARN_DB_RETRIES', '3'))       # DB pre-flight: attempts before aborting
 DB_RETRY_WAIT = int(os.environ.get('EC_LEARN_DB_RETRY_WAIT', '20'))   # seconds between DB connect attempts (sandbox may still be starting)
