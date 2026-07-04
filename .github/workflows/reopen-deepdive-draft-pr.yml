@@ -1,0 +1,52 @@
+name: reopen-deepdive-draft-pr
+
+# Keeps exactly ONE open DRAFT PR for the EC Screen Deep-Dive program.
+# When the owner merges the standing PR (from feature/ec-screen-deepdive into master) at a
+# milestone, a merged PR cannot be re-opened, so this workflow opens a FRESH draft PR from the
+# same permanent branch back to master - removing the only manual step in the program.
+#
+# Fires only for the deep-dive branch's own merges; never touches any other PR.
+# Public repo => GitHub Actions minutes are free. Runs a few seconds, only at a milestone merge.
+
+on:
+  pull_request:
+    types: [closed]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  reopen:
+    # Only when THIS PR was actually merged (not just closed) AND its head is the program branch.
+    if: >-
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'feature/ec-screen-deepdive'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Re-open standing draft PR (only if none open and branch is ahead of base)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: feature/ec-screen-deepdive
+          BASE: master
+        run: |
+          set -euo pipefail
+          # 1) Don't double-open: if a PR for this head is already open, stop.
+          open_count=$(gh pr list --repo "$REPO" --head "$BRANCH" --state open --json number --jq 'length')
+          echo "open PRs on $BRANCH: $open_count"
+          if [ "$open_count" -ne 0 ]; then
+            echo "An open PR already exists for $BRANCH; nothing to do."
+            exit 0
+          fi
+          # 2) GitHub refuses an empty PR: only create if the branch is ahead of base.
+          ahead=$(gh api "repos/$REPO/compare/$BASE...$BRANCH" --jq '.ahead_by')
+          echo "$BRANCH is ahead of $BASE by: $ahead"
+          if [ "$ahead" -le 0 ]; then
+            echo "$BRANCH is not ahead of $BASE; skipping (nothing to PR)."
+            exit 0
+          fi
+          # 3) Open a fresh DRAFT PR (owner-merge-only; the automated reviewer must not auto-merge).
+          gh pr create --repo "$REPO" --draft --base "$BASE" --head "$BRANCH" \
+            --title "EC Screen Deep-Dive — standing program PR (auto-reopened)" \
+            --body "Auto-reopened by the \`reopen-deepdive-draft-pr\` workflow after the previous standing PR was merged at a milestone. **DRAFT = owner-merge-only** (the automated reviewer must not auto-merge this). The daily autopilot (\`tools/deep-dive-scheduler/run_ec_screen_learn.py\`) appends screen notes to this branch; periodic \`DeepDiveLearnings/ec-screens/REVIEW-<date>.md\` files accumulate too. Permanent branch - never deleted, never force-pushed without owner OK."

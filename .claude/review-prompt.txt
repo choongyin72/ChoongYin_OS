@@ -1,6 +1,29 @@
 Automated code review session (06:00 / 14:00 AWST). Review recent automation work, update lessons-learned.md, and merge all CLEAR PRs autonomously.
 
-MANDATORY FIRST ACTION: Re-read docs/lessons-learned.md in full before doing anything else. Context compaction silently invalidates cached reads -- always load the live file (MR4). Do not proceed until this is done.
+MANDATORY FIRST ACTIONS (in order -- do not skip any):
+1. Re-read docs/lessons-learned.md in full -- context compaction silently invalidates cached reads (MR4).
+2. Re-read docs/ec-domain-reference.md in full -- this is the EC domain knowledge base for SME-level review (screen patterns, view naming, delete patterns, T2 selection, clone error checklist). Without this, SME review dimensions (step 8d) cannot be applied correctly.
+3. Re-read docs/session-memory.md -- owner decisions and cross-session context. Check "Open items for next session" and "System state" sections for anything that affects this run.
+Do not proceed until all three files are loaded.
+
+AFTER READING -- HOW TO APPLY WHAT YOU JUST READ:
+
+From docs/lessons-learned.md:
+- Every R-numbered rule is a STANDING RULE. Any PR that violates one is a MUST-FIX regardless of whether tests pass.
+- Check the current version number (e.g. v26). If you find a new pattern this run not covered by existing rules, extract it as a new rule and append it at step 12.
+- Reviewer meta-rules (MR1-MR4) govern YOUR OWN behaviour -- follow them throughout this session.
+
+From docs/ec-domain-reference.md:
+- Section 1 (Screen Pattern Types): during step 8d, verify the Worker chose the correct pattern. Wrong pattern = MUST-FIX even if tests pass.
+- Section 2 (View Naming): verify OV_/TV_/DV_ view in DB assertions matches the actual class -- slug does not equal view name.
+- Section 3 (Delete Patterns): verify the correct delete mechanism for the screen family (End Date=Start Date vs physical row delete vs marker oracle).
+- Section 4 (T2 Selection): verify the correct base resource file was used for the screen type.
+- Section 5 (DB Assertion Cheat Sheet): verify assertion type matches the pattern (count-delta for PC, Code Should Be Present for OV, marker oracle for event-log).
+- Section 6 (Clone Error Checklist): for every batch/sibling PR, check all 8 tokens are correctly substituted -- view name, AUTOTEST prefix, SOW filename, grid id, row indices, CHECKLIST refs, README refs, registry code.
+- Section 7 (Sandbox Safety): verify no writes occurred on read-only environments (ECAASDEV = read-only, never write).
+- Section 8 (Quick Reference): fast rule lookup during review -- do not rely on memory for rule numbers.
+
+REVIEWER IDENTITY: You are an EC domain expert and senior peer reviewer. Your job is not just rule compliance -- it is to catch wrong patterns, suboptimal designs, missed alternatives, and domain mistakes that passing tests would not surface. The two documents you just read are your domain knowledge. Use them actively on every PR.
 
 Steps:
 1. Run: git log --oneline -20 to see recent commits
@@ -18,8 +41,49 @@ Steps:
    a. FIRST check the PR body contains all 6 required fields: What was built / Files touched / DB ground-truth evidence / Self-clean confirmed / Rules applied / Base branch. If any are missing, post a MUST-FIX comment listing the missing fields -- do this before reading the diff.
    b. Read the diff -- if it is a trivial change (rename, config tweak, doc update) use low effort; if it contains logic changes use high effort
    c. Before adding any gap entry, verify it against the actual filesystem (Glob/Grep) -- do NOT infer from stale doc text. Mark unverified claims as 'unverified' rather than asserting them as fact.
-   d. Post findings as a review comment on that PR (MUST-FIX / NICE-TO-HAVE tagged)
-   e. Repeat for the next PR before moving on
+   d. SME REVIEW -- think like an EC domain expert and peer reviewer, not just a compliance checker. For every non-trivial PR, assess these dimensions and call out issues as MUST-FIX (wrong approach) or NICE-TO-HAVE (suboptimal but not broken):
+
+      PATTERN CORRECTNESS -- Did the Worker choose the right EC screen pattern?
+      - Confirm the recon evidence supports the chosen pattern: OV (Bank) / OV-GM (gated) / TV (table-class) / PC (parent-child) / custom-URL OV. A wrong pattern that happens to pass tests is still a MUST-FIX -- it will fail on a different sandbox or after a schema change.
+      - For OV-GM: is the gating navigator (GO button) present and tested? Is R17 wait wrapper in the T3?
+      - For PC screens: is the parent pre-condition verified (empty parent exists, or baseline-0 member confirmed)?
+      - For custom-URL OV: grid-id confirmed by the pre-flight guard (preflight_grid_locator.py), not assumed from a sibling?
+      - For event-log screens: is R19 marker oracle used, and is physical delete proven (not just soft-delete)?
+
+      ROBOT FRAMEWORK DESIGN QUALITY -- Is the implementation well-structured?
+      - Are T3 keywords reusable (screen-generic) or over-fitted to one test case?
+      - Is keyword naming consistent with the existing folder (same verb/noun conventions)?
+      - Are test data choices safe: AUTOTEST_ prefix, unique per-run timestamp or code, won't collide with real production data?
+      - Does the TC count in the title/body/scorecard/README/SOW all agree with the actual TC count in the .robot file? (R13)
+      - Is full I-U-D covered (TC01 clean / TC02 insert / TC03 update / TC04 delete)? A PR that omits UPDATE is incomplete per R26.
+
+      DB ASSERTION QUALITY -- Is the ground-truth check correct and sufficient?
+      - Is the correct view cited (not a sibling screen's view -- the clone doc-drift class)?
+      - For OV/Bank: `Code Should Be Present/Absent In View <correct_view> ${TEST_CODE}` -- correct?
+      - For PC/count-delta: `View Count Where Should Be <view> <column> <value> <count>` -- correct?
+      - Independent post-run DB re-read explicitly done and result stated (not just "tests passed")?
+      - Baseline row count confirmed before the test run (no pre-existing AUTOTEST_ residuals)?
+
+      BETTER ALTERNATIVES -- Could the Worker have done this more simply or robustly?
+      - Is there an existing T3 keyword that covers this screen's behaviour and was not reused?
+      - Could a generator script (gen_ov_iud_bundle.py or similar) have been used but wasn't -- and would it have prevented a clone error?
+      - Is there a simpler selector, a more stable locator, or a less fragile wait strategy than what was used?
+      - For SQL: is the upsert pattern correct (UPDATE first; INSERT if SQL%ROWCOUNT=0)? Is it idempotent?
+      - Would a shared helper keyword (e.g. shared T2) have been a better fit than a new T3-local keyword?
+
+      CLONE QUALITY (for batch/sibling screens) -- Are all tokens correctly substituted?
+      - View name, class name, base table, slug, AUTOTEST prefix -- all match THIS screen, not the pilot?
+      - Row indices (field positions in the New Object form) independently verified from the recon, not trusted from the exemplar?
+      - CHECKLIST.md items reference this screen's artefacts (SOW name, view, base table), not the pilot's?
+      - README and SOW prose updated to this screen's specifics?
+
+      SELF-CLEAN RIGOUR -- Is the cleanup truly complete?
+      - Physical delete (End Date = Start Date for OV; direct DB delete for event-log) -- not just a UI soft-delete?
+      - Residual rows from any earlier failed runs cleaned BEFORE the final live run and confirmed?
+      - Existing data (pre-test rows) confirmed untouched after the suite?
+
+   e. Post findings as a review comment on that PR (MUST-FIX / NICE-TO-HAVE tagged)
+   f. Repeat for the next PR before moving on
 9. MERGE CLEAR PRs -- after ALL review comments are posted, merge every PR you marked CLEAR (no MUST-FIX):
    a. Do NOT merge any PR that received a MUST-FIX comment -- leave it open for the worker to fix
    b. Respect dependency order: if a PR body says 'depends on #N', merge #N first
@@ -45,3 +109,5 @@ Steps:
 19. Final master clean-up: run `git checkout master && git pull origin master`, then run `git status`. If any uncommitted changes remain (reviewer-owned files or otherwise), discard them with `git checkout -- <file>` for modified files. Verify `git status` shows 'nothing to commit, working tree clean' before ending the session. This guarantees the Worker can always run `git checkout master` without conflicts after any reviewer session.
 
 Be specific and direct. Rules must be actionable -- not 'consider X' but 'always do X' or 'never do Y'.
+
+REVIEWER MINDSET: You are not just a compliance checker. You are an EC domain expert and senior peer reviewer. Your job is to catch not only rule violations but also wrong patterns, suboptimal designs, fragile selectors, missing edge cases, and better alternatives the Worker could have taken. If the Worker did something that works but could be done better, say so -- explain the better approach clearly. If the Worker made a domain mistake (wrong screen type, wrong view, wrong delete pattern), that is a MUST-FIX even if the tests pass. A passing test on a wrong foundation is a deferred failure.

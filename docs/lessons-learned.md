@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v25** (R25 added 2026-06-25)
+> **Current rule version: v27** (R27 added 2026-07-03)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -33,6 +33,8 @@ _Worker sessions: read this before starting any automation work._
 | v23 | R23 | A long-lived/permanent Worker branch must keep reviewer-owned append-only docs in sync — `git diff origin/master...HEAD` must show NO `-` lines on lessons-learned.md / review-log.md / automation-scorecard.md / STATUS.md | 2026-06-23 |
 | v24 | R24 | Pushing from a detached/throwaway worktree MUST use `push origin HEAD:refs/heads/<branch>` -- a bare `push origin <branch>` resolves to the shared local branch ref (another worktree's tip), NOT the detached HEAD | 2026-06-25 |
 | v25 | R25 | When any tool/MCP/connection breaks, OWN the troubleshooting -- diagnose, give actionable fix steps, keep moving; never say "I can't" without following up with "here is how to fix it" | 2026-06-25 |
+| v26 | R26 | Every EC Object IUD PR is gated against the 19-item `docs/IUD-DELIVERABLE-CHECKLIST.md`; the bundle MUST carry a ticked `CHECKLIST.md`; reviewer spot-checks SUBSTANCE not just ticks; a missing/failing deliverable ⇒ MUST-FIX | 2026-06-28 |
+| v27 | R27 | A squash-style milestone merge of a permanent standing-draft branch breaks shared history; rebase the continuation onto master (or use `git merge --no-ff`) before the branch's next milestone push, or expect real file conflicts | 2026-07-03 |
 
 ---
 
@@ -916,3 +918,448 @@ _None new this cycle. R1-R25 cover every finding. Version stays **v25**._
 | Remaining 3 Royalty Object screens (RC.0054/0057/0058) not yet started (Tract RC.0056 now done) | Worker | Medium |
 | Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_ov_iud_bundle.py`/`gen_checklist.py`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause | Worker | Medium |
 | Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
+
+---
+
+## 2026-06-26 -- Automated Review (14:00 AWST, 1 worker PR + 1 standing draft)
+
+_No new master commits since the 06:00 run (#125/`327e769`) other than what this run merges; 2 open PRs -- #126 (ECSR-35236 PHD check-rule scoping SQL, NOT draft) and #118 (the standing deep-dive draft). Open PRs trigger a full review (R14). **#126 CLEAR -- zero MUST-FIX -- squash-merged (`b991897`).** #118 left open (owner-merge-only standing draft). **No new executable rule -- R1-R25 cover every finding; version stays v25.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #126 | Clear (HIGH effort -- client check-rule config SQL + paired rollback). Scopes 8 PHD validation rules (tank GRS_MASS/STD_DENS = MEASURED; stream DENSITY/GCV = COMP_ANALYSIS; 4x PWEL no-data temp/press = ON_STREAM_HRS > 0) by appending a method/on-stream criterion to each WHERE_FORMULA + an ATTRIBUTE method var, mirroring the live `PHD_STREAM_LIQUID_MEAS_VAL2` rule. Apply SQL: idempotent upsert (`UPDATE; IF SQL%ROWCOUNT=0 THEN INSERT`, no MERGE), **targets by CHECK_NAME** (CHECK_ID env-local, resolved at runtime), `REV_TEXT='ECSR-35236'` real ticket (**R22 clean -- no `ECPR-XXXX`**), **0 DELETE** (non-destructive), per-rule `check_id` keying so shared var names (`ConstMEASURED`/`ConstCOMP`/`OnStrmHrs`) never collide across rules. Rollback SQL: restores original value-only formulas, DELETE precisely guarded by `rev_text='ECSR-35236'` + the 7 net-new var names + the 8 target check_ids; net-new status cross-checked vs pristine ECAASTEST (the key safety proof for a stamp-guarded delete). Full apply->rollback->re-apply cycle is clean. R8 satisfied (branch merged origin/master `306d2f55`/`0c15c32`). DB ground-truth (round-trip S0==S2, behavioural before/after counts, Validation Overview screen 20->12 Errors) + self-clean taken as worker-attested (plutodev read-write-with-rollback, not reviewer-re-run). **1 NICE-TO-HAVE (R18/R20):** `investigation/compare_check_rules.py` has em-dashes in its docstring/comments (lines 3/5/13) -- only in docstring/comments (not `print()` strings) so no cp1252 runtime crash, and the file is outside the `check_bundle_hygiene.py` glob (`workstreams/**` not scanned) so the static gate misses it. Exactly the still-open "broaden the hygiene glob to `workstreams/**`" carry-over. | OK Clear (NICE-TO-HAVE) -- merged |
+| #118 | STANDING/DRAFT EC Screen Deep-Dive (draft=true). Reviewer leaves it alone by design (draft = skip; owner milestone-merges). Not reviewed for content this run. | -- left open (owner-merge-only) |
+
+### Rules (apply immediately, no exceptions)
+
+_None new this cycle. R1-R25 cover every finding. Version stays **v25**._
+
+### Observations (good patterns to keep)
+
+- **Paired apply/rollback with asymmetric audit stamps is the right shape.** #126's rollback audit-stamps the rule rows with a distinct `'ECSR-35236-ROLLBACK'` REV_TEXT while keying the variable DELETE off the apply's `'ECSR-35236'` stamp -- so the currently-applied-vs-rolled-back state is legible straight from REV_TEXT, and the deletion still targets exactly what apply wrote. The stamp-guarded delete is only safe because the worker proved the 7 vars are net-new via a pristine-ECAASTEST cross-check ([[feedback_clone_full_row_diff]] / R2 verify-before-assume) -- that cross-check is what turns "DELETE WHERE rev_text=mine" from risky into precise.
+- **R22 is now reflexive on client SQL.** Every SQL delivery since R22 was minted (#96 NOPTA, #107 SCA-email, now #126) has set the real governing ticket on every DML via a single `lv_rev_text` constant with zero `ECPR-XXXX`/`ECSR-XXXX` placeholder. The standing re-runnable+REV_TEXT directive needs no reminder.
+- **Per-branch JOURNAL.md habit landed.** #126's `a757ba5` adds a committed `JOURNAL.md` (built / done-wrong / done-well / improve / blockers+resolution / decisions) -- the first instance of the standing per-feature-branch journal habit. Good for handover/resumability; keep it.
+
+### Gaps (verified against filesystem / PRs)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `workstreams/ecsr-35236-phd-validations/investigation/compare_check_rules.py` em-dashes (lines 3/5/13) -- ASCII-normalise (R18/R20). Reinforces the open carry-over to broaden `check_bundle_hygiene.py` to `workstreams/**/**.py` so these are machine-caught | Worker | Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/**.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): #124 SOW date wording vs hardcoded `2011-01-01` (R21); remaining 3 Royalty Object screens (RC.0054/0057/0058); Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
+
+### Reviewer process note
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent `feature/ec-screen-deepdive` branch with a dirty working tree (and many active sibling IUD worktrees: `wt-royalty*`/`wt-tract`/`wt-prodgrp`/`wt-unitagr`/`wt-ecsr*`/`wt-ec-learn`). That branch was behind master at **v23** while master is **v25** -- the exact R23/MR4 drift. All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-26-1400` worktree off `origin/master`; the Worker's checkout and every sibling worktree were never touched. The current `lessons-learned.md` state (v25, R24/R25) was re-read from the master copy in the worktree, not the stale v23 main-checkout copy (MR4).
+
+---
+
+## 2026-06-27 06:00 AWST -- Automated Review (1 worker PR #128 + 1 standing draft #118)
+
+_0 new master commits since #127/`1aa08e0` (the 06-26 14:00 review); 1 non-draft worker PR (#128) + the standing deep-dive draft (#118). Open PRs trigger a full review (R14). **#128 content CLEAR but has 1 MUST-FIX (R9 body header drift) -- left OPEN.** #118 = owner-merge-only standing draft, **NOT merged**, R23 satisfied. **No new executable rules** -- R1-R25 cover every finding; version stays **v25**._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #128 | **MUST-FIX (R9)** -- ECSR-35333 RAU report read-only fact-finding (Issue 1 root cause proven, no fix, awaiting client re-test). The diff is clean and high quality, independently verified: 8 `investigation/*.py` are **read-only** (0 INSERT/UPDATE/DELETE/MERGE/commit, grep-verified), env-var creds `EC_DB_USER`/`EC_DB_PWD`/`EC_DB_DSN` (R16), ASCII-clean `.py` (R18/R20 -- `[^\x00-\x7F]` -> 0 matches; em-dash only in pure-MD `FINDINGS.md`/`JOURNAL.md`, exempt), isolated `workstreams/ecsr-35333-rau-report/` tree, **0 deletions** anywhere (R8/R23 trivially clean), root cause proven four independent ways (As-Built DDS 4.1.6 + `ZWP_P_DEF_RAU_CALC` gate code + live 120/150 `P` unverified + the calc's own revision text). DB ground-truth taken as worker-attested (ECAASDEV read-only, not reviewer-re-run). **But the PR body is missing 4 of the 6 literal R9 headers:** "What was built" (present only as "What this is"), "DB ground-truth evidence", "Self-clean confirmed", and "Rules applied" (entirely absent). Format-only fix -- no code change needed. | MUST-FIX open -- left for Worker |
+| #118 | Clear (re-confirmation) -- standing DRAFT EC Screen Deep-Dive; reviewer never auto-merges (owner milestone-merges). Increment since the last cleared head `c32cec2` = `39fb078` (CO.0018/CO.0038/PO.0008) + `12eaad8` (CO.0039/0040/0042/0044/0045/0049/0050/0051) = 11 new screen notes, all **full** (DB binding + Help both present). Bindings spot-checked real (CO.0049 Well->`WELL`/OBJECT/VERSIONED->`OV_WELL`; CO.0039 Tank Strapping->`TANK_STRAPPING`/DATA/EVENT->`DV_TANK_STRAPPING`), genuine EC config-manual Help text, ASCII-clean, honest marking. **R23 satisfied:** `git diff --stat origin/master...origin/feature/ec-screen-deepdive` shows ZERO `-` lines on the four reviewer-owned docs (the 21 deletions are CHECKLIST `[ ]`->`[x]` flips + note re-enrichment). | OK Clear -- left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **A content-clean PR can still earn a MUST-FIX purely on body discipline -- and should.** #128's *change* is exemplary (read-only, env creds, ASCII, isolated tree, 4-way-proven root cause), yet the body is missing 4 of the 6 literal R9 headers. R9 exists precisely so the body is a trustworthy parse surface; "What this is" is not "What was built", and "Rules applied" being absent means the reviewer cannot see which rules the worker claims to have honoured. Holding the line here is consistent (cf. #19 missing-fields MUST-FIX) and the fix is format-only -- low cost to the worker, high value to the merge gate.
+- **R23 holds on the permanent branch this run without intervention.** The deep-dive branch has re-absorbed master (now v25) via its own `git merge origin/master` commits (`3d9aa78`), so the four reviewer-owned docs show zero `-` lines vs master -- a milestone-merge will not clobber any review record. The standing-draft + branch-self-syncs model is working as designed (cf. R23 + the step-18 sync).
+- **Read-only fact-finding is the correct deliverable shape for a critical client bug awaiting re-test.** #128 proves the root cause and stops (no fix, no client-repo touch, no DB write) -- the operational fix (verify the outstanding June deferment events, re-run `ZWP_RAU_CALC_PLUSCA`) is handed back for the client to action. This is exactly R3-style "prove what works, park what requires the other party, never over-claim" applied to investigation work.
+
+### Gaps (verified against filesystem / PRs)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **#128 MUST-FIX:** add the 4 missing literal R9 headers to the PR body ("What was built" / "DB ground-truth evidence" / "Self-clean confirmed" / "Rules applied"); push the body fix to clear (format-only, no code change) | Worker | High |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/**.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): #124 SOW date wording vs hardcoded `2011-01-01` (R21); remaining 3 Royalty Object screens (RC.0054/0057/0058); Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
+
+### Reviewer process note
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent `feature/ec-screen-deepdive` branch with a dirty working tree (sibling IUD worktrees `wt-royalty*`/`wt-tract`/`wt-prodgrp`/`wt-unitagr`/`wt-uws2`/`wt-ecsr*`/`wt-ec-learn` all present). The main checkout sits at `a7a0a3d` (v23) while master is `1aa08e0` (v25) -- the R23/MR4 drift; the *committed* deep-dive branch tip (`origin/feature/ec-screen-deepdive` = `12eaad8`) has re-absorbed master, so R23 is green at the branch tip even though the dirty checkout is behind. All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-27-0600` worktree off `origin/master`; the Worker's checkout and every sibling worktree were never touched. Current v25 state (R24/R25) re-read from the master copy in the worktree, not the stale v23 main-checkout copy (MR4).
+
+---
+
+## 2026-06-27 — Automated Review (14:00 AWST, 3 new worker PRs #130/#131/#132 + #128 re-check + standing draft #118)
+
+_Open PRs trigger a full review (R14); run fired ~16:00 AWST (late 14:00 slot). **3 of 4 worker PRs CLEAR — squash-merged; 1 MUST-FIX left open.** **No new executable rules** — R1–R25 cover every finding; version stays **v25**. The MUST-FIX on #130 is a pure R13/R21 re-application, not a new rule._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #128 | **CLEAR (06:00 MUST-FIX resolved).** The 06:00 R9-body MUST-FIX is fixed — the body now carries all 6 literal headers (What was built / Files touched / DB ground-truth evidence / Self-clean confirmed / Rules applied / Base branch). Content (ECSR-35333 RAU read-only fact-finding) was already verified CLEAR at 06:00 (8 read-only `investigation/*.py`, env creds, ASCII, isolated tree, 0 deletions). | ✅ Clear — merged |
+| #131 | **CLEAR.** Tract - Well Setup (RC.0057, PC cascade), full I-U-D. 4 TCs = title/body/scorecard all `4/4` (R13). DB ground-truth real via T3 wrappers over `DbVerify.py` (`View Count Where Should Be DV_TRACT_WELL_SETUP` count-delta 0→1→0 + `Code Should Be Present/Absent In View` COMMENTS sentinel). Env creds (R16), 5 `.py` ASCII-clean (R18/R20), no shared T1/T2/DbVerify edits (R12), 0 deletion lines on append-only scorecard+registry (R23). Self-clean: baseline-0 member under existing Unit 3 Tract 01, pre-existing PI-5/PI-6 verified intact. | ✅ Clear — merged |
+| #132 | **CLEAR.** Product Group Setup (RC.0054), 3-tier master→detail→sub-detail, tab-gated, no nav — most complex of the batch. 10 TCs = `10/10` everywhere (R13). Per-entity COMMENTS-sentinel oracle over `DV_PRODUCT_GROUP_SETUP`/`DV_PRODUCT_GROUP_COST`/`PRODUCT_STRM_BAL_CAT` (label≠table handled). 11 `.py` ASCII-clean, R12/R16/R23 clean. Royalty Objects batch **COMPLETE 8/8**. (Resolved the expected stacked add/add conflict on `automation-scorecard.md` + `ec_screen_registry.md` after #131's squash — see process note.) | ✅ Clear — merged |
+| #130 | **MUST-FIX (R13/R21 — body/title only, no code change).** Unit - Well Setup (RC.0050, PC) suite is **4 TCs full I-U-D** (TC01 Clean / TC02 Insert / TC03 Update / TC04 Delete; results.json `"update":"PASS"`) and the scorecard, README, and SOW all say **4/4 full I-U-D** — but the PR **title** still says `live 3/3` and the **body** says `RF 3/3 PASS` + `insert/delete` (omitting the UPDATE added after user feedback). Stale title/body contradicting the 4-TC suite = the same defect class that was a MUST-FIX on PR #24. | ⛔ MUST-FIX open — left for Worker |
+| #118 | **CLEAR — NOT merged** (owner-merge-only standing deep-dive draft, still DRAFT). Only new content since the 06:00 run (`12eaad8`) is `1910222` (CO.0054–0069: 7 full + 1 honest `[~]` partial — CO.0060 "missing DB binding", not fabricated to `[x]`). Real bindings spot-checked (`WELL_BORE`→`OV_WELL_BORE`, `WELL_BORE_SPLIT_FACTOR`→`DV_WELL_BORE_SPLIT_FACTOR`, `CARGO_ACTIVITY`→`TV_CARGO_ACTIVITY`), ASCII-clean, CHECKLIST flips only. **R23 satisfied** — `git diff --stat origin/master...origin/feature/ec-screen-deepdive` shows 0 `-` lines on the four reviewer-owned docs. | ✅ Clear (NICE-TO-HAVE) — left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **Reviewer-flagged MUST-FIX closed in one cycle (#128).** The 06:00 run posted a format-only R9-body MUST-FIX; the Worker fixed the body (no code change) and the 14:00 run merged it. The post-comment → Worker-fix → next-run-merge loop works for body-only defects too.
+- **The "3/3 → 4/4 after adding UPDATE" trap recurs, and the suite-side artifacts caught it (#130).** When a suite grows from I/D to full I-U-D after feedback, the count must be re-stated in EVERY surface. Here the scorecard/README/SOW were all updated to 4/4 but the PR title/body were missed — the same R13 failure mode as PR #24. The fix is mechanical; the lesson is that the *PR title and body* are part of the "everywhere" in R13, not just the in-repo docs.
+- **Stacked-PR append-only conflict resolved by union, not `--ours`.** Unlike the 2026-06-26 stack (where the child branch was a strict superset of master for the two append-only files, so `--ours` was correct), here #132's branch was cut **before** #131 merged, so `--ours` would have dropped #131's Tract-Well-Setup row. Correct resolution = a real merge keeping the **union** of rows (master's 7/8 row + the branch's 8/8 row), committed in a throwaway `--detach` worktree and pushed `HEAD:refs/heads/feature/product-group-setup-iud` (R24). Reaffirms: choose `--ours`/`--theirs` only after confirming superset direction; default to a hand-merged union for append-only files.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **#130 MUST-FIX:** update title `3/3`→`4/4`, body `RF 3/3 PASS`→`RF 4/4 PASS`, and "What was built" `insert/delete`→`insert/update/delete` to match the 4-TC suite + scorecard/README/SOW (R13/R21; body/title only, no code) | Worker | High |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/**.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` → `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): #124 SOW date wording vs hardcoded `2011-01-01` (R21); Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
+
+### Reviewer process note
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent `feature/ec-screen-deepdive` branch with a dirty working tree (sibling IUD/runner worktrees `wt-ec-learn`/`wt-ecsr*`/`wt-pgs`/`wt-prodgrp`/`wt-royalty*`/`wt-tract`/`wt-tws`/`wt-unitagr`/`wt-uws2` all present); it sits at `a7a0a3d` (v23) while master advanced to v25 — the standing R23/MR4 drift. **The reviewer's v23 cached read at session start was the stale main-checkout copy; the live v25 state (R24/R25) was re-read from the master copy in the worktree (MR4).** All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-27-1400` worktree off `origin/master`; the #132 stacked-conflict resolution used a throwaway `C:/tmp/wt-pgs-merge` detached worktree (removed after push). The Worker's checkout and every `wt-*` sibling worktree were never touched.
+
+---
+
+## 2026-06-28 - Automated Review (06:00 AWST, 3 worker PRs #130/#134/#136 + 1 standing draft #135)
+
+_Open PRs trigger a full review (R14). All 3 worker PRs CLEAR -- zero MUST-FIX -- all squash-merged; #135 left open (owner-merge-only draft). **No new executable rules** -- R1-R25 cover every finding; version stays **v25**. R1-R25 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #130 | Clear (HIGH effort -- full I-U-D RF suite, PC pattern). Unit - Well Setup IUD (RC.0050, 6th of 8 Royalty Objects, 2nd PC). The **06-27 14:00 R13/R21 MUST-FIX is RESOLVED**: title `live 4/4`, body `RF 4/4 PASS` + insert/update/delete, count consistent across title/body/scorecard (`Live 4/4 full I-U-D`)/README (TC01-TC04)/SOW. Re-verified: 4 TCs (clean / insert +1 / update COMMENTS `C3_in` present-in-view / delete count-delta to baseline) over `DV_UNIT_WELL_SETUP`; `investigation/*.py`+`playwright/*.py` ASCII-clean (R20, em-dash only in .md prose -- exempt); scorecard+registry append-only (R23, 0 deletion lines); no shared T1/T2/DbVerify (R12 N/A); env creds (R16). | OK Clear -- merged |
+| #134 | Clear (low effort -- single SKILL.md, doc-only). New `ec-deepdive-review` skill codifying the periodic deep-dive-program review (inventory batch -> Explore breadth-read + read process docs -> synthesize domain learnings + note-quality + next-batch rec -> persist `REVIEW-<date>.md` + LEARNING-SCORECARD row to the program branch). All 6 body fields; correctly encodes the program guardrails (read-only screens/DB, isolated worktree, R23 append-only, never-merge the standing draft, ASCII .py, spot-verify agent claims, honest `[~]` tiering). 1 NICE-TO-HAVE (R21): the skill's "Reference example: REVIEW-2026-06-27.md" lives only on the program branch, not master (verified `git cat-file -e origin/master:...` absent). | OK Clear (NICE-TO-HAVE) -- merged |
+| #136 | Clear (HIGH effort -- CI workflow logic). `reopen-deepdive-draft-pr.yml` auto-reopens a fresh DRAFT standing PR after the owner milestone-merges the deep-dive branch. Trigger correctly gated (`merged==true && head.ref=='feature/ec-screen-deepdive'` -- fires only on the program branch's own merges); double-open + not-ahead guards; creates a DRAFT (owner-merge-only); least-privilege perms (`contents: read`, `pull-requests: write`) + `github.token`. 1 NICE-TO-HAVE (R20 consistency): em-dash in the `--title` line vs the file's own ASCII hyphens. | OK Clear (NICE-TO-HAVE) -- merged |
+| #135 | Clear -- standing deep-dive DRAFT (re-opened post-milestone-merge of #118). **NOT merged** (owner-merge-only by design). R23 satisfied: `git diff --stat origin/master...origin/feature/ec-screen-deepdive` = ZERO changes on the four reviewer-owned docs; diff vs master = 2 files / 86 ins / 0 del (new `REVIEW-2026-06-27.md` + 1 append-only LEARNING-SCORECARD row). Still DRAFT, MERGEABLE. | OK Clear -- left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **NICE-TO-HAVE -> next-PR fix loop closed for #130.** The 06-27 14:00 run left #130 open on a single R13/R21 body/title defect (suite was 4-TC full I-U-D but title/body said `3/3` + insert/delete only, the UPDATE silently dropped). This run confirmed the Worker fixed both the title (`live 4/4`) and the body (added the UPDATE TC + the "MUST-FIX addressed" rules line) -- the suite code never changed, only the parse surface. Exactly the R13/R21 advisory-comment -> worker-fix -> re-verify loop working as intended (cf. PR #24).
+- **Re-introducing GH Actions is policy-compatible when it is a no-LLM `gh`-only job on a public repo (#136).** PR #44 (2026-06-17) dropped GH Actions on a company-spend concern, but that concern was specifically the *paid LLM-driven reviewer* on Actions. #136 is a few-second `gh pr list/api compare/pr create` job that fires only at a milestone merge on a PUBLIC repo (free minutes), uses the built-in `github.token` (no extra API spend), and runs no model -- so it does not re-trip the #44 policy. The lesson: a prior "we removed X for policy reason Y" is scoped to Y; re-introducing a narrow, Y-free variant of X is fine, but say so explicitly so the audit trail shows the policy was considered, not forgotten.
+- **The deep-dive program's manual step is being automated end-to-end (#134 + #136).** #136 removes the manual re-open of the standing draft after a milestone merge; #134 turns the periodic review into a repeatable skill. Together they harden the standing-draft model (never-auto-merge draft + auto-reopen + codified review) so the program runs unattended without the reviewer ever auto-merging accumulating learning notes.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| #134 skill references `DeepDiveLearnings/ec-screens/REVIEW-2026-06-27.md` as its reference example, but that file is program-branch-only (not on master where the skill lives) -- note it is program-branch-only or seed an on-master example (R21-adjacent) | Worker | Low |
+| #136 `--title` line carries a U+2014 em-dash vs the file's own ASCII hyphens -- swap to ` - ` for consistency (no crash risk on ubuntu-latest; cosmetic R20) | Worker | Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/**.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): #124 SOW date wording vs hardcoded `2011-01-01` (R21); Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
+
+### Reviewer process note
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent `feature/ec-screen-deepdive` branch with a dirty working tree (sibling IUD/runner worktrees `wt-ec-learn`/`wt-ecsr*`/`wt-ghaction`/`wt-pgs`/`wt-prodgrp`/`wt-royalty*`/`wt-tract`/`wt-tws`/`wt-unitagr`/`wt-uws2` all present); it sits at `a7a0a3d` (v23) while master is at v25 -- the standing R23/MR4 drift. **The session-start cached read was the stale v23 main-checkout copy; the live v25 state (R24/R25) was re-read from the master copy in the worktree (MR4).** All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-28-0600` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling worktree were never touched. Two CLEAR merges (#130 head branch in `wt-uws2`, #136 head branch in `wt-ghaction`) succeeded on the remote but `gh --delete-branch` could not delete the local branch (checked out in a Worker worktree) -- the remote merge is unaffected (verified `state=MERGED` via `gh pr view`), and the worktrees were correctly left untouched.
+
+---
+
+## 2026-06-28 - Automated Review (14:00 AWST, 8 worker PRs #139/#140/#141/#142/#143/#144/#145/#146 + 1 standing draft #135)
+
+_Open PRs trigger a full review (R14); run fired ~16:00 AWST (late 14:00 slot). All 8 worker PRs **CLEAR -- zero MUST-FIX -- all squash-merged**; #135 left open (owner-merge-only draft). **One new executable rule (R26)** formalises the owner-directed IUD deliverable gate that PR #140 introduced. R1-R25 remain current; version -> v26._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #139 | Clear (low effort, config). Adds Worker session-start step 5 (check open GitHub Issues), renumbers old 5 -> 6 in `CLAUDE.md`. Diff 1:1 to body (R21); 6 R9 fields; ASCII; single-purpose. | OK Clear -- merged |
+| #140 | Clear (process/docs). New `docs/IUD-DELIVERABLE-CHECKLIST.md` (19 hard gates, owner-locked) + `ec-object-iud-builder` SKILL.md "Done =" rewrite + `PR-REVIEW-PROTOCOL.md` "IUD PR gate" append -- all additive/append-only; **R23 respected** (`lessons-learned.md` untouched -- left for the reviewer to formalise); 6 R9 fields; Files-touched 1:1 to diff (R21). Per the PR's own note, formalised as **R26** this run. Merged FIRST so the gate doc is on master before the IUD stack. | OK Clear -- merged |
+| #141 | Clear (HIGH effort, new RF suite). **Pilot** for the 19-item standard (Document Date Term CD.0107, OV Bank-family, METHOD dd R:6 + numeric OFFSET R:7 filled-last). Internally consistent -- it IS Document Date Term, so `OV_DOC_DATE_TERM`/`AUTOTEST_DDT` are correct throughout. Live 4/4 = title/body/scorecard/README (R13); scorecard+registry append-only (R23); env creds (R16), ASCII (R20); CHECKLIST.md carries all 19. | OK Clear -- merged |
+| #142 | Clear (HIGH effort). Document Received Term (CD.0108), clone of #141. Suite + PR body name the correct view (`ov_doc_received_term`); R23/R16/R20 clean. **1 NICE-TO-HAVE** (clone copy-paste, doc-only): CHECKLIST item 15 + README "DB ground truth" still cite the pilot's `OV_DOC_DATE_TERM` instead of `OV_DOC_RECEIVED_TERM`. | OK Clear (NICE-TO-HAVE) -- merged |
+| #143 | Clear (HIGH effort). Payment Term (CD.0023). Good recon -- caught shifted field rows (Method R:7, mandatory DAY_VALUE R:8) instead of trusting the exemplar's R:6/R:7. Correct view in suite + body (`ov_payment_term`). **1 NICE-TO-HAVE**: same item-15/README `OV_DOC_DATE_TERM` copy-paste (-> `OV_PAYMENT_TERM`). | OK Clear (NICE-TO-HAVE) -- merged |
+| #144 | Clear (HIGH effort). Calendar (CD.0024), **custom-URL OV** (grid `nav:form:T_data`, no GO). Good diagnose-before-retry: first run's `Row Should Exist` failure diagnosed vs DB (insert had PERSISTED -- a UI-read bug not an insert bug), grid id fixed, 3 diagnostic residuals cleaned, re-run 4/4. Correct view in suite + body. **1 NICE-TO-HAVE**: item-15/README `OV_DOC_DATE_TERM` (-> `OV_CALENDAR`) + README recon list vs CHECKLIST item-5 mismatch. | OK Clear (NICE-TO-HAVE) -- merged |
+| #145 | Clear (HIGH effort). Calendar Collection (CD.0105), custom-URL OV; recon-first -> 4/4 first run. **Completes Date Objects 5/5.** T3+suite+playwright all use the correct `ov_calendar_collection`/`nav:form:T_data`; JOURNAL names the right view; R23/R16 clean. **1 NICE-TO-HAVE**: item-15 cites `AUTOTEST_CAL%` in `OV_DOC_DATE_TERM` (-> `AUTOTEST_CC%` in `OV_CALENDAR_COLLECTION`); item-1 `calendar_sow.md` (-> `calendar_collection_sow.md`); README "DB ground truth" `OV_DOC_DATE_TERM` (-> `OV_CALENDAR_COLLECTION`); README run-cmd path uses a space not underscore. | OK Clear (NICE-TO-HAVE) -- merged |
+| #146 | Clear. Read-only grid-locator pre-flight guard (`tmp/scripts/preflight_grid_locator.py`): opens the screen, asserts the T3's declared `GRID_ID` resolves in the live DOM + GO presence matches, FAILS LOUD (exit 1) printing the actual grid ids when a sibling id was assumed -- no Save/no DB mutation, env creds (R16), ASCII (R20). Validated both ways vs live Calendar. SKILL.md trust-boundary #4 + Step-5 mandatory pre-flight + custom-URL OV cheat-sheet row turn the CD.0024 lesson into an enforced gate (section-disjoint from #140's "Done =" edit -- merged cleanly after #140). **1 NICE-TO-HAVE** (R9): body header "Evidence (guard validated both ways)" instead of the literal "DB ground-truth evidence". | OK Clear (NICE-TO-HAVE) -- merged |
+| #135 | Clear -- standing deep-dive DRAFT, **NOT merged** (owner-merge-only). Increment since the 06:00 run: 7 new notes (CO.0070/0072/0074/0076/0077/0078/0079) + CO.0060 re-enrichment + `REVIEW-2026-06-27.md` + 1 LEARNING-SCORECARD row + CHECKLIST flips. Spot-checked bindings real & honest (CO.0070 `CHEM_TANK`->`OV_CHEM_TANK` OBJECT/VERSIONED; CO.0060 honestly "(no class resolved)" for generic `manage_copy_equipment`). **R23 satisfied** -- ZERO changes on the four reviewer-owned docs. | OK Clear -- left open (owner-merge-only) |
+
+### Rules (apply immediately, no exceptions)
+
+**R26 -- Every EC Object IUD PR is gated against the 19-item `docs/IUD-DELIVERABLE-CHECKLIST.md`** OK _live-validated (PR #140 introduced the gate; first applied to the #141-#145 batch this run)_
+Owner-locked 2026-06-28: an EC Object IUD screen is "covered" ONLY when all 19 deliverables are green -- artifacts (SOW/README/JOURNAL/playwright/investigation/evidence/`CHECKLIST.md`), RF (T3 + suite), gates (robocop/dryrun/**live N/N**/**DB ground-truth**/**full I-U-D**/self-clean/hygiene), delivery (registry row + scorecard row + R9 PR). The Worker MUST copy the canonical list into the bundle as `CHECKLIST.md` with every item ticked + evidence. **Reviewer: verify each item against the PR and spot-check the SUBSTANCE, not just the tick** -- item 12 has a real N/N, item 13's DbVerify assertion is real, items 17/18 are 0-deletion appends (R23). A genuinely missing or failing deliverable is a MUST-FIX (do not merge, leave open, post the note-back in the checklist doc, re-review next run). _Nuance from this run's application: a copy-paste error in the bundle's EVIDENCE PROSE (e.g. CHECKLIST item-15 / README naming the wrong `OV_*` view) where the underlying deliverable is independently proven correct (suite + PR body name the right view, live N/N DB-verified) is a NICE-TO-HAVE doc-accuracy fix, NOT a failing gate -- the gate tests whether the deliverable exists and is real, and here it does/is. Reserve MUST-FIX for an ABSENT or FALSE deliverable._
+
+### Observations (good patterns to keep)
+
+- **Recon-first paid off across the batch -- two genuine trust-boundary catches.** #143 (Payment Term) re-derived the shifted form rows from live DOM instead of cloning the exemplar's R:6/R:7; #144 (Calendar) caught the custom-URL OV (grid `nav:form:T_data`, no GO) and diagnosed the resulting UI-read failure against the DB (the insert had persisted) rather than assuming an insert bug. These are exactly the template-trust-boundary points the `ec-object-iud-builder` skill warns about. #146 then turned the #144 lesson into an enforced pre-flight guard, closing the loop the same day.
+- **Stacked-PR append-only conflicts resolved deterministically (R24).** The 4 children (#142-#145) each add/add-conflicted on `automation-scorecard.md` + `ec_screen_registry.md` after the parent's squash-merge (branch carries the parent's real commits; master has the squash). Each was resolved in a throwaway `--detach` worktree: retarget base->master, `git merge origin/master`, `git checkout --ours` on the two append-only docs (the branch is a strict superset = all prior rows + the new row), then `push origin HEAD:refs/heads/<branch>` (R24) -- never touching the Worker's worktrees. Verified post-merge: master's scorecard carries all 5 Date Objects rows (no row lost).
+- **Recurring clone-substitution gap worth a generator.** The same wrong-view (`OV_DOC_DATE_TERM`) crept into the item-15 self-clean line + README "DB ground truth" of all four clones (#142-#145) because the clone substitutes the code/screen name but not every embedded `OV_*`/base-table token in the evidence prose. Non-blocking here (R26 substance met), but a clone helper that takes a full token map (code + short label + view + base table + tag) -- which the Worker flagged in #145's own JOURNAL -- would eliminate this class of doc drift. Reinforces R7/R13/R21 (docs must match reality).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Batch-wide clone copy-paste (doc-only, R26-NICE-TO-HAVE): CHECKLIST item 15 + README "DB ground truth" cite the pilot view `OV_DOC_DATE_TERM` instead of this screen's view in #142 (`OV_DOC_RECEIVED_TERM`), #143 (`OV_PAYMENT_TERM`), #144 (`OV_CALENDAR`), #145 (`OV_CALENDAR_COLLECTION` + prefix `AUTOTEST_CC%` + `calendar_sow.md`->`calendar_collection_sow.md`). Suite + PR body are correct; fix the bundle docs in a follow-up (a token-map clone helper would prevent recurrence). | Worker | Low |
+| #146 PR body uses "Evidence (...)" not the literal R9 header "DB ground-truth evidence"; harmless (read-only work, evidence present) but drifts the 6-field gate -- write "DB ground-truth evidence -- N/A (read-only guard, validated live)". | Worker | Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/**.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause; #134 skill REVIEW reference is program-branch-only; #136 `--title` em-dash. | Worker | Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp. | Worker | Low |
+
+### Reviewer process note
+
+- Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent `feature/ec-screen-deepdive` branch, dirty, sitting at `a7a0a3d` (v23) while master is at v25 -- the standing R23/MR4 drift. The session-start cached read was the stale v23 copy; the live state (v25, R24/R25) was re-read from the master copy in the worktree (MR4) before extracting R26. All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-28-1400` worktree off `origin/master`; the stacked-PR conflict resolution used a throwaway `C:/tmp/wt-stack-0628` detached worktree (removed). The Worker's checkout and every `wt-*` sibling worktree were never touched.
+
+## 2026-06-29 -- Automated Review (06:00 AWST, 2 worker PRs #148/#149 + standing draft #135)
+
+_Open PRs trigger a full review (R14) despite 0 new master commits since #147/`c8c1fa5` (= master HEAD). Both worker PRs CLEAR -- zero MUST-FIX -- both squash-merged. #135 left open (owner-merge-only draft). **No new executable rules -- R1-R26 cover every finding; version stays v26.** R1-R26 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #148 | Clear (doc-only, low effort) -- closes the 06-28 14:00 (#147) batch-wide clone doc-drift NICE-TO-HAVE. All 4 Date Objects clones now cite their OWN OV view in CHECKLIST item-15 + README "DB ground truth" (`OV_CALENDAR`/`OV_CALENDAR_COLLECTION`/`OV_DOC_RECEIVED_TERM`/`OV_PAYMENT_TERM`), each cross-checked vs `ec_screen_registry.md:120-123`; SOW filename fix applied; `git grep OV_DOC_DATE_TERM` over the 4 clone dirs -> NONE. 6 body fields (R9); R23 trivially clean. **1 NICE-TO-HAVE (R7/R26-nuance):** the same README sentence's trailing `Base \`DOC_DATE_TERM\`` base-table clause was NOT corrected per-screen (each screen has its own base table per the registry) -- same drift class, automation DB-verified-correct, non-gating. | OK Clear (NICE-TO-HAVE) -- merged `15ead59` |
+| #149 | Clear (HIGH effort -- changes the reviewer's own operating contract). Adds step-8d SME review dimensions + REVIEWER MINDSET + mandatory `ec-domain-reference.md` read to `.claude/review-prompt.txt` (+71); new 245-line `docs/ec-domain-reference.md`; scorecard +`Coverage Strategy (Phased Rollout)` section. SME-verified the new reference vs live/merged ground truth -- §1.1-1.6 patterns match R17/R19/R26 + merged evidence; §2's worked example `OV_UNIT_AGR` (not `OV_UNIT_AGREEMENT`) confirmed correct against the merged live-4/4 #122 suite + registry (NOT a stale guess). 6 body fields (R9); R23 OK on scorecard (only `-` line = date bump). **1 NICE-TO-HAVE (R21):** body "Files touched" lists ONLY `review-prompt.txt`, omitting the new 245-line `ec-domain-reference.md` + the scorecard edit -- under-claim not over-claim, non-gating. | OK Clear (NICE-TO-HAVE) -- merged `8885201` |
+| #135 | Clear (re-confirmation) -- STANDING/DRAFT EC Screen Deep-Dive program. Head `48b8fa0` unchanged since the 06-28 14:00 review; increment is the already-reviewed CO.0070-0079 + CO.0060 fix + `REVIEW-2026-06-27.md`. R23 satisfied (0 changes on the four reviewer-owned docs); CO.0070 binding spot-checked real (`CHEM_TANK`->`OV_CHEM_TANK`), ASCII-clean. **NOT merged** (owner-merge-only, still DRAFT). | OK Clear -- left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **The reviewer SME-upgrade (#149) is sound, and verifying its own reference doc paid off immediately.** A mandatory-read knowledge base can propagate wrong domain claims if it ships an unverified "fact", so every concrete assertion in `ec-domain-reference.md` was checked against merged/live evidence before accepting -- the §2 worked example `OV_UNIT_AGR` looked like it might contradict the 06-25 review-log's loose paraphrase ("ov_unit_agreement"), but the actual merged #122 code/registry assert `ov_unit_agr`, so the doc is right and the review-log summary was the loose one. Lesson reaffirmed (MR1): verify the live artifact, not the prose summary of it -- in both directions.
+- **SME review caught a residual drift the doc-fix PR itself missed (#148).** #148 corrected the OV-view clause but left the adjacent `Base DOC_DATE_TERM` clause in the same README sentence pointing at the pilot across all 4 clones. A line-level clone substitution that fixes one token in a sentence and not its neighbour is exactly the failure mode a **token-map clone helper** (code + label + view + base table + tag) would eliminate -- now flagged for the 3rd time (#145 JOURNAL, #147 reviewer note, here). This is the strongest argument yet for building it before the next sibling batch.
+- **0-new-master-commit + open-PRs => still a full review (R14 working as designed).** Master HEAD was the previous review commit, yet two substantive PRs (created after the 14:00 run) needed review. The skip logic correctly did not fire.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Build a **token-map clone helper** (code + short label + OV/DV view + base table + AUTOTEST prefix + SOW filename + grid id + registry code) so sibling-batch evidence prose is fully substituted in one pass -- would have prevented BOTH the #147 OV-view drift and the #148 residual base-table drift. 3rd recurrence. | Worker | Medium |
+| #148 residual (doc-only): the 4 Date Objects clone READMEs still read `Base \`DOC_DATE_TERM\`` instead of each screen's own base table (`DOC_RECEIVED_TERM`/`PAYMENT_TERM`/`CALENDAR`/`CALENDAR_COLLECTION`). | Worker | Low |
+| #149 body under-claim (R21): future reviewer-prompt PRs must list every touched file (it added a 245-line `ec-domain-reference.md` + a scorecard edit not in "Files touched"). | Worker | Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/**.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload->RUN NOW` flakiness root cause; ~1 GB Help-PNG history (downscale/JPEG/LFS). | Worker | Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp. | Worker | Low |
+
+### Reviewer process note
+
+- Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent dirty `feature/ec-screen-deepdive` branch, behind master on the reviewer-owned docs (R23/MR4 drift -- the session-start cached read was a stale v23 copy; live v26 + R24/R25/R26 were re-read from the master copy in the worktree per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-29-0600` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree (`wt-ec-learn`, `wt-ecsr*`, `wt-royalty*`, `wt-tract`, `wt-tws`, `wt-uws2`, `wt-pgs`, `wt-prodgrp`, `wt-unitagr`, `wt-iudchk`, `wt-ghaction`, `wt-calclab`, `wt-docdateterm`) were never touched. No reviewer worktree from this run (`wt-review-2026-06-29-0600`) is left behind after step 17.
+
+---
+
+## 2026-06-29 -- Automated Review (14:00 AWST, 1 worker PR #152 + standing draft #135)
+
+_Open PRs trigger a full review (R14); run fired ~16:00 AWST (late 14:00 slot). 0 new master commits since #151/`e4cb4d4` (the 06:00 review = master HEAD). **#152 CLEAR -- zero MUST-FIX -- squash-merged**; #135 standing draft re-confirmed CLEAR, NOT merged (owner-merge-only). **No new executable rules -- R1-R26 cover every finding; version stays v26.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #152 | Clear (low/medium effort -- a 1-line runner config change + a 1-line scorecard note). Raises the EC screen deep-dive runner's per-run batch cap **8 -> 25** (default), overridable via **`EC_LEARN_MAX_SCREENS`**; verified `MAXN = int(os.environ.get('EC_LEARN_MAX_SCREENS', os.environ.get('EC_LEARN_MAX', '25')))` meets all 4 acceptance criteria (no-env->25; `EC_LEARN_MAX_SCREENS=50`->50; legacy `EC_LEARN_MAX=8` alone->8 back-compat; both set->primary wins). Recon-first name reconciliation (issue/scorecard assumed `EC_LEARN_MAX_SCREENS`; real knob was `EC_LEARN_MAX`) handled by honouring the new name + keeping the legacy alias. R9 (6 fields), R21 (Files-touched 1:1 to the 2-file diff), R18/R20 (both added `.py` lines ASCII; runner is `tools/**`, outside the hygiene glob, noted), R8 (base = master HEAD). The single `-` line on `automation-scorecard.md` is a legitimate factual update of the runner-default note -- not a reviewer-entry clobber, so R23 not implicated. **2 NICE-TO-HAVE** (R21/doc): scorecard `_Last updated_` not bumped on the edited line; "increase up to 50" wording implies a hard cap the code does not enforce. | OK Clear (NICE-TO-HAVE) -- squash-merged (`b1370fe`) |
+| #135 | Clear re-confirmation -- standing deep-dive draft, **NOT merged** (owner-merge-only, still DRAFT). Head `48b8fa0`->`4081edb` (1 new commit: CO.0080/0081/0082 + 5 note re-touches, "1 full, 7 partial"). **R23 satisfied** -- `git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the four reviewer-owned docs = EMPTY (the 8 deletions are CHECKLIST `[ ]`->`[x]` flips + note re-enrichment). Spot-checked CO.0081 (Stream Formula Editor) + CO.0080 (Rule Group Combination): real captured Help, honest `(no class resolved from URL/LABEL)` partial marking (R3, not fabricated), pure-MD notes ASCII-clean. | OK Clear -- left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **Recon-first beat the issue's assumption.** #150 (and the scorecard) named the knob `EC_LEARN_MAX_SCREENS`, but the runner's existing env var was `EC_LEARN_MAX`; the worker located the real constant before editing rather than adding a second, dead knob. The fix honours the new name AND keeps the legacy one as a quiet alias -- the correct way to reconcile a doc/code name mismatch without breaking an existing caller. Reinforces the standing "REFER/recon before guessing" discipline.
+- **The standing-draft invariants held again.** #135's only safety obligations for a never-auto-merged draft -- (a) never merge it, (b) R23 zero `-` lines on the four reviewer-owned docs, (c) partials marked honestly not fabricated -- all held. An unchanged-content draft is a re-confirmation; here the head DID move (CO.0080-0082) so the increment's substance was spot-checked, not just the invariants.
+
+### Gaps (verified against filesystem / live diff)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| #152 scorecard edit did not bump `_Last updated_`; "increase up to 50" wording implies a hard cap the runner does not enforce (env accepts any int) -- doc-only, non-gating | Worker | Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch the runner + `gen_checklist.py:33`); `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | Low |
+
+### Reviewer process note
+
+- Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent dirty `feature/ec-screen-deepdive` branch, behind master on the reviewer-owned docs (R23/MR4 drift -- the session-start cached read was a stale v23 copy; live v26 + R24/R25/R26 were re-read from the master copy in the worktree per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-29-1400` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree (`wt-ec-learn`, `wt-ecsr*`, `wt-royalty*`, `wt-tract`, `wt-tws`, `wt-uws2`, `wt-pgs`, `wt-prodgrp`, `wt-unitagr`, `wt-iudchk`, `wt-ghaction`, `wt-calclab`, `wt-docdateterm`, `wt-runner`) were never touched. No reviewer worktree from this run (`wt-review-2026-06-29-1400`) is left behind after step 17.
+
+---
+
+## 2026-06-30 - Automated Review (06:00 AWST, 1 open PR #135, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). The only open PR is the standing **EC Screen Deep-Dive** draft (#135) on the Worker's permanent branch. Its head `4081edb` is unchanged since the 2026-06-29 14:00 re-verify that cleared it - no new pushed content (0 new master commits since #153/`92a0302`). **Re-confirmed CLEAR; NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v26.** R1-R26 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #135 | Clear (re-confirmation). Head `4081edb` is byte-identical to the commit cleared at the 2026-06-29 14:00 review (`gh pr view 135 --json headRefOid` = `4081edb...`; 0 new master commits since #153). Per the unchanged-head pattern the already-cleared content is NOT re-litigated; the run instead verified the safety invariants: (a) the never-auto-merge invariant holds (still `DRAFT`); (b) **R23 satisfied vs the now-further-advanced master** - `git diff --stat origin/master...origin/feature/ec-screen-deepdive` over the FIVE reviewer-owned docs (`lessons-learned.md`/`review-log.md`/`automation-scorecard.md`/`STATUS.md`/`ec-domain-reference.md`) is EMPTY = ZERO `-` (deletion) lines; the 11 deletions in the full diff are all CHECKLIST `[ ]`->`[x]` flips + the CO.0060 note re-enrichment, none on reviewer docs; (c) substance spot-check - newest note CO.0082 (Sub Area) carries a real metadata binding `SUB_AREA -> OV_SUB_AREA` (OBJECT/VERSIONED, base `GEOGRAPHICAL_AREA`), correct OV typing, genuine captured Help, and all new notes (CO.0072/0074/0076/0077/0078/0079/0080/0081/0082) are ASCII-clean (R18/R20, `[^\x00-\x7F]` -> 0). **NOT merged** (owner-merge-only standing draft, still DRAFT). | OK Clear - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **An unchanged open-PR head is a re-confirmation, not a re-review of the same diff (4th consecutive standing-draft re-confirm).** #135's head has not moved since the 14:00 re-verify, so the deep-dive *content* (already CLEAR) was not re-scored; the run verified (a) the never-auto-merge invariant, (b) R23 still holds against a master that has advanced further (now +`ec-domain-reference.md` as a fifth reviewer-owned doc since #149), and (c) the prior pass's content is unchanged. This is the correct, low-cost shape for a standing-draft PR the reviewer is forbidden to merge: confirm invariants, don't re-litigate frozen content.
+- **The fifth reviewer-owned doc is now in the R23 check.** Since #149 added `docs/ec-domain-reference.md` as reviewer-owned, the R23 deletion-line sweep was run over all FIVE files (not the original four). The branch shows zero `-` lines on every one - the standing-draft "don't track reviewer-owned docs on the permanent branch" discipline (R23 better-still clause) is holding even as the reviewer-owned set grows.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `DeepDiveLearnings/ec-screens/gen_checklist.py:33` `print("wrote CHECKLIST.md -...",...)` emits a U+2014 em-dash to stdout (R18/R20 - `UnicodeEncodeError` on a cp1252 redirected/captured console). Pre-existing on master, outside the hygiene-guard glob, non-gating. Still open. | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33` and the runner); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | 🟢 Low |
+
+### Reviewer process note (standing-draft on a permanent Worker branch)
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty working tree, and is itself behind master on the reviewer-owned docs (R23/MR4 drift - it was at an older rule version locally; the live v26 + R23-R26 were re-read from the master copy in the isolated worktree per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-30-0600` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree were never touched. The reviewer worktree from this run is removed at step 17.
+
+---
+
+## 2026-06-30 - Automated Review (06:00 re-verify, late morning slot, 1 open PR #135 STANDING/DRAFT)
+
+_Re-fire of the morning slot (clock ~08:00 AWST). The 06:00 run (#154/`cd9ebe4`) already cleared #135 at head `4081edb`; this run fired with 1 genuinely new worker commit on the standing draft (`4081edb`->`e63237e`), so it is a distinct **re-verify** (per the 2026-06-23 precedent), not a crash-restart duplicate. Open PR triggers a full review (R14). #135 **re-confirmed CLEAR; NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v26.** R1-R26 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #135 | Clear (re-confirmation). New commit `e63237e` ("CO.0060, CO.0074, CO.0076, CO.0077, CO.0078, CO.0080, CO.0081, CO.0086 - 0 full, 8 partial") adds one new note (CO.0086 Stream Reference Values) + re-touches 7 existing notes (date-stamp bump) + a CHECKLIST flip. **R23 satisfied** - `git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the FIVE reviewer-owned docs is EMPTY (zero `-` lines); the 8 deletions in `4081edb..e63237e` are date bumps + the CO.0086 CHECKLIST `[ ]`->`[~]` flip, none on reviewer docs. **Content spot-check:** CO.0086 honestly marked `[~]` partial with `(no class resolved from URL/LABEL)` (R3) - correct for a generic-maintain/calc-type screen with no resolvable class; the "0 full, 8 partial" label is accurate; all 8 touched notes ASCII-clean (R18/R20, `[^\x00-\x7F]` -> 0). **NOT merged** (owner-merge-only standing draft, still DRAFT). | OK Clear - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **A re-fire with a genuinely-new head is a re-verify, not a duplicate skip.** #154 cleared head `4081edb`; this run saw `e63237e` (1 new commit), so it correctly logged a distinct re-verify row rather than skipping as a same-hour duplicate. The dedup guard (step 6) only suppresses a row when the date AND hour match AND there is no new content - new pushed content on the open PR is exactly what justifies a fresh review pass.
+- **Honest `[~]` partial marking continues to be the right shape.** A "0 full, 8 partial" batch (all missing DB binding) is a transparent, resumable outcome for calc/formula-editor/generic-maintain screens that have no resolvable class - far better than fabricating a binding to flip the box to `[x]`. CO.0086's `(no class resolved from URL/LABEL)` is the model (R3).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | 🟢 Low |
+
+### Reviewer process note (standing-draft on a permanent Worker branch)
+
+- Same posture as the 06:00 run: the main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty working tree, locally behind master on the reviewer-owned docs (R23/MR4 drift - the live v26 + R23-R26 were re-read from the master copy per MR4 before any review judgement). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-06-30-0600r` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree were never touched. The reviewer worktree from this run is removed at step 17.
+
+---
+
+## 2026-07-01 — Automated Review (14:00 AWST, 1 open PR #135 — STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). The only open PR is the long-lived **STANDING/DRAFT** EC Screen Deep-Dive program PR (#135) on the Worker's permanent branch. Its head `e63237e` is byte-identical to the commit cleared at the 2026-06-30 06:00 re-verify (0 new master commits since #155/`77f2abd`; no 2026-06-30 14:00 run was logged, so this is the next scheduled slot). **Re-confirmed CLEAR; NOT merged** (owner-merge-only standing draft). **No new executable rules — version stays v26.** R1–R26 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #135 | Clear (re-confirmation). Head `e63237e` unchanged since the 06-30 06:00 re-verify — no new pushed content. Per the unchanged-head standing-draft pattern, confirmed the safety invariants rather than re-litigating frozen content: (a) **never-auto-merge invariant holds** (still `draft: true`); (b) **R23 satisfied vs the further-advanced master** — `git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the FIVE reviewer-owned docs (`docs/lessons-learned.md`/`docs/review-log.md`/`docs/automation-scorecard.md`/`STATUS.md`/`docs/ec-domain-reference.md`) is EMPTY = ZERO `-` lines; the 12 deletions in the full diff are all CHECKLIST `[ ]`->`[x]`/`[~]` flips + note date-stamp/enrichment, none on reviewer docs; (c) **content spot-check** — newest notes (CO.0079/0080/0081/0082/0086) unchanged since the re-verify; CO.0086 (Stream Reference Values) remains an honest `[~]` partial (`no class resolved from URL/LABEL`, not fabricated — R3); new CO.* notes ASCII-clean. | OK Clear — left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **An unchanged open-PR head is a re-confirmation, not a re-review of the same diff.** #135's head has not moved since the 06-30 06:00 re-verify, so the deep-dive *content* (already CLEAR repeatedly) was not re-litigated; the run instead verified (a) the never-auto-merge invariant still holds, (b) R23 is still satisfied vs the now-further-advanced master, and (c) the newest notes remain ASCII-clean and honestly partial-marked. This is the correct shape for a standing-draft PR the reviewer is forbidden to merge: confirm the safety invariants, don't re-score frozen content.
+- **R18-exemption for markdown notes held under scrutiny.** An ASCII scan over all branch notes flagged PO.0001/0002/0003/0005 as containing non-ASCII bytes — but they are **pre-existing on master, identical, and NOT in this PR's diff**, and markdown notes are R18-exempt regardless (R18/R20 scope only to console-printed / PowerShell-parsed `.py` files, never `.write_text(encoding="utf-8")` notes). Verified before flagging (MR1) — not a finding.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `DeepDiveLearnings/ec-screens/gen_checklist.py:33` `print(...)` em-dash to stdout (R18/R20, cp1252 crash risk); pre-existing on master, outside the hygiene glob, non-gating | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | 🟡 Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+### Reviewer process note (standing-draft on a permanent Worker branch)
+
+- Same posture as every recent run: the main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's **permanent** branch `feature/ec-screen-deepdive` with a dirty working tree, locally **55 commits behind master** on the reviewer-owned docs (R23/MR4 drift — the live v26 + R23–R26 were re-read from the master copy per MR4 before any review judgement; the local stale copy showed only v23). All review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-01-1400` worktree off `origin/master`; the Worker's checkout and every `wt-*` sibling/runner worktree were never touched. The reviewer worktree from this run is removed at step 17.
+
+---
+
+## 2026-07-01 - Automated Review (14:00 re-verify, 1 open PR #135 - STANDING/DRAFT)
+
+_Re-fire of the 14:00 slot (clock ~16:00 AWST). The morning 14:00 run merged as #156 (`5107e44`, now master HEAD); since then the Worker pushed ONE new commit (`e63237e`->`e902713`) to the permanent branch, so this is a distinct follow-up row (not a crash-restart, not a duplicate) per the 2026-06-30 re-verify precedent. Open PR triggers a full review (R14). **#135 re-confirmed CLEAR; NOT merged** (owner-merge-only standing draft). **No new executable rules - R1-R26 cover all findings; version stays v26.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #135 | Clear (re-confirmation). Head advanced `e63237e`->`e902713` since #156; the sole new commit is labelled "0 full, 8 partial" and is accurate - it adds NO new DB bindings, only re-touches the deep-dive date-stamp (`2026-06-30`->`2026-07-01`) on 8 already-partial notes (CO.0060/0074/0076/0077/0078/0080/0081/0086). **R23 stays satisfied:** `git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the FIVE reviewer-owned docs (`docs/lessons-learned.md`/`docs/review-log.md`/`docs/automation-scorecard.md`/`STATUS.md`/`docs/ec-domain-reference.md`) is EMPTY = ZERO `-` lines; the 8 deletions in the new commit are all date-stamp single-line flips, none on reviewer docs. Content spot-check: CO.0086 (Stream Reference Values) + CO.0081 (Stream Formula Editor) remain honest `(no class resolved from URL/LABEL)` partials with genuine captured Help, not fabricated bindings (R3) - correct for generic-maintain/calc-editor screens with no OV/TV class. All 8 touched notes ASCII-clean (R18/R20, ripgrep `[^\x00-\x7F]` -> 0 matches). **NOT merged** (owner-merge-only standing draft, still DRAFT). | OK Clear - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **A re-touch-only advance is a re-confirmation, not a re-review.** The new commit changes nothing but the deep-dive date stamp on 8 partial notes, so the deep-dive content (already CLEAR across many prior runs) was not re-litigated; the run instead verified the three standing-draft safety invariants: (a) never-auto-merge holds (still DRAFT); (b) R23 satisfied vs the now-further-advanced master; (c) the "0 full, 8 partial" commit label is truthful and no partial was silently promoted to a fabricated binding. This is the correct shape for a standing-draft PR the reviewer is forbidden to merge.
+- **Honest partial marking still holding at re-visit.** CO.0086 and CO.0081 were re-visited by the runner and kept their `[~]`/`(no class resolved)` marking rather than being back-filled with a guessed class - the runner does not invent bindings on a second pass (R3).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**` (would catch `gen_checklist.py:33`); fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause | Worker | Medium |
+| Carry-over (still open): Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD (Transport System / Contract Type); WR.0010.02 Well Oil Comp | Worker | Medium |
+
+### Reviewer process note
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent, dirty `feature/ec-screen-deepdive`. Following the standing precedent, ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-01-1400r` worktree off `origin/master`; the main checkout and every `wt-*` sibling worktree (incl. the runner's `wt-ec-learn`) were never touched. `lessons-learned.md` was re-read live from the master copy at session start per MR4 (the Worker's branch copy is behind master = R23/MR4 drift, which is expected on the permanent branch and is why the four/five reviewer-owned docs are best kept off it entirely).
+
+---
+
+## 2026-07-03 — Automated Review (06:00 AWST, 6 new master commits since #157, 1 open PR #159 STANDING/DRAFT)
+
+_Open PR triggers a full review (R14); also 6 new master commits since the 2026-07-01 14:00 re-verify (`5107e44`) clear the >=3-commit threshold independently. Reviewed #159 (the reopened standing draft, following #135's milestone merge via `e9ad812`) at head `406b989`. **CLEAR, no MUST-FIX, NOT merged** (owner-merge-only by design). **One new rule (R27).** R1-R26 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #159 | Clear — 8 new commits since the 2026-07-01 14:00 re-verify's head (`e902713`): CO.0060/0074/0076-0082/0086 upgraded from partial to full via a runner rework that sources Help from the local offline online-help corpus instead of live-scraping the sandbox web app, plus 17 newly captured screens (CO.0087/0088/0089/0091/0093/0094x2/0096/0096.01/0098/0100/0102/0103/0105/0108/0118). Spot-checked bindings (CO.0118 `REGION -> OV_REGION`/`GEOGRAPHICAL_AREA`; CO.0060 `EQUIPMENT` interface w/o view) are real, not fabricated. Runner refactor (+145/-76) removes the Playwright/browser/login dependency entirely, fixes the perpetual-partial re-pick loop (full = structure resolved, not Help-gated), and adds a NO-PROGRESS ALARM that loudly flags a stalled run. `py_compile` OK, 0 non-ASCII bytes (R18/R20). **R23 clean** — `git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the five reviewer-owned docs is empty. 2 NICE-TO-HAVE posted (dead code left by the corpus-switch refactor; new `mergeable: CONFLICTING` status against master — see R27). | ✅ Clear (NICE-TO-HAVE) — left open (owner-merge-only) |
+
+### Rules (apply immediately, no exceptions)
+
+**R27 — A squash-style milestone merge of a permanent standing-draft branch breaks shared history for files both sides keep touching** ✅ _live-validated via `git merge-tree` against PR #159_
+Standing-draft branches like `feature/ec-screen-deepdive` are milestone-merged into master periodically (e.g. `e9ad812`, "milestone merge (post-#118 batch)"). When that merge is a **squash** (or any merge that doesn't preserve the branch's own commit ancestry as a real parent), `git merge-base origin/master origin/feature/ec-screen-deepdive` resolves to an OLD commit from *before* the milestone (`1910222`, not `e9ad812`) — because master's squash commit and the branch's continuing commits share no direct lineage. Any file both sides go on to touch after that point (`CHECKLIST.md`, and any revisited note like `notes/CO.0060.md`) then presents as "changed in both" with real conflict markers, even though there is no genuine content contradiction — it is a false conflict manufactured by the squash. First observed live on PR #159 (`mergeable: CONFLICTING`); confirmed via `git merge-tree $(git merge-base ...) origin/master origin/feature/ec-screen-deepdive`. This is NOT reviewer-fixable (the reviewer never merges this draft) — it is the **owner's** responsibility at the next milestone merge: either (a) `git rebase origin/master` the standing-draft branch immediately after any squash milestone merge, before further commits land on it, or (b) perform future milestone merges as a true `git merge --no-ff` (not squash) so the branch's ancestry is preserved and no false conflict can arise. Distinguish this from R23 (which governs the four/five *reviewer-owned* docs specifically) — R27 covers the branch's *own* content files.
+
+### Observations (good patterns to keep)
+
+- **Runner evolution is converging on a robust, dependency-light design.** Across this cycle the runner went from live-browser Help scraping (fragile: login/timeout/DOM-drift risk) to an offline local corpus lookup (`docs/EC/EC Calculation/online-help-14.2.5/`) — faster, deterministic, and removes an entire class of flakiness (browser/login failures) that previously caused silent stalls. Combined with the redefined completeness gate (structure-resolved, not Help-gated) and the new NO-PROGRESS ALARM, three real operational failure modes from the last two weeks (perpetual-partial loop, silent 06-30->07-01 stall, browser-login ABORTED runs) are now each independently guarded against.
+- **R23 holding steady across an owner milestone-merge cycle.** Despite the PR base moving (old #135 -> merged -> new #159 reopened), the five reviewer-owned docs still show zero deletion risk — the append-only discipline survives across milestone boundaries, which is exactly what R23 was designed to guarantee.
+- **NICE-TO-HAVE -> next-commit loop still open, not yet exercised this cycle**: the dead `EC_URL`/`EC_USER`/`EC_PASS`/`help_text()` leftovers are a natural target for the runner's next touch.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| PR #159 is `mergeable: CONFLICTING` against master (R27) — real conflicts on `CHECKLIST.md` + `notes/CO.0060.md` will surface at the next milestone merge; rebase onto master or switch to `--no-ff` merges going forward | Owner | 🔴 High |
+| `run_ec_screen_learn.py` dead code from the corpus-switch refactor: unused `EC_URL`/`EC_USER`/`EC_PASS` constants + unused `help_text(page, ...)` Playwright function | Worker (next runner touch) | 🟢 Low |
+| Carry-over (still open, unchanged this cycle): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-03-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, still on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched. A stale, never-pushed `C:/tmp/wt-review-2026-07-02-0600` worktree (0 commits, crashed before any doc edit) was found and removed per step 17.
+
+---
+
+## 2026-07-04 - Automated Review (06:00 AWST, 1 open PR #159, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14) despite 0 new master commits since #164/`ccfd603`. #159's head advanced `20d41a8` -> `d7e0c8d` (1 new Worker commit). **Re-confirmed CLEAR - zero MUST-FIX - NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v27.** R1-R27 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #159 | Clear. 1 new commit `d7e0c8d`: raise runner default batch size 8 -> 100 screens/run (`EC_LEARN_MAX` default + matching docstring line - a 2-line, ASCII-clean change with no R7 doc/code drift). Rationale sound: the already-reviewed 2026-07-03 corpus-Help refactor removed the browser bottleneck (~0.5s/screen), so the 8/day throttle was pacing the remaining ~1,377 screens at ~172 days; 100/day finishes in ~14. Per-screen try/except + hard timeout + NO-PROGRESS alarm unchanged, so a 100-screen batch cannot hang or flail any more than an 8-screen one. Safety invariants re-confirmed: never-auto-merge holds (still DRAFT); **R23 clean** (`git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the five reviewer-owned docs = EMPTY, zero `-` lines). 2 NICE-TO-HAVE posted (repo-growth pacing; R27 carry-over). | OK Clear (NICE-TO-HAVE) - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **Throttle removal follows the bottleneck, not the other way round.** The 8/day cap existed to bound a slow, fragile browser loop; once the corpus refactor made the loop fast and deterministic, the Worker raised the cap in a separate, minimal, well-argued commit (with the arithmetic in the commit message) rather than bundling it into the refactor. Change-one-thing discipline keeps each commit independently reviewable.
+- **Repo-growth math got cheaper than feared - measured, not assumed (MR1).** The notes tree measures ~140KB/screen actual (6.6MB over the current 138 note files, `git cat-file -s` summed), so full 1,457-screen coverage projects to roughly +190MB of committed corpus images - well under the earlier ~1GB live-capture projection. Acceptable as-is; but at 100/day the bulk lands within ~2 weeks, so if LFS/out-of-repo storage (open #110 carry-over) is ever going to happen, the economical moment is BEFORE the sweep completes, not after.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| PR #159 still `mergeable_state: dirty` (CONFLICTING) against master (R27, unchanged since 2026-07-03 06:00) - rebase onto master or `--no-ff` at the next milestone. At 100 screens/day the next milestone arrives fast; resolving NOW avoids a much larger conflict surface | Owner | 🔴 High |
+| Decide LFS/out-of-repo for corpus Help images BEFORE the 100/day sweep completes (~2 weeks); after that the ~190MB is permanently in history (revised down from the ~1GB #110 projection - measured ~140KB/screen) | Owner/Worker | 🟡 Medium |
+| `run_ec_screen_learn.py` dead code from the corpus-switch refactor (unused `EC_URL`/`EC_USER`/`EC_PASS` + `help_text()`) - untouched by `d7e0c8d`, still open | Worker (next runner touch) | 🟢 Low |
+| Carry-over (still open, unchanged this cycle): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-04-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched.
+
+---
+
+## 2026-07-04 - Automated Review (14:00 AWST, 1 open PR #159, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14) despite 0 new master commits since #165/`405c30f`. #159's head advanced `d7e0c8d` -> `076f420` (1 new Worker commit). **Re-confirmed CLEAR - zero MUST-FIX - NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v27.** R1-R27 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #159 | Clear. 1 new commit `076f420`: the FIRST run at the raised 100-screen batch cap - 100 new full screens (CO.0133..CO.1003, 0 partial), 259 files +2360/-100. **Pure-data commit** verified against the diff: zero `.py`/`.ps1`/`.robot`/`.resource`/`.sql` changes; only 100 new `notes/*.md` + corpus screenshots + CHECKLIST flips (200 changed lines = exactly 100 `[ ]`->`[x]`; new-note file count = 100 = commit-message claim, R21 holds). CHECKLIST now 181 `[x]` / 1 `[~]`. **R23 clean** (diff vs master on the reviewer-owned docs = EMPTY). **R18/R20 clean** (zero non-ASCII bytes on ADDED lines; the 103 context-line em-dashes are pre-existing exempt markdown). **Honest classification:** CO.0500 (Keycloak account) / CO.1000-1003 (User Maintenance family) record "(no class resolved from URL/LABEL)" and are typed process/config - a valid terminal type per the runner logic cleared 2026-07-03; no fabricated bindings. 1 NICE-TO-HAVE posted (dead `PARTIAL` branch, below). | OK Clear (NICE-TO-HAVE) - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **The 100-screen cap raise performed exactly as argued.** The 06:00 review cleared the 8->100 cap raise on the arithmetic that the corpus refactor removed the browser bottleneck; this run is the empirical confirmation - 100 screens captured in one run, all with notes + flips consistent, zero code drift, zero partials fabricated to full (the no-class screens carry their honest "(no class resolved)" marker inside the note). Predict-then-confirm across two review cycles is the right cadence for a throughput change.
+- **"0 partial" is now structurally guaranteed, which weakens it as an audit signal.** `full = has_db or bool(info['classes']) or is_process` is tautologically True (`is_process = not info['classes']`), so `done_partial` and the `PARTIAL[...]` log branch are dead code. That is the documented intent (no perpetual-partial re-picks), but a reader of "(100 full, 0 partial)" may wrongly infer every binding resolved. NICE-TO-HAVE posted: simplify to `full = True` and log flag counts (e.g. "100 screens, N flagged no-corpus-Help / no-class") so the commit message keeps informational content.
+
+### Gaps (verified against filesystem / GitHub API)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| PR #159 still `mergeable_state: dirty` (CONFLICTING) against master (R27, unchanged since 2026-07-03 06:00) - re-confirmed via the GitHub API this run. At 100 screens/day the conflict surface compounds every run; rebase onto master or switch to `--no-ff` milestone merges NOW, before the next milestone | Owner | 🔴 High |
+| Runner `full` flag is tautologically True - dead `done_partial`/`PARTIAL` branch; replace "(N full, 0 partial)" with flag-count logging | Worker (next runner touch) | 🟢 Low |
+| Decide LFS/out-of-repo for corpus Help images BEFORE the 100/day sweep completes (~2 weeks at current pace; 181/1457 done) | Owner/Worker | 🟡 Medium |
+| Carry-over (still open, unchanged this cycle): `run_ec_screen_learn.py` dead corpus-switch code (`EC_URL`/`EC_USER`/`EC_PASS` + `help_text()`); extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-04-1400` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched.
+
+---
