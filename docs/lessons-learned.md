@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v27** (R27 added 2026-07-03)
+> **Current rule version: v28** (R28 added 2026-07-02)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -35,6 +35,7 @@ _Worker sessions: read this before starting any automation work._
 | v25 | R25 | When any tool/MCP/connection breaks, OWN the troubleshooting -- diagnose, give actionable fix steps, keep moving; never say "I can't" without following up with "here is how to fix it" | 2026-06-25 |
 | v26 | R26 | Every EC Object IUD PR is gated against the 19-item `docs/IUD-DELIVERABLE-CHECKLIST.md`; the bundle MUST carry a ticked `CHECKLIST.md`; reviewer spot-checks SUBSTANCE not just ticks; a missing/failing deliverable ⇒ MUST-FIX | 2026-06-28 |
 | v27 | R27 | A squash-style milestone merge of a permanent standing-draft branch breaks shared history; rebase the continuation onto master (or use `git merge --no-ff`) before the branch's next milestone push, or expect real file conflicts | 2026-07-03 |
+| v28 | R28 | `CLAUDE.md` is auto-injected into every session's context (unlike other mandatory-read docs) — every review run checks `wc -l CLAUDE.md`; >200 lines = NICE-TO-HAVE (name pruning candidates), >400 lines = MUST-FIX | 2026-07-02 |
 
 ---
 
@@ -1361,5 +1362,44 @@ _Open PR triggers a full review (R14) despite 0 new master commits since #165/`4
 | Carry-over (still open, unchanged this cycle): `run_ec_screen_learn.py` dead corpus-switch code (`EC_URL`/`EC_USER`/`EC_PASS` + `help_text()`); extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
 
 Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-04-1400` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched.
+
+---
+
+## 2026-07-02 (Owner-directed — CLAUDE.md context-budget gate; branch-synced into master 2026-07-04)
+
+_Authored 2026-07-02 on the Worker's `claude/session-memory-resume-ljdyun` branch, which was not yet merged when the 2026-07-03/07-04 automated reviews above (independently) claimed v27/R27 for the squash-merge-conflict rule. Renumbered R27→**R28** on merge to preserve both rules under the append-only discipline (R23) — no content from either side was dropped._
+
+### Rule (apply immediately, no exceptions)
+
+**R28 — `CLAUDE.md` size gate (auto-injected context budget)**
+`CLAUDE.md` is auto-injected in full into every session's context on session start — unlike
+`lessons-learned.md`/`session-memory.md`/`automation-scorecard.md`, which are only loaded when a
+session explicitly reads them. This makes `CLAUDE.md` the highest-leverage place for standing
+behavioral rules (see the 2026-07-02 status-update-routine fix, backfilled in `session-memory.md`),
+but it also means uncontrolled growth there has a real, permanent cost paid on every single session
+regardless of whether that session needs the content.
+
+Every reviewer run (06:00/14:00 AWST, step 3a) MUST check `wc -l CLAUDE.md`:
+- **> 200 lines** → post a NICE-TO-HAVE in the review PR body naming the specific section(s) that
+  are pruning/relocation candidates (move to a read-on-demand doc: `lessons-learned.md`,
+  `session-memory.md`, `PR-REVIEW-PROTOCOL.md`, `automation-scorecard.md`).
+- **> 400 lines** → escalate to MUST-FIX. Do not let it grow unchecked just because no open PR
+  happens to touch it directly — this is a standing gate, not a diff-triggered one.
+- Record the current line count in the `docs/review-log.md` row each run so growth is trackable
+  over time (e.g. "CLAUDE.md: 124 lines").
+
+**Guiding principle:** `CLAUDE.md` = always-true, rarely-changing rules only (session-start reading
+order, git workflow, standing behavioral definitions). Narrative, historical, or occasionally-needed
+content belongs in a mandatory-read doc instead, where volume is cheap because it's read on demand,
+not injected on every turn.
+
+### Context
+Raised by the owner after observing a cross-session knowledge gap (the "status update" routine —
+meetings/email/Teams pull — lived only in `tools/morning-briefing/run_briefing.py`, undiscoverable by
+a fresh session) get fixed by adding it directly to `CLAUDE.md`. The owner then asked what happens if
+that pattern repeats indefinitely and `CLAUDE.md` grows unbounded. This rule is the standing answer:
+a periodic size check wired into the existing daily reviewer cadence, so growth is caught early
+without requiring the owner to notice and flag it manually. Current baseline: 124 lines (well under
+the 200-line NICE-TO-HAVE threshold).
 
 ---

@@ -94,3 +94,32 @@ _Append a new dated section after each owner chat session. Keep entries concise 
 - Open Issues: #150 (batch size — for Worker)
 - All reviewer-owned docs current on master (v26)
 - Auto-reopen workflow: ✅ working
+
+---
+
+## 2026-07-02 (Afternoon session — status-update routine gap)
+
+### Problem raised by owner
+Asking a fresh session for a "status update" got only a PR/automation-scorecard summary, then only
+Jira — the session had no way to know "status update" also means meetings/email/Teams (the format
+already used by the scheduled 9am `tools/morning-briefing/run_briefing.py` job) until told twice.
+Owner does not want to re-teach this every new session.
+
+### Root cause
+The morning-briefing format existed only in `tools/morning-briefing/run_briefing.py`, which nothing
+in the mandatory session-start reading list (CLAUDE.md) pointed to. `CLAUDE.md` itself is
+auto-injected into every session's context (shown as a system-reminder before any file is read), but
+`session-memory.md`/other docs require an explicit Read call — so anything owner needs enforced
+with zero re-teaching belongs in `CLAUDE.md`, not just in session-memory.md.
+
+### Fix applied
+Added a **"Status update" requests** section directly to `CLAUDE.md` (not just here) defining the
+standing behavior: any ad-hoc "status update" / "check PR status" ask pulls all four of GitHub
+PRs/Issues + Outlook calendar (today) + Outlook email (today) + Teams messages (today), presented in
+the ☀️/📅/📧/💬/🚨 emoji-sectioned format. This is now load-bearing in every session automatically,
+no explicit read step required.
+
+### Standing rule for future doc changes
+When a behavior must survive a fresh session with **zero re-explanation**, put it in `CLAUDE.md`
+(auto-loaded). Reserve `session-memory.md` for narrative/decisions history that's fine to require an
+explicit read (it's already mandatory step 5, but CLAUDE.md is the belt-and-suspenders location).

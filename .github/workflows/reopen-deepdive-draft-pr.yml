@@ -5,12 +5,21 @@ name: reopen-deepdive-draft-pr
 # milestone, a merged PR cannot be re-opened, so this workflow opens a FRESH draft PR from the
 # same permanent branch back to master - removing the only manual step in the program.
 #
-# Fires only for the deep-dive branch's own merges; never touches any other PR.
-# Public repo => GitHub Actions minutes are free. Runs a few seconds, only at a milestone merge.
+# Two triggers, both narrowed to the deep-dive branch; never touches any other PR/branch:
+#   - pull_request/closed: catches the milestone merge itself (branch may already show ahead_by=0
+#     right after a non-squash merge, in which case this run correctly no-ops).
+#   - push to feature/ec-screen-deepdive: catches the case above - once the daily autopilot's next
+#     commit lands, the branch goes ahead of master again with no open PR to receive it, and no
+#     further pull_request event is coming to re-trigger the check. The push trigger self-heals
+#     that gap instead of requiring a manual `gh pr create` or workflow re-run.
+# Public repo => GitHub Actions minutes are free. Runs a few seconds per trigger.
 
 on:
   pull_request:
     types: [closed]
+  push:
+    branches:
+      - feature/ec-screen-deepdive
 
 permissions:
   contents: read
@@ -18,10 +27,14 @@ permissions:
 
 jobs:
   reopen:
-    # Only when THIS PR was actually merged (not just closed) AND its head is the program branch.
+    # Either: this PR was actually merged (not just closed) AND its head is the program branch,
+    # OR: this run was triggered by a push directly to the program branch.
     if: >-
-      github.event.pull_request.merged == true &&
-      github.event.pull_request.head.ref == 'feature/ec-screen-deepdive'
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.merged == true &&
+       github.event.pull_request.head.ref == 'feature/ec-screen-deepdive') ||
+      (github.event_name == 'push' &&
+       github.ref == 'refs/heads/feature/ec-screen-deepdive')
     runs-on: ubuntu-latest
     steps:
       - name: Re-open standing draft PR (only if none open and branch is ahead of base)

@@ -14,6 +14,40 @@
    - NICE-TO-HAVE comments are advisory, merge can proceed without them
    - Push fixes to the existing PR branch, do not open a new PR
 
+## "Status update" requests (standing definition — read this before answering any status-update ask)
+When the owner asks for a **"status update"** (or "check PR status", "daily status", etc.) in chat,
+this is NOT just re-running `scripts/update_status.py` (that only regenerates this repo's own
+STATUS.md from git log — a narrower, separate routine). A "status update" means the full pull below,
+even if the owner's phrasing only mentions one source — always cover all four unless told to narrow it:
+
+1. **GitHub** — open PRs (state, CI checks, review comments) in `choongyin72/ChoongYin_OS`, plus any
+   open Issues assigned to Worker (see mandatory step 6 above).
+2. **Outlook calendar** — today's meetings via `outlook_calendar_search` (query `*`, `afterDateTime`/
+   `beforeDateTime` = today's window). Convert returned times to MYT (UTC+8) for display.
+3. **Outlook email** — today's emails via `outlook_email_search` (`afterDateTime: "today 00:00"`,
+   `order: newest`). Flag anything actionable or urgent.
+4. **Teams** — today's messages via `chat_message_search` (`afterDateTime: "today 00:00"`). If Graph
+   rate-limits (429, partial scan), say so explicitly and offer a retry — don't silently drop it.
+
+Present in this format (mirrors `tools/morning-briefing/run_briefing.py`'s scheduled 9am prompt):
+```
+☀️ Status Update — [Day, Date] | Woodside Pluto
+
+📅 MEETINGS TODAY
+[table/list, MY times, cancelled/tentative flagged]
+
+📧 EMAILS
+[flagged/actionable ones first, sender + key point]
+
+💬 TEAMS HIGHLIGHTS
+[key discussions/action items, or note the rate-limit if search was partial]
+
+🚨 ACTION ITEMS
+[pending/overdue items pulled from the above]
+```
+Fold in repo/PR status (item 1) either inline or as a closing section — don't drop it just because
+the format above doesn't have a dedicated slot for it.
+
 ## Git workflow (mandatory — never commit directly to master)
 1. At the start of every session, create a feature branch from master:
    `git checkout master && git pull origin master && git checkout -b feature/<task-name>`
