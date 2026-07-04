@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v27** (R27 added 2026-07-02)
+> **Current rule version: v28** (R28 added 2026-07-02)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -34,7 +34,8 @@ _Worker sessions: read this before starting any automation work._
 | v24 | R24 | Pushing from a detached/throwaway worktree MUST use `push origin HEAD:refs/heads/<branch>` -- a bare `push origin <branch>` resolves to the shared local branch ref (another worktree's tip), NOT the detached HEAD | 2026-06-25 |
 | v25 | R25 | When any tool/MCP/connection breaks, OWN the troubleshooting -- diagnose, give actionable fix steps, keep moving; never say "I can't" without following up with "here is how to fix it" | 2026-06-25 |
 | v26 | R26 | Every EC Object IUD PR is gated against the 19-item `docs/IUD-DELIVERABLE-CHECKLIST.md`; the bundle MUST carry a ticked `CHECKLIST.md`; reviewer spot-checks SUBSTANCE not just ticks; a missing/failing deliverable ⇒ MUST-FIX | 2026-06-28 |
-| v27 | R27 | `CLAUDE.md` is auto-injected into every session's context (unlike other mandatory-read docs) — every review run checks `wc -l CLAUDE.md`; >200 lines = NICE-TO-HAVE (name pruning candidates), >400 lines = MUST-FIX | 2026-07-02 |
+| v27 | R27 | A squash-style milestone merge of a permanent standing-draft branch breaks shared history; rebase the continuation onto master (or use `git merge --no-ff`) before the branch's next milestone push, or expect real file conflicts | 2026-07-03 |
+| v28 | R28 | `CLAUDE.md` is auto-injected into every session's context (unlike other mandatory-read docs) — every review run checks `wc -l CLAUDE.md`; >200 lines = NICE-TO-HAVE (name pruning candidates), >400 lines = MUST-FIX | 2026-07-02 |
 
 ---
 
@@ -1275,11 +1276,102 @@ _Re-fire of the 14:00 slot (clock ~16:00 AWST). The morning 14:00 run merged as 
 
 ---
 
-## 2026-07-02 (Owner-directed — CLAUDE.md context-budget gate)
+## 2026-07-03 — Automated Review (06:00 AWST, 6 new master commits since #157, 1 open PR #159 STANDING/DRAFT)
+
+_Open PR triggers a full review (R14); also 6 new master commits since the 2026-07-01 14:00 re-verify (`5107e44`) clear the >=3-commit threshold independently. Reviewed #159 (the reopened standing draft, following #135's milestone merge via `e9ad812`) at head `406b989`. **CLEAR, no MUST-FIX, NOT merged** (owner-merge-only by design). **One new rule (R27).** R1-R26 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #159 | Clear — 8 new commits since the 2026-07-01 14:00 re-verify's head (`e902713`): CO.0060/0074/0076-0082/0086 upgraded from partial to full via a runner rework that sources Help from the local offline online-help corpus instead of live-scraping the sandbox web app, plus 17 newly captured screens (CO.0087/0088/0089/0091/0093/0094x2/0096/0096.01/0098/0100/0102/0103/0105/0108/0118). Spot-checked bindings (CO.0118 `REGION -> OV_REGION`/`GEOGRAPHICAL_AREA`; CO.0060 `EQUIPMENT` interface w/o view) are real, not fabricated. Runner refactor (+145/-76) removes the Playwright/browser/login dependency entirely, fixes the perpetual-partial re-pick loop (full = structure resolved, not Help-gated), and adds a NO-PROGRESS ALARM that loudly flags a stalled run. `py_compile` OK, 0 non-ASCII bytes (R18/R20). **R23 clean** — `git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the five reviewer-owned docs is empty. 2 NICE-TO-HAVE posted (dead code left by the corpus-switch refactor; new `mergeable: CONFLICTING` status against master — see R27). | ✅ Clear (NICE-TO-HAVE) — left open (owner-merge-only) |
+
+### Rules (apply immediately, no exceptions)
+
+**R27 — A squash-style milestone merge of a permanent standing-draft branch breaks shared history for files both sides keep touching** ✅ _live-validated via `git merge-tree` against PR #159_
+Standing-draft branches like `feature/ec-screen-deepdive` are milestone-merged into master periodically (e.g. `e9ad812`, "milestone merge (post-#118 batch)"). When that merge is a **squash** (or any merge that doesn't preserve the branch's own commit ancestry as a real parent), `git merge-base origin/master origin/feature/ec-screen-deepdive` resolves to an OLD commit from *before* the milestone (`1910222`, not `e9ad812`) — because master's squash commit and the branch's continuing commits share no direct lineage. Any file both sides go on to touch after that point (`CHECKLIST.md`, and any revisited note like `notes/CO.0060.md`) then presents as "changed in both" with real conflict markers, even though there is no genuine content contradiction — it is a false conflict manufactured by the squash. First observed live on PR #159 (`mergeable: CONFLICTING`); confirmed via `git merge-tree $(git merge-base ...) origin/master origin/feature/ec-screen-deepdive`. This is NOT reviewer-fixable (the reviewer never merges this draft) — it is the **owner's** responsibility at the next milestone merge: either (a) `git rebase origin/master` the standing-draft branch immediately after any squash milestone merge, before further commits land on it, or (b) perform future milestone merges as a true `git merge --no-ff` (not squash) so the branch's ancestry is preserved and no false conflict can arise. Distinguish this from R23 (which governs the four/five *reviewer-owned* docs specifically) — R27 covers the branch's *own* content files.
+
+### Observations (good patterns to keep)
+
+- **Runner evolution is converging on a robust, dependency-light design.** Across this cycle the runner went from live-browser Help scraping (fragile: login/timeout/DOM-drift risk) to an offline local corpus lookup (`docs/EC/EC Calculation/online-help-14.2.5/`) — faster, deterministic, and removes an entire class of flakiness (browser/login failures) that previously caused silent stalls. Combined with the redefined completeness gate (structure-resolved, not Help-gated) and the new NO-PROGRESS ALARM, three real operational failure modes from the last two weeks (perpetual-partial loop, silent 06-30->07-01 stall, browser-login ABORTED runs) are now each independently guarded against.
+- **R23 holding steady across an owner milestone-merge cycle.** Despite the PR base moving (old #135 -> merged -> new #159 reopened), the five reviewer-owned docs still show zero deletion risk — the append-only discipline survives across milestone boundaries, which is exactly what R23 was designed to guarantee.
+- **NICE-TO-HAVE -> next-commit loop still open, not yet exercised this cycle**: the dead `EC_URL`/`EC_USER`/`EC_PASS`/`help_text()` leftovers are a natural target for the runner's next touch.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| PR #159 is `mergeable: CONFLICTING` against master (R27) — real conflicts on `CHECKLIST.md` + `notes/CO.0060.md` will surface at the next milestone merge; rebase onto master or switch to `--no-ff` merges going forward | Owner | 🔴 High |
+| `run_ec_screen_learn.py` dead code from the corpus-switch refactor: unused `EC_URL`/`EC_USER`/`EC_PASS` constants + unused `help_text(page, ...)` Playwright function | Worker (next runner touch) | 🟢 Low |
+| Carry-over (still open, unchanged this cycle): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-03-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, still on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched. A stale, never-pushed `C:/tmp/wt-review-2026-07-02-0600` worktree (0 commits, crashed before any doc edit) was found and removed per step 17.
+
+---
+
+## 2026-07-04 - Automated Review (06:00 AWST, 1 open PR #159, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14) despite 0 new master commits since #164/`ccfd603`. #159's head advanced `20d41a8` -> `d7e0c8d` (1 new Worker commit). **Re-confirmed CLEAR - zero MUST-FIX - NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v27.** R1-R27 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #159 | Clear. 1 new commit `d7e0c8d`: raise runner default batch size 8 -> 100 screens/run (`EC_LEARN_MAX` default + matching docstring line - a 2-line, ASCII-clean change with no R7 doc/code drift). Rationale sound: the already-reviewed 2026-07-03 corpus-Help refactor removed the browser bottleneck (~0.5s/screen), so the 8/day throttle was pacing the remaining ~1,377 screens at ~172 days; 100/day finishes in ~14. Per-screen try/except + hard timeout + NO-PROGRESS alarm unchanged, so a 100-screen batch cannot hang or flail any more than an 8-screen one. Safety invariants re-confirmed: never-auto-merge holds (still DRAFT); **R23 clean** (`git diff --stat origin/master...origin/feature/ec-screen-deepdive` on the five reviewer-owned docs = EMPTY, zero `-` lines). 2 NICE-TO-HAVE posted (repo-growth pacing; R27 carry-over). | OK Clear (NICE-TO-HAVE) - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **Throttle removal follows the bottleneck, not the other way round.** The 8/day cap existed to bound a slow, fragile browser loop; once the corpus refactor made the loop fast and deterministic, the Worker raised the cap in a separate, minimal, well-argued commit (with the arithmetic in the commit message) rather than bundling it into the refactor. Change-one-thing discipline keeps each commit independently reviewable.
+- **Repo-growth math got cheaper than feared - measured, not assumed (MR1).** The notes tree measures ~140KB/screen actual (6.6MB over the current 138 note files, `git cat-file -s` summed), so full 1,457-screen coverage projects to roughly +190MB of committed corpus images - well under the earlier ~1GB live-capture projection. Acceptable as-is; but at 100/day the bulk lands within ~2 weeks, so if LFS/out-of-repo storage (open #110 carry-over) is ever going to happen, the economical moment is BEFORE the sweep completes, not after.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| PR #159 still `mergeable_state: dirty` (CONFLICTING) against master (R27, unchanged since 2026-07-03 06:00) - rebase onto master or `--no-ff` at the next milestone. At 100 screens/day the next milestone arrives fast; resolving NOW avoids a much larger conflict surface | Owner | 🔴 High |
+| Decide LFS/out-of-repo for corpus Help images BEFORE the 100/day sweep completes (~2 weeks); after that the ~190MB is permanently in history (revised down from the ~1GB #110 projection - measured ~140KB/screen) | Owner/Worker | 🟡 Medium |
+| `run_ec_screen_learn.py` dead code from the corpus-switch refactor (unused `EC_URL`/`EC_USER`/`EC_PASS` + `help_text()`) - untouched by `d7e0c8d`, still open | Worker (next runner touch) | 🟢 Low |
+| Carry-over (still open, unchanged this cycle): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-04-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched.
+
+---
+
+## 2026-07-04 - Automated Review (14:00 AWST, 1 open PR #159, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14) despite 0 new master commits since #165/`405c30f`. #159's head advanced `d7e0c8d` -> `076f420` (1 new Worker commit). **Re-confirmed CLEAR - zero MUST-FIX - NOT merged** (owner-merge-only standing draft, still DRAFT). **No new executable rules - version stays v27.** R1-R27 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #159 | Clear. 1 new commit `076f420`: the FIRST run at the raised 100-screen batch cap - 100 new full screens (CO.0133..CO.1003, 0 partial), 259 files +2360/-100. **Pure-data commit** verified against the diff: zero `.py`/`.ps1`/`.robot`/`.resource`/`.sql` changes; only 100 new `notes/*.md` + corpus screenshots + CHECKLIST flips (200 changed lines = exactly 100 `[ ]`->`[x]`; new-note file count = 100 = commit-message claim, R21 holds). CHECKLIST now 181 `[x]` / 1 `[~]`. **R23 clean** (diff vs master on the reviewer-owned docs = EMPTY). **R18/R20 clean** (zero non-ASCII bytes on ADDED lines; the 103 context-line em-dashes are pre-existing exempt markdown). **Honest classification:** CO.0500 (Keycloak account) / CO.1000-1003 (User Maintenance family) record "(no class resolved from URL/LABEL)" and are typed process/config - a valid terminal type per the runner logic cleared 2026-07-03; no fabricated bindings. 1 NICE-TO-HAVE posted (dead `PARTIAL` branch, below). | OK Clear (NICE-TO-HAVE) - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **The 100-screen cap raise performed exactly as argued.** The 06:00 review cleared the 8->100 cap raise on the arithmetic that the corpus refactor removed the browser bottleneck; this run is the empirical confirmation - 100 screens captured in one run, all with notes + flips consistent, zero code drift, zero partials fabricated to full (the no-class screens carry their honest "(no class resolved)" marker inside the note). Predict-then-confirm across two review cycles is the right cadence for a throughput change.
+- **"0 partial" is now structurally guaranteed, which weakens it as an audit signal.** `full = has_db or bool(info['classes']) or is_process` is tautologically True (`is_process = not info['classes']`), so `done_partial` and the `PARTIAL[...]` log branch are dead code. That is the documented intent (no perpetual-partial re-picks), but a reader of "(100 full, 0 partial)" may wrongly infer every binding resolved. NICE-TO-HAVE posted: simplify to `full = True` and log flag counts (e.g. "100 screens, N flagged no-corpus-Help / no-class") so the commit message keeps informational content.
+
+### Gaps (verified against filesystem / GitHub API)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| PR #159 still `mergeable_state: dirty` (CONFLICTING) against master (R27, unchanged since 2026-07-03 06:00) - re-confirmed via the GitHub API this run. At 100 screens/day the conflict surface compounds every run; rebase onto master or switch to `--no-ff` milestone merges NOW, before the next milestone | Owner | 🔴 High |
+| Runner `full` flag is tautologically True - dead `done_partial`/`PARTIAL` branch; replace "(N full, 0 partial)" with flag-count logging | Worker (next runner touch) | 🟢 Low |
+| Decide LFS/out-of-repo for corpus Help images BEFORE the 100/day sweep completes (~2 weeks at current pace; 181/1457 done) | Owner/Worker | 🟡 Medium |
+| Carry-over (still open, unchanged this cycle): `run_ec_screen_learn.py` dead corpus-switch code (`EC_URL`/`EC_USER`/`EC_PASS` + `help_text()`); extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-04-1400` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched.
+
+---
+
+## 2026-07-02 (Owner-directed — CLAUDE.md context-budget gate; branch-synced into master 2026-07-04)
+
+_Authored 2026-07-02 on the Worker's `claude/session-memory-resume-ljdyun` branch, which was not yet merged when the 2026-07-03/07-04 automated reviews above (independently) claimed v27/R27 for the squash-merge-conflict rule. Renumbered R27→**R28** on merge to preserve both rules under the append-only discipline (R23) — no content from either side was dropped._
 
 ### Rule (apply immediately, no exceptions)
 
-**R27 — `CLAUDE.md` size gate (auto-injected context budget)**
+**R28 — `CLAUDE.md` size gate (auto-injected context budget)**
 `CLAUDE.md` is auto-injected in full into every session's context on session start — unlike
 `lessons-learned.md`/`session-memory.md`/`automation-scorecard.md`, which are only loaded when a
 session explicitly reads them. This makes `CLAUDE.md` the highest-leverage place for standing

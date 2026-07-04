@@ -29,7 +29,7 @@ Steps:
 1. Run: git log --oneline -20 to see recent commits
 2. Check the last entry date in docs/review-log.md
 3. Count commits since that date
-3a. CLAUDE.md size gate (R27): run `wc -l CLAUDE.md`. It is auto-injected in full into every
+3a. CLAUDE.md size gate (R28): run `wc -l CLAUDE.md`. It is auto-injected in full into every
     session's context (unlike lessons-learned.md/session-memory.md, which are read on demand), so
     it must stay lean. If it exceeds 200 lines: post a NICE-TO-HAVE in the review PR body naming
     the specific section(s) that are candidates to prune or move into a read-on-demand doc
