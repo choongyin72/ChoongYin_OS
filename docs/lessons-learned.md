@@ -1403,3 +1403,32 @@ without requiring the owner to notice and flag it manually. Current baseline: 12
 the 200-line NICE-TO-HAVE threshold).
 
 ---
+
+## 2026-07-05 - Automated Review (06:00 AWST, 4 new master commits, 1 open PR #167)
+
+_Open PR triggers a full review (R14); the 4 new master commits since #166 also clear the threshold independently. Reviewed #167 (owner-session docs/config PR): **CLEAR - zero MUST-FIX - squash-merged (`954e3a0`)**, bringing master to **v28** (R28 authored by the owner session, not this review). **No new executable rules from this run - version stays v28.** R1-R28 current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #167 | Clear - (1) "Status update" standing routine baked into `CLAUDE.md` (GitHub + Outlook calendar/email + Teams, emoji-sectioned format) so a fresh session never needs re-teaching; (2) **R28** (CLAUDE.md size gate: >200 lines NICE-TO-HAVE, >400 MUST-FIX, count recorded each review run) + review-prompt step 3a wiring; (3) undisclosed-but-sound fix to `.github/workflows/reopen-deepdive-draft-pr.yml` adding a `push` trigger for the program branch. R23 append-only verified on the lessons-learned edit (zero deletions; the R27/R28 version-collision renumber preserved both rules). 2 NICE-TO-HAVE (R21 body drift in BOTH directions - workflow file omitted from "Files touched"/"What was built"; `review-log.md`+`STATUS.md` listed but absent from the final 5-file diff). First R28 gate run: **CLAUDE.md = 124 lines, PASS**. | OK Clear (NICE-TO-HAVE) - merged |
+
+### Observations (good patterns to keep)
+
+- **R27 closed the loop: the owner performed the `18a87c4` milestone merge as a true `--no-ff` merge.** Verified: the commit has two parents (2nd = branch tip `e680ed3`) and `git merge-base origin/master origin/feature/ec-screen-deepdive` now resolves to the milestone point itself - no more false conflicts, the 🔴 High R27 gap (open since 2026-07-03) is RESOLVED. Rule -> owner-action -> verified-fix in two days; this is the extract-a-rule loop working at the owner level, not just the Worker level.
+- **The auto-reopen workflow had a real blind spot, now fixed by #167.** The `closed`-event run at the milestone fired while the branch was ahead_by=0 (correct no-op), but when the next autopilot commit (`02a2041`, 200 screens) landed there was no open PR and no event to re-trigger the check - so the standing-draft PR silently did not exist this run. #167's `push` trigger on `feature/ec-screen-deepdive` self-heals exactly this. Until the next autopilot push fires it, `02a2041` was reviewed directly against the branch (pure-data, 200 CHECKLIST flips = claim, 0 non-ASCII added, spot-checked binding real, R23 clean on all five reviewer-owned docs).
+- **Reviewer self-correction (MR1):** this run's #167 review comment asserted "PR-head CLAUDE.md = 158 lines" without measuring; the actual count is 124. Corrected publicly via follow-up comment. Reminder: any number published in a review comment must come from a command actually run, not an estimate - the same discipline demanded of Worker PR bodies (R13/R21) applies to reviewer comments.
+
+### Gaps (verified against filesystem / GitHub API)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Standing-draft PR for `feature/ec-screen-deepdive` currently MISSING (post-milestone, pre-next-push). Expected to auto-reopen on the next autopilot push via #167's new trigger - next review run MUST verify it exists again; if not, the push trigger needs debugging | Reviewer (verify next run) | 🔴 High |
+| ~~PR #159/#166 R27 CONFLICTING carry-over~~ - **RESOLVED**: `18a87c4` was a true `--no-ff` merge; merge-base = milestone point; branch conflict-free | - | OK Closed |
+| Decide LFS/out-of-repo for corpus Help images BEFORE the sweep completes - now MORE urgent: cap raised again 100 -> 200/run (`841019a`) and 381+/1457 done; at 200/day the remaining ~1,076 screens land in ~5-6 days | Owner/Worker | 🟡 Medium |
+| Carry-over (still open, unchanged this cycle): `run_ec_screen_learn.py` dead corpus-switch code (`EC_URL`/`EC_USER`/`EC_PASS` + `help_text()`) + tautological `full` flag/dead `PARTIAL` branch; extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; fix `sql_idempotency_check.py` em-dashes; `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'` -> `'ECPR-DEMO'` (R22); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-05-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched.
+
+---
