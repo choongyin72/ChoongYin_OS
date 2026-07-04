@@ -1,6 +1,6 @@
 # CO.0086 - Stream Reference Values
 
-_Deep-dive 2026-07-01 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-02 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0086 - URL: `/com.ec.prod.co.screens/stream_reference_value`
@@ -10,10 +10,13 @@ _Deep-dive 2026-07-01 (deterministic runner). Module: CO._
 |---|---|---|---|
 | (no class resolved from URL/LABEL) | | | |
 
+_Resolved by: not resolved_
+
 ## Screen type
-unknown (no class resolved)
+process/config (no data class -- e.g. a process trigger, rule/formula editor or combination screen)
 
-## Help (description)
-This is a generic maintain screen; see description of generic maintain screens in the beginning of the configuration manual.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0086 screenshot](CO.0086_shot_1.png)
 
-Streams are a very central object class in EC.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

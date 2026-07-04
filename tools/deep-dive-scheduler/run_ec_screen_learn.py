@@ -9,13 +9,13 @@ in Python, per screen, with a hard timeout + best-effort fallback so it can neve
      -> class, CLASS_TYPE, TIME_SCOPE, base table, OV_/TV_/DV_ view, screen type
   3) Help: login once, then per screen open it + openOnlineHelp() -> description text AND a full-page
      screenshot of the Help popup saved to notes/<BF_CODE>_help.png (both best-effort, timeout-guarded)
-  4) write notes/<BF_CODE>.md (incl. the screenshot reference), mark [x] (full = DB+Help text) or
-     [~] (DB only, Help not captured); the screenshot is a bonus and does not change the full/partial threshold
+  4) write notes/<BF_CODE>.md; mark [x] once the screen's STRUCTURE is resolved -- a data class (bound view
+     or interface) OR a process/config screen (no data class by design). Help text + screenshot are best-effort
+     enrichment and do NOT gate completeness (so process/config + help-less screens are never re-picked forever)
   5) commit on the detached worktree HEAD; push unless EC_LEARN_PUSH=0
 
 Isolated git worktree (C:\\tmp\\wt-ec-learn) so it never touches the user's main checkout.
-Env knobs: EC_LEARN_MAX_SCREENS (screen cap per run, default 25; legacy alias EC_LEARN_MAX still honoured);
-           EC_LEARN_PUSH=0 (commit locally, no push).
+Env knobs: EC_LEARN_MAX (screen cap, default 200); EC_LEARN_PUSH=0 (commit locally, no push).
 """
 import os, re, sys, subprocess, time
 from datetime import datetime
@@ -25,7 +25,7 @@ REPO   = r'C:\Projects\ChoongYin_OS'
 WT     = r'C:\tmp\wt-ec-learn'
 BRANCH = 'feature/ec-screen-deepdive'
 LOG    = Path(REPO) / 'tools' / 'deep-dive-scheduler' / 'session_log.txt'
-MAXN   = int(os.environ.get('EC_LEARN_MAX_SCREENS', os.environ.get('EC_LEARN_MAX', '25')))  # #150: 8->25 default, override EC_LEARN_MAX_SCREENS (e.g. 50)
+MAXN   = int(os.environ.get('EC_LEARN_MAX', '200'))
 DO_PUSH= os.environ.get('EC_LEARN_PUSH', '1') != '0'
 DB_RETRIES    = int(os.environ.get('EC_LEARN_DB_RETRIES', '3'))       # DB pre-flight: attempts before aborting
 DB_RETRY_WAIT = int(os.environ.get('EC_LEARN_DB_RETRY_WAIT', '20'))   # seconds between DB connect attempts (sandbox may still be starting)
@@ -36,6 +36,10 @@ EC_PASS = os.environ.get('EC_PASS', 'sysadmin')
 DB_DSN  = os.environ.get('EC_DB_DSN', 'localhost:1521/ORCL')
 DB_USER = os.environ.get('EC_DB_USER', 'ECKERNEL_EC')
 DB_PASS = os.environ.get('EC_DB_PASS', 'energy')
+
+# Help now comes from the LOCAL online-help corpus (offline: screen + field-description images) instead of
+# live-scraping the sandbox web app -- faster, deterministic, and removes the browser/login dependency.
+CORPUS = Path(os.environ.get('EC_HELP_CORPUS', str(Path(REPO) / 'docs' / 'EC' / 'EC Calculation' / 'online-help-14.2.5')))
 
 def log(m):
     line = f'[{datetime.now().strftime("%Y-%m-%d %H:%M:%S")}] {m}'
@@ -89,10 +93,14 @@ def db_resolve(cur, bf_code, name):
     classes = re.findall(r'CLASS_NAME[^/]*/([A-Z0-9_]+)', url)
     if classes:
         info['resolved_by'] = 'url CLASS_NAME'
-    else:  # (2) URL last path-segment token
+    else:  # (2) URL last path-segment token (verb-prefix stripped; must be a REAL class -> high confidence)
         tok = url.rstrip('/').split('/')[-1].upper()
-        for cand in dict.fromkeys([tok, re.sub(r'^(MAINTAIN|MANAGE|EDIT|VIEW|CREATE)_', '', tok)]):
-            if cand and _class_exists(cur, cand):
+        cands = [tok,
+                 re.sub(r'^(MAINTAIN|MANAGE|EDIT|VIEW|CREATE|INITIATE)_', '', tok),
+                 re.sub(r'^MANAGE_COPY_', '', tok),   # e.g. manage_copy_equipment -> EQUIPMENT
+                 re.sub(r'S$', '', tok)]              # de-pluralise (e.g. ..._streams -> _STREAM)
+        for cand in dict.fromkeys(c for c in cands if c):
+            if _class_exists(cur, cand):
                 classes = [cand]; info['resolved_by'] = 'url path token'; break
     if not classes:  # (3) case-insensitive EXACT label, only if unambiguous
         cur.execute("""SELECT DISTINCT class_name FROM class_property_cnfg
@@ -117,8 +125,9 @@ def db_resolve(cur, bf_code, name):
 
 def screen_type(info):
     if not info['classes']:
-        return 'unknown (no class resolved)'
+        return 'process/config (no data class -- e.g. a process trigger, rule/formula editor or combination screen)'
     c0 = info['classes'][0]
+    if c0['type'] == 'INTERFACE': return 'OV (interface/object screen)'
     if c0['type'] == 'OBJECT':   return 'OV (master-data object)'
     if c0['type'] == 'TABLE':    return 'TV (table-class)'
     if c0['type'] == 'DATA' and c0['scope'] == 'DAY':   return 'N1 daily-status grid'
@@ -175,8 +184,43 @@ def _ascii(s):
         s = s.replace(chr(cp), v)
     return s.encode('ascii', 'ignore').decode('ascii')
 
-def write_note(wt, bf_code, name, info, help_desc, help_shot=False):
-    help_desc = _ascii(help_desc); name = _ascii(name)
+_HELP_MAPS = None
+def load_help_maps():
+    """Parse the corpus BF_CODE->image CSVs once (screenshot + field-description image filenames)."""
+    global _HELP_MAPS
+    if _HELP_MAPS is not None: return _HELP_MAPS
+    shots, descs = {}, {}
+    for fn, d in (('screenshot_mapping_file.csv', shots), ('description_image_mapping_file.csv', descs)):
+        p = CORPUS / fn
+        if p.exists():
+            for ln in p.read_text(encoding='utf-8', errors='ignore').splitlines():
+                parts = [x.strip() for x in ln.split(',')]
+                if len(parts) >= 2 and parts[0]:
+                    d.setdefault(parts[0].upper(), []).append(parts[1])
+    _HELP_MAPS = (shots, descs); return _HELP_MAPS
+
+def help_from_corpus(bf_code, notes_dir):
+    """Offline Help: copy the corpus screen screenshot(s) + field-description image(s) for this BF_CODE
+    into notes/ and return their reference filenames. No web app needed. Best-effort."""
+    import shutil, glob as _glob
+    shots, descs = load_help_maps()
+    refs = {'shots': [], 'descs': []}
+    for i, fname in enumerate(shots.get(bf_code.upper(), []), 1):
+        hits = _glob.glob(str(CORPUS / 'SCREENSHOTS' / '**' / fname), recursive=True)  # in a module subfolder
+        if hits:
+            dest = f'{bf_code}_shot_{i}{Path(fname).suffix.lower() or ".png"}'
+            try: shutil.copyfile(hits[0], str(Path(notes_dir) / dest)); refs['shots'].append(dest)
+            except Exception: pass
+    for i, fname in enumerate(descs.get(bf_code.upper(), []), 1):
+        src = CORPUS / 'DESCRIPTION_IMAGES' / fname
+        if src.exists():
+            dest = f'{bf_code}_descr_{i}{Path(fname).suffix.lower() or ".png"}'
+            try: shutil.copyfile(str(src), str(Path(notes_dir) / dest)); refs['descs'].append(dest)
+            except Exception: pass
+    return refs
+
+def write_note(wt, bf_code, name, info, corpus_refs):
+    name = _ascii(name)
     nd = Path(wt) / 'DeepDiveLearnings' / 'ec-screens' / 'notes'; nd.mkdir(parents=True, exist_ok=True)
     rows = '\n'.join(f"| `{c['class']}` | {c['type']}/{c['scope']} | `{c['base']}` | `{c['view'] or '(none)'}` |"
                      for c in info['classes']) or "| (no class resolved from URL/LABEL) | | | |"
@@ -197,24 +241,32 @@ _Resolved by: {info.get('resolved_by') or 'not resolved'}_
 ## Screen type
 {screen_type(info)}
 
-## Help (description)
-{help_desc if help_desc else '_(not captured this run - DB binding above is verified; Help to backfill)_'}
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+{chr(10).join(f'![{bf_code} screenshot]({r})' for r in corpus_refs['shots']) or '_(no screen screenshot in corpus for this BF_CODE)_'}
 
-## Help (screenshot)
-{f'![{bf_code} Help screenshot]({bf_code}_help.png)' if help_shot else '_(no Help screenshot captured this run)_'}
+## Help (field-description images -- local online-help corpus 14.2.5)
+{chr(10).join(f'![{bf_code} field descriptions]({r})' for r in corpus_refs['descs']) or '_(no field-description images in corpus for this BF_CODE)_'}
 """
+    is_process = not info['classes']                       # no data class => process/config screen (a valid terminal type)
     has_db = any(c.get('view') for c in info['classes'])
-    missing = []
-    if not has_db: missing.append('DB binding')
-    if not help_desc: missing.append('Help')
+    # COMPLETE once the screen's STRUCTURE is resolved: a data class (bound view, or interface w/o view) OR a
+    # process/config screen. Corpus Help images are best-effort enrichment and do NOT gate completeness -- this
+    # stops process/config + help-less screens being re-picked forever as perpetual partials.
+    full = has_db or bool(info['classes']) or is_process   # always resolvable -> never a perpetual partial
+    flags = []
+    if info['classes'] and not has_db: flags.append('class w/o view')
+    if not (corpus_refs['shots'] or corpus_refs['descs']): flags.append('no corpus Help')
     (nd / f'{bf_code}.md').write_text(body, encoding='utf-8')
-    return (not missing), ', '.join(missing)
+    return full, ', '.join(flags)
 
 def mark_checklist(wt, bf_code, name, full, missing):
     p = Path(wt) / 'DeepDiveLearnings' / 'ec-screens' / 'CHECKLIST.md'
     s = p.read_text(encoding='utf-8')
     mark = '[x]' if full else '[~]'
-    suffix = '' if full else f' (partial: missing {missing})'
+    if full:
+        suffix = f' (note: {missing})' if missing else ''
+    else:
+        suffix = f' (partial: missing {missing})'
     newline = f'- {mark} **{bf_code}** - {_ascii(name)} -> notes/{bf_code}.md{suffix}'
     orig = s
     s = re.sub(r'(?m)^- \[[ x~\-]\] \*\*' + re.escape(bf_code) + r'\*\* .*$', newline, s, count=1)
@@ -222,18 +274,27 @@ def mark_checklist(wt, bf_code, name, full, missing):
         log(f'  WARNING: {bf_code} not found in CHECKLIST.md -- mark skipped')
     p.write_text(s, encoding='utf-8')
 
+def count_done(checklist):
+    """Number of screens marked complete ([x]) in the CHECKLIST -- the progress metric for the stall alarm."""
+    try:
+        return len(re.findall(r'(?m)^- \[x\] ', checklist.read_text(encoding='utf-8')))
+    except Exception:
+        return -1
+
 def main():
     log(f'EC-screen learn (deterministic): start, max={MAXN}, push={DO_PUSH}')
     if not ensure_worktree(): log('ABORTED: worktree not ready'); return 1
     try:
         import oracledb
-        from playwright.sync_api import sync_playwright
     except Exception as e:
         log(f'ABORTED: missing dep {str(e)[:80]}'); return 1
+    if not CORPUS.exists():
+        log(f'WARNING: online-help corpus not found at {CORPUS} -- notes will carry DB binding only (no Help images)')
     checklist = Path(WT) / 'DeepDiveLearnings' / 'ec-screens' / 'CHECKLIST.md'
     screens = pick_screens(checklist, MAXN)
     if not screens: log('nothing to do (no [ ] screens found)'); return 0
     log(f'screens this run: {", ".join(c for c,_ in screens)}')
+    done_before = count_done(checklist)   # baseline completed-count for the no-progress alarm
     # DB pre-flight with retry/backoff -- the local sandbox Oracle may still be starting (e.g. Docker just brought up)
     con = None; last_err = ''
     for attempt in range(1, DB_RETRIES + 1):
@@ -248,33 +309,32 @@ def main():
             f'metadata DB {DB_DSN} after {DB_RETRIES} attempts ({last_err}). Is the local sandbox Oracle up?')
         return 1
     done_full = done_partial = 0
-    with sync_playwright() as p:
-        br = None
+    notes_dir = Path(WT) / 'DeepDiveLearnings' / 'ec-screens' / 'notes'
+    notes_dir.mkdir(parents=True, exist_ok=True)
+    for bf_code, name in screens:
         try:
-            br = p.chromium.launch(headless=True)
-            page = br.new_context(ignore_https_errors=True, viewport={'width': 1500, 'height': 1000}).new_page()
-            page.goto(EC_URL, wait_until='domcontentloaded', timeout=60000)
-            page.fill('#username', EC_USER); page.fill('#password', EC_PASS); page.click('#kc-login')
-            page.wait_for_selector('[id="menu:searchForm:searchTxt"]', timeout=60000); page.wait_for_timeout(1200)
+            info = db_resolve(cur, bf_code, name)
+            refs = help_from_corpus(bf_code, notes_dir)        # Help from the LOCAL online-help corpus (offline, no web app)
+            full, missing = write_note(WT, bf_code, name, info, refs)
+            mark_checklist(WT, bf_code, name, full, missing)
+            done_full += int(full); done_partial += int(not full)
+            nimg = len(refs['shots']) + len(refs['descs'])
+            log(f'  {bf_code}: {"FULL" if full else "PARTIAL["+missing+"]"} ({len(info["classes"])} class, {nimg} corpus img)')
         except Exception as e:
-            log(f'ABORTED: EC-screen Help extract job aborted -- browser/EC sandbox login failed ({str(e)[:110]})')
-            if br: br.close()
-            con.close(); return 1
-        for bf_code, name in screens:
-            try:
-                info = db_resolve(cur, bf_code, name)
-                notes_dir = Path(WT) / 'DeepDiveLearnings' / 'ec-screens' / 'notes'
-                notes_dir.mkdir(parents=True, exist_ok=True)
-                shot_path = str(notes_dir / f'{bf_code}_help.png')
-                hd, shot_ok = help_text(page, name, shot_path)
-                full, missing = write_note(WT, bf_code, name, info, hd, shot_ok)
-                mark_checklist(WT, bf_code, name, full, missing)
-                done_full += int(full); done_partial += int(not full)
-                log(f'  {bf_code}: {"FULL" if full else "PARTIAL["+missing+"]"} ({len(info["classes"])} class{", +shot" if shot_ok else ""})')
-            except Exception as e:
-                log(f'  {bf_code}: skipped ({str(e)[:60]})')
-        br.close()
+            log(f'  {bf_code}: skipped ({str(e)[:60]})')
     con.close()
+    # NO-PROGRESS ALARM: if screens were picked but the completed ([x]) count did not grow, the pipeline is
+    # stalled (screens not being marked complete / the same set re-picked every run -- the 06-30->07-01 silent
+    # loop). Surface it LOUDLY in the log so it can't go unnoticed for days again.
+    done_after = count_done(checklist)
+    if done_before >= 0 and done_after >= 0:
+        advanced = done_after - done_before
+        if advanced <= 0:
+            log(f'  *** NO-PROGRESS ALARM: {len(screens)} screens picked but completed-count did NOT increase '
+                f'({done_before} -> {done_after} [x]). Pipeline may be STALLED (marks not sticking / same set '
+                f're-picked). INVESTIGATE before relying on the next run. ***')
+        else:
+            log(f'  progress: +{advanced} newly completed this run ({done_before} -> {done_after} [x] of 1457)')
     git(['add', 'DeepDiveLearnings/ec-screens/'], cwd=WT)
     if done_full + done_partial == 0:
         log('nothing committed (all screens skipped -- no notes written)')

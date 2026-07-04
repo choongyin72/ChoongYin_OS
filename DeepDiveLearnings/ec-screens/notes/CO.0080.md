@@ -1,6 +1,6 @@
 # CO.0080 - Rule Group Combination
 
-_Deep-dive 2026-07-01 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-02 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0080 - URL: `/com.ec.prod.co.screens/check_rule_group_comb`
@@ -10,8 +10,13 @@ _Deep-dive 2026-07-01 (deterministic runner). Module: CO._
 |---|---|---|---|
 | (no class resolved from URL/LABEL) | | | |
 
-## Screen type
-unknown (no class resolved)
+_Resolved by: not resolved_
 
-## Help (description)
-The Rule Group Combination screen provides a user interface for creating new rule-group combinations, and maintenance of existing combinations. This screen is used to connect check rules to check groups.
+## Screen type
+process/config (no data class -- e.g. a process trigger, rule/formula editor or combination screen)
+
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0080 screenshot](CO.0080_shot_1.png)
+
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

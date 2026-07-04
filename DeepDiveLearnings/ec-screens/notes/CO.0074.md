@@ -1,6 +1,6 @@
 # CO.0074 - Chemical Tank Product Combination
 
-_Deep-dive 2026-07-01 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-02 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0074 - URL: `/com.ec.prod.co.screens/chem_tank_product`
@@ -8,12 +8,15 @@ _Deep-dive 2026-07-01 (deterministic runner). Module: CO._
 ## DB binding (metadata-resolved)
 | Class | Type/Scope | Base table | View |
 |---|---|---|---|
-| (no class resolved from URL/LABEL) | | | |
+| `CHEM_TANK_PRODUCT` | DATA/EVENT | `CHEM_TANK_PRODUCT` | `DV_CHEM_TANK_PRODUCT` |
+
+_Resolved by: url path token_
 
 ## Screen type
-unknown (no class resolved)
+DATA/EVENT
 
-## Help (description)
-This screen is used to conenct a chemical product to a chemical tank. Choose a chemical tank in the navigator, and the screen will list which chemical products that have been on that tank. Only one chemical product can be on one chemcial tank at the time.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0074 screenshot](CO.0074_shot_1.png)
 
-When a new chemical product is conencted to a chemical tank, EC assumes that the starting closing volume is 0.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_
