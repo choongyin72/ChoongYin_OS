@@ -79,106 +79,106 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0130** - Schedules -> notes/CO.0130.md
 - [x] **CO.0131** - Schedule History -> notes/CO.0131.md
 - [x] **CO.0132** - Manage Scheduler -> notes/CO.0132.md
-- [ ] **CO.0133** — Reservoir Block
-- [ ] **CO.0135** — Reservoir Formation
-- [ ] **CO.0137** — Reservoir Block Formation
-- [ ] **CO.0142** — Maintain Message Type
-- [ ] **CO.0143** — Message Format
-- [ ] **CO.0144** — Freetext Message Template
-- [ ] **CO.0145** — Functional Area
-- [ ] **CO.0147** — Deferment Group Well Connection
-- [ ] **CO.0148** — Stream ORF Values
-- [ ] **CO.0149** — Deferment Group
-- [ ] **CO.0151** — Maintain System Reference Value
-- [ ] **CO.0153** — Perforation Interval
-- [ ] **CO.0154** — Perforation Interval Split
-- [ ] **CO.0155** — Stream Profit Centre Connection
-- [ ] **CO.0156** — Well Reference Value
-- [ ] **CO.0157** — Regulatory Permits
-- [ ] **CO.0158** — Report Group
-- [ ] **CO.0159** — Report Group Connection
-- [ ] **CO.0160** — Compression and Summation Factor
-- [ ] **CO.0161** — Calorific Values Ideal Gas Mol
-- [ ] **CO.0162** — Calorific Values Ideal Gas Wt
-- [ ] **CO.0163** — Calorific Values Ideal Gas Vol
-- [ ] **CO.0165** — Vi Interpolation
-- [ ] **CO.0166** — K1 and K2 Interpolation
-- [ ] **CO.0167** — Object Group Connection
-- [ ] **CO.0185** — Choke
-- [ ] **CO.0186** — Choke Conversion
-- [ ] **CO.0187** — Stream DPT Conversion Values
-- [ ] **CO.0188** — Test Device Reference Values
-- [ ] **CO.0189** — Choke Gas Lift Conversion
-- [ ] **CO.0190** — Action Trigger Connection
-- [ ] **CO.0191** — Task Process
-- [ ] **CO.0192** — Task Process Item
-- [ ] **CO.0193** — Action Trigger
-- [ ] **CO.0194** — System Messages
-- [ ] **CO.0197** — Stream Well Connection
-- [ ] **CO.0200** — Alloc Job Status Process Conn
-- [ ] **CO.0201** — Asset Calculation Attributes
-- [ ] **CO.0203** — Validation Overview
-- [ ] **CO.0204** — Validation Overview by Facility
-- [ ] **CO.0205** — Collection Point
-- [ ] **CO.0208** — Disposition Type
-- [ ] **CO.0210** — Equipment Reference Value
-- [ ] **CO.0211** — Swing Well Connection
-- [ ] **CO.0212** — Chemical Injection Point
-- [ ] **CO.0213** — County
-- [ ] **CO.0214** — MMS Lease
-- [ ] **CO.0215** — State Lease
-- [ ] **CO.0216** — Operator Lease
-- [ ] **CO.0217** — Choke Model
-- [ ] **CO.0218** — Choke Model Reference Values
-- [ ] **CO.0219** — Blend
-- [ ] **CO.0220** — Maintain Blend Content Split
-- [ ] **CO.0221** — Intermediate Storage Products
-- [ ] **CO.0224** — Shift
-- [ ] **CO.0225** — Maintain Contact Group Set
-- [ ] **CO.0226** — Mismeasurement Event
-- [ ] **CO.0227** — External Location
-- [ ] **CO.0228** — Facility - External Location Connection
-- [ ] **CO.0229** — External Location Reference Value
-- [ ] **CO.0230** — Tank Tap
-- [ ] **CO.0231** — Collection Point Hierarchy Reorganization
-- [ ] **CO.0232** — Facility Analysis Items
-- [ ] **CO.0234** — Well Seasonal Value
-- [ ] **CO.0235** — Stream Seasonal Values
-- [ ] **CO.0236** — Message Group
-- [ ] **CO.0237** — Equipment
-- [ ] **CO.0238** — Equipment Connection
-- [ ] **CO.0239** — Company Contact
-- [ ] **CO.0243** — State
-- [ ] **CO.0244** — Operator Route
-- [ ] **CO.0245** — Calculation Group Context
-- [ ] **CO.0246** — Calculation Group Setup
-- [ ] **CO.0247** — Planned Well
-- [ ] **CO.0248** — Facility Reference Values
-- [ ] **CO.0249** — Manage Facility Class 1
-- [ ] **CO.0250** — Manage Well
-- [ ] **CO.0251** — Manage Stream
-- [ ] **CO.0252** — Manage Tank
-- [ ] **CO.0253** — Hierarchical Object Validation
-- [ ] **CO.0255** — Well Mode Attributes
-- [ ] **CO.0256** — Well Mode
-- [ ] **CO.0257** — Chemical Transport Tank
-- [ ] **CO.0258** — Chemical Stream
-- [ ] **CO.0259** — Analysis Point
-- [ ] **CO.0260** — Chemical Stream Hookup
-- [ ] **CO.0261** — Manage Chemical Product
-- [ ] **CO.0262** — Manage Chemical Tank
-- [ ] **CO.0263** — Manage Chemical Stream
-- [ ] **CO.0264** — Truck
-- [ ] **CO.0265** — Trailer
-- [ ] **CO.0266** — Driver
-- [ ] **CO.0267** — Equation Of State
-- [ ] **CO.0500** — Account Settings
-- [ ] **CO.0501** — Documentation
-- [ ] **CO.0502** — Dashboard
-- [ ] **CO.1000** — User Maintenance
-- [ ] **CO.1001** — Role Maintenance
-- [ ] **CO.1002** — Object Maintenance
-- [ ] **CO.1003** — Role Users
+- [x] **CO.0133** - Reservoir Block -> notes/CO.0133.md
+- [x] **CO.0135** - Reservoir Formation -> notes/CO.0135.md
+- [x] **CO.0137** - Reservoir Block Formation -> notes/CO.0137.md
+- [x] **CO.0142** - Maintain Message Type -> notes/CO.0142.md
+- [x] **CO.0143** - Message Format -> notes/CO.0143.md
+- [x] **CO.0144** - Freetext Message Template -> notes/CO.0144.md
+- [x] **CO.0145** - Functional Area -> notes/CO.0145.md
+- [x] **CO.0147** - Deferment Group Well Connection -> notes/CO.0147.md
+- [x] **CO.0148** - Stream ORF Values -> notes/CO.0148.md
+- [x] **CO.0149** - Deferment Group -> notes/CO.0149.md
+- [x] **CO.0151** - Maintain System Reference Value -> notes/CO.0151.md
+- [x] **CO.0153** - Perforation Interval -> notes/CO.0153.md
+- [x] **CO.0154** - Perforation Interval Split -> notes/CO.0154.md
+- [x] **CO.0155** - Stream Profit Centre Connection -> notes/CO.0155.md
+- [x] **CO.0156** - Well Reference Value -> notes/CO.0156.md
+- [x] **CO.0157** - Regulatory Permits -> notes/CO.0157.md
+- [x] **CO.0158** - Report Group -> notes/CO.0158.md
+- [x] **CO.0159** - Report Group Connection -> notes/CO.0159.md
+- [x] **CO.0160** - Compression and Summation Factor -> notes/CO.0160.md
+- [x] **CO.0161** - Calorific Values Ideal Gas Mol -> notes/CO.0161.md
+- [x] **CO.0162** - Calorific Values Ideal Gas Wt -> notes/CO.0162.md
+- [x] **CO.0163** - Calorific Values Ideal Gas Vol -> notes/CO.0163.md
+- [x] **CO.0165** - Vi Interpolation -> notes/CO.0165.md
+- [x] **CO.0166** - K1 and K2 Interpolation -> notes/CO.0166.md
+- [x] **CO.0167** - Object Group Connection -> notes/CO.0167.md
+- [x] **CO.0185** - Choke -> notes/CO.0185.md
+- [x] **CO.0186** - Choke Conversion -> notes/CO.0186.md
+- [x] **CO.0187** - Stream DPT Conversion Values -> notes/CO.0187.md
+- [x] **CO.0188** - Test Device Reference Values -> notes/CO.0188.md
+- [x] **CO.0189** - Choke Gas Lift Conversion -> notes/CO.0189.md
+- [x] **CO.0190** - Action Trigger Connection -> notes/CO.0190.md
+- [x] **CO.0191** - Task Process -> notes/CO.0191.md
+- [x] **CO.0192** - Task Process Item -> notes/CO.0192.md
+- [x] **CO.0193** - Action Trigger -> notes/CO.0193.md
+- [x] **CO.0194** - System Messages -> notes/CO.0194.md
+- [x] **CO.0197** - Stream Well Connection -> notes/CO.0197.md
+- [x] **CO.0200** - Alloc Job Status Process Conn -> notes/CO.0200.md
+- [x] **CO.0201** - Asset Calculation Attributes -> notes/CO.0201.md
+- [x] **CO.0203** - Validation Overview -> notes/CO.0203.md
+- [x] **CO.0204** - Validation Overview by Facility -> notes/CO.0204.md
+- [x] **CO.0205** - Collection Point -> notes/CO.0205.md
+- [x] **CO.0208** - Disposition Type -> notes/CO.0208.md
+- [x] **CO.0210** - Equipment Reference Value -> notes/CO.0210.md
+- [x] **CO.0211** - Swing Well Connection -> notes/CO.0211.md
+- [x] **CO.0212** - Chemical Injection Point -> notes/CO.0212.md
+- [x] **CO.0213** - County -> notes/CO.0213.md
+- [x] **CO.0214** - MMS Lease -> notes/CO.0214.md
+- [x] **CO.0215** - State Lease -> notes/CO.0215.md
+- [x] **CO.0216** - Operator Lease -> notes/CO.0216.md
+- [x] **CO.0217** - Choke Model -> notes/CO.0217.md
+- [x] **CO.0218** - Choke Model Reference Values -> notes/CO.0218.md
+- [x] **CO.0219** - Blend -> notes/CO.0219.md
+- [x] **CO.0220** - Maintain Blend Content Split -> notes/CO.0220.md
+- [x] **CO.0221** - Intermediate Storage Products -> notes/CO.0221.md
+- [x] **CO.0224** - Shift -> notes/CO.0224.md
+- [x] **CO.0225** - Maintain Contact Group Set -> notes/CO.0225.md
+- [x] **CO.0226** - Mismeasurement Event -> notes/CO.0226.md
+- [x] **CO.0227** - External Location -> notes/CO.0227.md
+- [x] **CO.0228** - Facility - External Location Connection -> notes/CO.0228.md
+- [x] **CO.0229** - External Location Reference Value -> notes/CO.0229.md
+- [x] **CO.0230** - Tank Tap -> notes/CO.0230.md
+- [x] **CO.0231** - Collection Point Hierarchy Reorganization -> notes/CO.0231.md
+- [x] **CO.0232** - Facility Analysis Items -> notes/CO.0232.md
+- [x] **CO.0234** - Well Seasonal Value -> notes/CO.0234.md
+- [x] **CO.0235** - Stream Seasonal Values -> notes/CO.0235.md
+- [x] **CO.0236** - Message Group -> notes/CO.0236.md
+- [x] **CO.0237** - Equipment -> notes/CO.0237.md (note: class w/o view)
+- [x] **CO.0238** - Equipment Connection -> notes/CO.0238.md
+- [x] **CO.0239** - Company Contact -> notes/CO.0239.md
+- [x] **CO.0243** - State -> notes/CO.0243.md
+- [x] **CO.0244** - Operator Route -> notes/CO.0244.md
+- [x] **CO.0245** - Calculation Group Context -> notes/CO.0245.md
+- [x] **CO.0246** - Calculation Group Setup -> notes/CO.0246.md
+- [x] **CO.0247** - Planned Well -> notes/CO.0247.md
+- [x] **CO.0248** - Facility Reference Values -> notes/CO.0248.md
+- [x] **CO.0249** - Manage Facility Class 1 -> notes/CO.0249.md
+- [x] **CO.0250** - Manage Well -> notes/CO.0250.md
+- [x] **CO.0251** - Manage Stream -> notes/CO.0251.md
+- [x] **CO.0252** - Manage Tank -> notes/CO.0252.md
+- [x] **CO.0253** - Hierarchical Object Validation -> notes/CO.0253.md
+- [x] **CO.0255** - Well Mode Attributes -> notes/CO.0255.md
+- [x] **CO.0256** - Well Mode -> notes/CO.0256.md
+- [x] **CO.0257** - Chemical Transport Tank -> notes/CO.0257.md
+- [x] **CO.0258** - Chemical Stream -> notes/CO.0258.md
+- [x] **CO.0259** - Analysis Point -> notes/CO.0259.md
+- [x] **CO.0260** - Chemical Stream Hookup -> notes/CO.0260.md
+- [x] **CO.0261** - Manage Chemical Product -> notes/CO.0261.md
+- [x] **CO.0262** - Manage Chemical Tank -> notes/CO.0262.md
+- [x] **CO.0263** - Manage Chemical Stream -> notes/CO.0263.md
+- [x] **CO.0264** - Truck -> notes/CO.0264.md
+- [x] **CO.0265** - Trailer -> notes/CO.0265.md
+- [x] **CO.0266** - Driver -> notes/CO.0266.md
+- [x] **CO.0267** - Equation Of State -> notes/CO.0267.md
+- [x] **CO.0500** - Account Settings -> notes/CO.0500.md (note: no corpus Help)
+- [x] **CO.0501** - Documentation -> notes/CO.0501.md (note: no corpus Help)
+- [x] **CO.0502** - Dashboard -> notes/CO.0502.md (note: no corpus Help)
+- [x] **CO.1000** - User Maintenance -> notes/CO.1000.md
+- [x] **CO.1001** - Role Maintenance -> notes/CO.1001.md
+- [x] **CO.1002** - Object Maintenance -> notes/CO.1002.md
+- [x] **CO.1003** - Role Users -> notes/CO.1003.md
 - [ ] **CO.1004** — Object Partition
 - [ ] **CO.1005** — Group Maintenance
 - [ ] **CO.1006** — Maintain System Settings
