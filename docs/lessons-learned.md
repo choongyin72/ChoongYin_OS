@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v28** (R28 added 2026-07-02)
+> **Current rule version: v29** (R29 added 2026-07-06)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -36,6 +36,7 @@ _Worker sessions: read this before starting any automation work._
 | v26 | R26 | Every EC Object IUD PR is gated against the 19-item `docs/IUD-DELIVERABLE-CHECKLIST.md`; the bundle MUST carry a ticked `CHECKLIST.md`; reviewer spot-checks SUBSTANCE not just ticks; a missing/failing deliverable ⇒ MUST-FIX | 2026-06-28 |
 | v27 | R27 | A squash-style milestone merge of a permanent standing-draft branch breaks shared history; rebase the continuation onto master (or use `git merge --no-ff`) before the branch's next milestone push, or expect real file conflicts | 2026-07-03 |
 | v28 | R28 | `CLAUDE.md` is auto-injected into every session's context (unlike other mandatory-read docs) — every review run checks `wc -l CLAUDE.md`; >200 lines = NICE-TO-HAVE (name pruning candidates), >400 lines = MUST-FIX | 2026-07-02 |
+| v29 | R29 | A scheduled/unattended runner MUST be sync/hash-verified against the branch tip before every run — a stale executing copy silently mass-produces artifacts in a superseded format while the commit history claims the fix is live | 2026-07-06 |
 
 ---
 
@@ -1456,6 +1457,39 @@ _Open PR triggers a full review (R14). #170 is the auto-reopened standing draft 
 | Resolver v3 dead candidate (`run_ec_screen_learn.py:104`, on master via `c3ce9d5`): combined prefix+suffix strip uses replacement `r''` (verified: always yields `''`, dropped by the `if c` filter) - intended `r'\2'`; URL tokens needing BOTH strips (e.g. `DAILY_TANK_STATUS` -> `TANK`) silently never resolve via this path. Fold into the planned resolver v4 (Phase 2 of the completion plan). | Worker | 🟡 Medium |
 | `EXECUTION-PLAN-completion.md` Phase 4 step 2 prescribes a squash milestone merge - R27 recurrence baked into the plan; change to `--no-ff`/rebase | Worker | 🟡 Medium |
 | R9 header drift in the standing-draft body (carry-over; harmless for a never-auto-merged draft) | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD; WR.0010.02 Well Oil Comp automation | Worker | 🟡 Medium |
+
+---
+
+## 2026-07-06 - Automated Review (06:00 AWST, 1 open PR #170, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14; 0 new master commits since #171). Reviewed #170 at head `ea1da6b`: **CLEAR - zero MUST-FIX - NOT merged** (owner-merge-only standing draft). **One new rule (R29).** R1-R28 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #170 | Clear. ~444 new screens since the 07-05 14:00 review (WR/SA/CP 200 via `ea1da6b`, PO/GD/CD/WR 200 via `405eeb4`, 44 corpus regens via `d2efc31`) + completion execution plan (`0432659`) + note resets/orphan-png cleanup (Worker-owned files) + runner resolver/labeling fix (`f2ddb71`). Spot-checks: WR.0091 dual-class binding real; SA.0084 honest "(no class resolved from URL/LABEL)" (R3). **R23 clean** (diff vs master on all four reviewer-owned docs = EMPTY); **R28 PASS** (CLAUDE.md 124 lines). 4 NICE-TO-HAVE posted: stale executing runner (-> R29); resolver dead 7th candidate (`r''` replacement, carry-over from #171, still present at tip); R27 pre-milestone-sync reminder; R9 header drift (carry-over). | OK Clear (NICE-TO-HAVE) - left open (owner-merge-only) |
+
+### Rules (apply immediately, no exceptions)
+
+**R29 - A scheduled/unattended runner MUST be verified against the branch tip before every run** ⚠️ _code-derived - the artifact mismatch is confirmed in committed content; the exact execution path (which stale copy ran) is inferred, not live-observed_
+When an unattended autopilot commits artifacts to a branch, the copy of the runner it EXECUTES must be the same version that is COMMITTED on that branch tip. Before each run, sync the executing workspace (`git -C <runner-worktree> pull` / detach to the branch tip) or hash-compare the executing script against `git show <branch>:<path>`; abort the run on mismatch. Otherwise a runner fix lands on the branch but never takes effect, and the autopilot mass-produces artifacts in the superseded format while the commit history claims the fix is live.
+_Precedent: `f2ddb71` (2026-07-05, honest "no class resolved" screen-type wording) is an ancestor of `ea1da6b` (2026-07-06, 200 screens), yet notes ADDED by `ea1da6b` (e.g. `SA.0084.md`) still emit the pre-fix wording "process/config (no data class ...)" - verified by diffing the note against the branch-tip runner (line 131). ~400 notes were generated with the superseded labeling; they are content-correct but will need the enrichment pass anyway (execution-plan Phase 2), so no reset was demanded._
+
+### Observations (good patterns to keep)
+
+- **The honest-partial design keeps holding at scale:** all 3 batches report "N full, 0 partial" and the spot-checked no-class screen (SA.0084) records the unresolved binding transparently instead of fabricating one. The corpus-format note shape (Identity / DB binding / Screen type / Help images) is uniform across modules (WR, SA, CP, GD, CD checked by sample).
+- **Worker-owned deletions are fine when they are regeneration resets:** `7182f9c`/`d075025` (reset pre-corpus notes) and `c8941a8` (6 orphaned `_help.png`, unreferenced - claim verified by grep at the 07-05 14:00 review) account for the -1,246 lines; none touch reviewer-owned docs.
+- **The completion execution plan (`0432659`) is a good unattended-program artifact:** phased, each phase with a Done-condition, Tier-3 pilot behind a separate owner gate. One standing advisory remains: Phase 4 step 2 still says "squash" for the milestone merge (R27 recurrence baked in - change to `--no-ff`/rebase).
+
+### Gaps (verified against filesystem / GitHub API)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Autopilot executes a stale runner copy (R29): sync `wt-ec-learn` (and any scheduled-task runner path) to the branch tip before each run; the main checkout also holds a STAGED-modified `run_ec_screen_learn.py` that may be the drift source | Worker | 🔴 High |
+| Resolver dead 7th candidate (`r''` -> intended `r'\2'`) still present at `ea1da6b` (carry-over from #171); fold into resolver v4 (completion-plan Phase 2) | Worker | 🟡 Medium |
+| `EXECUTION-PLAN-completion.md` Phase 4 step 2 still prescribes a squash milestone merge (R27) - change to `--no-ff`/rebase | Worker | 🟡 Medium |
 | Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD; WR.0010.02 Well Oil Comp automation | Worker | 🟡 Medium |
 
 ---
