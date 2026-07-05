@@ -90,3 +90,16 @@ Set env then run any script: `EC_DB_DSN=dev.db.non-prod.plp.wde.ecaas.cloud:1521
 ## Follow-up Q (2026-07-05) — "Tab 4 always shows LNG Train 1, not COND/PNI"
 
 **Answer: not a report defect.** (1) The generated xlsx contains ALL 8 facility sections on Tab 4 (rows 11/28/45/62/79/93/110/124 — verified in the ticket's own attachment). (2) All 24 Tab-4 subreport queries filter their OWN facility (`DEF_FCTY_1_CODE`/`FACILITY_CODE`/`FACILITY` per jrxml — no copy-paste bug). (3) Train1/Train2/Cond LOOK identical because the uploaded RAU **targets are literally the same values** (Rel 98.12 / Avail 88.12 across all three; verified in `DV_SCTR_ACC_MTH_EVENT`). (4) **PNI has ZERO target events for all of 2026** (`C_PLU_PNI` — no `RAU_*_TRGT` rows) → its section shows only the derived YEO ≈ 0.333 artifact → reads as "not loaded". Actual columns differ per the 3-cause RCA. **Data fixes: upload PNI RAU targets; correct Train1/2/Cond targets if they were meant to differ.** Trace: `investigation/target_compare_across_contracts.py` (read-only, ECAASDEV).
+
+---
+
+## Validation of gate-PASS Period Actuals (2026-07-05, read-only recompute vs stored)
+
+| Contract | Verdict | Detail |
+|---|---|---|
+| C_PLA_GAS_EXP | **PASS** | Stored 100/100/85.89 = recomputed exactly (cap 765,000; defer 107,913). |
+| C_PLA_LIQ_EXP | **PASS** | Stored 99.97/99.97/35.07 = recomputed exactly (cap 36,000; defer 23,375). |
+| C_PLU_LNG_2 | **FAIL (invalid)** | Formula-faithful but inputs poisoned: `LNG_TRAIN_2_TECHMAX` stream effectively unloaded (1 day = 15,000 t, 1 day = 9 t, 28 days ~0 -> month cap 15,009 t, ~30x understated) AND the same near-zero reference drives the "Daily Variation" auto-deferments to -454,350 -> Util 3127%. Rel/Avail 100% masked (variation = REAS_3_OTHE, excluded from UNPL/PLAN terms). _ACT_YTD NULL from NULL pre-June YTD capacity. **Fix: load full-month Techmax dailies, re-run calc.** |
+| C_SCA_GAS_EXP | **FAIL (never calculated)** | Stage-E capacity gate: summary capacity 0 (no CAPACITY forecast group, per Cause 2) -> no events written; same zero reference -> -918,670 negative deferments. **Fix: load SCA capacity forecast, re-run calc.** |
+
+**Meta-root:** Train 2 and SCA share ONE cause — missing/garbage capacity reference data — corrupting both the capacity denominator and the auto-deferment quantities. Scripts: `validate_actuals_gate_pass.py`, `validate_actuals_t2_sca.py`, `t2_techmax_stream_days.py`.
