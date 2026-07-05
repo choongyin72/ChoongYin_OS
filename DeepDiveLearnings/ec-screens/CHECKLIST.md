@@ -382,15 +382,15 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **PO.0002.04** - Daily Gas Stream Status - Run Hours and Rate -> notes/PO.0002.04.md
 - [x] **PO.0003** - Daily Water Stream Status -> notes/PO.0003.md
 - [x] **PO.0004** - Daily Water Overboard Status -> notes/PO.0004.md
-- [ ] **PO.0005** — Daily Tank Status
+- [x] **PO.0005** - Daily Tank Status -> notes/PO.0005.md
 - [x] **PO.0005.01** - Daily Tank Status - Mass -> notes/PO.0005.01.md
 - [x] **PO.0005.02** - Daily Tank Status - VCF Calc -> notes/PO.0005.02.md
 - [x] **PO.0006** - Monthly Tank Status -> notes/PO.0006.md
 - [x] **PO.0007** - Daily Safety,  Health and Environment -> notes/PO.0007.md
-- [ ] **PO.0008** — Operational Comments
-- [ ] **PO.0009** — Environmental Events
+- [x] **PO.0008** - Operational Comments -> notes/PO.0008.md
+- [x] **PO.0009** - Environmental Events -> notes/PO.0009.md
 - [x] **PO.0010** - Daily Personnel Onboard -> notes/PO.0010.md
-- [ ] **PO.0011** — Daily Equipment Status
+- [x] **PO.0011** - Daily Equipment Status -> notes/PO.0011.md
 - [x] **PO.0012** - Alarms -> notes/PO.0012.md
 - [x] **PO.0013** - Marine Logistics -> notes/PO.0013.md
 - [x] **PO.0014** - Daily Weather Status -> notes/PO.0014.md
@@ -590,206 +590,206 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **GD.0073** - Delivery Composition -> notes/GD.0073.md
 - [x] **GD.0074** - Monthly Meter Measurement -> notes/GD.0074.md
 - [x] **GD.0075** - Daily Meter Composition Matrix -> notes/GD.0075.md
-- [ ] **GD.0075.01** — Daily Meter Composition Matrix - Approved
-- [ ] **GD.0076** — Monthly Meter Composition Matrix
-- [ ] **GD.0076.01** — Monthly Meter Composition Matrix - Approved
-- [ ] **GD.0077** — Period Transport Zone Factors
-- [ ] **GD.0077.01** — Period Contract Factors
-- [ ] **GD.0077.02** — Period Nomination Point Factors
-- [ ] **GD.0078** — Meter Event Forecast Quality
-- [ ] **GD.0079** — Daily Nomination Point Availability
-- [ ] **GD.0080** — Period Nomination Point Share
-- [ ] **GD.0081** — Contract Capacity Factors
-- [ ] **GD.0082** — Daily Capacity Validation
-- [ ] **GD.0083** — Sub Daily Location Matching
-- [ ] **GD.0084** — Period Contract Quality Handling
-- [ ] **GD.0085** — Period Component Recovery Factors
-- [ ] **GD.0086** — Daily Transfer Validation
-- [ ] **GD.0087** — Daily Contract Balance
-- [ ] **GD.0088** — Daily Location Contract Balance
-- [ ] **GD.0091** — Sub Daily Location Summary
-- [ ] **GD.0091.01** — Sub Daily Location Summary - Details
-- [ ] **GD.0092** — Daily Contract Capacity Request
-- [ ] **GD.0093** — Sub Daily Contract Nomination Boundaries
-- [ ] **GD.0100** — Period Input Nomination
-- [ ] **GD.0101** — Period Output Nomination
-- [ ] **GD.0102** — Period Operational Nomination
-- [ ] **GD.0103** — Daily Pipeline Linepack
-- [ ] **GD.0104** — Daily Delivery Point Nomination
-- [ ] **GD.0104.01** — Daily Delivery Stream Nomination
-- [ ] **GD.0105** — Daily Nomination Delivery
-- [ ] **GD.0106** — Sub Daily Nomination Delivery
-- [ ] **GD.0107** — Daily Renomination
-- [ ] **GD.0108** — Daily Nomination Point Transfer
-- [ ] **GD.0109** — Daily Meter Allocation
-- [ ] **GD.0110** — Monthly Contract Balance
-- [ ] **GD.0111** — Period Product Component Recovery Factors
-- [ ] **GD.0115** — Gas Day Summary
-- [ ] **GD.0116** — Sub Daily Location Summary Matrix
-- [ ] **GD.0120** — Sub Daily Renomination
-- [ ] **GD.0120.01** — Sub Daily Renomination List
-- [ ] **GD.0150** — Contract Bundle Transfer
-- [ ] **GD.0151** — Daily Path Nomination
-- [ ] **GD.0152** — Daily Path Nomination Matrix
-- [ ] **GD.0153** — Daily Path Delivery
-- [ ] **GD.0154** — Period Path Nomination
-- [ ] **GD.0155** — Daily Pipeline Segment Contracted Nominations
-- [ ] **GD.0156** — Daily Capacity Trades
-- [ ] **GD.0157** — Period Path Nomination Matrix
-- [ ] **GD.0158** — Path Nomination Point Favourites
-- [ ] **GD.0159** — Sub Daily Pipeline Linepack
-- [ ] **GD.0160** — Sub Daily Pipeline Segment Summary
-- [ ] **GD.0161** — Service Capacity
-- [ ] **GD.0162** — Daily Inventory Accounting
-- [ ] **GD.0163** — Daily Inventory Trade
-- [ ] **GD.0164** — Daily Inventory Trade Approval
-- [ ] **GD.0165** — Transport Events
-- [ ] **GD.0166** — Contract/Service Events
-- [ ] **GD.0167** — Daily Service Nomination
-- [ ] **GD.0168** — Service Capacity Request
-- [ ] **GD.0169** — Service Capacity Request Approval
-- [ ] **GD.0170** — Annual Service Capacity Request
-- [ ] **GD.0171** — Annual Service Capacity Request Approval
-- [ ] **GD.0172** — Daily Service Nomination Approval
-- [ ] **GD.0173** — Daily Schedule Job
-- [ ] **GD.0174** — Daily Allocation Job
-- [ ] **GD.0175** — Daily Segment Status
-- [ ] **GD.0176** — Daily Location Status
-- [ ] **GD.0180** — Period Schedule Job
-- [ ] **GD.0181** — Period Allocation Job
-- [ ] **GD.0183** — Delivery Stream Segment Network
-- [ ] **GD.1066** — Daily confirmation - Counterparty
-- [ ] **GD.1067** — Daily confirmation - TSO overview
-- [ ] **GD.1068** — Daily confirmation - Interconnect Operator
-- [ ] **GD.1069** — Daily confirmation - GTA
+- [x] **GD.0075.01** - Daily Meter Composition Matrix - Approved -> notes/GD.0075.01.md
+- [x] **GD.0076** - Monthly Meter Composition Matrix -> notes/GD.0076.md
+- [x] **GD.0076.01** - Monthly Meter Composition Matrix - Approved -> notes/GD.0076.01.md
+- [x] **GD.0077** - Period Transport Zone Factors -> notes/GD.0077.md
+- [x] **GD.0077.01** - Period Contract Factors -> notes/GD.0077.01.md
+- [x] **GD.0077.02** - Period Nomination Point Factors -> notes/GD.0077.02.md
+- [x] **GD.0078** - Meter Event Forecast Quality -> notes/GD.0078.md
+- [x] **GD.0079** - Daily Nomination Point Availability -> notes/GD.0079.md
+- [x] **GD.0080** - Period Nomination Point Share -> notes/GD.0080.md
+- [x] **GD.0081** - Contract Capacity Factors -> notes/GD.0081.md
+- [x] **GD.0082** - Daily Capacity Validation -> notes/GD.0082.md
+- [x] **GD.0083** - Sub Daily Location Matching -> notes/GD.0083.md
+- [x] **GD.0084** - Period Contract Quality Handling -> notes/GD.0084.md
+- [x] **GD.0085** - Period Component Recovery Factors -> notes/GD.0085.md
+- [x] **GD.0086** - Daily Transfer Validation -> notes/GD.0086.md
+- [x] **GD.0087** - Daily Contract Balance -> notes/GD.0087.md
+- [x] **GD.0088** - Daily Location Contract Balance -> notes/GD.0088.md
+- [x] **GD.0091** - Sub Daily Location Summary -> notes/GD.0091.md
+- [x] **GD.0091.01** - Sub Daily Location Summary - Details -> notes/GD.0091.01.md
+- [x] **GD.0092** - Daily Contract Capacity Request -> notes/GD.0092.md
+- [x] **GD.0093** - Sub Daily Contract Nomination Boundaries -> notes/GD.0093.md
+- [x] **GD.0100** - Period Input Nomination -> notes/GD.0100.md
+- [x] **GD.0101** - Period Output Nomination -> notes/GD.0101.md
+- [x] **GD.0102** - Period Operational Nomination -> notes/GD.0102.md
+- [x] **GD.0103** - Daily Pipeline Linepack -> notes/GD.0103.md
+- [x] **GD.0104** - Daily Delivery Point Nomination -> notes/GD.0104.md
+- [x] **GD.0104.01** - Daily Delivery Stream Nomination -> notes/GD.0104.01.md
+- [x] **GD.0105** - Daily Nomination Delivery -> notes/GD.0105.md
+- [x] **GD.0106** - Sub Daily Nomination Delivery -> notes/GD.0106.md
+- [x] **GD.0107** - Daily Renomination -> notes/GD.0107.md
+- [x] **GD.0108** - Daily Nomination Point Transfer -> notes/GD.0108.md
+- [x] **GD.0109** - Daily Meter Allocation -> notes/GD.0109.md
+- [x] **GD.0110** - Monthly Contract Balance -> notes/GD.0110.md
+- [x] **GD.0111** - Period Product Component Recovery Factors -> notes/GD.0111.md
+- [x] **GD.0115** - Gas Day Summary -> notes/GD.0115.md
+- [x] **GD.0116** - Sub Daily Location Summary Matrix -> notes/GD.0116.md
+- [x] **GD.0120** - Sub Daily Renomination -> notes/GD.0120.md
+- [x] **GD.0120.01** - Sub Daily Renomination List -> notes/GD.0120.01.md (note: no corpus Help)
+- [x] **GD.0150** - Contract Bundle Transfer -> notes/GD.0150.md
+- [x] **GD.0151** - Daily Path Nomination -> notes/GD.0151.md
+- [x] **GD.0152** - Daily Path Nomination Matrix -> notes/GD.0152.md
+- [x] **GD.0153** - Daily Path Delivery -> notes/GD.0153.md
+- [x] **GD.0154** - Period Path Nomination -> notes/GD.0154.md
+- [x] **GD.0155** - Daily Pipeline Segment Contracted Nominations -> notes/GD.0155.md
+- [x] **GD.0156** - Daily Capacity Trades -> notes/GD.0156.md
+- [x] **GD.0157** - Period Path Nomination Matrix -> notes/GD.0157.md
+- [x] **GD.0158** - Path Nomination Point Favourites -> notes/GD.0158.md
+- [x] **GD.0159** - Sub Daily Pipeline Linepack -> notes/GD.0159.md
+- [x] **GD.0160** - Sub Daily Pipeline Segment Summary -> notes/GD.0160.md
+- [x] **GD.0161** - Service Capacity -> notes/GD.0161.md
+- [x] **GD.0162** - Daily Inventory Accounting -> notes/GD.0162.md (note: no corpus Help)
+- [x] **GD.0163** - Daily Inventory Trade -> notes/GD.0163.md (note: no corpus Help)
+- [x] **GD.0164** - Daily Inventory Trade Approval -> notes/GD.0164.md
+- [x] **GD.0165** - Transport Events -> notes/GD.0165.md (note: no corpus Help)
+- [x] **GD.0166** - Contract/Service Events -> notes/GD.0166.md
+- [x] **GD.0167** - Daily Service Nomination -> notes/GD.0167.md (note: no corpus Help)
+- [x] **GD.0168** - Service Capacity Request -> notes/GD.0168.md
+- [x] **GD.0169** - Service Capacity Request Approval -> notes/GD.0169.md (note: no corpus Help)
+- [x] **GD.0170** - Annual Service Capacity Request -> notes/GD.0170.md (note: no corpus Help)
+- [x] **GD.0171** - Annual Service Capacity Request Approval -> notes/GD.0171.md (note: no corpus Help)
+- [x] **GD.0172** - Daily Service Nomination Approval -> notes/GD.0172.md (note: no corpus Help)
+- [x] **GD.0173** - Daily Schedule Job -> notes/GD.0173.md
+- [x] **GD.0174** - Daily Allocation Job -> notes/GD.0174.md
+- [x] **GD.0175** - Daily Segment Status -> notes/GD.0175.md
+- [x] **GD.0176** - Daily Location Status -> notes/GD.0176.md
+- [x] **GD.0180** - Period Schedule Job -> notes/GD.0180.md
+- [x] **GD.0181** - Period Allocation Job -> notes/GD.0181.md (note: no corpus Help)
+- [x] **GD.0183** - Delivery Stream Segment Network -> notes/GD.0183.md (note: no corpus Help)
+- [x] **GD.1066** - Daily confirmation - Counterparty -> notes/GD.1066.md
+- [x] **GD.1067** - Daily confirmation - TSO overview -> notes/GD.1067.md
+- [x] **GD.1068** - Daily confirmation - Interconnect Operator -> notes/GD.1068.md
+- [x] **GD.1069** - Daily confirmation - GTA -> notes/GD.1069.md
 
 ## CD — Config Data (Node/Stream)  (108)
-- [ ] **CD.0006** — Node
-- [ ] **CD.0007** — Stream - All
-- [ ] **CD.0008** — Stream Item
-- [ ] **CD.0011** — Product Price Object
-- [ ] **CD.0012** — Product Description
-- [ ] **CD.0013** — Document Template
-- [ ] **CD.0015** — Revenue Stream Category
-- [ ] **CD.0016** — Stream Item Category
-- [ ] **CD.0017** — Split Item Other
-- [ ] **CD.0019** — Customer
-- [ ] **CD.0020** — Vendor
-- [ ] **CD.0021** — Bank
-- [ ] **CD.0022** — Bank Account
-- [ ] **CD.0023** — Payment Term
-- [ ] **CD.0024** — Calendar
-- [ ] **CD.0025** — Account
-- [ ] **CD.0026** — Account Mapping
-- [ ] **CD.0028** — Exchange Rates
-- [ ] **CD.0029** — VAT Code
-- [ ] **CD.0033** — Sales Order
-- [ ] **CD.0034** — EC Codes - Non-System Codes
-- [ ] **CD.0035** — Input List
-- [ ] **CD.0036** — Product Split Key
-- [ ] **CD.0037** — Product Split Key Shares
-- [ ] **CD.0042** — Stream Item Category Split Key
-- [ ] **CD.0043** — Stream Item Category Shares
-- [ ] **CD.0044** — Company Split Key
-- [ ] **CD.0045** — Company Split Key Shares
-- [ ] **CD.0046** — Other Split Key
-- [ ] **CD.0047** — Other Split Key Shares
-- [ ] **CD.0048** — Revenue Lock Module
-- [ ] **CD.0049** — Revenue Booking Period - Close
-- [ ] **CD.0050** — Revenue Reporting Period - Close
-- [ ] **CD.0051** — Revenue Booking Period - Re-open
-- [ ] **CD.0052** — Revenue Reporting Period - Re-open
-- [ ] **CD.0058** — Country Usage
-- [ ] **CD.0061** — Node Usage
-- [ ] **CD.0062** — Stream Usage
-- [ ] **CD.0065** — Document Template Usage
-- [ ] **CD.0066** — Company Usage
-- [ ] **CD.0067** — Stream Item Category Usage
-- [ ] **CD.0068** — Inter-Group Conversion
-- [ ] **CD.0069** — Customer Usage
-- [ ] **CD.0070** — Customer VAT Reg No
-- [ ] **CD.0071** — Vendors Usage
-- [ ] **CD.0072** — Vendor VAT Reg No
-- [ ] **CD.0073** — Bank Usage
-- [ ] **CD.0074** — Payment Term Usage
-- [ ] **CD.0079** — Product Usage
-- [ ] **CD.0082** — Input List Setup
-- [ ] **CD.0084** — EC Codes - System Codes
-- [ ] **CD.0088** — Interface Files
-- [ ] **CD.0089** — Cost Object Mapping
-- [ ] **CD.0091** — Field Group
-- [ ] **CD.0092** — Field Usage
-- [ ] **CD.0093** — Field Group Usage
-- [ ] **CD.0095** — Field Split Key
-- [ ] **CD.0096** — Field Split Key Shares
-- [ ] **CD.0097** — HCB System
-- [ ] **CD.0098** — HCB System Items
-- [ ] **CD.0099** — UOP Key
-- [ ] **CD.0100** — UOP Key Items
-- [ ] **CD.0101** — Contractual Attributes
-- [ ] **CD.0103** — Report Document Setup
-- [ ] **CD.0104** — Revenue Stream Category Setup
-- [ ] **CD.0105** — Calendar Collection
-- [ ] **CD.0107** — Document Date Term
-- [ ] **CD.0108** — Document Received Term
-- [ ] **CD.0109** — Document Sequence
-- [ ] **CD.0111** — Exchange Rate Source
-- [ ] **CD.0112** — Exchange Rate Setup
-- [ ] **CD.0113** — Payment Scheme
-- [ ] **CD.0114** — Payment Scheme Setup
-- [ ] **CD.0115** — Inventory Area
-- [ ] **CD.0116** — Forecast Stream Item
-- [ ] **CD.0117** — Restricted Customer Setup
-- [ ] **CD.0118** — Restricted Vendor Setup
-- [ ] **CD.0119** — Financial Posting Setup
-- [ ] **CD.0120** — Field Group Setup
-- [ ] **CD.0123** — Document Date Term Usage
-- [ ] **CD.0124** — Document Received Term Usage
-- [ ] **CD.0125** — Document Sequence Usage
-- [ ] **CD.0126** — BOE Conversion
-- [ ] **CD.0127** — WBS
-- [ ] **CD.0129** — Cost Centre
-- [ ] **CD.0130** — Revenue Order
-- [ ] **CD.0131** — Object List
-- [ ] **CD.0132** — Object List Setup
-- [ ] **CD.0133** — Revenue Detailed Log
-- [ ] **CD.0134** — VAT Country Setup
-- [ ] **CD.0135** — EC Code Object
-- [ ] **CD.0136** — Report Reference
-- [ ] **CD.0137** — Report Reference Group
-- [ ] **CD.0144** — Account Mapping Assistance
-- [ ] **CD.0145** — Cost Object Mapping Assistance
-- [ ] **CD.0147** — Stream Category Usage
-- [ ] **CD.0148** — Stream Item Usage
-- [ ] **CD.0149** — Bank Account Usage
-- [ ] **CD.0150** — Revenue Contract Attributes
-- [ ] **CD.0151** — Document Tracing
-- [ ] **CD.0152** — Visual Tracing
-- [ ] **CD.0153** — AFE
-- [ ] **CD.0154** — Report Table
-- [ ] **CD.0155** — Report Table Set
-- [ ] **CD.0156** — Stream Item Split Key
-- [ ] **CD.0157** — Stream Item Split Key Shares
-- [ ] **CD.0158** — Report Table Data
-- [ ] **CD.1059** — DOA Credit Limit
+- [x] **CD.0006** - Node -> notes/CD.0006.md
+- [x] **CD.0007** - Stream - All -> notes/CD.0007.md
+- [x] **CD.0008** - Stream Item -> notes/CD.0008.md
+- [x] **CD.0011** - Product Price Object -> notes/CD.0011.md
+- [x] **CD.0012** - Product Description -> notes/CD.0012.md
+- [x] **CD.0013** - Document Template -> notes/CD.0013.md
+- [x] **CD.0015** - Revenue Stream Category -> notes/CD.0015.md
+- [x] **CD.0016** - Stream Item Category -> notes/CD.0016.md
+- [x] **CD.0017** - Split Item Other -> notes/CD.0017.md
+- [x] **CD.0019** - Customer -> notes/CD.0019.md
+- [x] **CD.0020** - Vendor -> notes/CD.0020.md
+- [x] **CD.0021** - Bank -> notes/CD.0021.md
+- [x] **CD.0022** - Bank Account -> notes/CD.0022.md
+- [x] **CD.0023** - Payment Term -> notes/CD.0023.md
+- [x] **CD.0024** - Calendar -> notes/CD.0024.md
+- [x] **CD.0025** - Account -> notes/CD.0025.md
+- [x] **CD.0026** - Account Mapping -> notes/CD.0026.md
+- [x] **CD.0028** - Exchange Rates -> notes/CD.0028.md
+- [x] **CD.0029** - VAT Code -> notes/CD.0029.md
+- [x] **CD.0033** - Sales Order -> notes/CD.0033.md
+- [x] **CD.0034** - EC Codes - Non-System Codes -> notes/CD.0034.md
+- [x] **CD.0035** - Input List -> notes/CD.0035.md
+- [x] **CD.0036** - Product Split Key -> notes/CD.0036.md
+- [x] **CD.0037** - Product Split Key Shares -> notes/CD.0037.md
+- [x] **CD.0042** - Stream Item Category Split Key -> notes/CD.0042.md
+- [x] **CD.0043** - Stream Item Category Shares -> notes/CD.0043.md
+- [x] **CD.0044** - Company Split Key -> notes/CD.0044.md
+- [x] **CD.0045** - Company Split Key Shares -> notes/CD.0045.md
+- [x] **CD.0046** - Other Split Key -> notes/CD.0046.md
+- [x] **CD.0047** - Other Split Key Shares -> notes/CD.0047.md
+- [x] **CD.0048** - Revenue Lock Module -> notes/CD.0048.md
+- [x] **CD.0049** - Revenue Booking Period - Close -> notes/CD.0049.md
+- [x] **CD.0050** - Revenue Reporting Period - Close -> notes/CD.0050.md
+- [x] **CD.0051** - Revenue Booking Period - Re-open -> notes/CD.0051.md
+- [x] **CD.0052** - Revenue Reporting Period - Re-open -> notes/CD.0052.md
+- [x] **CD.0058** - Country Usage -> notes/CD.0058.md
+- [x] **CD.0061** - Node Usage -> notes/CD.0061.md
+- [x] **CD.0062** - Stream Usage -> notes/CD.0062.md
+- [x] **CD.0065** - Document Template Usage -> notes/CD.0065.md
+- [x] **CD.0066** - Company Usage -> notes/CD.0066.md
+- [x] **CD.0067** - Stream Item Category Usage -> notes/CD.0067.md
+- [x] **CD.0068** - Inter-Group Conversion -> notes/CD.0068.md
+- [x] **CD.0069** - Customer Usage -> notes/CD.0069.md
+- [x] **CD.0070** - Customer VAT Reg No -> notes/CD.0070.md
+- [x] **CD.0071** - Vendors Usage -> notes/CD.0071.md
+- [x] **CD.0072** - Vendor VAT Reg No -> notes/CD.0072.md
+- [x] **CD.0073** - Bank Usage -> notes/CD.0073.md
+- [x] **CD.0074** - Payment Term Usage -> notes/CD.0074.md
+- [x] **CD.0079** - Product Usage -> notes/CD.0079.md
+- [x] **CD.0082** - Input List Setup -> notes/CD.0082.md
+- [x] **CD.0084** - EC Codes - System Codes -> notes/CD.0084.md
+- [x] **CD.0088** - Interface Files -> notes/CD.0088.md
+- [x] **CD.0089** - Cost Object Mapping -> notes/CD.0089.md
+- [x] **CD.0091** - Field Group -> notes/CD.0091.md
+- [x] **CD.0092** - Field Usage -> notes/CD.0092.md
+- [x] **CD.0093** - Field Group Usage -> notes/CD.0093.md
+- [x] **CD.0095** - Field Split Key -> notes/CD.0095.md
+- [x] **CD.0096** - Field Split Key Shares -> notes/CD.0096.md
+- [x] **CD.0097** - HCB System -> notes/CD.0097.md
+- [x] **CD.0098** - HCB System Items -> notes/CD.0098.md
+- [x] **CD.0099** - UOP Key -> notes/CD.0099.md
+- [x] **CD.0100** - UOP Key Items -> notes/CD.0100.md
+- [x] **CD.0101** - Contractual Attributes -> notes/CD.0101.md
+- [x] **CD.0103** - Report Document Setup -> notes/CD.0103.md
+- [x] **CD.0104** - Revenue Stream Category Setup -> notes/CD.0104.md
+- [x] **CD.0105** - Calendar Collection -> notes/CD.0105.md
+- [x] **CD.0107** - Document Date Term -> notes/CD.0107.md
+- [x] **CD.0108** - Document Received Term -> notes/CD.0108.md
+- [x] **CD.0109** - Document Sequence -> notes/CD.0109.md
+- [x] **CD.0111** - Exchange Rate Source -> notes/CD.0111.md
+- [x] **CD.0112** - Exchange Rate Setup -> notes/CD.0112.md
+- [x] **CD.0113** - Payment Scheme -> notes/CD.0113.md
+- [x] **CD.0114** - Payment Scheme Setup -> notes/CD.0114.md
+- [x] **CD.0115** - Inventory Area -> notes/CD.0115.md
+- [x] **CD.0116** - Forecast Stream Item -> notes/CD.0116.md
+- [x] **CD.0117** - Restricted Customer Setup -> notes/CD.0117.md
+- [x] **CD.0118** - Restricted Vendor Setup -> notes/CD.0118.md
+- [x] **CD.0119** - Financial Posting Setup -> notes/CD.0119.md
+- [x] **CD.0120** - Field Group Setup -> notes/CD.0120.md
+- [x] **CD.0123** - Document Date Term Usage -> notes/CD.0123.md
+- [x] **CD.0124** - Document Received Term Usage -> notes/CD.0124.md
+- [x] **CD.0125** - Document Sequence Usage -> notes/CD.0125.md
+- [x] **CD.0126** - BOE Conversion -> notes/CD.0126.md
+- [x] **CD.0127** - WBS -> notes/CD.0127.md
+- [x] **CD.0129** - Cost Centre -> notes/CD.0129.md
+- [x] **CD.0130** - Revenue Order -> notes/CD.0130.md
+- [x] **CD.0131** - Object List -> notes/CD.0131.md
+- [x] **CD.0132** - Object List Setup -> notes/CD.0132.md
+- [x] **CD.0133** - Revenue Detailed Log -> notes/CD.0133.md
+- [x] **CD.0134** - VAT Country Setup -> notes/CD.0134.md
+- [x] **CD.0135** - EC Code Object -> notes/CD.0135.md
+- [x] **CD.0136** - Report Reference -> notes/CD.0136.md
+- [x] **CD.0137** - Report Reference Group -> notes/CD.0137.md
+- [x] **CD.0144** - Account Mapping Assistance -> notes/CD.0144.md
+- [x] **CD.0145** - Cost Object Mapping Assistance -> notes/CD.0145.md
+- [x] **CD.0147** - Stream Category Usage -> notes/CD.0147.md
+- [x] **CD.0148** - Stream Item Usage -> notes/CD.0148.md
+- [x] **CD.0149** - Bank Account Usage -> notes/CD.0149.md
+- [x] **CD.0150** - Revenue Contract Attributes -> notes/CD.0150.md
+- [x] **CD.0151** - Document Tracing -> notes/CD.0151.md
+- [x] **CD.0152** - Visual Tracing -> notes/CD.0152.md
+- [x] **CD.0153** - AFE -> notes/CD.0153.md (note: no corpus Help)
+- [x] **CD.0154** - Report Table -> notes/CD.0154.md
+- [x] **CD.0155** - Report Table Set -> notes/CD.0155.md
+- [x] **CD.0156** - Stream Item Split Key -> notes/CD.0156.md
+- [x] **CD.0157** - Stream Item Split Key Shares -> notes/CD.0157.md (note: class w/o view)
+- [x] **CD.0158** - Report Table Data -> notes/CD.0158.md
+- [x] **CD.1059** - DOA Credit Limit -> notes/CD.1059.md (note: no corpus Help)
 
 ## WR — Well & Reservoir  (87)
-- [ ] **WR.0001** — Daily Production Well Status 1
-- [ ] **WR.0001.02** — Daily Prod Well Status 1, by Collection Point
-- [ ] **WR.0002** — Daily Gas Injection Well Status
-- [ ] **WR.0003** — Daily Water Injection Well Status
-- [ ] **WR.0004** — Maintain Production Well Status
-- [ ] **WR.0005** — Maintain Injection Well Status
-- [ ] **WR.0006** — Daily Production Flowline and Well Status 1
-- [ ] **WR.0007** — Daily Gas Injection Flowline and Well Status
-- [ ] **WR.0008** — Daily Water Injection Flowline and Well Status
-- [ ] **WR.0009** — Sub Daily Production Well Status 1 - by Well
-- [ ] **WR.0010** — Well Oil Component Analysis
-- [ ] **WR.0010.01** — Well Gas Component Analysis
-- [ ] **WR.0010.02** — Well Gas Injection Component Analysis
-- [ ] **WR.0010.03** — QA of Well Component Analysis
-- [ ] **WR.0011** — Maintain Well Chronology
-- [ ] **WR.0013** — Daily Well Data - Water Source Wells
+- [x] **WR.0001** - Daily Production Well Status 1 -> notes/WR.0001.md
+- [x] **WR.0001.02** - Daily Prod Well Status 1, by Collection Point -> notes/WR.0001.02.md (note: no corpus Help)
+- [x] **WR.0002** - Daily Gas Injection Well Status -> notes/WR.0002.md
+- [x] **WR.0003** - Daily Water Injection Well Status -> notes/WR.0003.md
+- [x] **WR.0004** - Maintain Production Well Status -> notes/WR.0004.md
+- [x] **WR.0005** - Maintain Injection Well Status -> notes/WR.0005.md
+- [x] **WR.0006** - Daily Production Flowline and Well Status 1 -> notes/WR.0006.md
+- [x] **WR.0007** - Daily Gas Injection Flowline and Well Status -> notes/WR.0007.md
+- [x] **WR.0008** - Daily Water Injection Flowline and Well Status -> notes/WR.0008.md
+- [x] **WR.0009** - Sub Daily Production Well Status 1 - by Well -> notes/WR.0009.md
+- [x] **WR.0010** - Well Oil Component Analysis -> notes/WR.0010.md
+- [x] **WR.0010.01** - Well Gas Component Analysis -> notes/WR.0010.01.md
+- [x] **WR.0010.02** - Well Gas Injection Component Analysis -> notes/WR.0010.02.md
+- [x] **WR.0010.03** - QA of Well Component Analysis -> notes/WR.0010.03.md
+- [x] **WR.0011** - Maintain Well Chronology -> notes/WR.0011.md
+- [x] **WR.0013** - Daily Well Data - Water Source Wells -> notes/WR.0013.md
 - [ ] **WR.0014** — Daily Well Data - Observation Wells
 - [ ] **WR.0016** — Sub Daily Gas Injection Well Status
 - [ ] **WR.0017** — Sub Daily Water Injection Well Status
