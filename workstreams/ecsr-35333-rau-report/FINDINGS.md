@@ -84,3 +84,9 @@ Set env then run any script: `EC_DB_DSN=dev.db.non-prod.plp.wde.ecaas.cloud:1521
 **Env & routing:** all analysis read-only on ECAASDEV. Fixes for Causes 1–2 are operational/data; Cause 3 is a calc-logic decision. Deploy env is NOT ECAASDEV — confirm target before any change.
 
 **New investigation scripts (this session):** `ecaasdev_rau_recon2`, `def_verify_check`, `neg_autodef_trace`/`_trace2`, `sca_capacity_trace`/`_alldays`, `sca_forecast_trace`, `sca_streamref_trace`, `fcst_setup_cmp`, `getcapacity_trace`/`_body`, `getcap_helpers`, `getgroupfcst_src`, `plannedvol_body`, `valid_group_trace`, `train1_capacity_trace`, `eqpm_type`, `fcty_names`, `pkg_details`. All read creds from env (no hardcoded credentials).
+
+---
+
+## Follow-up Q (2026-07-05) — "Tab 4 always shows LNG Train 1, not COND/PNI"
+
+**Answer: not a report defect.** (1) The generated xlsx contains ALL 8 facility sections on Tab 4 (rows 11/28/45/62/79/93/110/124 — verified in the ticket's own attachment). (2) All 24 Tab-4 subreport queries filter their OWN facility (`DEF_FCTY_1_CODE`/`FACILITY_CODE`/`FACILITY` per jrxml — no copy-paste bug). (3) Train1/Train2/Cond LOOK identical because the uploaded RAU **targets are literally the same values** (Rel 98.12 / Avail 88.12 across all three; verified in `DV_SCTR_ACC_MTH_EVENT`). (4) **PNI has ZERO target events for all of 2026** (`C_PLU_PNI` — no `RAU_*_TRGT` rows) → its section shows only the derived YEO ≈ 0.333 artifact → reads as "not loaded". Actual columns differ per the 3-cause RCA. **Data fixes: upload PNI RAU targets; correct Train1/2/Cond targets if they were meant to differ.** Trace: `investigation/target_compare_across_contracts.py` (read-only, ECAASDEV).
