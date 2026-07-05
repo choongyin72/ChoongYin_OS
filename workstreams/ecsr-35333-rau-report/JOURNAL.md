@@ -51,3 +51,11 @@ Re-investigated read-only on ECAASDEV (VPN up). Established the ticket has **thr
 ### Key outcome
 - **Cause 1** unverified deferments (Train 1/Cond/DG/PNI); **Cause 2** SCA no capacity forecast; **Cause 3** negative auto-deferments (Train 2 + latent). Fixes: #1 verify+re-run, #2 load SCA capacity forecast, #3 floor/exclude negatives (calc logic, Grant Hewton). Deploy env NOT ECAASDEV.
 - **Stop point (user):** work halted on ECSR-35333; findings backed up. RCA Jira comment drafted but not yet posted.
+
+---
+
+## Session 3 — 2026-07-05 (validation + completion of fact-finding)
+**Done:** live Stage-A gate list (4 blocked / 4 pass); recompute-validation of all gate-PASS Period Actuals (PLA x2 exact PASS; Train2 FAIL-invalid; SCA FAIL-never-calculated); Train2 root pinned to `LNG_TRAIN_2_TECHMAX` stream unloaded 28/30 days; Cause-2 refined (SCA group EXISTS, capacity VALUES empty; user path via Daily Deferment Summary PD.0005/ZZ.0001); Tab-4 "only Train 1" question answered (all 8 sections load; identical targets + PNI/PLA_LIQ missing targets explain the perception); C_PLA_LIQ_EXP targets-never-uploaded found (blank targets + deflated YEO 0.416). Consolidated per-contract matrix + actions list written.
+**Done well:** every claim recompute-validated read-only; each finding banked with a re-runnable script same-day.
+**Watch:** REV_TEXT last-writer-wins made four blocked facilities invisible — always check per-facility data, never trust the single schedule message.
+**Next:** draft the Jira user summary from the consolidated matrix (todo #2).

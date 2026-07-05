@@ -106,3 +106,37 @@ Set env then run any script: `EC_DB_DSN=dev.db.non-prod.plp.wde.ecaas.cloud:1521
 
 ### Cause-2 refinement + user path (2026-07-05)
 Precision fix: SCA's forecast GROUPS exist (`SCA_OFF_EXP_120D`, 30 June rows; `SCA_OFF_EXP_ANNUAL`) — what is missing is the **capacity VALUES inside the daily forecast rows** (ZWP capacity fields empty), so `getGroupForecastId(...,'CAPACITY')` finds no usable group. User-visible symptom: **Daily Deferment Summary (PD.0005 / ZZ.0001) Capacity column = 0** for SCA Gas Export all June. SCA's Deferment Equipment "Stream Reference Capacity" attribute is blank (trains use that path; SCA uses the forecast path). **User fix path: populate the June daily capacity values in the SCA_OFF_EXP_120D scenario (copy the PLU_PNI_120D pattern) -> re-run ZWP_RAU_CALC_PLUSCA -> confirm Daily Deferment capacity + RAU_*_ACT events + report Tab 4 SCA actuals.** Script: `sca_user_path.py`.
+
+---
+
+# ⭐⭐ CONSOLIDATED FACT-FINDING SUMMARY — June 2026, all facilities (2026-07-05)
+
+_Every facility now has a verdict and a named fix. Report / views / Jasper / calc code are all CORRECT — every defect is an input-data condition. Basis for the Jira user update._
+
+## Per-contract matrix
+
+| Contract | Facility | Deferments verified | Capacity | Period Actual | Targets | Verdict → Fix |
+|---|---|---|---|---|---|---|
+| C_PLU_LNG_1 | LNG Train 1 | ❌ 30/150 (120 Pending) | (healthy techmax 73,166 t — unused) | none — gate skip | loaded (identical set) | **Cause 1** → verify 120 rows + re-run |
+| C_PLU_PNI | Interconnector | ❌ 30/116 (86 Pending) | ok | none — gate skip | **ZERO for all 2026** | **Cause 1 + missing targets** → verify + upload PNI targets |
+| C_PLU_COND | Condensate | ❌ 31/91 (60 Pending) | ok | none — gate skip | loaded (identical set) | **Cause 1** → verify + re-run |
+| C_PLU_PG | Pipeline Gas | ❌ 31/61 (30 Pending) | ok | none — gate skip | loaded (own values) | **Cause 1** → verify + re-run |
+| C_SCA_GAS_EXP | Scarborough | ✅ 31/31 | **0** — `SCA_OFF_EXP_120D` forecast rows exist but capacity VALUES empty (Daily Deferment Summary shows Capacity=0) | none — Stage-E silent skip | loaded | **Cause 2** → load June capacity values into SCA_OFF_EXP_120D (copy PLU_PNI_120D pattern) + re-run |
+| C_PLU_LNG_2 | LNG Train 2 | ✅ 30/30 | **garbage** — `LNG_TRAIN_2_TECHMAX` stream 28/30 days ~0 (1 day 15,000 t, 1 day 9 t → month 15,009 t, ~30x understated) | **INVALID: Util 3127%** (formula-faithful on poisoned inputs; same near-zero reference drives −454,350 negative variation defs; ACT_YTD NULL from null pre-June capacity) | loaded (identical set) | **Cause 3** → load full-month Techmax dailies (+fix 9 t day) + re-run |
+| C_PLA_GAS_EXP | Pluto A Gas | ✅ 30/30 | 765,000 ✅ | **PASS — recompute-validated exact** (100/100/85.89) | 12 monthly TRGT loaded ✅ | healthy — reference example |
+| C_PLA_LIQ_EXP | Pluto A Liquid | ✅ 32/32 | 36,000 ✅ | **PASS — validated exact** (99.97/99.97/35.07; low Util is GENUINE deferment) | **TRGT never uploaded** → Period/YTD/Year-End Target blank; TRGT_YTD rows written with NULL qty; **YEO deflated to 0.416** (= actuals/12, no target leg) | actuals fine → upload 2026 monthly targets (mirror Gas Export) |
+
+## Cross-cutting findings
+1. **Identical targets** for Train1 / Train2 / Cond (Rel 98.12 / Avail 88.12 …) — the manual target upload used the same values; CLP/Woodside to confirm whether intentional.
+2. **Meta-root for SCA + Train 2:** ONE cause — missing/garbage **capacity reference data** — poisons BOTH the capacity denominator AND the auto-deferment ("Daily Variation") quantities simultaneously.
+3. **REV_TEXT is last-writer-wins:** each facility's calc call clears the schedule message before writing its own, and the equipment cursor has no ORDER BY — so only ONE facility's warning survives a run (why the 16-Jun run showed only SCA's message while four facilities were blocked). Diagnostic trap; recommend logging improvement to the calc author.
+4. **Fail-silent philosophy** of the calc (skip-on-unverified, skip-on-zero-capacity, warn-only-on-negatives) means a clean run log does NOT prove complete output.
+5. Report side re-verified: Tab 4 loads ALL 8 facilities (each subreport correctly filters its own facility) — no report defect anywhere.
+
+## Actions list (all data/config; no code change)
+1. Verify the 296 pending June deferment rows (Train1 120 / PNI 86 / Cond 60 / PG 30) → re-run `ZWP_RAU_CALC_PLUSCA`.
+2. Load June daily capacity values into `SCA_OFF_EXP_120D`.
+3. Load full-month `LNG_TRAIN_2_TECHMAX` daily capacities (correct the 9 t entry).
+4. Upload 2026 monthly RAU targets for `C_PLU_PNI` and `C_PLA_LIQ_EXP`.
+5. Confirm intent of identical Train1/Train2/Cond targets.
+6. (Enhancement suggestion to calc author) REV_TEXT accumulation instead of overwrite; consider flooring negative deferments in RAU actuals.
