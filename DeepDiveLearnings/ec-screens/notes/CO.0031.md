@@ -1,6 +1,6 @@
 # CO.0031 - Flowline
 
-_Deep-dive 2026-06-23 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0031 - URL: `/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/FLOWLINE/TARGET/FLOWLINE/CLASS_NAME/FLOWLINE`
@@ -10,10 +10,15 @@ _Deep-dive 2026-06-23 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `FLOWLINE` | OBJECT/VERSIONED | `FLOWLINE` | `OV_FLOWLINE` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-A flowline is a line connecting subsea well templates to facilities. It can also be used to model onshore flowlines connecting wells to a gathering station.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0031 screenshot](CO.0031_shot_1.png)
+![CO.0031 screenshot](CO.0031_shot_2.png)
+![CO.0031 screenshot](CO.0031_shot_3.png)
 
-The relation between well and flowline is a many to many. Therefore this connection is not held in the group model.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

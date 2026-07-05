@@ -1,6 +1,6 @@
 # CO.0070 - Chemical Tank
 
-_Deep-dive 2026-06-28 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0070 - URL: `/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/CHEM_TANK/TARGET/CHEM_TANK/CLASS_NAME/CHEM_TANK`
@@ -10,32 +10,14 @@ _Deep-dive 2026-06-28 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `CHEM_TANK` | OBJECT/VERSIONED | `CHEM_TANK` | `OV_CHEM_TANK` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-A chemical tank object is a representation of a physical chemical tank used for chemical storage or hooked up to chemical injection lines and pumps. The object can also represent a virtual tank for movable and interchangeable tanks.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0070 screenshot](CO.0070_shot_1.png)
+![CO.0070 screenshot](CO.0070_shot_2.png)
 
-Measurement / input data
-
-The input data is for a selected chemical tank is:
-
-Tank level volume as NET volume
-Comments
-
-Chemical tank calculations
-
-The chemical tank object has settings for calculations performed on a chemical tank as:
-
-Available volume
-Chemical tank rate (drainage rate)
-Remaining days to empty
-
-The following properties can be set in the chemical tank object:
-
-Min Fill Volume(only available in full version)
-Under plate volume(adjust available volume for the volume beneath the drain)
-dVol limit(only available in full version)
-No. dV less than Limit to set rate 0(only available in ful version)
-
-The chemical tank rate is based on dV/dt where dV
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

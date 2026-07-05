@@ -1,6 +1,6 @@
 # CO.0037 - Maintain Tanks
 
-_Deep-dive 2026-06-24 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0037 - URL: `/com.ec.frmw.co.screens/manage_copy_object/GROUPMODEL/TANK/TARGET/TANK/CLASS_NAME/TANK`
@@ -10,10 +10,16 @@ _Deep-dive 2026-06-24 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `TANK` | OBJECT/VERSIONED | `TANK` | `OV_TANK` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-This is a generic screen; see description of generic screens in the beginning of the configuration manual.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0037 screenshot](CO.0037_shot_1.png)
+![CO.0037 screenshot](CO.0037_shot_2.png)
+![CO.0037 screenshot](CO.0037_shot_3.png)
+![CO.0037 screenshot](CO.0037_shot_4.png)
 
-This screen retrieves records from the Tank class. The version that is valid within the specified values in the navigator will be displayed. It displays all enabled attributes of Tank object. The screen provides the ease to update more than one record at the same time. It also allows creation of a new Tank as a copy of an existing Tank. To Copy a Tank, select the well to copy from and then enter the new Tank Name, Tank Code, and Start Date, and then hit Create a Copy button. If the Tank has Tank Usage connections, it will automatically be included in the copy job.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

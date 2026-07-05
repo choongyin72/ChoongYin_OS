@@ -1,6 +1,6 @@
 # CO.0042 - Production Separator
 
-_Deep-dive 2026-06-26 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0042 - URL: `/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/PRODSEPARATOR/TARGET/PRODSEPARATOR/CLASS_NAME/PRODSEPARATOR`
@@ -10,10 +10,13 @@ _Deep-dive 2026-06-26 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `PRODSEPARATOR` | OBJECT/VERSIONED | `SEPARATOR` | `OV_PRODSEPARATOR` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-Production separator is used to process oil, gas and water under normal operations. Data gathered here is typically temperature and pressure readings for the separator.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0042 screenshot](CO.0042_shot_1.png)
 
-Any outgoing metered streams are modeled as streams and are therefore not a data class for the production separator.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

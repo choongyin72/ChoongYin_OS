@@ -1,6 +1,6 @@
 # CO.0069 - Cargo Account
 
-_Deep-dive 2026-06-27 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0069 - URL: `/com.ec.frmw.co.screens/manage_table/CLASS_NAME/CARGO_ACCOUNT`
@@ -10,12 +10,13 @@ _Deep-dive 2026-06-27 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `CARGO_ACCOUNT` | TABLE/EVENT | `ACCOUNT` | `TV_CARGO_ACCOUNT` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 TV (table-class)
 
-## Help (description)
-Cargo accounts are holding export storage inventory for each owner and product. Owners are those having equity shares in the incoming production to storage. One company having equity shares in several licenses will therefore have one account for each license.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0069 screenshot](CO.0069_shot_1.png)
 
-Official production into the storage times your equity share is your input to your account. Cargo lifting is your output from your account. Production into the storage is often determined as delta storage + export out from storage. Accounts can become negative, as own owner can lift more than he has on storage. However, the sum of all accounts for storage is always equal closing inventory of the storage.
-
-Future account balances can be calculated based on planned production, equity shares and lifting nominations.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

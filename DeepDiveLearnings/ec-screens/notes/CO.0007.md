@@ -1,6 +1,6 @@
 # CO.0007 - Product
 
-_Deep-dive 2026-06-22 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0007 - URL: `/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/PRODUCT`
@@ -10,12 +10,13 @@ _Deep-dive 2026-06-22 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `PRODUCT` | OBJECT/VERSIONED | `PRODUCT` | `OV_PRODUCT` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-This is a generic screen; see description of generic screens in the beginning of the configuration manual.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0007 screenshot](CO.0007_shot_1.png)
 
-Product is the final product being sold. It can be crude oil, condensate, butane and more. Product is associated with storage, a storage has one product and all tanks connected to the storage have the same product.
-
-Note! Transport specific attributes will not be available if only EC Production is installed.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

@@ -1,6 +1,6 @@
 # CO.0068 - Cargo Activity
 
-_Deep-dive 2026-06-27 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0068 - URL: `/com.ec.frmw.co.screens/manage_table/CLASS_NAME/CARGO_ACTIVITY`
@@ -10,10 +10,13 @@ _Deep-dive 2026-06-27 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `CARGO_ACTIVITY` | TABLE/EVENT | `CARGO_ACTIVITY_CODE` | `TV_CARGO_ACTIVITY` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 TV (table-class)
 
-## Help (description)
-Cargo activity is a list of events that should be entered for each cargo load, often called port log. For each new cargo, a new list will be prepared and ready to fill in. This list is found under the BF "Port Log".
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0068 screenshot](CO.0068_shot_1.png)
 
-The information in the cargo activity list is often included in the bill of lading papers.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

@@ -1,6 +1,6 @@
 # CO.0040 - Test Separator
 
-_Deep-dive 2026-06-26 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0040 - URL: `/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/TESTSEPARATOR/TARGET/TESTSEPARATOR/CLASS_NAME/TESTSEPARATOR`
@@ -10,10 +10,13 @@ _Deep-dive 2026-06-26 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `TESTSEPARATOR` | OBJECT/VERSIONED | `SEPARATOR` | `OV_TESTSEPARATOR` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-This is a generic screen; see description of generic screens in the beginning of the configuration manual.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0040 screenshot](CO.0040_shot_1.png)
 
-Test separator is used to test a well or a set of wells. It is used to determine the well potential, as most well normally are not metered. The test separator is a one stage separation and there are normally three outgoing metered streams, oil, gas and water. Because the test separator normally operates under pressure much higher than atmosphere, some of the gas remains in the oil phase. This is compensated for using shrinkage factors to shrink the oil and gas in solution factors to increase the gas amount to derive results as close to standard conditions as possible.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

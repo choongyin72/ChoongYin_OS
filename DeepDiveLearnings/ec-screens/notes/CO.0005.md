@@ -1,6 +1,6 @@
 # CO.0005 - Country
 
-_Deep-dive 2026-06-22 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0005 - URL: `/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/COUNTRY`
@@ -10,12 +10,13 @@ _Deep-dive 2026-06-22 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `COUNTRY` | OBJECT/VERSIONED | `GEOGRAPHICAL_AREA` | `OV_COUNTRY` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-This is a generic screen; see description of generic screens in the beginning of the configuration manual.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0005 screenshot](CO.0005_shot_1.png)
 
-Country is a class holding countries. Countries can be used in a geographical group model, but is not included in the default group models shipped with the product.
-
-Country does not have any data classes.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

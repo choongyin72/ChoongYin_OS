@@ -1,6 +1,6 @@
 # PO.0009 - Environmental Events
 
-_Deep-dive 2026-06-22 (deterministic runner). Module: PO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: PO._
 
 ## Identity
 - BF_CODE: PO.0009 - URL: `/com.ec.prod.po.screens/environmental_events`
@@ -10,10 +10,13 @@ _Deep-dive 2026-06-22 (deterministic runner). Module: PO._
 |---|---|---|---|
 | `FCTY_SPILL_EVENT` | DATA/DAY | `FCTY_SPILL_EVENT` | `DV_FCTY_SPILL_EVENT` |
 
+_Resolved by: label (exact, unique)_
+
 ## Screen type
 N1 daily-status grid
 
-## Help (description)
-This BF is used to keep track of environmental events. Event types are configurable and the user can create as many events as needed within a production day.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![PO.0009 screenshot](PO.0009_shot_1.png)
 
-The user can also decide whether the event should be included in the daily report or not by ticking off the report check box.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

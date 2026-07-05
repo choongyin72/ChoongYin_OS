@@ -1,6 +1,6 @@
 # CO.0013 - Company
 
-_Deep-dive 2026-06-22 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0013 - URL: `/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/COMPANY`
@@ -10,10 +10,13 @@ _Deep-dive 2026-06-22 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `COMPANY` | OBJECT/VERSIONED | `COMPANY` | `OV_COMPANY` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-This is a generic screen; see description of generic screens in the beginning of the configuration manual.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0013 screenshot](CO.0013_shot_1.png)
 
-Company in EC Production context is typically either the operating company or a partner company. In EC Transport & Sales Company can also be buyers or sellers of processed oil and gas.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

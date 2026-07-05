@@ -1,6 +1,6 @@
 # CO.0082 - Sub Area
 
-_Deep-dive 2026-06-29 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0082 - URL: `/com.ec.frmw.co.screens/manage_object_groupmodel_nav/GROUPMODEL/SUB_AREA/TARGET/SUB_AREA/CLASS_NAME/SUB_AREA`
@@ -10,10 +10,13 @@ _Deep-dive 2026-06-29 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `SUB_AREA` | OBJECT/VERSIONED | `GEOGRAPHICAL_AREA` | `OV_SUB_AREA` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-This is a generic screen; see description of generic screens in the beginning of the configuration manual.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0082 screenshot](CO.0082_shot_1.png)
 
-Sub area is a class that can be used if the operation covers a very large geographical area and the area needs to be further split into sub areas.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

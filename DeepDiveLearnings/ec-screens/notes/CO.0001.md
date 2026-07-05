@@ -1,6 +1,6 @@
 # CO.0001 - Production Unit
 
-_Deep-dive 2026-06-22 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0001 - URL: `/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/PRODUCTIONUNIT`
@@ -10,12 +10,13 @@ _Deep-dive 2026-06-22 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `PRODUCTIONUNIT` | OBJECT/VERSIONED | `GEOGRAPHICAL_AREA` | `OV_PRODUCTIONUNIT` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-This is a generic screen; see description of generic screens in the beginning of the configuration manual.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0001 screenshot](CO.0001_shot_1.png)
 
-Production unit is part of the operational group model. It is used to aggregate data to production unit level and to navigate down to data starting from production unit level in the navigator.
-
-Production unit does not have any data classes. It's also optional, and does not need to be configured for small operations.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

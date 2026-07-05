@@ -1,6 +1,6 @@
 # CO.0011 - Licence
 
-_Deep-dive 2026-06-22 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-05 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0011 - URL: `/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/LICENCE`
@@ -10,10 +10,13 @@ _Deep-dive 2026-06-22 (deterministic runner). Module: CO._
 |---|---|---|---|
 | `LICENCE` | OBJECT/VERSIONED | `LICENCE` | `OV_LICENCE` |
 
+_Resolved by: url CLASS_NAME_
+
 ## Screen type
 OV (master-data object)
 
-## Help (description)
-This is a generic screen; see description of generic screens in the beginning of the configuration manual.
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![CO.0011 screenshot](CO.0011_shot_1.png)
 
-A licence is a right to explore and produce oil and gas from a geographical area. This is normally granted by the government. Commercial Entity belongs to a Licence, and Licence is used in the Commercial Entity navigator to list Commercial Entities. Licence is also used in the Maintain Equity Share navigator.
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_

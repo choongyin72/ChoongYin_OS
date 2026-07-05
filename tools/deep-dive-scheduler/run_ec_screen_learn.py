@@ -95,10 +95,13 @@ def db_resolve(cur, bf_code, name):
         info['resolved_by'] = 'url CLASS_NAME'
     else:  # (2) URL last path-segment token (verb-prefix stripped; must be a REAL class -> high confidence)
         tok = url.rstrip('/').split('/')[-1].upper()
-        cands = [tok,
-                 re.sub(r'^(MAINTAIN|MANAGE|EDIT|VIEW|CREATE|INITIATE)_', '', tok),
+        base = re.sub(r'^(MAINTAIN|MANAGE|EDIT|VIEW|CREATE|INITIATE)_', '', tok)
+        cands = [tok, base,
                  re.sub(r'^MANAGE_COPY_', '', tok),   # e.g. manage_copy_equipment -> EQUIPMENT
-                 re.sub(r'S$', '', tok)]              # de-pluralise (e.g. ..._streams -> _STREAM)
+                 re.sub(r'S$', '', tok),              # de-pluralise (e.g. ..._streams -> _STREAM)
+                 re.sub(r'^(DAILY|SUB_DAILY|MONTHLY|MTH|YEARLY)_', '', base),   # daily_tank_status -> TANK_STATUS
+                 re.sub(r'_(STATUS|OVERVIEW|SCREEN)$', '', base),               # ..._status -> base
+                 re.sub(r'^(DAILY|SUB_DAILY|MONTHLY|MTH|YEARLY)_(.*?)(_STATUS|_OVERVIEW)?$', r'', base)]
         for cand in dict.fromkeys(c for c in cands if c):
             if _class_exists(cur, cand):
                 classes = [cand]; info['resolved_by'] = 'url path token'; break
@@ -125,7 +128,8 @@ def db_resolve(cur, bf_code, name):
 
 def screen_type(info):
     if not info['classes']:
-        return 'process/config (no data class -- e.g. a process trigger, rule/formula editor or combination screen)'
+        return ('no class resolved -- process/config screen OR a data screen whose class could not be '
+                'derived from URL/label (flagged for a later enrichment pass)')
     c0 = info['classes'][0]
     if c0['type'] == 'INTERFACE': return 'OV (interface/object screen)'
     if c0['type'] == 'OBJECT':   return 'OV (master-data object)'
@@ -254,6 +258,7 @@ _Resolved by: {info.get('resolved_by') or 'not resolved'}_
     # stops process/config + help-less screens being re-picked forever as perpetual partials.
     full = has_db or bool(info['classes']) or is_process   # always resolvable -> never a perpetual partial
     flags = []
+    if is_process: flags.append('no class resolved')
     if info['classes'] and not has_db: flags.append('class w/o view')
     if not (corpus_refs['shots'] or corpus_refs['descs']): flags.append('no corpus Help')
     (nd / f'{bf_code}.md').write_text(body, encoding='utf-8')
