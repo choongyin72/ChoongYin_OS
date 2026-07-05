@@ -6,54 +6,54 @@ Status key: `[ ]` ready · `[x]` done (note written) · `[~]` in progress · `[-
 Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, screen type) + live recon. Notes in `notes/<BF_CODE>.md`.
 
 ## CO — Core / Common Config  (368)
-- [ ] **CO.0001** — Production Unit
-- [ ] **CO.0003** — Area
-- [ ] **CO.0005** — Country
-- [ ] **CO.0007** — Product
-- [ ] **CO.0010** — Hydrocarbon Component
-- [ ] **CO.0011** — Licence
-- [ ] **CO.0013** — Company
-- [ ] **CO.0015** — Field
-- [ ] **CO.0018** — Maintain Equity Share
-- [ ] **CO.0019** — Facility Class 1
-- [ ] **CO.0021** — Facility Class 2
-- [ ] **CO.0027** — Stream - by Group Model
-- [ ] **CO.0028** — Maintain Streams
-- [ ] **CO.0029** — Stream Set
-- [ ] **CO.0030** — Stream Set List
-- [ ] **CO.0031** — Flowline
-- [ ] **CO.0033** — Area Codes
-- [ ] **CO.0034** — Storage
-- [ ] **CO.0035** — Maintain Storages
-- [ ] **CO.0036** — Tank
-- [ ] **CO.0037** — Maintain Tanks
-- [ ] **CO.0038** — Tank Usage
-- [ ] **CO.0039** — Tank Strapping
-- [ ] **CO.0040** — Test Separator
-- [ ] **CO.0042** — Production Separator
-- [ ] **CO.0044** — Vessel
-- [ ] **CO.0045** — Weather Site
-- [ ] **CO.0049** — Well
-- [ ] **CO.0050** — Maintain Wells
-- [ ] **CO.0051** — Well Hole
-- [ ] **CO.0054** — Well Bore
-- [ ] **CO.0055** — Well Bore Split
-- [ ] **CO.0057** — Well Bore Interval
-- [ ] **CO.0058** — Well Bore Interval Split
+- [x] **CO.0001** - Production Unit -> notes/CO.0001.md
+- [x] **CO.0003** - Area -> notes/CO.0003.md
+- [x] **CO.0005** - Country -> notes/CO.0005.md
+- [x] **CO.0007** - Product -> notes/CO.0007.md
+- [x] **CO.0010** - Hydrocarbon Component -> notes/CO.0010.md
+- [x] **CO.0011** - Licence -> notes/CO.0011.md
+- [x] **CO.0013** - Company -> notes/CO.0013.md
+- [x] **CO.0015** - Field -> notes/CO.0015.md
+- [x] **CO.0018** - Maintain Equity Share -> notes/CO.0018.md
+- [x] **CO.0019** - Facility Class 1 -> notes/CO.0019.md
+- [x] **CO.0021** - Facility Class 2 -> notes/CO.0021.md
+- [x] **CO.0027** - Stream - by Group Model -> notes/CO.0027.md
+- [x] **CO.0028** - Maintain Streams -> notes/CO.0028.md
+- [x] **CO.0029** - Stream Set -> notes/CO.0029.md
+- [x] **CO.0030** - Stream Set List -> notes/CO.0030.md
+- [x] **CO.0031** - Flowline -> notes/CO.0031.md
+- [x] **CO.0033** - Area Codes -> notes/CO.0033.md
+- [x] **CO.0034** - Storage -> notes/CO.0034.md
+- [x] **CO.0035** - Maintain Storages -> notes/CO.0035.md
+- [x] **CO.0036** - Tank -> notes/CO.0036.md
+- [x] **CO.0037** - Maintain Tanks -> notes/CO.0037.md
+- [x] **CO.0038** - Tank Usage -> notes/CO.0038.md
+- [x] **CO.0039** - Tank Strapping -> notes/CO.0039.md
+- [x] **CO.0040** - Test Separator -> notes/CO.0040.md
+- [x] **CO.0042** - Production Separator -> notes/CO.0042.md
+- [x] **CO.0044** - Vessel -> notes/CO.0044.md
+- [x] **CO.0045** - Weather Site -> notes/CO.0045.md
+- [x] **CO.0049** - Well -> notes/CO.0049.md
+- [x] **CO.0050** - Maintain Wells -> notes/CO.0050.md
+- [x] **CO.0051** - Well Hole -> notes/CO.0051.md
+- [x] **CO.0054** - Well Bore -> notes/CO.0054.md
+- [x] **CO.0055** - Well Bore Split -> notes/CO.0055.md
+- [x] **CO.0057** - Well Bore Interval -> notes/CO.0057.md
+- [x] **CO.0058** - Well Bore Interval Split -> notes/CO.0058.md
 - [x] **CO.0060** - Maintain Equipment -> notes/CO.0060.md (note: class w/o view)
-- [ ] **CO.0067** — Flowline Well Connection
-- [ ] **CO.0068** — Cargo Activity
-- [ ] **CO.0069** — Cargo Account
-- [ ] **CO.0070** — Chemical Tank
-- [ ] **CO.0072** — Chemical Product
+- [x] **CO.0067** - Flowline Well Connection -> notes/CO.0067.md
+- [x] **CO.0068** - Cargo Activity -> notes/CO.0068.md
+- [x] **CO.0069** - Cargo Account -> notes/CO.0069.md
+- [x] **CO.0070** - Chemical Tank -> notes/CO.0070.md
+- [x] **CO.0072** - Chemical Product -> notes/CO.0072.md
 - [x] **CO.0074** - Chemical Tank Product Combination -> notes/CO.0074.md
 - [x] **CO.0076** - Status Processes -> notes/CO.0076.md
 - [x] **CO.0077** - Initiate Day -> notes/CO.0077.md
 - [x] **CO.0078** - Check Rule -> notes/CO.0078.md
-- [ ] **CO.0079** — Check Group
+- [x] **CO.0079** - Check Group -> notes/CO.0079.md
 - [x] **CO.0080** - Rule Group Combination -> notes/CO.0080.md
 - [x] **CO.0081** - Stream Formula Editor -> notes/CO.0081.md
-- [ ] **CO.0082** — Sub Area
+- [x] **CO.0082** - Sub Area -> notes/CO.0082.md
 - [x] **CO.0086** - Stream Reference Values -> notes/CO.0086.md
 - [x] **CO.0087** - Component Set -> notes/CO.0087.md
 - [x] **CO.0088** - Component Set List -> notes/CO.0088.md
@@ -376,11 +376,11 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.3101** - Analytics Manager -> notes/CO.3101.md (note: no corpus Help)
 
 ## PO — Production Operations (stream status)  (149)
-- [ ] **PO.0001** — Daily Oil Stream Status
+- [x] **PO.0001** - Daily Oil Stream Status -> notes/PO.0001.md
 - [x] **PO.0001.03** - Daily Oil Stream Status - Mass -> notes/PO.0001.03.md
-- [ ] **PO.0002** — Daily Gas Stream Status → `notes/PO.0002.md` (N1 daily-status; STRM_DAY_STREAM)
+- [x] **PO.0002** - Daily Gas Stream Status  `notes/PO.0002.md` -> notes/PO.0002.md
 - [x] **PO.0002.04** - Daily Gas Stream Status - Run Hours and Rate -> notes/PO.0002.04.md
-- [ ] **PO.0003** — Daily Water Stream Status
+- [x] **PO.0003** - Daily Water Stream Status -> notes/PO.0003.md
 - [x] **PO.0004** - Daily Water Overboard Status -> notes/PO.0004.md
 - [ ] **PO.0005** — Daily Tank Status
 - [x] **PO.0005.01** - Daily Tank Status - Mass -> notes/PO.0005.01.md
