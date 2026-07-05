@@ -1432,3 +1432,30 @@ _Open PR triggers a full review (R14); the 4 new master commits since #166 also 
 Review-doc edits made in isolated `C:/tmp/wt-review-2026-07-05-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout (`C:\Projects\ChoongYin_OS`, on `feature/ec-screen-deepdive`) and all sibling `wt-*` worktrees were never touched.
 
 ---
+
+## 2026-07-05 - Automated Review (14:00 AWST, 1 open PR #170, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). #170 is the auto-reopened standing draft (the push-trigger fix from #167 worked - the draft reopened at 06:19Z after the milestone merge). Reviewed at head `0432659`: **CLEAR - zero MUST-FIX - NOT merged** (owner-merge-only standing draft). **No new executable rules - version stays v28.** R1-R28 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #170 | Clear. PR stats inflated by the squash milestone (1,501 files / +14,483 shown); **real net delta vs master (`c3ce9d5..0432659`) = 7 files / +47 lines**: the new `EXECUTION-PLAN-completion.md` (sound completion sequencing; Tier-3 pilot correctly behind a separate owner gate) + removal of 6 orphaned pre-corpus `PO.000x_help.png` (orphan claim grep-verified, zero references). Milestone content already on master (`c3ce9d5`, 776/1457 + resolver v3) spot-checked post-hoc: bindings real (`WELL_GAS_INJ_COMPONENT` -> `TV_WELL_GAS_INJ_COMPONENT`, base `FLUID_ANALYSIS_COMPONENT`, resolved-by label exact/unique), runner 0 non-ASCII bytes (R18/R20), honest `no class resolved` flag now rendered into notes. **R23 clean** (diff vs master on all five reviewer-owned docs = EMPTY). `mergeable_state: clean`. CLAUDE.md 124 lines (R28 gate PASS). 3 NICE-TO-HAVE posted (see below). | OK Clear (NICE-TO-HAVE) - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **The #167 auto-reopen push trigger closed the standing-PR gap on its first live firing.** The 06:00 review noted the prior `closed`-event trigger failed at ahead_by=0; today the milestone merge (`c3ce9d5`) was followed within a minute by the workflow reopening #170. The reviewer always has a PR surface to review now.
+- **R27 recurred the same day it was credited as fixed.** The 06:00 review recorded "R27 High gap RESOLVED - `18a87c4` is a true two-parent merge"; the very next milestone (`c3ce9d5`, ~06:18) was a single-parent SQUASH again (merged via the GitHub UI squash button by the look of the bot authorship). Current effect is cosmetic (merge-base stuck at `317bbdb` -> inflated PR stats; `mergeable_state` still clean because content is identical), but divergent edits to the same files on both sides will now produce R27's false conflicts. Sharper edge: **the Worker's own `EXECUTION-PLAN-completion.md` Phase 4 step 2 prescribes "squash" for the next milestone** - the recurrence is baked into the plan doc. Advisory posted: change Phase 4 to `--no-ff` (or rebase the branch right after any squash).
+- **Verify-the-claim before clearing a deletion commit:** `c8941a8` claims the 6 deleted `_help.png` are unreferenced orphans; grep over the branch's notes tree confirmed zero references before clearing. Deletion commits get the same ground-truth treatment as insertions (MR1).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Resolver v3 dead candidate (`run_ec_screen_learn.py:104`, on master via `c3ce9d5`): combined prefix+suffix strip uses replacement `r''` (verified: always yields `''`, dropped by the `if c` filter) - intended `r'\2'`; URL tokens needing BOTH strips (e.g. `DAILY_TANK_STATUS` -> `TANK`) silently never resolve via this path. Fold into the planned resolver v4 (Phase 2 of the completion plan). | Worker | 🟡 Medium |
+| `EXECUTION-PLAN-completion.md` Phase 4 step 2 prescribes a squash milestone merge - R27 recurrence baked into the plan; change to `--no-ff`/rebase | Worker | 🟡 Medium |
+| R9 header drift in the standing-draft body (carry-over; harmless for a never-auto-merged draft) | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD; WR.0010.02 Well Oil Comp automation | Worker | 🟡 Medium |
+
+---
