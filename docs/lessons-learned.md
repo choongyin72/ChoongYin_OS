@@ -1493,3 +1493,33 @@ _Precedent: `f2ddb71` (2026-07-05, honest "no class resolved" screen-type wordin
 | Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; next OV-GM IUD; WR.0010.02 Well Oil Comp automation | Worker | 🟡 Medium |
 
 ---
+
+## 2026-07-06 - Automated Review (14:00 AWST, 1 open PR #170, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). 0 new master commits since #172/`3789fa6` (the 06:00 review). The only open PR is the **STANDING/DRAFT** EC Screen Deep-Dive PR #170, head advanced `ea1da6b` -> `a8f58bf` -> `2d3a255` (400 new full screens across 2 autopilot batches). **CLEAR; NOT merged** (owner-merge-only). **No new executable rules - version stays v29.** R1-R29 remain current._
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #170 | Clear - 400 new full screens (`a8f58bf` CP/PP/SP/VO/PR + `2d3a255` SD/FC/TO/IN/PT/MHM/PD/RP/PA), 0 partial. Pure-data (0 `.py`/`.robot`/`.sql`/`.resource` touched), exactly 400 CHECKLIST `[ ]`->`[x]` flips = commit claims (R21). **R23 clean** (diff vs master on all five reviewer-owned docs = EMPTY). **R18/R20 clean** (0 non-ASCII on added lines). **R28 PASS** (CLAUDE.md 124 lines). Bindings spot-checked real (`TERM_OPERATION_NAVIGATOR`->`TV_TERM_OPERATION_NAVIGATOR`, TABLE/EVENT); honest `(no class resolved)` w/ stated reason for SD.0001/FC.0003/MHM.0001 (R3). **NOT merged** (owner-merge-only standing draft). 4 NICE-TO-HAVE carry-overs below. | OK Clear (NICE-TO-HAVE) - left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **R29 is a real, recurring defect - confirmed a second time.** The stale-runner symptom extracted at 06:00 recurs verbatim in the 14:00 batch: the runner committed at branch tip carries the `f2ddb71` screen-type-wording fix (`run_ec_screen_learn.py:131`), yet notes ADDED by `2d3a255` (same day) still emit the PRE-`f2ddb71` wording. This is not a one-off timing artifact - the unattended autopilot is executing a runner copy that predates the fix, so every committed runner improvement (resolver v3/v4, wording, batch caps) silently never reaches the notes until the autopilot's own copy is re-synced. The durable fix is a `git pull`/re-checkout of the runner at each autopilot run start (or pointing the scheduler directly at the branch-tip file), not another runner edit.
+- **Pure-data batch discipline holding at 200/run.** Two consecutive 200-screen commits touched zero code files and flipped exactly 200 CHECKLIST boxes each - the append-only, no-code-in-a-data-commit shape that keeps R23/R21 trivially verifiable and the reviewer's job to invariant-confirmation rather than content re-litigation.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **R29 stale-runner** - autopilot emits PRE-`f2ddb71` note wording though the branch-tip runner is fixed; re-sync the autopilot's runner copy at each run start (verified: notes at `2d3a255` still carry the old `process/config (no data class -- e.g. ...)` string) | Worker | 🟡 Medium |
+| Resolver dead 7th candidate `run_ec_screen_learn.py:104` - `re.sub(...,r'',base)` is always empty (intended `r'\2'`); carry-over from #171/#172, still at tip | Worker | 🟢 Low |
+| **R27 conflict** - #170 still `mergeable_state: dirty` (base `c3ce9d5` vs master `3789fa6`, single-parent squash lineage); rebase onto master or `--no-ff` at the next milestone merge | Owner | 🔴 High |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; `gen_checklist.py:33` em-dash `print`; ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+### Reviewer process note
+
+- Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent branch `feature/ec-screen-deepdive` at a stale tip (`a7a0a3d`, 2026-06-24) far behind master (`3789fa6`, 2026-07-06). ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-06-1400` worktree off `origin/master`; the Worker's checkout and all sibling `wt-*` worktrees were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
+
+---
