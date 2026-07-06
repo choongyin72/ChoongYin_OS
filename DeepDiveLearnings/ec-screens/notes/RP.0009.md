@@ -1,0 +1,23 @@
+# RP.0009 - Excel Report Sets
+
+_Deep-dive 2026-07-06 (deterministic runner). Module: RP._
+
+## Identity
+- BF_CODE: RP.0009 - URL: `/com.ec.frmw.report.screens/xls_report_set_definition`
+
+## DB binding (metadata-resolved)
+| Class | Type/Scope | Base table | View |
+|---|---|---|---|
+| (no class resolved from URL/LABEL) | | | |
+
+_Resolved by: not resolved_
+
+## Screen type
+process/config (no data class -- e.g. a process trigger, rule/formula editor or combination screen)
+
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![RP.0009 screenshot](RP.0009_shot_1.png)
+![RP.0009 screenshot](RP.0009_shot_2.png)
+
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_
