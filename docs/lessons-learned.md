@@ -1523,3 +1523,34 @@ _Open PR triggers a full review (R14). 0 new master commits since #172/`3789fa6`
 - Main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent branch `feature/ec-screen-deepdive` at a stale tip (`a7a0a3d`, 2026-06-24) far behind master (`3789fa6`, 2026-07-06). ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-06-1400` worktree off `origin/master`; the Worker's checkout and all sibling `wt-*` worktrees were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
 
 ---
+
+## 2026-07-07 — Automated Review (06:00 AWST, 1 open PR #170 — STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). The only open PR is the standing-draft EC Screen Deep-Dive PR #170 on the Worker's permanent branch. Reviewed at branch tip: **CLEAR, zero MUST-FIX, NOT merged** (owner-merge-only). **No new executable rules — R1–R29 cover every finding; version stays v29.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #170 | Clear — 1 new commit since 07-06 14:00 (`91c8864`): **76 new full screens, 0 partial** (PA/RC/LM/HA/CM/IS/FI/CA/LA/WL). Pure-data commit (0 `.py`/`.robot`/`.sql`/`.resource`); 76 new notes = 76 CHECKLIST `[ ]`->`[x]` flips = commit claim (R21). **R23 clean** (diff vs master on all five reviewer-owned docs = EMPTY). **R18/R20 clean** (added notes ASCII, markdown-exempt regardless). **R28 PASS** (CLAUDE.md 124 lines). Bindings spot-checked real: `CARGO`->`TV_CARGO`, `STREAM_ITEM`->`OV_STREAM_ITEM`, `TASK_LIST`->`TV_TASK_LIST`. **NOT merged** (owner-merge-only standing draft, still DRAFT). 4 NICE-TO-HAVE carry-overs (see below). | ✅ Clear — left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **R29 stale-runner is now a 3-run recurrence — a persistently-unactioned NICE-TO-HAVE, not a flake.** Extracted 07-06 06:00, re-observed 07-06 14:00, re-observed again 07-07 06:00: the branch-tip runner carries the `f2ddb71` wording fix (`run_ec_screen_learn.py:131` → `no class resolved -- process/config screen OR a data screen...`) yet note `HA.0001` ADDED today by `91c8864` still emits the PRE-`f2ddb71` `process/config (no data class -- e.g. ...)` wording. The autopilot is executing a stale runner copy, so the resolver improvements never take effect — screens that *could* resolve a class remain mislabeled process/config. This is a genuine quality degradation (not merely cosmetic), but it does not gate a never-auto-merged draft, so it stays NICE-TO-HAVE while the recurrence count is flagged to raise urgency. The durable fix is a `git pull`/re-checkout (or hash-verify) of the runner at each autopilot run start, per R29 — a runner *edit* cannot fix a runner that is not being re-read.
+- **Unchanged-master, single-new-commit re-confirmation shape held.** Master did not advance since #173; the run confirmed the safety invariants (never-auto-merge, R23 clean, R21/R18/R20/R28) and spot-checked substance on the one new commit, rather than re-litigating already-cleared content — the correct shape for a standing-draft PR the reviewer is forbidden to merge.
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **R29 stale-runner (3rd consecutive recurrence)** — autopilot emits PRE-`f2ddb71` note wording though the branch-tip runner is fixed; re-sync/hash-verify the autopilot's runner copy at each run start (verified: `HA.0001` added by `91c8864` still carries the old `process/config (no data class -- e.g. ...)` string) | Worker | 🟡 Medium (escalating) |
+| Resolver dead 7th candidate `run_ec_screen_learn.py:104` — `re.sub(...,r'',base)` is always empty (intended `r'\2'`); carry-over from #170/#171/#172, still at tip | Worker | 🟢 Low |
+| **R27 conflict** — #170 still `mergeable_state: dirty` (CONFLICTING on `CHECKLIST.md` + overlapping `notes/*.md` from the `c3ce9d5` squash lineage vs master `a4ba2a8`; NOT a reviewer-doc clobber — R23 clean); rebase onto master or `--no-ff` before the next milestone merge | Owner | 🔴 High |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; `gen_checklist.py:33` em-dash `print`; ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+### Reviewer process note (MR4/R23 — stale mandatory-read docs)
+
+- Session start read the mandatory `docs/lessons-learned.md` (v23) and `docs/review-log.md` (ending 2026-06-24) from the **main checkout** — but that checkout is the Worker's permanent branch at a stale tip (`a7a0a3d`), **90 commits behind master**, so those were the STALE copies. The live docs on master are at **v29** (R1–R29), review-log through 2026-07-06 14:00. The worktree HEAD (`a4ba2a8` = #173) surfaced the discrepancy; the live v29 versions were re-read from the master copy in the worktree **before** any rule/version decision — MR4 working exactly as intended. Lesson reinforced: on this repo, always re-read the reviewer-owned docs from `origin/master` (worktree), never trust the main-checkout copies, because the main checkout is a long-lived branch that lags master.
+- ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-07-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout and all sibling `wt-*` worktrees were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
+
+---
