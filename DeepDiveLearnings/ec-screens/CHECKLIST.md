@@ -1425,97 +1425,97 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **PA.0007** - Process Action -> notes/PA.0007.md
 - [x] **PA.0008** - Process Monitor Configuration -> notes/PA.0008.md
 - [x] **PA.0009** - Process Monitor -> notes/PA.0009.md
-- [ ] **PA.0010** — Viewer Tag
-- [ ] **PA.0011** — Process Overview Configuration
-- [ ] **PA.0012** — Task Management
-- [ ] **PA.0013** — Project Management
+- [x] **PA.0010** - Viewer Tag -> notes/PA.0010.md
+- [x] **PA.0011** - Process Overview Configuration -> notes/PA.0011.md
+- [x] **PA.0012** - Task Management -> notes/PA.0012.md
+- [x] **PA.0013** - Project Management -> notes/PA.0013.md
 
 ## RC — Royalty / Contract Setup  (13)
-- [ ] **RC.0050** — Unit - Well Setup
-- [ ] **RC.0051** — Royalty Owner
-- [ ] **RC.0052** — Royalty Depositor
-- [ ] **RC.0053** — Product Group
-- [ ] **RC.0054** — Product Group Setup
-- [ ] **RC.0055** — Unit Agreement
-- [ ] **RC.0056** — Tract
-- [ ] **RC.0057** — Tract - Well Setup
-- [ ] **RC.0058** — Division Order
-- [ ] **RC.0059** — Royalty Contract
-- [ ] **RC.0060** — Monthly Royalty Process
-- [ ] **RC.0061** — Monthly Royalty Process Accrual
-- [ ] **RC.0062** — Royalty Reconciliation
+- [x] **RC.0050** - Unit - Well Setup -> notes/RC.0050.md
+- [x] **RC.0051** - Royalty Owner -> notes/RC.0051.md
+- [x] **RC.0052** - Royalty Depositor -> notes/RC.0052.md
+- [x] **RC.0053** - Product Group -> notes/RC.0053.md
+- [x] **RC.0054** - Product Group Setup -> notes/RC.0054.md
+- [x] **RC.0055** - Unit Agreement -> notes/RC.0055.md
+- [x] **RC.0056** - Tract -> notes/RC.0056.md
+- [x] **RC.0057** - Tract - Well Setup -> notes/RC.0057.md
+- [x] **RC.0058** - Division Order -> notes/RC.0058.md
+- [x] **RC.0059** - Royalty Contract -> notes/RC.0059.md
+- [x] **RC.0060** - Monthly Royalty Process -> notes/RC.0060.md
+- [x] **RC.0061** - Monthly Royalty Process Accrual -> notes/RC.0061.md
+- [x] **RC.0062** - Royalty Reconciliation -> notes/RC.0062.md
 
 ## LM — Lab & Measurements (Lite)  (12)
-- [ ] **LM.0001** — Analysis Template Lite
-- [ ] **LM.0002** — Analysis Target Lite
-- [ ] **LM.0003** — Analysis And Measurements
-- [ ] **LM.0004** — Sample Schedule Editor
-- [ ] **LM.0005** — Analysis Target
-- [ ] **LM.0006** — Analysis Template
-- [ ] **LM.0007** — Daily Analysis And Measurements
-- [ ] **LM.0008** — Sample Manager
-- [ ] **LM.0009** — Sample Analysis
-- [ ] **LM.0011** — Corrosion Coupon Material
-- [ ] **LM.0012** — Scale Simulation Results
-- [ ] **LM.0013** — Corrosion Simulation Results
+- [x] **LM.0001** - Analysis Template Lite -> notes/LM.0001.md
+- [x] **LM.0002** - Analysis Target Lite -> notes/LM.0002.md
+- [x] **LM.0003** - Analysis And Measurements -> notes/LM.0003.md
+- [x] **LM.0004** - Sample Schedule Editor -> notes/LM.0004.md
+- [x] **LM.0005** - Analysis Target -> notes/LM.0005.md
+- [x] **LM.0006** - Analysis Template -> notes/LM.0006.md
+- [x] **LM.0007** - Daily Analysis And Measurements -> notes/LM.0007.md
+- [x] **LM.0008** - Sample Manager -> notes/LM.0008.md
+- [x] **LM.0009** - Sample Analysis -> notes/LM.0009.md
+- [x] **LM.0011** - Corrosion Coupon Material -> notes/LM.0011.md
+- [x] **LM.0012** - Scale Simulation Results -> notes/LM.0012.md
+- [x] **LM.0013** - Corrosion Simulation Results -> notes/LM.0013.md
 
 ## HA — Allocation / Status Processes  (11)
-- [ ] **HA.0001** — Daily Data Status Processes
-- [ ] **HA.0002** — Daily Allocation
-- [ ] **HA.0003** — Monthly Allocation
-- [ ] **HA.0004** — Monthly Data Status Processes
-- [ ] **HA.0007** — Monthly Data Locking
-- [ ] **HA.0008** — Sub Daily Allocation
-- [ ] **HA.0009** — Period Process Calculations
-- [ ] **HA.0010** — Daily Allocation - Single Date
-- [ ] **HA.0011** — Daily Data Status Processes - Single Date
-- [ ] **HA.0012** — Monthly Local Data Locking
-- [ ] **HA.0013** — Daily Data Status Processes - by Facility
+- [x] **HA.0001** - Daily Data Status Processes -> notes/HA.0001.md
+- [x] **HA.0002** - Daily Allocation -> notes/HA.0002.md
+- [x] **HA.0003** - Monthly Allocation -> notes/HA.0003.md
+- [x] **HA.0004** - Monthly Data Status Processes -> notes/HA.0004.md
+- [x] **HA.0007** - Monthly Data Locking -> notes/HA.0007.md
+- [x] **HA.0008** - Sub Daily Allocation -> notes/HA.0008.md
+- [x] **HA.0009** - Period Process Calculations -> notes/HA.0009.md
+- [x] **HA.0010** - Daily Allocation - Single Date -> notes/HA.0010.md
+- [x] **HA.0011** - Daily Data Status Processes - Single Date -> notes/HA.0011.md
+- [x] **HA.0012** - Monthly Local Data Locking -> notes/HA.0012.md
+- [x] **HA.0013** - Daily Data Status Processes - by Facility -> notes/HA.0013.md
 
 ## CM — Chemical Management  (9)
-- [ ] **CM.0001** — Chemical Tank Status Read Lite
-- [ ] **CM.0002** — Chemical Injection Reading Lite
-- [ ] **CM.0003** — Chemical Injection Status
-- [ ] **CM.0005** — Chemical Batch Treatment
-- [ ] **CM.0006** — Chemical Stream Flow Configuration
-- [ ] **CM.0007** — Chemical Tank Status Read
-- [ ] **CM.0008** — Manage Chemical Inventory
-- [ ] **CM.0009** — Chemical Availability And Order
-- [ ] **CM.0010** — Chemical Compatibility
+- [x] **CM.0001** - Chemical Tank Status Read Lite -> notes/CM.0001.md
+- [x] **CM.0002** - Chemical Injection Reading Lite -> notes/CM.0002.md
+- [x] **CM.0003** - Chemical Injection Status -> notes/CM.0003.md
+- [x] **CM.0005** - Chemical Batch Treatment -> notes/CM.0005.md
+- [x] **CM.0006** - Chemical Stream Flow Configuration -> notes/CM.0006.md
+- [x] **CM.0007** - Chemical Tank Status Read -> notes/CM.0007.md
+- [x] **CM.0008** - Manage Chemical Inventory -> notes/CM.0008.md
+- [x] **CM.0009** - Chemical Availability And Order -> notes/CM.0009.md
+- [x] **CM.0010** - Chemical Compatibility -> notes/CM.0010.md
 
 ## IS — Integration Services (ECIS)  (9)
-- [ ] **IS.0001** — Mapping Configuration
-- [ ] **IS.0002** — Target Mapping Configuration
-- [ ] **IS.0003** — Staging Data
-- [ ] **IS.0004** — Historic Data Load
-- [ ] **IS.0006** — Upload Files
-- [ ] **IS.0007** — User Exit Configuration
-- [ ] **IS.0008** — Mapping Codes
-- [ ] **IS.0009** — Agent Configuration
-- [ ] **IS.0010** — Adapter Configuration
+- [x] **IS.0001** - Mapping Configuration -> notes/IS.0001.md
+- [x] **IS.0002** - Target Mapping Configuration -> notes/IS.0002.md
+- [x] **IS.0003** - Staging Data -> notes/IS.0003.md
+- [x] **IS.0004** - Historic Data Load -> notes/IS.0004.md
+- [x] **IS.0006** - Upload Files -> notes/IS.0006.md
+- [x] **IS.0007** - User Exit Configuration -> notes/IS.0007.md
+- [x] **IS.0008** - Mapping Codes -> notes/IS.0008.md
+- [x] **IS.0009** - Agent Configuration -> notes/IS.0009.md
+- [x] **IS.0010** - Adapter Configuration -> notes/IS.0010.md
 
 ## FI — Financial Items  (8)
-- [ ] **FI.0001** — Financial Item Definition
-- [ ] **FI.0002** — Financial Item Template
-- [ ] **FI.0003** — Monthly Financial Item
-- [ ] **FI.0005** — Daily Financial Item
-- [ ] **FI.0006** — Yearly Financial Item
-- [ ] **FI.0007** — Monthly Financial Item Calculation
-- [ ] **FI.0008** — Daily Financial Item Calculation
-- [ ] **FI.0009** — Yearly Financial Item Calculation
+- [x] **FI.0001** - Financial Item Definition -> notes/FI.0001.md
+- [x] **FI.0002** - Financial Item Template -> notes/FI.0002.md
+- [x] **FI.0003** - Monthly Financial Item -> notes/FI.0003.md
+- [x] **FI.0005** - Daily Financial Item -> notes/FI.0005.md
+- [x] **FI.0006** - Yearly Financial Item -> notes/FI.0006.md
+- [x] **FI.0007** - Monthly Financial Item Calculation -> notes/FI.0007.md
+- [x] **FI.0008** - Daily Financial Item Calculation -> notes/FI.0008.md
+- [x] **FI.0009** - Yearly Financial Item Calculation -> notes/FI.0009.md
 
 ## CA — Cargo & Parcel  (4)
-- [ ] **CA.0001** — Cargo And Parcel Information
-- [ ] **CA.0002** — Cargo Load and Analysis
-- [ ] **CA.0003** — Port Log
-- [ ] **CA.0004** — Monthly Account Balance Calculation
+- [x] **CA.0001** - Cargo And Parcel Information -> notes/CA.0001.md
+- [x] **CA.0002** - Cargo Load and Analysis -> notes/CA.0002.md
+- [x] **CA.0003** - Port Log -> notes/CA.0003.md
+- [x] **CA.0004** - Monthly Account Balance Calculation -> notes/CA.0004.md
 
 ## LA — Lifting Account  (3)
-- [ ] **LA.0001** — Sub Daily - Lifting Account Adjustment
-- [ ] **LA.0002** — Monthly Account Status
-- [ ] **LA.0003** — Lifting Account Adjustment
+- [x] **LA.0001** - Sub Daily - Lifting Account Adjustment -> notes/LA.0001.md
+- [x] **LA.0002** - Monthly Account Status -> notes/LA.0002.md
+- [x] **LA.0003** - Lifting Account Adjustment -> notes/LA.0003.md
 
 ## WL — Workflow / Task List  (3)
-- [ ] **WL.0001** — Task List
-- [ ] **WL.0002** — Four Eye Approval
-- [ ] **WL.0003** — Logbook
+- [x] **WL.0001** - Task List -> notes/WL.0001.md
+- [x] **WL.0002** - Four Eye Approval -> notes/WL.0002.md
+- [x] **WL.0003** - Logbook -> notes/WL.0003.md
