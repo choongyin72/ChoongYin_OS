@@ -28,6 +28,7 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `7ea9bfe` | 2026-07-07 | review: automated quality feedback 2026-07-07 (06:00 AWST -- #170 standing draft… |
 | `a4ba2a8` | 2026-07-06 | review: automated quality feedback 2026-07-06 (14:00 AWST -- #170 standing draft… |
 | `3789fa6` | 2026-07-06 | review: automated quality feedback 2026-07-06 (06:00 AWST -- #170 standing draft… |
 | `38f370c` | 2026-07-05 | review: automated quality feedback 2026-07-05 (14:00 AWST -- #170 standing draft… |
@@ -37,7 +38,6 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 | `18a87c4` | 2026-07-04 | EC Screen Deep-Dive: milestone merge (CO.0060â€“CO.1003 batch, 100-screen/day ca… |
 | `e680ed3` | 2026-07-04 | docs(ec-screens): periodic deep-dive review at 180/1457 - the 10 domain clusters… |
 | `b35751f` | 2026-07-04 | merge origin/master into feature/ec-screen-deepdive (pre-milestone sync, R8; kep… |
-| `841019a` | 2026-07-04 | feat(ec-screen-runner): batch size 100 -> 200 screens/run |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
