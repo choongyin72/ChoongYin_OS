@@ -1554,3 +1554,33 @@ _Open PR triggers a full review (R14). The only open PR is the standing-draft EC
 - ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-07-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout and all sibling `wt-*` worktrees were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
 
 ---
+
+## 2026-07-07 — Automated Review (14:00 AWST, 1 open PR #170 — STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). The only open PR is the standing-draft EC Screen Deep-Dive PR #170; its head (`91c8864`) is **byte-identical** to the commit cleared ~8h earlier at the 06:00 review (#174) and master did not advance (0 new commits). **Re-confirmed CLEAR, zero MUST-FIX, NOT merged** (owner-merge-only). **No new executable rules — R1–R29 cover every finding; version stays v29.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #170 | Clear (re-confirmation). Head `91c8864` unchanged since the 06:00 review (#174); 0 new master commits. Content already CLEAR at 06:00 — not re-litigated. Safety invariants re-verified at the tip: **R23 clean** (diff vs master on all five reviewer-owned docs = EMPTY, zero `-` lines), **R28 PASS** (CLAUDE.md 124 lines), R18/R20 unaffected (no new content). **R27** still `mergeable_state: DIRTY`/CONFLICTING (squash-lineage vs master; NOT a reviewer-doc clobber). **NOT merged** (owner-merge-only standing draft, still DRAFT). 4 NICE-TO-HAVE carry-overs re-verified present (see below). | ✅ Clear — left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **An unchanged open-PR head is a re-confirmation, not a re-review.** With #170's head byte-identical to the 06:00 commit and master static, the run confirmed the never-auto-merge invariant + R23/R28/R27 status and re-verified the carry-over findings still hold at the tip (MR1 — spot-checked, not inferred), rather than re-scoring frozen content. This is the correct shape for a standing-draft PR the reviewer is forbidden to merge.
+- **R29 stale-runner is now a 4-run recurrence — the durable fix is a Worker action R29 already prescribes.** 07-06 06:00 (extracted) → 07-06 14:00 → 07-07 06:00 → 07-07 14:00: the branch-tip runner carries the `f2ddb71` wording fix, yet notes added on the Worker's permanent branch (`HA.0001` via `91c8864`) still emit the PRE-`f2ddb71` `process/config (no data class -- e.g. ...)` string. The unattended autopilot executes a stale runner copy, so resolver/wording fixes never take effect and screens that *could* resolve a class stay mislabeled. It is a genuine quality degradation but does not gate a never-auto-merged draft, so it remains NICE-TO-HAVE with the recurrence count flagged. A runner *edit* cannot fix a runner that is never re-read — the fix is a `git pull`/re-checkout or hash-verify of the autopilot's runner at each run start (R29).
+
+### Gaps (verified against filesystem)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **R29 stale-runner (4th consecutive recurrence)** — autopilot emits PRE-`f2ddb71` note wording though the branch-tip runner is fixed; re-sync/hash-verify the autopilot's runner copy at each run start (verified: `HA.0001.md` added by `91c8864` still carries `process/config (no data class -- e.g. ...)`; runner tip `run_ec_screen_learn.py:131` has the fixed wording) | Worker | 🟡 Medium (escalating) |
+| Resolver dead 7th candidate `run_ec_screen_learn.py:104` — `re.sub(...,r'',base)` always empty (intended `r'\2'`); carry-over from #170/#171/#172/#174, still at tip | Worker | 🟢 Low |
+| **R27 conflict** — #170 still `mergeable_state: DIRTY`/CONFLICTING (squash lineage from `c3ce9d5` vs master; NOT a reviewer-doc clobber — R23 clean); rebase onto master or `--no-ff` before the next milestone merge | Owner | 🔴 High |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; `gen_checklist.py:33` em-dash `print`; ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+
+### Reviewer process note (isolated worktree; stale main-checkout docs)
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent branch `feature/ec-screen-deepdive` at a stale tip (`a7a0a3d`, **90 commits behind master**), so the session-start mandatory-read `docs/lessons-learned.md`/`docs/review-log.md` there were the STALE v23 copies; the live v29 docs were re-read from the master copy in the worktree before any rule/version decision (MR4). ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-07-1400` worktree off `origin/master`; the Worker's dirty permanent-branch checkout and all sibling `wt-*` worktrees were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
+
+---
