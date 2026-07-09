@@ -28,6 +28,8 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `d3cd8eb` | 2026-07-09 | EC Screen Deep-Dive: milestone COMPLETE 1457/1457 + underscore BF-code parser fi… |
+| `ed56817` | 2026-07-09 | review: automated quality feedback 2026-07-09 (14:00 AWST -- #170 standing draft… |
 | `caa4312` | 2026-07-08 | review: automated quality feedback 2026-07-08 (06:00 AWST -- #170 standing draft… |
 | `6502da6` | 2026-07-07 | review: automated quality feedback 2026-07-07 (14:00 AWST -- #170 standing draft… |
 | `7ea9bfe` | 2026-07-07 | review: automated quality feedback 2026-07-07 (06:00 AWST -- #170 standing draft… |
@@ -36,8 +38,6 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 | `38f370c` | 2026-07-05 | review: automated quality feedback 2026-07-05 (14:00 AWST -- #170 standing draft… |
 | `c3ce9d5` | 2026-07-05 | EC Screen Deep-Dive milestone: 776/1457 screens, corpus-format complete (regen o… |
 | `317bbdb` | 2026-07-05 | review: automated quality feedback 2026-07-05 (06:00 AWST -- #167 CLEAR/merged v… |
-| `954e3a0` | 2026-07-05 | docs: bake status-update routine into CLAUDE.md + CLAUDE.md size gate (R28) (#16… |
-| `18a87c4` | 2026-07-04 | EC Screen Deep-Dive: milestone merge (CO.0060â€“CO.1003 batch, 100-screen/day ca… |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
