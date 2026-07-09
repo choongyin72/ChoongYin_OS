@@ -40,7 +40,7 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0055** - Well Bore Split -> notes/CO.0055.md
 - [x] **CO.0057** - Well Bore Interval -> notes/CO.0057.md
 - [x] **CO.0058** - Well Bore Interval Split -> notes/CO.0058.md
-- [x] **CO.0060** - Maintain Equipment -> notes/CO.0060.md (note: class w/o view)
+- [ ] **CO.0060** - Maintain Equipment -> notes/CO.0060.md (note: class w/o view)
 - [x] **CO.0067** - Flowline Well Connection -> notes/CO.0067.md
 - [x] **CO.0068** - Cargo Activity -> notes/CO.0068.md
 - [x] **CO.0069** - Cargo Account -> notes/CO.0069.md
@@ -145,7 +145,7 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CO.0234** - Well Seasonal Value -> notes/CO.0234.md
 - [x] **CO.0235** - Stream Seasonal Values -> notes/CO.0235.md
 - [x] **CO.0236** - Message Group -> notes/CO.0236.md
-- [x] **CO.0237** - Equipment -> notes/CO.0237.md (note: class w/o view)
+- [ ] **CO.0237** - Equipment -> notes/CO.0237.md (note: class w/o view)
 - [x] **CO.0238** - Equipment Connection -> notes/CO.0238.md
 - [x] **CO.0239** - Company Contact -> notes/CO.0239.md
 - [x] **CO.0243** - State -> notes/CO.0243.md
@@ -769,7 +769,7 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **CD.0154** - Report Table -> notes/CD.0154.md
 - [x] **CD.0155** - Report Table Set -> notes/CD.0155.md
 - [x] **CD.0156** - Stream Item Split Key -> notes/CD.0156.md
-- [x] **CD.0157** - Stream Item Split Key Shares -> notes/CD.0157.md (note: class w/o view)
+- [ ] **CD.0157** - Stream Item Split Key Shares -> notes/CD.0157.md (note: class w/o view)
 - [x] **CD.0158** - Report Table Data -> notes/CD.0158.md
 - [x] **CD.1059** - DOA Credit Limit -> notes/CD.1059.md (note: no corpus Help)
 
@@ -1165,8 +1165,8 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **VO.0036** - Daily Cascade -> notes/VO.0036.md
 - [x] **VO.0037** - Monthly Cascade -> notes/VO.0037.md
 - [x] **VO.0038** - Forecast Monthly Cascade -> notes/VO.0038.md
-- [x] **VO.0039** - Daily Split Key Stream Item -> notes/VO.0039.md (note: class w/o view)
-- [x] **VO.0040** - Monthly Split Key Stream Item -> notes/VO.0040.md (note: class w/o view)
+- [ ] **VO.0039** - Daily Split Key Stream Item -> notes/VO.0039.md (note: class w/o view)
+- [ ] **VO.0040** - Monthly Split Key Stream Item -> notes/VO.0040.md (note: class w/o view)
 - [x] **VO.0041** - Forecast Stream Item Quantities -> notes/VO.0041.md
 
 ## PR — Pricing  (37)
