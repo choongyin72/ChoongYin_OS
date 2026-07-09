@@ -69,7 +69,7 @@ def pick_screens(checklist_path, n):
     """Complete [~] partials FIRST (DoD backfill), then new [ ] screens, in file/priority order."""
     todo, partial = [], []
     for ln in Path(checklist_path).read_text(encoding='utf-8').splitlines():
-        m = re.match(r'- \[([ ~])\] \*\*([A-Z0-9.]+)\*\* (?:' + chr(0x2014) + r'|-) (.+)', ln)
+        m = re.match(r'- \[([ ~])\] \*\*([A-Z0-9._]+)\*\* (?:' + chr(0x2014) + r'|-) (.+)', ln)
         if not m: continue
         status, code, rest = m.group(1), m.group(2), m.group(3)
         name = rest.split(' -> ')[0].split(' (')[0].strip()
@@ -120,7 +120,7 @@ def db_resolve(cur, bf_code, name):
         if not row: continue
         ctype, tscope, base = row
         view = None
-        for pref in ('OV_', 'TV_', 'DV_'):
+        for pref in ('OV_', 'TV_', 'DV_', 'RV_'):
             cur.execute("SELECT 1 FROM all_views WHERE owner='ECKERNEL_EC' AND view_name=:v", [pref + cn])
             if cur.fetchone(): view = pref + cn; break
         info['classes'].append({'class': cn, 'type': ctype, 'scope': tscope, 'base': base, 'view': view})
