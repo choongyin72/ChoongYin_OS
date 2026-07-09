@@ -1,0 +1,23 @@
+# WR.0049 - Sub Daily Production Well Status 2 - by Well
+
+_Deep-dive 2026-07-06 (deterministic runner). Module: WR._
+
+## Identity
+- BF_CODE: WR.0049 - URL: `/com.ec.prod.wr.screens/sub_daily_oil_production_well_status/CLASS_NAME/PWEL_SUB_DAY_STATUS_2/DAILY_CLASS_NAME/PWEL_DAY_STATUS_2`
+
+## DB binding (metadata-resolved)
+| Class | Type/Scope | Base table | View |
+|---|---|---|---|
+| `PWEL_SUB_DAY_STATUS_2` | DATA/1HR | `PWEL_SUB_DAY_STATUS` | `DV_PWEL_SUB_DAY_STATUS_2` |
+| `PWEL_DAY_STATUS_2` | DATA/DAY | `PWEL_DAY_STATUS` | `DV_PWEL_DAY_STATUS_2` |
+
+_Resolved by: url CLASS_NAME_
+
+## Screen type
+DATA/1HR
+
+## Help (screen screenshot -- local online-help corpus 14.2.5)
+![WR.0049 screenshot](WR.0049_shot_1.png)
+
+## Help (field-description images -- local online-help corpus 14.2.5)
+_(no field-description images in corpus for this BF_CODE)_
