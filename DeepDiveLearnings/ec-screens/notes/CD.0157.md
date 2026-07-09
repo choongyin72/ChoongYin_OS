@@ -1,6 +1,6 @@
 # CD.0157 - Stream Item Split Key Shares
 
-_Deep-dive 2026-07-05 (deterministic runner). Module: CD._
+_Deep-dive 2026-07-09 (deterministic runner). Module: CD._
 
 ## Identity
 - BF_CODE: CD.0157 - URL: `/com.ec.revn.cd/stream_item_split_key/SPLIT_TYPE/STREAM_ITEM_SPLIT`
@@ -8,7 +8,7 @@ _Deep-dive 2026-07-05 (deterministic runner). Module: CD._
 ## DB binding (metadata-resolved)
 | Class | Type/Scope | Base table | View |
 |---|---|---|---|
-| `STREAM_ITEM_SPLIT` | INTERFACE/VERSIONED | `None` | `(none)` |
+| `STREAM_ITEM_SPLIT` | INTERFACE/VERSIONED | `None` | `RV_STREAM_ITEM_SPLIT` |
 
 _Resolved by: url path token_
 

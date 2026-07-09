@@ -1,6 +1,6 @@
 # CO.0060 - Maintain Equipment
 
-_Deep-dive 2026-07-02 (deterministic runner). Module: CO._
+_Deep-dive 2026-07-09 (deterministic runner). Module: CO._
 
 ## Identity
 - BF_CODE: CO.0060 - URL: `/com.ec.frmw.co.screens/manage_copy_equipment`
@@ -8,7 +8,7 @@ _Deep-dive 2026-07-02 (deterministic runner). Module: CO._
 ## DB binding (metadata-resolved)
 | Class | Type/Scope | Base table | View |
 |---|---|---|---|
-| `EQUIPMENT` | INTERFACE/VERSIONED | `None` | `(none)` |
+| `EQUIPMENT` | INTERFACE/VERSIONED | `None` | `RV_EQUIPMENT` |
 
 _Resolved by: url path token_
 

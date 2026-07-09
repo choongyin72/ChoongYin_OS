@@ -1,6 +1,6 @@
 # VO.0039 - Daily Split Key Stream Item
 
-_Deep-dive 2026-07-06 (deterministic runner). Module: VO._
+_Deep-dive 2026-07-09 (deterministic runner). Module: VO._
 
 ## Identity
 - BF_CODE: VO.0039 - URL: `/com.ec.revn.vo/stream_item_split_key/DAILY/TRUE/SPLIT_TYPE/STREAM_ITEM_SPLIT`
@@ -8,7 +8,7 @@ _Deep-dive 2026-07-06 (deterministic runner). Module: VO._
 ## DB binding (metadata-resolved)
 | Class | Type/Scope | Base table | View |
 |---|---|---|---|
-| `STREAM_ITEM_SPLIT` | INTERFACE/VERSIONED | `None` | `(none)` |
+| `STREAM_ITEM_SPLIT` | INTERFACE/VERSIONED | `None` | `RV_STREAM_ITEM_SPLIT` |
 
 _Resolved by: url path token_
 
