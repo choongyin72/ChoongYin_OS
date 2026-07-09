@@ -1614,3 +1614,34 @@ _Open PR triggers a full review (R14). The only open PR is the standing-draft EC
 - The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent branch `feature/ec-screen-deepdive` at a stale tip (`a7a0a3d`, **91 commits behind master**), so the session-start mandatory-read `docs/lessons-learned.md`/`docs/review-log.md` there were the STALE v23 copies; the live v29 docs were re-read from the master copy in the worktree before any rule/version decision (MR4). ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-08-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout and all sibling `wt-*` worktrees were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
 
 ---
+
+## 2026-07-09 — Automated Review (16:00 AWST, milestone-completion run, 1 open PR #178 — STANDING/DRAFT)
+
+_Off-schedule milestone-completion run (the 14:00 slot was #177 on the frozen `91c8864` head). Since #177 the owner **squash-milestone-merged the prior standing draft #170** — `d3cd8eb` "EC Screen Deep-Dive: milestone COMPLETE **1457/1457** + underscore BF-code parser fix" landed on master — and CI auto-reopened a fresh standing shell **#178**. Open PR triggers a full review (R14). **#178 CLEAR — zero MUST-FIX — NOT merged** (owner-merge-only standing draft). **No new executable rules — R1–R29 cover every finding; version stays v29.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #178 | Clear — auto-reopened standing shell, **content byte-identical to master**. Direct tip-vs-tip `git diff --stat origin/master origin/feature/ec-screen-deepdive` = **EMPTY**: the whole 1457-note corpus is on master via the milestone squash, so #178 carries **zero real content divergence** (the ~1924-file `origin/master...branch` three-dot diff is purely the R27 squash-history artifact — the squash `d3cd8eb` is not a true ancestor of the branch, so all branch notes read as "added" vs the merge-base though the trees match). **R23 clean** (`git diff --numstat origin/master...origin/feature/ec-screen-deepdive` on all four reviewer-owned docs = EMPTY, zero `-` lines). **R28 PASS** (CLAUDE.md 124 lines). **mergeStateStatus = CLEAN/MERGEABLE** — the prior R27 DIRTY/CONFLICTING state is **RESOLVED**: branch tip `52d4436` is a fresh `Merge origin/master into HEAD` re-absorbing the squash. Newest note (`c6404e9` SA.0019.DS_PC) spot-checked: real binding `SCTR_ACC_DAY_DS_PC_ALLOC` (DATA/DAY) → `DV_SCTR_ACC_DAY_DS_PC_ALLOC`, honest "no field-description images in corpus", ASCII-clean. 3 NICE-TO-HAVE carry-overs. **NOT merged** (owner-merge-only standing draft). | ✅ Clear (NICE-TO-HAVE) — left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **1457/1457 milestone complete — the deterministic-runner deep-dive program landed in full.** The whole corpus is now on master via `d3cd8eb`. The design that got it there is worth restating: a deterministic (no-LLM) runner executing a proven recon→metadata-resolve→corpus-Help→note recipe, honest `[~]`/no-class partials (R3), read-only-by-construction against the live EC, and a never-auto-merged standing-draft PR the reviewer confirms-but-never-merges. It scaled from ~8 screens/run to 200/run without a MUST-FIX on content.
+- **R27's remedy was applied correctly this time.** The milestone was squash-merged (single-parent `d3cd8eb`) — R27 recurrence, as the execution plan's Phase 4 still bakes in — but the Worker then `Merge origin/master into HEAD` on the branch (`52d4436`), which re-absorbed the squash and returned #178 to CLEAN/MERGEABLE with a byte-identical tree. A squash milestone is survivable if the continuation immediately merges master back; the durable fix remains `--no-ff`/rebase to avoid the transient DIRTY window (still owed in `EXECUTION-PLAN-completion.md`).
+- **R29 stale-runner resolved by worktree convergence.** The Worker's autopilot runner worktree `wt-ec-learn` is now at `52d4436` (= branch tip), so the executing runner copy finally matches the committed one — the 6-run recurrence chain ends here. The lesson (R29) still stands for any future unattended program: hash/sync-verify the executing copy at each run start rather than trusting that a committed fix is live.
+- **A byte-identical open head is a re-confirmation, not a re-review.** With the branch tree == master tree, the review's job was to confirm the never-auto-merge invariant, R23/R28 safety, the R27 conflict-resolution, and content quality of the single new commit — not to re-score 1457 frozen notes.
+
+### Gaps (verified against filesystem / GitHub API)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| `DeepDiveLearnings/ec-screens/EXECUTION-PLAN-completion.md` Phase 4 step 2 still prescribes a **squash** milestone merge (R27) — change to `--no-ff`/rebase so any future milestone push does not re-enter the DIRTY window | Worker | 🟡 Medium |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; `gen_checklist.py:33` em-dash `print` (R18/R20); resolver dead 7th candidate `run_ec_screen_learn.py:104` (`re.sub(...,r'',base)` → intended `r'\2'`); ECIS `upload -> RUN NOW` flakiness root cause; Reported Alarms EVENT_LOG clone; #84 base-table count into the suite; WR.0010.02 Well Oil Comp | Worker | 🟡 Medium |
+| R9 header drift on the auto-generated #178 draft body (no exact 6 field headers) — harmless for a never-auto-merged draft; the reopen-PR workflow template could adopt the 6 headers | Worker | 🟢 Low |
+
+### Reviewer process note (isolated worktree; stale main-checkout docs)
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent branch `feature/ec-screen-deepdive` at a stale tip (`a7a0a3d`, **90+ commits behind master**), so the session-start mandatory-read `docs/lessons-learned.md`/`docs/review-log.md` there were the STALE **v23** copies; the live **v29** docs were re-read from the master copy in the worktree before any rule/version decision (MR4). ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-09-1600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout and all sibling `wt-*` worktrees (incl. the runner's `wt-ec-learn` at `52d4436`) were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
+
+---
