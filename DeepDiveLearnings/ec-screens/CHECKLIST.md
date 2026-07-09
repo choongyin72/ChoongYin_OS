@@ -880,17 +880,17 @@ Per-screen deep-dive = Help (code/desc/screenshots) + DB view (OV_/TV_/DV_, scre
 - [x] **SA.0018** - Monthly Contract Account Company Status -> notes/SA.0018.md
 - [x] **SA.0019.CPY** - Daily Contract Account Result - Company -> notes/SA.0019.CPY.md
 - [x] **SA.0019.DS** - Daily Contract Account Result - Dataset -> notes/SA.0019.DS.md
-- [ ] **SA.0019.DS_PC** — Daily Contract Account Result - Profit Centre and Dataset
+- [x] **SA.0019.DS_PC** - Daily Contract Account Result - Profit Centre and Dataset -> notes/SA.0019.DS_PC.md
 - [x] **SA.0019.PC** - Daily Contract Account Result - Profit Centre -> notes/SA.0019.PC.md
-- [ ] **SA.0019.PC_CPY** — Daily Contract Account Result - Profit Centre and Company
+- [x] **SA.0019.PC_CPY** - Daily Contract Account Result - Profit Centre and Company -> notes/SA.0019.PC_CPY.md
 - [x] **SA.0020.CPY** - Monthly Contract Account Result - Company -> notes/SA.0020.CPY.md
 - [x] **SA.0020.DS** - Monthly Contract Account Result - Dataset -> notes/SA.0020.DS.md
-- [ ] **SA.0020.DS_PC** — Monthly Contract Account Result - Profit Centre and Dataset
+- [x] **SA.0020.DS_PC** - Monthly Contract Account Result - Profit Centre and Dataset -> notes/SA.0020.DS_PC.md
 - [x] **SA.0020.PC** - Monthly Contract Account Result - Profit Centre -> notes/SA.0020.PC.md
-- [ ] **SA.0020.PC_CPY** — Monthly Contract Account Result - Profit Centre and Company
+- [x] **SA.0020.PC_CPY** - Monthly Contract Account Result - Profit Centre and Company -> notes/SA.0020.PC_CPY.md
 - [x] **SA.0021.CPY** - Yearly Contract Account Result - Company -> notes/SA.0021.CPY.md
 - [x] **SA.0021.PC** - Yearly Contract Account Result - Profit Centre -> notes/SA.0021.PC.md
-- [ ] **SA.0021.PC_CPY** — Yearly Contract Account Result - Profit Centre and Company
+- [x] **SA.0021.PC_CPY** - Yearly Contract Account Result - Profit Centre and Company -> notes/SA.0021.PC_CPY.md
 - [x] **SA.0030** - Forecast - Sales Allocation -> notes/SA.0030.md
 - [x] **SA.0031** - Forecast - Monthly Expenditure -> notes/SA.0031.md
 - [x] **SA.0033** - Forecast - Monthly Contract Account Company Status -> notes/SA.0033.md
