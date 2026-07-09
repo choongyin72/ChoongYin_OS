@@ -1645,3 +1645,33 @@ _Off-schedule milestone-completion run (the 14:00 slot was #177 on the frozen `9
 - The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent branch `feature/ec-screen-deepdive` at a stale tip (`a7a0a3d`, **90+ commits behind master**), so the session-start mandatory-read `docs/lessons-learned.md`/`docs/review-log.md` there were the STALE **v23** copies; the live **v29** docs were re-read from the master copy in the worktree before any rule/version decision (MR4). ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-09-1600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout and all sibling `wt-*` worktrees (incl. the runner's `wt-ec-learn` at `52d4436`) were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
 
 ---
+
+## 2026-07-10 06:00 AWST — Automated Review (0 new master commits since #179; 1 open PR #178, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). #178 (the post-completion standing-draft shell) had REAL new work this run — 3 branch commits since #179, one a runner code change — so it was reviewed HIGH effort, not treated as an unchanged-head re-confirmation. **CLEAR — zero MUST-FIX — NOT merged** (owner-merge-only standing draft). **No new executable rules — R1–R29 cover every finding; version stays v29.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #178 | Clear — 3 new commits since #179 (`04044c5` reset 5 INTERFACE screens for re-resolution + `f6dcd21` re-learn 5 + `56ed452` runner fix). **Runner fix** (`run_ec_screen_learn.py`, +2/-2): `pick_screens` BF-code regex `[A-Z0-9.]+`→`[A-Z0-9._]+` (matches underscore BF-codes) and `db_resolve` adds `'RV_'` to the `OV_/TV_/DV_` view-prefix search (INTERFACE-class read-views now resolve) — both correct, ASCII-clean (em-dash is `chr(0x2014)` code-point, R18/R20-safe), diff↔commit-message match (R21). **5 INTERFACE re-resolutions** (CO.0060/CO.0237→`EQUIPMENT`→`RV_EQUIPMENT`; CD.0157/VO.0039/VO.0040→`STREAM_ITEM_SPLIT`→`RV_STREAM_ITEM_SPLIT`): honest DoD-backfill — verified before→after on CD.0157 (`(none)`→`RV_STREAM_ITEM_SPLIT`), consistent with INTERFACE/VERSIONED typing, not fabricated. **R23 clean** (three-dot diff on the four reviewer-owned docs = EMPTY). **R28 PASS** (CLAUDE.md 124 lines). **R18/R20 clean** (0 non-ASCII on added lines). **NOT merged** (owner-merge-only draft). 3 NICE-TO-HAVE (carry-overs) — see below. | ✅ Clear (NICE-TO-HAVE) — **left open (owner-merge-only)** |
+
+### Observations (good patterns to keep)
+
+- **RV_ read-view resolution is the right fix, and it landed honestly.** The old runner only searched `OV_/TV_/DV_` prefixes, so INTERFACE-class screens (EQUIPMENT, STREAM_ITEM_SPLIT) recorded `(none)` for their View — an honest gap, not a fabrication. Adding `RV_` (EC's read-view prefix for INTERFACE classes) closes the gap for real: each of the 5 reset screens now binds to an existing `RV_*` view. The worker reset the 5 notes to a clean baseline (`04044c5`) THEN re-resolved with the improved runner (`f6dcd21`/`56ed452`) rather than hand-patching the View column — the correct, reproducible shape for a post-completion resolver improvement.
+- **A moved standing-draft head is not automatically a re-confirmation.** The last five runs were unchanged-head re-confirmations of a frozen `91c8864`; this run's head genuinely moved (`52d4436`→`56ed452`) with a `.py` change, so it earned a full HIGH-effort review of the actual 3-commit delta (isolated via `git diff 04044c5^..56ed452`, NOT the 1927-file three-dot artifact). Reviewing the real commit range — not the squash-lineage-inflated three-dot diff — is what keeps the R27 noise from drowning a genuine 7-file change.
+
+### Gaps (verified against filesystem / git at tip)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **R27 pre-milestone re-absorb (now a live clobber-latent).** The 3 new commits were built on `52d4436` (pre-#179) without re-absorbing master, so the DIRECT two-dot `git diff origin/master origin/feature/ec-screen-deepdive` shows `docs/lessons-learned.md -31` + `docs/review-log.md -1` + `STATUS.md` (= #179's review entry the branch is now behind on). The literal R23 test is the THREE-dot form and it is CLEAN (branch made no edit to those files) → NOT an R23 MUST-FIX; but the owner MUST `git merge origin/master` (or `--no-ff`) before the next milestone push/merge or a squash would clobber #179's record. | Worker/owner | 🟡 Medium |
+| Resolver dead 7th candidate at `run_ec_screen_learn.py:104` — `re.sub('^(DAILY\|SUB_DAILY\|MONTHLY\|MTH\|YEARLY)_(.*?)(_STATUS\|_OVERVIEW)?$', r'', base)` uses replacement `r''` (always empty → filtered out by `if c`); intended `r'\2'`. Carry-over from #170–#179, still at tip. | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; `gen_checklist.py:33` `print(... em-dash ...)` (R18/R20); `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'`→`'ECPR-DEMO'` (R22). | Worker | 🟡 Medium |
+| Carry-over (still open): R27 squash still prescribed in `EXECUTION-PLAN-completion.md` Phase 4 (switch to `--no-ff`/rebase for any future milestone); R9 header drift on the bot-generated draft body (harmless for a never-auto-merged draft). | Worker | 🟢 Low |
+
+### Reviewer process note (isolated worktree; stale main-checkout docs)
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent branch `feature/ec-screen-deepdive` at a stale tip (`a7a0a3d`, ~90 commits behind master), so the session-start mandatory-read `docs/lessons-learned.md`/`docs/review-log.md` there were the STALE **v23** copies; the live **v29** docs were re-read from the `origin/master` copy in the worktree before any rule/version decision (MR4). ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-10-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout and all sibling `wt-*` worktrees were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
+
+---
