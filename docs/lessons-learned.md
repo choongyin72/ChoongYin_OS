@@ -1675,3 +1675,32 @@ _Open PR triggers a full review (R14). #178 (the post-completion standing-draft 
 - The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent branch `feature/ec-screen-deepdive` at a stale tip (`a7a0a3d`, ~90 commits behind master), so the session-start mandatory-read `docs/lessons-learned.md`/`docs/review-log.md` there were the STALE **v23** copies; the live **v29** docs were re-read from the `origin/master` copy in the worktree before any rule/version decision (MR4). ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-10-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout and all sibling `wt-*` worktrees were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
 
 ---
+
+## 2026-07-11 06:00 AWST — Automated Review (0 new master commits since #181; 1 open PR #178, STANDING/DRAFT)
+
+_Open PR triggers a full review (R14). #178's head `56ed452` is byte-identical to the commit cleared ~16h/~8h ago at the 07-10 06:00 (#180) and 14:00 (#181) reviews and master did not advance (0 new commits since `e533162`) — an unchanged-head RE-CONFIRMATION (2nd consecutive on `56ed452`), NOT a re-review of already-cleared content. **Re-confirmed CLEAR; NOT merged** (owner-merge-only standing draft, still `draft:true`). **No new executable rules — R1–R29 cover every finding; version stays v29.**_
+
+### PR Status after this review pass
+
+| PR | Finding | Status |
+|----|---------|--------|
+| #178 | Clear (re-confirmation). Head `56ed452` byte-identical to the commit cleared at #180/#181 (PR `headRefOid` = `56ed452`, `updated_at` 2026-07-10T08:02:51Z — no new push). Safety invariants re-verified at the tip (checked, not inferred — MR1): **R23 CLEAN** (`git diff --numstat origin/master...origin/feature/ec-screen-deepdive` on all four reviewer-owned docs = EMPTY, zero `-` lines — the branch does not edit those files); **R28 PASS** (CLAUDE.md 124 lines); never-auto-merge invariant holds (`draft:true`, `merged:false`). The 1928 `changed_files` / +16366/-692 the GitHub API reports is the R27 squash-lineage three-dot artifact (`d3cd8eb` milestone squash is not a true ancestor of the branch), NOT real content divergence. **NOT merged** (owner-merge-only standing draft). 3 NICE-TO-HAVE carry-overs. | ✅ Clear (NICE-TO-HAVE) — left open (owner-merge-only) |
+
+### Observations (good patterns to keep)
+
+- **An unchanged open-PR head is a re-confirmation, not a re-review.** #178's head has not moved since #180 (the last run with real work — the RV_ runner fix + 5 INTERFACE re-resolutions), so the 1457-note corpus (already CLEAR many times) was not re-litigated. The run instead confirmed (a) the never-auto-merge invariant still holds, (b) R23 is still satisfied vs the now-further-advanced master, and (c) R28 still passes — the correct shape for a standing-draft PR the reviewer is forbidden to merge.
+- **The R23 (three-dot) vs R27 (two-dot) distinction remains the crux of this branch.** The literal R23 test — the branch's OWN edits since merge-base — stays EMPTY every run, because the deep-dive branch never edits the four reviewer-owned docs. What grows every review is the two-dot gap (branch behind master), now `lessons-learned.md -61` + `review-log.md -3` + `STATUS.md`, purely because each review APPENDS to those files on master and the permanent branch has not re-absorbed. That is an R27 pre-milestone-re-absorb obligation on the owner, not an R23 clobber the reviewer must block. Conflating the two would either falsely MUST-FIX a clean branch or falsely clear a real clobber — keep testing both forms explicitly.
+
+### Gaps (verified against filesystem / GitHub API)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **R27 pre-milestone re-absorb (clobber-latent, NICE-TO-HAVE not MUST-FIX).** The branch is behind master on the reviewer-owned docs (two-dot: `lessons-learned.md -61` + `review-log.md -3` + `STATUS.md`) — the #179/#180/#181 review entries it has not re-absorbed. R23 three-dot is CLEAN so this is not a reviewer-blocking clobber, but the owner MUST `git merge origin/master` (or `--no-ff`) before the next milestone push/merge or a squash would delete those review records. | Worker/owner | 🟡 Medium |
+| Resolver dead 7th candidate at `run_ec_screen_learn.py:104` — `re.sub('^(DAILY\|SUB_DAILY\|MONTHLY\|MTH\|YEARLY)_(.*?)(_STATUS\|_OVERVIEW)?$', r'', base)` uses replacement `r''` (always empty → filtered out by `if c`); intended `r'\2'`. Carry-over from #170–#181, still at tip. | Worker | 🟢 Low |
+| Carry-over (still open): extend `check_bundle_hygiene.py` ASCII gate to `.claude/skills/**/*.py` + `workstreams/**/scripts/*.py` + `tools/**`; `DeepDiveLearnings/ec-screens/gen_checklist.py:33` em-dash `print` (R18/R20); `ec-sql-script-builder` demo SQL `REV_TEXT='ECPR-XXXX'`→`'ECPR-DEMO'` (R22); `EXECUTION-PLAN-completion.md` Phase 4 still prescribes squash (R27 — switch to `--no-ff`/rebase); R9 header drift on the bot-generated draft body (harmless for a never-auto-merged draft). | Worker | 🟡 Medium |
+
+### Reviewer process note (isolated worktree; stale main-checkout docs)
+
+- The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent branch `feature/ec-screen-deepdive` at a stale tip (`a7a0a3d`, ~97 commits behind master), so the session-start mandatory-read `docs/lessons-learned.md`/`docs/review-log.md` there were the STALE **v23** copies; the live **v29** docs were re-read from the `origin/master` copy in the worktree before any rule/version decision (MR4). ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-11-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout and all sibling `wt-*` worktrees (incl. the runner's `wt-ec-learn`) were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
+
+---
