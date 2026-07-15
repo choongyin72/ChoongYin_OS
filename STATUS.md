@@ -28,6 +28,7 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 ### Recent Commits
 | SHA | Date | Message |
 |-----|------|---------|
+| `5e7986c` | 2026-07-15 | review: automated quality feedback 2026-07-15 (06:00 AWST -- #178 standing draft… |
 | `a580d76` | 2026-07-14 | review: automated quality feedback 2026-07-14 (06:00 AWST -- #178 standing draft… |
 | `ebdb2d1` | 2026-07-13 | review: automated quality feedback 2026-07-13 (06:00 AWST -- #178 standing draft… |
 | `9c4a5fd` | 2026-07-13 | review: automated quality feedback 2026-07-13 (01:00 AWST off-schedule -- #178 s… |
@@ -37,7 +38,6 @@ _Last Jira sync: 2026-06-13. Run a Jira search in session to refresh._
 | `e533162` | 2026-07-10 | review: automated quality feedback 2026-07-10 (14:00 AWST -- #178 standing draft… |
 | `bf63f6a` | 2026-07-10 | review: automated quality feedback 2026-07-10 (06:00 AWST -- #178 standing draft… |
 | `a12bc1f` | 2026-07-09 | review: automated quality feedback 2026-07-09 (16:00 AWST -- milestone-completio… |
-| `d3cd8eb` | 2026-07-09 | EC Screen Deep-Dive: milestone COMPLETE 1457/1457 + underscore BF-code parser fi… |
 
 ## Queue (approved, awaiting arm)
 - daily-status-reconcile (daily 08:00 AWST)
