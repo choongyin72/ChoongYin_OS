@@ -10,6 +10,16 @@
    - NICE-TO-HAVE comments are advisory, merge can proceed without them
    - Push fixes to the existing PR branch, do not open a new PR
 
+## EC UI work — read-first (mandatory, every EC UI / bug-trace task, at each task-switch)
+Before ANY EC UI action (test, trace, save/update/delete):
+1. Read `ec-ui-knowledge/EC_UI_SOP.md` (screen actions) or `ec-ui-knowledge/EC_BUG_TRACE_SOP.md` (investigation).
+2. Check `ec-ui-knowledge/screens/<screen-name>.md` — if it exists, use those selectors directly; do NOT re-scan.
+3. Check `ec-ui-knowledge/EC_KNOWN_ISSUES.md` before diagnosing any bug.
+
+NEVER invent a selector, table name, or root cause. Tag every claim: `[from screens/x.md]` / `[from fresh scan]` / `[UNCONFIRMED — must verify]`. An `[UNCONFIRMED]` claim cannot be acted on — say "I don't know", then do ONE scan or ask.
+
+Max 2 attempts on any save/update/delete/fix, then STOP and report — no looping, no selector variations. After the action, UPDATE the relevant `screens/*.md` / `EC_KNOWN_ISSUES.md` in the same session (write-after). Re-trigger this at every task-switch, not just session start (context dilutes over long sessions).
+
 ## Git workflow (mandatory — never commit directly to master)
 1. At the start of every session, create a feature branch from master:
    `git checkout master && git pull origin master && git checkout -b feature/<task-name>`
