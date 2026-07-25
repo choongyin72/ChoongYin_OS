@@ -36,7 +36,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [ ] Deferment Group — `CO.0149` — `OV_DEFERMENT_GROUP`
 - [ ] Choke — `CO.0185` — `OV_CHOKE`
 - [x] Disposition Type — `CO.0208` — `OV_DISPOSITION_TYPE` (done 2026-07-25)
-- [ ] Choke Model — `CO.0217` — `OV_CHOKE_MODEL`
+- [x] Choke Model — `CO.0217` — `OV_CHOKE_MODEL` (done 2026-07-26)
 - [ ] Blend — `CO.0219` — `OV_BLEND`
 - [ ] Calculation Group Context — `CO.0245` — `OV_CALC_GRP_CONTEXT`
 - [ ] Chemical Transport Tank — `CO.0257` — `OV_CHEM_TRANS_TANK`
