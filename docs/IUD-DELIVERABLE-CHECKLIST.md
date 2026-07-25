@@ -4,9 +4,18 @@
 - **Worker:** copy this list into the screen bundle as `CHECKLIST.md`, tick every item with evidence, and raise the PR **only when all items are green**.
 - **Reviewer:** verify the PR against this list. **ALL 19 items are HARD GATES** — any missing or failing item ⇒ **MUST-FIX: do NOT approve/merge, leave the PR open, post a note-back listing the exact gaps** (template below), re-review next run.
 
-_Locked 2026-06-28 (owner): all 19 are hard gates — no NICE-TO-HAVE exceptions._
+_Locked 2026-06-28 (owner): all items are hard gates — no NICE-TO-HAVE exceptions._
+_Updated 2026-07-25: added Step 0 (check-existing gate) + items 20–21 (KB MD map, reuse clause) after the
+Bank Account gap — a screen had passing tests but was missing its KB map + JOURNAL, so "Done" was declared
+too shallow. Count is now 21 hard gates._
 
 ---
+
+## Step 0. CHECK-EXISTING-FIRST GATE (before building anything — not optional)
+- [ ] **0a.** Read `ec-ui-knowledge/screens/<screen>.md` if it exists (use its selectors; don't re-scan).
+- [ ] **0b.** `grep -ril "<screen-slug>" workstreams/master-plan/ec-automation/{py,pageobjects,tests,screens}`
+      → **found ⇒ REUSE/EXTEND, never build a parallel copy** (the Bank 3rd-stack mistake). State "existing impl: `<path>` / none" in the plan.
+- [ ] **0c.** Prefer the shared engine over new code: `py/ec_object_iud.py` (OV IUD) + `libraries/DbVerify.py` (single DB-verify). A new OV screen = a thin driver (copy `py/bank_iud.py`, swap config), not new plumbing.
 
 ## A. Bundle artifacts — `screens/<menu path>/<Screen>/`
 - [ ] **1. `<screen>_sow.md`** — SOW: classification (type/pattern), nav/grid/cells, test data, dev story, lessons.
@@ -34,6 +43,14 @@ _Locked 2026-06-28 (owner): all 19 are hard gates — no NICE-TO-HAVE exceptions
 - [ ] **17. Registry row** appended to `workstreams/master-plan/ec-automation/docs/ec_screen_registry.md` (append-only, R23).
 - [ ] **18. Scorecard row** appended to `docs/automation-scorecard.md` (append-only, R23).
 - [ ] **19. PR** with the R9 6-field body (What / Files / DB ground-truth evidence / Self-clean / Rules applied / Base branch); R8 sync first; **never self-merge**.
+
+## E. Knowledge base (added 2026-07-25 — MD-only, tool-agnostic)
+- [ ] **20. KB selector map** `ec-ui-knowledge/screens/<screen>.md` — nav path, DB view, grid id, insert/update/delete
+      selectors, mandatory-yellow fields, quirks, last-verified date + EC version/env. Serves BOTH Playwright & RF
+      (it's the single selector reference; code files cite it). `ec-ui-knowledge/` holds MD only — no code.
+- [ ] **21. Reuse clause.** If Step 0 finds the screen ALREADY implemented, a "reuse run" is NOT done at green
+      tests alone — it must still produce/refresh the deliverables that document it: **#3 JOURNAL**, **#6 evidence**,
+      and **#20 KB map**. "Done" = tests + KB MD + JOURNAL + evidence, never just passing tests.
 
 ---
 
