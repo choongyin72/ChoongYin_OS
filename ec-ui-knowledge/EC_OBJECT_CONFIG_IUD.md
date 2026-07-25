@@ -8,6 +8,16 @@
 >
 > _Distilled from the Bank task; verified live on EC 14.2.4 sandbox 2026-07-25 (I-U-D 7/7 DB-verified)._
 
+## Step 0 — CHECK FIRST, then build (mandatory gate)
+Before writing ANY new code for a screen:
+1. **Read** `screens/<name>.md` if it exists — use its selectors, don't re-scan.
+2. **Search for an existing implementation** — do not assume a clean slate:
+   `grep -ril "<screen-slug>" workstreams/master-plan/ec-automation/{py,pageobjects,tests,screens}`
+   - Found → **reuse/extend it**; never add a parallel copy (the Bank mistake: a 3rd standalone stack).
+3. **Prefer the shared engine over new code:** `py/ec_object_iud.py` (OV IUD) + `libraries/DbVerify.py`
+   (DB truth). A new OV screen should be a thin driver (copy `py/bank_iud.py`, swap the config), not new plumbing.
+State the search result in the plan-back ("existing impl: <path> / none").
+
 ## Screen anatomy that matters
 Tree View (open) · Navigator Pane (filter fields + mandatory-yellow + **GO**) · Data Window (grid) ·
 Tool Bar (**Save**, Refresh, **New** = hover-menu). Status-area tabs (Record Status / Revision /

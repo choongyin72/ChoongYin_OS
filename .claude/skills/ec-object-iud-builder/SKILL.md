@@ -52,6 +52,16 @@ At these four points: slow down, recon first, verify against ground truth — do
   this session's files by explicit path.
 
 ## Steps (execute in order, autonomously)
+**0. CHECK-EXISTING-FIRST GATE (before any build).** The task is *check-then-build*, never *build*.
+   - Read `ec-ui-knowledge/screens/<screen>.md` if it exists (use its selectors; don't re-scan).
+   - Search for a working implementation:
+     `grep -ril "<screen-slug>" workstreams/master-plan/ec-automation/{py,pageobjects,tests,screens}`.
+     **Found → reuse/extend it; NEVER add a parallel copy** (real miss: a 3rd standalone Bank stack got
+     built alongside the existing RF + Playwright). Also check the registry (`docs/ec_screen_registry.md`).
+   - Prefer configuring the shared engine over new plumbing: `py/ec_object_iud.py` (OV IUD) +
+     `libraries/DbVerify.py`. A new OV screen = a thin driver (copy `py/bank_iud.py`, swap config).
+   - State the result in the plan ("existing impl: <path> / none") before writing anything.
+
 **1. Branch + scope.** `git checkout -b feature/<screen-slug>-iud origin/master`. Read the registry row if present.
 
 **2. Recon → fill the spec template (§1–§6).** DB-first → Finder/Toolbar/Nav → DOM:

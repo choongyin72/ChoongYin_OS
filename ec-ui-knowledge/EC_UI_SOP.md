@@ -14,8 +14,17 @@
 2. Check `screens/<screen-name>.md` for the target screen.
    - **Exists** → use its selectors directly. Do NOT re-scan the DOM "just to check."
    - **Does not exist** → proceed to Step 1 (Discovery Mode) below.
-3. Confirm which environment/credentials apply (`${EC_URL}`, `${EC_USERNAME}`, `${EC_PASSWORD}`, `${WAIT_TIMEOUT}=30s`).
-4. State the plan back in one short line before executing (screen name, action, source of selectors: "file" or "fresh scan").
+3. **CHECK-EXISTING-FIRST GATE (before writing ANY new automation code).** The task is
+   *check-then-build*, never *build*. Search `ec-automation` for a working implementation of this
+   screen BEFORE creating a driver/suite/engine:
+   `grep -ril "<screen-slug>" workstreams/master-plan/ec-automation/{py,pageobjects,tests,screens}`
+   - **Found** → **reuse or extend it.** Do NOT write a parallel copy (that was the Bank mistake:
+     a 3rd standalone stack got created alongside the existing RF + Playwright).
+   - Also confirm the reusable engine/lib already covers the mechanics: `py/ec_object_iud.py`
+     (OV IUD), `libraries/DbVerify.py` (DB ground truth). Prefer configuring these over new code.
+   - Only write NEW code when the search returns nothing. State what the search found in the plan-back.
+4. Confirm which environment/credentials apply (`${EC_URL}`, `${EC_USERNAME}`, `${EC_PASSWORD}`, `${WAIT_TIMEOUT}=30s`).
+5. State the plan back in one short line before executing (screen, action, source of selectors: "file" or "fresh scan", and "existing impl: found <path> / none").
 
 ---
 
