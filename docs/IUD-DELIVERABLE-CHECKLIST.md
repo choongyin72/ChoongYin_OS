@@ -31,6 +31,9 @@ too shallow. Count is now 21 hard gates._
 - [ ] **9. Suite** `tests/<menu path>/<screen>_iud.robot` — TC structure clean → insert → update → delete → cleanup.
 
 ## C. Verification gates (record the evidence in CHECKLIST + the PR body)
+> **These ticks are NOT hand-typed.** Run `py scripts/verify_screen.py --name … --t3 … --suite … --driver … --out <bundle>/VERIFY-REPORT.md`
+> — it RUNS robocop + hygiene + dryrun + live suite + driver and emits the ticks from real exit codes. It must print
+> `OVERALL: PASS` before the PR. Ticking a gate the verifier did not pass = hard violation (CLAUDE.md 'NO GUESSING').
 - [ ] **10. robocop clean** (the new T3 + suite).
 - [ ] **11. `--dryrun` N/N PASS** (suite).
 - [ ] **12. LIVE headed run N/N PASS** — the proof (`EC_HEADLESS=false`).

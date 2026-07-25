@@ -117,6 +117,12 @@ At these four points: slow down, recon first, verify against ground truth — do
    guard — fails statically on ANY non-ASCII char in `playwright/*.py` or `investigation/*.py`**, so author
    every bundle/recon `.py` ASCII-clean: use `-` not em-dash, `->` not arrow, `OK`/`X` not check/cross, plain
    quotes — including in docstrings/comments and untaken FAIL-branch strings).
+   **⛔ MANDATORY GATE — `py scripts/verify_screen.py --name "<Screen>" --t3 <T3> --suite <suite> --driver <driver>
+   --out <bundle>/VERIFY-REPORT.md` MUST print `OVERALL: PASS` (exit 0) BEFORE the PR.** It RUNS robocop +
+   hygiene + dryrun + the live suite + the driver and writes the tick marks FROM THE REAL EXIT CODES — you do
+   NOT hand-tick the verification gates (10/11/12/13/15/16). Copy its `VERIFY-REPORT.md` into the bundle and
+   reference it from `CHECKLIST.md`. Ticking a gate the verifier did not pass is a hard violation
+   ([[feedback_dont_trust_own_code_until_validated]] / CLAUDE.md 'NO GUESSING' rule).
 
 **6. Package.** Append a row to `docs/ec_screen_registry.md` + `docs/automation-scorecard.md` (append-only).
 
