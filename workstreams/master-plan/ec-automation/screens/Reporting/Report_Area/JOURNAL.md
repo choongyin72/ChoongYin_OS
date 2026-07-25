@@ -14,8 +14,13 @@ _Branch: feature/report-area-iud (off master; #194 foundation already merged). 2
 - Simplest OV so far (Code/Name/Start Date only; no Description, no dropdowns) — clean recon-first build.
 
 ## Problems / blockers
-- None. Grid empty on open (needs GO) — expected for this screen (not a defect); handled by GO after open in driver + T3 `Apply Navigator`.
+- **No hard blockers** — both tools passed first try (payoff of the merged foundation; selector/hook/path issues from earlier screens were already solved + captured).
+- Grid empty on open (needs GO) — expected for this screen (not a defect); handled by GO after open in driver + T3 `Apply Navigator`.
 - Treeview path resolved authoritatively from DB treeview JSON (Reporting > Report Area) — note it sits under top-level **Reporting**, not Configuration/Assets.
+
+## Done wrong (minor self-notes — logged for honesty)
+- Used an **inline `py <<heredoc`** once to confirm CODE/NAME columns — a bend of the "no inline python, write a script file in tmp/" rule. Should have dropped it in `tmp/`. No impact; noting to not repeat.
+- Left the OV tracker's sub-header reading **"Uncovered (35)"** while the two entries were ticked + totals said 33 — stale count. Fixed in the same commit as this note.
 
 ## Decisions
 - Update covers Name only (no Description column exists). Plain OV → engine unchanged.

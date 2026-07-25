@@ -14,7 +14,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
   reference dropdowns (e.g. Bank Account: Bank/Customer/Currency). Recon each form before building; if it has
   mandatory ref dropdowns the generic engine needs dropdown-fill support (not yet built) or a standalone bundle.
 
-## Uncovered — reuse targets (35)
+## Uncovered — reuse targets (33 remaining; 2 ticked below now done)
 ### CD (9)
 - [ ] Document Template — `CD.0013` — `OV_DOC_TEMPLATE`
 - [ ] Revenue Stream Category — `CD.0015` — `OV_STREAM_CATEGORY`
