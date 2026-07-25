@@ -10,6 +10,12 @@ Library             Browser
 Resource            common.resource
 
 
+*** Variables ***
+# The OV manage-object list grid id is INVARIANT across every manage_object_nav screen (framework
+# constant, verified). Defined ONCE here so no T3 hardcodes it; T3s reference ${OV_MANAGE_OBJECT_TABLE}.
+${OV_MANAGE_OBJECT_TABLE}       manage_object_nav_nav:form:T_data
+
+
 *** Keywords ***
 Open New Object Form
     [Documentation]    Hover the Insert toolbar menu and choose "New Object".
