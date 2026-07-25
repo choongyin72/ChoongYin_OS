@@ -117,4 +117,5 @@ _Last updated: 2026-06-28_
 | Commercial Sub Field | Not attempted | |
 | Disposition Type (OV, CO.0208) | ✅ Done 2026-07-25 — RF 4/4 + Playwright 7/7, DB-verified vs OV_DISPOSITION_TYPE, self-clean; 1st OV-reuse-target on shared py/ec_object_iud.py engine | 34 uncovered OV reuse-targets remain (see docs/ov-reuse-targets.md) |
 | Report Area (OV, RP.0017) | ✅ Done 2026-07-25 — RF 4/4 + Playwright 7/7, DB-verified vs OV_REPORT_AREA, self-clean; 2nd OV-reuse-target (simplest OV) | 33 uncovered OV reuse-targets remain (see docs/ov-reuse-targets.md) |
-| Choke Model (OV, CO.0217) | ✅ Done 2026-07-26 — RF 4/4 + Playwright 7/7 via verify_screen.py gate (OVERALL PASS), DB-verified vs OV_CHOKE_MODEL (Name+Description), self-clean; 4th OV-reuse-target | see docs/ov-reuse-targets.md (Choke #200 + Choke Model both landing) |
+| Choke (OV, CO.0185) | ✅ Done 2026-07-25 — RF 4/4 + Playwright 7/7 via verify_screen.py gate (OVERALL PASS), DB-verified vs OV_CHOKE (Name+Comments), self-clean; 3rd OV-reuse-target | see docs/ov-reuse-targets.md |
+| Choke Model (OV, CO.0217) | ✅ Done 2026-07-26 — RF 4/4 + Playwright 7/7 via verify_screen.py gate (OVERALL PASS), DB-verified vs OV_CHOKE_MODEL (Name+Description), self-clean; 4th OV-reuse-target | 31 uncovered OV reuse-targets remain |

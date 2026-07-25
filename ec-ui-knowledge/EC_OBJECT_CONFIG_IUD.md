@@ -59,6 +59,10 @@ Exception: `objectdates` row R0 holds Start Date (C:1) **and End Date (C:3)** on
   `field_should_equal_in_view` (RF keyword) · `code_present` (bool) · `count_like`.
 - `ec-automation/py/bank_iud.py` — thin per-screen driver (**template**): copy it, change
   `SCREEN` / `GRID_DATA_ID` / `VIEW` / the field_maps. Engine unchanged.
+- **NO HARDCODED field ids** (owner rule): RF T3 resolves fields **by LABEL** via T2 `Fill OV Field By Label` /
+  `Fill OV Date By Label` / `OV Field Id By Label` (`${form}` = objectForm|updateAttributes|objectdates). A field's
+  label span + input are adjacent tableCells, so the label locates the input with no `R:<n>:C:<n>` id — robust to
+  per-screen row shifts (Start Date R2 on Choke vs R4 on Choke Model). Playwright engine already resolves by label.
 - RF layer (shared framework): `ec-automation/resources/manage_object.resource` (T2) +
   `ec-automation/libraries/DbVerify.py` + per-screen T3 `pageobjects/.../bank_page.resource` + suite `tests/.../bank_iud.robot`.
 
