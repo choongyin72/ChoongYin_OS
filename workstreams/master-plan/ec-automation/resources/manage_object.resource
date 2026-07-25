@@ -76,3 +76,29 @@ Object Row Should Show Name
     [Arguments]    ${table_id}    ${code}    ${name}
     ${row}=    Get Text    xpath=//tbody[@id='${table_id}']//tr[.//span[normalize-space(text())='${code}']]
     Should Contain    ${row}    ${name}    msg=Row ${code} does not show name ${name}
+
+# --- Label-driven field resolution (NO hardcoded row/column ids) -------------------------------
+# A field's label span (ECCell) and its input sit in ADJACENT tableCells of the same tableRow. So a
+# field is located by its LABEL, not a hardcoded R:<n>:C:<n> id - robust to per-screen row shifts
+# (e.g. Start Date at R2 on Choke vs R4 on Choke Model) and to the objectdates End Date (C:2 label ->
+# C:3 input). Browser locators auto-pierce the EC iframe. ${form} = objectForm | updateAttributes | objectdates.
+
+OV Field Id By Label
+    [Documentation]    Resolve the input id for a field by its LABEL in ${form} (no hardcoded row/column).
+    [Arguments]    ${form}    ${label}
+    ${id}=    Get Attribute
+    ...    xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input
+    ...    id
+    RETURN    ${id}
+
+Fill OV Field By Label
+    [Documentation]    Fill a text field found by its LABEL in ${form}; reuses Fill EC Field (change/blur dispatch).
+    [Arguments]    ${form}    ${label}    ${value}
+    ${id}=    OV Field Id By Label    ${form}    ${label}
+    Fill EC Field    ${id}    ${value}
+
+Fill OV Date By Label
+    [Documentation]    Fill a date field found by its LABEL in ${form}; reuses Fill EC Date (Tab + change dispatch).
+    [Arguments]    ${form}    ${label}    ${value}
+    ${id}=    OV Field Id By Label    ${form}    ${label}
+    Fill EC Date    ${id}    ${value}

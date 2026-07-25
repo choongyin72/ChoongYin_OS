@@ -95,10 +95,14 @@ At these four points: slow down, recon first, verify against ground truth — do
    and `os.environ.get("EC_PASS", "sysadmin")` — never hardcode strings in the bundle (the local sandbox
    is `sysadmin`/`sysadmin`; matches `tmp/scripts/ec_session.py`). Match the pattern in the recon scripts.
 
-**4. Build the RF** (treeview-mirrored): T3 `pageobjects/<path>/<screen>_page.resource` (locators in
-   Variables; docstring matches Variables — R7) + suite `tests/<path>/<screen>_iud.robot`
-   (clean→insert→update→delete→cleanup, in-suite DB asserts). **Reuse T2** `manage_object.resource` (OV) or
-   `table_class.resource` (TV) + T1 + DbVerify; a shared-file edit ⇒ R12 (backup + canary + random sibling).
+**4. Build the RF** (treeview-mirrored): T3 `pageobjects/<path>/<screen>_page.resource` + suite
+   `tests/<path>/<screen>_iud.robot` (clean→insert→update→delete→cleanup, in-suite DB asserts).
+   **⛔ NO HARDCODED field ids (owner rule).** OV field fills MUST resolve **by LABEL** via T2
+   `Fill OV Field By Label ${form} <label> <value>` / `Fill OV Date By Label` / `OV Field Id By Label`
+   (`${form}` = objectForm|updateAttributes|objectdates) — never a hardcoded `…R:<n>:C:<n>:in` id (row shifts
+   per screen: Start Date R2 on Choke vs R4 on Choke Model). Keep only screen NAME + grid id (constant) as vars.
+   **Reuse T2** `manage_object.resource` (OV) or `table_class.resource` (TV) + T1 + DbVerify; a shared-file edit
+   ⇒ R12 (backup + canary + random sibling).
    **OV-GM wait wrapper (N2):** for any OV-GM screen (BU navigator required), the T3 MUST define its own
    `<Screen> Row Should Exist` keyword that calls `Wait For Elements State    css=...    visible    20s`
    before the T1 `Row Should Exist` — the OV-GM grid redraws lazily after Save+GO and the instant T1 assert
