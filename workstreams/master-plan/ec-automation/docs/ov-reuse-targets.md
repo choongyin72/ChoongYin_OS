@@ -9,7 +9,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - **Signature:** URL controller `manage_object_nav/CLASS_NAME`. OV-GM (BU/PU cascade nav) use a different
   controller and are NOT in this set. Navigator confirmed Date+GO on a 5-screen visual spot-check (CD/CO/SP/IN).
 - **Coverage key:** the `OV_<view>` name referenced (word-boundary) in `pageobjects/` + `tests/`.
-- **Totals:** 71 screens = **38 covered · 33 uncovered** (updated 2026-07-25: +Disposition Type CO.0208, +Report Area RP.0017).
+- **Totals:** 71 screens = **39 covered · 32 uncovered** (updated 2026-07-25: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185).
 - **Caveat:** navigator is uniform, but each screen's **detail-form fields differ** — some have mandatory
   reference dropdowns (e.g. Bank Account: Bank/Customer/Currency). Recon each form before building; if it has
   mandatory ref dropdowns the generic engine needs dropdown-fill support (not yet built) or a standalone bundle.
@@ -34,7 +34,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [ ] Reservoir Formation — `CO.0135` — `OV_RESV_FORMATION`
 - [ ] Reservoir Block Formation — `CO.0137` — `OV_RESV_BLOCK_FORMATION`
 - [ ] Deferment Group — `CO.0149` — `OV_DEFERMENT_GROUP`
-- [ ] Choke — `CO.0185` — `OV_CHOKE`
+- [x] Choke — `CO.0185` — `OV_CHOKE` (done 2026-07-25)
 - [x] Disposition Type — `CO.0208` — `OV_DISPOSITION_TYPE` (done 2026-07-25)
 - [ ] Choke Model — `CO.0217` — `OV_CHOKE_MODEL`
 - [ ] Blend — `CO.0219` — `OV_BLEND`
