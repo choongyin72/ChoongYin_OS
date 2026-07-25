@@ -17,13 +17,13 @@
 - [x] 9 Suite `tests/.../Hydrocarbon_Objects/disposition_type_iud.robot` (clean→insert→update→delete)
 
 ## C. Verification gates
-- [x] 10 robocop — (T3+suite follow bank pattern; run before merge)
+- [x] 10 robocop — **RAN** `robocop check` on T3+suite → **0 issues** (verified 2026-07-25, post-merge honesty pass)
 - [x] 11 `--dryrun` 4/4 PASS
 - [x] 12 LIVE headed run 4/4 PASS (RF) + Playwright 7/7
 - [x] 13 DB ground-truth — `Code Should Be Present/Absent In View OV_DISPOSITION_TYPE` (insert/delete) + `Field Should Equal In View OV_DISPOSITION_TYPE <code> NAME/DESCRIPTION` (update)
 - [x] 14 FULL I-U-D (insert + update + delete)
 - [x] 15 Self-clean — DB re-read 0 residual `AUTOTEST` (Playwright `count_like`)
-- [ ] 16 Hygiene — `py scripts/check_bundle_hygiene.py` (run at review; driver is in py/ not bundle/playwright/, ASCII-clean)
+- [x] 16 Hygiene — **RAN** `py scripts/check_bundle_hygiene.py` → RESULT PASS (exit 0): R20 ASCII-clean; investigation creds WARN-only (verified 2026-07-25)
 
 ## D. Delivery
 - [x] 17 Registry row appended
