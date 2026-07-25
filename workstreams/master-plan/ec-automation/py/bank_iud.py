@@ -1,9 +1,10 @@
-"""Bank screen - IUD driver (thin). Uses the reusable engine ec-ui-knowledge/lib/ec_object_iud.py.
+"""Bank screen - IUD driver (thin). Uses the reusable engine py/ec_object_iud.py (same folder).
 
 This is the PER-SCREEN template: to cover a new OV object screen, copy this file, change
 SCREEN / GRID_DATA_ID / VIEW / the field_maps. The engine + DB-verify never change.
+Selector map of record: ec-ui-knowledge/screens/bank.md ; pattern: ec-ui-knowledge/EC_OBJECT_CONFIG_IUD.md
 
-Run headed:   EC_HEADED=1 py -X utf8 ec-ui-knowledge/screens/bank_iud.py
+Run headed:   EC_HEADED=1 py -X utf8 workstreams/master-plan/ec-automation/py/bank_iud.py
 Env: EC_URL, EC_USERNAME/EC_USER, EC_PASSWORD/EC_PASS (default sandbox + sysadmin);
      EC_DB_DSN/USER/PASS for ground truth; EC_HEADED=1 shows the browser.
 """
@@ -12,10 +13,20 @@ import sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
-_ROOT = Path(__file__).resolve().parents[2]                       # C:\Projects\ChoongYin_OS
-sys.path.insert(0, str(_ROOT / "ec-ui-knowledge" / "lib"))
+_HERE = Path(__file__).resolve().parent                           # ec-automation/py
+sys.path.insert(0, str(_HERE))                                    # engine + db-verify are siblings here
 import ec_object_iud as ec
 import ec_db_verify as db
+
+
+def _repo_root():
+    for p in [_HERE, *_HERE.parents]:
+        if (p / ".git").exists():
+            return p
+    return _HERE.parents[3]
+
+
+_ROOT = _repo_root()                                              # C:\Projects\ChoongYin_OS
 
 # ---- screen config (the only per-screen part) --------------------------------
 SCREEN        = "Bank"

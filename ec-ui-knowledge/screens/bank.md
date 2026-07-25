@@ -35,7 +35,10 @@ Row R0: Start Date `…R:0:C:1:da_input`, **End Date `…R:0:C:3:da_input`** (la
 - Insert is a **hover-menu**, not a titled button (`span.ui-icon-insert`); a generic `a[title*=New]` finds nothing.
 - The `…C:0` label-cell id carries a generated suffix → resolve labels by **prefix** (`[id^="…C:0"]`), not exact `getElementById`.
 
-## Automation
-- Engine: `../lib/ec_object_iud.py` · DB verify: `../lib/ec_db_verify.py` · driver: `bank_iud.py`
-- Run: `EC_HEADED=1 py -X utf8 ec-ui-knowledge/screens/bank_iud.py` → 7/7 PASS (grid + `ov_bank`), self-clean 0 residual.
-- Evidence: `tmp/bank_iud/evidence/bank_0[1-5]_*.png`
+## Automation (code lives in ec-automation — this file is the MD selector reference)
+- **Playwright:** engine `ec-automation/py/ec_object_iud.py` · DB verify `ec-automation/py/ec_db_verify.py` ·
+  driver `ec-automation/py/bank_iud.py`. Run: `EC_HEADED=1 py -X utf8 workstreams/master-plan/ec-automation/py/bank_iud.py`
+  → 7/7 PASS (grid + `ov_bank`, incl. Description), self-clean 0 residual.
+- **RF:** T3 `ec-automation/pageobjects/Configuration/Assets/Financial_Objects/bank_page.resource` +
+  suite `ec-automation/tests/Configuration/Assets/Financial_Objects/bank_iud.robot` (T2 `manage_object` + `DbVerify.py`).
+  Validated live 4/4. Legacy per-screen Playwright bundle: `ec-automation/screens/.../Bank/playwright/ec_iud_bank.py`.

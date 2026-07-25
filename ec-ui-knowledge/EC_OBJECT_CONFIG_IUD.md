@@ -35,14 +35,20 @@ Exception: `objectdates` row R0 holds Start Date (C:1) **and End Date (C:3)** on
 - **2-strike stop** on any Save/action, then report — no looping selector variations.
 
 ## Reuse (code)
-- `lib/ec_object_iud.py` — engine (fields resolved **by label**, not blind row index):
+> All executable code lives in **`ec-automation`** (Playwright + RF + SOW). `ec-ui-knowledge` is MD-only.
+> Reusable Python helpers: **`workstreams/master-plan/ec-automation/py/`** (relative-link from any script).
+
+- `ec-automation/py/ec_object_iud.py` — engine (fields resolved **by label**, not blind row index):
   - write: `login` · `open_object_screen` · `insertObjectRecord(grid, fields)` ·
     `updateObjectRecord(grid, code, fields)` · `closeObjectRecord(grid, code, end_date)`
   - read/locate: `row_exists` · `wait_for_row` · `select_row` · **`read_form_record(grid, code)`** →
     `{label: value}` of the whole form window (test-case inspection).
-- `lib/ec_db_verify.py` — `is_present` · `field_equals` · **`verify_row(view, code, {COL: expected})`** →
+- `ec-automation/py/ec_db_verify.py` — `is_present` · `field_equals` · **`verify_row(view, code, {COL: expected})`** →
   `(all_ok, checks)` (one-call test-case column assertion) · `count_like` · `fetch_object`.
-- **New screen = copy `screens/bank_iud.py`, change `SCREEN` / `GRID_DATA_ID` / `VIEW` / the field_maps.** Engine unchanged.
+- `ec-automation/py/bank_iud.py` — thin per-screen driver (**template**): copy it, change
+  `SCREEN` / `GRID_DATA_ID` / `VIEW` / the field_maps. Engine unchanged.
+- RF layer (shared framework): `ec-automation/resources/manage_object.resource` (T2) +
+  `ec-automation/libraries/DbVerify.py` + per-screen T3 `pageobjects/.../bank_page.resource` + suite `tests/.../bank_iud.robot`.
 
 ## Timing lesson (baked into the engine)
 The grid redraws **asynchronously** after open/GO. Always `wait_for_row()` before `select_row()` — an instant
