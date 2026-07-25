@@ -9,7 +9,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - **Signature:** URL controller `manage_object_nav/CLASS_NAME`. OV-GM (BU/PU cascade nav) use a different
   controller and are NOT in this set. Navigator confirmed Date+GO on a 5-screen visual spot-check (CD/CO/SP/IN).
 - **Coverage key:** the `OV_<view>` name referenced (word-boundary) in `pageobjects/` + `tests/`.
-- **Totals (2026-07-25):** 71 screens = **36 covered · 35 uncovered**.
+- **Totals:** 71 screens = **38 covered · 33 uncovered** (updated 2026-07-25: +Disposition Type CO.0208, +Report Area RP.0017).
 - **Caveat:** navigator is uniform, but each screen's **detail-form fields differ** — some have mandatory
   reference dropdowns (e.g. Bank Account: Bank/Customer/Currency). Recon each form before building; if it has
   mandatory ref dropdowns the generic engine needs dropdown-fill support (not yet built) or a standalone bundle.
@@ -35,7 +35,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [ ] Reservoir Block Formation — `CO.0137` — `OV_RESV_BLOCK_FORMATION`
 - [ ] Deferment Group — `CO.0149` — `OV_DEFERMENT_GROUP`
 - [ ] Choke — `CO.0185` — `OV_CHOKE`
-- [ ] Disposition Type — `CO.0208` — `OV_DISPOSITION_TYPE`
+- [x] Disposition Type — `CO.0208` — `OV_DISPOSITION_TYPE` (done 2026-07-25)
 - [ ] Choke Model — `CO.0217` — `OV_CHOKE_MODEL`
 - [ ] Blend — `CO.0219` — `OV_BLEND`
 - [ ] Calculation Group Context — `CO.0245` — `OV_CALC_GRP_CONTEXT`
@@ -50,7 +50,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [ ] Transactional Inventory Properties — `IN.0023` — `OV_TRANS_INVENTORY`
 - [ ] Config Variable — `IN.0031` — `OV_CONFIG_VARIABLE`
 - [ ] Transactional Inventory Layout Set — `IN.0033` — `OV_TRANS_INV_TMPL_SET`
-- [ ] Report Area — `RP.0017` — `OV_REPORT_AREA`
+- [x] Report Area — `RP.0017` — `OV_REPORT_AREA` (done 2026-07-25)
 - [ ] Data Extract Setup — `SP.0043` — `OV_SUMMARY_SETUP`
 - [ ] Data Extract Set — `SP.0049` — `OV_SUMMARY_SET`
 
