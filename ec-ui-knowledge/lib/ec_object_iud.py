@@ -1,0 +1,277 @@
+"""EC Object Configuration - reusable IUD engine (OV screens).
+
+Applies to ~95% of EC object config screens (Bank, Currency, Language-object, etc.).
+Only the Navigator columns + Data Window field labels differ per object; the gestures
+below are CONSTANT. Locators/field labels are ARGUMENTS - nothing is screen-hardcoded.
+
+Verified live on EC 14.2.4 sandbox 2026-07-25 (Bank). See ec-ui-knowledge/EC_OBJECT_CONFIG_IUD.md.
+
+Public API (all take a Playwright `page`):
+    login(page, url, user, pw)
+    open_object_screen(page, screen_name) -> screen label text
+    row_exists(page, grid_data_id, code) -> bool
+    insertObjectRecord(page, grid_data_id, fields)          # fields: [{label,value,kind}]
+    updateObjectRecord(page, grid_data_id, code, fields)
+    closeObjectRecord(page, grid_data_id, code, end_date)   # EC delete = End Date = Start Date
+
+`kind` is 'text' or 'date'. Insert resolves ids in the New-Object 'objectForm';
+update resolves ids in 'updateAttributes'; both by LABEL (never a blind row index).
+"""
+import os
+
+WAIT = int(os.environ.get("EC_WAIT_MS", "30000"))
+_SETTLE = 1200
+
+
+def _css(fid):
+    return "#" + fid.replace(":", "\\:")
+
+
+def wait_ajax(page, t=None):
+    page.wait_for_load_state("networkidle", timeout=t or WAIT)
+    page.wait_for_timeout(_SETTLE)
+
+
+# ---------------------------------------------------------------- login + nav
+def login(page, url, user, pw):
+    page.goto(url, wait_until="domcontentloaded", timeout=WAIT)
+    page.fill("#username", user)
+    page.fill("#password", pw)
+    page.click("#kc-login")
+    page.wait_for_url("**/dashboard**", timeout=WAIT * 2)
+    wait_ajax(page)
+
+
+def open_object_screen(page, screen_name):
+    si = page.locator("#menu\\:searchForm\\:searchTxt")
+    si.wait_for(state="visible", timeout=WAIT)
+    si.clear()
+    si.type(screen_name, delay=60)
+    page.wait_for_load_state("networkidle", timeout=WAIT)
+    page.wait_for_timeout(500)
+    # EC 14.2.4: the search hit is a <label class="tv-link"> (was <span> pre-14.2). Match either.
+    page.locator(
+        "xpath=//*[self::label or self::span]"
+        "[contains(@class,'tv-link') and normalize-space(text())='%s']" % screen_name
+    ).first.click()
+    wait_ajax(page)
+    return page.locator("#screenToolbar\\:form\\:screenLabel").text_content(timeout=WAIT)
+
+
+# ---------------------------------------------------------------- grid helpers
+def _rows(page, grid_data_id):
+    return page.evaluate(
+        """(gid) => {
+            const tb = document.getElementById(gid);
+            if (!tb) return [];
+            const out = [];
+            tb.querySelectorAll('tr').forEach(tr => {
+                const c = [];
+                tr.querySelectorAll('td').forEach(td => c.push(td.textContent.trim()));
+                if (c.some(x => x)) out.push(c);
+            });
+            return out;
+        }""",
+        grid_data_id,
+    )
+
+
+def row_exists(page, grid_data_id, code):
+    return any(r and r[0].strip() == code for r in _rows(page, grid_data_id))
+
+
+def wait_for_row(page, grid_data_id, code, timeout_ms=None):
+    """Poll until the grid has rendered a row with this code (grid draws async after open/GO)."""
+    attempts = max(1, (timeout_ms or WAIT) // 500)
+    for _ in range(attempts):
+        if row_exists(page, grid_data_id, code):
+            return True
+        page.wait_for_timeout(500)
+    return False
+
+
+def select_row(page, grid_data_id, code):
+    """Select a grid row by code. Waits for the row to render first (R17-style lazy redraw)."""
+    if not wait_for_row(page, grid_data_id, code):
+        return False
+    span = page.locator("css=#%s span" % grid_data_id.replace(":", "\\:")).filter(has_text=code).first
+    if span.count() == 0:
+        return False
+    span.click()
+    wait_ajax(page)
+    page.wait_for_timeout(800)
+    return True
+
+
+def read_form_record(page, grid_data_id, code, form_key="updateAttributes"):
+    """Select `code` and return every form-window field as {label: value} (text/date value,
+    or dropdown display label). Reusable read for test-case verification / inspection."""
+    if not select_row(page, grid_data_id, code):
+        raise RuntimeError("read_form_record: row not found: %s" % code)
+    return page.evaluate(
+        """(form) => {
+            const base = 'tab:tabPanel:' + form + ':form:G:0:R:';
+            const out = {};
+            for (let r = 0; r < 30; r++) {
+                const inn = document.getElementById(base + r + ':C:1:in');
+                const dai = document.getElementById(base + r + ':C:1:da_input');
+                const ddi = document.getElementById(base + r + ':C:1:dd_input');
+                const el = inn || dai || ddi;
+                if (!el) continue;
+                const lc = document.getElementById(base + r + ':C:0')
+                        || document.querySelector('[id^="' + base + r + ':C:0"]');
+                const label = lc ? (lc.innerText || '').trim() : ('R' + r);
+                let val = el.value || '';
+                if (ddi) { const lbl = document.getElementById(base + r + ':C:1:dd_label');
+                           if (lbl) val = (lbl.innerText || '').trim(); }
+                out[label] = (val || '').trim();
+            }
+            return out;
+        }""",
+        form_key,
+    )
+
+
+# ---------------------------------------------------------------- field resolve + fill
+def _resolve_field(page, form_key, label):
+    """Return {'id','kind'} for the row whose C:0 label == `label`, inside the given
+    form ('objectForm' | 'updateAttributes'). One field per row: input at C:1, label at C:0.
+    Drives off the input id (exact, proven) and reads the label via a prefix fallback because
+    the C:0 label-cell id carries a generated suffix (exact getElementById returns null)."""
+    return page.evaluate(
+        """([form, want]) => {
+            const base = 'tab:tabPanel:' + form + ':form:G:0:R:';
+            for (let r = 0; r < 30; r++) {
+                const inn = document.getElementById(base + r + ':C:1:in');
+                const dai = document.getElementById(base + r + ':C:1:da_input');
+                const ddi = document.getElementById(base + r + ':C:1:dd_input');
+                let el = null, kind = '';
+                if (inn) { el = inn; kind = 'text'; }
+                else if (dai) { el = dai; kind = 'date'; }
+                else if (ddi) { el = ddi; kind = 'dropdown'; }
+                if (!el) continue;
+                const lc = document.getElementById(base + r + ':C:0')
+                        || document.querySelector('[id^="' + base + r + ':C:0"]');
+                const label = lc ? (lc.innerText || '').trim() : '';
+                if (label.toLowerCase() === want.toLowerCase()) return { id: el.id, kind };
+            }
+            return null;
+        }""",
+        [form_key, label],
+    )
+
+
+def _fire(page, fid):
+    page.evaluate(
+        """(id) => { const e = document.getElementById(id);
+            if (e) { e.dispatchEvent(new Event('change',{bubbles:true}));
+                     e.dispatchEvent(new Event('blur',{bubbles:true})); } }""",
+        fid,
+    )
+
+
+def fill_field(page, fid, value, kind):
+    el = page.locator(_css(fid))
+    if el.count() == 0 or not el.is_visible():
+        raise RuntimeError("field not visible: %s" % fid)
+    el.click()
+    el.fill(value)
+    if kind == "date":
+        page.keyboard.press("Tab")
+        page.wait_for_timeout(500)
+    _fire(page, fid)
+    page.wait_for_timeout(350)
+
+
+def save(page, attempts=2):
+    """Click Save (title='Save [Ctrl+s]'), 2-strike then raise. Returns method used."""
+    for _ in range(attempts):
+        btn = page.locator("xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]")
+        if btn.count() > 0:
+            btn.first.click()
+            wait_ajax(page)
+            return "button"
+        page.keyboard.press("Control+s")
+        wait_ajax(page)
+        # if Save went disabled again the write likely landed; loop re-checks
+        if page.locator("xpath=//a[@title='Save [Ctrl+s]' and contains(@class,'ui-state-disabled')]").count() > 0:
+            return "ctrl+s"
+    raise RuntimeError("Save not actionable after %d attempts (2-strike stop)" % attempts)
+
+
+def click_go(page):
+    go = page.locator("#button\\:form\\:B")
+    if go.count() > 0 and go.is_visible():
+        go.first.click()
+        wait_ajax(page)
+
+
+def ec_error(page):
+    txt = page.evaluate(
+        """() => { const n = document.getElementById('ECNotificationArea')
+            || document.getElementById('ECClientNotificationArea');
+            return n ? n.textContent.trim() : ''; }"""
+    )
+    return txt.replace("EC.jsMessage.clear();", "").strip()[:200] if ("Error" in txt or "Required" in txt) else ""
+
+
+# ---------------------------------------------------------------- I / U / D
+def _open_new_object(page):
+    li = page.locator(
+        "xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]"
+    )
+    li.first.hover()
+    page.wait_for_timeout(900)
+    page.locator(
+        "xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']"
+    ).first.click()
+    wait_ajax(page)
+
+
+def insertObjectRecord(page, grid_data_id, fields):
+    """fields = [{'label','value','kind'}] against the New-Object form."""
+    _open_new_object(page)
+    for f in fields:
+        r = _resolve_field(page, "objectForm", f["label"])
+        if not r:
+            raise RuntimeError("insert: field label not found: %s" % f["label"])
+        fill_field(page, r["id"], f["value"], r["kind"])
+    save(page)
+    err = ec_error(page)
+    click_go(page)
+    if err:
+        raise RuntimeError("insert save error: %s" % err)
+
+
+def updateObjectRecord(page, grid_data_id, code, fields):
+    if not select_row(page, grid_data_id, code):
+        raise RuntimeError("update: row not found: %s" % code)
+    for f in fields:
+        r = _resolve_field(page, "updateAttributes", f["label"])
+        if not r:
+            raise RuntimeError("update: field label not found: %s" % f["label"])
+        fill_field(page, r["id"], f["value"], r["kind"])
+    save(page)
+    err = ec_error(page)
+    click_go(page)
+    if err:
+        raise RuntimeError("update save error: %s" % err)
+
+
+# objectdates row R:0 = Start Date (C:1) + End Date (C:3); label 'End Date' sits at C:2, so
+# End Date is resolved by its known cell id, not the one-field-per-row label scan.
+END_DATE_ID = "tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input"
+
+
+def closeObjectRecord(page, grid_data_id, code, end_date, end_date_id=END_DATE_ID):
+    """EC delete = End Date = Start Date (zero-length window). No toolbar Delete for EC Objects."""
+    if not select_row(page, grid_data_id, code):
+        raise RuntimeError("delete: row not found: %s" % code)
+    if page.locator(_css(end_date_id)).count() == 0:
+        raise RuntimeError("delete: End Date field not found: %s" % end_date_id)
+    fill_field(page, end_date_id, end_date, "date")
+    save(page)
+    err = ec_error(page)
+    click_go(page)
+    if err:
+        raise RuntimeError("delete save error: %s" % err)

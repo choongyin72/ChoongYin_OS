@@ -3,6 +3,8 @@
 > **Read this file in full before touching any EC UI screen.**
 > This SOP is constant — it does not change between screens or sessions.
 > Screen-specific selectors live separately in `screens/<screen-name>.md`.
+> For Insert/Update/Delete on object-config (OV) screens, follow the pattern in
+> **`EC_OBJECT_CONFIG_IUD.md`** (reusable code in `lib/`; per-screen driver = `screens/<name>_iud.py`).
 
 ---
 
