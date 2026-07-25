@@ -43,8 +43,10 @@ Exception: `objectdates` row R0 holds Start Date (C:1) **and End Date (C:3)** on
     `updateObjectRecord(grid, code, fields)` · `closeObjectRecord(grid, code, end_date)`
   - read/locate: `row_exists` · `wait_for_row` · `select_row` · **`read_form_record(grid, code)`** →
     `{label: value}` of the whole form window (test-case inspection).
-- `ec-automation/py/ec_db_verify.py` — `is_present` · `field_equals` · **`verify_row(view, code, {COL: expected})`** →
-  `(all_ok, checks)` (one-call test-case column assertion) · `count_like` · `fetch_object`.
+- `ec-automation/libraries/DbVerify.py` — the single DB ground-truth library (also the RF keyword lib).
+  Existing: `code_should_be_present/absent_in_view`, `view_row_count`, N1/N2/N3/MHM oracles.
+  Added for OV column verification: `fetch_object` · `field_equals` · **`verify_row(view, code, {COL: expected})`** ·
+  `field_should_equal_in_view` (RF keyword) · `code_present` (bool) · `count_like`.
 - `ec-automation/py/bank_iud.py` — thin per-screen driver (**template**): copy it, change
   `SCREEN` / `GRID_DATA_ID` / `VIEW` / the field_maps. Engine unchanged.
 - RF layer (shared framework): `ec-automation/resources/manage_object.resource` (T2) +

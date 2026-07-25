@@ -36,8 +36,8 @@ Row R0: Start Date `…R:0:C:1:da_input`, **End Date `…R:0:C:3:da_input`** (la
 - The `…C:0` label-cell id carries a generated suffix → resolve labels by **prefix** (`[id^="…C:0"]`), not exact `getElementById`.
 
 ## Automation (code lives in ec-automation — this file is the MD selector reference)
-- **Playwright:** engine `ec-automation/py/ec_object_iud.py` · DB verify `ec-automation/py/ec_db_verify.py` ·
-  driver `ec-automation/py/bank_iud.py`. Run: `EC_HEADED=1 py -X utf8 workstreams/master-plan/ec-automation/py/bank_iud.py`
+- **Playwright:** engine `ec-automation/py/ec_object_iud.py` · DB verify `ec-automation/libraries/DbVerify.py`
+  (single shared lib) · driver `ec-automation/py/bank_iud.py`. Run: `EC_HEADED=1 py -X utf8 workstreams/master-plan/ec-automation/py/bank_iud.py`
   → 7/7 PASS (grid + `ov_bank`, incl. Description), self-clean 0 residual.
 - **RF:** T3 `ec-automation/pageobjects/Configuration/Assets/Financial_Objects/bank_page.resource` +
   suite `ec-automation/tests/Configuration/Assets/Financial_Objects/bank_iud.robot` (T2 `manage_object` + `DbVerify.py`).

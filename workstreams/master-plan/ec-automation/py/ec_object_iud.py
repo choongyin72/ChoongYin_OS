@@ -184,17 +184,29 @@ def fill_field(page, fid, value, kind):
 
 
 def save(page, attempts=2):
-    """Click Save (title='Save [Ctrl+s]'), 2-strike then raise. Returns method used."""
+    """Save the screen, 2-strike then raise. Returns the method that worked.
+    Order: enabled Save button -> force-enable via EC.toolbar then click (grafted from the legacy
+    Bank bundle; robust when the button stays greyed) -> Ctrl+S."""
+    enabled = "xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]"
+    disabled = "xpath=//a[@title='Save [Ctrl+s]' and contains(@class,'ui-state-disabled')]"
     for _ in range(attempts):
-        btn = page.locator("xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]")
+        btn = page.locator(enabled)
         if btn.count() > 0:
             btn.first.click()
             wait_ajax(page)
             return "button"
+        # legacy fallback: force-enable the Save button, then click
+        page.evaluate("() => { if (typeof EC !== 'undefined' && EC.toolbar) EC.toolbar.toggleSaveButton(true); }")
+        page.wait_for_timeout(300)
+        btn2 = page.locator(enabled)
+        if btn2.count() > 0:
+            btn2.first.click()
+            wait_ajax(page)
+            return "toggle+button"
         page.keyboard.press("Control+s")
         wait_ajax(page)
         # if Save went disabled again the write likely landed; loop re-checks
-        if page.locator("xpath=//a[@title='Save [Ctrl+s]' and contains(@class,'ui-state-disabled')]").count() > 0:
+        if page.locator(disabled).count() > 0:
             return "ctrl+s"
     raise RuntimeError("Save not actionable after %d attempts (2-strike stop)" % attempts)
 

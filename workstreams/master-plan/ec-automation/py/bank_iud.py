@@ -14,9 +14,10 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 _HERE = Path(__file__).resolve().parent                           # ec-automation/py
-sys.path.insert(0, str(_HERE))                                    # engine + db-verify are siblings here
+sys.path.insert(0, str(_HERE))                                    # engine is a sibling here
+sys.path.insert(0, str(_HERE.parent / "libraries"))               # single DB-verify (shared DbVerify.py)
 import ec_object_iud as ec
-import ec_db_verify as db
+import DbVerify as db
 
 
 def _repo_root():
@@ -109,7 +110,7 @@ def main():
             shot(page, "02_inserted")
             def _v_ins():
                 assert ec.row_exists(page, GRID_DATA_ID, CODE), "not in grid"
-                assert db.is_present(VIEW, CODE), "not in ov_bank"
+                assert db.code_present(VIEW, CODE), "not in ov_bank"
                 ok_n, act = db.field_equals(VIEW, CODE, "NAME", NAME)
                 assert ok_n, f"DB NAME={act!r} != {NAME!r}"
             step(page, "insert_db", _v_ins)
@@ -133,7 +134,7 @@ def main():
             shot(page, "04_deleted")
             def _v_del():
                 assert not ec.row_exists(page, GRID_DATA_ID, CODE), "still in grid"
-                assert not db.is_present(VIEW, CODE), "still in ov_bank"
+                assert not db.code_present(VIEW, CODE), "still in ov_bank"
             step(page, "delete_db", _v_del)
             print("  DELETE verified (absent grid + ov_bank)")
 
