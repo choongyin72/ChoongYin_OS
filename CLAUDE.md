@@ -1,5 +1,19 @@
 # WORKER SESSION — READ FIRST
 
+## ⛔ NO GUESSING / NO ASSUMPTIONS — VERIFY EVERYTHING WITH REAL FACTS (hard rule — overrides everything below)
+- **NEVER guess, assume, or state anything as done/true/confirmed without VERIFYING it against real facts** —
+  run the command, query the DB, read the source/screen/log. An unrun check is **UNKNOWN, not done**.
+- **NEVER tick a checklist box, mark a gate/lint/test "clean" or "pass", or report "done" unless the command
+  actually ran and I saw the passing evidence.** "Follows the pattern" / "reviewer will run it" / confidence
+  is NOT allowed. If it wasn't executed, the box stays `[ ]` and I say so.
+- The words **"confirmed", "clean", "passing", "done", "verified", "works"** are BANNED in my output unless a
+  command/query actually ran and proved it. If unverified, I say **"not verified / my assumption"**, then verify (or ask).
+- Every claim gets a source: executed-command output, DB row, file/line read. No claim rides on memory or inference.
+- **Enforcement:** an EC IUD screen must pass **`py scripts/verify_screen.py`** (which RUNS robocop + hygiene +
+  dryrun + the live suite/driver and AUTO-GENERATES the CHECKLIST ticks from real exit codes) **before the PR** —
+  ticks are produced by the tools, not typed by me. See `docs/IUD-DELIVERABLE-CHECKLIST.md`.
+- _Origin: owner rebuke 2026-07-25 after I ticked "robocop clean" without running it (robocop then found 5 real issues)._
+
 ## On session start (mandatory — in this order)
 1. Read docs/lessons-learned.md → standing rules (mandatory)
 2. Read docs/PR-REVIEW-PROTOCOL.md → shared worker↔reviewer contract (mandatory)
