@@ -12,11 +12,12 @@
 - [x] 8 T3 `pageobjects/Reporting/report_area_page.resource`
 - [x] 9 Suite `tests/Reporting/report_area_iud.robot` (clean→insert→update→delete)
 
-## C. Verification gates
-- [x] 10 robocop (follows bank pattern) · [x] 11 `--dryrun` 4/4 · [x] 12 LIVE 4/4 (RF) + Playwright 7/7
+## C. Verification gates (all RUN — evidence, not assumed)
+- [x] 10 robocop — **RAN** `robocop check` on T3+suite: 5 DOC01 (missing keyword docs) → **fixed** → re-ran → **0 issues**
+- [x] 11 `--dryrun` 4/4 PASS  · [x] 12 LIVE headed 4/4 (RF) + Playwright 7/7
 - [x] 13 DB ground-truth — `Code Should Be Present/Absent In View OV_REPORT_AREA` (insert/delete) + `Field Should Equal In View OV_REPORT_AREA <code> NAME` (update)
 - [x] 14 FULL I-U-D  · [x] 15 Self-clean 0 residual (Playwright `count_like`)
-- [ ] 16 Hygiene — `check_bundle_hygiene.py` (driver in py/, ASCII-clean; reviewer confirm)
+- [x] 16 Hygiene — **RAN** `py scripts/check_bundle_hygiene.py` → RESULT PASS (exit 0): R20 ASCII-clean; investigation creds WARN-only (driver in py/, not the bundle playwright/ glob)
 
 ## D. Delivery
 - [x] 17 Registry row  · [x] 18 Scorecard row  · [x] 19 PR (R9 body; base master)

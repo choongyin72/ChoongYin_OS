@@ -32,22 +32,27 @@ Open Report Area Screen
     Apply Navigator    # grid needs GO to populate (no default rows on open)
 
 Report Area Row Should Exist
+    [Documentation]    Assert a report area with ${code} is present in the list.
     [Arguments]    ${code}
     Row Should Exist    ${RPTA_TABLE}    ${code}
 
 Report Area Row Should Not Exist
+    [Documentation]    Assert a report area with ${code} is absent from the list.
     [Arguments]    ${code}
     Row Should Not Exist    ${RPTA_TABLE}    ${code}
 
 Report Area Should Exist In DB
+    [Documentation]    DB ground-truth: assert ${code} really persisted in OV_REPORT_AREA.
     [Arguments]    ${code}
     Code Should Be Present In View    OV_REPORT_AREA    ${code}
 
 Report Area Should Not Exist In DB
+    [Documentation]    DB ground-truth: assert ${code} was truly deleted from OV_REPORT_AREA.
     [Arguments]    ${code}
     Code Should Be Absent In View    OV_REPORT_AREA    ${code}
 
 Report Area Row Should Show Name
+    [Documentation]    Assert the Report Area row for ${code} displays ${name}.
     [Arguments]    ${code}    ${name}
     Object Row Should Show Name    ${RPTA_TABLE}    ${code}    ${name}
 
