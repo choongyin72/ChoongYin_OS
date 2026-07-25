@@ -115,3 +115,4 @@ _Last updated: 2026-06-28_
 | Dispatching Pipeline | Not attempted | Resume from slice 2 checkpoint |
 | ~~Financial Objects (3 parked)~~ | Closed as stale — all 15 FO suites present (validated 2026-06-15) | — |
 | Commercial Sub Field | Not attempted | |
+| Disposition Type (OV, CO.0208) | ✅ Done 2026-07-25 — RF 4/4 + Playwright 7/7, DB-verified vs OV_DISPOSITION_TYPE, self-clean; 1st OV-reuse-target on shared py/ec_object_iud.py engine | 34 uncovered OV reuse-targets remain (see docs/ov-reuse-targets.md) |
