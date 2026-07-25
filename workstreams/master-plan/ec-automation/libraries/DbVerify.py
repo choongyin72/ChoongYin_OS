@@ -771,3 +771,79 @@ def component_value_should_be(view, object_id, daytime, component_no, column, ex
             f"DB check FAILED: {view}.{column} for OBJECT_ID={object_id} COMPONENT_NO={component_no} "
             f"on {daytime} = {actual!r}, expected {expected!r}"
         )
+
+
+# --- OV object: whole-row fetch + per-column value verification (by CODE) ------------------------
+# For OV_* object views with a CODE key column. Complements code_should_be_present/absent_in_view:
+# these read the record's OTHER columns so a test can assert field values (Name, Swift Code, etc.),
+# not just existence. fetch_object/field_equals/verify_row are python-friendly (return values, for
+# use from plain scripts); field_should_equal_in_view is the raising Robot keyword.
+
+def fetch_object(view, code):
+    """Return the row whose CODE = ``code`` from an OV_* view as {COLUMN: value}, or None if absent."""
+    _safe(view)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(f"SELECT * FROM {view} WHERE CODE = :c", c=code)
+        cols = [d[0] for d in cur.description]
+        row = cur.fetchone()
+        return dict(zip(cols, row)) if row else None
+    finally:
+        cur.close()
+        conn.close()
+
+
+def code_present(view, code):
+    """Bool sibling of code_should_be_present_in_view (matches any string column). For script asserts."""
+    return _code_present(view, code)
+
+
+def count_like(view, code_prefix):
+    """COUNT(*) of rows whose CODE starts with ``code_prefix`` (residual self-clean check on OV_* views)."""
+    _safe(view)
+    conn = _connect()
+    cur = conn.cursor()
+    try:
+        cur.execute(f"SELECT COUNT(*) FROM {view} WHERE CODE LIKE :p", p=code_prefix + "%")
+        return cur.fetchone()[0]
+    finally:
+        cur.close()
+        conn.close()
+
+
+def field_equals(view, code, column, expected):
+    """Non-raising: return (ok, actual) for the CODE row's ``column`` vs ``expected`` (trimmed str compare)."""
+    row = fetch_object(view, code)
+    if row is None:
+        return False, None
+    actual = row.get(column.upper())
+    actual_s = "" if actual is None else str(actual).strip()
+    return actual_s == str(expected).strip(), actual_s
+
+
+def verify_row(view, code, expected):
+    """Multi-column test-case helper. expected = {COLUMN: value}. Returns (all_ok, checks) where
+    checks is a list of (column, expected, actual, ok). Missing row => all checks fail."""
+    row = fetch_object(view, code)
+    checks = []
+    all_ok = row is not None
+    for col, exp in expected.items():
+        if row is None:
+            checks.append((col, exp, None, False))
+            continue
+        actual = row.get(col.upper())
+        actual_s = "" if actual is None else str(actual).strip()
+        ok = actual_s == str(exp).strip()
+        all_ok = all_ok and ok
+        checks.append((col, exp, actual_s, ok))
+    return all_ok, checks
+
+
+def field_should_equal_in_view(view, code, column, expected):
+    """Robot keyword (raising): fail unless the CODE row's ``column`` equals ``expected`` in ``view``."""
+    ok, actual = field_equals(view, code, column, expected)
+    if not ok:
+        raise AssertionError(
+            f"DB check FAILED: {view}.{column} for {code} = {actual!r}, expected {expected!r}"
+        )

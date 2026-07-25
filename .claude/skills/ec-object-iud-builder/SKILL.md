@@ -52,6 +52,16 @@ At these four points: slow down, recon first, verify against ground truth — do
   this session's files by explicit path.
 
 ## Steps (execute in order, autonomously)
+**0. CHECK-EXISTING-FIRST GATE (before any build).** The task is *check-then-build*, never *build*.
+   - Read `ec-ui-knowledge/screens/<screen>.md` if it exists (use its selectors; don't re-scan).
+   - Search for a working implementation:
+     `grep -ril "<screen-slug>" workstreams/master-plan/ec-automation/{py,pageobjects,tests,screens}`.
+     **Found → reuse/extend it; NEVER add a parallel copy** (real miss: a 3rd standalone Bank stack got
+     built alongside the existing RF + Playwright). Also check the registry (`docs/ec_screen_registry.md`).
+   - Prefer configuring the shared engine over new plumbing: `py/ec_object_iud.py` (OV IUD) +
+     `libraries/DbVerify.py`. A new OV screen = a thin driver (copy `py/bank_iud.py`, swap config).
+   - State the result in the plan ("existing impl: <path> / none") before writing anything.
+
 **1. Branch + scope.** `git checkout -b feature/<screen-slug>-iud origin/master`. Read the registry row if present.
 
 **2. Recon → fill the spec template (§1–§6).** DB-first → Finder/Toolbar/Nav → DOM:
@@ -125,12 +135,14 @@ At these four points: slow down, recon first, verify against ground truth — do
 | OV-GM variant | + Business Unit / PU cascade + GO first; T3 MUST define `<Screen> Row Should Exist` with `Wait For Elements State visible 20s` before T1 assert (lazy redraw) | — |
 | OV custom-URL variant | grid `nav:form:T_data` (NOT `manage_object_nav_`), **NO GO button** → T2 `Save And Refresh List` falls back to toolbar Refresh (e.g. Calendar, Account, Regulatory Permits). **Set `${X_TABLE}` from the scan, confirm via the Step-5 pre-flight guard.** | — |
 
-## Done = ALL 19 items of `docs/IUD-DELIVERABLE-CHECKLIST.md` are green
+## Done = ALL 21 items of `docs/IUD-DELIVERABLE-CHECKLIST.md` are green
 A screen is "covered" ONLY when every item of the canonical **`docs/IUD-DELIVERABLE-CHECKLIST.md`** is done
 with evidence. **Mandatory: copy that file into the bundle as `CHECKLIST.md` and tick each item** as you go
-(artifacts: SOW + README + JOURNAL + playwright + investigation + evidence; RF: T3 + suite; gates: robocop +
-dryrun + **live N/N** + **DB ground-truth** + **full I-U-D** + self-clean + hygiene; delivery: registry row +
-scorecard row + R9 PR). **Raise the PR only when all 19 are green** — the automated reviewer enforces this
-list as HARD GATES and will MUST-FIX (not merge) any PR with gaps. Reference exemplars:
+(**Step 0 check-existing gate**; artifacts: SOW + README + JOURNAL + playwright + investigation + evidence; RF:
+T3 + suite; gates: robocop + dryrun + **live N/N** + **DB ground-truth** + **full I-U-D** + self-clean + hygiene;
+delivery: registry row + scorecard row + R9 PR; **KB map `ec-ui-knowledge/screens/<screen>.md`**; **reuse clause**
+— a reuse run still refreshes JOURNAL + evidence + KB map). "Done" is NEVER green tests alone. **Raise the PR only
+when all 21 are green** — the automated reviewer enforces this list as HARD GATES and will MUST-FIX (not merge)
+any PR with gaps. Reference exemplars:
 `screens/.../Financial_Objects/Bank/` (OV), `screens/.../System/Language/` (TV),
 `screens/.../Royalty_Objects/Product_Group_Setup/` (3-tier PC).

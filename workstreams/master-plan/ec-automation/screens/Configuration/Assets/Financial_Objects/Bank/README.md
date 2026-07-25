@@ -1,5 +1,9 @@
 # Bank — Playwright IUD
 
+> **SUPERSEDED (2026-07-25):** the standalone `playwright/ec_iud_bank.py` is now a thin pointer to the
+> reusable driver `py/bank_iud.py` (engine `py/ec_object_iud.py`, DB verify `libraries/DbVerify.py`).
+> Selector map of record: `ec-ui-knowledge/screens/bank.md`. Notes below are retained for context.
+
 Insert / Update / Delete automation for the EC **Bank** screen
 (Configuration → Assets → Financial Objects → Bank), implemented in **Playwright** (Python).
 
