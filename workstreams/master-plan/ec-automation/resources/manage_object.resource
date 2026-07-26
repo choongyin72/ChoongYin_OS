@@ -119,4 +119,8 @@ Fill OV Dropdown By Label
     ...    xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[contains(@id,'dd_input')]
     ...    id
     ${dd}=    Set Variable    ${id.replace('_input', '')}
-    Select EC Dropdown Option    ${dd}    ${value}
+    IF    '${value}' == '__FIRST__'
+        Select First EC Dropdown Option    ${dd}
+    ELSE
+        Select EC Dropdown Option    ${dd}    ${value}
+    END
