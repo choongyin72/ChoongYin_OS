@@ -9,7 +9,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - **Signature:** URL controller `manage_object_nav/CLASS_NAME`. OV-GM (BU/PU cascade nav) use a different
   controller and are NOT in this set. Navigator confirmed Date+GO on a 5-screen visual spot-check (CD/CO/SP/IN).
 - **Coverage key:** the `OV_<view>` name referenced (word-boundary) in `pageobjects/` + `tests/`.
-- **Totals:** 71 screens = **42 covered · 29 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012).
+- **Totals:** 71 screens = **43 covered · 28 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012).
 - **Caveat:** navigator is uniform, but each screen's **detail-form fields differ** — some have mandatory
   reference dropdowns (e.g. Bank Account: Bank/Customer/Currency). Recon each form before building; if it has
   mandatory ref dropdowns the generic engine needs dropdown-fill support (not yet built) or a standalone bundle.
@@ -20,7 +20,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [ ] Revenue Stream Category — `CD.0015` — `OV_STREAM_CATEGORY`
 - [ ] Stream Item Category — `CD.0016` — `OV_STREAM_ITEM_CATEGORY`
 - [ ] Split Item Other — `CD.0017` — `OV_SPLIT_ITEM_OTHER`
-- [ ] Input List — `CD.0035` — `OV_STREAM_ITEM_COLLECTION`
+- [x] Input List — `CD.0035` — `OV_STREAM_ITEM_COLLECTION` (done 2026-07-26)
 - [ ] HCB System — `CD.0097` — `OV_BALANCE`
 - [ ] UOP Key — `CD.0099` — `OV_FIN_UOP_DEPR_KEY`
 - [ ] Inventory Area — `CD.0115` — `OV_INVENTORY_AREA`
