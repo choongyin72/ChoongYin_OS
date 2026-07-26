@@ -9,7 +9,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - **Signature:** URL controller `manage_object_nav/CLASS_NAME`. OV-GM (BU/PU cascade nav) use a different
   controller and are NOT in this set. Navigator confirmed Date+GO on a 5-screen visual spot-check (CD/CO/SP/IN).
 - **Coverage key:** the `OV_<view>` name referenced (word-boundary) in `pageobjects/` + `tests/`.
-- **Totals:** 71 screens = **53 covered · 18 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012).
+- **Totals:** 71 screens = **54 covered · 17 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012).
 - **Caveat:** navigator is uniform, but each screen's **detail-form fields differ** — some have mandatory
   reference dropdowns (e.g. Bank Account: Bank/Customer/Currency). Recon each form before building; if it has
   mandatory ref dropdowns the generic engine needs dropdown-fill support (not yet built) or a standalone bundle.
@@ -29,7 +29,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [ ] Chemical Product — `CO.0072` — `OV_CHEM_PRODUCT`
 - [x] Orifice Plate — `CO.0089` — `OV_ORIFICE_PLATE` (done 2026-07-26)
 - [x] Meter Run — `CO.0091` — `OV_METER_RUN` (done 2026-07-26)
-- [ ] Process Train — `CO.0120` — `OV_PROCESS_TRAIN`
+- [x] Process Train — `CO.0120` — `OV_PROCESS_TRAIN` (done 2026-07-26)
 - [ ] Reservoir Block — `CO.0133` — `OV_RESV_BLOCK`
 - [ ] Reservoir Formation — `CO.0135` — `OV_RESV_FORMATION`
 - [ ] Reservoir Block Formation — `CO.0137` — `OV_RESV_BLOCK_FORMATION`
