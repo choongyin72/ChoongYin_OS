@@ -14,6 +14,9 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
   reference dropdowns (e.g. Bank Account: Bank/Customer/Currency). Recon each form before building; if it has
   mandatory ref dropdowns the generic engine needs dropdown-fill support (not yet built) or a standalone bundle.
 
+> **Parked screens (not plain Bank-layout):** see `ov-parked-screens.md` — 17 screens parked with reasons
+> (14 mandatory-dropdown, 2 extra-mandatory-field, 1 open-gesture). Revisit per that doc's unpark notes.
+
 ## Uncovered — reuse targets (28 remaining; done ones ticked [x] below)
 ### CD (9)
 - [ ] Document Template — `CD.0013` — `OV_DOC_TEMPLATE`
