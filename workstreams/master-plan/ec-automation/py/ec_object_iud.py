@@ -59,6 +59,22 @@ def open_object_screen(page, screen_name):
 
 
 # ---------------------------------------------------------------- grid helpers
+# Generic across all Bank-family OV screens: grids may be single-page or PrimeFaces-
+# paginated (e.g. Port: 2 pages), and redraw asynchronously after open/GO/Save. The
+# helpers below cater for both -- no per-screen tuning needed:
+#   * _rows           = rows on the CURRENTLY rendered page
+#   * row_exists      = membership across ALL pages (walks the paginator, resets to p1)
+#   * wait_for_row    = polls for async appearance, then a full paginated sweep
+#   * select_row      = navigates to the page holding the code before clicking
+def _css_id(component_id):
+    return component_id.replace(":", "\\:")
+
+
+def _table_id(grid_data_id):
+    """PrimeFaces datatable container id = the tbody data id minus the '_data' suffix."""
+    return grid_data_id[:-5] if grid_data_id.endswith("_data") else grid_data_id
+
+
 def _rows(page, grid_data_id):
     return page.evaluate(
         """(gid) => {
@@ -76,25 +92,96 @@ def _rows(page, grid_data_id):
     )
 
 
-def row_exists(page, grid_data_id, code):
+def _pager_next(page, grid_data_id):
+    """The paginator 'next page' control for this grid (scoped to the datatable;
+    falls back to page scope if the container id can't be matched). None if absent."""
+    tid = _css_id(_table_id(grid_data_id))
+    scoped = page.locator("css=#%s .ui-paginator-next" % tid).first
+    if scoped.count():
+        return scoped
+    loose = page.locator("css=.ui-paginator-next").first
+    return loose if loose.count() else None
+
+
+def _pager_first(page, grid_data_id):
+    tid = _css_id(_table_id(grid_data_id))
+    scoped = page.locator("css=#%s .ui-paginator-first" % tid).first
+    if scoped.count():
+        return scoped
+    loose = page.locator("css=.ui-paginator-first").first
+    return loose if loose.count() else None
+
+
+def _is_disabled(loc):
+    return "ui-state-disabled" in ((loc.get_attribute("class") or "") if loc else "")
+
+
+def _reset_to_first_page(page, grid_data_id):
+    first = _pager_first(page, grid_data_id)
+    if first and not _is_disabled(first):
+        first.click()
+        wait_ajax(page)
+        page.wait_for_timeout(300)
+
+
+def row_on_current_page(page, grid_data_id, code):
+    """Membership on the rendered page only (no pager navigation)."""
     return any(r and r[0].strip() == code for r in _rows(page, grid_data_id))
 
 
+def row_exists(page, grid_data_id, code):
+    """Membership across ALL paginator pages. Walks next-page until found or the
+    pager is exhausted, then restores the grid to page 1. Single-page grids (no
+    paginator) collapse to the plain current-page check -- fully backward compatible."""
+    if row_on_current_page(page, grid_data_id, code):
+        return True
+    nxt = _pager_next(page, grid_data_id)
+    if nxt is None:
+        return False
+    found, guard = False, 0
+    while not _is_disabled(nxt) and guard < 100:
+        nxt.click()
+        wait_ajax(page)
+        page.wait_for_timeout(350)
+        if row_on_current_page(page, grid_data_id, code):
+            found = True
+            break
+        nxt = _pager_next(page, grid_data_id)
+        guard += 1
+    _reset_to_first_page(page, grid_data_id)
+    return found
+
+
 def wait_for_row(page, grid_data_id, code, timeout_ms=None):
-    """Poll until the grid has rendered a row with this code (grid draws async after open/GO)."""
+    """Poll for the row to render (grid draws async after open/GO/Save). Cheap
+    current-page check each tick handles the common timing case; a final full
+    paginated sweep catches a code that sorts onto a later page."""
     attempts = max(1, (timeout_ms or WAIT) // 500)
     for _ in range(attempts):
-        if row_exists(page, grid_data_id, code):
+        if row_on_current_page(page, grid_data_id, code):
             return True
         page.wait_for_timeout(500)
-    return False
+    return row_exists(page, grid_data_id, code)
 
 
 def select_row(page, grid_data_id, code):
-    """Select a grid row by code. Waits for the row to render first (R17-style lazy redraw)."""
+    """Select a grid row by code. Waits for the row (async redraw), then navigates
+    to the paginator page that holds it before clicking (the span for an off-page
+    code is not in the DOM)."""
     if not wait_for_row(page, grid_data_id, code):
         return False
-    span = page.locator("css=#%s span" % grid_data_id.replace(":", "\\:")).filter(has_text=code).first
+    if not row_on_current_page(page, grid_data_id, code):
+        nxt = _pager_next(page, grid_data_id)
+        guard = 0
+        while nxt is not None and not _is_disabled(nxt) and guard < 100:
+            nxt.click()
+            wait_ajax(page)
+            page.wait_for_timeout(350)
+            if row_on_current_page(page, grid_data_id, code):
+                break
+            nxt = _pager_next(page, grid_data_id)
+            guard += 1
+    span = page.locator("css=#%s span" % _css_id(grid_data_id)).filter(has_text=code).first
     if span.count() == 0:
         return False
     span.click()
