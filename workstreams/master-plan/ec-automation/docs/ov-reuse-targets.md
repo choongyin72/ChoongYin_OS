@@ -9,7 +9,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - **Signature:** URL controller `manage_object_nav/CLASS_NAME`. OV-GM (BU/PU cascade nav) use a different
   controller and are NOT in this set. Navigator confirmed Date+GO on a 5-screen visual spot-check (CD/CO/SP/IN).
 - **Coverage key:** the `OV_<view>` name referenced (word-boundary) in `pageobjects/` + `tests/`.
-- **Totals:** 71 screens = **56 covered · 15 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012).
+- **Totals:** 71 screens = **57 covered · 14 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012).
 - **Caveat:** navigator is uniform, but each screen's **detail-form fields differ** — some have mandatory
   reference dropdowns (e.g. Bank Account: Bank/Customer/Currency). Recon each form before building; if it has
   mandatory ref dropdowns the generic engine needs dropdown-fill support (not yet built) or a standalone bundle.
@@ -24,7 +24,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [x] HCB System — `CD.0097` — `OV_BALANCE` (done 2026-07-26)
 - [x] UOP Key — `CD.0099` — `OV_FIN_UOP_DEPR_KEY` (done 2026-07-26)
 - [ ] Inventory Area — `CD.0115` — `OV_INVENTORY_AREA`
-- [ ] EC Code Object — `CD.0135` — `OV_EC_CODE_OBJECT`
+- [x] EC Code Object — `CD.0135` — `OV_EC_CODE_OBJECT` (done 2026-07-26)
 ### CO (20)
 - [ ] Chemical Product — `CO.0072` — `OV_CHEM_PRODUCT`
 - [x] Orifice Plate — `CO.0089` — `OV_ORIFICE_PLATE` (done 2026-07-26)
