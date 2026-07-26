@@ -9,12 +9,12 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - **Signature:** URL controller `manage_object_nav/CLASS_NAME`. OV-GM (BU/PU cascade nav) use a different
   controller and are NOT in this set. Navigator confirmed Date+GO on a 5-screen visual spot-check (CD/CO/SP/IN).
 - **Coverage key:** the `OV_<view>` name referenced (word-boundary) in `pageobjects/` + `tests/`.
-- **Totals:** 71 screens = **41 covered · 30 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003).
+- **Totals:** 71 screens = **42 covered · 29 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012).
 - **Caveat:** navigator is uniform, but each screen's **detail-form fields differ** — some have mandatory
   reference dropdowns (e.g. Bank Account: Bank/Customer/Currency). Recon each form before building; if it has
   mandatory ref dropdowns the generic engine needs dropdown-fill support (not yet built) or a standalone bundle.
 
-## Uncovered — reuse targets (30 remaining; done ones ticked [x] below)
+## Uncovered — reuse targets (29 remaining; done ones ticked [x] below)
 ### CD (9)
 - [ ] Document Template — `CD.0013` — `OV_DOC_TEMPLATE`
 - [ ] Revenue Stream Category — `CD.0015` — `OV_STREAM_CATEGORY`
@@ -43,7 +43,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [ ] Calculation Context — `CO.1059` — `OV_CALC_CONTEXT`
 - [ ] Dummy Tag Event Object — `CO.1063` — `OV_DUMMY_TAG_EVENT`
 - [x] Port — `CO.2003` — `OV_PORT` (done 2026-07-26)
-- [ ] Berth — `CO.2012` — `OV_BERTH`
+- [x] Berth — `CO.2012` — `OV_BERTH` (done 2026-07-26)
 - [ ] Canal — `CO.2069` — `OV_CANAL`
 - [ ] Storage Flow — `CO.2091` — `OV_STORAGE_FLOW`
 ### IN / RP / SP (6)
