@@ -1,6 +1,7 @@
 """check_bundle_hygiene.py - enforce R16 (no hardcoded creds) + R20 (ASCII-only) on EC Playwright bundles.
 
-Two static gates over screens/**/playwright/*.py and screens/**/investigation/*.py:
+Two static gates over screens/**/playwright/*.py, ec-automation/py/*.py (canonical drivers +
+shared engine), and screens/**/investigation/*.py:
   * R16 - a hardcoded credential literal NOT read from the environment is a FAILURE in BUNDLES (exit 1);
     in throwaway investigation/ recon scripts it only WARNs (they should use tmp/scripts/ec_session.py).
   * R20 - ANY non-ASCII byte (em-dash, box-drawing, check/cross, smart quotes...) in EITHER glob is a
@@ -19,7 +20,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(os.environ.get("REPO_ROOT") or Path(__file__).resolve().parents[1])
-SCREENS = ROOT / "workstreams" / "master-plan" / "ec-automation" / "screens"
+EC = ROOT / "workstreams" / "master-plan" / "ec-automation"
+SCREENS = EC / "screens"
+PYDIR = EC / "py"   # canonical driver location (drivers + shared engine) - was NOT scanned pre-2026-07-26
 
 CRED_LITERAL = re.compile(r"""['"]sysadmin['"]""")
 FILL_HARDCODED = re.compile(r"""#(?:username|password)['"]\s*,\s*['"][^'"]+['"]""")
@@ -48,7 +51,11 @@ def non_ascii_in(path):
 def main():
     if not SCREENS.exists():
         print(f"[hygiene] screens dir not found: {SCREENS}"); return 0
+    # BUNDLES (R16 FAIL + R20 FAIL): legacy screens/**/playwright/ AND the canonical ec-automation/py/
+    # driver + shared-engine location (added 2026-07-26 - drivers moved to py/ but the glob never followed).
     bundles = sorted(SCREENS.glob("**/playwright/*.py"))
+    if PYDIR.exists():
+        bundles += sorted(PYDIR.glob("*.py"))
     recon = sorted(SCREENS.glob("**/investigation/*.py"))
     fails, warns, nonascii = [], [], []
     for f in bundles:
