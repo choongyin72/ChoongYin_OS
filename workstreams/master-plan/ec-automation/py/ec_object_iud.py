@@ -276,19 +276,32 @@ def select_dropdown(page, dd_input_id, value):
     normalize-space (stored labels can carry leading/double spaces). One reopen retry (a pending
     re-render can close the panel). Typing into autocomplete dds is unreliable - never .fill()."""
     prefix = dd_input_id[:-6] if dd_input_id.endswith("_input") else dd_input_id
-    opt = ("xpath=//*[@id='%s_panel']//tr[normalize-space(@data-item-label)='%s']" % (prefix, value))
+    any_opt = "xpath=//*[@id='%s_panel']//tr[@data-item-label and normalize-space(@data-item-label)!='']" % prefix
+    # value None/''/'__FIRST__' => take the first available option; also used as fallback when a
+    # requested value isn't in the panel (cascade child: its options only appear once the parent
+    # dropdown - filled earlier in form order - is selected). So cascade + stale values both resolve.
+    want_first = value in (None, "", "__FIRST__")
+    opt = None if want_first else ("xpath=//*[@id='%s_panel']//tr[normalize-space(@data-item-label)='%s']" % (prefix, value))
     for attempt in range(2):
         page.locator(_css(prefix + "_button")).first.click()
         try:
-            page.locator(opt).first.wait_for(state="visible", timeout=6000)
+            page.locator(opt or any_opt).first.wait_for(state="visible", timeout=6000)
             break
         except Exception:
             if attempt == 0:
                 page.keyboard.press("Escape")
                 page.wait_for_timeout(1200)
+            elif opt is not None:
+                opt = None  # requested value absent -> retry accepting ANY (first) option
+                page.locator(_css(prefix + "_button")).first.click()
+                try:
+                    page.locator(any_opt).first.wait_for(state="visible", timeout=6000)
+                except Exception:
+                    raise RuntimeError("dropdown has no options: %s (value=%r)" % (dd_input_id, value))
             else:
-                raise RuntimeError("dropdown option not found: %s = %s" % (dd_input_id, value))
-    page.locator(opt).first.click()
+                raise RuntimeError("dropdown has no options: %s" % dd_input_id)
+    target = opt if (opt is not None and page.locator(opt).count() > 0) else any_opt
+    page.locator(target).first.click()
     wait_ajax(page)
     page.wait_for_timeout(400)
 
