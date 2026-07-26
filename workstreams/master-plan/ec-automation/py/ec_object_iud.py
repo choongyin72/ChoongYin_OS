@@ -164,6 +164,18 @@ def wait_for_row(page, grid_data_id, code, timeout_ms=None):
     return row_exists(page, grid_data_id, code)
 
 
+def wait_for_row_absent(page, grid_data_id, code, timeout_ms=None):
+    """Poll until the row is GONE from every page (grid redraws async after
+    delete+GO; row_exists is immediate and can catch the pre-redraw render).
+    Mirror of wait_for_row for delete-absence assertions."""
+    attempts = max(1, (timeout_ms or WAIT) // 500)
+    for _ in range(attempts):
+        if not row_exists(page, grid_data_id, code):
+            return True
+        page.wait_for_timeout(500)
+    return not row_exists(page, grid_data_id, code)
+
+
 def select_row(page, grid_data_id, code):
     """Select a grid row by code. Waits for the row (async redraw), then navigates
     to the paginator page that holds it before clicking (the span for an off-page
