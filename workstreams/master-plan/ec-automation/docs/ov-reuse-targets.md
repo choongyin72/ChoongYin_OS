@@ -9,7 +9,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - **Signature:** URL controller `manage_object_nav/CLASS_NAME`. OV-GM (BU/PU cascade nav) use a different
   controller and are NOT in this set. Navigator confirmed Date+GO on a 5-screen visual spot-check (CD/CO/SP/IN).
 - **Coverage key:** the `OV_<view>` name referenced (word-boundary) in `pageobjects/` + `tests/`.
-- **Totals:** 71 screens = **57 covered · 14 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012).
+- **Totals:** 71 screens = **58 covered · 13 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012).
 - **Caveat:** navigator is uniform, but each screen's **detail-form fields differ** — some have mandatory
   reference dropdowns (e.g. Bank Account: Bank/Customer/Currency). Recon each form before building; if it has
   mandatory ref dropdowns the generic engine needs dropdown-fill support (not yet built) or a standalone bundle.
@@ -32,7 +32,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [x] Process Train — `CO.0120` — `OV_PROCESS_TRAIN` (done 2026-07-26)
 - [ ] Reservoir Block — `CO.0133` — `OV_RESV_BLOCK`
 - [ ] Reservoir Formation — `CO.0135` — `OV_RESV_FORMATION`
-- [ ] Reservoir Block Formation — `CO.0137` — `OV_RESV_BLOCK_FORMATION`
+- [x] Reservoir Block Formation — `CO.0137` — `OV_RESV_BLOCK_FORMATION` (2026-07-27: Playwright multi-object driver 15/15; RF suite WIP)
 - [x] Deferment Group — `CO.0149` — `OV_DEFERMENT_GROUP` (done 2026-07-26)
 - [x] Choke — `CO.0185` — `OV_CHOKE` (done 2026-07-25)
 - [x] Disposition Type — `CO.0208` — `OV_DISPOSITION_TYPE` (done 2026-07-25)
