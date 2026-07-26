@@ -196,3 +196,27 @@ Reproduced live with standalone tools (`PiAdapterRepro` = framework/apiqa; `PiFo
 
 **Notes:**
 It's the gateway, not the adapter — both repros build the identical request; only the base URL differs. Sibling to the "Apigee OAuth2 non-compliant token_type" entry above (same PI interface, different fault).
+
+---
+
+### OV_CHEM_PRODUCT (Chemical Product, CO.0072) — End=Start delete blocked by a child-FK dependency
+
+**Status:** Confirmed root cause (verified against the DB). Screen PARKED for IUD automation (insert/update fine; delete needs child-aware handling).
+**Environment(s) seen:** Local sandbox `localhost:1521/ORCL` (ECKERNEL_EC), EC 14.2.4. 2026-07-26.
+
+**Symptom:**
+The standard EC "delete = End Date = Start Date" (zero-length window) does NOT persist for Chemical Product. In the UI the End Date field fills, Save clicks with **no error shown**, but `OV_CHEM_PRODUCT.OBJECT_END_DATE` stays NULL and the object remains in the view. No toolbar Delete exists on this screen.
+
+**Root cause (verified):**
+`CHEM_PRODUCT` is VERSIONED, but a zero-length close is blocked by a child foreign key. EC auto-creates a 1:1 `CHEM_USAGE_REPORT_CONF` row on product insert; the delete then raises
+`ORA-02292: integrity constraint (ECKERNEL_EC.FK_CHEM_USAGE_REPORT_CONF_1) violated - child record found`
+(child `CHEM_USAGE_REPORT_CONF.OBJECT_ID` -> `CHEM_PRODUCT.OBJECT_ID`, delete rule **NO ACTION**), and the `IUD_CHEM_PRODUCT` trigger returns `ORA-20102: Object delete is not allowed, set object end date`. The web UI swallows both, so it looks like a no-op. `CHEM_PRODUCT` is referenced by **18 FKs** total (CHEM_USAGE_REPORT_CONF, CHEM_PRODUCT_VERSION, CHEM_PHYSICAL_PROPERTIES, CHEM_PROD_STATUS, CHEM_UNIT_PRICE, CHEM_MATERIAL_COMPAT, ... ) so a clean delete must remove auto-created children first.
+
+**Fix / resolution:**
+To delete a Chemical Product: remove its child config rows (at minimum the `CHEM_USAGE_REPORT_CONF` record) — via the Chemical Usage Report config screen — THEN set End Date = Start Date. The generic OV engine (`py/ec_object_iud.py` `closeObjectRecord`) does NOT do child-aware delete; extend it (or a screen-specific driver) before automating this screen's delete.
+
+**Verification:**
+Reproduced live: End Date fills + Save (button) + `ec_error`='' but `object_end_date` NULL; raw view `update ... end=start` -> ORA-02292; view `delete` -> ORA-20102; direct child count `CHEM_USAGE_REPORT_CONF where OBJECT_ID=<product id>` = 1.
+
+**Notes:**
+Lesson for the OV IUD sweep: classify screens on **delete complexity** (child FKs / trigger rules), not just mandatory-dropdown presence, BEFORE building — an insert-only build leaves an un-deletable residual. Sibling dropdown screen HCB System (CD.0097) deletes cleanly via End=Start, so this is Chemical-Product-specific, not dropdown-wide.
