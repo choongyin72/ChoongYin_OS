@@ -51,6 +51,21 @@ At these four points: slow down, recon first, verify against ground truth — do
 - **Before the PR:** scan [[feedback_pre_commit_mistakes_review]] and confirm none repeated; stage only
   this session's files by explicit path.
 
+## Sweep-workflow rules (multi-screen batches — reviewer 2026-07-26, non-negotiable)
+- **Engine-first, then off-master:** any shared-engine/T2 change ships as its OWN PR merged FIRST; then base
+  each screen branch off **master**, independently. Do NOT deep-stack independent screens (a deep chain forces
+  order-locked merges + conflicts for no benefit). Stack ONLY when a screen truly needs an unmerged engine symbol.
+- **Tracking docs = append-only.** Append registry/scorecard ROWS; do NOT edit the shared
+  `**N covered · M uncovered**` totals line in every screen PR (guaranteed conflict) — reconcile totals once at the end.
+- **`verify_screen.py` on EVERY IUD PR** (ticks from real runs). Its hygiene gate scans `ec-automation/py/*.py`
+  drivers + `screens/**/{playwright,investigation}/` — keep drivers ASCII + env-creds.
+- **Recon-first classify before building:** plain Bank-layout (Code/Name/Start Date only, no mandatory dropdown,
+  opens via tv-link) = BUILD; mandatory dropdown / gated nav / tv-link-not-found = PARK with the reason. A batch
+  recon that fails UNIFORMLY = distrust the SCAN, not the screens. Siblings are NOT clones — recon each form.
+- **Fix whole buckets, not one screen at a time:** if N parked screens block on the same missing capability
+  (e.g. mandatory-dropdown fill), build it ONCE and unlock the batch.
+- **Verify a reviewer's specific list against the files before acting** (a listed screen may already be fixed).
+
 ## Steps (execute in order, autonomously)
 **0. CHECK-EXISTING-FIRST GATE (before any build).** The task is *check-then-build*, never *build*.
    - Read `ec-ui-knowledge/screens/<screen>.md` if it exists (use its selectors; don't re-scan).
