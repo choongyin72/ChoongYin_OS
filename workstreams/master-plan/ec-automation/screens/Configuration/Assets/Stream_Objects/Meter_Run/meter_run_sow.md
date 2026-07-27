@@ -2,7 +2,7 @@
 
 ## Classification
 - **Screen:** Configuration > Assets > Stream_Objects > Meter Run (BF_CODE **CO.0091**)
-- **Type/pattern:** OV (Manage-Object, `manage_object_nav`) - date-effective; plain (no mandatory dropdowns)
+- **Type/pattern:** OV (Manage-Object, `manage_object_nav`) - date-effective; mandatory extras beyond Code/Name/Start Date: Type of Taps, Pipe Material, Location of Taps (dropdowns), Pipe Diameter [mm], Diameter Meas Temp [deg R], All Calibration Factor
 - **DB view:** `OV_METER_RUN` (versioned); key `CODE`
 - **Delete:** End Date = Start Date -> row leaves `OV_METER_RUN`
 
@@ -18,7 +18,7 @@
 - `AUTOTEST_MR_<timestamp>` unique per run; Start/End = `${TEST_START_DATE}` (2000-01-01). Never touch real rows.
 
 ## Dev story
-Recon-first (DB `CLASS_TYPE=OBJECT` ⇒ OV; live form) -> plain Bank-layout OV, no mandatory dropdowns.
+Recon-first (DB `CLASS_TYPE=OBJECT` ⇒ OV; live form) -> mandatory extras beyond Code/Name/Start Date: Type of Taps, Pipe Material, Location of Taps (dropdowns), Pipe Diameter [mm], Diameter Meas Temp [deg R], All Calibration Factor.
 Built label-driven on the shared engine + T2 (zero engine changes). Playwright driver 7/7; RF T3+suite
 label-driven -> live 4/4. All gates run + auto-ticked by `verify_screen.py` (OVERALL PASS).
 

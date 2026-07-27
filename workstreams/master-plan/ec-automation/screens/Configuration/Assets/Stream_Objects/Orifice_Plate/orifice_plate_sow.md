@@ -2,7 +2,7 @@
 
 ## Classification
 - **Screen:** Configuration > Assets > Stream_Objects > Orifice Plate (BF_CODE **CO.0089**)
-- **Type/pattern:** OV (Manage-Object, `manage_object_nav`) - date-effective; plain (no mandatory dropdowns)
+- **Type/pattern:** OV (Manage-Object, `manage_object_nav`) - date-effective; mandatory extras beyond Code/Name/Start Date: Material (dropdown), Diameter [mm], Measurement Temp [deg R]
 - **DB view:** `OV_ORIFICE_PLATE` (versioned); key `CODE`
 - **Delete:** End Date = Start Date -> row leaves `OV_ORIFICE_PLATE`
 
@@ -18,7 +18,7 @@
 - `AUTOTEST_OP_<timestamp>` unique per run; Start/End = `${TEST_START_DATE}` (2000-01-01). Never touch real rows.
 
 ## Dev story
-Recon-first (DB `CLASS_TYPE=OBJECT` ⇒ OV; live form) -> plain Bank-layout OV, no mandatory dropdowns.
+Recon-first (DB `CLASS_TYPE=OBJECT` ⇒ OV; live form) -> mandatory extras beyond Code/Name/Start Date: Material (dropdown), Diameter [mm], Measurement Temp [deg R].
 Built label-driven on the shared engine + T2 (zero engine changes). Playwright driver 7/7; RF T3+suite
 label-driven -> live 4/4. All gates run + auto-ticked by `verify_screen.py` (OVERALL PASS).
 

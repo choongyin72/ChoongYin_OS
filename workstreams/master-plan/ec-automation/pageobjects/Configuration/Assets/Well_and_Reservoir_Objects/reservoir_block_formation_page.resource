@@ -45,6 +45,11 @@ Insert Reservoir Block Formation
     Fill OV Field By Label    objectForm    Resv Block Formation Name    ${name}
     Fill OV Date By Label    objectForm    Start Date    ${start_date}
     Fill OV Dropdown By Label    objectForm    Reservoir Block    ${block_name}
+    # Reservoir Formation is a DEPENDENT dropdown - its options are AJAX-repopulated only after a
+    # Reservoir Block is chosen. Wait for that round-trip to settle before selecting the Formation,
+    # else the option isn't in the list yet (TC02 cascade-timing failure, #237 item 4).
+    Wait For Load State    networkidle    timeout=15s
+    Sleep    1s
     Fill OV Dropdown By Label    objectForm    Reservoir Formation    ${formation_name}
     Save
     Apply Navigator

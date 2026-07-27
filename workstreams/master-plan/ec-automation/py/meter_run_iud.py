@@ -42,7 +42,7 @@ INSERT_FIELDS = [
     {"label": "Pipe Material", "value": "Stainless Steel", "kind": "dropdown"},
     {"label": "Location of Taps", "value": "Upstream", "kind": "dropdown"},
     {"label": "Pipe Diameter (temp uncorrected) [mm]", "value": "1", "kind": "text"},
-    {"label": "Diameter Meas Temp [°R]", "value": "1", "kind": "text"},
+    {"label": "Diameter Meas Temp [\u00b0R]", "value": "1", "kind": "text"},
     {"label": "All Calibration Factor", "value": "1", "kind": "text"},
 ]
 UPDATE_FIELDS = [

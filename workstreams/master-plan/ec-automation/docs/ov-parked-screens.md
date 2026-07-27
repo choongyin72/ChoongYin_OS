@@ -26,7 +26,7 @@ menu-search → tv-link worked once built). Only Chemical Product remains parked
 | Orifice Plate | CO.0089 | OV_ORIFICE_PLATE | Material — ✅ done 2026-07-26 (#223) |
 | Meter Run | CO.0091 | OV_METER_RUN | Type of Taps, Pipe Material, Location of Taps — ✅ done 2026-07-26 (#226) |
 | Process Train | CO.0120 | OV_PROCESS_TRAIN | Production Facility Class 1 — ✅ done 2026-07-26 (#231, `__FIRST__` cascade) |
-| Reservoir Block Formation | CO.0137 | OV_RESV_BLOCK_FORMATION | Reservoir Block, Reservoir Formation — 🟡 Playwright driver 15/15 DB-verified + self-clean (#235); RF suite WIP (1/5 live, cascade-timing + Navigate collision); robocop also failing (~4 issues, not yet fixed) |
+| Reservoir Block Formation | CO.0137 | OV_RESV_BLOCK_FORMATION | Reservoir Block, Reservoir Formation — 🟡 Playwright driver 15/15 DB-verified + self-clean (#235); robocop NOW clean + dryrun 5/5 (verified 2026-07-27); RF suite live still incomplete - blocked by a confirmationForm:confirmation_modal overlay at screen-open (needs investigation); tracked as #237 item 4 |
 | Calculation Group Context | CO.0245 | OV_CALC_GRP_CONTEXT | Calculation Group Object Class, Calculation Group List Class — ✅ done 2026-07-26 (#232, `__FIRST__` cascade) |
 | Config Variable | IN.0031 | OV_CONFIG_VARIABLE | Calculation Context — ✅ done 2026-07-26 (#222) |
 | Data Extract Setup | SP.0043 | OV_SUMMARY_SETUP | Data Extract Type — ✅ done 2026-07-26 (#224) |
