@@ -108,3 +108,15 @@ Fill OV Date By Label
     [Arguments]    ${form}    ${label}    ${value}
     ${id}=    OV Field Id By Label    ${form}    ${label}
     Fill EC Date    ${id}    ${value}
+
+Fill OV Dropdown By Label
+    [Documentation]    Select an autocomplete-dropdown option found by its LABEL in ${form} (no hardcoded ids).
+    ...    Targets the dd input SPECIFICALLY (contains 'dd_input') - the generic //input matches TWO nodes
+    ...    for a dropdown (dd_input + dd_hinput) and trips Browser strict mode. Derives the PrimeFaces widget
+    ...    prefix (strip '_input' -> '...:dd'), then reuses Select EC Dropdown Option (chevron -> item row).
+    [Arguments]    ${form}    ${label}    ${value}
+    ${id}=    Get Attribute
+    ...    xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[contains(@id,'dd_input')]
+    ...    id
+    ${dd}=    Set Variable    ${id.replace('_input', '')}
+    Select EC Dropdown Option    ${dd}    ${value}

@@ -269,7 +269,34 @@ def _fire(page, fid):
     )
 
 
+def select_dropdown(page, dd_input_id, value):
+    """Pick an option from an EC autocomplete dropdown BY its item label. dd_input_id is the
+    resolved '...:C:1:dd_input'; the PrimeFaces widget prefix is that minus '_input' (=> '...:dd'),
+    with '<prefix>_button' (chevron) + '<prefix>_panel' (options). Match tr[data-item-label] via
+    normalize-space (stored labels can carry leading/double spaces). One reopen retry (a pending
+    re-render can close the panel). Typing into autocomplete dds is unreliable - never .fill()."""
+    prefix = dd_input_id[:-6] if dd_input_id.endswith("_input") else dd_input_id
+    opt = ("xpath=//*[@id='%s_panel']//tr[normalize-space(@data-item-label)='%s']" % (prefix, value))
+    for attempt in range(2):
+        page.locator(_css(prefix + "_button")).first.click()
+        try:
+            page.locator(opt).first.wait_for(state="visible", timeout=6000)
+            break
+        except Exception:
+            if attempt == 0:
+                page.keyboard.press("Escape")
+                page.wait_for_timeout(1200)
+            else:
+                raise RuntimeError("dropdown option not found: %s = %s" % (dd_input_id, value))
+    page.locator(opt).first.click()
+    wait_ajax(page)
+    page.wait_for_timeout(400)
+
+
 def fill_field(page, fid, value, kind):
+    if kind == "dropdown":
+        select_dropdown(page, fid, value)
+        return
     el = page.locator(_css(fid))
     if el.count() == 0 or not el.is_visible():
         raise RuntimeError("field not visible: %s" % fid)
