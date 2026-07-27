@@ -26,6 +26,14 @@ from pathlib import Path
 ROOT = Path(os.environ.get("REPO_ROOT") or Path(__file__).resolve().parents[1])
 EC = ROOT / "workstreams" / "master-plan" / "ec-automation"
 TESTS_RE = re.compile(r"(\d+)\s+tests?,\s+(\d+)\s+passed,\s+(\d+)\s+failed")
+PW_RESULT_RE = re.compile(r"^\s+(OK|X)\s+\S+\s*:", re.MULTILINE)
+
+
+def playwright_counts(output):
+    """Count real per-check OK/X lines from the driver's own RESULTS block, instead of
+    assuming a fixed step count - drivers vary (single-object vs multi-object screens)."""
+    marks = PW_RESULT_RE.findall(output)
+    return (sum(1 for m in marks if m == "OK"), len(marks))
 
 
 def run(cmd, cwd=None, env=None):
@@ -85,8 +93,10 @@ def main():
         # Playwright driver (parallel proof)
         if a.driver:
             rc, out = run(["py", "-X", "utf8", a.driver], cwd=str(ROOT), env={"EC_HEADED": "0"})
-            ok = rc == 0 and "Overall: ALL PASS" in out
-            gates.append(("PW", "Playwright driver 7/7", ok, "Overall: ALL PASS" if ok else f"exit={rc} (see output)"))
+            passed_n, total_n = playwright_counts(out)
+            ok = rc == 0 and "Overall: ALL PASS" in out and total_n > 0 and passed_n == total_n
+            gates.append(("PW", f"Playwright driver {passed_n}/{total_n}", ok,
+                          "Overall: ALL PASS" if ok else f"exit={rc} (see output)"))
 
     static_ok = all(g[2] for g in gates)
     # --no-live can NEVER be OVERALL PASS: the live suite (the real DB-verified proof) was not run.

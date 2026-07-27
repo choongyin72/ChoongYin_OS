@@ -40,7 +40,7 @@ TC02 Insert Reservoir Block Formation Linking Both
     [Documentation]    On RBF: select the new Block (populates Formation), then the new Formation; confirm in list + DB.
     [Tags]    insert
     Go To Screen    Reservoir Block Formation
-    Insert Reservoir Block Formation    ${RBF_CODE}    ${RBF_NAME}    ${SD}    ${BLK_NAME}    ${FRM_NAME}
+    Insert Reservoir Block Formation    ${RBF_CODE}    ${RBF_NAME}    ${SD}    ${BLK_NAME}    ${FRM_CODE}
     Row Present    ${RBF_CODE}
     Code Should Be Present In View    OV_RESV_BLOCK_FORMATION    ${RBF_CODE}
 

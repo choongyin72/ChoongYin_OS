@@ -39,18 +39,19 @@ Insert Plain Object
 Insert Reservoir Block Formation
     [Documentation]    New Object -> Code/Name/Start Date, select Reservoir Block (populates Formation),
     ...    then select Reservoir Formation -> Save -> GO. Block chosen BEFORE Formation (dependent dropdown).
-    [Arguments]    ${code}    ${name}    ${start_date}    ${block_name}    ${formation_name}
+    ...    The Formation cascade's rendered options key off its CODE, not its Name (verified via DOM probe,
+    ...    issue 237 item 4) - unlike the Block dropdown, which matches by Name. Pass the Formation CODE here.
+    [Arguments]    ${code}    ${name}    ${start_date}    ${block_name}    ${formation_code}
     Open New Object Form
     Fill OV Field By Label    objectForm    Resv Block Formation Code    ${code}
     Fill OV Field By Label    objectForm    Resv Block Formation Name    ${name}
     Fill OV Date By Label    objectForm    Start Date    ${start_date}
     Fill OV Dropdown By Label    objectForm    Reservoir Block    ${block_name}
     # Reservoir Formation is a DEPENDENT dropdown - its options are AJAX-repopulated only after a
-    # Reservoir Block is chosen. Wait for that round-trip to settle before selecting the Formation,
-    # else the option isn't in the list yet (TC02 cascade-timing failure, #237 item 4).
+    # Reservoir Block is chosen. Wait for that round-trip to settle before selecting the Formation.
     Wait For Load State    networkidle    timeout=15s
     Sleep    1s
-    Fill OV Dropdown By Label    objectForm    Reservoir Formation    ${formation_name}
+    Fill OV Dropdown By Label    objectForm    Reservoir Formation    ${formation_code}
     Save
     Apply Navigator
 

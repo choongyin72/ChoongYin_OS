@@ -163,7 +163,7 @@ if __name__ == "__main__":
     print("\n" + "=" * 56 + "\nRESULTS")
     for k, v in results.items():
         mark = "OK" if str(v).startswith(("PASS", "CLEAN")) else "X"
-        if mark == "X" and not str(v).startswith("RESIDUAL"):
+        if mark == "X":
             ok = False
         print("  %s %-20s: %s" % (mark, k, v))
     print("Overall:", "ALL PASS" if ok else "FAILURES")
