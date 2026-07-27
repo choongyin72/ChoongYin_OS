@@ -2,7 +2,7 @@
 
 ## Classification
 - **Screen:** Configuration > Assets > Data_Mapping_Objects > Data Extract Setup (BF_CODE **SP.0043**)
-- **Type/pattern:** OV (Manage-Object, `manage_object_nav`) - date-effective; plain (no mandatory dropdowns)
+- **Type/pattern:** OV (Manage-Object, `manage_object_nav`) - date-effective; mandatory extra beyond Code/Name/Start Date: Data Extract Type (dropdown)
 - **DB view:** `OV_SUMMARY_SETUP` (versioned); key `CODE`
 - **Delete:** End Date = Start Date -> row leaves `OV_SUMMARY_SETUP`
 
@@ -18,7 +18,7 @@
 - `AUTOTEST_DXS_<timestamp>` unique per run; Start/End = `${TEST_START_DATE}` (2000-01-01). Never touch real rows.
 
 ## Dev story
-Recon-first (DB `CLASS_TYPE=OBJECT` ⇒ OV; live form) -> plain Bank-layout OV, no mandatory dropdowns.
+Recon-first (DB `CLASS_TYPE=OBJECT` ⇒ OV; live form) -> mandatory extra beyond Code/Name/Start Date: Data Extract Type (dropdown).
 Built label-driven on the shared engine + T2 (zero engine changes). Playwright driver 7/7; RF T3+suite
 label-driven -> live 4/4. All gates run + auto-ticked by `verify_screen.py` (OVERALL PASS).
 
