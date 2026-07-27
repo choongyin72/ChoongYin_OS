@@ -112,7 +112,7 @@ Only the **custom-URL** ones build with current tooling.
 | CO.1049 | Conversion Group | custom-URL | nav:form:T_data | **DONE #236** |
 | CO.1060 | Calculation Library | custom-URL | nav:form:T_data | 1 (buildable now) |
 | CO.2038 | Contract Area Setup | custom-URL | nav:form:T_data | 1 (buildable now) |
-| CD.0109 | Document Sequence | custom-URL | nav:form:T_data | 1 (buildable now) |
+| CD.0109 | Document Sequence | custom-URL | nav:form:T_data | **DONE** (this PR) |
 | CO.0193 | Action Trigger | custom-URL | nav:form:T_data | 1 (buildable now) |
 | CO.0191 | Task Process | custom-URL | nav:form:T_data | 1 (buildable now) |
 | FC.0010 | Forecast | custom-URL | nav:form:T_data | 1 (buildable now) |
