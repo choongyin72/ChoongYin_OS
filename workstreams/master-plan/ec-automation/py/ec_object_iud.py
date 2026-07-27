@@ -311,9 +311,16 @@ def save(page, attempts=2):
 
 
 def click_go(page):
+    """Reload the object list. Manage-object OV: click the navigator GO (button:form:B). Custom-URL OV:
+    NO GO button -> reload via the toolbar Refresh icon instead (grid = nav:form:T_data). Generalises both."""
     go = page.locator("#button\\:form\\:B")
     if go.count() > 0 and go.is_visible():
         go.first.click()
+        wait_ajax(page)
+        return
+    rf = page.locator("xpath=//a[starts-with(@title,'Refresh') and not(contains(@class,'ui-state-disabled'))]")
+    if rf.count() > 0 and rf.first.is_visible():
+        rf.first.click()
         wait_ajax(page)
 
 
