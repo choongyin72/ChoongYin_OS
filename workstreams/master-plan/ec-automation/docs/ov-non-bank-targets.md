@@ -113,9 +113,9 @@ Only the **custom-URL** ones build with current tooling.
 | CO.1060 | Calculation Library | custom-URL | nav:form:T_data | **DONE** (this PR) |
 | CO.2038 | Contract Area Setup | custom-URL | nav:form:T_data | 1 (buildable now) |
 | CD.0109 | Document Sequence | custom-URL | nav:form:T_data | **DONE** (this PR) |
-| CO.0193 | Action Trigger | custom-URL | nav:form:T_data | 1 (buildable now) |
-| CO.0191 | Task Process | custom-URL | nav:form:T_data | 1 (buildable now) |
-| FC.0010 | Forecast | custom-URL | nav:form:T_data | 1 (buildable now) |
+| CO.0193 | Action Trigger | custom-URL (POPUP refs) | nav:form:T_data | (P) popup-picker capability (AT_TYPE_POPUP/TRIGGER_TYPE_POPUP mandatory) |
+| CO.0191 | Task Process | custom-URL | nav:form:T_data | **DONE** (this PR) |
+| FC.0010 | Forecast | custom-URL | nav:form:T_data | (P) mandatory End Date on insert - generator fills only Start Date (small tweak) |
 | CO.0100 | Production Sub Unit | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
 | CO.0021 | Facility Class 2 | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
 | CO.0158 | Report Group | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
