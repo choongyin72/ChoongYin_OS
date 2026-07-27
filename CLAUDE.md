@@ -13,6 +13,16 @@
   dryrun + the live suite/driver and AUTO-GENERATES the CHECKLIST ticks from real exit codes) **before the PR** —
   ticks are produced by the tools, not typed by me. See `docs/IUD-DELIVERABLE-CHECKLIST.md`.
 - _Origin: owner rebuke 2026-07-25 after I ticked "robocop clean" without running it (robocop then found 5 real issues)._
+- ⛔ **REPEAT OFFENCE 2026-07-27 — MUST NEVER HAPPEN AGAIN.** On PR #235 I shipped a `CHECKLIST.md` that
+  claimed `[x] robocop clean` / OVERALL PASS while the auto-generated `VERIFY-REPORT.md` next to it said
+  **OVERALL: FAIL** (robocop exit=1, LIVE RF 1/5). Root cause: my generator pre-wrote every CHECKLIST box
+  as `[x]` at scaffold time — a FABRICATED tick that no command had proven — and I let it stand. The
+  automated reviewer caught it (Issue #237). **A hand-typed/templated claim must NEVER sit next to an
+  auto-generated report that contradicts it. A tick exists ONLY because a command ran and I saw it pass.**
+  Enforced now (so it cannot rest on my memory): (1) the generator writes gate boxes as `[ ]`, filled only
+  by the real run; (2) `scripts/check_bundle_hygiene.py` FAILS the build if ANY `CHECKLIST.md` claim
+  contradicts its `VERIFY-REPORT.md` (per-gate by number/keyword + OVERALL). If I ever fear I broke a rule,
+  I STOP, say so plainly, verify against real facts, and record the lesson here.
 
 ## On session start (mandatory — in this order)
 1. Read docs/lessons-learned.md → standing rules (mandatory)

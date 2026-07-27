@@ -1,6 +1,6 @@
 # Screen: Meter Run
 
-- **Type:** OV (EC Object Configuration, date-effective) - Bank-family (`manage_object_nav`); plain (optional dropdowns only, none mandatory)
+- **Type:** OV (EC Object Configuration, date-effective) - Bank-family (`manage_object_nav`); plain (mandatory extras beyond Code/Name/Start Date: Type of Taps, Pipe Material, Location of Taps (dropdowns), Pipe Diameter [mm], Diameter Meas Temp [deg R], All Calibration Factor)
 - **BF_CODE:** CO.0091 - **Treeview:** Configuration > Assets > Stream_Objects > Meter Run _(DB treeview JSON)_
 - **DB view:** `OV_METER_RUN` (key `CODE`; `NAME`, `OBJECT_START/END_DATE`)
 - **Last verified:** 2026-07-26 - EC 14.2.4 - local sandbox - `verify_screen.py` OVERALL PASS (RF 4/4 + Playwright 7/7, DB-verified, self-clean)
@@ -25,4 +25,4 @@
 - **Gate:** `verify_screen.py` -> OVERALL PASS.
 
 ## Quirks
-- Plain OV; no mandatory dropdowns. Generic engine handles appear/absent/pagination.
+- Plain OV; mandatory extras beyond Code/Name/Start Date: Type of Taps, Pipe Material, Location of Taps (dropdowns), Pipe Diameter [mm], Diameter Meas Temp [deg R], All Calibration Factor. Generic engine handles appear/absent/pagination.

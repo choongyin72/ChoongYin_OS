@@ -40,7 +40,7 @@ INSERT_FIELDS = [
     {"label": "Start Date",  "value": START_DATE, "kind": "date"},
     {"label": "Material", "value": "304/316 Stainless Steel", "kind": "dropdown"},
     {"label": "Diameter [mm]", "value": "1", "kind": "text"},
-    {"label": "Measurement Temp [°R]", "value": "1", "kind": "text"},
+    {"label": "Measurement Temp [\u00b0R]", "value": "1", "kind": "text"},
 ]
 UPDATE_FIELDS = [
     {"label": "Orifice Name",  "value": NAME_UPD,   "kind": "text"},

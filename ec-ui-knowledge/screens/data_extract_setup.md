@@ -1,6 +1,6 @@
 # Screen: Data Extract Setup
 
-- **Type:** OV (EC Object Configuration, date-effective) - Bank-family (`manage_object_nav`); plain (optional dropdowns only, none mandatory)
+- **Type:** OV (EC Object Configuration, date-effective) - Bank-family (`manage_object_nav`); plain (mandatory extra beyond Code/Name/Start Date: Data Extract Type (dropdown))
 - **BF_CODE:** SP.0043 - **Treeview:** Configuration > Assets > Data_Mapping_Objects > Data Extract Setup _(DB treeview JSON)_
 - **DB view:** `OV_SUMMARY_SETUP` (key `CODE`; `NAME`, `OBJECT_START/END_DATE`)
 - **Last verified:** 2026-07-26 - EC 14.2.4 - local sandbox - `verify_screen.py` OVERALL PASS (RF 4/4 + Playwright 7/7, DB-verified, self-clean)
@@ -25,4 +25,4 @@
 - **Gate:** `verify_screen.py` -> OVERALL PASS.
 
 ## Quirks
-- Plain OV; no mandatory dropdowns. Generic engine handles appear/absent/pagination.
+- Plain OV; mandatory extra beyond Code/Name/Start Date: Data Extract Type (dropdown). Generic engine handles appear/absent/pagination.

@@ -1,6 +1,6 @@
 # Screen: Orifice Plate
 
-- **Type:** OV (EC Object Configuration, date-effective) - Bank-family (`manage_object_nav`); plain (optional dropdowns only, none mandatory)
+- **Type:** OV (EC Object Configuration, date-effective) - Bank-family (`manage_object_nav`); plain (mandatory extras beyond Code/Name/Start Date: Material (dropdown), Diameter [mm], Measurement Temp [deg R])
 - **BF_CODE:** CO.0089 - **Treeview:** Configuration > Assets > Stream_Objects > Orifice Plate _(DB treeview JSON)_
 - **DB view:** `OV_ORIFICE_PLATE` (key `CODE`; `NAME`, `OBJECT_START/END_DATE`)
 - **Last verified:** 2026-07-26 - EC 14.2.4 - local sandbox - `verify_screen.py` OVERALL PASS (RF 4/4 + Playwright 7/7, DB-verified, self-clean)
@@ -25,4 +25,4 @@
 - **Gate:** `verify_screen.py` -> OVERALL PASS.
 
 ## Quirks
-- Plain OV; no mandatory dropdowns. Generic engine handles appear/absent/pagination.
+- Plain OV; mandatory extras beyond Code/Name/Start Date: Material (dropdown), Diameter [mm], Measurement Temp [deg R]. Generic engine handles appear/absent/pagination.
