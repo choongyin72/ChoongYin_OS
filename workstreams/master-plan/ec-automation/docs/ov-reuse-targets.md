@@ -9,8 +9,7 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - **Signature:** URL controller `manage_object_nav/CLASS_NAME`. OV-GM (BU/PU cascade nav) use a different
   controller and are NOT in this set. Navigator confirmed Date+GO on a 5-screen visual spot-check (CD/CO/SP/IN).
 - **Coverage key:** the `OV_<view>` name referenced (word-boundary) in `pageobjects/` + `tests/`.
-- **Totals:** 71 screens = **54 covered · 17 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012, +Canal CO.2069).
-- **Totals:** 71 screens = **43 covered · 28 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012).
+- **Totals:** 71 screens = **56 covered · 15 uncovered** (updated 2026-07-26: +Disposition Type CO.0208, +Report Area RP.0017, +Choke CO.0185, +Choke Model CO.0217, +Port CO.2003, +Berth CO.2012, +Canal CO.2069, +Revenue Stream Category CD.0015, +Stream Item Category CD.0016, +Split Item Other CD.0017, +Inventory Area CD.0115, +Reservoir Block CO.0133, +Reservoir Formation CO.0135, +Blend CO.0219, +Chemical Transport Tank CO.0257, +Calculation Context CO.1059, +Dummy Tag Event Object CO.1063, +Transactional Inventory Layout Set IN.0033, +Input List CD.0035, +HCB System CD.0097).
 - **Caveat:** navigator is uniform, but each screen's **detail-form fields differ** — some have mandatory
   reference dropdowns (e.g. Bank Account: Bank/Customer/Currency). Recon each form before building; if it has
   mandatory ref dropdowns the generic engine needs dropdown-fill support (not yet built) or a standalone bundle.
@@ -18,21 +17,14 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 > **Parked screens (not plain Bank-layout):** see `ov-parked-screens.md` — 17 screens parked with reasons
 > (14 mandatory-dropdown, 2 extra-mandatory-field, 1 open-gesture). Revisit per that doc's unpark notes.
 
-## Uncovered — reuse targets (28 remaining; done ones ticked [x] below)
+## Uncovered — reuse targets (15 remaining; done ones ticked [x] below)
 ### CD (9)
 - [ ] Document Template — `CD.0013` — `OV_DOC_TEMPLATE`
 - [x] Revenue Stream Category — `CD.0015` — `OV_STREAM_CATEGORY` (done 2026-07-26)
 - [x] Stream Item Category — `CD.0016` — `OV_STREAM_ITEM_CATEGORY` (done 2026-07-26)
 - [x] Split Item Other — `CD.0017` — `OV_SPLIT_ITEM_OTHER` (done 2026-07-26)
-- [ ] Input List — `CD.0035` — `OV_STREAM_ITEM_COLLECTION`
-## Uncovered — reuse targets (29 remaining; done ones ticked [x] below)
-### CD (9)
-- [ ] Document Template — `CD.0013` — `OV_DOC_TEMPLATE`
-- [ ] Revenue Stream Category — `CD.0015` — `OV_STREAM_CATEGORY`
-- [ ] Stream Item Category — `CD.0016` — `OV_STREAM_ITEM_CATEGORY`
-- [ ] Split Item Other — `CD.0017` — `OV_SPLIT_ITEM_OTHER`
 - [x] Input List — `CD.0035` — `OV_STREAM_ITEM_COLLECTION` (done 2026-07-26)
-- [ ] HCB System — `CD.0097` — `OV_BALANCE`
+- [x] HCB System — `CD.0097` — `OV_BALANCE` (done 2026-07-26)
 - [ ] UOP Key — `CD.0099` — `OV_FIN_UOP_DEPR_KEY`
 - [x] Inventory Area — `CD.0115` — `OV_INVENTORY_AREA` (done 2026-07-26)
 - [ ] EC Code Object — `CD.0135` — `OV_EC_CODE_OBJECT`
@@ -56,12 +48,6 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [x] Port — `CO.2003` — `OV_PORT` (done 2026-07-26)
 - [x] Berth — `CO.2012` — `OV_BERTH` (done 2026-07-26)
 - [x] Canal — `CO.2069` — `OV_CANAL` (done 2026-07-26)
-- [ ] Chemical Transport Tank — `CO.0257` — `OV_CHEM_TRANS_TANK`
-- [ ] Calculation Context — `CO.1059` — `OV_CALC_CONTEXT`
-- [ ] Dummy Tag Event Object — `CO.1063` — `OV_DUMMY_TAG_EVENT`
-- [x] Port — `CO.2003` — `OV_PORT` (done 2026-07-26)
-- [x] Berth — `CO.2012` — `OV_BERTH` (done 2026-07-26)
-- [ ] Canal — `CO.2069` — `OV_CANAL`
 - [ ] Storage Flow — `CO.2091` — `OV_STORAGE_FLOW`
 ### IN / RP / SP (6)
 - [ ] Transactional Inventory Properties — `IN.0023` — `OV_TRANS_INVENTORY`
