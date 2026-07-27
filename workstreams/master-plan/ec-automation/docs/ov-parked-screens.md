@@ -10,9 +10,9 @@ Sweep result: **14 built** this session (Port/Berth/Canal + 11 generator-scaffol
 plus individual recon for Storage Flow and Deferment Group.
 
 **Update 2026-07-26 (PRs #219–#233):** the mandatory-dropdown-fill capability (`select_dropdown` +
-`Fill OV Dropdown By Label`, including the `__FIRST__` cascade-fallback from #229) unparked 12/14 of
+`Fill OV Dropdown By Label`, including the `__FIRST__` cascade-fallback from #229) unparked 13/14 of
 section A, all of section B, and section C (Deferment Group's "gesture" issue was transient — plain
-menu-search → tv-link worked once built). Only Chemical Product and EC Code Object remain parked.
+menu-search → tv-link worked once built). Only Chemical Product remains parked.
 
 ## A. Mandatory reference dropdown(s) — engine has no mandatory-dropdown fill yet (14)
 | Screen | BF | View | Mandatory dropdown(s) |
@@ -21,7 +21,7 @@ menu-search → tv-link worked once built). Only Chemical Product and EC Code Ob
 | Input List | CD.0035 | OV_STREAM_ITEM_COLLECTION | List Category — ✅ done 2026-07-26 (#219) |
 | HCB System | CD.0097 | OV_BALANCE | HCB Category — ✅ done 2026-07-26 (#220) |
 | UOP Key | CD.0099 | OV_FIN_UOP_DEPR_KEY | Company, Key Type — ✅ done 2026-07-26 (#230) |
-| EC Code Object | CD.0135 | OV_EC_CODE_OBJECT | EC Code Type, EC Code — still parked |
+| EC Code Object | CD.0135 | OV_EC_CODE_OBJECT | EC Code Type, EC Code — ✅ done 2026-07-26 (#234, `__FIRST__` cascade) |
 | Chemical Product | CO.0072 | OV_CHEM_PRODUCT | Meas. Units — still parked |
 | Orifice Plate | CO.0089 | OV_ORIFICE_PLATE | Material — ✅ done 2026-07-26 (#223) |
 | Meter Run | CO.0091 | OV_METER_RUN | Type of Taps, Pipe Material, Location of Taps — ✅ done 2026-07-26 (#226) |
