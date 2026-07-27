@@ -96,3 +96,33 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 | BF | Screen | OV_ view | Folder | Status |
 |---|---|---|---|---|
 | CO.0236 | Message Group | OV_MESSAGE_GROUP | Messaging | [ ] |
+
+## Group A live flavour classification (2026-07-27, read-only grid probe + verify)
+**CORRECTED after a live build attempt** (Production Sub Unit): the initial batch probe only checked two
+grid ids (`manage_object_nav_nav:form:T_data`, `nav:form:T_data`). Screens showing `grid=? go=True` are
+actually **OV-GM** with a THIRD grid id `manageObject:form:T_data` (navigator-scoped, GO reload, lazy
+redraw). Proof: Production Sub Unit inserted OK (row persisted in `OV_PROD_SUB_UNIT`) but the grid re-check
+failed; a follow-up probe found grid = `manageObject:form:T_data`, and `select_row` could not find the row
+(navigator-scoped). So **"no navigator" in the recipe != plain manage-object.** OV-GM screens -> **Phase 2**
+(need grid_id=`manageObject:form:T_data` + GO reload + lazy-redraw wait R17 + insert parent-dd = nav scope).
+Only the **custom-URL** ones build with current tooling.
+
+| BF | Screen | Flavour | grid_id | Phase |
+|---|---|---|---|---|
+| CO.1049 | Conversion Group | custom-URL | nav:form:T_data | **DONE #236** |
+| CO.1060 | Calculation Library | custom-URL | nav:form:T_data | 1 (buildable now) |
+| CO.2038 | Contract Area Setup | custom-URL | nav:form:T_data | 1 (buildable now) |
+| CD.0109 | Document Sequence | custom-URL | nav:form:T_data | 1 (buildable now) |
+| CO.0193 | Action Trigger | custom-URL | nav:form:T_data | 1 (buildable now) |
+| CO.0191 | Task Process | custom-URL | nav:form:T_data | 1 (buildable now) |
+| FC.0010 | Forecast | custom-URL | nav:form:T_data | 1 (buildable now) |
+| CO.0100 | Production Sub Unit | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
+| CO.0021 | Facility Class 2 | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
+| CO.0158 | Report Group | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
+| CO.0227 | External Location | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
+| CO.0264 | Truck | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
+| CO.0265 | Trailer | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
+| CO.0266 | Driver | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
+| CO.0102 | Constant Standard | (P) unknown - no GO, no nav grid; individual recon | ? |
+| CD.0008 | Stream Item | (P) unknown - individual recon | ? |
+| CO.1033 | Production Day Table | (P) unknown - individual recon | ? |
