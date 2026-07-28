@@ -115,7 +115,7 @@ Only the **custom-URL** ones build with current tooling.
 | CD.0109 | Document Sequence | custom-URL | nav:form:T_data | **DONE #236** |
 | CO.0193 | Action Trigger | custom-URL (POPUP refs) | nav:form:T_data | (P) popup-picker capability (AT_TYPE_POPUP/TRIGGER_TYPE_POPUP mandatory) |
 | CO.0191 | Task Process | custom-URL | nav:form:T_data | **DONE #236** |
-| FC.0010 | Forecast | custom-URL | nav:form:T_data | (P) mandatory End Date on insert - generator fills only Start Date (small tweak) |
+| FC.0010 | Forecast | custom-URL | nav:form:T_data | (P) end-date-on-insert ADDED to generator, but FORECAST_TYPE (DB NOT NULL) also mandatory; filling Forecast Type first-available still rejected at Save (likely popup-picker, not dropdown) - 2 attempts, parked 2026-07-27 |
 | CO.0100 | Production Sub Unit | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
 | CO.0021 | Facility Class 2 | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
 | CO.0158 | Report Group | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
@@ -123,6 +123,29 @@ Only the **custom-URL** ones build with current tooling.
 | CO.0264 | Truck | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
 | CO.0265 | Trailer | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
 | CO.0266 | Driver | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
-| CO.0102 | Constant Standard | (P) unknown - no GO, no nav grid; individual recon | ? |
-| CD.0008 | Stream Item | (P) unknown - individual recon | ? |
-| CO.1033 | Production Day Table | (P) unknown - individual recon | ? |
+| CO.0102 | Constant Standard | custom-URL grid cstandard:form:T_data | (P) standard New-Object menu gesture times out (custom toolbar) - needs individual insert-gesture recon; 2026-07-27 |
+| CD.0008 | Stream Item | (P) no :T_data grid renders on open (different layout / didn't open) - needs individual recon; 2026-07-27 |
+| CO.1033 | Production Day Table | custom-URL grid production_day:form:T_data | (P) INVARIANT (physical delete, not End=Start) - needs physical-delete capability; 2026-07-27 |
+
+## OV-GM batch investigation (2026-07-27) - grid-never-lists blocker
+Attempted the OV-GM capability starting with the simplest case, **Production Sub Unit (CO.0100)**:
+- Navigator = **Date + GO only** (no BU/PU/Area cascade) - so it's a date-scoped OV-GM, grid `manageObject:form:T_data`.
+- Insert **persists** in `OV_PROD_SUB_UNIT` (DB-verified) and `insertObjectRecord` runs GO after Save, BUT the
+  grid shows **"No records found" at every nav Date** (tested today + 2005). The row never lists.
+- This matches the known EC behavior [[reference_ec_groupmodel_not_enabled]]: an OV-GM screen with the group
+  model NOT enabled accepts inserts but the grid never lists them -> **cannot verify via the grid; exclude**.
+- Self-cleaned all AUTOTEST_PSU rows via End=Start (DB-verified 0 residual).
+
+**Implication for the OV-GM batch (Groups A-OVGM 7, B 20, C 10, D 3, F 1 = ~41):** each needs a per-screen check
+of whether its group model is enabled (grid lists inserts) BEFORE building - do NOT assume. Gated ones (B/C/D)
+additionally need the BU/PU/Area/Facility cascade filled + parent-dd = nav scope. This is genuine capability
+R&D, not a quick build. **PARKED pending a dedicated OV-GM capability session.**
+
+### Parked this session (2026-07-27, verified reasons - skip-and-park)
+| Screen | Reason |
+|---|---|
+| Production Sub Unit (CO.0100) | OV-GM grid never lists inserts (groupmodel-not-enabled); DB persists |
+| Forecast (FC.0010) | FORECAST_TYPE (DB NOT NULL) mandatory + likely popup-picker; Save rejected after 2 attempts |
+| Constant Standard (CO.0102) | custom toolbar - standard New-Object menu gesture times out |
+| Stream Item (CD.0008) | no :T_data grid renders on open |
+| Production Day Table (CO.1033) | INVARIANT (physical delete, not End=Start) - needs physical-delete capability |
