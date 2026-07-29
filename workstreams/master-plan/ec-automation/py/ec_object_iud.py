@@ -211,7 +211,7 @@ def read_form_record(page, grid_data_id, code, form_key="updateAttributes"):
         """(form) => {
             const base = 'tab:tabPanel:' + form + ':form:G:0:R:';
             const out = {};
-            for (let r = 0; r < 30; r++) {
+            for (let r = 0; r < 80; r++) {
                 const inn = document.getElementById(base + r + ':C:1:in');
                 const dai = document.getElementById(base + r + ':C:1:da_input');
                 const ddi = document.getElementById(base + r + ':C:1:dd_input');
@@ -240,7 +240,7 @@ def _resolve_field(page, form_key, label):
     return page.evaluate(
         """([form, want]) => {
             const base = 'tab:tabPanel:' + form + ':form:G:0:R:';
-            for (let r = 0; r < 30; r++) {
+            for (let r = 0; r < 80; r++) {
                 const inn = document.getElementById(base + r + ':C:1:in');
                 const dai = document.getElementById(base + r + ':C:1:da_input');
                 const ddi = document.getElementById(base + r + ':C:1:dd_input');
