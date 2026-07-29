@@ -10,8 +10,12 @@ _Built 2026-07-29. The reusable primitive that unlocks the ~41 OV-GM object scre
    grid loads only after this.
 2. **Capture the top-parent** (C1 value, e.g. `AS1 EC Exploration Norway`).
 3. **Insert:** New-Object form Code/Name/Start + mandatory extras, and set the **parent-dd**
-   (e.g. `Op Production Unit` / `Business Unit Name`) = the captured C1 value -- REQUIRED or the new row is
-   not visible under this navigator scope.
+   (e.g. `Op Production Unit` / `Business Unit Name`). Set it to the captured C1 value **if that value is
+   an option** in the parent-dd panel; otherwise **first-available** (`__FIRST__`). PER-SCREEN, VERIFY:
+   the parent-dd panel is date-filtered and its list can DIFFER from the navigator's (real case: on **Node**
+   the Op PU panel offers 5 PUs and the nav first-available `AS1...` is NOT one of them - yet the row still
+   lists after GO with first-available Op PU; contrast **Area**, where nav PU == Op PU was required). Never
+   assume the nav value is a valid parent-dd option - probe the panel (`tmp/node/probe_op_pu.py`).
 4. **Groupmodel check (per screen):** after Save + GO, does the row LIST in the grid? YES -> groupmodel enabled,
    buildable. NO -> groupmodel OFF (insert persists but grid never lists, e.g. Production Sub Unit) -> EXCLUDE.
 5. **Lazy redraw:** the GM grid redraws async after Save+GO -> poll (`wait_for_row`) / extra Apply Navigator
