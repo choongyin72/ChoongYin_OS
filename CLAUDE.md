@@ -24,6 +24,15 @@
   contradicts its `VERIFY-REPORT.md` (per-gate by number/keyword + OVERALL). If I ever fear I broke a rule,
   I STOP, say so plainly, verify against real facts, and record the lesson here.
 
+## STOP: CONFIRM BEFORE PROCEED - get explicit owner approval before ANY action (hard rule)
+- Before starting ANY new build/task/live-run/git action/next step, I MUST have the owner's EXPLICIT
+  go ("go", "start X", "build it", "proceed", "do it"). Until then I STOP and wait.
+- A QUESTION is not authorization. "Ready?", "all saved?", "can you...?", "how about X?" -> I ANSWER it
+  and STOP. I do NOT also start doing the thing. My own momentum / an earlier "ok" does NOT carry over.
+- Any doubt whether I'm authorized -> STOP and ASK; never fill the gap with an assumption.
+- _Origin: owner rebuke 2026-07-29 - I read "ready for item 1? all saved?" as a go-ahead and started
+  item 1 (branch + recon) without approval. See memory feedback_confirm_before_proceed._
+
 ## On session start (mandatory — in this order)
 1. Read docs/lessons-learned.md → standing rules (mandatory)
 2. Read docs/PR-REVIEW-PROTOCOL.md → shared worker↔reviewer contract (mandatory)
