@@ -40,3 +40,20 @@ Pick From EC Object Popup
     ${val}=    Get Property    css=[id="${pin_prefix}"]    value
     Should Be Equal    ${val}    ${item_label}
     ...    msg=Popup pick did not fill the pin field (shows '${val}')
+
+Pick First EC Object Popup
+    [Documentation]    Same as Pick From EC Object Popup but selects the FIRST row (first-available) -
+    ...    used when any valid reference will do (generic build). Opens the popup behind ${pin_prefix}
+    ...    (the cell id WITHOUT the trailing B), clicks the first data row, verifies the pin took a value.
+    [Arguments]    ${pin_prefix}
+    Evaluate JavaScript    ${None}    () => document.getElementById('${pin_prefix}B').click()
+    Wait For Elements State    css=[id="popupIFrame"]    visible    timeout=15s
+    Sleep    4s
+    ${found}=    Evaluate JavaScript
+    ...    css=[id="popupIFrame"] >>> css=[id="PopupList:form:T_data"]
+    ...    (tbody) => { const tr = tbody.querySelector('tr'); const td = tr ? tr.querySelector('td') : null; if (td) { td.click(); return true; } return false; }
+    Should Be True    ${found}    msg=Popup has no rows to pick (first-available) - source list empty (check navigator scope)
+    Wait For Elements State    css=[id="popupIFrame"]    hidden    timeout=15s
+    Sleep    1s
+    ${val}=    Get Property    css=[id="${pin_prefix}"]    value
+    Should Not Be Empty    ${val}    msg=Popup first-pick did not fill the pin field
