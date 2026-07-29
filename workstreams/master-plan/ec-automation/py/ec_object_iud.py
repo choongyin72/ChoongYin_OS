@@ -418,6 +418,26 @@ def click_go(page):
         wait_ajax(page)
 
 
+def apply_ovgm_navigator(page, levels=4, row=1):
+    """OV-GM (grid manageObject:form:T_data) is navigator-GATED: the grid is empty until a cascade of
+    navigator dropdowns (Business Unit / Production Unit -> Area -> Facility Class 1 ...) is set + GO.
+    Fill nav:form:G:0:R:<row>:C:1..N dd FIRST-AVAILABLE parent->child (child options only render after the
+    parent is chosen), click GO, and RETURN the C:1 (top-parent) value. The insert form's parent-dd (e.g.
+    'Op Production Unit' / 'Business Unit Name') must be set to that returned value or the new row won't be
+    grid-visible under this scope. `levels` = max cascade columns to try (stops at the first absent column)."""
+    top = None
+    for col in range(1, levels + 1):
+        dd = "nav:form:G:0:R:%d:C:%d:dd_input" % (row, col)
+        if page.locator(_css(dd)).count() == 0:
+            break
+        select_dropdown(page, dd, "__FIRST__")
+        page.wait_for_timeout(700)
+        if col == 1:
+            top = page.eval_on_selector(_css(dd), "e => e.value")
+    click_go(page)
+    return top
+
+
 def ec_error(page):
     txt = page.evaluate(
         """() => { const n = document.getElementById('ECNotificationArea')

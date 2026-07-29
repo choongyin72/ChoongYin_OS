@@ -142,3 +142,24 @@ Pick OV Popup By Label
     ELSE
         Pick From EC Object Popup    ${id}    ${value}
     END
+
+Apply OV-GM Navigator First Available
+    [Documentation]    OV-GM (grid manageObject:form:T_data) is navigator-GATED: the grid is empty until a
+    ...    cascade of navigator dropdowns is set + GO. Fill nav:form:G:0:R:${row}:C:1..N dd FIRST-AVAILABLE
+    ...    parent->child (up to 6 columns; stops at the first absent), click GO, RETURN the C:1 top-parent
+    ...    value. The insert form's parent-dd (Op Production Unit / Business Unit Name) MUST be set to it or
+    ...    the new row is not visible under this scope. Twin of engine apply_ovgm_navigator (py/ec_object_iud.py).
+    [Arguments]    ${row}=1
+    ${top}=    Set Variable    ${EMPTY}
+    FOR    ${col}    IN RANGE    1    7
+        ${dd}=    Set Variable    nav:form:G:0:R:${row}:C:${col}:dd
+        ${n}=    Get Element Count    css=[id="${dd}_input"]
+        IF    ${n} == 0    BREAK
+        Select First EC Dropdown Option    ${dd}
+        Sleep    0.7s
+        IF    ${col} == 1
+            ${top}=    Get Property    css=[id="${dd}_input"]    value
+        END
+    END
+    Apply Navigator
+    RETURN    ${top}
