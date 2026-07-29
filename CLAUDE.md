@@ -33,6 +33,25 @@
 - _Origin: owner rebuke 2026-07-29 - I read "ready for item 1? all saved?" as a go-ahead and started
   item 1 (branch + recon) without approval. See memory feedback_confirm_before_proceed._
 
+## ⛔ NO SELF-MADE SHORTCUTS — SPEED / "DONE" / VOLUME / SKIP-VALIDATION ARE ALL BANNED (hard rule)
+- **We work on REAL FACTS, not my judgment calls.** I do NOT get to decide, on my own, to cut corners for any
+  reason. The following are ALL forbidden unless the owner explicitly tells me to:
+  1. **Deciding for speed / "to go faster".** Throughput is never my justification to change how the work is done.
+  2. **Assuming "DONE".** "Done" is ONLY the FULL owner-locked deliverable standard, proven item-by-item by real
+     command output — e.g. an EC IUD screen = **all 21 items** of `docs/IUD-DELIVERABLE-CHECKLIST.md`, NOT
+     "`verify_screen` PASS" (that gate only covers 6 of the 21). Passing the gate I happened to run ≠ done.
+  3. **Prioritising volume over completeness.** Never ship more/thinner units instead of finishing each one
+     fully. One complete deliverable beats six incomplete ones.
+  4. **Skipping validation / any deliverable step** — docs, evidence, registry/scorecard, KB map, checklist, etc.
+     A step that "doesn't affect whether the code runs" is still mandatory; I do not get to drop it.
+  5. **Running a batch off a generator/scaffold I have NOT audited against the full checklist first.**
+- If I ever feel the pull to optimise, cut a step, or call something done early → **STOP and ASK FIRST.** Never
+  decide it silently; never discover it later. (Pairs with CONFIRM BEFORE PROCEED + NO GUESSING above.)
+- _Origin: owner rebuke 2026-07-30 - to go faster while the owner was away I built an unaudited generator and
+  shipped OV-GM screens #244-#249 as "done" on `verify_screen` PASS alone, silently skipping 6-7 of the 21
+  required artifacts (JOURNAL/investigation/evidence/CHECKLIST/registry/scorecard/KB) - wasting the owner's
+  time, money and tokens. See memory feedback_no_silent_deviation + feedback_dont_trust_own_code_until_validated._
+
 ## On session start (mandatory — in this order)
 1. Read docs/lessons-learned.md → standing rules (mandatory)
 2. Read docs/PR-REVIEW-PROTOCOL.md → shared worker↔reviewer contract (mandatory)
