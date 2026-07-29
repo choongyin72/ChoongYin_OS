@@ -28,6 +28,7 @@ SCAN_JS = r"""()=>{
     if(e.type==='hidden'||e.offsetParent===null) return;
     const id=e.id||''; if(!id.includes(':objectForm:form:')) return;
     let kind='text'; if(id.endsWith('da_input'))kind='date'; else if(id.endsWith('dd_input'))kind='dropdown';
+    else if(id.endsWith(':pin'))kind='popup';              // Pick-from-EC-Object popup (pin/pinB widget)
     else if(id.endsWith('dd_hinput'))return;               // dropdown hidden twin - skip
     const yellow=getComputedStyle(e).backgroundColor.includes('252, 249, 192');
     let lbl=''; const row=e.closest('.tableRow')||e.closest('tr');
@@ -78,6 +79,8 @@ with sync_playwright() as p:
                 dds.append({"label": f["label"], "value": opts[0] if opts else None, "n_opts": len(opts)})
             except Exception as e:
                 dds.append({"label": f["label"], "value": None, "err": repr(e)[:60]})
+    # mandatory Pick-from-EC-Object popups (pin/pinB) - routed to Pick OV Popup By Label, first-available
+    pops = [f["label"] for f in mand if f["kind"] == "popup"]
     br.close()
 
 cfg = {
@@ -86,6 +89,7 @@ cfg = {
     "date_label": date_l, "end_label": "End Date",
     "name_val": "AUTOTEST %s 001" % screen,
     "dropdowns": [{"label": d["label"], "value": "__FIRST__"} for d in dds],  # first-available = cascade-safe
+    "popups": [{"label": pl, "value": "__FIRST__"} for pl in pops],           # pin/pinB EC-object popups
     "extra_fields": [{"label": e, "value": "1"} for e in extras],
 }
 blockers = [d["label"] for d in dds if not d["value"]]

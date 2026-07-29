@@ -244,10 +244,12 @@ def _resolve_field(page, form_key, label):
                 const inn = document.getElementById(base + r + ':C:1:in');
                 const dai = document.getElementById(base + r + ':C:1:da_input');
                 const ddi = document.getElementById(base + r + ':C:1:dd_input');
+                const pin = document.getElementById(base + r + ':C:1:pin');
                 let el = null, kind = '';
                 if (inn) { el = inn; kind = 'text'; }
                 else if (dai) { el = dai; kind = 'date'; }
                 else if (ddi) { el = ddi; kind = 'dropdown'; }
+                else if (pin) { el = pin; kind = 'popup'; }
                 if (!el) continue;
                 const lc = document.getElementById(base + r + ':C:0')
                         || document.querySelector('[id^="' + base + r + ':C:0"]');
@@ -306,9 +308,61 @@ def select_dropdown(page, dd_input_id, value):
     page.wait_for_timeout(400)
 
 
+def pick_popup(page, pin_id, value):
+    """Select a 'Pick from EC Object' popup reference (the Playwright twin of RF Pick From/First EC Object
+    Popup). pin_id = the readonly '...:pin' input; its launch button is pin_id + 'B'. JS-click the button
+    (a normal click times out - the dialog mask appears mid-click), wait for the popup iframe + its grid
+    'PopupList:form:T_data', click the first row (value in None/''/'__FIRST__') or the row whose input
+    .value / text matches value, verify the pin input took a value. Location-agnostic: works for a form
+    pin or a navigator pin. GOTCHA: the popup list is filtered by the navigator scope - empty if unset."""
+    page.evaluate("(id) => { const b = document.getElementById(id + 'B'); if (b) b.click(); }", pin_id)
+    page.wait_for_selector('css=[id="popupIFrame"]', state="visible", timeout=15000)
+    # Wait for the grid INSIDE the iframe (frame_locator pierces the iframe - the proven RF pattern).
+    # A clean timeout here == empty/absent source list (navigator scope not set), not a code fault.
+    try:
+        page.frame_locator('css=[id="popupIFrame"]').locator('css=[id="PopupList:form:T_data"]').first.wait_for(
+            state="visible", timeout=15000)
+    except Exception:
+        raise RuntimeError("popup opened but grid 'PopupList:form:T_data' never appeared for %s "
+                           "(empty source list - check the navigator scope is set first)" % pin_id)
+    page.wait_for_timeout(1500)
+    fr = None
+    for f in page.frames:
+        try:
+            if f.query_selector('[id="PopupList:form:T_data"]'):
+                fr = f
+                break
+        except Exception:
+            pass
+    if fr is None:
+        raise RuntimeError("popup grid not found (iframe) for %s" % pin_id)
+    want = None if value in (None, "", "__FIRST__") else value
+    picked = fr.evaluate(
+        """(want) => {
+            const tb = document.getElementById('PopupList:form:T_data'); if (!tb) return false;
+            for (const tr of tb.querySelectorAll('tr')) {
+                const inp = tr.querySelector('td input'); const v = inp ? inp.value.trim() : '';
+                const t = (tr.innerText || '').trim();
+                if (want === null || v === want || t === want || t.startsWith(want)) {
+                    const td = tr.querySelector('td'); if (td) { td.click(); return true; } } }
+            return false; }""",
+        want,
+    )
+    if not picked:
+        raise RuntimeError("popup row not found (value=%r, first-available if None) for %s" % (value, pin_id))
+    page.wait_for_selector('css=[id="popupIFrame"]', state="hidden", timeout=15000)
+    page.wait_for_timeout(800)
+    val = page.eval_on_selector(_css(pin_id), "e => e.value")
+    if not (val and val.strip()):
+        raise RuntimeError("popup pick did not fill the pin field: %s" % pin_id)
+
+
 def fill_field(page, fid, value, kind):
     if kind == "dropdown":
         select_dropdown(page, fid, value)
+        return
+    if kind == "popup":
+        pick_popup(page, fid, value)
         return
     el = page.locator(_css(fid))
     if el.count() == 0 or not el.is_visible():

@@ -8,6 +8,7 @@ Documentation       T2 (pattern) — Manage-Object (OV) screen mechanics, shared
 
 Library             Browser
 Resource            common.resource
+Resource            popup.resource
 
 
 *** Variables ***
@@ -123,4 +124,21 @@ Fill OV Dropdown By Label
         Select First EC Dropdown Option    ${dd}
     ELSE
         Select EC Dropdown Option    ${dd}    ${value}
+    END
+
+Pick OV Popup By Label
+    [Documentation]    Select a "Pick from EC Object" popup reference found by its LABEL in ${form}
+    ...    (${form} = objectForm | updateAttributes | objectdates | nav). Resolves the readonly
+    ...    '...:pin' input by label (adjacent tableCell, same as the dropdown resolver but ending ':pin'),
+    ...    then reuses Pick From EC Object Popup (or Pick First for __FIRST__). LOCATION-AGNOSTIC: the
+    ...    pin/pinB widget is identical in the insert form and the navigator, so the same keyword handles
+    ...    both (the id-prefix filter drops the leading colon so 'nav:form:' matches as well as 'objectForm:form:').
+    [Arguments]    ${form}    ${label}    ${value}
+    ${id}=    Get Attribute
+    ...    xpath=//span[contains(@class,'ECCell') and contains(@id,'${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[substring(@id, string-length(@id) - 3) = ':pin']
+    ...    id
+    IF    '${value}' == '__FIRST__'
+        Pick First EC Object Popup    ${id}
+    ELSE
+        Pick From EC Object Popup    ${id}    ${value}
     END
