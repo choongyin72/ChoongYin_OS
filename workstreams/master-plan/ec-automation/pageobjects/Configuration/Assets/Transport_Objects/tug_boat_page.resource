@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation       T3 (screen) - Tug Boat page object.
-...                 Screen: Configuration > Assets > Transport Objects > Tug Boat.
+...                 Screen: Configuration > Assets > Transport_Objects > Tug Boat.
 ...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator
 ...                 cascade + GO (capability Apply OV-GM Navigator First Available). Fields resolved
 ...                 BY LABEL (no hardcoded rows). Extra dropdowns + Op Production Unit first-available.

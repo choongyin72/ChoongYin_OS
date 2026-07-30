@@ -1,10 +1,10 @@
 *** Settings ***
-Documentation       EC IUD Test - Tug Boat (Configuration > Assets > Transport Objects).
+Documentation       EC IUD Test - Tug Boat (Configuration > Assets > Transport_Objects).
 ...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
 ...                 DELETE = End Date = Start Date (true delete in OV_TUG_BOAT). NEVER touch existing data;
 ...                 a unique AUTOTEST_TB_<timestamp> code is generated per run.
 
-Resource            ../../../../pageobjects/Configuration/Assets/Transport Objects/tug_boat_page.resource
+Resource            ../../../../pageobjects/Configuration/Assets/Transport_Objects/tug_boat_page.resource
 
 Suite Setup         Set Up Tug Boat Suite
 Suite Teardown      Close EC

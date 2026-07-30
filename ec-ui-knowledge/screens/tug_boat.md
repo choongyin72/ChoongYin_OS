@@ -1,7 +1,8 @@
 # Screen: Tug Boat
 
 - **Type:** OV-GM (EC Object Configuration, date-effective) - manage-object groupmodel; navigator-GATED.
-- **BF_CODE:**  - **Treeview:** Configuration > Assets > Transport Objects > Tug Boat
+- **BF_CODE:** CO.2080
+- **Treeview:** Configuration > Assets > Transport_Objects > Tug Boat
 - **DB view:** `OV_TUG_BOAT` (key `CODE`; `NAME`, `OBJECT_START/END_DATE`)
 - **Last verified:** 2026-07-30 - EC 14.2.4 - local sandbox - `verify_screen.py` OVERALL PASS (RF 4/4 pass + Playwright 8/8, DB-verified, self-clean)
 
@@ -22,7 +23,7 @@
 
 ## Automation (code in ec-automation)
 - **Playwright:** `py/tug_boat_iud.py` (shared engine `ec_object_iud.py` + `apply_ovgm_navigator`).
-- **RF:** T3 `pageobjects/Configuration/Assets/Transport Objects/tug_boat_page.resource` (**label-driven**) + suite `tests/Configuration/Assets/Transport Objects/tug_boat_iud.robot`.
+- **RF:** T3 `pageobjects/Configuration/Assets/Transport_Objects/tug_boat_page.resource` (**label-driven**) + suite `tests/Configuration/Assets/Transport_Objects/tug_boat_iud.robot`.
 - **Gate:** `verify_screen.py` -> OVERALL PASS.
 
 ## Quirks
