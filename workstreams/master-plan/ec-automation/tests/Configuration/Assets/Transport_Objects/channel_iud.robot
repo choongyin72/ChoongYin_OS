@@ -1,10 +1,10 @@
 *** Settings ***
-Documentation       EC IUD Test - Channel (Configuration > Assets > Transport Objects).
+Documentation       EC IUD Test - Channel (Configuration > Assets > Transport_Objects).
 ...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
 ...                 DELETE = End Date = Start Date (true delete in OV_CHANNEL). NEVER touch existing data;
 ...                 a unique AUTOTEST_CHN_<timestamp> code is generated per run.
 
-Resource            ../../../../pageobjects/Configuration/Assets/Transport Objects/channel_page.resource
+Resource            ../../../../pageobjects/Configuration/Assets/Transport_Objects/channel_page.resource
 
 Suite Setup         Set Up Channel Suite
 Suite Teardown      Close EC
