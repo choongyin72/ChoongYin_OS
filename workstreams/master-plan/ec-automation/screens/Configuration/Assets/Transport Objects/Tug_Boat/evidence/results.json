@@ -1,0 +1,8 @@
+{
+ "screen": "Tug Boat",
+ "view": "OV_TUG_BOAT",
+ "verify_overall": "PASS",
+ "rf": "4/4 pass",
+ "pw": "Playwright 8/8",
+ "date": "2026-07-30"
+}
