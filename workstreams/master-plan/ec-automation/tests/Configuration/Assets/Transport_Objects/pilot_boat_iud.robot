@@ -1,10 +1,10 @@
 *** Settings ***
-Documentation       EC IUD Test - Pilot Boat (Configuration > Assets > Transport Objects).
+Documentation       EC IUD Test - Pilot Boat (Configuration > Assets > Transport_Objects).
 ...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
 ...                 DELETE = End Date = Start Date (true delete in OV_PILOT_BOAT). NEVER touch existing data;
 ...                 a unique AUTOTEST_PB_<timestamp> code is generated per run.
 
-Resource            ../../../../pageobjects/Configuration/Assets/Transport Objects/pilot_boat_page.resource
+Resource            ../../../../pageobjects/Configuration/Assets/Transport_Objects/pilot_boat_page.resource
 
 Suite Setup         Set Up Pilot Boat Suite
 Suite Teardown      Close EC

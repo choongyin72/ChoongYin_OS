@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation       T3 (screen) - Pilot Boat page object.
-...                 Screen: Configuration > Assets > Transport Objects > Pilot Boat.
+...                 Screen: Configuration > Assets > Transport_Objects > Pilot Boat.
 ...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator
 ...                 cascade + GO (capability Apply OV-GM Navigator First Available). Fields resolved
 ...                 BY LABEL (no hardcoded rows). Extra dropdowns + Op Production Unit first-available.
