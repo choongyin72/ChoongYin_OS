@@ -1,0 +1,12 @@
+[MODE] headed=False code=AUTOTEST_TD_001
+  screen: Test Device
+  navigator applied; top-parent PU = 'AS1 EC Exploration Norway'
+=== INSERT ===
+ABORTED: RuntimeError('insert: field label not found: Op Production Unit')
+
+========================================================
+RESULTS
+  OK nav_pu      : PASS: PU='AS1 EC Exploration Norway'
+  X insert_ui   : FAIL: RuntimeError('insert: field label not found: Op Production Unit')
+Overall: FAILURES
+Evidence: C:\Projects\ChoongYin_OS\tmp\test_device\evidence

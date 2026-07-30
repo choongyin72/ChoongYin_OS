@@ -1,0 +1,10 @@
+import oracledb
+c = oracledb.connect(user='ECKERNEL_EC', password='energy', dsn='localhost:1521/ORCL')
+cur = c.cursor()
+cur.execute("select count(*) from all_views where view_name like 'OV_%'")
+print("OV_* views total:", cur.fetchone()[0])
+cur.execute("select count(*) from class_cnfg where class_type='OBJECT'")
+print("classes CLASS_TYPE=OBJECT:", cur.fetchone()[0])
+cur.execute("select count(*) from class_cnfg where class_type='OBJECT' and time_scope_code='VERSIONED'")
+print("  of which VERSIONED (date-effective OV):", cur.fetchone()[0])
+c.close()

@@ -1,0 +1,32 @@
+{
+ "screen": "Data Extract Setup",
+ "bfcode": "SP.0043",
+ "view": "OV_SUMMARY_SETUP",
+ "folder": "Configuration/Assets/Data_Mapping_Objects",
+ "slug": "data_extract_setup",
+ "code_prefix": "AUTOTEST_DXS_",
+ "code_label": "Data Extract Setup Code",
+ "name_label": "Data Extract Setup Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Data Extract Setup 001",
+ "dropdowns": [
+  {
+   "label": "Data Extract Type",
+   "value": "Actual"
+  }
+ ],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 4,
+  "dropdowns_raw": [
+   {
+    "label": "Data Extract Type",
+    "value": "Actual",
+    "n_opts": 2
+   }
+  ],
+  "extras": [],
+  "dropdown_blockers": []
+ }
+}

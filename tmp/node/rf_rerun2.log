@@ -1,0 +1,17 @@
+==============================================================================
+Node Iud :: EC IUD Test - Node (Configuration > Assets > Calculation Object...
+==============================================================================
+TC01 Verify Clean State :: Confirm the (freshly generated) test no... | PASS |
+------------------------------------------------------------------------------
+TC02 Insert New Node :: Insert a new node under the captured navig... | PASS |
+------------------------------------------------------------------------------
+TC03 Update Node Name :: Edit the node name and confirm the list r... | PASS |
+------------------------------------------------------------------------------
+TC04 Delete Node :: Delete via End Date = Start Date and confirm t... | PASS |
+------------------------------------------------------------------------------
+Node Iud :: EC IUD Test - Node (Configuration > Assets > Calculati... | PASS |
+4 tests, 4 passed, 0 failed
+==============================================================================
+Output:  C:\Projects\ChoongYin_OS\tmp\node\rf_rerun2\output.xml
+Log:     C:\Projects\ChoongYin_OS\tmp\node\rf_rerun2\log.html
+Report:  C:\Projects\ChoongYin_OS\tmp\node\rf_rerun2\report.html

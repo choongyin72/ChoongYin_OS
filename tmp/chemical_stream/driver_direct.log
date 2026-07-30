@@ -1,0 +1,12 @@
+[MODE] headed=False code=AUTOTEST_CS_001
+  screen: Chemical Stream
+  navigator applied; top-parent PU = 'AS1 EC Exploration Norway'
+=== INSERT ===
+ABORTED: RuntimeError("popup opened but grid 'PopupList:form:T_data' never appeared for tab:tabPanel:objectForm:form:G:0:R:20:C:1:pin (empty source list - check the navigator scope is set first)")
+
+========================================================
+RESULTS
+  OK nav_pu      : PASS: PU='AS1 EC Exploration Norway'
+  X insert_ui   : FAIL: RuntimeError("popup opened but grid 'PopupList:form:T_data' never appeared for tab:tabPanel:objectForm:form:G:0:R:20:C:1:pin (empty source list - check the navi
+Overall: FAILURES
+Evidence: C:\Projects\ChoongYin_OS\tmp\chemical_stream\evidence

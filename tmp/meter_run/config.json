@@ -1,0 +1,67 @@
+{
+ "screen": "Meter Run",
+ "bfcode": "CO.0091",
+ "view": "OV_METER_RUN",
+ "folder": "Configuration/Assets/Stream_Objects",
+ "slug": "meter_run",
+ "code_prefix": "AUTOTEST_MR_",
+ "code_label": "Meter Run Code",
+ "name_label": "Meter Run Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Meter Run 001",
+ "dropdowns": [
+  {
+   "label": "Type of Taps",
+   "value": "Pipe"
+  },
+  {
+   "label": "Pipe Material",
+   "value": "Stainless Steel"
+  },
+  {
+   "label": "Location of Taps",
+   "value": "Upstream"
+  }
+ ],
+ "extra_fields": [
+  {
+   "label": "Pipe Diameter (temp uncorrected) [mm]",
+   "value": "1"
+  },
+  {
+   "label": "Diameter Meas Temp [\u00b0R]",
+   "value": "1"
+  },
+  {
+   "label": "All Calibration Factor",
+   "value": "1"
+  }
+ ],
+ "_scan": {
+  "mandatory_count": 9,
+  "dropdowns_raw": [
+   {
+    "label": "Type of Taps",
+    "value": "Pipe",
+    "n_opts": 2
+   },
+   {
+    "label": "Pipe Material",
+    "value": "Stainless Steel",
+    "n_opts": 3
+   },
+   {
+    "label": "Location of Taps",
+    "value": "Upstream",
+    "n_opts": 2
+   }
+  ],
+  "extras": [
+   "Pipe Diameter (temp uncorrected) [mm]",
+   "Diameter Meas Temp [\u00b0R]",
+   "All Calibration Factor"
+  ],
+  "dropdown_blockers": []
+ }
+}

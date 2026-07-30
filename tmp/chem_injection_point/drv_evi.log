@@ -1,0 +1,23 @@
+[MODE] headed=False code=AUTOTEST_CIP_001
+  screen: Chemical Injection Point
+  navigator applied; top-parent PU = 'AS1 EC Exploration Norway'
+=== INSERT ===
+  INSERT verified (grid + DB + NAME)
+=== UPDATE ===
+  UPDATE verified (DB NAME)
+=== DELETE (End=Start) ===
+  DELETE verified (absent grid + DB)
+  self-clean: CLEAN (0 residual)
+
+========================================================
+RESULTS
+  OK nav_pu      : PASS: PU='AS1 EC Exploration Norway'
+  OK insert_ui   : PASS
+  OK insert_db   : PASS
+  OK update_ui   : PASS
+  OK update_db   : PASS
+  OK delete_ui   : PASS
+  OK delete_db   : PASS
+  OK self_clean  : CLEAN (0 residual)
+Overall: ALL PASS
+Evidence: C:\Projects\ChoongYin_OS\tmp\chem_injection_point\evidence

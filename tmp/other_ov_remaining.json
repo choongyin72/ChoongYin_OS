@@ -1,0 +1,492 @@
+{
+ "remaining": [
+  {
+   "bf": "CO.1033",
+   "label": "Production Day Table",
+   "view": "OV_PRODUCTION_DAY",
+   "path": "Configuration > System"
+  },
+  {
+   "bf": "CO.1049",
+   "label": "Conversion Group",
+   "view": "OV_CONVERSION_GROUP",
+   "path": "Configuration > System > Units"
+  },
+  {
+   "bf": "CO.1060",
+   "label": "Calculation Library",
+   "view": "OV_CALC_LIBRARY",
+   "path": "Configuration > Assets > Calculation Objects"
+  },
+  {
+   "bf": "CD.0006",
+   "label": "Node",
+   "view": "OV_NODE",
+   "path": "Configuration > Assets > Calculation Objects"
+  },
+  {
+   "bf": "CO.0100",
+   "label": "Production Sub Unit",
+   "view": "OV_PROD_SUB_UNIT",
+   "path": "Configuration > Assets > Basic Objects"
+  },
+  {
+   "bf": "CO.0102",
+   "label": "Constant Standard",
+   "view": "OV_CONSTANT_STANDARD",
+   "path": "Configuration > Assets > Hydrocarbon Objects"
+  },
+  {
+   "bf": "CO.0019",
+   "label": "Facility Class 1",
+   "view": "OV_XFCTY_CLASS_1",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0021",
+   "label": "Facility Class 2",
+   "view": "OV_FCTY_CLASS_2",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0227",
+   "label": "External Location",
+   "view": "OV_EXTERNAL_LOCATION",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0244",
+   "label": "Operator Route",
+   "view": "OV_OPERATOR_ROUTE",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0205",
+   "label": "Collection Point",
+   "view": "OV_COLLECTION_POINT",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0040",
+   "label": "Test Separator",
+   "view": "OV_TESTSEPARATOR",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0042",
+   "label": "Production Separator",
+   "view": "OV_PRODSEPARATOR",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0158",
+   "label": "Report Group",
+   "view": "OV_REPORT_GROUP",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0108",
+   "label": "Well Hookup",
+   "view": "OV_WELL_HOOKUP",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0224",
+   "label": "Shift",
+   "view": "OV_SHIFT",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CD.0008",
+   "label": "Stream Item",
+   "view": "OV_STREAM_ITEM",
+   "path": "Configuration > Assets > Stream Objects"
+  },
+  {
+   "bf": "CO.0034",
+   "label": "Storage",
+   "view": "OV_STORAGE",
+   "path": "Configuration > Assets > Tank and Storage Objects"
+  },
+  {
+   "bf": "CO.0051",
+   "label": "Well Hole",
+   "view": "OV_WELL_HOLE",
+   "path": "Configuration > Assets > Well and Reservoir Objects"
+  },
+  {
+   "bf": "CO.0247",
+   "label": "Planned Well",
+   "view": "OV_PLANNED_WELL",
+   "path": "Configuration > Assets > Well and Reservoir Objects"
+  },
+  {
+   "bf": "CO.0049",
+   "label": "Well",
+   "view": "OV_WELL",
+   "path": "Configuration > Assets > Well and Reservoir Objects"
+  },
+  {
+   "bf": "CO.0054",
+   "label": "Well Bore",
+   "view": "OV_WELL_BORE",
+   "path": "Configuration > Assets > Well and Reservoir Objects"
+  },
+  {
+   "bf": "CO.0057",
+   "label": "Well Bore Interval",
+   "view": "OV_WELL_BORE_INTERVAL",
+   "path": "Configuration > Assets > Well and Reservoir Objects"
+  },
+  {
+   "bf": "CO.0153",
+   "label": "Perforation Interval",
+   "view": "OV_PERF_INTERVAL",
+   "path": "Configuration > Assets > Well and Reservoir Objects"
+  },
+  {
+   "bf": "CO.0123",
+   "label": "Test Device",
+   "view": "OV_TEST_DEVICE",
+   "path": "Configuration > Assets > Equipment Objects"
+  },
+  {
+   "bf": "CO.0260",
+   "label": "Chemical Stream Hookup",
+   "view": "OV_CHEM_STRM_HOOKUP",
+   "path": "Configuration > Assets > Chemical Objects"
+  },
+  {
+   "bf": "CO.0258",
+   "label": "Chemical Stream",
+   "view": "OV_CHEM_STREAM",
+   "path": "Configuration > Assets > Chemical Objects"
+  },
+  {
+   "bf": "CO.0070",
+   "label": "Chemical Tank",
+   "view": "OV_CHEM_TANK",
+   "path": "Configuration > Assets > Chemical Objects"
+  },
+  {
+   "bf": "CO.0212",
+   "label": "Chemical Injection Point",
+   "view": "OV_CHEM_INJ_POINT",
+   "path": "Configuration > Assets > Chemical Objects"
+  },
+  {
+   "bf": "CO.2016",
+   "label": "Contract",
+   "view": "OV_CONTRACT",
+   "path": "Configuration > Assets > Contract Objects"
+  },
+  {
+   "bf": "CO.2038",
+   "label": "Contract Area Setup",
+   "view": "OV_CONTRACT_AREA_SETUP",
+   "path": "Configuration > Assets > Contract Objects"
+  },
+  {
+   "bf": "CO.2044",
+   "label": "Contract Capacity",
+   "view": "OV_CONTRACT_CAPACITY",
+   "path": "Configuration > Assets > Contract Objects"
+  },
+  {
+   "bf": "CO.2054",
+   "label": "Contract Inventory",
+   "view": "OV_CONTRACT_INVENTORY",
+   "path": "Configuration > Assets > Contract Objects"
+  },
+  {
+   "bf": "CO.0264",
+   "label": "Truck",
+   "view": "OV_TRUCK",
+   "path": "Configuration > Assets > Transport Objects"
+  },
+  {
+   "bf": "CO.0265",
+   "label": "Trailer",
+   "view": "OV_TRAILER",
+   "path": "Configuration > Assets > Transport Objects"
+  },
+  {
+   "bf": "CO.0266",
+   "label": "Driver",
+   "view": "OV_DRIVER",
+   "path": "Configuration > Assets > Transport Objects"
+  },
+  {
+   "bf": "CO.2004",
+   "label": "Lifting Account",
+   "view": "OV_LIFTING_ACCOUNT",
+   "path": "Configuration > Assets > Transport Objects"
+  },
+  {
+   "bf": "CO.2077",
+   "label": "Channel",
+   "view": "OV_CHANNEL",
+   "path": "Configuration > Assets > Transport Objects"
+  },
+  {
+   "bf": "CO.2078",
+   "label": "Loading Arm",
+   "view": "OV_LOADING_ARM",
+   "path": "Configuration > Assets > Transport Objects"
+  },
+  {
+   "bf": "CO.2079",
+   "label": "Pilot",
+   "view": "OV_PILOT",
+   "path": "Configuration > Assets > Transport Objects"
+  },
+  {
+   "bf": "CO.2081",
+   "label": "Pilot Boat",
+   "view": "OV_PILOT_BOAT",
+   "path": "Configuration > Assets > Transport Objects"
+  },
+  {
+   "bf": "CO.2080",
+   "label": "Tug Boat",
+   "view": "OV_TUG_BOAT",
+   "path": "Configuration > Assets > Transport Objects"
+  },
+  {
+   "bf": "CO.2103",
+   "label": "Service",
+   "view": "OV_SERVICE",
+   "path": "Configuration > Assets > Service Objects"
+  },
+  {
+   "bf": "CO.3009",
+   "label": "Price Index",
+   "view": "OV_PRICE_INDEX",
+   "path": "Configuration > Assets > Sales Objects"
+  },
+  {
+   "bf": "CO.3016",
+   "label": "Price Object",
+   "view": "OV_PRICE_OBJECT",
+   "path": "Configuration > Assets > Sales Objects"
+  },
+  {
+   "bf": "CO.3024",
+   "label": "Price Rate",
+   "view": "OV_PRICE_RATE",
+   "path": "Configuration > Assets > Sales Objects"
+  },
+  {
+   "bf": "CD.0109",
+   "label": "Document Sequence",
+   "view": "OV_DOC_SEQUENCE",
+   "path": "Configuration > Assets > Revenue Document Objects"
+  },
+  {
+   "bf": "SP.0059",
+   "label": "Property",
+   "view": "OV_PROPERTY",
+   "path": "Configuration > Assets > Data Mapping Objects"
+  },
+  {
+   "bf": "CO.0236",
+   "label": "Message Group",
+   "view": "OV_MESSAGE_GROUP",
+   "path": "Configuration > Messaging"
+  },
+  {
+   "bf": "CO.0191",
+   "label": "Task Process",
+   "view": "OV_TASK_PROCESS",
+   "path": "Configuration > Task List"
+  },
+  {
+   "bf": "CO.0193",
+   "label": "Action Trigger",
+   "view": "OV_CONTROL_POINT",
+   "path": "Configuration > Business Action"
+  },
+  {
+   "bf": "CP.0030",
+   "label": "Cargo Planning Forecast",
+   "view": "OV_FCST_MNGR_FCST_LIST",
+   "path": "EC Transport > Cargo Planning > Forecast"
+  },
+  {
+   "bf": "FC.0010",
+   "label": "Forecast",
+   "view": "OV_FORECAST_GROUP",
+   "path": "EC Transport > Forecasting"
+  },
+  {
+   "bf": "RC.0059",
+   "label": "Royalty Contract",
+   "view": "OV_ROYALTY_CONTRACT",
+   "path": "EC Revenue > Royalty > Royalty Canada"
+  },
+  {
+   "bf": "RC.0058",
+   "label": "Division Order",
+   "view": "OV_DIVISION_ORDER",
+   "path": "EC Revenue > Royalty > Royalty USA"
+  }
+ ],
+ "covered": [
+  {
+   "bf": "CO.0003",
+   "label": "Area",
+   "view": "OV_XAREA",
+   "path": "Configuration > Assets > Basic Objects"
+  },
+  {
+   "bf": "CO.0082",
+   "label": "Sub Area",
+   "view": "OV_SUB_AREA",
+   "path": "Configuration > Assets > Basic Objects"
+  },
+  {
+   "bf": "CO.0157",
+   "label": "Regulatory Permits",
+   "view": "OV_REGULATORY_PERMITS",
+   "path": "Configuration > Assets > Basic Objects"
+  },
+  {
+   "bf": "CO.0239",
+   "label": "Company Contact",
+   "view": "OV_COMPANY_CONTACT",
+   "path": "Configuration > Assets > Commercial Objects"
+  },
+  {
+   "bf": "CO.0015",
+   "label": "Field",
+   "view": "OV_FIELD",
+   "path": "Configuration > Assets > Commercial Objects"
+  },
+  {
+   "bf": "CO.0105",
+   "label": "Sub Field",
+   "view": "OV_SUB_FIELD",
+   "path": "Configuration > Assets > Commercial Objects"
+  },
+  {
+   "bf": "CO.0125",
+   "label": "Commercial Entity",
+   "view": "OV_COMMERCIAL_ENTITY",
+   "path": "Configuration > Assets > Commercial Objects"
+  },
+  {
+   "bf": "CD.0024",
+   "label": "Calendar",
+   "view": "OV_CALENDAR",
+   "path": "Configuration > Assets > Date Objects"
+  },
+  {
+   "bf": "CD.0105",
+   "label": "Calendar Collection",
+   "view": "OV_CALENDAR_COLLECTION",
+   "path": "Configuration > Assets > Date Objects"
+  },
+  {
+   "bf": "CO.0031",
+   "label": "Flowline",
+   "view": "OV_FLOWLINE",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0096",
+   "label": "Pipeline",
+   "view": "OV_PIPELINE",
+   "path": "Configuration > Assets > Facility Objects"
+  },
+  {
+   "bf": "CO.0036",
+   "label": "Tank",
+   "view": "OV_TANK",
+   "path": "Configuration > Assets > Tank and Storage Objects"
+  },
+  {
+   "bf": "CO.0237",
+   "label": "Equipment",
+   "view": "OV_EQPM",
+   "path": "Configuration > Assets > Equipment Objects"
+  },
+  {
+   "bf": "CO.0259",
+   "label": "Analysis Point",
+   "view": "OV_ANALYSIS_POINT",
+   "path": "Configuration > Assets > Laboratory Objects"
+  },
+  {
+   "bf": "CO.2037",
+   "label": "Contract Area",
+   "view": "OV_CONTRACT_AREA",
+   "path": "Configuration > Assets > Contract Objects"
+  },
+  {
+   "bf": "CO.0096.01",
+   "label": "Pipeline",
+   "view": "OV_PIPELINE",
+   "path": "Configuration > Assets > Dispatching Objects"
+  },
+  {
+   "bf": "CO.2057",
+   "label": "Transport System",
+   "view": "OV_TRANSPORT_SYSTEM",
+   "path": "Configuration > Assets > Dispatching Objects"
+  },
+  {
+   "bf": "CO.2041",
+   "label": "Transport Zone",
+   "view": "OV_TRANSPORT_ZONE",
+   "path": "Configuration > Assets > Dispatching Objects"
+  },
+  {
+   "bf": "CO.2040",
+   "label": "Pipeline Segment",
+   "view": "OV_PIPELINE_SEGMENT",
+   "path": "Configuration > Assets > Dispatching Objects"
+  },
+  {
+   "bf": "CO.2026",
+   "label": "Delivery Point",
+   "view": "OV_DELIVERY_POINT",
+   "path": "Configuration > Assets > Dispatching Objects"
+  },
+  {
+   "bf": "CO.2039",
+   "label": "Delivery Stream",
+   "view": "OV_TEST_IMPLEMENTING_CLASS",
+   "path": "Configuration > Assets > Dispatching Objects"
+  },
+  {
+   "bf": "CO.2043",
+   "label": "Meter",
+   "view": "OV_METER",
+   "path": "Configuration > Assets > Dispatching Objects"
+  },
+  {
+   "bf": "CO.2024",
+   "label": "Nomination Point",
+   "view": "OV_NOMINATION_POINT",
+   "path": "Configuration > Assets > Dispatching Objects"
+  },
+  {
+   "bf": "CD.0130",
+   "label": "Revenue Order",
+   "view": "OV_FIN_REVENUE_ORDER",
+   "path": "Configuration > Assets > Financial Objects"
+  },
+  {
+   "bf": "CD.0127",
+   "label": "WBS",
+   "view": "OV_FIN_WBS",
+   "path": "Configuration > Assets > Financial Objects"
+  },
+  {
+   "bf": "RC.0056",
+   "label": "Tract",
+   "view": "OV_TRACT",
+   "path": "Configuration > Assets > Royalty Objects"
+  }
+ ]
+}

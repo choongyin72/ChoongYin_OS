@@ -1,0 +1,26 @@
+==============================================================================
+Node Iud :: EC IUD Test - Node (Configuration > Assets > Calculation Object...
+==============================================================================
+TC01 Verify Clean State :: Confirm the (freshly generated) test no... | PASS |
+------------------------------------------------------------------------------
+TC02 Insert New Node :: Insert a new node under the captured navig... | FAIL |
+TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[@id=\'tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_panel\']//tr[normalize-space(@data-item-label)=\'AS1 EC Exploration Norway\']').first().first() to be visible
+------------------------------------------------------------------------------
+TC03 Update Node Name :: Edit the node name and confirm the list r... | FAIL |
+TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manageObject:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_ND_20260729233906\']').first()
+------------------------------------------------------------------------------
+TC04 Delete Node :: Delete via End Date = Start Date and confirm t... | FAIL |
+TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manageObject:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_ND_20260729233906\']').first()
+------------------------------------------------------------------------------
+Node Iud :: EC IUD Test - Node (Configuration > Assets > Calculati... | FAIL |
+4 tests, 1 passed, 3 failed
+==============================================================================
+Output:  C:\Projects\ChoongYin_OS\tmp\node\rf_rerun\output.xml
+Log:     C:\Projects\ChoongYin_OS\tmp\node\rf_rerun\log.html
+Report:  C:\Projects\ChoongYin_OS\tmp\node\rf_rerun\report.html

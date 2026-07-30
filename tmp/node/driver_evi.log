@@ -1,0 +1,10 @@
+[MODE] headed=False code=AUTOTEST_ND_001
+  screen: Node
+  navigator applied; top-parent PU = None
+ABORTED: AssertionError('navigator cascade returned no top-parent PU')
+
+========================================================
+RESULTS
+  OK nav_pu      : PASS: PU=None
+Overall: FAILURES
+Evidence: C:\Projects\ChoongYin_OS\tmp\node\evidence

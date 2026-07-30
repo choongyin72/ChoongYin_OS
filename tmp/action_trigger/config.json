@@ -1,0 +1,91 @@
+{
+ "screen": "Action Trigger",
+ "bfcode": "CO.0193",
+ "view": "OV_CONTROL_POINT",
+ "folder": "Configuration/Business_Action",
+ "slug": "action_trigger",
+ "code_prefix": "AUTOTEST_AT_",
+ "code_label": "Action Trigger Code",
+ "name_label": "Action Trigger Name",
+ "date_label": "Start date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Action Trigger 001",
+ "dropdowns": [
+  {
+   "label": "Action Trigger Type",
+   "value": "__FIRST__"
+  },
+  {
+   "label": "Trigger Type",
+   "value": "__FIRST__"
+  }
+ ],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 5,
+  "dropdowns_raw": [
+   {
+    "label": "Action Trigger Type",
+    "value": "Generic Trigger",
+    "n_opts": 3
+   },
+   {
+    "label": "Trigger Type",
+    "value": "Before",
+    "n_opts": 2
+   }
+  ],
+  "extras": [],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "label": "Action Trigger Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "label": "Action Trigger Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "label": "Start date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "label": "End date",
+    "kind": "date",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd_input",
+    "label": "Action Trigger Type",
+    "kind": "dropdown",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_input",
+    "label": "Business Action",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_input",
+    "label": "PL/SQL Procedure",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:dd_input",
+    "label": "Trigger Type",
+    "kind": "dropdown",
+    "mandatory": true
+   }
+  ]
+ }
+}

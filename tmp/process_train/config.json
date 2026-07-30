@@ -1,0 +1,32 @@
+{
+ "screen": "Process Train",
+ "bfcode": "CO.0120",
+ "view": "OV_PROCESS_TRAIN",
+ "folder": "Configuration/Assets/Facility_Objects",
+ "slug": "process_train",
+ "code_prefix": "AUTOTEST_PT_",
+ "code_label": "Process Train Code",
+ "name_label": "Process Train Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Process Train 001",
+ "dropdowns": [
+  {
+   "label": "Production Facility Class 1",
+   "value": "__FIRST__"
+  }
+ ],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 4,
+  "dropdowns_raw": [
+   {
+    "label": "Production Facility Class 1",
+    "value": "Onshore facility",
+    "n_opts": 53
+   }
+  ],
+  "extras": [],
+  "dropdown_blockers": []
+ }
+}

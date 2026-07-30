@@ -1,0 +1,43 @@
+{
+ "screen": "Calculation Group Context",
+ "bfcode": "CO.0245",
+ "view": "OV_CALC_GRP_CONTEXT",
+ "folder": "Configuration/Assets/Calculation_Objects",
+ "slug": "calculation_group_context",
+ "code_prefix": "AUTOTEST_CGC_",
+ "code_label": "Calculation Group Context Code",
+ "name_label": "Calculation Group Context Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Calculation Group Context 001",
+ "dropdowns": [
+  {
+   "label": "Calculation Group Object Class",
+   "value": "__FIRST__"
+  },
+  {
+   "label": "Calculation Group List Class",
+   "value": "__FIRST__"
+  }
+ ],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 5,
+  "dropdowns_raw": [
+   {
+    "label": "Calculation Group Object Class",
+    "value": "ALLOC_NETWORK",
+    "n_opts": 6
+   },
+   {
+    "label": "Calculation Group List Class",
+    "value": null,
+    "n_opts": 0
+   }
+  ],
+  "extras": [],
+  "dropdown_blockers": [
+   "Calculation Group List Class"
+  ]
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "screen": "Reservoir Block Formation",
+ "bfcode": "CO.0137",
+ "view": "OV_RESV_BLOCK_FORMATION",
+ "folder": "Configuration/Assets/Well_and_Reservoir_Objects",
+ "slug": "reservoir_block_formation",
+ "code_prefix": "AUTOTEST_RBF_",
+ "code_label": "Resv Block Formation Code",
+ "name_label": "Resv Block Formation Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Reservoir Block Formation 001",
+ "dropdowns": [
+  {
+   "label": "Reservoir Block",
+   "value": "__FIRST__"
+  },
+  {
+   "label": "Reservoir Formation",
+   "value": "__FIRST__"
+  }
+ ],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 5,
+  "dropdowns_raw": [
+   {
+    "label": "Reservoir Block",
+    "value": "Reservoir Block A",
+    "n_opts": 10
+   },
+   {
+    "label": "Reservoir Formation",
+    "value": null,
+    "n_opts": 0
+   }
+  ],
+  "extras": [],
+  "dropdown_blockers": [
+   "Reservoir Formation"
+  ]
+ }
+}

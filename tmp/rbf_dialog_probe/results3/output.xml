@@ -1,0 +1,831 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.14.3 on win32)" generated="2026-07-27T18:51:18.717595" rpa="false" schemaversion="5">
+<suite id="s1" name="Probe Unsaved Dialog" source="C:\Projects\ChoongYin_OS\tmp\rbf_dialog_probe\probe_unsaved_dialog.robot">
+<test id="s1-t1" name="Probe Dialog DOM" line="15">
+<kw name="Launch EC And Open Screen" owner="common">
+<kw name="Open EC Browser" owner="browser">
+<if>
+<branch type="IF" condition="${HEADLESS}">
+<kw name="New Browser" owner="Browser">
+<arg>chromium</arg>
+<arg>headless=${TRUE}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:19.245969" elapsed="0.000078"/>
+</kw>
+<kw name="New Context" owner="Browser">
+<arg>ignoreHTTPSErrors=${TRUE}</arg>
+<arg>viewport={'width': 1920, 'height': 1080}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new BrowserContext with specified options.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:19.246190" elapsed="0.000052"/>
+</kw>
+<status status="NOT RUN" start="2026-07-27T18:51:19.245502" elapsed="0.000787"/>
+</branch>
+<branch type="ELSE">
+<variable name="@{args}">
+<msg time="2026-07-27T18:51:19.246547" level="INFO">@{args} = [ --start-maximized ]</msg>
+<var>--start-maximized</var>
+<status status="PASS" start="2026-07-27T18:51:19.246434" elapsed="0.000140"/>
+</variable>
+<kw name="New Browser" owner="Browser">
+<msg time="2026-07-27T18:51:19.247361" level="INFO">{"browser": "chromium", "headless": false, "args": ["--start-maximized"], "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "C:\\Projects\\ChoongYin_OS\\tmp\\rbf_dialog_probe\\results3\\browser\\traces\\temp\\6604e6b7-fd00-4124-b155-0467d0b73a69"}</msg>
+<msg time="2026-07-27T18:51:19.321280" level="INFO">Starting Browser process C:\Tools\Python\Python314\Lib\site-packages\Browser\wrapper\index.js using at 127.0.0.1:58401</msg>
+<msg time="2026-07-27T18:51:21.962605" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":false,"args":["--start-maximized"],"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"C:\\Projects\\ChoongYin_OS\\tmp\\rbf_dialog_probe\\results3\\browser\\traces\\temp\\6604e6b7-fd00-4124-b155-0467d0b73a69"}</msg>
+<arg>chromium</arg>
+<arg>headless=${FALSE}</arg>
+<arg>args=${args}</arg>
+<arg>slowMo=${SLOWMO}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="PASS" start="2026-07-27T18:51:19.246673" elapsed="2.716506"/>
+</kw>
+<kw name="New Context" owner="Browser">
+<msg time="2026-07-27T18:51:21.966966" level="INFO">{
+  "acceptDownloads": true,
+  "bypassCSP": false,
+  "forcedColors": "none",
+  "ignoreHTTPSErrors": true,
+  "javaScriptEnabled": true,
+  "offline": false,
+  "reducedMotion": "no-preference",
+  "serviceWorkers": "allow",
+  "viewport": null
+}</msg>
+<msg time="2026-07-27T18:51:21.988449" level="INFO">Successfully created context. </msg>
+<msg time="2026-07-27T18:51:21.988574" level="INFO">{'acceptDownloads': True, 'bypassCSP': False, 'forcedColors': 'none', 'ignoreHTTPSErrors': True, 'javaScriptEnabled': True, 'offline': False, 'reducedMotion': 'no-preference', 'serviceWorkers': 'allow', 'viewport': None}</msg>
+<arg>ignoreHTTPSErrors=${TRUE}</arg>
+<arg>viewport=${None}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new BrowserContext with specified options.</doc>
+<status status="PASS" start="2026-07-27T18:51:21.963613" elapsed="0.025085"/>
+</kw>
+<status status="PASS" start="2026-07-27T18:51:19.246342" elapsed="2.742476"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:51:19.245477" elapsed="2.743418"/>
+</if>
+<kw name="Set Browser Timeout" owner="Browser">
+<arg>30s</arg>
+<tag>Config</tag>
+<tag>Setter</tag>
+<doc>Sets the timeout used by most input and getter keywords.</doc>
+<status status="PASS" start="2026-07-27T18:51:21.989090" elapsed="0.003546"/>
+</kw>
+<kw name="Set Strict Mode" owner="Browser">
+<arg>False</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Controls library strict mode.</doc>
+<status status="PASS" start="2026-07-27T18:51:21.992927" elapsed="0.000705"/>
+</kw>
+<doc>Launch Chromium + context (headless from environment).
+Headed: OS-maximised window (--start-maximized, no fixed viewport) so the
+page fills the screen. Headless: 1920x1080 virtual viewport as before.</doc>
+<status status="PASS" start="2026-07-27T18:51:19.245289" elapsed="2.748456"/>
+</kw>
+<kw name="Login To EC" owner="browser">
+<kw name="New Page" owner="Browser">
+<msg time="2026-07-27T18:51:22.675065" level="INFO">Successfully initialized new page object and opened url: https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/</msg>
+<arg>${EC_URL}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<status status="PASS" start="2026-07-27T18:51:21.995320" elapsed="0.680000"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-27T18:51:22.676351" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="username"]</arg>
+<arg>${user}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:22.675570" elapsed="0.050044"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-27T18:51:22.726801" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="password"]</arg>
+<arg>${pass}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:22.725953" elapsed="0.017805"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:51:22.745019" level="INFO">Clicks the element 'css=[id="kc-login"]'.</msg>
+<arg>css=[id="kc-login"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:22.744097" elapsed="0.735482"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-27T18:51:24.088728" level="INFO">Waited for Element with selector css=[id="menu:searchForm:searchTxt"] at state visible</msg>
+<arg>css=[id="menu:searchForm:searchTxt"]</arg>
+<arg>visible</arg>
+<arg>timeout=60s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-27T18:51:23.480145" elapsed="0.608822"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:51:24.090012" level="INFO">Waiting page load to state to receive networkidle in 30000.0</msg>
+<msg time="2026-07-27T18:51:24.625381" level="INFO">Load state networkidle got in 30000</msg>
+<arg>networkidle</arg>
+<arg>timeout=30s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:51:24.089256" elapsed="0.536362"/>
+</kw>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>Open the app and authenticate as sysadmin (defaults to the
+env-configured user); wait for the sidebar search box.</doc>
+<status status="PASS" start="2026-07-27T18:51:21.994194" elapsed="2.631589"/>
+</kw>
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Dismiss Unsaved Changes Dialog If Present" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:51:24.633956" level="INFO">${present} = 0</msg>
+<var>${present}</var>
+<arg>css=[id="confirmationForm:confirmation_modal"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:24.627235" elapsed="0.006783"/>
+</kw>
+<if>
+<branch type="IF" condition="${present} &gt; 0">
+<kw name="Log" owner="BuiltIn">
+<arg>Unsaved-changes dialog detected - discarding via No to unblock navigation</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:24.634680" elapsed="0.000068"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="confirmationForm:nobtn"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:24.634861" elapsed="0.000050"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:24.635004" elapsed="0.000046"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:24.635135" elapsed="0.000046"/>
+</kw>
+<status status="NOT RUN" start="2026-07-27T18:51:24.634270" elapsed="0.000945"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:51:24.634232" elapsed="0.001019"/>
+</if>
+<doc>EC shows its own "UNSAVED CHANGES" Yes/No/Cancel confirm when navigating
+away from a dirty New Object form. If an earlier step failed mid-fill (e.g. a
+dependent-dropdown timeout), this dialog can be left open and its overlay mask
+(#confirmationForm:confirmation_modal) then intercepts every click for the rest of
+the run - the whole suite silently stalls behind it. Detect + discard via No, so a
+single earlier failure can't cascade into the entire suite hanging.</doc>
+<status status="PASS" start="2026-07-27T18:51:24.626791" elapsed="0.008514"/>
+</kw>
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:51:24.640540" level="INFO">${visible} = 1</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:24.635754" elapsed="0.004846"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:24.641214" elapsed="0.000104"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:24.641587" elapsed="0.000076"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:24.641799" elapsed="0.000067"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:24.641976" elapsed="0.000056"/>
+</kw>
+<status status="NOT RUN" start="2026-07-27T18:51:24.641424" elapsed="0.000650"/>
+</branch>
+<status status="NOT RUN" start="2026-07-27T18:51:24.641406" elapsed="0.000713"/>
+</if>
+<status status="NOT RUN" start="2026-07-27T18:51:24.640802" elapsed="0.001342"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:51:24.640766" elapsed="0.001410"/>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="PASS" start="2026-07-27T18:51:24.635516" elapsed="0.006717"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-07-27T18:51:24.643088" level="INFO">Types the text 'Reservoir Formation' in the given field.</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:24.642337" elapsed="1.590796"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:51:26.234423" level="INFO">Waiting page load to state to receive networkidle in 8000.0</msg>
+<msg time="2026-07-27T18:51:26.237173" level="INFO">Load state networkidle got in 8000</msg>
+<arg>networkidle</arg>
+<arg>timeout=8s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:51:26.233479" elapsed="0.003864"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:51:26.738643" level="INFO">Slept 500 milliseconds.</msg>
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:51:26.237586" elapsed="0.501268"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:51:26.740468" level="INFO">Clicks the element 'xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Reservoir Formation']'.</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:26.739191" elapsed="0.051677"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:51:26.792538" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-27T18:51:26.796130" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:51:26.791265" elapsed="0.005057"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:51:28.297395" level="INFO">Slept 1 second 500 milliseconds.</msg>
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:51:26.796600" elapsed="1.500939"/>
+</kw>
+<kw name="Confirm Screen Loaded" owner="screen">
+<kw name="Get Text" owner="Browser">
+<msg time="2026-07-27T18:51:28.341775" level="INFO">Text: 'Reservoir Formation'</msg>
+<msg time="2026-07-27T18:51:28.341989" level="INFO">${label} = Reservoir Formation</msg>
+<var>${label}</var>
+<arg>css=[id="screenToolbar:form:screenLabel"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns text attribute of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:28.298436" elapsed="0.043586"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${label}</arg>
+<arg>${screen_name}</arg>
+<arg>msg=Failed to navigate to ${screen_name}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-07-27T18:51:28.342277" elapsed="0.000961"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Assert the loaded screen's toolbar label matches Reservoir Formation.</doc>
+<status status="PASS" start="2026-07-27T18:51:28.297899" elapsed="0.045463"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-27T18:51:28.350635" level="INFO">Waited for Element with selector css=[id="screenToolbar:form:minmaxMenu"] at state visible</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-27T18:51:28.343970" elapsed="0.006861"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:51:28.351920" level="INFO">Clicks the element 'css=[id="screenToolbar:form:minmaxMenu"]'.</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:28.351213" elapsed="0.069342"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:51:28.421899" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-27T18:51:28.425544" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:51:28.420998" elapsed="0.004865"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:51:28.927428" level="INFO">Slept 500 milliseconds.</msg>
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:51:28.426244" elapsed="0.501342"/>
+</kw>
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="PASS" start="2026-07-27T18:51:28.343585" elapsed="0.584136"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="PASS" start="2026-07-27T18:51:24.626103" elapsed="4.301685"/>
+</kw>
+<arg>Reservoir Formation</arg>
+<doc>The standard Suite Setup gesture: launch the browser, login as
+${user} (defaults to the env-configured user), navigate to ${screen_name}.
+Page objects delegate their Open &lt;X&gt; Screen keyword here in one line.</doc>
+<status status="PASS" start="2026-07-27T18:51:19.244697" elapsed="9.683152"/>
+</kw>
+<kw name="Open New Object Form" owner="manage_object">
+<kw name="Hover" owner="Browser">
+<arg>xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Moves the virtual mouse and scrolls to the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:28.928708" elapsed="0.048294"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-27T18:51:28.985217" level="INFO">Waited for Element with selector xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object'] at state visible</msg>
+<arg>xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-27T18:51:28.977309" elapsed="0.008215"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:51:28.986651" level="INFO">Clicks the element 'xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']'.</msg>
+<arg>xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:28.985901" elapsed="0.048453"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:51:29.035850" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-27T18:51:29.040624" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:51:29.034638" elapsed="0.006199"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:51:30.242158" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:51:29.041112" elapsed="1.201228"/>
+</kw>
+<doc>Hover the Insert toolbar menu and choose "New Object".
+Wait for the submenu item to be visible before clicking (robust vs a fixed sleep).</doc>
+<status status="PASS" start="2026-07-27T18:51:28.928127" elapsed="1.314357"/>
+</kw>
+<kw name="Fill OV Field By Label" owner="manage_object">
+<kw name="OV Field Id By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-27T18:51:30.260708" level="INFO">Attribute is: 'tab:tabPanel:objectForm:form:G:0:R:0:C:1:in'</msg>
+<msg time="2026-07-27T18:51:30.260921" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:0:C:1:in</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:30.244636" elapsed="0.016318"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-07-27T18:51:30.261080" elapsed="0.000220"/>
+</return>
+<msg time="2026-07-27T18:51:30.261529" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:0:C:1:in</msg>
+<var>${id}</var>
+<arg>${form}</arg>
+<arg>${label}</arg>
+<doc>Resolve the input id for a field by its LABEL in objectForm (no hardcoded row/column).</doc>
+<status status="PASS" start="2026-07-27T18:51:30.244061" elapsed="0.017500"/>
+</kw>
+<kw name="Fill EC Field" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-27T18:51:30.263695" level="INFO">Fills the text 'AUTOTEST_PROBE_001' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:30.262805" elapsed="0.014009"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-27T18:51:30.287600" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-27T18:51:30.277167" elapsed="0.010637"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:51:30.689010" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:51:30.288149" elapsed="0.401034"/>
+</kw>
+<arg>${id}</arg>
+<arg>${value}</arg>
+<doc>Fill a text input by EC id and dispatch change/blur for EC validation.</doc>
+<status status="PASS" start="2026-07-27T18:51:30.262163" elapsed="0.427185"/>
+</kw>
+<arg>objectForm</arg>
+<arg>Reservoir Formation Code</arg>
+<arg>AUTOTEST_PROBE_001</arg>
+<doc>Fill a text field found by its LABEL in ${form}; reuses Fill EC Field (change/blur dispatch).</doc>
+<status status="PASS" start="2026-07-27T18:51:30.243315" elapsed="0.446120"/>
+</kw>
+<kw name="Fill OV Field By Label" owner="manage_object">
+<kw name="OV Field Id By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-27T18:51:30.704271" level="INFO">Attribute is: 'tab:tabPanel:objectForm:form:G:0:R:1:C:1:in'</msg>
+<msg time="2026-07-27T18:51:30.704564" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:1:C:1:in</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:30.691628" elapsed="0.012981"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-07-27T18:51:30.704761" elapsed="0.000266"/>
+</return>
+<msg time="2026-07-27T18:51:30.705284" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:1:C:1:in</msg>
+<var>${id}</var>
+<arg>${form}</arg>
+<arg>${label}</arg>
+<doc>Resolve the input id for a field by its LABEL in objectForm (no hardcoded row/column).</doc>
+<status status="PASS" start="2026-07-27T18:51:30.691124" elapsed="0.014197"/>
+</kw>
+<kw name="Fill EC Field" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-27T18:51:30.706878" level="INFO">Fills the text 'AUTOTEST Probe 001' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:30.706148" elapsed="0.012906"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-27T18:51:30.729073" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-27T18:51:30.719555" elapsed="0.009865"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:51:31.130590" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:51:30.729737" elapsed="0.400989"/>
+</kw>
+<arg>${id}</arg>
+<arg>${value}</arg>
+<doc>Fill a text input by EC id and dispatch change/blur for EC validation.</doc>
+<status status="PASS" start="2026-07-27T18:51:30.705618" elapsed="0.425228"/>
+</kw>
+<arg>objectForm</arg>
+<arg>Reservoir Formation Name</arg>
+<arg>AUTOTEST Probe 001</arg>
+<doc>Fill a text field found by its LABEL in ${form}; reuses Fill EC Field (change/blur dispatch).</doc>
+<status status="PASS" start="2026-07-27T18:51:30.690307" elapsed="0.440609"/>
+</kw>
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Dismiss Unsaved Changes Dialog If Present" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:51:31.137006" level="INFO">${present} = 0</msg>
+<var>${present}</var>
+<arg>css=[id="confirmationForm:confirmation_modal"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:31.132429" elapsed="0.004635"/>
+</kw>
+<if>
+<branch type="IF" condition="${present} &gt; 0">
+<kw name="Log" owner="BuiltIn">
+<arg>Unsaved-changes dialog detected - discarding via No to unblock navigation</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:31.137572" elapsed="0.000065"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="confirmationForm:nobtn"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:31.137737" elapsed="0.000047"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:31.137869" elapsed="0.000043"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:31.137990" elapsed="0.000046"/>
+</kw>
+<status status="NOT RUN" start="2026-07-27T18:51:31.137219" elapsed="0.000847"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:51:31.137187" elapsed="0.000914"/>
+</if>
+<doc>EC shows its own "UNSAVED CHANGES" Yes/No/Cancel confirm when navigating
+away from a dirty New Object form. If an earlier step failed mid-fill (e.g. a
+dependent-dropdown timeout), this dialog can be left open and its overlay mask
+(#confirmationForm:confirmation_modal) then intercepts every click for the rest of
+the run - the whole suite silently stalls behind it. Detect + discard via No, so a
+single earlier failure can't cascade into the entire suite hanging.</doc>
+<status status="PASS" start="2026-07-27T18:51:31.132204" elapsed="0.005941"/>
+</kw>
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:51:31.142560" level="INFO">${visible} = 0</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:31.138617" elapsed="0.003991"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:51:31.146388" level="INFO">${toggle} = 1</msg>
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:31.143002" elapsed="0.003445"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:51:31.147279" level="INFO">Clicks the element 'css=[id="screenToolbar:form:minmaxMenu"]'.</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:31.146873" elapsed="0.045409"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-27T18:51:31.200121" level="INFO">Waited for Element with selector css=[id="menu:searchForm:searchTxt"] at state visible</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-27T18:51:31.192563" elapsed="0.007767"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:51:31.701609" level="INFO">Slept 500 milliseconds.</msg>
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:51:31.200794" elapsed="0.500990"/>
+</kw>
+<status status="PASS" start="2026-07-27T18:51:31.146586" elapsed="0.555304"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:51:31.146564" elapsed="0.555432"/>
+</if>
+<status status="PASS" start="2026-07-27T18:51:31.142724" elapsed="0.559363"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:51:31.142703" elapsed="0.559450"/>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="PASS" start="2026-07-27T18:51:31.138361" elapsed="0.563866"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-07-27T18:51:31.703716" level="INFO">Types the text 'Reservoir Block' in the given field.</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:31.702422" elapsed="1.074884"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:51:32.778486" level="INFO">Waiting page load to state to receive networkidle in 8000.0</msg>
+<msg time="2026-07-27T18:51:32.781370" level="INFO">Load state networkidle got in 8000</msg>
+<arg>networkidle</arg>
+<arg>timeout=8s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:51:32.777604" elapsed="0.003913"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:51:33.282617" level="INFO">Slept 500 milliseconds.</msg>
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:51:32.781703" elapsed="0.501098"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:51:33.283887" level="INFO">Clicks the element 'xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Reservoir Block']'.</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:33.283057" elapsed="0.161672"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:51:33.446124" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-27T18:51:33.449550" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:51:33.445040" elapsed="0.004705"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:51:34.951174" level="INFO">Slept 1 second 500 milliseconds.</msg>
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:51:33.450018" elapsed="1.501325"/>
+</kw>
+<kw name="Confirm Screen Loaded" owner="screen">
+<kw name="Get Text" owner="Browser">
+<msg time="2026-07-27T18:51:34.968206" level="INFO">Text: 'Reservoir Formation'</msg>
+<msg time="2026-07-27T18:51:34.968385" level="INFO">${label} = Reservoir Formation</msg>
+<var>${label}</var>
+<arg>css=[id="screenToolbar:form:screenLabel"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns text attribute of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:34.952178" elapsed="0.016236"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<msg time="2026-07-27T18:51:34.969305" level="FAIL">Failed to navigate to Reservoir Block: 'Reservoir Formation' does not contain 'Reservoir Block'</msg>
+<arg>${label}</arg>
+<arg>${screen_name}</arg>
+<arg>msg=Failed to navigate to ${screen_name}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="FAIL" start="2026-07-27T18:51:34.968617" elapsed="0.000851">Failed to navigate to Reservoir Block: 'Reservoir Formation' does not contain 'Reservoir Block'</status>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Assert the loaded screen's toolbar label matches Reservoir Block.</doc>
+<status status="FAIL" start="2026-07-27T18:51:34.951711" elapsed="0.017901">Failed to navigate to Reservoir Block: 'Reservoir Formation' does not contain 'Reservoir Block'</status>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="NOT RUN" start="2026-07-27T18:51:34.969803" elapsed="0.000084"/>
+</kw>
+<arg>Reservoir Block</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="FAIL" start="2026-07-27T18:51:31.131858" elapsed="3.838117">Failed to navigate to Reservoir Block: 'Reservoir Formation' does not contain 'Reservoir Block'</status>
+</kw>
+<arg>Navigate To Screen</arg>
+<arg>Reservoir Block</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2026-07-27T18:51:31.131117" elapsed="3.838929"/>
+</kw>
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:51:34.975481" level="INFO">${present} = 1</msg>
+<var>${present}</var>
+<arg>css=[id="confirmationForm:confirmation_modal"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:51:34.970153" elapsed="0.005430"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-07-27T18:51:34.976313" level="INFO">modal present count = 1</msg>
+<arg>modal present count = ${present}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-07-27T18:51:34.975811" elapsed="0.000601"/>
+</kw>
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-07-27T18:51:35.089593" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/robotframework-browser-screenshot-1.png" target="_blank"&gt;&lt;img src="browser/screenshot/robotframework-browser-screenshot-1.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-07-27T18:51:34.976555" elapsed="0.113242"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-27T18:51:35.097138" level="INFO">JavaScript executed successfully.</msg>
+<msg time="2026-07-27T18:51:35.097472" level="INFO">${btns} = [{'tag': 'SPAN', 'id': 'confirmationForm:confirmation_title', 'text': 'Unsaved Changes'}, {'tag': 'SPAN', 'id': 'confirmationForm:confirmationTitle', 'text': 'Unsaved Changes'}, {'tag': 'A', 'id': '',...</msg>
+<var>${btns}</var>
+<arg>${None}</arg>
+<arg>() =&gt; Array.from(document.querySelectorAll('[id^="confirmationForm"] button, [id^="confirmationForm"] a, [id^="confirmationForm"] span, [id^="confirmationForm"] div[role="button"]')).map(e=&gt;({tag:e.tagName,id:e.id,text:e.textContent.trim()}))</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-27T18:51:35.090075" elapsed="0.007432"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-07-27T18:51:35.098678" level="INFO">[{'tag': 'SPAN', 'id': 'confirmationForm:confirmation_title', 'text': 'Unsaved Changes'}, {'tag': 'SPAN', 'id': 'confirmationForm:confirmationTitle', 'text': 'Unsaved Changes'}, {'tag': 'A', 'id': '', 'text': ''}, {'tag': 'SPAN', 'id': '', 'text': ''}, {'tag': 'BUTTON', 'id': 'confirmationForm:yesbtn', 'text': 'Yes'}, {'tag': 'SPAN', 'id': '', 'text': 'Yes'}, {'tag': 'BUTTON', 'id': 'confirmationForm:nobtn', 'text': 'No'}, {'tag': 'SPAN', 'id': '', 'text': 'No'}, {'tag': 'BUTTON', 'id': 'confirmationForm:cancelbtn', 'text': 'Cancel'}, {'tag': 'SPAN', 'id': '', 'text': 'Cancel'}]</msg>
+<arg>${btns}</arg>
+<arg>console=True</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-07-27T18:51:35.097789" elapsed="0.001053"/>
+</kw>
+<msg time="2026-07-27T18:51:35.109594" level="INFO">Switching context to context=2cfaabc8-5e54-4cdc-9245-028636747fb5 in CURRENT</msg>
+<msg time="2026-07-27T18:51:35.118063" level="INFO">Successfully changed active context: context=2cfaabc8-5e54-4cdc-9245-028636747fb5</msg>
+<msg time="2026-07-27T18:51:35.143546" level="INFO">Successfully closed Context</msg>
+<status status="PASS" start="2026-07-27T18:51:19.243280" elapsed="15.855749"/>
+</test>
+<kw name="Close Browser" owner="Browser" type="TEARDOWN">
+<msg time="2026-07-27T18:51:35.463492" level="INFO">Closed browser</msg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-07-27T18:51:35.144464" elapsed="0.319238"/>
+</kw>
+<doc>ONE-OFF diagnostic - reproduce EC's Unsaved-Changes dialog and dump the real
+DOM so the correct button locator can be read as fact, not guessed. Deletes
+nothing; discards the dirty New Object fill via whatever button turns out real.</doc>
+<status status="PASS" start="2026-07-27T18:51:18.720365" elapsed="16.743442"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Probe Unsaved Dialog" id="s1" pass="1" fail="0" skip="0">Probe Unsaved Dialog</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

@@ -1,0 +1,43 @@
+{
+ "screen": "EC Code Object",
+ "bfcode": "CD.0135",
+ "view": "OV_EC_CODE_OBJECT",
+ "folder": "Configuration/Codes",
+ "slug": "ec_code_object",
+ "code_prefix": "AUTOTEST_ECO_",
+ "code_label": "Object Code",
+ "name_label": null,
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST EC Code Object 001",
+ "dropdowns": [
+  {
+   "label": "EC Code Type",
+   "value": "__FIRST__"
+  },
+  {
+   "label": "EC Code",
+   "value": "__FIRST__"
+  }
+ ],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 4,
+  "dropdowns_raw": [
+   {
+    "label": "EC Code Type",
+    "value": "Document Type",
+    "n_opts": 3
+   },
+   {
+    "label": "EC Code",
+    "value": null,
+    "n_opts": 0
+   }
+  ],
+  "extras": [],
+  "dropdown_blockers": [
+   "EC Code"
+  ]
+ }
+}

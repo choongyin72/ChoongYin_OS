@@ -1,0 +1,493 @@
+{
+ "ov_total": 131,
+ "in71": 50,
+ "other": 81,
+ "other_list": [
+  {
+   "bf": "CO.1033",
+   "label": "Production Day Table",
+   "path": "Configuration > System",
+   "time_scope": "INVARIANT"
+  },
+  {
+   "bf": "CO.1049",
+   "label": "Conversion Group",
+   "path": "Configuration > System > Units",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.1060",
+   "label": "Calculation Library",
+   "path": "Configuration > Assets > Calculation Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CD.0006",
+   "label": "Node",
+   "path": "Configuration > Assets > Calculation Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0100",
+   "label": "Production Sub Unit",
+   "path": "Configuration > Assets > Basic Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0003",
+   "label": "Area",
+   "path": "Configuration > Assets > Basic Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0082",
+   "label": "Sub Area",
+   "path": "Configuration > Assets > Basic Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0157",
+   "label": "Regulatory Permits",
+   "path": "Configuration > Assets > Basic Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0102",
+   "label": "Constant Standard",
+   "path": "Configuration > Assets > Hydrocarbon Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0239",
+   "label": "Company Contact",
+   "path": "Configuration > Assets > Commercial Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0015",
+   "label": "Field",
+   "path": "Configuration > Assets > Commercial Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0105",
+   "label": "Sub Field",
+   "path": "Configuration > Assets > Commercial Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0125",
+   "label": "Commercial Entity",
+   "path": "Configuration > Assets > Commercial Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CD.0024",
+   "label": "Calendar",
+   "path": "Configuration > Assets > Date Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CD.0105",
+   "label": "Calendar Collection",
+   "path": "Configuration > Assets > Date Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0019",
+   "label": "Facility Class 1",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0021",
+   "label": "Facility Class 2",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0227",
+   "label": "External Location",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0244",
+   "label": "Operator Route",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0205",
+   "label": "Collection Point",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0031",
+   "label": "Flowline",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0040",
+   "label": "Test Separator",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0042",
+   "label": "Production Separator",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0096",
+   "label": "Pipeline",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0158",
+   "label": "Report Group",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0108",
+   "label": "Well Hookup",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0224",
+   "label": "Shift",
+   "path": "Configuration > Assets > Facility Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CD.0008",
+   "label": "Stream Item",
+   "path": "Configuration > Assets > Stream Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0034",
+   "label": "Storage",
+   "path": "Configuration > Assets > Tank and Storage Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0036",
+   "label": "Tank",
+   "path": "Configuration > Assets > Tank and Storage Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0051",
+   "label": "Well Hole",
+   "path": "Configuration > Assets > Well and Reservoir Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0247",
+   "label": "Planned Well",
+   "path": "Configuration > Assets > Well and Reservoir Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0049",
+   "label": "Well",
+   "path": "Configuration > Assets > Well and Reservoir Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0054",
+   "label": "Well Bore",
+   "path": "Configuration > Assets > Well and Reservoir Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0057",
+   "label": "Well Bore Interval",
+   "path": "Configuration > Assets > Well and Reservoir Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0153",
+   "label": "Perforation Interval",
+   "path": "Configuration > Assets > Well and Reservoir Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0237",
+   "label": "Equipment",
+   "path": "Configuration > Assets > Equipment Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0123",
+   "label": "Test Device",
+   "path": "Configuration > Assets > Equipment Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0259",
+   "label": "Analysis Point",
+   "path": "Configuration > Assets > Laboratory Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0260",
+   "label": "Chemical Stream Hookup",
+   "path": "Configuration > Assets > Chemical Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0258",
+   "label": "Chemical Stream",
+   "path": "Configuration > Assets > Chemical Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0070",
+   "label": "Chemical Tank",
+   "path": "Configuration > Assets > Chemical Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0212",
+   "label": "Chemical Injection Point",
+   "path": "Configuration > Assets > Chemical Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2016",
+   "label": "Contract",
+   "path": "Configuration > Assets > Contract Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2037",
+   "label": "Contract Area",
+   "path": "Configuration > Assets > Contract Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2038",
+   "label": "Contract Area Setup",
+   "path": "Configuration > Assets > Contract Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2044",
+   "label": "Contract Capacity",
+   "path": "Configuration > Assets > Contract Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2054",
+   "label": "Contract Inventory",
+   "path": "Configuration > Assets > Contract Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0264",
+   "label": "Truck",
+   "path": "Configuration > Assets > Transport Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0265",
+   "label": "Trailer",
+   "path": "Configuration > Assets > Transport Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0266",
+   "label": "Driver",
+   "path": "Configuration > Assets > Transport Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2004",
+   "label": "Lifting Account",
+   "path": "Configuration > Assets > Transport Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2077",
+   "label": "Channel",
+   "path": "Configuration > Assets > Transport Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2078",
+   "label": "Loading Arm",
+   "path": "Configuration > Assets > Transport Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2079",
+   "label": "Pilot",
+   "path": "Configuration > Assets > Transport Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2081",
+   "label": "Pilot Boat",
+   "path": "Configuration > Assets > Transport Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2080",
+   "label": "Tug Boat",
+   "path": "Configuration > Assets > Transport Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0096.01",
+   "label": "Pipeline",
+   "path": "Configuration > Assets > Dispatching Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2057",
+   "label": "Transport System",
+   "path": "Configuration > Assets > Dispatching Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2041",
+   "label": "Transport Zone",
+   "path": "Configuration > Assets > Dispatching Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2040",
+   "label": "Pipeline Segment",
+   "path": "Configuration > Assets > Dispatching Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2026",
+   "label": "Delivery Point",
+   "path": "Configuration > Assets > Dispatching Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2039",
+   "label": "Delivery Stream",
+   "path": "Configuration > Assets > Dispatching Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2043",
+   "label": "Meter",
+   "path": "Configuration > Assets > Dispatching Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2024",
+   "label": "Nomination Point",
+   "path": "Configuration > Assets > Dispatching Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.2103",
+   "label": "Service",
+   "path": "Configuration > Assets > Service Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.3009",
+   "label": "Price Index",
+   "path": "Configuration > Assets > Sales Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.3016",
+   "label": "Price Object",
+   "path": "Configuration > Assets > Sales Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.3024",
+   "label": "Price Rate",
+   "path": "Configuration > Assets > Sales Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CD.0130",
+   "label": "Revenue Order",
+   "path": "Configuration > Assets > Financial Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CD.0127",
+   "label": "WBS",
+   "path": "Configuration > Assets > Financial Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CD.0109",
+   "label": "Document Sequence",
+   "path": "Configuration > Assets > Revenue Document Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "RC.0056",
+   "label": "Tract",
+   "path": "Configuration > Assets > Royalty Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "SP.0059",
+   "label": "Property",
+   "path": "Configuration > Assets > Data Mapping Objects",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0236",
+   "label": "Message Group",
+   "path": "Configuration > Messaging",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0191",
+   "label": "Task Process",
+   "path": "Configuration > Task List",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CO.0193",
+   "label": "Action Trigger",
+   "path": "Configuration > Business Action",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "CP.0030",
+   "label": "Cargo Planning Forecast",
+   "path": "EC Transport > Cargo Planning > Forecast",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "FC.0010",
+   "label": "Forecast",
+   "path": "EC Transport > Forecasting",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "RC.0059",
+   "label": "Royalty Contract",
+   "path": "EC Revenue > Royalty > Royalty Canada",
+   "time_scope": "VERSIONED"
+  },
+  {
+   "bf": "RC.0058",
+   "label": "Division Order",
+   "path": "EC Revenue > Royalty > Royalty USA",
+   "time_scope": "VERSIONED"
+  }
+ ]
+}

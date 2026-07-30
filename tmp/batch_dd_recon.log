@@ -1,0 +1,15 @@
+HCB System                   CD.0097  dds: HCB Category='Operating area system'(3) | err=
+Chemical Product             CO.0072  dds: Meas. Units='Liter'(8) | err=
+Orifice Plate                CO.0089  dds: Material='304/316 Stainless Steel'(5) | err=
+Process Train                CO.0120  dds: Production Facility Class 1=None(0) | err=
+Config Variable              IN.0031  dds: Calculation Context='Cargo Load/Unload'(14) | err=
+Data Extract Setup           SP.0043  dds: Data Extract Type='Actual'(2) | err=
+Data Extract Set             SP.0049  dds: Owner Class='All'(2) | err=
+Storage Flow                 CO.2091  dds: Flow Direction='*Inbound'(2); Storage='AS3_Crude_Storage'(32) | err=
+UOP Key                      CD.0099  dds: Company=None(0); Key Type='Non Drilling'(2) | err=
+EC Code Object               CD.0135  dds: EC Code Type='Document Type'(3); EC Code=None(0) | err=
+Meter Run                    CO.0091  dds: Type of Taps='Pipe'(2); Pipe Material='Stainless Steel'(3); Location of Taps='Upstream'(2) | err=
+Reservoir Block Formation    CO.0137  dds: Reservoir Block='Reservoir Block A'(10); Reservoir Formation=None(0) | err=
+Calculation Group Context    CO.0245  dds: Calculation Group Object Class='ALLOC_NETWORK'(6); Calculation Group List Class=None(0) | err=
+
+wrote C:\Projects\ChoongYin_OS\tmp\batch_dd_results.json

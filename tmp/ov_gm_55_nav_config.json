@@ -1,0 +1,532 @@
+[
+ {
+  "bf": "CO.0100",
+  "screen": "Production Sub Unit",
+  "view": "OV_PROD_SUB_UNIT",
+  "folder": "Assets > Basic Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CD.0006",
+  "screen": "Node",
+  "view": "OV_NODE",
+  "folder": "Assets > Calculation Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.1060",
+  "screen": "Calculation Library",
+  "view": "OV_CALC_LIBRARY",
+  "folder": "Assets > Calculation Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CO.0070",
+  "screen": "Chemical Tank",
+  "view": "OV_CHEM_TANK",
+  "folder": "Assets > Chemical Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0212",
+  "screen": "Chemical Injection Point",
+  "view": "OV_CHEM_INJ_POINT",
+  "folder": "Assets > Chemical Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0258",
+  "screen": "Chemical Stream",
+  "view": "OV_CHEM_STREAM",
+  "folder": "Assets > Chemical Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0260",
+  "screen": "Chemical Stream Hookup",
+  "view": "OV_CHEM_STRM_HOOKUP",
+  "folder": "Assets > Chemical Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.2016",
+  "screen": "Contract",
+  "view": "OV_CONTRACT",
+  "folder": "Assets > Contract Objects",
+  "nav": {
+   "Business Unit": "SS1 BU",
+   "Contract Area": "SS1 CA"
+  }
+ },
+ {
+  "bf": "CO.2038",
+  "screen": "Contract Area Setup",
+  "view": "OV_CONTRACT_AREA_SETUP",
+  "folder": "Assets > Contract Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CO.2044",
+  "screen": "Contract Capacity",
+  "view": "OV_CONTRACT_CAPACITY",
+  "folder": "Assets > Contract Objects",
+  "nav": {
+   "Business Unit": "SS1 BU",
+   "Contract Area": "SS1 CA"
+  }
+ },
+ {
+  "bf": "CO.2054",
+  "screen": "Contract Inventory",
+  "view": "OV_CONTRACT_INVENTORY",
+  "folder": "Assets > Contract Objects",
+  "nav": {
+   "Business Unit": "SS1 BU",
+   "Contract Area": "SS1 CA"
+  }
+ },
+ {
+  "bf": "SP.0059",
+  "screen": "Property",
+  "view": "OV_PROPERTY",
+  "folder": "Assets > Data Mapping Objects",
+  "nav": {
+   "Business Unit": "SS1 BU"
+  }
+ },
+ {
+  "bf": "CO.0123",
+  "screen": "Test Device",
+  "view": "OV_TEST_DEVICE",
+  "folder": "Assets > Equipment Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0019",
+  "screen": "Facility Class 1",
+  "view": "OV_XFCTY_CLASS_1",
+  "folder": "Assets > Facility Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area"
+  }
+ },
+ {
+  "bf": "CO.0021",
+  "screen": "Facility Class 2",
+  "view": "OV_FCTY_CLASS_2",
+  "folder": "Assets > Facility Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CO.0040",
+  "screen": "Test Separator",
+  "view": "OV_TESTSEPARATOR",
+  "folder": "Assets > Facility Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0042",
+  "screen": "Production Separator",
+  "view": "OV_PRODSEPARATOR",
+  "folder": "Assets > Facility Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0108",
+  "screen": "Well Hookup",
+  "view": "OV_WELL_HOOKUP",
+  "folder": "Assets > Facility Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0158",
+  "screen": "Report Group",
+  "view": "OV_REPORT_GROUP",
+  "folder": "Assets > Facility Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CO.0205",
+  "screen": "Collection Point",
+  "view": "OV_COLLECTION_POINT",
+  "folder": "Assets > Facility Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area"
+  }
+ },
+ {
+  "bf": "CO.0224",
+  "screen": "Shift",
+  "view": "OV_SHIFT",
+  "folder": "Assets > Facility Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0227",
+  "screen": "External Location",
+  "view": "OV_EXTERNAL_LOCATION",
+  "folder": "Assets > Facility Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CO.0244",
+  "screen": "Operator Route",
+  "view": "OV_OPERATOR_ROUTE",
+  "folder": "Assets > Facility Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area"
+  }
+ },
+ {
+  "bf": "CO.0102",
+  "screen": "Constant Standard",
+  "view": "OV_CONSTANT_STANDARD",
+  "folder": "Assets > Hydrocarbon Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CD.0109",
+  "screen": "Document Sequence",
+  "view": "OV_DOC_SEQUENCE",
+  "folder": "Assets > Revenue Document Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CO.3009",
+  "screen": "Price Index",
+  "view": "OV_PRICE_INDEX",
+  "folder": "Assets > Sales Objects",
+  "nav": {
+   "Business Unit": "SS1 BU"
+  }
+ },
+ {
+  "bf": "CO.3016",
+  "screen": "Price Object",
+  "view": "OV_PRICE_OBJECT",
+  "folder": "Assets > Sales Objects",
+  "nav": {
+   "Business Unit": "SS1 BU"
+  }
+ },
+ {
+  "bf": "CO.3024",
+  "screen": "Price Rate",
+  "view": "OV_PRICE_RATE",
+  "folder": "Assets > Sales Objects",
+  "nav": {
+   "Business Unit": "SS1 BU"
+  }
+ },
+ {
+  "bf": "CO.2103",
+  "screen": "Service",
+  "view": "OV_SERVICE",
+  "folder": "Assets > Service Objects",
+  "nav": {
+   "Business Unit": "SS1 BU"
+  }
+ },
+ {
+  "bf": "CD.0008",
+  "screen": "Stream Item",
+  "view": "OV_STREAM_ITEM",
+  "folder": "Assets > Stream Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CO.0034",
+  "screen": "Storage",
+  "view": "OV_STORAGE",
+  "folder": "Assets > Tank and Storage Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0264",
+  "screen": "Truck",
+  "view": "OV_TRUCK",
+  "folder": "Assets > Transport Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CO.0265",
+  "screen": "Trailer",
+  "view": "OV_TRAILER",
+  "folder": "Assets > Transport Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CO.0266",
+  "screen": "Driver",
+  "view": "OV_DRIVER",
+  "folder": "Assets > Transport Objects",
+  "nav": {}
+ },
+ {
+  "bf": "CO.2004",
+  "screen": "Lifting Account",
+  "view": "OV_LIFTING_ACCOUNT",
+  "folder": "Assets > Transport Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1",
+   "Operator Route": "Storage at row 32"
+  }
+ },
+ {
+  "bf": "CO.2077",
+  "screen": "Channel",
+  "view": "OV_CHANNEL",
+  "folder": "Assets > Transport Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.2078",
+  "screen": "Loading Arm",
+  "view": "OV_LOADING_ARM",
+  "folder": "Assets > Transport Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.2079",
+  "screen": "Pilot",
+  "view": "OV_PILOT",
+  "folder": "Assets > Transport Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.2080",
+  "screen": "Tug Boat",
+  "view": "OV_TUG_BOAT",
+  "folder": "Assets > Transport Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.2081",
+  "screen": "Pilot Boat",
+  "view": "OV_PILOT_BOAT",
+  "folder": "Assets > Transport Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0049",
+  "screen": "Well",
+  "view": "OV_WELL",
+  "folder": "Assets > Well and Reservoir Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0051",
+  "screen": "Well Hole",
+  "view": "OV_WELL_HOLE",
+  "folder": "Assets > Well and Reservoir Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "CO.0054",
+  "screen": "Well Bore",
+  "view": "OV_WELL_BORE",
+  "folder": "Assets > Well and Reservoir Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1",
+   "Well & Well Hookup": "P1 WHK 001 GL",
+   "Well": "P1 W092 OP"
+  }
+ },
+ {
+  "bf": "CO.0057",
+  "screen": "Well Bore Interval",
+  "view": "OV_WELL_BORE_INTERVAL",
+  "folder": "Assets > Well and Reservoir Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1",
+   "Well & Well Hookup": "P1 WHK 001 GL",
+   "Well": "P1 W092 OP",
+   "Well Bore": "Well Bore at row 44",
+   "Well Bore Interval": "Well Bore at row 44"
+  }
+ },
+ {
+  "bf": "CO.0153",
+  "screen": "Perforation Interval",
+  "view": "OV_PERF_INTERVAL",
+  "folder": "Assets > Well and Reservoir Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1",
+   "Well & Well Hookup": "P1 WHK 001 GL",
+   "Well": "P1 W092 OP",
+   "Well Bore": "Well Bore at row 44",
+   "Well Bore Interval": "Well Bore Internel at row 46"
+  }
+ },
+ {
+  "bf": "CO.0247",
+  "screen": "Planned Well",
+  "view": "OV_PLANNED_WELL",
+  "folder": "Assets > Well and Reservoir Objects",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1",
+   "Well & Well Hookup": "P1 WHK 001 GL",
+   "Well": "P1 W092 OP"
+  }
+ },
+ {
+  "bf": "CO.0193",
+  "screen": "Action Trigger",
+  "view": "OV_CONTROL_POINT",
+  "folder": "Business Action",
+  "nav": {}
+ },
+ {
+  "bf": "CO.0236",
+  "screen": "Message Group",
+  "view": "OV_MESSAGE_GROUP",
+  "folder": "Messaging",
+  "nav": {
+   "Functional Area": "EC"
+  }
+ },
+ {
+  "bf": "CO.1033",
+  "screen": "Production Day Table",
+  "view": "OV_PRODUCTION_DAY",
+  "folder": "System",
+  "nav": {}
+ },
+ {
+  "bf": "CO.1049",
+  "screen": "Conversion Group",
+  "view": "OV_CONVERSION_GROUP",
+  "folder": "System > Units",
+  "nav": {}
+ },
+ {
+  "bf": "CO.0191",
+  "screen": "Task Process",
+  "view": "OV_TASK_PROCESS",
+  "folder": "Task List",
+  "nav": {}
+ },
+ {
+  "bf": "RC.0059",
+  "screen": "Royalty Contract",
+  "view": "OV_ROYALTY_CONTRACT",
+  "folder": "Royalty > Royalty Canada",
+  "nav": {
+   "Business Unit": "SS1 BU",
+   "Contract Area": "SS1 CA"
+  }
+ },
+ {
+  "bf": "RC.0058",
+  "screen": "Division Order",
+  "view": "OV_DIVISION_ORDER",
+  "folder": "Royalty > Royalty USA",
+  "nav": {
+   "Business Unit": "SS1 BU",
+   "Contract Area": "SS1 CA"
+  }
+ },
+ {
+  "bf": "CP.0030",
+  "screen": "Cargo Planning Forecast",
+  "view": "OV_FCST_MNGR_FCST_LIST",
+  "folder": "Cargo Planning > Forecast",
+  "nav": {
+   "Production Unit": "P1 Production Unit",
+   "Area": "P1 Area",
+   "Facility Class 1": "P1 Facility 1"
+  }
+ },
+ {
+  "bf": "FC.0010",
+  "screen": "Forecast",
+  "view": "OV_FORECAST_GROUP",
+  "folder": "Forecasting",
+  "nav": {}
+ }
+]

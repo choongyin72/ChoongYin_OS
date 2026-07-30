@@ -1,0 +1,59 @@
+{
+ "screen": "Conversion Group",
+ "bfcode": "CO.1049",
+ "view": "OV_CONVERSION_GROUP",
+ "folder": "Configuration/System/Units",
+ "slug": "conversion_group",
+ "code_prefix": "AUTOTEST_CVG_",
+ "code_label": "Conversion Group Code",
+ "name_label": "Conversion Group Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Conversion Group 001",
+ "dropdowns": [],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 3,
+  "dropdowns_raw": [],
+  "extras": [],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "label": "Conversion Group Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "label": "Conversion Group Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:cb",
+    "label": "Fallback Ind",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:da_input",
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false
+   }
+  ]
+ }
+}

@@ -1,0 +1,53 @@
+{
+ "screen": "Task Process",
+ "bfcode": "CO.0191",
+ "view": "OV_TASK_PROCESS",
+ "folder": "Configuration/Task_List",
+ "slug": "task_process",
+ "code_prefix": "AUTOTEST_TP_",
+ "code_label": "Task Process Code",
+ "name_label": "Task Process Name",
+ "date_label": "Start date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Task Process 001",
+ "dropdowns": [],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 3,
+  "dropdowns_raw": [],
+  "extras": [],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "label": "Task Process Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "label": "Task Process Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "label": "Start date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "label": "End date",
+    "kind": "date",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false
+   }
+  ]
+ }
+}

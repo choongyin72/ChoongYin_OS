@@ -1,0 +1,97 @@
+==============================================================================
+Reservoir Block Formation Iud :: EC IUD Test - Reservoir Block Formation (C...
+==============================================================================
+TC01 Create Parent Block And Formation :: Insert a fresh Reservoir... | FAIL |
+TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to <a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}">…</a>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"></div> intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"></div> intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"></div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+------------------------------------------------------------------------------
+TC02 Insert Reservoir Block Formation Linking Both :: On RBF: sele... | FAIL |
+TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to <a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}">…</a>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"></div> intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"></div> intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"></div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+------------------------------------------------------------------------------
+TC03 Update Reservoir Block Formation :: Edit RBF Name; confirm DB... | FAIL |
+TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+------------------------------------------------------------------------------
+TC04 Delete Reservoir Block Formation :: Delete RBF via End Date =... | FAIL |
+TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+------------------------------------------------------------------------------
+TC05 Tear Down Parents In Reverse Order :: Delete Formation then B... | FAIL |
+TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to <a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}">…</a>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"></div> intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"></div> intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"></div> intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+------------------------------------------------------------------------------

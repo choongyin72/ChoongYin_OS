@@ -1,0 +1,10 @@
+import sys
+sys.path.insert(0, r"c:\Projects\ChoongYin_OS\workstreams\master-plan\ec-automation\libraries")
+from DbVerify import _code_present
+
+for view, code in [
+    ("OV_RESV_BLOCK", "AUTOTEST_RFB_001"),
+    ("OV_RESV_FORMATION", "AUTOTEST_RFF_001"),
+    ("OV_RESV_BLOCK_FORMATION", "AUTOTEST_RFR_001"),
+]:
+    print(view, code, "present:", _code_present(view, code))

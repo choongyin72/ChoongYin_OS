@@ -1,0 +1,65 @@
+{
+ "screen": "Production Sub Unit",
+ "bfcode": "CO.0100",
+ "view": "OV_PROD_SUB_UNIT",
+ "folder": "Configuration/Assets/Basic_Objects",
+ "slug": "production_sub_unit",
+ "code_prefix": "AUTOTEST_PSU_",
+ "code_label": "Production Sub Unit Code",
+ "name_label": "Production Sub Unit Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Production Sub Unit 001",
+ "dropdowns": [],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 3,
+  "dropdowns_raw": [],
+  "extras": [],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "label": "Production Sub Unit Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "label": "Production Sub Unit Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "label": "Master System Code",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "label": "Master System Name",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:da_input",
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_input",
+    "label": "System of Measurement",
+    "kind": "dropdown",
+    "mandatory": false
+   }
+  ]
+ }
+}

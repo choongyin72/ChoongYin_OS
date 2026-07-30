@@ -1,0 +1,59 @@
+{
+ "screen": "Calculation Library",
+ "bfcode": "CO.1060",
+ "view": "OV_CALC_LIBRARY",
+ "folder": "Configuration/Assets/Calculation_Objects",
+ "slug": "calculation_library",
+ "code_prefix": "AUTOTEST_CL_",
+ "code_label": "Calc Library Code",
+ "name_label": "Calc Library Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Calculation Library 001",
+ "dropdowns": [],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 3,
+  "dropdowns_raw": [],
+  "extras": [],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "label": "Calc Library Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "label": "Calc Library Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false
+   }
+  ]
+ }
+}

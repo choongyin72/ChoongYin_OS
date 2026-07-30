@@ -1,0 +1,32 @@
+{
+ "screen": "Data Extract Set",
+ "bfcode": "SP.0049",
+ "view": "OV_SUMMARY_SET",
+ "folder": "Configuration/Assets/Data_Mapping_Objects",
+ "slug": "data_extract_set",
+ "code_prefix": "AUTOTEST_DXT_",
+ "code_label": "Code",
+ "name_label": "Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Data Extract Set 001",
+ "dropdowns": [
+  {
+   "label": "Owner Class",
+   "value": "All"
+  }
+ ],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 4,
+  "dropdowns_raw": [
+   {
+    "label": "Owner Class",
+    "value": "All",
+    "n_opts": 2
+   }
+  ],
+  "extras": [],
+  "dropdown_blockers": []
+ }
+}

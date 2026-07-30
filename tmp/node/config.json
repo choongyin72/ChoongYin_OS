@@ -1,0 +1,139 @@
+{
+ "screen": "Node",
+ "bfcode": "CD.0006",
+ "view": "OV_NODE",
+ "folder": "Configuration/Assets/Calculation_Objects",
+ "slug": "node",
+ "code_prefix": "AUTOTEST_ND_",
+ "code_label": "Node Code",
+ "name_label": "Node Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Node 001",
+ "dropdowns": [],
+ "popups": [],
+ "extra_fields": [
+  {
+   "label": "Calculation Sequence Number",
+   "value": "1"
+  }
+ ],
+ "_scan": {
+  "mandatory_count": 4,
+  "dropdowns_raw": [],
+  "extras": [
+   "Calculation Sequence Number"
+  ],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "label": "Node Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "label": "Node Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "label": "Stream Node Diagram Label",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_input",
+    "label": "Allocation Reconciliation Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "label": "Calculation Sequence Number",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:cb",
+    "label": "Include In Allocation",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "label": "Layout Info",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:dd_input",
+    "label": "Country",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:in",
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:in",
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:dd_input",
+    "label": "Node Category",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:dd_input",
+    "label": "Field Connection",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:14:C:1:dd_input",
+    "label": "Field Group Connection",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_input",
+    "label": "Op Production Unit",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:16:C:1:dd_input",
+    "label": "Op Area",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:17:C:1:dd_input",
+    "label": "Op Facility Class 1",
+    "kind": "dropdown",
+    "mandatory": false
+   }
+  ]
+ }
+}

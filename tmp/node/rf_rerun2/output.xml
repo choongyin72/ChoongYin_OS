@@ -1,0 +1,3307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.14.3 on win32)" generated="2026-07-29T23:45:54.164187" rpa="false" schemaversion="5">
+<suite id="s1" name="Node Iud" source="C:\Projects\ChoongYin_OS\workstreams\master-plan\ec-automation\tests\Configuration\Assets\Calculation_Objects\node_iud.robot">
+<kw name="Set Up Node Suite" type="SETUP">
+<kw name="Prepare IUD Object Data" owner="utils">
+<kw name="Generate Unique Code" owner="utils">
+<kw name="Get Current Date" owner="DateTime">
+<msg time="2026-07-29T23:45:54.740280" level="INFO">${ts} = 20260729234554</msg>
+<var>${ts}</var>
+<arg>result_format=%Y%m%d%H%M%S</arg>
+<doc>Returns current local or UTC time with an optional increment.</doc>
+<status status="PASS" start="2026-07-29T23:45:54.739927" elapsed="0.000401"/>
+</kw>
+<return>
+<value>${prefix}${ts}</value>
+<status status="PASS" start="2026-07-29T23:45:54.740449" elapsed="0.000225"/>
+</return>
+<msg time="2026-07-29T23:45:54.741054" level="INFO">${code} = AUTOTEST_ND_20260729234554</msg>
+<var>${code}</var>
+<arg>${prefix}</arg>
+<doc>Return AUTOTEST_ND_ + a YYYYMMDDHHMMSS timestamp (unique per second)
+so re-runs never collide with codes that linger in the DB after a delete.</doc>
+<status status="PASS" start="2026-07-29T23:45:54.739218" elapsed="0.001879"/>
+</kw>
+<variable name="${TEST_CODE}" scope="SUITE">
+<msg time="2026-07-29T23:45:54.741484" level="INFO">${TEST_CODE} = AUTOTEST_ND_20260729234554</msg>
+<var>${code}</var>
+<status status="PASS" start="2026-07-29T23:45:54.741204" elapsed="0.000315"/>
+</variable>
+<variable name="${OBJ_NAME}" scope="SUITE">
+<msg time="2026-07-29T23:45:54.741860" level="INFO">${OBJ_NAME} = Node AUTOTEST_ND_20260729234554</msg>
+<var>${label} ${code}</var>
+<status status="PASS" start="2026-07-29T23:45:54.741600" elapsed="0.000293"/>
+</variable>
+<variable name="${OBJ_NAME_UPD}" scope="SUITE">
+<msg time="2026-07-29T23:45:54.742134" level="INFO">${OBJ_NAME_UPD} = Node AUTOTEST_ND_20260729234554 UPD</msg>
+<var>${label} ${code} UPD</var>
+<status status="PASS" start="2026-07-29T23:45:54.741957" elapsed="0.000206"/>
+</variable>
+<return>
+<value>${code}</value>
+<status status="PASS" start="2026-07-29T23:45:54.742222" elapsed="0.000159"/>
+</return>
+<arg>AUTOTEST_ND_</arg>
+<arg>Node</arg>
+<doc>Standard IUD suite-setup data step: generate a unique AUTOTEST
+code from ${prefix} and publish the conventional suite variables
+ /  ("${label} &lt;code&gt;") /  (...UPD).
+Returns the code for suites that need it directly.</doc>
+<status status="PASS" start="2026-07-29T23:45:54.738789" elapsed="0.003853"/>
+</kw>
+<kw name="Open Node Screen" owner="node_page">
+<kw name="Launch EC And Open Screen" owner="common">
+<kw name="Open EC Browser" owner="browser">
+<if>
+<branch type="IF" condition="${HEADLESS}">
+<kw name="New Browser" owner="Browser">
+<msg time="2026-07-29T23:45:54.746700" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "C:\\Projects\\ChoongYin_OS\\tmp\\node\\rf_rerun2\\browser\\traces\\temp\\f1b9570f-916a-4f4f-a388-37dc75547a71"}</msg>
+<msg time="2026-07-29T23:45:54.843855" level="INFO">Starting Browser process C:\Tools\Python\Python314\Lib\site-packages\Browser\wrapper\index.js using at 127.0.0.1:60189</msg>
+<msg time="2026-07-29T23:45:57.021012" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"C:\\Projects\\ChoongYin_OS\\tmp\\node\\rf_rerun2\\browser\\traces\\temp\\f1b9570f-916a-4f4f-a388-37dc75547a71"}</msg>
+<arg>chromium</arg>
+<arg>headless=${TRUE}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="PASS" start="2026-07-29T23:45:54.745598" elapsed="2.275732"/>
+</kw>
+<kw name="New Context" owner="Browser">
+<msg time="2026-07-29T23:45:57.024989" level="INFO">{
+  "acceptDownloads": true,
+  "bypassCSP": false,
+  "forcedColors": "none",
+  "ignoreHTTPSErrors": true,
+  "javaScriptEnabled": true,
+  "offline": false,
+  "reducedMotion": "no-preference",
+  "serviceWorkers": "allow",
+  "viewport": {
+    "height": 1080,
+    "width": 1920
+  }
+}</msg>
+<msg time="2026-07-29T23:45:57.040010" level="INFO">Successfully created context. </msg>
+<msg time="2026-07-29T23:45:57.040143" level="INFO">{'acceptDownloads': True, 'bypassCSP': False, 'forcedColors': 'none', 'ignoreHTTPSErrors': True, 'javaScriptEnabled': True, 'offline': False, 'reducedMotion': 'no-preference', 'serviceWorkers': 'allow', 'viewport': {'height': 1080, 'width': 1920}}</msg>
+<arg>ignoreHTTPSErrors=${TRUE}</arg>
+<arg>viewport={'width': 1920, 'height': 1080}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new BrowserContext with specified options.</doc>
+<status status="PASS" start="2026-07-29T23:45:57.021750" elapsed="0.018518"/>
+</kw>
+<status status="PASS" start="2026-07-29T23:45:54.745093" elapsed="2.295298"/>
+</branch>
+<branch type="ELSE">
+<variable name="@{args}">
+<var>--start-maximized</var>
+<status status="NOT RUN" start="2026-07-29T23:45:57.040675" elapsed="0.000095"/>
+</variable>
+<kw name="New Browser" owner="Browser">
+<arg>chromium</arg>
+<arg>headless=${FALSE}</arg>
+<arg>args=${args}</arg>
+<arg>slowMo=${SLOWMO}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="NOT RUN" start="2026-07-29T23:45:57.040982" elapsed="0.000079"/>
+</kw>
+<kw name="New Context" owner="Browser">
+<arg>ignoreHTTPSErrors=${TRUE}</arg>
+<arg>viewport=${None}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new BrowserContext with specified options.</doc>
+<status status="NOT RUN" start="2026-07-29T23:45:57.041215" elapsed="0.000070"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:45:57.040470" elapsed="0.000891"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:45:54.745030" elapsed="2.296376"/>
+</if>
+<kw name="Set Browser Timeout" owner="Browser">
+<arg>30s</arg>
+<tag>Config</tag>
+<tag>Setter</tag>
+<doc>Sets the timeout used by most input and getter keywords.</doc>
+<status status="PASS" start="2026-07-29T23:45:57.041526" elapsed="0.003465"/>
+</kw>
+<kw name="Set Strict Mode" owner="Browser">
+<arg>False</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Controls library strict mode.</doc>
+<status status="PASS" start="2026-07-29T23:45:57.045276" elapsed="0.000711"/>
+</kw>
+<doc>Launch Chromium + context (headless from environment).
+Headed: OS-maximised window (--start-maximized, no fixed viewport) so the
+page fills the screen. Headless: 1920x1080 virtual viewport as before.</doc>
+<status status="PASS" start="2026-07-29T23:45:54.744627" elapsed="2.301471"/>
+</kw>
+<kw name="Login To EC" owner="browser">
+<kw name="New Page" owner="Browser">
+<msg time="2026-07-29T23:46:00.029627" level="INFO">Successfully initialized new page object and opened url: https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/</msg>
+<arg>${EC_URL}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<status status="PASS" start="2026-07-29T23:45:57.047208" elapsed="2.982698"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-29T23:46:00.030984" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="username"]</arg>
+<arg>${user}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:00.030208" elapsed="0.046764"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-29T23:46:00.077929" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="password"]</arg>
+<arg>${pass}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:00.077281" elapsed="0.012714"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:00.091028" level="INFO">Clicks the element 'css=[id="kc-login"]'.</msg>
+<arg>css=[id="kc-login"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:00.090351" elapsed="0.177120"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-29T23:46:00.602619" level="INFO">Waited for Element with selector css=[id="menu:searchForm:searchTxt"] at state visible</msg>
+<arg>css=[id="menu:searchForm:searchTxt"]</arg>
+<arg>visible</arg>
+<arg>timeout=60s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-29T23:46:00.267801" elapsed="0.335062"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:00.604144" level="INFO">Waiting page load to state to receive networkidle in 30000.0</msg>
+<msg time="2026-07-29T23:46:01.135009" level="INFO">Load state networkidle got in 30000</msg>
+<arg>networkidle</arg>
+<arg>timeout=30s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:00.603184" elapsed="0.532024"/>
+</kw>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>Open the app and authenticate as sysadmin (defaults to the
+env-configured user); wait for the sidebar search box.</doc>
+<status status="PASS" start="2026-07-29T23:45:57.046540" elapsed="4.088831"/>
+</kw>
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Dismiss Unsaved Changes Dialog If Present" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-29T23:46:01.142360" level="INFO">${present} = 0</msg>
+<var>${present}</var>
+<arg>css=[id="confirmationForm:confirmation_modal"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:01.136388" elapsed="0.006057"/>
+</kw>
+<if>
+<branch type="IF" condition="${present} &gt; 0">
+<kw name="Log" owner="BuiltIn">
+<arg>Unsaved-changes dialog detected - discarding via No to unblock navigation</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:01.143217" elapsed="0.000131"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="confirmationForm:nobtn"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:01.143546" elapsed="0.000087"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:01.143813" elapsed="0.000080"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:01.144029" elapsed="0.000072"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:01.142655" elapsed="0.001490"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:01.142614" elapsed="0.001584"/>
+</if>
+<doc>EC shows its own "UNSAVED CHANGES" Yes/No/Cancel confirm when navigating
+away from a dirty New Object form. If an earlier step failed mid-fill (e.g. a
+dependent-dropdown timeout), this dialog can be left open and its overlay mask
+(#confirmationForm:confirmation_modal) then intercepts every click for the rest of
+the run - the whole suite silently stalls behind it. Detect + discard via No, so a
+single earlier failure can't cascade into the entire suite hanging.</doc>
+<status status="PASS" start="2026-07-29T23:46:01.136160" elapsed="0.008115"/>
+</kw>
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-29T23:46:01.151335" level="INFO">${visible} = 1</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:01.144867" elapsed="0.006527"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:01.151969" elapsed="0.000074"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:01.152274" elapsed="0.000058"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:01.152445" elapsed="0.000056"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:01.152614" elapsed="0.000532"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:01.152132" elapsed="0.001105"/>
+</branch>
+<status status="NOT RUN" start="2026-07-29T23:46:01.152114" elapsed="0.001180"/>
+</if>
+<status status="NOT RUN" start="2026-07-29T23:46:01.151557" elapsed="0.001772"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:01.151528" elapsed="0.001837"/>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="PASS" start="2026-07-29T23:46:01.144564" elapsed="0.008870"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-07-29T23:46:01.154314" level="INFO">Types the text 'Node' in the given field.</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:01.153591" elapsed="0.281278"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-29T23:46:02.274424" level="INFO">Waited for Element with selector xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Node'] at state visible</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-29T23:46:01.435151" elapsed="0.839474"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:02.275601" level="INFO">Clicks the element 'xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Node']'.</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:02.274876" elapsed="0.025557"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:02.301503" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:02.304597" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:02.300794" elapsed="0.003965"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:03.805740" level="INFO">Slept 1 second 500 milliseconds.</msg>
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:02.304979" elapsed="1.500935"/>
+</kw>
+<kw name="Confirm Screen Loaded" owner="screen">
+<kw name="Get Text" owner="Browser">
+<msg time="2026-07-29T23:46:03.855042" level="INFO">Text: 'Node'</msg>
+<msg time="2026-07-29T23:46:03.855255" level="INFO">${label} = Node</msg>
+<var>${label}</var>
+<arg>css=[id="screenToolbar:form:screenLabel"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns text attribute of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:03.806836" elapsed="0.048456"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${label}</arg>
+<arg>${screen_name}</arg>
+<arg>msg=Failed to navigate to ${screen_name}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-07-29T23:46:03.855581" elapsed="0.000909"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Assert the loaded screen's toolbar label matches Node.</doc>
+<status status="PASS" start="2026-07-29T23:46:03.806315" elapsed="0.050279"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-29T23:46:03.865251" level="INFO">Waited for Element with selector css=[id="screenToolbar:form:minmaxMenu"] at state visible</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-29T23:46:03.857107" elapsed="0.008372"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:03.866604" level="INFO">Clicks the element 'css=[id="screenToolbar:form:minmaxMenu"]'.</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:03.865815" elapsed="0.035618"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:03.902474" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:03.905459" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:03.901716" elapsed="0.003953"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:04.406842" level="INFO">Slept 500 milliseconds.</msg>
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:03.905993" elapsed="0.501074"/>
+</kw>
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="PASS" start="2026-07-29T23:46:03.856803" elapsed="0.550464"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="PASS" start="2026-07-29T23:46:01.135643" elapsed="3.271777"/>
+</kw>
+<arg>${NODE_SCREEN}</arg>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>The standard Suite Setup gesture: launch the browser, login as
+sysadmin (defaults to the env-configured user), navigate to ${screen_name}.
+Page objects delegate their Open &lt;X&gt; Screen keyword here in one line.</doc>
+<status status="PASS" start="2026-07-29T23:45:54.744084" elapsed="9.663496"/>
+</kw>
+<kw name="Apply OV-GM Navigator First Available" owner="manage_object">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-07-29T23:46:04.410497" level="INFO">${top} = </msg>
+<var>${top}</var>
+<arg>${EMPTY}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.409379" elapsed="0.001174"/>
+</kw>
+<for flavor="IN RANGE">
+<iter>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-07-29T23:46:04.412040" level="INFO">${dd} = nav:form:G:0:R:1:C:1:dd</msg>
+<var>${dd}</var>
+<arg>nav:form:G:0:R:${row}:C:${col}:dd</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.411506" elapsed="0.000581"/>
+</kw>
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-29T23:46:04.420270" level="INFO">${n} = 1</msg>
+<var>${n}</var>
+<arg>css=[id="${dd}_input"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.412306" elapsed="0.008039"/>
+</kw>
+<if>
+<branch type="IF" condition="${n} == 0">
+<break>
+<status status="NOT RUN" start="2026-07-29T23:46:04.421055" elapsed="0.000088"/>
+</break>
+<status status="NOT RUN" start="2026-07-29T23:46:04.420675" elapsed="0.000533"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:04.420617" elapsed="0.000635"/>
+</if>
+<kw name="Select First EC Dropdown Option" owner="table">
+<variable name="${item}">
+<msg time="2026-07-29T23:46:04.422036" level="INFO">${item} = css=[id="nav:form:G:0:R:1:C:1:dd_panel"] tr[data-item-label]</msg>
+<var>css=[id="${dd_prefix}_panel"] tr[data-item-label]</var>
+<status status="PASS" start="2026-07-29T23:46:04.421862" elapsed="0.000211"/>
+</variable>
+<kw name="Open EC Dropdown Panel" owner="table">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:04.423422" level="INFO">Clicks the element 'css=[id="nav:form:G:0:R:1:C:1:dd_button"]'.</msg>
+<arg>css=[id="${dd_prefix}_button"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.422690" elapsed="0.028955"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-29T23:46:04.661104" level="INFO">Waited for Element with selector css=[id="nav:form:G:0:R:1:C:1:dd_panel"] tr[data-item-label] &gt;&gt; nth=0 at state visible</msg>
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>visible</arg>
+<arg>timeout=6s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.452574" elapsed="0.208758"/>
+</kw>
+<status status="PASS" start="2026-07-29T23:46:04.451897" elapsed="0.209567"/>
+</branch>
+<branch type="EXCEPT">
+<kw name="Keyboard Key" owner="Browser">
+<arg>press</arg>
+<arg>Escape</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:04.662013" elapsed="0.000223"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:04.662404" elapsed="0.000073"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="${dd_prefix}_button"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:04.662618" elapsed="0.000073"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:04.662828" elapsed="0.000104"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:04.661597" elapsed="0.001397"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:04.451825" elapsed="0.211248"/>
+</try>
+<arg>${dd_prefix}</arg>
+<arg>${item}</arg>
+<doc>Open an EC autocomplete dropdown and wait for its first option
+row; one Escape+reopen retry covers panels closed by a concurrent partial
+re-render or cascades whose options arrive late.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.422355" elapsed="0.240805"/>
+</kw>
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-29T23:46:04.678474" level="INFO">Attribute is: 'AS1 EC Exploration Norway'</msg>
+<msg time="2026-07-29T23:46:04.678692" level="INFO">${label} = AS1 EC Exploration Norway</msg>
+<var>${label}</var>
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>data-item-label</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.663300" elapsed="0.015429"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-07-29T23:46:04.679546" level="INFO">First option selected for nav:form:G:0:R:1:C:1:dd: AS1 EC Exploration Norway</msg>
+<arg>First option selected for ${dd_prefix}: ${label}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.679000" elapsed="0.000601"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:04.680338" level="INFO">Clicks the element 'css=[id="nav:form:G:0:R:1:C:1:dd_panel"] tr[data-item-label] &gt;&gt; nth=0'.</msg>
+<arg>${item} &gt;&gt; nth=0</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.679760" elapsed="0.155090"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:04.836088" level="INFO">Waiting page load to state to receive networkidle in 12000.0</msg>
+<msg time="2026-07-29T23:46:04.839526" level="INFO">Load state networkidle got in 12000</msg>
+<arg>networkidle</arg>
+<arg>timeout=12s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.835138" elapsed="0.004563"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:05.440869" level="INFO">Slept 600 milliseconds.</msg>
+<arg>0.6s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.839938" elapsed="0.601151"/>
+</kw>
+<arg>${dd}</arg>
+<doc>Pick the FIRST option of an EC autocomplete dropdown — for
+mandatory reference dropdowns on throwaway test records where the specific
+value is irrelevant (the record is deleted again by the cleanup TC). The
+chosen label is logged for the evidence trail.</doc>
+<status status="PASS" start="2026-07-29T23:46:04.421570" elapsed="1.019694"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:06.142669" level="INFO">Slept 700 milliseconds.</msg>
+<arg>0.7s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:05.441540" elapsed="0.701284"/>
+</kw>
+<if>
+<branch type="IF" condition="${col} == 1">
+<kw name="Get Property" owner="Browser">
+<msg time="2026-07-29T23:46:06.156592" level="INFO">Property: 'AS1 EC Exploration Norway'</msg>
+<msg time="2026-07-29T23:46:06.156803" level="INFO">${top} = AS1 EC Exploration Norway</msg>
+<var>${top}</var>
+<arg>css=[id="${dd}_input"]</arg>
+<arg>value</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the ``property`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.143531" elapsed="0.013308"/>
+</kw>
+<status status="PASS" start="2026-07-29T23:46:06.143005" elapsed="0.013944"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:06.142966" elapsed="0.014048"/>
+</if>
+<var name="${col}">1</var>
+<status status="PASS" start="2026-07-29T23:46:04.411266" elapsed="1.745782"/>
+</iter>
+<iter>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-07-29T23:46:06.158123" level="INFO">${dd} = nav:form:G:0:R:1:C:2:dd</msg>
+<var>${dd}</var>
+<arg>nav:form:G:0:R:${row}:C:${col}:dd</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.157634" elapsed="0.000521"/>
+</kw>
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-29T23:46:06.163088" level="INFO">${n} = 1</msg>
+<var>${n}</var>
+<arg>css=[id="${dd}_input"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.158288" elapsed="0.004866"/>
+</kw>
+<if>
+<branch type="IF" condition="${n} == 0">
+<break>
+<status status="NOT RUN" start="2026-07-29T23:46:06.163605" elapsed="0.000068"/>
+</break>
+<status status="NOT RUN" start="2026-07-29T23:46:06.163323" elapsed="0.000398"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:06.163290" elapsed="0.000469"/>
+</if>
+<kw name="Select First EC Dropdown Option" owner="table">
+<variable name="${item}">
+<msg time="2026-07-29T23:46:06.164367" level="INFO">${item} = css=[id="nav:form:G:0:R:1:C:2:dd_panel"] tr[data-item-label]</msg>
+<var>css=[id="${dd_prefix}_panel"] tr[data-item-label]</var>
+<status status="PASS" start="2026-07-29T23:46:06.164228" elapsed="0.000168"/>
+</variable>
+<kw name="Open EC Dropdown Panel" owner="table">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:06.165388" level="INFO">Clicks the element 'css=[id="nav:form:G:0:R:1:C:2:dd_button"]'.</msg>
+<arg>css=[id="${dd_prefix}_button"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.164911" elapsed="0.034827"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-29T23:46:06.405838" level="INFO">Waited for Element with selector css=[id="nav:form:G:0:R:1:C:2:dd_panel"] tr[data-item-label] &gt;&gt; nth=0 at state visible</msg>
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>visible</arg>
+<arg>timeout=6s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.200431" elapsed="0.205646"/>
+</kw>
+<status status="PASS" start="2026-07-29T23:46:06.199981" elapsed="0.206227"/>
+</branch>
+<branch type="EXCEPT">
+<kw name="Keyboard Key" owner="Browser">
+<arg>press</arg>
+<arg>Escape</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:06.406682" elapsed="0.000094"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:06.406915" elapsed="0.000074"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="${dd_prefix}_button"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:06.407114" elapsed="0.000071"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:06.407316" elapsed="0.000091"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:06.406318" elapsed="0.001148"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:06.199916" elapsed="0.207648"/>
+</try>
+<arg>${dd_prefix}</arg>
+<arg>${item}</arg>
+<doc>Open an EC autocomplete dropdown and wait for its first option
+row; one Escape+reopen retry covers panels closed by a concurrent partial
+re-render or cascades whose options arrive late.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.164625" elapsed="0.243022"/>
+</kw>
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-29T23:46:06.421330" level="INFO">Attribute is: 'AS1_Area'</msg>
+<msg time="2026-07-29T23:46:06.421547" level="INFO">${label} = AS1_Area</msg>
+<var>${label}</var>
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>data-item-label</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.407790" elapsed="0.013800"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-07-29T23:46:06.422324" level="INFO">First option selected for nav:form:G:0:R:1:C:2:dd: AS1_Area</msg>
+<arg>First option selected for ${dd_prefix}: ${label}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.421825" elapsed="0.000548"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:06.423020" level="INFO">Clicks the element 'css=[id="nav:form:G:0:R:1:C:2:dd_panel"] tr[data-item-label] &gt;&gt; nth=0'.</msg>
+<arg>${item} &gt;&gt; nth=0</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.422502" elapsed="0.143085"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:06.566794" level="INFO">Waiting page load to state to receive networkidle in 12000.0</msg>
+<msg time="2026-07-29T23:46:06.569342" level="INFO">Load state networkidle got in 12000</msg>
+<arg>networkidle</arg>
+<arg>timeout=12s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.565919" elapsed="0.003670"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:07.170678" level="INFO">Slept 600 milliseconds.</msg>
+<arg>0.6s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.569879" elapsed="0.600976"/>
+</kw>
+<arg>${dd}</arg>
+<doc>Pick the FIRST option of an EC autocomplete dropdown — for
+mandatory reference dropdowns on throwaway test records where the specific
+value is irrelevant (the record is deleted again by the cleanup TC). The
+chosen label is logged for the evidence trail.</doc>
+<status status="PASS" start="2026-07-29T23:46:06.163989" elapsed="1.007008"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:07.872407" level="INFO">Slept 700 milliseconds.</msg>
+<arg>0.7s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:07.171240" elapsed="0.701325"/>
+</kw>
+<if>
+<branch type="IF" condition="${col} == 1">
+<kw name="Get Property" owner="Browser">
+<var>${top}</var>
+<arg>css=[id="${dd}_input"]</arg>
+<arg>value</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the ``property`` of the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:07.873194" elapsed="0.000102"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:07.872737" elapsed="0.000632"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:07.872703" elapsed="0.000720"/>
+</if>
+<var name="${col}">2</var>
+<status status="PASS" start="2026-07-29T23:46:06.157317" elapsed="1.716136"/>
+</iter>
+<iter>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-07-29T23:46:07.874274" level="INFO">${dd} = nav:form:G:0:R:1:C:3:dd</msg>
+<var>${dd}</var>
+<arg>nav:form:G:0:R:${row}:C:${col}:dd</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-07-29T23:46:07.873853" elapsed="0.000447"/>
+</kw>
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-29T23:46:07.881156" level="INFO">${n} = 1</msg>
+<var>${n}</var>
+<arg>css=[id="${dd}_input"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:07.874405" elapsed="0.006816"/>
+</kw>
+<if>
+<branch type="IF" condition="${n} == 0">
+<break>
+<status status="NOT RUN" start="2026-07-29T23:46:07.881709" elapsed="0.000069"/>
+</break>
+<status status="NOT RUN" start="2026-07-29T23:46:07.881409" elapsed="0.001128"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:07.881377" elapsed="0.001233"/>
+</if>
+<kw name="Select First EC Dropdown Option" owner="table">
+<variable name="${item}">
+<msg time="2026-07-29T23:46:07.883555" level="INFO">${item} = css=[id="nav:form:G:0:R:1:C:3:dd_panel"] tr[data-item-label]</msg>
+<var>css=[id="${dd_prefix}_panel"] tr[data-item-label]</var>
+<status status="PASS" start="2026-07-29T23:46:07.883358" elapsed="0.000232"/>
+</variable>
+<kw name="Open EC Dropdown Panel" owner="table">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:07.884811" level="INFO">Clicks the element 'css=[id="nav:form:G:0:R:1:C:3:dd_button"]'.</msg>
+<arg>css=[id="${dd_prefix}_button"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:07.884244" elapsed="0.031685"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-29T23:46:08.126936" level="INFO">Waited for Element with selector css=[id="nav:form:G:0:R:1:C:3:dd_panel"] tr[data-item-label] &gt;&gt; nth=0 at state visible</msg>
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>visible</arg>
+<arg>timeout=6s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-29T23:46:07.916503" elapsed="0.210727"/>
+</kw>
+<status status="PASS" start="2026-07-29T23:46:07.916179" elapsed="0.211207"/>
+</branch>
+<branch type="EXCEPT">
+<kw name="Keyboard Key" owner="Browser">
+<arg>press</arg>
+<arg>Escape</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:08.127943" elapsed="0.000148"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:08.128309" elapsed="0.000129"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="${dd_prefix}_button"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:08.128595" elapsed="0.000088"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:08.128846" elapsed="0.000083"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:08.127511" elapsed="0.001488"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:07.916118" elapsed="0.213054"/>
+</try>
+<arg>${dd_prefix}</arg>
+<arg>${item}</arg>
+<doc>Open an EC autocomplete dropdown and wait for its first option
+row; one Escape+reopen retry covers panels closed by a concurrent partial
+re-render or cascades whose options arrive late.</doc>
+<status status="PASS" start="2026-07-29T23:46:07.883869" elapsed="0.245437"/>
+</kw>
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-29T23:46:08.146986" level="INFO">Attribute is: 'AS1_Facility_01'</msg>
+<msg time="2026-07-29T23:46:08.147300" level="INFO">${label} = AS1_Facility_01</msg>
+<var>${label}</var>
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>data-item-label</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:08.129561" elapsed="0.017829"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-07-29T23:46:08.148384" level="INFO">First option selected for nav:form:G:0:R:1:C:3:dd: AS1_Facility_01</msg>
+<arg>First option selected for ${dd_prefix}: ${label}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-07-29T23:46:08.147675" elapsed="0.000779"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:08.149633" level="INFO">Clicks the element 'css=[id="nav:form:G:0:R:1:C:3:dd_panel"] tr[data-item-label] &gt;&gt; nth=0'.</msg>
+<arg>${item} &gt;&gt; nth=0</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:08.148827" elapsed="0.254430"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:08.404600" level="INFO">Waiting page load to state to receive networkidle in 12000.0</msg>
+<msg time="2026-07-29T23:46:08.407631" level="INFO">Load state networkidle got in 12000</msg>
+<arg>networkidle</arg>
+<arg>timeout=12s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:08.403630" elapsed="0.004188"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:09.009122" level="INFO">Slept 600 milliseconds.</msg>
+<arg>0.6s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:08.408071" elapsed="0.601231"/>
+</kw>
+<arg>${dd}</arg>
+<doc>Pick the FIRST option of an EC autocomplete dropdown — for
+mandatory reference dropdowns on throwaway test records where the specific
+value is irrelevant (the record is deleted again by the cleanup TC). The
+chosen label is logged for the evidence trail.</doc>
+<status status="PASS" start="2026-07-29T23:46:07.882933" elapsed="1.126520"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:09.710707" level="INFO">Slept 700 milliseconds.</msg>
+<arg>0.7s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:09.009670" elapsed="0.701239"/>
+</kw>
+<if>
+<branch type="IF" condition="${col} == 1">
+<kw name="Get Property" owner="Browser">
+<var>${top}</var>
+<arg>css=[id="${dd}_input"]</arg>
+<arg>value</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the ``property`` of the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:09.712007" elapsed="0.000144"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:09.711116" elapsed="0.001293"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:09.711073" elapsed="0.001554"/>
+</if>
+<var name="${col}">3</var>
+<status status="PASS" start="2026-07-29T23:46:07.873683" elapsed="1.839000"/>
+</iter>
+<iter>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-07-29T23:46:09.714135" level="INFO">${dd} = nav:form:G:0:R:1:C:4:dd</msg>
+<var>${dd}</var>
+<arg>nav:form:G:0:R:${row}:C:${col}:dd</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-07-29T23:46:09.713524" elapsed="0.000655"/>
+</kw>
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-29T23:46:09.720088" level="INFO">${n} = 0</msg>
+<var>${n}</var>
+<arg>css=[id="${dd}_input"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:09.714364" elapsed="0.005795"/>
+</kw>
+<if>
+<branch type="IF" condition="${n} == 0">
+<break>
+<status status="PASS" start="2026-07-29T23:46:09.720679" elapsed="0.000094"/>
+</break>
+<status status="PASS" start="2026-07-29T23:46:09.720350" elapsed="0.000476"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:09.720313" elapsed="0.000555"/>
+</if>
+<kw name="Select First EC Dropdown Option" owner="table">
+<arg>${dd}</arg>
+<doc>Pick the FIRST option of an EC autocomplete dropdown — for
+mandatory reference dropdowns on throwaway test records where the specific
+value is irrelevant (the record is deleted again by the cleanup TC). The
+chosen label is logged for the evidence trail.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:09.721128" elapsed="0.000086"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.7s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:09.721368" elapsed="0.000088"/>
+</kw>
+<if>
+<branch type="IF" condition="${col} == 1">
+<kw name="Get Property" owner="Browser">
+<var>${top}</var>
+<arg>css=[id="${dd}_input"]</arg>
+<arg>value</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the ``property`` of the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:09.721698" elapsed="0.000063"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:09.721537" elapsed="0.000278"/>
+</branch>
+<status status="NOT RUN" start="2026-07-29T23:46:09.721519" elapsed="0.000334"/>
+</if>
+<var name="${col}">4</var>
+<status status="PASS" start="2026-07-29T23:46:09.713134" elapsed="0.008743"/>
+</iter>
+<var>${col}</var>
+<value>1</value>
+<value>7</value>
+<status status="PASS" start="2026-07-29T23:46:04.410693" elapsed="5.311240"/>
+</for>
+<kw name="Apply Navigator" owner="navigator">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:09.722948" level="INFO">Clicks the element 'css=[id="button:form:B"]'.</msg>
+<arg>css=[id="button:form:B"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:09.722457" elapsed="0.046476"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:09.770329" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:09.773961" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:09.769283" elapsed="0.004912"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:10.975275" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:09.774494" elapsed="1.200935"/>
+</kw>
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="PASS" start="2026-07-29T23:46:09.722113" elapsed="1.253454"/>
+</kw>
+<return>
+<value>${top}</value>
+<status status="PASS" start="2026-07-29T23:46:10.975659" elapsed="0.000230"/>
+</return>
+<msg time="2026-07-29T23:46:10.976097" level="INFO">${pu} = AS1 EC Exploration Norway</msg>
+<var>${pu}</var>
+<doc>OV-GM (grid manageObject:form:T_data) is navigator-GATED: the grid is empty until a
+cascade of navigator dropdowns is set + GO. Fill nav:form:G:0:R:${row}:C:1..N dd FIRST-AVAILABLE
+parent-&gt;child (up to 6 columns; stops at the first absent), click GO, RETURN the C:1 top-parent
+value. The insert form's parent-dd (Op Production Unit / Business Unit Name) MUST be set to it or
+the new row is not visible under this scope. Twin of engine apply_ovgm_navigator (py/ec_object_iud.py).</doc>
+<status status="PASS" start="2026-07-29T23:46:04.408805" elapsed="6.567322"/>
+</kw>
+<return>
+<value>${pu}</value>
+<status status="PASS" start="2026-07-29T23:46:10.976194" elapsed="0.000091"/>
+</return>
+<msg time="2026-07-29T23:46:10.976412" level="INFO">${pu} = AS1 EC Exploration Norway</msg>
+<var>${pu}</var>
+<doc>Suite Setup: launch, login, navigate, fill the OV-GM navigator cascade
+first-available (PU -&gt; Area -&gt; Facility Class 1) + GO, and RETURN the top-parent PU
+(the grid is empty until then; the PU is reused as the insert Op Production Unit).</doc>
+<status status="PASS" start="2026-07-29T23:45:54.742923" elapsed="16.233546"/>
+</kw>
+<variable name="${NODE_PU}" scope="SUITE">
+<msg time="2026-07-29T23:46:10.976711" level="INFO">${NODE_PU} = AS1 EC Exploration Norway</msg>
+<var>${pu}</var>
+<status status="PASS" start="2026-07-29T23:46:10.976539" elapsed="0.000201"/>
+</variable>
+<doc>Generate a unique test code/name, open the Node screen, and fill the
+OV-GM navigator cascade first-available + GO, capturing the top-parent PU for the insert.</doc>
+<status status="PASS" start="2026-07-29T23:45:54.737162" elapsed="16.239648"/>
+</kw>
+<test id="s1-t1" name="TC01 Verify Clean State" line="28">
+<kw name="Node Row Should Not Exist" owner="node_page">
+<kw name="Row Should Not Exist" owner="table">
+<kw name="Row Exists" owner="table">
+<kw name="Get Table Rows" owner="table">
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-29T23:46:10.995353" level="INFO">JavaScript executed successfully.</msg>
+<msg time="2026-07-29T23:46:10.995686" level="INFO">${rows} = [['BLEND_INT', 'Blend Interconnect', '2003-01-01', ''], ['BLEND_ONSITE', 'Blend Onsite', '2003-01-01', ''], ['BLEND_PIPE', 'Blend Pipeline', '2003-01-01', ''], ['BLEND_TANK', 'Blend Tank', '2003-01-01...</msg>
+<var>${rows}</var>
+<arg>${None}</arg>
+<arg>() =&gt; { const t=document.getElementById('${table_id}'); if(!t) return []; const o=[]; t.querySelectorAll('tr').forEach(tr=&gt;{const c=[];tr.querySelectorAll('td').forEach(td=&gt;c.push((td.textContent||'').trim()));if(c.some(x=&gt;x))o.push(c);}); return o; }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-29T23:46:10.987169" elapsed="0.008557"/>
+</kw>
+<return>
+<value>${rows}</value>
+<status status="PASS" start="2026-07-29T23:46:10.995873" elapsed="0.000222"/>
+</return>
+<msg time="2026-07-29T23:46:10.996347" level="INFO">${rows} = [['BLEND_INT', 'Blend Interconnect', '2003-01-01', ''], ['BLEND_ONSITE', 'Blend Onsite', '2003-01-01', ''], ['BLEND_PIPE', 'Blend Pipeline', '2003-01-01', ''], ['BLEND_TANK', 'Blend Tank', '2003-01-01...</msg>
+<var>${rows}</var>
+<arg>${table_id}</arg>
+<doc>Return a list of non-empty cell-lists from a results table by id.</doc>
+<status status="PASS" start="2026-07-29T23:46:10.986899" elapsed="0.009491"/>
+</kw>
+<for flavor="IN">
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:10.997505" level="INFO">${first} = BLEND_INT</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:10.997166" elapsed="0.000378"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:10.997956" elapsed="0.000065"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:10.997669" elapsed="0.000404"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:10.997642" elapsed="0.000472"/>
+</if>
+<var name="${row}">['BLEND_INT', 'Blend Interconnect', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:10.996908" elapsed="0.001234"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:10.998749" level="INFO">${first} = BLEND_ONSITE</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:10.998484" elapsed="0.000296"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:10.999109" elapsed="0.000056"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:10.998893" elapsed="0.000316"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:10.998856" elapsed="0.000388"/>
+</if>
+<var name="${row}">['BLEND_ONSITE', 'Blend Onsite', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:10.998305" elapsed="0.000966"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:10.999844" level="INFO">${first} = BLEND_PIPE</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:10.999585" elapsed="0.000287"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.000135" elapsed="0.000051"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:10.999951" elapsed="0.000279"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:10.999935" elapsed="0.000328"/>
+</if>
+<var name="${row}">['BLEND_PIPE', 'Blend Pipeline', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:10.999409" elapsed="0.000876"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.000748" level="INFO">${first} = BLEND_TANK</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.000547" elapsed="0.000228"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.001050" elapsed="0.000053"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.000854" elapsed="0.000292"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.000838" elapsed="0.000345"/>
+</if>
+<var name="${row}">['BLEND_TANK', 'Blend Tank', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.000412" elapsed="0.000794"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.001704" level="INFO">${first} = DIL_INT</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.001473" elapsed="0.000260"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.001995" elapsed="0.000057"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.001816" elapsed="0.000278"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.001800" elapsed="0.000327"/>
+</if>
+<var name="${row}">['DIL_INT', 'Diluent Interconnect', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.001339" elapsed="0.000813"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.002630" level="INFO">${first} = DIL_ONSITE</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.002412" elapsed="0.000247"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.002941" elapsed="0.000057"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.002738" elapsed="0.000304"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.002722" elapsed="0.000355"/>
+</if>
+<var name="${row}">['DIL_ONSITE', 'Diluent Onsite', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.002281" elapsed="0.000819"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.003610" level="INFO">${first} = DIL_PIPE</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.003378" elapsed="0.000259"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.003930" elapsed="0.000053"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.003744" elapsed="0.000284"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.003728" elapsed="0.000334"/>
+</if>
+<var name="${row}">['DIL_PIPE', 'Diluent Pipeline', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.003230" elapsed="0.000856"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.004560" level="INFO">${first} = DIL_SCIP_RES</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.004354" elapsed="0.000235"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.004843" elapsed="0.000053"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.004666" elapsed="0.000289"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.004652" elapsed="0.000337"/>
+</if>
+<var name="${row}">['DIL_SCIP_RES', 'Diluent SCIP Resevoir', '2013-07-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.004217" elapsed="0.000797"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.005489" level="INFO">${first} = DIL_SCIP_SUR</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.005283" elapsed="0.000234"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.005771" elapsed="0.000051"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.005595" elapsed="0.000267"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.005581" elapsed="0.000315"/>
+</if>
+<var name="${row}">['DIL_SCIP_SUR', 'Diluent SCIP Surface', '2013-07-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.005144" elapsed="0.000775"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.006406" level="INFO">${first} = DIL_TANK</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.006189" elapsed="0.000247"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.006702" elapsed="0.000052"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.006519" elapsed="0.000276"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.006504" elapsed="0.000324"/>
+</if>
+<var name="${row}">['DIL_TANK', 'Diluent Tank', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.006045" elapsed="0.000805"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.007346" level="INFO">${first} = FRMW_ALLOC_NODE</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.007132" elapsed="0.000242"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.007637" elapsed="0.000058"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.007455" elapsed="0.000283"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.007439" elapsed="0.000332"/>
+</if>
+<var name="${row}">['FRMW_ALLOC_NODE', 'FRMW Alloc Node', '2000-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.006998" elapsed="0.000798"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.008265" level="INFO">${first} = GB_APOLLO_FPSO</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.008061" elapsed="0.000231"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.008537" elapsed="0.000050"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.008368" elapsed="0.000259"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.008353" elapsed="0.000307"/>
+</if>
+<var name="${row}">['GB_APOLLO_FPSO', 'Apollo FPSO', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.007928" elapsed="0.000754"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.009222" level="INFO">${first} = GB_GAS_PLANT</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.008948" elapsed="0.000307"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.009545" elapsed="0.000061"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.009345" elapsed="0.000320"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.009328" elapsed="0.000382"/>
+</if>
+<var name="${row}">['GB_GAS_PLANT', 'Gas Plant GB', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.008808" elapsed="0.000936"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.010308" level="INFO">${first} = GB_LNG_FRACTION</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.010090" elapsed="0.000249"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.010616" elapsed="0.000059"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.010422" elapsed="0.000298"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.010406" elapsed="0.000350"/>
+</if>
+<var name="${row}">['GB_LNG_FRACTION', 'LNG Fraction GB', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.009921" elapsed="0.000859"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.011397" level="INFO">${first} = GB_LNG_PLANT</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.011162" elapsed="0.000265"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.011901" elapsed="0.000104"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.011507" elapsed="0.000570"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.011492" elapsed="0.000634"/>
+</if>
+<var name="${row}">['GB_LNG_PLANT', 'LNG Plant GB', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.010964" elapsed="0.001197"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.012860" level="INFO">${first} = GB_MERCURY_PROD</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.012544" elapsed="0.000356"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.013324" elapsed="0.000063"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.013012" elapsed="0.000425"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.012990" elapsed="0.000484"/>
+</if>
+<var name="${row}">['GB_MERCURY_PROD', 'Mercury  Production Unit', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.012360" elapsed="0.001141"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.014064" level="INFO">${first} = GB_NEPTUNE_PROD</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.013822" elapsed="0.000272"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.014379" elapsed="0.000055"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.014180" elapsed="0.000301"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.014163" elapsed="0.000352"/>
+</if>
+<var name="${row}">['GB_NEPTUNE_PROD', 'Neptune Production Unit', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.013656" elapsed="0.000884"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.015053" level="INFO">${first} = GB_PIPE_JOINT</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.014821" elapsed="0.000263"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.015378" elapsed="0.000053"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.015185" elapsed="0.000288"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.015168" elapsed="0.000341"/>
+</if>
+<var name="${row}">['GB_PIPE_JOINT', 'Crude Pipe Joint GB', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.014677" elapsed="0.000854"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.016009" level="INFO">${first} = GB_TERMINAL</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.015801" elapsed="0.000239"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.016303" elapsed="0.000063"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.016117" elapsed="0.000300"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.016102" elapsed="0.000356"/>
+</if>
+<var name="${row}">['GB_TERMINAL', 'Crude Terminal GB', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.015667" elapsed="0.000820"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:11.017013" level="INFO">${first} = GB_VENUS_PROD</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.016783" elapsed="0.000262"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:11.017361" elapsed="0.000055"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:11.017133" elapsed="0.000326"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:11.017116" elapsed="0.000377"/>
+</if>
+<var name="${row}">['GB_VENUS_PROD', 'Venus Production Unit', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:11.016644" elapsed="0.000873"/>
+</iter>
+<var>${row}</var>
+<value>@{rows}</value>
+<status status="PASS" start="2026-07-29T23:46:10.996516" elapsed="0.021048"/>
+</for>
+<return>
+<value>${FALSE}</value>
+<status status="PASS" start="2026-07-29T23:46:11.017638" elapsed="0.000078"/>
+</return>
+<msg time="2026-07-29T23:46:11.017856" level="INFO">${exists} = False</msg>
+<var>${exists}</var>
+<arg>${table_id}</arg>
+<arg>${code}</arg>
+<doc>True if a row whose first cell equals AUTOTEST_ND_20260729234554 exists in the table.</doc>
+<status status="PASS" start="2026-07-29T23:46:10.986588" elapsed="0.031294"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${exists}</arg>
+<arg>${FALSE}</arg>
+<arg>msg=Row ${code} should NOT exist in ${table_id}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.018012" elapsed="0.000535"/>
+</kw>
+<arg>${NODE_TABLE}</arg>
+<arg>${code}</arg>
+<doc>Assert a row with AUTOTEST_ND_20260729234554 is absent.</doc>
+<status status="PASS" start="2026-07-29T23:46:10.986119" elapsed="0.032511"/>
+</kw>
+<arg>${TEST_CODE}</arg>
+<doc>Assert a node with ${code} is absent from the list.</doc>
+<status status="PASS" start="2026-07-29T23:46:10.985597" elapsed="0.033096"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-07-29T23:46:11.106054" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="node_tc01_clean.png" target="_blank"&gt;&lt;img src="node_tc01_clean.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.019234" elapsed="0.086970"/>
+</kw>
+<arg>node_tc01_clean</arg>
+<doc>Take a screenshot into the output dir with a step label.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.018869" elapsed="0.087449"/>
+</kw>
+<doc>Confirm the (freshly generated) test node does not exist before inserting.</doc>
+<tag>clean-state</tag>
+<tag>iud</tag>
+<tag>node</tag>
+<status status="PASS" start="2026-07-29T23:46:10.976902" elapsed="0.129548"/>
+</test>
+<test id="s1-t2" name="TC02 Insert New Node" line="34">
+<kw name="Insert Node Record" owner="node_page">
+<kw name="Open New Object Form" owner="manage_object">
+<kw name="Hover" owner="Browser">
+<arg>xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Moves the virtual mouse and scrolls to the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.120658" elapsed="0.039077"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-29T23:46:11.167053" level="INFO">Waited for Element with selector xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object'] at state visible</msg>
+<arg>xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.160032" elapsed="0.007226"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:11.168223" level="INFO">Clicks the element 'xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']'.</msg>
+<arg>xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.167524" elapsed="0.049420"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:11.218273" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:11.221321" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.217298" elapsed="0.004234"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:12.422995" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.221848" elapsed="1.201310"/>
+</kw>
+<doc>Hover the Insert toolbar menu and choose "New Object".
+Wait for the submenu item to be visible before clicking (robust vs a fixed sleep).</doc>
+<status status="PASS" start="2026-07-29T23:46:11.120343" elapsed="1.302947"/>
+</kw>
+<kw name="Fill OV Field By Label" owner="manage_object">
+<kw name="OV Field Id By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-29T23:46:12.436792" level="INFO">Attribute is: 'tab:tabPanel:objectForm:form:G:0:R:0:C:1:in'</msg>
+<msg time="2026-07-29T23:46:12.436982" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:0:C:1:in</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:12.424876" elapsed="0.012139"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-07-29T23:46:12.437133" elapsed="0.000159"/>
+</return>
+<msg time="2026-07-29T23:46:12.437446" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:0:C:1:in</msg>
+<var>${id}</var>
+<arg>${form}</arg>
+<arg>${label}</arg>
+<doc>Resolve the input id for a field by its LABEL in objectForm (no hardcoded row/column).</doc>
+<status status="PASS" start="2026-07-29T23:46:12.424584" elapsed="0.012885"/>
+</kw>
+<kw name="Fill EC Field" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-29T23:46:12.438867" level="INFO">Fills the text 'AUTOTEST_ND_20260729234554' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:12.437998" elapsed="0.013180"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-29T23:46:12.459195" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-29T23:46:12.451538" elapsed="0.007913"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:12.860861" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:12.459764" elapsed="0.401284"/>
+</kw>
+<arg>${id}</arg>
+<arg>${value}</arg>
+<doc>Fill a text input by EC id and dispatch change/blur for EC validation.</doc>
+<status status="PASS" start="2026-07-29T23:46:12.437671" elapsed="0.423535"/>
+</kw>
+<arg>objectForm</arg>
+<arg>Node Code</arg>
+<arg>${code}</arg>
+<doc>Fill a text field found by its LABEL in ${form}; reuses Fill EC Field (change/blur dispatch).</doc>
+<status status="PASS" start="2026-07-29T23:46:12.424109" elapsed="0.437182"/>
+</kw>
+<kw name="Fill OV Field By Label" owner="manage_object">
+<kw name="OV Field Id By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-29T23:46:12.879858" level="INFO">Attribute is: 'tab:tabPanel:objectForm:form:G:0:R:1:C:1:in'</msg>
+<msg time="2026-07-29T23:46:12.880081" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:1:C:1:in</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:12.863487" elapsed="0.016646"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-07-29T23:46:12.880264" elapsed="0.000185"/>
+</return>
+<msg time="2026-07-29T23:46:12.880624" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:1:C:1:in</msg>
+<var>${id}</var>
+<arg>${form}</arg>
+<arg>${label}</arg>
+<doc>Resolve the input id for a field by its LABEL in objectForm (no hardcoded row/column).</doc>
+<status status="PASS" start="2026-07-29T23:46:12.863169" elapsed="0.017482"/>
+</kw>
+<kw name="Fill EC Field" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-29T23:46:12.881824" level="INFO">Fills the text 'Node AUTOTEST_ND_20260729234554' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:12.881283" elapsed="0.013017"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-29T23:46:12.902534" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-29T23:46:12.894618" elapsed="0.008243"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:13.304820" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:12.903677" elapsed="0.401344"/>
+</kw>
+<arg>${id}</arg>
+<arg>${value}</arg>
+<doc>Fill a text input by EC id and dispatch change/blur for EC validation.</doc>
+<status status="PASS" start="2026-07-29T23:46:12.880896" elapsed="0.424291"/>
+</kw>
+<arg>objectForm</arg>
+<arg>Node Name</arg>
+<arg>${name}</arg>
+<doc>Fill a text field found by its LABEL in ${form}; reuses Fill EC Field (change/blur dispatch).</doc>
+<status status="PASS" start="2026-07-29T23:46:12.862568" elapsed="0.442707"/>
+</kw>
+<kw name="Fill OV Date By Label" owner="manage_object">
+<kw name="OV Field Id By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-29T23:46:13.327096" level="INFO">Attribute is: 'tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input'</msg>
+<msg time="2026-07-29T23:46:13.327502" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:13.308768" elapsed="0.018837"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-07-29T23:46:13.327998" elapsed="0.000769"/>
+</return>
+<msg time="2026-07-29T23:46:13.329199" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input</msg>
+<var>${id}</var>
+<arg>${form}</arg>
+<arg>${label}</arg>
+<doc>Resolve the input id for a field by its LABEL in objectForm (no hardcoded row/column).</doc>
+<status status="PASS" start="2026-07-29T23:46:13.307917" elapsed="0.021332"/>
+</kw>
+<kw name="Fill EC Date" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-29T23:46:13.331208" level="INFO">Fills the text '2000-01-01' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:13.330377" elapsed="0.015039"/>
+</kw>
+<kw name="Keyboard Key" owner="Browser">
+<arg>press</arg>
+<arg>Tab</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="PASS" start="2026-07-29T23:46:13.345888" elapsed="0.013528"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:13.960862" level="INFO">Slept 600 milliseconds.</msg>
+<arg>0.6s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:13.359702" elapsed="0.601346"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-29T23:46:13.967794" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-29T23:46:13.961310" elapsed="0.006702"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:14.369173" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:13.968272" elapsed="0.401067"/>
+</kw>
+<arg>${id}</arg>
+<arg>${value}</arg>
+<doc>Fill a da_input calendar field; Tab out triggers PrimeFaces validation.</doc>
+<status status="PASS" start="2026-07-29T23:46:13.329679" elapsed="1.039804"/>
+</kw>
+<arg>objectForm</arg>
+<arg>Start Date</arg>
+<arg>${start_date}</arg>
+<doc>Fill a date field found by its LABEL in ${form}; reuses Fill EC Date (Tab + change dispatch).</doc>
+<status status="PASS" start="2026-07-29T23:46:13.306280" elapsed="1.063285"/>
+</kw>
+<kw name="Fill OV Field By Label" owner="manage_object">
+<kw name="OV Field Id By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-29T23:46:14.384390" level="INFO">Attribute is: 'tab:tabPanel:objectForm:form:G:0:R:6:C:1:in'</msg>
+<msg time="2026-07-29T23:46:14.384622" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:6:C:1:in</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.371408" elapsed="0.013252"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-07-29T23:46:14.384809" elapsed="0.000244"/>
+</return>
+<msg time="2026-07-29T23:46:14.385276" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:6:C:1:in</msg>
+<var>${id}</var>
+<arg>${form}</arg>
+<arg>${label}</arg>
+<doc>Resolve the input id for a field by its LABEL in objectForm (no hardcoded row/column).</doc>
+<status status="PASS" start="2026-07-29T23:46:14.371065" elapsed="0.014244"/>
+</kw>
+<kw name="Fill EC Field" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-29T23:46:14.386951" level="INFO">Fills the text '1' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.386201" elapsed="0.013639"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-29T23:46:14.407573" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.400157" elapsed="0.007643"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:14.809019" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.408095" elapsed="0.401135"/>
+</kw>
+<arg>${id}</arg>
+<arg>${value}</arg>
+<doc>Fill a text input by EC id and dispatch change/blur for EC validation.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.385583" elapsed="0.423831"/>
+</kw>
+<arg>objectForm</arg>
+<arg>Calculation Sequence Number</arg>
+<arg>${calc_seq}</arg>
+<doc>Fill a text field found by its LABEL in ${form}; reuses Fill EC Field (change/blur dispatch).</doc>
+<status status="PASS" start="2026-07-29T23:46:14.370444" elapsed="0.439082"/>
+</kw>
+<kw name="Fill OV Dropdown By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-29T23:46:14.825857" level="INFO">Attribute is: 'tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_input'</msg>
+<msg time="2026-07-29T23:46:14.826114" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_input</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[contains(@id,'dd_input')]</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.811668" elapsed="0.014491"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2026-07-29T23:46:14.827839" level="INFO">${dd} = tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd</msg>
+<var>${dd}</var>
+<arg>${id.replace('_input', '')}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.826500" elapsed="0.001395"/>
+</kw>
+<if>
+<branch type="IF" condition="'${value}' == '__FIRST__'">
+<kw name="Select First EC Dropdown Option" owner="table">
+<variable name="${item}">
+<msg time="2026-07-29T23:46:14.829420" level="INFO">${item} = css=[id="tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_panel"] tr[data-item-label]</msg>
+<var>css=[id="${dd_prefix}_panel"] tr[data-item-label]</var>
+<status status="PASS" start="2026-07-29T23:46:14.829137" elapsed="0.000336"/>
+</variable>
+<kw name="Open EC Dropdown Panel" owner="table">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:14.831075" level="INFO">Clicks the element 'css=[id="tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_button"]'.</msg>
+<arg>css=[id="${dd_prefix}_button"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.830377" elapsed="0.051954"/>
+</kw>
+<try>
+<branch type="TRY">
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-29T23:46:15.221493" level="INFO">Waited for Element with selector css=[id="tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_panel"] tr[data-item-label] &gt;&gt; nth=0 at state visible</msg>
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>visible</arg>
+<arg>timeout=6s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.882989" elapsed="0.338756"/>
+</kw>
+<status status="PASS" start="2026-07-29T23:46:14.882588" elapsed="0.339281"/>
+</branch>
+<branch type="EXCEPT">
+<kw name="Keyboard Key" owner="Browser">
+<arg>press</arg>
+<arg>Escape</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:15.222324" elapsed="0.000119"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:15.222588" elapsed="0.000067"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="${dd_prefix}_button"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:15.222766" elapsed="0.000060"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:15.222939" elapsed="0.000070"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:15.221967" elapsed="0.001095"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:14.882525" elapsed="0.340596"/>
+</try>
+<arg>${dd_prefix}</arg>
+<arg>${item}</arg>
+<doc>Open an EC autocomplete dropdown and wait for its first option
+row; one Escape+reopen retry covers panels closed by a concurrent partial
+re-render or cascades whose options arrive late.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.829846" elapsed="0.393350"/>
+</kw>
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-29T23:46:15.235035" level="INFO">Attribute is: 'EC-UT-GENERIC Production Unit'</msg>
+<msg time="2026-07-29T23:46:15.235213" level="INFO">${label} = EC-UT-GENERIC Production Unit</msg>
+<var>${label}</var>
+<arg>${item} &gt;&gt; nth=0</arg>
+<arg>data-item-label</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:15.223313" elapsed="0.011928"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2026-07-29T23:46:15.235887" level="INFO">First option selected for tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd: EC-UT-GENERIC Production Unit</msg>
+<arg>First option selected for ${dd_prefix}: ${label}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2026-07-29T23:46:15.235451" elapsed="0.000479"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:15.236497" level="INFO">Clicks the element 'css=[id="tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_panel"] tr[data-item-label] &gt;&gt; nth=0'.</msg>
+<arg>${item} &gt;&gt; nth=0</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:15.236060" elapsed="0.080785"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:15.318049" level="INFO">Waiting page load to state to receive networkidle in 12000.0</msg>
+<msg time="2026-07-29T23:46:15.321322" level="INFO">Load state networkidle got in 12000</msg>
+<arg>networkidle</arg>
+<arg>timeout=12s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:15.317177" elapsed="0.004327"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:15.922708" level="INFO">Slept 600 milliseconds.</msg>
+<arg>0.6s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:15.321746" elapsed="0.601125"/>
+</kw>
+<arg>${dd}</arg>
+<doc>Pick the FIRST option of an EC autocomplete dropdown — for
+mandatory reference dropdowns on throwaway test records where the specific
+value is irrelevant (the record is deleted again by the cleanup TC). The
+chosen label is logged for the evidence trail.</doc>
+<status status="PASS" start="2026-07-29T23:46:14.828680" elapsed="1.094329"/>
+</kw>
+<status status="PASS" start="2026-07-29T23:46:14.828062" elapsed="1.095014"/>
+</branch>
+<branch type="ELSE">
+<kw name="Select EC Dropdown Option" owner="table">
+<arg>${dd}</arg>
+<arg>${value}</arg>
+<doc>Pick an option from an EC autocomplete dropdown (…:dd) by its
+exact item label: click the chevron, wait for the option row
+(tr[data-item-label]) and click it. A pending form re-render (e.g. after a
+date Tab-out) can close the panel between open and click, so one re-open
+retry is built in. Typing into autocomplete-dd fields is unreliable.</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:15.923608" elapsed="0.000110"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:15.923139" elapsed="0.000644"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:14.828025" elapsed="1.095798"/>
+</if>
+<arg>objectForm</arg>
+<arg>Op Production Unit</arg>
+<arg>${op_production_unit}</arg>
+<doc>Select an autocomplete-dropdown option found by its LABEL in ${form} (no hardcoded ids).
+Targets the dd input SPECIFICALLY (contains 'dd_input') - the generic //input matches TWO nodes
+for a dropdown (dd_input + dd_hinput) and trips Browser strict mode. Derives the PrimeFaces widget
+prefix (strip '_input' -&gt; '...:dd'), then reuses Select EC Dropdown Option (chevron -&gt; item row).</doc>
+<status status="PASS" start="2026-07-29T23:46:14.810811" elapsed="1.113078"/>
+</kw>
+<kw name="Save And Refresh List" owner="manage_object">
+<kw name="Save" owner="toolbar">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:15.925246" level="INFO">Clicks the element 'xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]'.</msg>
+<arg>xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:15.924790" elapsed="0.019838"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:15.946009" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:15.948694" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:15.945172" elapsed="0.003689"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:17.149838" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:15.949132" elapsed="1.200857"/>
+</kw>
+<doc>Click the Save toolbar button (only when enabled).</doc>
+<status status="PASS" start="2026-07-29T23:46:15.924522" elapsed="1.225602"/>
+</kw>
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-29T23:46:17.157457" level="INFO">${has_go} = 1</msg>
+<var>${has_go}</var>
+<arg>css=button[id="button:form:B"]:visible, a[id="button:form:B"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:17.150323" elapsed="0.007268"/>
+</kw>
+<if>
+<branch type="IF" condition="${has_go} &gt; 0">
+<kw name="Apply Navigator" owner="navigator">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:17.159160" level="INFO">Clicks the element 'css=[id="button:form:B"]'.</msg>
+<arg>css=[id="button:form:B"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:17.158626" elapsed="0.037819"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:17.197981" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:17.200763" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:17.197009" elapsed="0.003898"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:18.402150" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:17.201120" elapsed="1.201207"/>
+</kw>
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="PASS" start="2026-07-29T23:46:17.158262" elapsed="1.244210"/>
+</kw>
+<status status="PASS" start="2026-07-29T23:46:17.157761" elapsed="1.244763"/>
+</branch>
+<branch type="ELSE">
+<kw name="Refresh Screen" owner="toolbar">
+<doc>Click the Refresh toolbar button to reload the grid from the DB
+(so verification reads persisted data, not stale optimistic client state).</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:18.402989" elapsed="0.000084"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:18.402586" elapsed="0.000534"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:17.157729" elapsed="1.245428"/>
+</if>
+<doc>Save the form, then reload the list from the DB: Apply Navigator
+(GO) where the screen has one, else the toolbar Refresh — some custom-URL OV
+screens (Account, Cost Centre, Revenue Order, WBS…) have NO navigator GO.</doc>
+<status status="PASS" start="2026-07-29T23:46:15.924127" elapsed="2.479084"/>
+</kw>
+<arg>${TEST_CODE}</arg>
+<arg>${OBJ_NAME}</arg>
+<arg>${START_DATE}</arg>
+<arg>${CALC_SEQ}</arg>
+<arg>__FIRST__</arg>
+<doc>Insert a new node (all fields BY LABEL): Code/Name/Start Date +
+Calculation Sequence Number + Op Production Unit (= the navigator top-parent so the
+new row shows in the filtered grid) -&gt; Save.</doc>
+<status status="PASS" start="2026-07-29T23:46:11.119594" elapsed="7.283684"/>
+</kw>
+<kw name="Node Row Should Exist" owner="node_page">
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-29T23:46:18.411597" level="INFO">Waited for Element with selector xpath=//tbody[@id='manageObject:form:T_data']//span[normalize-space(text())='AUTOTEST_ND_20260729234554'] at state visible</msg>
+<arg>xpath=//tbody[@id='${NODE_TABLE}']//span[normalize-space(text())='${code}']</arg>
+<arg>visible</arg>
+<arg>timeout=20s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.404470" elapsed="0.007361"/>
+</kw>
+<kw name="Row Should Exist" owner="table">
+<kw name="Row Exists" owner="table">
+<kw name="Get Table Rows" owner="table">
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-29T23:46:18.419021" level="INFO">JavaScript executed successfully.</msg>
+<msg time="2026-07-29T23:46:18.419286" level="INFO">${rows} = [['AUTOTEST_ND_20260729234554', 'Node AUTOTEST_ND_20260729234554', '2000-01-01', ''], ['BLEND_INT', 'Blend Interconnect', '2003-01-01', ''], ['BLEND_ONSITE', 'Blend Onsite', '2003-01-01', ''], ['BLEND...</msg>
+<var>${rows}</var>
+<arg>${None}</arg>
+<arg>() =&gt; { const t=document.getElementById('${table_id}'); if(!t) return []; const o=[]; t.querySelectorAll('tr').forEach(tr=&gt;{const c=[];tr.querySelectorAll('td').forEach(td=&gt;c.push((td.textContent||'').trim()));if(c.some(x=&gt;x))o.push(c);}); return o; }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.413796" elapsed="0.005524"/>
+</kw>
+<return>
+<value>${rows}</value>
+<status status="PASS" start="2026-07-29T23:46:18.419431" elapsed="0.000149"/>
+</return>
+<msg time="2026-07-29T23:46:18.419764" level="INFO">${rows} = [['AUTOTEST_ND_20260729234554', 'Node AUTOTEST_ND_20260729234554', '2000-01-01', ''], ['BLEND_INT', 'Blend Interconnect', '2003-01-01', ''], ['BLEND_ONSITE', 'Blend Onsite', '2003-01-01', ''], ['BLEND...</msg>
+<var>${rows}</var>
+<arg>${table_id}</arg>
+<doc>Return a list of non-empty cell-lists from a results table by id.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.413468" elapsed="0.006325"/>
+</kw>
+<for flavor="IN">
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:18.420592" level="INFO">${first} = AUTOTEST_ND_20260729234554</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.420352" elapsed="0.000268"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="PASS" start="2026-07-29T23:46:18.420901" elapsed="0.000064"/>
+</return>
+<status status="PASS" start="2026-07-29T23:46:18.420707" elapsed="0.000319"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:18.420691" elapsed="0.000374"/>
+</if>
+<var name="${row}">['AUTOTEST_ND_20260729234554', 'Node AUTOTEST_ND_20260729234554', '2000-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:18.420162" elapsed="0.000935"/>
+</iter>
+<var>${row}</var>
+<value>@{rows}</value>
+<status status="PASS" start="2026-07-29T23:46:18.419869" elapsed="0.001275"/>
+</for>
+<return>
+<value>${FALSE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:18.421198" elapsed="0.000048"/>
+</return>
+<msg time="2026-07-29T23:46:18.421355" level="INFO">${exists} = True</msg>
+<var>${exists}</var>
+<arg>${table_id}</arg>
+<arg>${code}</arg>
+<doc>True if a row whose first cell equals AUTOTEST_ND_20260729234554 exists in the table.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.412992" elapsed="0.008384"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${exists}</arg>
+<arg>msg=Expected row ${code} to exist in ${table_id}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.421492" elapsed="0.000438"/>
+</kw>
+<arg>${NODE_TABLE}</arg>
+<arg>${code}</arg>
+<doc>Assert a row with AUTOTEST_ND_20260729234554 is present.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.412273" elapsed="0.009720"/>
+</kw>
+<arg>${TEST_CODE}</arg>
+<doc>Assert a node with ${code} is present (await lazy OV-GM redraw first).</doc>
+<status status="PASS" start="2026-07-29T23:46:18.404068" elapsed="0.017979"/>
+</kw>
+<kw name="Node Should Exist In DB" owner="node_page">
+<kw name="Code Should Be Present In View" owner="DbVerify">
+<arg>OV_NODE</arg>
+<arg>${code}</arg>
+<doc>Fail unless ``code`` appears in any string column of ``view`` (DB ground truth).</doc>
+<status status="PASS" start="2026-07-29T23:46:18.422985" elapsed="0.116007"/>
+</kw>
+<arg>${TEST_CODE}</arg>
+<doc>DB ground-truth: assert ${code} really persisted in OV_NODE.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.422684" elapsed="0.116495"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-07-29T23:46:18.629798" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="node_tc02_inserted.png" target="_blank"&gt;&lt;img src="node_tc02_inserted.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.539988" elapsed="0.089998"/>
+</kw>
+<arg>node_tc02_inserted</arg>
+<doc>Take a screenshot into the output dir with a step label.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.539458" elapsed="0.090670"/>
+</kw>
+<doc>Insert a new node under the captured navigator PU and confirm it lists.</doc>
+<tag>insert</tag>
+<tag>iud</tag>
+<tag>node</tag>
+<status status="PASS" start="2026-07-29T23:46:11.114231" elapsed="7.516092"/>
+</test>
+<test id="s1-t3" name="TC03 Update Node Name" line="44">
+<kw name="Update Node Name" owner="node_page">
+<kw name="Select Object Row" owner="manage_object">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:18.644044" level="INFO">Clicks the element 'xpath=//tbody[@id='manageObject:form:T_data']//span[normalize-space(text())='AUTOTEST_ND_20260729234554']'.</msg>
+<arg>xpath=//tbody[@id='${table_id}']//span[normalize-space(text())='${code}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.643316" elapsed="0.037984"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:18.682321" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:18.684683" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.681623" elapsed="0.003211"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:19.885751" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.685062" elapsed="1.200836"/>
+</kw>
+<arg>${NODE_TABLE}</arg>
+<arg>${code}</arg>
+<doc>Select an object row by its code (text lives in a span child).</doc>
+<status status="PASS" start="2026-07-29T23:46:18.642926" elapsed="1.243109"/>
+</kw>
+<kw name="Fill OV Field By Label" owner="manage_object">
+<kw name="OV Field Id By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-29T23:46:19.899720" level="INFO">Attribute is: 'tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in'</msg>
+<msg time="2026-07-29T23:46:19.899930" level="INFO">${id} = tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:19.887744" elapsed="0.012218"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-07-29T23:46:19.900102" elapsed="0.000230"/>
+</return>
+<msg time="2026-07-29T23:46:19.900530" level="INFO">${id} = tab:tabPanel:updateAttributes:form:G:0:R:1:C:1:in</msg>
+<var>${id}</var>
+<arg>${form}</arg>
+<arg>${label}</arg>
+<doc>Resolve the input id for a field by its LABEL in updateAttributes (no hardcoded row/column).</doc>
+<status status="PASS" start="2026-07-29T23:46:19.887421" elapsed="0.013137"/>
+</kw>
+<kw name="Fill EC Field" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-29T23:46:19.901981" level="INFO">Fills the text 'Node AUTOTEST_ND_20260729234554 UPD' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:19.901293" elapsed="0.013184"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-29T23:46:19.922176" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-29T23:46:19.914752" elapsed="0.007635"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:20.323641" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:19.922663" elapsed="0.401148"/>
+</kw>
+<arg>${id}</arg>
+<arg>${value}</arg>
+<doc>Fill a text input by EC id and dispatch change/blur for EC validation.</doc>
+<status status="PASS" start="2026-07-29T23:46:19.900829" elapsed="0.423118"/>
+</kw>
+<arg>updateAttributes</arg>
+<arg>Node Name</arg>
+<arg>${new_name}</arg>
+<doc>Fill a text field found by its LABEL in ${form}; reuses Fill EC Field (change/blur dispatch).</doc>
+<status status="PASS" start="2026-07-29T23:46:19.886854" elapsed="0.437167"/>
+</kw>
+<kw name="Save And Refresh List" owner="manage_object">
+<kw name="Save" owner="toolbar">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:20.325710" level="INFO">Clicks the element 'xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]'.</msg>
+<arg>xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:20.325123" elapsed="0.040600"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:20.367283" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:20.369951" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:20.366342" elapsed="0.003773"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:21.570897" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:20.370325" elapsed="1.200721"/>
+</kw>
+<doc>Click the Save toolbar button (only when enabled).</doc>
+<status status="PASS" start="2026-07-29T23:46:20.324830" elapsed="1.246342"/>
+</kw>
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-29T23:46:21.579240" level="INFO">${has_go} = 1</msg>
+<var>${has_go}</var>
+<arg>css=button[id="button:form:B"]:visible, a[id="button:form:B"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:21.571372" elapsed="0.007949"/>
+</kw>
+<if>
+<branch type="IF" condition="${has_go} &gt; 0">
+<kw name="Apply Navigator" owner="navigator">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:21.581330" level="INFO">Clicks the element 'css=[id="button:form:B"]'.</msg>
+<arg>css=[id="button:form:B"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:21.580734" elapsed="0.037508"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:21.619715" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:21.622971" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:21.618672" elapsed="0.004551"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:22.824262" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:21.623509" elapsed="1.200997"/>
+</kw>
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="PASS" start="2026-07-29T23:46:21.580192" elapsed="1.244466"/>
+</kw>
+<status status="PASS" start="2026-07-29T23:46:21.579542" elapsed="1.245167"/>
+</branch>
+<branch type="ELSE">
+<kw name="Refresh Screen" owner="toolbar">
+<doc>Click the Refresh toolbar button to reload the grid from the DB
+(so verification reads persisted data, not stale optimistic client state).</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:22.825205" elapsed="0.000096"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:22.824775" elapsed="0.000576"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:21.579496" elapsed="1.245896"/>
+</if>
+<doc>Save the form, then reload the list from the DB: Apply Navigator
+(GO) where the screen has one, else the toolbar Refresh — some custom-URL OV
+screens (Account, Cost Centre, Revenue Order, WBS…) have NO navigator GO.</doc>
+<status status="PASS" start="2026-07-29T23:46:20.324372" elapsed="2.501083"/>
+</kw>
+<arg>${TEST_CODE}</arg>
+<arg>${OBJ_NAME_UPD}</arg>
+<doc>Select the node, edit Name (by label in updateAttributes), save + reload.</doc>
+<status status="PASS" start="2026-07-29T23:46:18.642221" elapsed="4.183305"/>
+</kw>
+<kw name="Node Row Should Show Name" owner="node_page">
+<kw name="Object Row Should Show Name" owner="manage_object">
+<kw name="Get Text" owner="Browser">
+<msg time="2026-07-29T23:46:22.844973" level="INFO">Text: 'AUTOTEST_ND_20260729234554\tNode AUTOTEST_ND_20260729234554 UPD\t2000-01-01\t'</msg>
+<msg time="2026-07-29T23:46:22.845217" level="INFO">${row} = AUTOTEST_ND_20260729234554	Node AUTOTEST_ND_20260729234554 UPD	2000-01-01	</msg>
+<var>${row}</var>
+<arg>xpath=//tbody[@id='${table_id}']//tr[.//span[normalize-space(text())='${code}']]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns text attribute of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.828049" elapsed="0.017206"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${row}</arg>
+<arg>${name}</arg>
+<arg>msg=Row ${code} does not show name ${name}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.845540" elapsed="0.000880"/>
+</kw>
+<arg>${NODE_TABLE}</arg>
+<arg>${code}</arg>
+<arg>${name}</arg>
+<doc>Assert the grid row holding AUTOTEST_ND_20260729234554 displays Node AUTOTEST_ND_20260729234554 UPD.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.827601" elapsed="0.018949"/>
+</kw>
+<arg>${TEST_CODE}</arg>
+<arg>${OBJ_NAME_UPD}</arg>
+<doc>Assert the Node row for ${code} displays ${name}.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.826958" elapsed="0.019674"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-07-29T23:46:22.935533" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="node_tc03_updated.png" target="_blank"&gt;&lt;img src="node_tc03_updated.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.847413" elapsed="0.088354"/>
+</kw>
+<arg>node_tc03_updated</arg>
+<doc>Take a screenshot into the output dir with a step label.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.846957" elapsed="0.088952"/>
+</kw>
+<doc>Edit the node name and confirm the list reflects the change.</doc>
+<tag>iud</tag>
+<tag>node</tag>
+<tag>update</tag>
+<status status="PASS" start="2026-07-29T23:46:18.637205" elapsed="4.299004"/>
+</test>
+<test id="s1-t4" name="TC04 Delete Node" line="51">
+<kw name="Delete Node" owner="node_page">
+<kw name="Delete Object Via End Date" owner="manage_object">
+<kw name="Select Object Row" owner="manage_object">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:22.953895" level="INFO">Clicks the element 'xpath=//tbody[@id='manageObject:form:T_data']//span[normalize-space(text())='AUTOTEST_ND_20260729234554']'.</msg>
+<arg>xpath=//tbody[@id='${table_id}']//span[normalize-space(text())='${code}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.953070" elapsed="0.028753"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:22.983591" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:22.986660" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.982174" elapsed="0.004697"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:24.188069" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.987146" elapsed="1.201095"/>
+</kw>
+<arg>${table_id}</arg>
+<arg>${code}</arg>
+<doc>Select an object row by its code (text lives in a span child).</doc>
+<status status="PASS" start="2026-07-29T23:46:22.952651" elapsed="1.235741"/>
+</kw>
+<kw name="Delete Object By Zero-Length Window" owner="manage_object">
+<kw name="Fill EC Date" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-29T23:46:24.190467" level="INFO">Fills the text '2000-01-01' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:24.189802" elapsed="0.015411"/>
+</kw>
+<kw name="Keyboard Key" owner="Browser">
+<arg>press</arg>
+<arg>Tab</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="PASS" start="2026-07-29T23:46:24.205522" elapsed="0.010639"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:24.817281" level="INFO">Slept 600 milliseconds.</msg>
+<arg>0.6s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:24.216466" elapsed="0.601003"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-29T23:46:24.823860" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-29T23:46:24.817761" elapsed="0.006319"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:25.225528" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:24.824357" elapsed="0.401349"/>
+</kw>
+<arg>${enddate_id}</arg>
+<arg>${date}</arg>
+<doc>Fill a da_input calendar field; Tab out triggers PrimeFaces validation.</doc>
+<status status="PASS" start="2026-07-29T23:46:24.189334" elapsed="1.036520"/>
+</kw>
+<arg>${enddate_id}</arg>
+<arg>${date}</arg>
+<doc>Set End Date = Start Date -&gt; zero-length window -&gt; EC true delete.</doc>
+<status status="PASS" start="2026-07-29T23:46:24.188677" elapsed="1.037255"/>
+</kw>
+<kw name="Save And Refresh List" owner="manage_object">
+<kw name="Save" owner="toolbar">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:25.227654" level="INFO">Clicks the element 'xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]'.</msg>
+<arg>xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:25.227051" elapsed="0.043142"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:25.271452" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:25.274866" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:25.270556" elapsed="0.004516"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:26.476287" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:25.275338" elapsed="1.201136"/>
+</kw>
+<doc>Click the Save toolbar button (only when enabled).</doc>
+<status status="PASS" start="2026-07-29T23:46:25.226766" elapsed="1.249861"/>
+</kw>
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-29T23:46:26.485500" level="INFO">${has_go} = 1</msg>
+<var>${has_go}</var>
+<arg>css=button[id="button:form:B"]:visible, a[id="button:form:B"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:26.476855" elapsed="0.008724"/>
+</kw>
+<if>
+<branch type="IF" condition="${has_go} &gt; 0">
+<kw name="Apply Navigator" owner="navigator">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:26.487369" level="INFO">Clicks the element 'css=[id="button:form:B"]'.</msg>
+<arg>css=[id="button:form:B"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:26.486748" elapsed="0.030133"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:26.518333" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:26.521162" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:26.517323" elapsed="0.004033"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:27.722759" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:26.521612" elapsed="1.201283"/>
+</kw>
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="PASS" start="2026-07-29T23:46:26.486357" elapsed="1.236662"/>
+</kw>
+<status status="PASS" start="2026-07-29T23:46:26.485771" elapsed="1.237294"/>
+</branch>
+<branch type="ELSE">
+<kw name="Refresh Screen" owner="toolbar">
+<doc>Click the Refresh toolbar button to reload the grid from the DB
+(so verification reads persisted data, not stale optimistic client state).</doc>
+<status status="NOT RUN" start="2026-07-29T23:46:27.723455" elapsed="0.000066"/>
+</kw>
+<status status="NOT RUN" start="2026-07-29T23:46:27.723118" elapsed="0.000437"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:26.485736" elapsed="1.237849"/>
+</if>
+<doc>Save the form, then reload the list from the DB: Apply Navigator
+(GO) where the screen has one, else the toolbar Refresh — some custom-URL OV
+screens (Account, Cost Centre, Revenue Order, WBS…) have NO navigator GO.</doc>
+<status status="PASS" start="2026-07-29T23:46:25.226281" elapsed="2.497355"/>
+</kw>
+<arg>${NODE_TABLE}</arg>
+<arg>${NODE_DEL_ENDDATE}</arg>
+<arg>${code}</arg>
+<arg>${date}</arg>
+<doc>Select the object row, set End Date = Start Date (EC true
+delete for date-effective objects), save + reload.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.952010" elapsed="4.771679"/>
+</kw>
+<kw name="Apply Navigator" owner="navigator">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-29T23:46:27.724660" level="INFO">Clicks the element 'css=[id="button:form:B"]'.</msg>
+<arg>css=[id="button:form:B"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-29T23:46:27.724100" elapsed="0.038690"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-29T23:46:27.764279" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-29T23:46:27.766992" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-29T23:46:27.763274" elapsed="0.003871"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:28.968633" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:27.767438" elapsed="1.201381"/>
+</kw>
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="PASS" start="2026-07-29T23:46:27.723814" elapsed="1.245170"/>
+</kw>
+<arg>${TEST_CODE}</arg>
+<arg>${END_DATE}</arg>
+<doc>Delete via End Date = Start Date (EC true delete), save + reload.
+OV-GM grids redraw lazily after a delete - apply the navigator once more so the
+assertion reads a fresh list, not stale state.</doc>
+<status status="PASS" start="2026-07-29T23:46:22.951322" elapsed="6.017742"/>
+</kw>
+<kw name="Node Row Should Not Exist" owner="node_page">
+<kw name="Row Should Not Exist" owner="table">
+<kw name="Row Exists" owner="table">
+<kw name="Get Table Rows" owner="table">
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-29T23:46:28.978918" level="INFO">JavaScript executed successfully.</msg>
+<msg time="2026-07-29T23:46:28.979346" level="INFO">${rows} = [['BLEND_INT', 'Blend Interconnect', '2003-01-01', ''], ['BLEND_ONSITE', 'Blend Onsite', '2003-01-01', ''], ['BLEND_PIPE', 'Blend Pipeline', '2003-01-01', ''], ['BLEND_TANK', 'Blend Tank', '2003-01-01...</msg>
+<var>${rows}</var>
+<arg>${None}</arg>
+<arg>() =&gt; { const t=document.getElementById('${table_id}'); if(!t) return []; const o=[]; t.querySelectorAll('tr').forEach(tr=&gt;{const c=[];tr.querySelectorAll('td').forEach(td=&gt;c.push((td.textContent||'').trim()));if(c.some(x=&gt;x))o.push(c);}); return o; }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.971760" elapsed="0.007628"/>
+</kw>
+<return>
+<value>${rows}</value>
+<status status="PASS" start="2026-07-29T23:46:28.979567" elapsed="0.000259"/>
+</return>
+<msg time="2026-07-29T23:46:28.980078" level="INFO">${rows} = [['BLEND_INT', 'Blend Interconnect', '2003-01-01', ''], ['BLEND_ONSITE', 'Blend Onsite', '2003-01-01', ''], ['BLEND_PIPE', 'Blend Pipeline', '2003-01-01', ''], ['BLEND_TANK', 'Blend Tank', '2003-01-01...</msg>
+<var>${rows}</var>
+<arg>${table_id}</arg>
+<doc>Return a list of non-empty cell-lists from a results table by id.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.971468" elapsed="0.008651"/>
+</kw>
+<for flavor="IN">
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.981079" level="INFO">${first} = BLEND_INT</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.980761" elapsed="0.000354"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.982064" elapsed="0.000082"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.981712" elapsed="0.000501"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.981676" elapsed="0.000587"/>
+</if>
+<var name="${row}">['BLEND_INT', 'Blend Interconnect', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.980516" elapsed="0.001781"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.983025" level="INFO">${first} = BLEND_ONSITE</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.982706" elapsed="0.000354"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.983394" elapsed="0.000082"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.983164" elapsed="0.000368"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.983142" elapsed="0.000434"/>
+</if>
+<var name="${row}">['BLEND_ONSITE', 'Blend Onsite', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.982491" elapsed="0.001113"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.984151" level="INFO">${first} = BLEND_PIPE</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.983924" elapsed="0.000254"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.984434" elapsed="0.000054"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.984258" elapsed="0.000274"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.984242" elapsed="0.000323"/>
+</if>
+<var name="${row}">['BLEND_PIPE', 'Blend Pipeline', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.983761" elapsed="0.000826"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.985055" level="INFO">${first} = BLEND_TANK</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.984850" elapsed="0.000232"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.985337" elapsed="0.000068"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.985158" elapsed="0.000295"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.985144" elapsed="0.000371"/>
+</if>
+<var name="${row}">['BLEND_TANK', 'Blend Tank', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.984719" elapsed="0.000825"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.986023" level="INFO">${first} = DIL_INT</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.985822" elapsed="0.000228"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.986292" elapsed="0.000051"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.986127" elapsed="0.000256"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.986113" elapsed="0.000303"/>
+</if>
+<var name="${row}">['DIL_INT', 'Diluent Interconnect', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.985692" elapsed="0.000746"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.986874" level="INFO">${first} = DIL_ONSITE</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.986681" elapsed="0.000219"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.987138" elapsed="0.000057"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.986976" elapsed="0.000260"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.986962" elapsed="0.000307"/>
+</if>
+<var name="${row}">['DIL_ONSITE', 'Diluent Onsite', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.986558" elapsed="0.000733"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.987744" level="INFO">${first} = DIL_PIPE</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.987548" elapsed="0.000222"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.988028" elapsed="0.000062"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.987848" elapsed="0.000290"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.987833" elapsed="0.000345"/>
+</if>
+<var name="${row}">['DIL_PIPE', 'Diluent Pipeline', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.987411" elapsed="0.000793"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.988733" level="INFO">${first} = DIL_SCIP_RES</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.988504" elapsed="0.000257"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.989017" elapsed="0.000052"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.988842" elapsed="0.000268"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.988825" elapsed="0.000319"/>
+</if>
+<var name="${row}">['DIL_SCIP_RES', 'Diluent SCIP Resevoir', '2013-07-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.988352" elapsed="0.000815"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.989665" level="INFO">${first} = DIL_SCIP_SUR</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.989436" elapsed="0.000257"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.989977" elapsed="0.000061"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.989775" elapsed="0.000311"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.989759" elapsed="0.000365"/>
+</if>
+<var name="${row}">['DIL_SCIP_SUR', 'Diluent SCIP Surface', '2013-07-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.989296" elapsed="0.000855"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.990676" level="INFO">${first} = DIL_TANK</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.990458" elapsed="0.000247"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.991009" elapsed="0.000058"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.990798" elapsed="0.000343"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.990780" elapsed="0.000399"/>
+</if>
+<var name="${row}">['DIL_TANK', 'Diluent Tank', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.990309" elapsed="0.000895"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.991698" level="INFO">${first} = FRMW_ALLOC_NODE</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.991471" elapsed="0.000256"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.991978" elapsed="0.000054"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.991804" elapsed="0.000271"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.991790" elapsed="0.000322"/>
+</if>
+<var name="${row}">['FRMW_ALLOC_NODE', 'FRMW Alloc Node', '2000-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.991337" elapsed="0.000799"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.992631" level="INFO">${first} = GB_APOLLO_FPSO</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.992427" elapsed="0.000230"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.992916" elapsed="0.000069"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.992733" elapsed="0.000293"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.992718" elapsed="0.000342"/>
+</if>
+<var name="${row}">['GB_APOLLO_FPSO', 'Apollo FPSO', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.992288" elapsed="0.000793"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.993538" level="INFO">${first} = GB_GAS_PLANT</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.993328" elapsed="0.000238"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.993823" elapsed="0.000067"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.993648" elapsed="0.000283"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.993633" elapsed="0.000332"/>
+</if>
+<var name="${row}">['GB_GAS_PLANT', 'Gas Plant GB', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.993205" elapsed="0.000783"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.994517" level="INFO">${first} = GB_LNG_FRACTION</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.994278" elapsed="0.000271"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.995192" elapsed="0.000248"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.994638" elapsed="0.000899"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.994620" elapsed="0.000973"/>
+</if>
+<var name="${row}">['GB_LNG_FRACTION', 'LNG Fraction GB', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.994128" elapsed="0.001502"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.996715" level="INFO">${first} = GB_LNG_PLANT</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.996345" elapsed="0.000411"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.997167" elapsed="0.000082"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.996884" elapsed="0.000423"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.996858" elapsed="0.000494"/>
+</if>
+<var name="${row}">['GB_LNG_PLANT', 'LNG Plant GB', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.996005" elapsed="0.001377"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.997990" level="INFO">${first} = GB_MERCURY_PROD</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.997722" elapsed="0.000302"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.998403" elapsed="0.000065"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.998129" elapsed="0.000391"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.998107" elapsed="0.000457"/>
+</if>
+<var name="${row}">['GB_MERCURY_PROD', 'Mercury  Production Unit', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.997555" elapsed="0.001036"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:28.999102" level="INFO">${first} = GB_NEPTUNE_PROD</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.998880" elapsed="0.000250"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:28.999399" elapsed="0.000057"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:28.999212" elapsed="0.000286"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:28.999194" elapsed="0.000339"/>
+</if>
+<var name="${row}">['GB_NEPTUNE_PROD', 'Neptune Production Unit', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.998738" elapsed="0.000818"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:29.000021" level="INFO">${first} = GB_PIPE_JOINT</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.999814" elapsed="0.000235"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:29.000314" elapsed="0.000060"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:29.000127" elapsed="0.000288"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:29.000112" elapsed="0.000336"/>
+</if>
+<var name="${row}">['GB_PIPE_JOINT', 'Crude Pipe Joint GB', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:28.999683" elapsed="0.000788"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:29.000938" level="INFO">${first} = GB_TERMINAL</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:29.000728" elapsed="0.000243"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:29.001253" elapsed="0.000051"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:29.001064" elapsed="0.000284"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:29.001046" elapsed="0.000336"/>
+</if>
+<var name="${row}">['GB_TERMINAL', 'Crude Terminal GB', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:29.000594" elapsed="0.000837"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-29T23:46:29.001897" level="INFO">${first} = GB_VENUS_PROD</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-29T23:46:29.001695" elapsed="0.000231"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-29T23:46:29.002198" elapsed="0.000062"/>
+</return>
+<status status="NOT RUN" start="2026-07-29T23:46:29.002008" elapsed="0.000320"/>
+</branch>
+<status status="PASS" start="2026-07-29T23:46:29.001991" elapsed="0.000378"/>
+</if>
+<var name="${row}">['GB_VENUS_PROD', 'Venus Production Unit', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-29T23:46:29.001566" elapsed="0.000829"/>
+</iter>
+<var>${row}</var>
+<value>@{rows}</value>
+<status status="PASS" start="2026-07-29T23:46:28.980208" elapsed="0.022243"/>
+</for>
+<return>
+<value>${FALSE}</value>
+<status status="PASS" start="2026-07-29T23:46:29.002526" elapsed="0.000088"/>
+</return>
+<msg time="2026-07-29T23:46:29.002766" level="INFO">${exists} = False</msg>
+<var>${exists}</var>
+<arg>${table_id}</arg>
+<arg>${code}</arg>
+<doc>True if a row whose first cell equals AUTOTEST_ND_20260729234554 exists in the table.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.971088" elapsed="0.031708"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${exists}</arg>
+<arg>${FALSE}</arg>
+<arg>msg=Row ${code} should NOT exist in ${table_id}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2026-07-29T23:46:29.002941" elapsed="0.000555"/>
+</kw>
+<arg>${NODE_TABLE}</arg>
+<arg>${code}</arg>
+<doc>Assert a row with AUTOTEST_ND_20260729234554 is absent.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.970578" elapsed="0.033013"/>
+</kw>
+<arg>${TEST_CODE}</arg>
+<doc>Assert a node with ${code} is absent from the list.</doc>
+<status status="PASS" start="2026-07-29T23:46:28.969967" elapsed="0.033697"/>
+</kw>
+<kw name="Node Should Not Exist In DB" owner="node_page">
+<kw name="Code Should Be Absent In View" owner="DbVerify">
+<arg>OV_NODE</arg>
+<arg>${code}</arg>
+<doc>Fail if ``code`` appears in any string column of ``view`` (DB ground truth).</doc>
+<status status="PASS" start="2026-07-29T23:46:29.004855" elapsed="0.270551"/>
+</kw>
+<arg>${TEST_CODE}</arg>
+<doc>DB ground-truth: assert ${code} was truly deleted from OV_NODE.</doc>
+<status status="PASS" start="2026-07-29T23:46:29.004484" elapsed="0.271132"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-07-29T23:46:29.365906" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="node_tc04_deleted.png" target="_blank"&gt;&lt;img src="node_tc04_deleted.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-07-29T23:46:29.276592" elapsed="0.089582"/>
+</kw>
+<arg>node_tc04_deleted</arg>
+<doc>Take a screenshot into the output dir with a step label.</doc>
+<status status="PASS" start="2026-07-29T23:46:29.275933" elapsed="0.090399"/>
+</kw>
+<doc>Delete via End Date = Start Date and confirm the node is gone.</doc>
+<tag>cleanup</tag>
+<tag>delete</tag>
+<tag>iud</tag>
+<tag>node</tag>
+<status status="PASS" start="2026-07-29T23:46:22.944494" elapsed="6.422003"/>
+</test>
+<kw name="Close EC" owner="browser" type="TEARDOWN">
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-29T23:46:29.376477" level="INFO">Slept 0 seconds.</msg>
+<arg>${HOLD}</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-29T23:46:29.375977" elapsed="0.000569"/>
+</kw>
+<kw name="Close Browser" owner="Browser">
+<msg time="2026-07-29T23:46:29.493300" level="INFO">Closed browser</msg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-07-29T23:46:29.376704" elapsed="0.116837"/>
+</kw>
+<doc>Optional hold then close the browser (Suite Teardown).</doc>
+<status status="PASS" start="2026-07-29T23:46:29.375546" elapsed="0.118167"/>
+</kw>
+<doc>EC IUD Test - Node (Configuration &gt; Assets &gt; Calculation Objects &gt; Node).
+OV-GM (manage-object, groupmodel) screen: the grid is filtered by the navigator
+cascade (Production Unit -&gt; Area -&gt; Facility Class 1). The insert Op Production Unit
+= the captured navigator top-parent so the new row appears in the filtered grid.
+DELETE = End Date = Start Date (true delete in OV_NODE). NEVER touch existing data;
+a unique AUTOTEST_ND_&lt;timestamp&gt; code is generated per run.</doc>
+<status status="PASS" start="2026-07-29T23:45:54.166308" elapsed="35.327475"/>
+</suite>
+<statistics>
+<total>
+<stat pass="4" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">clean-state</stat>
+<stat pass="1" fail="0" skip="0">cleanup</stat>
+<stat pass="1" fail="0" skip="0">delete</stat>
+<stat pass="1" fail="0" skip="0">insert</stat>
+<stat pass="4" fail="0" skip="0">iud</stat>
+<stat pass="4" fail="0" skip="0">node</stat>
+<stat pass="1" fail="0" skip="0">update</stat>
+</tag>
+<suite>
+<stat name="Node Iud" id="s1" pass="4" fail="0" skip="0">Node Iud</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>

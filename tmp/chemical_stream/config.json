@@ -1,0 +1,268 @@
+{
+ "screen": "Chemical Stream",
+ "bfcode": "CO.0258",
+ "view": "",
+ "folder": "Configuration/Assets/Chemical_Objects",
+ "slug": "chemical_stream",
+ "code_prefix": "AUTOTEST_CS_",
+ "code_label": "Chemical Stream Code",
+ "name_label": "Chemical Stream Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Chemical Stream 001",
+ "dropdowns": [
+  {
+   "label": "Chemical Stream Type",
+   "value": "__FIRST__"
+  }
+ ],
+ "popups": [
+  {
+   "label": "From Connection",
+   "value": "__FIRST__"
+  }
+ ],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 5,
+  "dropdowns_raw": [
+   {
+    "label": "Chemical Stream Type",
+    "value": "Pump Stream",
+    "n_opts": 19
+   }
+  ],
+  "extras": [],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:da_input",
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:da_input",
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "label": "Chemical Stream Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:in",
+    "label": "Chemical Stream Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd_input",
+    "label": "Chemical Stream Type",
+    "kind": "dropdown",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "label": "Sort Order",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_input",
+    "label": "Injection Phase",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "label": "Minimum Measurable Flow Rate [L/d]",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "label": "Maximum Flow Rate [L/d]",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:in",
+    "label": "Target Rate Method",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:in",
+    "label": "Actual Rate Source",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:11:C:1:in",
+    "label": "Actual Rate Method",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:dd_input",
+    "label": "Actual Dosage Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:in",
+    "label": "Target Dosage [ppm]",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:14:C:1:dd_input",
+    "label": "Class Name",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_input",
+    "label": "Class Attribute",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:16:C:1:pin",
+    "label": "Production Object",
+    "kind": "popup",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:17:C:1:dd_input",
+    "label": "Usage Reporting",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:18:C:1:in",
+    "label": "Latitude",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:19:C:1:in",
+    "label": "Longitude",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:20:C:1:pin",
+    "label": "From Connection",
+    "kind": "popup",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:21:C:1:pin",
+    "label": "To Connection",
+    "kind": "popup",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:22:C:1:in",
+    "label": "Stream Node Diagram Label",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:23:C:1:dd_input",
+    "label": "Stream Phase",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:24:C:1:dd_input",
+    "label": "Stream Category",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:25:C:1:dd_input",
+    "label": "Stream Type",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:26:C:1:dd_input",
+    "label": "Alloc Period",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:27:C:1:dd_input",
+    "label": "Alloc Data Frequency",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:28:C:1:dd_input",
+    "label": "Alloc Fixed",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:29:C:1:dd_input",
+    "label": "Op Production Unit",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:30:C:1:dd_input",
+    "label": "Op Area",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:31:C:1:dd_input",
+    "label": "Op Facility Class 1",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:32:C:1:dd_input",
+    "label": "Geo Area",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:33:C:1:dd_input",
+    "label": "Geo Field",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:34:C:1:dd_input",
+    "label": "Cp Production Unit",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:35:C:1:dd_input",
+    "label": "Cp Area",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:36:C:1:dd_input",
+    "label": "Cp Operator Route",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:37:C:1:dd_input",
+    "label": "Cp Collection Point",
+    "kind": "dropdown",
+    "mandatory": false
+   }
+  ]
+ }
+}

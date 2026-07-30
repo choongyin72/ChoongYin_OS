@@ -1,0 +1,90 @@
+{
+ "screen": "Document Sequence",
+ "bfcode": "CD.0109",
+ "view": "OV_DOC_SEQUENCE",
+ "folder": "Configuration/Assets/Revenue_Document_Objects",
+ "slug": "document_sequence",
+ "code_prefix": "AUTOTEST_DS_",
+ "code_label": "Code",
+ "name_label": "Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Document Sequence 001",
+ "dropdowns": [],
+ "extra_fields": [
+  {
+   "label": "Starting Point",
+   "value": "1"
+  }
+ ],
+ "_scan": {
+  "mandatory_count": 4,
+  "dropdowns_raw": [],
+  "extras": [
+   "Starting Point"
+  ],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "label": "Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "label": "Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "label": "Starting Point",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:7:C:1:in",
+    "label": "Current Sequence No",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:in",
+    "label": "Number of Digits",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:da_input",
+    "label": "Reset Date",
+    "kind": "date",
+    "mandatory": false
+   }
+  ]
+ }
+}

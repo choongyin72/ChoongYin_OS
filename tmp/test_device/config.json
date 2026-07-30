@@ -1,0 +1,330 @@
+{
+ "screen": "Test Device",
+ "bfcode": "CO.0123",
+ "view": "",
+ "folder": "Configuration/Assets/Facility_Objects",
+ "slug": "test_device",
+ "code_prefix": "AUTOTEST_TD_",
+ "code_label": "Test Device Code",
+ "name_label": "Test Device Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Test Device 001",
+ "dropdowns": [],
+ "popups": [],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 3,
+  "dropdowns_raw": [],
+  "extras": [],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "label": "Test Device Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "label": "Test Device Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:in",
+    "label": "Sort Order",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:da_input",
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:in",
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_input",
+    "label": "Instrumentation type",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:8:C:1:dd_input",
+    "label": "Preferred Data Source",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:9:C:1:dd_input",
+    "label": "Calculation Basis",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:10:C:1:cb",
+    "label": "Gas Lift State Conv.",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:12:C:1:cb",
+    "label": "Is Default Facility Test Device",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:13:C:1:cb",
+    "label": "Auto-populate Wells for Multi Well",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:14:C:1:dd_input",
+    "label": "Std Net Rate Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:15:C:1:dd_input",
+    "label": "Net Rate Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:16:C:1:dd_input",
+    "label": "Grs Liq Rate Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:17:C:1:dd_input",
+    "label": "Grs Gas Rate Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:18:C:1:dd_input",
+    "label": "Grs GL Rate Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:19:C:1:dd_input",
+    "label": "Diluent Rate Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:20:C:1:dd_input",
+    "label": "Grs Water Rate Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:21:C:1:dd_input",
+    "label": "Well Wet Gas Rate Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:22:C:1:dd_input",
+    "label": "Grs Liq Vol Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:23:C:1:dd_input",
+    "label": "Grs Gas Vol Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:24:C:1:dd_input",
+    "label": "Grs GL Vol Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:25:C:1:dd_input",
+    "label": "Grs Water Vol Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:26:C:1:dd_input",
+    "label": "Shrinkage Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:27:C:1:dd_input",
+    "label": "Meter Factor Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:28:C:1:dd_input",
+    "label": "GOR Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:29:C:1:dd_input",
+    "label": "GLR Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:30:C:1:dd_input",
+    "label": "CGR Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:31:C:1:dd_input",
+    "label": "WOR Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:32:C:1:dd_input",
+    "label": "WGR Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:33:C:1:dd_input",
+    "label": "BS&W Volume Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:35:C:1:dd_input",
+    "label": "On Time Method",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:36:C:1:cb",
+    "label": "Should the Test Device be used in Test Device Analysis",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:37:C:1:dd_input",
+    "label": "Test Device Data Frequency",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:38:C:1:dd_input",
+    "label": "Use In BF",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:39:C:1:dd_input",
+    "label": "PO.0121 Data Class 1",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:40:C:1:dd_input",
+    "label": "PO.0121 Data Class 2",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:41:C:1:dd_input",
+    "label": "PO.0121 Data Class 3",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:42:C:1:dd_input",
+    "label": "PO.0121 Data Class 4",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:43:C:1:in",
+    "label": "Match tolerance on density",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:44:C:1:in",
+    "label": "Match tolerance on GOR",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:45:C:1:dd_input",
+    "label": "Component adjustment switch",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:46:C:1:dd_input",
+    "label": "Oil density correction switch",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:47:C:1:dd_input",
+    "label": "Gas density correction switch",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:48:C:1:in",
+    "label": "PVTSIM Unit Type",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:49:C:1:dd_input",
+    "label": "Separator",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:50:C:1:dd_input",
+    "label": "Tank",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:51:C:1:dd_input",
+    "label": "Op Production Unit",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:52:C:1:dd_input",
+    "label": "Op Area",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:53:C:1:dd_input",
+    "label": "Op Facility Class 1",
+    "kind": "dropdown",
+    "mandatory": false
+   }
+  ]
+ }
+}

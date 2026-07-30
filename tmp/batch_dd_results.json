@@ -1,0 +1,421 @@
+[
+ {
+  "screen": "HCB System",
+  "bfcode": "CD.0097",
+  "view": "OV_BALANCE",
+  "folder": "Configuration/Assets/Inventory_Objects",
+  "code_prefix": "AUTOTEST_HCB_",
+  "code_label": "Code",
+  "name_label": "Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "HCB Category",
+    "value": "Operating area system",
+    "n_opts": 3,
+    "sample": [
+     "Operating area system",
+     "Single field system",
+     "Plant / terminal system"
+    ]
+   }
+  ],
+  "all_mandatory_text": [
+   "Code",
+   "Name",
+   "Start Date"
+  ]
+ },
+ {
+  "screen": "Chemical Product",
+  "bfcode": "CO.0072",
+  "view": "OV_CHEM_PRODUCT",
+  "folder": "Configuration/Assets/Chemical_Objects",
+  "code_prefix": "AUTOTEST_CP_",
+  "code_label": "Chemical Product Code",
+  "name_label": "Chemical Product Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Meas. Units",
+    "value": "Liter",
+    "n_opts": 8,
+    "sample": [
+     "Liter",
+     "M3",
+     "bbls",
+     "%"
+    ]
+   }
+  ],
+  "all_mandatory_text": [
+   "Chemical Product Code",
+   "Chemical Product Name",
+   "Start Date"
+  ]
+ },
+ {
+  "screen": "Orifice Plate",
+  "bfcode": "CO.0089",
+  "view": "OV_ORIFICE_PLATE",
+  "folder": "Configuration/Assets/Metering_Objects",
+  "code_prefix": "AUTOTEST_OP_",
+  "code_label": "Orifice Code",
+  "name_label": "Orifice Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Material",
+    "value": "304/316 Stainless Steel",
+    "n_opts": 5,
+    "sample": [
+     "304/316 Stainless Steel",
+     "Monel",
+     "Carbon Steel",
+     "304 Stainless Steel"
+    ]
+   }
+  ],
+  "all_mandatory_text": [
+   "Orifice Code",
+   "Orifice Name",
+   "Start Date",
+   "Diameter [mm]",
+   "Measurement Temp [\u00b0R]"
+  ]
+ },
+ {
+  "screen": "Process Train",
+  "bfcode": "CO.0120",
+  "view": "OV_PROCESS_TRAIN",
+  "folder": "Configuration/Assets/Facility_Objects",
+  "code_prefix": "AUTOTEST_PT_",
+  "code_label": "Process Train Code",
+  "name_label": "Process Train Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Production Facility Class 1",
+    "value": null,
+    "n_opts": 0,
+    "sample": []
+   }
+  ],
+  "all_mandatory_text": [
+   "Process Train Code",
+   "Process Train Name",
+   "Start Date"
+  ]
+ },
+ {
+  "screen": "Config Variable",
+  "bfcode": "IN.0031",
+  "view": "OV_CONFIG_VARIABLE",
+  "folder": "Configuration/Assets/Calculation_Objects",
+  "code_prefix": "AUTOTEST_CV_",
+  "code_label": "Code",
+  "name_label": "Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Calculation Context",
+    "value": "Cargo Load/Unload",
+    "n_opts": 14,
+    "sample": [
+     "Cargo Load/Unload",
+     "Cargo Planning",
+     "Contract Calculation",
+     "Financial Item Calculation"
+    ]
+   }
+  ],
+  "all_mandatory_text": [
+   "Code",
+   "Name",
+   "Start Date"
+  ]
+ },
+ {
+  "screen": "Data Extract Setup",
+  "bfcode": "SP.0043",
+  "view": "OV_SUMMARY_SETUP",
+  "folder": "Configuration/Assets/Reporting_Objects",
+  "code_prefix": "AUTOTEST_DXS_",
+  "code_label": "Data Extract Setup Code",
+  "name_label": "Data Extract Setup Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Data Extract Type",
+    "value": "Actual",
+    "n_opts": 2,
+    "sample": [
+     "Actual",
+     "Forecast"
+    ]
+   }
+  ],
+  "all_mandatory_text": [
+   "Data Extract Setup Code",
+   "Data Extract Setup Name",
+   "Start Date"
+  ]
+ },
+ {
+  "screen": "Data Extract Set",
+  "bfcode": "SP.0049",
+  "view": "OV_SUMMARY_SET",
+  "folder": "Configuration/Assets/Reporting_Objects",
+  "code_prefix": "AUTOTEST_DXT_",
+  "code_label": "Code",
+  "name_label": "Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Owner Class",
+    "value": "All",
+    "n_opts": 2,
+    "sample": [
+     "All",
+     "Project"
+    ]
+   }
+  ],
+  "all_mandatory_text": [
+   "Code",
+   "Name",
+   "Start Date"
+  ]
+ },
+ {
+  "screen": "Storage Flow",
+  "bfcode": "CO.2091",
+  "view": "OV_STORAGE_FLOW",
+  "folder": "Configuration/Assets/Tank_and_Storage_Objects",
+  "code_prefix": "AUTOTEST_SF_",
+  "code_label": "Storage Flow Code",
+  "name_label": "Storage Flow Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Flow Direction",
+    "value": "*Inbound",
+    "n_opts": 2,
+    "sample": [
+     "*Inbound",
+     "Outbound"
+    ]
+   },
+   {
+    "label": "Storage",
+    "value": "AS3_Crude_Storage",
+    "n_opts": 32,
+    "sample": [
+     "AS3_Crude_Storage",
+     "LNG Rotterdam Storage",
+     "LNG Stavanger Storage",
+     "LNG Trondheim Storage"
+    ]
+   }
+  ],
+  "all_mandatory_text": [
+   "Storage Flow Code",
+   "Storage Flow Name",
+   "Start Date"
+  ]
+ },
+ {
+  "screen": "UOP Key",
+  "bfcode": "CD.0099",
+  "view": "OV_FIN_UOP_DEPR_KEY",
+  "folder": "Configuration/Assets/Financial_Objects",
+  "code_prefix": "AUTOTEST_UOP_",
+  "code_label": "Code",
+  "name_label": "Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Company",
+    "value": null,
+    "n_opts": 0,
+    "sample": []
+   },
+   {
+    "label": "Key Type",
+    "value": "Non Drilling",
+    "n_opts": 2,
+    "sample": [
+     "Non Drilling",
+     "Drilling"
+    ]
+   }
+  ],
+  "all_mandatory_text": [
+   "Code",
+   "Name",
+   "Start Date",
+   "Key Number"
+  ]
+ },
+ {
+  "screen": "EC Code Object",
+  "bfcode": "CD.0135",
+  "view": "OV_EC_CODE_OBJECT",
+  "folder": "Configuration/Assets/Basic_Objects",
+  "code_prefix": "AUTOTEST_ECO_",
+  "code_label": "Object Code",
+  "name_label": "Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "EC Code Type",
+    "value": "Document Type",
+    "n_opts": 3,
+    "sample": [
+     "Document Type",
+     "Expenditure Type",
+     "Dataset"
+    ]
+   },
+   {
+    "label": "EC Code",
+    "value": null,
+    "n_opts": 0,
+    "sample": []
+   }
+  ],
+  "all_mandatory_text": [
+   "Object Code",
+   "Start Date"
+  ]
+ },
+ {
+  "screen": "Meter Run",
+  "bfcode": "CO.0091",
+  "view": "OV_METER_RUN",
+  "folder": "Configuration/Assets/Metering_Objects",
+  "code_prefix": "AUTOTEST_MR_",
+  "code_label": "Meter Run Code",
+  "name_label": "Meter Run Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Type of Taps",
+    "value": "Pipe",
+    "n_opts": 2,
+    "sample": [
+     "Pipe",
+     "Flange"
+    ]
+   },
+   {
+    "label": "Pipe Material",
+    "value": "Stainless Steel",
+    "n_opts": 3,
+    "sample": [
+     "Stainless Steel",
+     "Monel",
+     "Carbon Steel"
+    ]
+   },
+   {
+    "label": "Location of Taps",
+    "value": "Upstream",
+    "n_opts": 2,
+    "sample": [
+     "Upstream",
+     "Downstream"
+    ]
+   }
+  ],
+  "all_mandatory_text": [
+   "Meter Run Code",
+   "Meter Run Name",
+   "Start Date",
+   "Pipe Diameter (temp uncorrected) [mm]",
+   "Diameter Meas Temp [\u00b0R]",
+   "All Calibration Factor"
+  ]
+ },
+ {
+  "screen": "Reservoir Block Formation",
+  "bfcode": "CO.0137",
+  "view": "OV_RESV_BLOCK_FORMATION",
+  "folder": "Configuration/Assets/Well_and_Reservoir_Objects",
+  "code_prefix": "AUTOTEST_RBF_",
+  "code_label": "Resv Block Formation Code",
+  "name_label": "Resv Block Formation Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Reservoir Block",
+    "value": "Reservoir Block A",
+    "n_opts": 10,
+    "sample": [
+     "Reservoir Block A",
+     "Reservoir Block B",
+     "AS3_Block_1",
+     "AS3_Block_2"
+    ]
+   },
+   {
+    "label": "Reservoir Formation",
+    "value": null,
+    "n_opts": 0,
+    "sample": []
+   }
+  ],
+  "all_mandatory_text": [
+   "Resv Block Formation Code",
+   "Resv Block Formation Name",
+   "Start Date"
+  ]
+ },
+ {
+  "screen": "Calculation Group Context",
+  "bfcode": "CO.0245",
+  "view": "OV_CALC_GRP_CONTEXT",
+  "folder": "Configuration/Assets/Calculation_Objects",
+  "code_prefix": "AUTOTEST_CGC_",
+  "code_label": "Calculation Group Context Code",
+  "name_label": "Calculation Group Context Name",
+  "date_label": "Start Date",
+  "end_label": "End Date",
+  "dropdowns": [
+   {
+    "label": "Calculation Group Object Class",
+    "value": "ALLOC_NETWORK",
+    "n_opts": 6,
+    "sample": [
+     "ALLOC_NETWORK",
+     "ALLOC_NETWORK_GROUP",
+     "CONTRACT_GROUP",
+     "FIN_ITEM_GROUP"
+    ]
+   },
+   {
+    "label": "Calculation Group List Class",
+    "value": null,
+    "n_opts": 0,
+    "sample": []
+   }
+  ],
+  "all_mandatory_text": [
+   "Calculation Group Context Code",
+   "Calculation Group Context Name",
+   "Start Date"
+  ]
+ }
+]

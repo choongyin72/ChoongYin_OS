@@ -1,0 +1,65 @@
+{
+ "screen": "Forecast",
+ "bfcode": "FC.0010",
+ "view": "OV_FORECAST_GROUP",
+ "folder": "Configuration/Forecasting",
+ "slug": "forecast",
+ "code_prefix": "AUTOTEST_FC_",
+ "code_label": "Forecast Code",
+ "name_label": "Forecast Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Forecast 001",
+ "dropdowns": [],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 4,
+  "dropdowns_raw": [],
+  "extras": [],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "label": "Forecast Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "label": "Forecast Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:in",
+    "label": "Description",
+    "kind": "text",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_input",
+    "label": "Period Type",
+    "kind": "dropdown",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:dd_input",
+    "label": "Forecast Type",
+    "kind": "dropdown",
+    "mandatory": false
+   }
+  ]
+ }
+}

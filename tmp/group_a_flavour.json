@@ -1,0 +1,146 @@
+[
+ {
+  "bf": "CO.0100",
+  "screen": "Production Sub Unit",
+  "view": "OV_PROD_SUB_UNIT",
+  "folder": "Assets > Basic Objects",
+  "grid_id": "?",
+  "go": true,
+  "flavour": "manage-object"
+ },
+ {
+  "bf": "CO.1060",
+  "screen": "Calculation Library",
+  "view": "OV_CALC_LIBRARY",
+  "folder": "Assets > Calculation Objects",
+  "grid_id": "nav:form:T_data",
+  "go": false,
+  "flavour": "custom-URL"
+ },
+ {
+  "bf": "CO.2038",
+  "screen": "Contract Area Setup",
+  "view": "OV_CONTRACT_AREA_SETUP",
+  "folder": "Assets > Contract Objects",
+  "grid_id": "nav:form:T_data",
+  "go": false,
+  "flavour": "custom-URL"
+ },
+ {
+  "bf": "CO.0021",
+  "screen": "Facility Class 2",
+  "view": "OV_FCTY_CLASS_2",
+  "folder": "Assets > Facility Objects",
+  "grid_id": "?",
+  "go": true,
+  "flavour": "manage-object"
+ },
+ {
+  "bf": "CO.0158",
+  "screen": "Report Group",
+  "view": "OV_REPORT_GROUP",
+  "folder": "Assets > Facility Objects",
+  "grid_id": "?",
+  "go": true,
+  "flavour": "manage-object"
+ },
+ {
+  "bf": "CO.0227",
+  "screen": "External Location",
+  "view": "OV_EXTERNAL_LOCATION",
+  "folder": "Assets > Facility Objects",
+  "grid_id": "?",
+  "go": true,
+  "flavour": "manage-object"
+ },
+ {
+  "bf": "CO.0102",
+  "screen": "Constant Standard",
+  "view": "OV_CONSTANT_STANDARD",
+  "folder": "Assets > Hydrocarbon Objects",
+  "grid_id": "?",
+  "go": false,
+  "flavour": "?"
+ },
+ {
+  "bf": "CD.0109",
+  "screen": "Document Sequence",
+  "view": "OV_DOC_SEQUENCE",
+  "folder": "Assets > Revenue Document Objects",
+  "grid_id": "nav:form:T_data",
+  "go": false,
+  "flavour": "custom-URL"
+ },
+ {
+  "bf": "CD.0008",
+  "screen": "Stream Item",
+  "view": "OV_STREAM_ITEM",
+  "folder": "Assets > Stream Objects",
+  "grid_id": "?",
+  "go": false,
+  "flavour": "?"
+ },
+ {
+  "bf": "CO.0264",
+  "screen": "Truck",
+  "view": "OV_TRUCK",
+  "folder": "Assets > Transport Objects",
+  "grid_id": "?",
+  "go": true,
+  "flavour": "manage-object"
+ },
+ {
+  "bf": "CO.0265",
+  "screen": "Trailer",
+  "view": "OV_TRAILER",
+  "folder": "Assets > Transport Objects",
+  "grid_id": "?",
+  "go": true,
+  "flavour": "manage-object"
+ },
+ {
+  "bf": "CO.0266",
+  "screen": "Driver",
+  "view": "OV_DRIVER",
+  "folder": "Assets > Transport Objects",
+  "grid_id": "?",
+  "go": true,
+  "flavour": "manage-object"
+ },
+ {
+  "bf": "CO.0193",
+  "screen": "Action Trigger",
+  "view": "OV_CONTROL_POINT",
+  "folder": "Business Action",
+  "grid_id": "nav:form:T_data",
+  "go": false,
+  "flavour": "custom-URL"
+ },
+ {
+  "bf": "CO.1033",
+  "screen": "Production Day Table",
+  "view": "OV_PRODUCTION_DAY",
+  "folder": "System",
+  "grid_id": "?",
+  "go": false,
+  "flavour": "?"
+ },
+ {
+  "bf": "CO.0191",
+  "screen": "Task Process",
+  "view": "OV_TASK_PROCESS",
+  "folder": "Task List",
+  "grid_id": "nav:form:T_data",
+  "go": false,
+  "flavour": "custom-URL"
+ },
+ {
+  "bf": "FC.0010",
+  "screen": "Forecast",
+  "view": "OV_FORECAST_GROUP",
+  "folder": "Forecasting",
+  "grid_id": "nav:form:T_data",
+  "go": false,
+  "flavour": "custom-URL"
+ }
+]

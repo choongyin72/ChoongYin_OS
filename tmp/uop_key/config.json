@@ -1,0 +1,50 @@
+{
+ "screen": "UOP Key",
+ "bfcode": "CD.0099",
+ "view": "OV_FIN_UOP_DEPR_KEY",
+ "folder": "Configuration/Assets/Revenue_Lists",
+ "slug": "uop_key",
+ "code_prefix": "AUTOTEST_UOP_",
+ "code_label": "Code",
+ "name_label": "Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST UOP Key 001",
+ "dropdowns": [
+  {
+   "label": "Company",
+   "value": "__FIRST__"
+  },
+  {
+   "label": "Key Type",
+   "value": "__FIRST__"
+  }
+ ],
+ "extra_fields": [
+  {
+   "label": "Key Number",
+   "value": "1"
+  }
+ ],
+ "_scan": {
+  "mandatory_count": 6,
+  "dropdowns_raw": [
+   {
+    "label": "Company",
+    "value": null,
+    "n_opts": 0
+   },
+   {
+    "label": "Key Type",
+    "value": "Non Drilling",
+    "n_opts": 2
+   }
+  ],
+  "extras": [
+   "Key Number"
+  ],
+  "dropdown_blockers": [
+   "Company"
+  ]
+ }
+}

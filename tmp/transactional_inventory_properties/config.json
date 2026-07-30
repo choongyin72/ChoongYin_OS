@@ -1,0 +1,28 @@
+{
+ "screen": "Transactional Inventory Properties",
+ "bfcode": "IN.0023",
+ "view": "OV_TRANS_INVENTORY",
+ "folder": "EC_Revenue/Inventory/Transactional_Inventory/Configuration",
+ "slug": "transactional_inventory_properties",
+ "code_prefix": "AUTOTEST_TIP_",
+ "code_label": "Code",
+ "name_label": "Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Transactional Inventory Properties 001",
+ "dropdowns": [],
+ "extra_fields": [
+  {
+   "label": "Sequence Number",
+   "value": "1"
+  }
+ ],
+ "_scan": {
+  "mandatory_count": 4,
+  "dropdowns_raw": [],
+  "extras": [
+   "Sequence Number"
+  ],
+  "dropdown_blockers": []
+ }
+}

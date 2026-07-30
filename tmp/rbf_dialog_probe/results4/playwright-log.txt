@@ -1,0 +1,193 @@
+{"level":"info","time":"2026-07-27T10:51:58.303Z","seq":1,"component":"browser-library","msg":"Listening on 127.0.0.1:51014"}
+{"level":"info","time":"2026-07-27T10:51:58.586Z","seq":2,"component":"browser-library","event_kind":"grpc","action":"newBrowser","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:00.792Z","seq":3,"component":"browser-library","msg":"Adding browser to stack: chromium, version: 148.0.7778.96"}
+{"level":"info","time":"2026-07-27T10:52:00.792Z","seq":4,"component":"browser-library","msg":"Adding 0 contexts to browser"}
+{"level":"info","time":"2026-07-27T10:52:00.792Z","seq":5,"component":"browser-library","event_kind":"grpc","action":"newBrowser","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:00.802Z","seq":6,"component":"browser-library","event_kind":"grpc","action":"newContext","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:00.802Z","seq":7,"component":"browser-library","msg":"Creating new context with options: {\"acceptDownloads\":true,\"bypassCSP\":false,\"forcedColors\":\"none\",\"ignoreHTTPSErrors\":true,\"javaScriptEnabled\":true,\"offline\":false,\"reducedMotion\":\"no-preference\",\"serviceWorkers\":\"allow\",\"viewport\":null}"}
+{"level":"info","time":"2026-07-27T10:52:00.802Z","seq":8,"component":"browser-library","msg":"currentBrowser: {\"_contextStack\":[],\"browser\":{\"_type\":\"Browser\",\"_guid\":\"browser@6a72067745b3f46843bf97926b99da2e\"},\"name\":\"chromium\",\"id\":\"browser=dc7c0d1e-8a08-4f23-8263-4b3bd8d6b439\",\"headless\":false}"}
+{"level":"info","time":"2026-07-27T10:52:00.802Z","seq":9,"component":"browser-library","msg":"Trace file: "}
+{"level":"info","time":"2026-07-27T10:52:00.819Z","seq":10,"component":"browser-library","msg":"Setting default timeout for context context=39340ade-a2d2-4476-b363-d4170049f6fc to 10000"}
+{"level":"info","time":"2026-07-27T10:52:00.819Z","seq":11,"component":"browser-library","msg":"Changed active context: context=39340ade-a2d2-4476-b363-d4170049f6fc"}
+{"level":"info","time":"2026-07-27T10:52:00.819Z","seq":12,"component":"browser-library","event_kind":"grpc","action":"newContext","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:00.829Z","seq":13,"component":"browser-library","event_kind":"grpc","action":"newPage","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:00.829Z","seq":14,"component":"browser-library","msg":"currentBrowser: {\"_contextStack\":[{\"id\":\"context=39340ade-a2d2-4476-b363-d4170049f6fc\",\"c\":{\"_type\":\"BrowserContext\",\"_guid\":\"browser-context@5c42204a7675ba5a040ad3fdc5247e3c\"},\"pageStack\":[],\"options\":{\"acceptDownloads\":true,\"bypassCSP\":false,\"forcedColors\":\"none\",\"ignoreHTTPSErrors\":true,\"javaScriptEnabled\":true,\"offline\":false,\"reducedMotion\":\"no-preference\",\"serviceWorkers\":\"allow\",\"viewport\":null},\"traceFile\":\"\"}],\"browser\":{\"_type\":\"Browser\",\"_guid\":\"browser@6a72067745b3f46843bf97926b99da2e\"},\"name\":\"chromium\",\"id\":\"browser=dc7c0d1e-8a08-4f23-8263-4b3bd8d6b439\",\"headless\":false}"}
+{"level":"info","time":"2026-07-27T10:52:01.140Z","seq":15,"component":"browser-library","msg":"Video path: undefined"}
+{"level":"info","time":"2026-07-27T10:52:01.141Z","seq":16,"component":"browser-library","msg":"Changed active page"}
+{"level":"info","time":"2026-07-27T10:52:01.411Z","seq":17,"component":"browser-library","event_kind":"grpc","action":"newPage","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:01.417Z","seq":18,"component":"browser-library","event_kind":"grpc","action":"fillText","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:01.417Z","seq":19,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"username\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:01.470Z","seq":20,"component":"browser-library","event_kind":"grpc","action":"fillText","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:01.476Z","seq":21,"component":"browser-library","event_kind":"grpc","action":"fillText","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:01.476Z","seq":22,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"password\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:01.491Z","seq":23,"component":"browser-library","event_kind":"grpc","action":"fillText","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:01.496Z","seq":24,"component":"browser-library","event_kind":"grpc","action":"click","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:01.497Z","seq":25,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"kc-login\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:02.251Z","seq":26,"component":"browser-library","event_kind":"grpc","action":"click","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:02.257Z","seq":27,"component":"browser-library","event_kind":"grpc","action":"waitForElementState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:02.257Z","seq":28,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"menu:searchForm:searchTxt\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:02.777Z","seq":29,"component":"browser-library","event_kind":"grpc","action":"waitForElementState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:02.782Z","seq":30,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:02.782Z","seq":31,"component":"browser-library","msg":"timeout: 30000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:03.315Z","seq":32,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:03.320Z","seq":33,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:03.321Z","seq":34,"component":"browser-library","msg":"Strict mode is disabled, return Locator: css=[id=\"confirmationForm:confirmation_modal\"]:visible in page."}
+{"level":"info","time":"2026-07-27T10:52:03.324Z","seq":35,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:03.330Z","seq":36,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:03.330Z","seq":37,"component":"browser-library","msg":"Strict mode is disabled, return Locator: css=[id=\"menu:searchForm:searchTxt\"]:visible in page."}
+{"level":"info","time":"2026-07-27T10:52:03.333Z","seq":38,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:03.339Z","seq":39,"component":"browser-library","event_kind":"grpc","action":"typeText","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:03.339Z","seq":40,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"menu:searchForm:searchTxt\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:05.013Z","seq":41,"component":"browser-library","event_kind":"grpc","action":"typeText","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:05.017Z","seq":42,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:05.017Z","seq":43,"component":"browser-library","msg":"timeout: 8000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:05.018Z","seq":44,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:05.524Z","seq":45,"component":"browser-library","event_kind":"grpc","action":"click","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:05.524Z","seq":46,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Reservoir Formation'] in page."}
+{"level":"info","time":"2026-07-27T10:52:05.574Z","seq":47,"component":"browser-library","event_kind":"grpc","action":"click","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:05.578Z","seq":48,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:05.579Z","seq":49,"component":"browser-library","msg":"timeout: 15000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:05.580Z","seq":50,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:07.085Z","seq":51,"component":"browser-library","event_kind":"grpc","action":"getText","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:07.086Z","seq":52,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"screenToolbar:form:screenLabel\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:07.120Z","seq":53,"component":"browser-library","msg":"Retrieved text for element css=[id=\"screenToolbar:form:screenLabel\"] containing Reservoir Formation"}
+{"level":"info","time":"2026-07-27T10:52:07.120Z","seq":54,"component":"browser-library","event_kind":"grpc","action":"getText","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:07.124Z","seq":55,"component":"browser-library","event_kind":"grpc","action":"waitForElementState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:07.124Z","seq":56,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"screenToolbar:form:minmaxMenu\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:07.128Z","seq":57,"component":"browser-library","event_kind":"grpc","action":"waitForElementState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:07.131Z","seq":58,"component":"browser-library","event_kind":"grpc","action":"click","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:07.131Z","seq":59,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"screenToolbar:form:minmaxMenu\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:07.205Z","seq":60,"component":"browser-library","event_kind":"grpc","action":"click","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:07.209Z","seq":61,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:07.209Z","seq":62,"component":"browser-library","msg":"timeout: 15000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:07.210Z","seq":63,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:07.715Z","seq":64,"component":"browser-library","event_kind":"grpc","action":"hover","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:07.716Z","seq":65,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]] in page."}
+{"level":"info","time":"2026-07-27T10:52:07.757Z","seq":66,"component":"browser-library","event_kind":"grpc","action":"hover","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:07.761Z","seq":67,"component":"browser-library","event_kind":"grpc","action":"waitForElementState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:07.761Z","seq":68,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object'] in page."}
+{"level":"info","time":"2026-07-27T10:52:07.766Z","seq":69,"component":"browser-library","event_kind":"grpc","action":"waitForElementState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:07.769Z","seq":70,"component":"browser-library","event_kind":"grpc","action":"click","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:07.769Z","seq":71,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object'] in page."}
+{"level":"info","time":"2026-07-27T10:52:07.816Z","seq":72,"component":"browser-library","event_kind":"grpc","action":"click","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:07.820Z","seq":73,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:07.820Z","seq":74,"component":"browser-library","msg":"timeout: 15000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:07.821Z","seq":75,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.028Z","seq":76,"component":"browser-library","event_kind":"grpc","action":"getElementAttribute","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.028Z","seq":77,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: xpath=//span[contains(@class,'ECCell') and contains(@id,':objectForm:form:') and normalize-space(text())='Reservoir Formation Code']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input in page."}
+{"level":"info","time":"2026-07-27T10:52:09.037Z","seq":78,"component":"browser-library","msg":"Retrieved attribute for element xpath=//span[contains(@class,'ECCell') and contains(@id,':objectForm:form:') and normalize-space(text())='Reservoir Formation Code']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input containing tab:tabPanel:objectForm:form:G:0:R:0:C:1:in"}
+{"level":"info","time":"2026-07-27T10:52:09.037Z","seq":79,"component":"browser-library","event_kind":"grpc","action":"getElementAttribute","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.042Z","seq":80,"component":"browser-library","event_kind":"grpc","action":"fillText","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.042Z","seq":81,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"tab:tabPanel:objectForm:form:G:0:R:0:C:1:in\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:09.052Z","seq":82,"component":"browser-library","event_kind":"grpc","action":"fillText","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.057Z","seq":83,"component":"browser-library","event_kind":"grpc","action":"evaluateJavascript","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.063Z","seq":84,"component":"browser-library","event_kind":"grpc","action":"evaluateJavascript","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.472Z","seq":85,"component":"browser-library","event_kind":"grpc","action":"getElementAttribute","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.472Z","seq":86,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: xpath=//span[contains(@class,'ECCell') and contains(@id,':objectForm:form:') and normalize-space(text())='Reservoir Formation Name']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input in page."}
+{"level":"info","time":"2026-07-27T10:52:09.483Z","seq":87,"component":"browser-library","msg":"Retrieved attribute for element xpath=//span[contains(@class,'ECCell') and contains(@id,':objectForm:form:') and normalize-space(text())='Reservoir Formation Name']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input containing tab:tabPanel:objectForm:form:G:0:R:1:C:1:in"}
+{"level":"info","time":"2026-07-27T10:52:09.483Z","seq":88,"component":"browser-library","event_kind":"grpc","action":"getElementAttribute","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.488Z","seq":89,"component":"browser-library","event_kind":"grpc","action":"fillText","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.488Z","seq":90,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"tab:tabPanel:objectForm:form:G:0:R:1:C:1:in\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:09.498Z","seq":91,"component":"browser-library","event_kind":"grpc","action":"fillText","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.503Z","seq":92,"component":"browser-library","event_kind":"grpc","action":"evaluateJavascript","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.509Z","seq":93,"component":"browser-library","event_kind":"grpc","action":"evaluateJavascript","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.915Z","seq":94,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.915Z","seq":95,"component":"browser-library","msg":"Strict mode is disabled, return Locator: css=[id=\"confirmationForm:confirmation_modal\"]:visible in page."}
+{"level":"info","time":"2026-07-27T10:52:09.918Z","seq":96,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.922Z","seq":97,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.922Z","seq":98,"component":"browser-library","msg":"Strict mode is disabled, return Locator: css=[id=\"menu:searchForm:searchTxt\"]:visible in page."}
+{"level":"info","time":"2026-07-27T10:52:09.924Z","seq":99,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.927Z","seq":100,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.927Z","seq":101,"component":"browser-library","msg":"Strict mode is disabled, return Locator: css=[id=\"screenToolbar:form:minmaxMenu\"]:visible in page."}
+{"level":"info","time":"2026-07-27T10:52:09.929Z","seq":102,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.932Z","seq":103,"component":"browser-library","event_kind":"grpc","action":"click","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.932Z","seq":104,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"screenToolbar:form:minmaxMenu\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:09.970Z","seq":105,"component":"browser-library","event_kind":"grpc","action":"click","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:09.973Z","seq":106,"component":"browser-library","event_kind":"grpc","action":"waitForElementState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:09.973Z","seq":107,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"menu:searchForm:searchTxt\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:09.977Z","seq":108,"component":"browser-library","event_kind":"grpc","action":"waitForElementState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:10.483Z","seq":109,"component":"browser-library","event_kind":"grpc","action":"typeText","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:10.483Z","seq":110,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"menu:searchForm:searchTxt\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:11.608Z","seq":111,"component":"browser-library","event_kind":"grpc","action":"typeText","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:11.611Z","seq":112,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:11.611Z","seq":113,"component":"browser-library","msg":"timeout: 8000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:11.612Z","seq":114,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:12.116Z","seq":115,"component":"browser-library","event_kind":"grpc","action":"click","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:12.116Z","seq":116,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Reservoir Block'] in page."}
+{"level":"info","time":"2026-07-27T10:52:12.249Z","seq":117,"component":"browser-library","event_kind":"grpc","action":"click","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:12.252Z","seq":118,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:12.252Z","seq":119,"component":"browser-library","msg":"timeout: 15000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:12.252Z","seq":120,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:13.757Z","seq":121,"component":"browser-library","event_kind":"grpc","action":"getText","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:13.757Z","seq":122,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"screenToolbar:form:screenLabel\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:13.770Z","seq":123,"component":"browser-library","msg":"Retrieved text for element css=[id=\"screenToolbar:form:screenLabel\"] containing Reservoir Formation"}
+{"level":"info","time":"2026-07-27T10:52:13.770Z","seq":124,"component":"browser-library","event_kind":"grpc","action":"getText","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:13.776Z","seq":125,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:13.776Z","seq":126,"component":"browser-library","msg":"Strict mode is disabled, return Locator: css=[id=\"confirmationForm:confirmation_modal\"]:visible in page."}
+{"level":"info","time":"2026-07-27T10:52:13.779Z","seq":127,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:13.788Z","seq":128,"component":"browser-library","event_kind":"grpc","action":"takeScreenshot","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:13.788Z","seq":129,"component":"browser-library","Take screenshot with options: ":{"path":"C:\\Projects\\ChoongYin_OS\\tmp\\rbf_dialog_probe\\results4\\browser\\screenshot\\robotframework-browser-screenshot-1.png","fileType":"png","fullPage":false,"timeout":30000,"omitBackground":false}}
+{"level":"info","time":"2026-07-27T10:52:13.882Z","seq":130,"component":"browser-library","event_kind":"grpc","action":"takeScreenshot","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:13.888Z","seq":131,"component":"browser-library","event_kind":"grpc","action":"evaluateJavascript","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:13.892Z","seq":132,"component":"browser-library","event_kind":"grpc","action":"evaluateJavascript","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:13.899Z","seq":133,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:13.899Z","seq":134,"component":"browser-library","msg":"Strict mode is disabled, return Locator: css=[id=\"confirmationForm:confirmation_modal\"]:visible in page."}
+{"level":"info","time":"2026-07-27T10:52:13.902Z","seq":135,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:13.908Z","seq":136,"component":"browser-library","event_kind":"grpc","action":"click","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:13.908Z","seq":137,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"confirmationForm:nobtn\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:13.933Z","seq":138,"component":"browser-library","event_kind":"grpc","action":"click","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:13.938Z","seq":139,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:13.939Z","seq":140,"component":"browser-library","msg":"timeout: 10000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:13.939Z","seq":141,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:14.446Z","seq":142,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:14.447Z","seq":143,"component":"browser-library","msg":"Strict mode is disabled, return Locator: css=[id=\"menu:searchForm:searchTxt\"]:visible in page."}
+{"level":"info","time":"2026-07-27T10:52:14.463Z","seq":144,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:14.468Z","seq":145,"component":"browser-library","event_kind":"grpc","action":"typeText","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:14.469Z","seq":146,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"menu:searchForm:searchTxt\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:16.353Z","seq":147,"component":"browser-library","event_kind":"grpc","action":"typeText","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:16.357Z","seq":148,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:16.357Z","seq":149,"component":"browser-library","msg":"timeout: 8000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:16.358Z","seq":150,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:16.863Z","seq":151,"component":"browser-library","event_kind":"grpc","action":"click","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:16.863Z","seq":152,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Reservoir Block Formation'] in page."}
+{"level":"info","time":"2026-07-27T10:52:16.923Z","seq":153,"component":"browser-library","event_kind":"grpc","action":"click","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:16.927Z","seq":154,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:16.927Z","seq":155,"component":"browser-library","msg":"timeout: 15000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:16.928Z","seq":156,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:18.433Z","seq":157,"component":"browser-library","event_kind":"grpc","action":"getText","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:18.433Z","seq":158,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"screenToolbar:form:screenLabel\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:18.461Z","seq":159,"component":"browser-library","msg":"Retrieved text for element css=[id=\"screenToolbar:form:screenLabel\"] containing Reservoir Block Formation"}
+{"level":"info","time":"2026-07-27T10:52:18.462Z","seq":160,"component":"browser-library","event_kind":"grpc","action":"getText","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:18.466Z","seq":161,"component":"browser-library","event_kind":"grpc","action":"waitForElementState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:18.466Z","seq":162,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"screenToolbar:form:minmaxMenu\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:18.469Z","seq":163,"component":"browser-library","event_kind":"grpc","action":"waitForElementState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:18.473Z","seq":164,"component":"browser-library","event_kind":"grpc","action":"click","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:18.473Z","seq":165,"component":"browser-library","msg":"Strict mode is disabled, return first Locator: css=[id=\"screenToolbar:form:minmaxMenu\"] in page."}
+{"level":"info","time":"2026-07-27T10:52:18.513Z","seq":166,"component":"browser-library","event_kind":"grpc","action":"click","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:18.517Z","seq":167,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:18.517Z","seq":168,"component":"browser-library","msg":"timeout: 15000 state: networkidle"}
+{"level":"info","time":"2026-07-27T10:52:18.517Z","seq":169,"component":"browser-library","event_kind":"grpc","action":"WaitForPageLoadState","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:19.023Z","seq":170,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:19.023Z","seq":171,"component":"browser-library","msg":"Strict mode is disabled, return Locator: css=[id=\"confirmationForm:confirmation_modal\"]:visible in page."}
+{"level":"info","time":"2026-07-27T10:52:19.027Z","seq":172,"component":"browser-library","event_kind":"grpc","action":"getElementCount","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:19.037Z","seq":173,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"getBrowserCatalog","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:19.040Z","seq":174,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"getBrowserCatalog","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:19.043Z","seq":175,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"getBrowserCatalog","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:19.043Z","seq":176,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"getBrowserCatalog","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:19.046Z","seq":177,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"getBrowserCatalog","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:19.046Z","seq":178,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"getBrowserCatalog","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:19.052Z","seq":179,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"getBrowserCatalog","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:19.052Z","seq":180,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"getBrowserCatalog","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:19.055Z","seq":181,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","msg":"Changed active context: context=39340ade-a2d2-4476-b363-d4170049f6fc"}
+{"level":"info","time":"2026-07-27T10:52:19.055Z","seq":182,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","msg":"Changing current active page: page=5dc02f49-df97-4826-a84c-94ede0e9f45d"}
+{"level":"info","time":"2026-07-27T10:52:19.055Z","seq":183,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","msg":"Changed active page"}
+{"level":"info","time":"2026-07-27T10:52:19.063Z","seq":184,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"closeContext","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:19.082Z","seq":185,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","msg":"Removed page=e3215c93-4438-4e37-9f9d-71baf6f7bb51 from context=39340ade-a2d2-4476-b363-d4170049f6fc page stack"}
+{"level":"info","time":"2026-07-27T10:52:19.090Z","seq":186,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"closeContext","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:19.096Z","seq":187,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"closeBrowser","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:19.442Z","seq":188,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc","action":"closeBrowser","status":"succeeded"}
+{"level":"error","time":"2026-07-27T10:52:19.445Z","seq":189,"suite_id":"s1","suite_name":"Probe Unsaved Dialog","component":"browser-library","event_kind":"grpc_error","status":"failed","error_type":"Error","msg":"Error: Browser has been closed.\n    at PlaywrightState.getActiveBrowser (C:\\Tools\\Python\\Python314\\Lib\\site-packages\\Browser\\wrapper\\index.js:12431:13)\n    at PlaywrightServer.getActiveBrowser (C:\\Tools\\Python\\Python314\\Lib\\site-packages\\Browser\\wrapper\\index.js:13353:52)\n    at PlaywrightServer.setTimeout (C:\\Tools\\Python\\Python314\\Lib\\site-packages\\Browser\\wrapper\\index.js:13571:56)\n    at Object.onReceiveHalfClose (C:\\Tools\\Python\\Python314\\Lib\\site-packages\\Browser\\wrapper\\node_modules\\@grpc\\grpc-js\\build\\src\\server.js:1464:25)\n    at BaseServerInterceptingCall.maybePushNextMessage (C:\\Tools\\Python\\Python314\\Lib\\site-packages\\Browser\\wrapper\\node_modules\\@grpc\\grpc-js\\build\\src\\server-interceptors.js:595:31)\n    at BaseServerInterceptingCall.handleEndEvent (C:\\Tools\\Python\\Python314\\Lib\\site-packages\\Browser\\wrapper\\node_modules\\@grpc\\grpc-js\\build\\src\\server-interceptors.js:635:14)\n    at ServerHttp2Stream.<anonymous> (C:\\Tools\\Python\\Python314\\Lib\\site-packages\\Browser\\wrapper\\node_modules\\@grpc\\grpc-js\\build\\src\\server-interceptors.js:394:18)\n    at ServerHttp2Stream.emit (node:events:520:35)\n    at endReadableNT (node:internal/streams/readable:1729:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)"}
+{"level":"info","time":"2026-07-27T10:52:19.449Z","seq":190,"component":"browser-library","event_kind":"grpc","action":"getBrowserCatalog","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:19.449Z","seq":191,"component":"browser-library","event_kind":"grpc","action":"getBrowserCatalog","status":"succeeded"}
+{"level":"info","time":"2026-07-27T10:52:19.499Z","seq":192,"component":"browser-library","event_kind":"grpc","action":"closeAllBrowsers","status":"started"}
+{"level":"info","time":"2026-07-27T10:52:19.499Z","seq":193,"component":"browser-library","event_kind":"grpc","action":"closeAllBrowsers","status":"succeeded"}

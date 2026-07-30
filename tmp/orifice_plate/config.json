@@ -1,0 +1,44 @@
+{
+ "screen": "Orifice Plate",
+ "bfcode": "CO.0089",
+ "view": "OV_ORIFICE_PLATE",
+ "folder": "Configuration/Assets/Stream_Objects",
+ "slug": "orifice_plate",
+ "code_prefix": "AUTOTEST_OP_",
+ "code_label": "Orifice Code",
+ "name_label": "Orifice Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Orifice Plate 001",
+ "dropdowns": [
+  {
+   "label": "Material",
+   "value": "304/316 Stainless Steel"
+  }
+ ],
+ "extra_fields": [
+  {
+   "label": "Diameter [mm]",
+   "value": "1"
+  },
+  {
+   "label": "Measurement Temp [\u00b0R]",
+   "value": "1"
+  }
+ ],
+ "_scan": {
+  "mandatory_count": 6,
+  "dropdowns_raw": [
+   {
+    "label": "Material",
+    "value": "304/316 Stainless Steel",
+    "n_opts": 5
+   }
+  ],
+  "extras": [
+   "Diameter [mm]",
+   "Measurement Temp [\u00b0R]"
+  ],
+  "dropdown_blockers": []
+ }
+}

@@ -1,0 +1,21 @@
+{
+ "screen": "Deferment Group",
+ "bfcode": "CO.0149",
+ "view": "OV_DEFERMENT_GROUP",
+ "folder": "Configuration/Assets/Facility_Objects",
+ "slug": "deferment_group",
+ "code_prefix": "AUTOTEST_DG_",
+ "code_label": "Deferment Group Code",
+ "name_label": "Deferment Group Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Deferment Group 001",
+ "dropdowns": [],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 3,
+  "dropdowns_raw": [],
+  "extras": [],
+  "dropdown_blockers": []
+ }
+}

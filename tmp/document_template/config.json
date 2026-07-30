@@ -1,0 +1,28 @@
+{
+ "screen": "Document Template",
+ "bfcode": "CD.0013",
+ "view": "OV_DOC_TEMPLATE",
+ "folder": "Configuration/Assets/Revenue_Document_Objects",
+ "slug": "document_template",
+ "code_prefix": "AUTOTEST_DT_",
+ "code_label": "Code",
+ "name_label": "Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Document Template 001",
+ "dropdowns": [],
+ "extra_fields": [
+  {
+   "label": "Document Title",
+   "value": "1"
+  }
+ ],
+ "_scan": {
+  "mandatory_count": 4,
+  "dropdowns_raw": [],
+  "extras": [
+   "Document Title"
+  ],
+  "dropdown_blockers": []
+ }
+}

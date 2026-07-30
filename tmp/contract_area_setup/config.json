@@ -1,0 +1,85 @@
+{
+ "screen": "Contract Area Setup",
+ "bfcode": "CO.2038",
+ "view": "OV_CONTRACT_AREA_SETUP",
+ "folder": "Configuration/Assets/Contract_Objects",
+ "slug": "contract_area_setup",
+ "code_prefix": "AUTOTEST_CAS_",
+ "code_label": "Contract Area Setup Code",
+ "name_label": "Contract Area Setup Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Contract Area Setup 001",
+ "dropdowns": [
+  {
+   "label": "Contract Area Name",
+   "value": "__FIRST__"
+  },
+  {
+   "label": "Contract Name",
+   "value": "__FIRST__"
+  }
+ ],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 5,
+  "dropdowns_raw": [
+   {
+    "label": "Contract Area Name",
+    "value": "Alberta",
+    "n_opts": 25
+   },
+   {
+    "label": "Contract Name",
+    "value": "Albritton 15H-1 Division Order",
+    "n_opts": 88
+   }
+  ],
+  "extras": [],
+  "dropdown_blockers": [],
+  "all_fields": [
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:0:C:1:in",
+    "label": "Contract Area Setup Code",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:1:C:1:in",
+    "label": "Contract Area Setup Name",
+    "kind": "text",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input",
+    "label": "Start Date",
+    "kind": "date",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:3:C:1:da_input",
+    "label": "End Date",
+    "kind": "date",
+    "mandatory": false
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:4:C:1:dd_input",
+    "label": "Contract Area Name",
+    "kind": "dropdown",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:5:C:1:dd_input",
+    "label": "Contract Name",
+    "kind": "dropdown",
+    "mandatory": true
+   },
+   {
+    "id": "tab:tabPanel:objectForm:form:G:0:R:6:C:1:in",
+    "label": "Comments",
+    "kind": "text",
+    "mandatory": false
+   }
+  ]
+ }
+}

@@ -1,0 +1,41 @@
+{
+ "screen": "Storage Flow",
+ "bfcode": "CO.2091",
+ "view": "OV_STORAGE_FLOW",
+ "folder": "Configuration/Assets/Tank_and_Storage_Objects",
+ "slug": "storage_flow",
+ "code_prefix": "AUTOTEST_SF_",
+ "code_label": "Storage Flow Code",
+ "name_label": "Storage Flow Name",
+ "date_label": "Start Date",
+ "end_label": "End Date",
+ "name_val": "AUTOTEST Storage Flow 001",
+ "dropdowns": [
+  {
+   "label": "Flow Direction",
+   "value": "*Inbound"
+  },
+  {
+   "label": "Storage",
+   "value": "AS3_Crude_Storage"
+  }
+ ],
+ "extra_fields": [],
+ "_scan": {
+  "mandatory_count": 5,
+  "dropdowns_raw": [
+   {
+    "label": "Flow Direction",
+    "value": "*Inbound",
+    "n_opts": 2
+   },
+   {
+    "label": "Storage",
+    "value": "AS3_Crude_Storage",
+    "n_opts": 32
+   }
+  ],
+  "extras": [],
+  "dropdown_blockers": []
+ }
+}

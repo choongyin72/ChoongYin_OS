@@ -1,0 +1,2403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.14.3 on win32)" generated="2026-07-27T18:02:58.723747" rpa="false" schemaversion="5">
+<suite id="s1" name="Reservoir Block Formation Iud" source="C:\Projects\ChoongYin_OS\workstreams\master-plan\ec-automation\tests\Configuration\Assets\Well_and_Reservoir_Objects\reservoir_block_formation_iud.robot">
+<kw name="Open Reservoir Block Formation Suite" owner="reservoir_block_formation_page" type="SETUP">
+<kw name="Launch EC And Open Screen" owner="common">
+<kw name="Open EC Browser" owner="browser">
+<if>
+<branch type="IF" condition="${HEADLESS}">
+<kw name="New Browser" owner="Browser">
+<msg time="2026-07-27T18:02:59.505822" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "C:\\Projects\\ChoongYin_OS\\tmp\\rbf_live\\browser\\traces\\temp\\22a48849-ebb4-42d6-8500-796ce28effb4"}</msg>
+<msg time="2026-07-27T18:02:59.614476" level="INFO">Starting Browser process C:\Tools\Python\Python314\Lib\site-packages\Browser\wrapper\index.js using at 127.0.0.1:51721</msg>
+<msg time="2026-07-27T18:03:01.917245" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"C:\\Projects\\ChoongYin_OS\\tmp\\rbf_live\\browser\\traces\\temp\\22a48849-ebb4-42d6-8500-796ce28effb4"}</msg>
+<arg>chromium</arg>
+<arg>headless=${TRUE}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="PASS" start="2026-07-27T18:02:59.504924" elapsed="2.412619"/>
+</kw>
+<kw name="New Context" owner="Browser">
+<msg time="2026-07-27T18:03:01.920917" level="INFO">{
+  "acceptDownloads": true,
+  "bypassCSP": false,
+  "forcedColors": "none",
+  "ignoreHTTPSErrors": true,
+  "javaScriptEnabled": true,
+  "offline": false,
+  "reducedMotion": "no-preference",
+  "serviceWorkers": "allow",
+  "viewport": {
+    "height": 1080,
+    "width": 1920
+  }
+}</msg>
+<msg time="2026-07-27T18:03:01.936687" level="INFO">Successfully created context. </msg>
+<msg time="2026-07-27T18:03:01.936883" level="INFO">{'acceptDownloads': True, 'bypassCSP': False, 'forcedColors': 'none', 'ignoreHTTPSErrors': True, 'javaScriptEnabled': True, 'offline': False, 'reducedMotion': 'no-preference', 'serviceWorkers': 'allow', 'viewport': {'height': 1080, 'width': 1920}}</msg>
+<arg>ignoreHTTPSErrors=${TRUE}</arg>
+<arg>viewport={'width': 1920, 'height': 1080}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new BrowserContext with specified options.</doc>
+<status status="PASS" start="2026-07-27T18:03:01.917950" elapsed="0.019138"/>
+</kw>
+<status status="PASS" start="2026-07-27T18:02:59.504210" elapsed="2.433051"/>
+</branch>
+<branch type="ELSE">
+<variable name="@{args}">
+<var>--start-maximized</var>
+<status status="NOT RUN" start="2026-07-27T18:03:01.937778" elapsed="0.000274"/>
+</variable>
+<kw name="New Browser" owner="Browser">
+<arg>chromium</arg>
+<arg>headless=${FALSE}</arg>
+<arg>args=${args}</arg>
+<arg>slowMo=${SLOWMO}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:01.938404" elapsed="0.000183"/>
+</kw>
+<kw name="New Context" owner="Browser">
+<arg>ignoreHTTPSErrors=${TRUE}</arg>
+<arg>viewport=${None}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new BrowserContext with specified options.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:01.939152" elapsed="0.000545"/>
+</kw>
+<status status="NOT RUN" start="2026-07-27T18:03:01.937381" elapsed="0.002433"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:02:59.504176" elapsed="2.435706"/>
+</if>
+<kw name="Set Browser Timeout" owner="Browser">
+<arg>30s</arg>
+<tag>Config</tag>
+<tag>Setter</tag>
+<doc>Sets the timeout used by most input and getter keywords.</doc>
+<status status="PASS" start="2026-07-27T18:03:01.940087" elapsed="0.004986"/>
+</kw>
+<kw name="Set Strict Mode" owner="Browser">
+<arg>False</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Controls library strict mode.</doc>
+<status status="PASS" start="2026-07-27T18:03:01.945565" elapsed="0.001162"/>
+</kw>
+<doc>Launch Chromium + context (headless from environment).
+Headed: OS-maximised window (--start-maximized, no fixed viewport) so the
+page fills the screen. Headless: 1920x1080 virtual viewport as before.</doc>
+<status status="PASS" start="2026-07-27T18:02:59.503994" elapsed="2.442871"/>
+</kw>
+<kw name="Login To EC" owner="browser">
+<kw name="New Page" owner="Browser">
+<msg time="2026-07-27T18:03:06.479141" level="INFO">Successfully initialized new page object and opened url: https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/</msg>
+<arg>${EC_URL}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<status status="PASS" start="2026-07-27T18:03:01.947685" elapsed="4.531845"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-27T18:03:06.484948" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="username"]</arg>
+<arg>${user}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:06.481822" elapsed="0.062594"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-27T18:03:06.546124" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="password"]</arg>
+<arg>${pass}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:06.544796" elapsed="0.022414"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:03:06.568829" level="INFO">Clicks the element 'css=[id="kc-login"]'.</msg>
+<arg>css=[id="kc-login"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:06.567636" elapsed="0.246170"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-27T18:03:07.186472" level="INFO">Waited for Element with selector css=[id="menu:searchForm:searchTxt"] at state visible</msg>
+<arg>css=[id="menu:searchForm:searchTxt"]</arg>
+<arg>visible</arg>
+<arg>timeout=60s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-27T18:03:06.814224" elapsed="0.372541"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:03:07.188340" level="INFO">Waiting page load to state to receive networkidle in 30000.0</msg>
+<msg time="2026-07-27T18:03:07.726571" level="INFO">Load state networkidle got in 30000</msg>
+<arg>networkidle</arg>
+<arg>timeout=30s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:03:07.187167" elapsed="0.539610"/>
+</kw>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>Open the app and authenticate as sysadmin (defaults to the
+env-configured user); wait for the sidebar search box.</doc>
+<status status="PASS" start="2026-07-27T18:03:01.947165" elapsed="5.779772"/>
+</kw>
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:03:07.746021" level="INFO">${visible} = 1</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:07.728261" elapsed="0.017835"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:07.746906" elapsed="0.000116"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:07.747371" elapsed="0.000084"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:07.747584" elapsed="0.000063"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:07.747767" elapsed="0.000059"/>
+</kw>
+<status status="NOT RUN" start="2026-07-27T18:03:07.747149" elapsed="0.000719"/>
+</branch>
+<status status="NOT RUN" start="2026-07-27T18:03:07.747125" elapsed="0.000792"/>
+</if>
+<status status="NOT RUN" start="2026-07-27T18:03:07.746334" elapsed="0.001615"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:03:07.746291" elapsed="0.001691"/>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="PASS" start="2026-07-27T18:03:07.727930" elapsed="0.020116"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-07-27T18:03:07.748871" level="INFO">Types the text 'Reservoir Block' in the given field.</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:07.748157" elapsed="1.134916"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:03:08.884623" level="INFO">Waiting page load to state to receive networkidle in 8000.0</msg>
+<msg time="2026-07-27T18:03:08.888226" level="INFO">Load state networkidle got in 8000</msg>
+<arg>networkidle</arg>
+<arg>timeout=8s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:03:08.883467" elapsed="0.004957"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:09.390136" level="INFO">Slept 500 milliseconds.</msg>
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:08.888710" elapsed="0.501605"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:03:09.391481" level="INFO">Clicks the element 'xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Reservoir Block']'.</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:09.390596" elapsed="0.070932"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:03:09.463310" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-27T18:03:09.468783" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:03:09.461931" elapsed="0.007160"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:10.971129" level="INFO">Slept 1 second 500 milliseconds.</msg>
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:09.469493" elapsed="1.501801"/>
+</kw>
+<kw name="Get Text" owner="Browser">
+<msg time="2026-07-27T18:03:11.021636" level="INFO">Text: 'Reservoir Block'</msg>
+<msg time="2026-07-27T18:03:11.021888" level="INFO">${label} = Reservoir Block</msg>
+<var>${label}</var>
+<arg>css=[id="screenToolbar:form:screenLabel"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns text attribute of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:10.971548" elapsed="0.050381"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${label}</arg>
+<arg>${screen_name}</arg>
+<arg>msg=Failed to navigate to ${screen_name}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-07-27T18:03:11.022229" elapsed="0.001137"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-27T18:03:11.032282" level="INFO">Waited for Element with selector css=[id="screenToolbar:form:minmaxMenu"] at state visible</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-27T18:03:11.024102" elapsed="0.008384"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:03:11.033421" level="INFO">Clicks the element 'css=[id="screenToolbar:form:minmaxMenu"]'.</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:11.032760" elapsed="0.046223"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:03:11.080067" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-27T18:03:11.082815" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:03:11.079266" elapsed="0.003690"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:11.584031" level="INFO">Slept 500 milliseconds.</msg>
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:11.083165" elapsed="0.501027"/>
+</kw>
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="PASS" start="2026-07-27T18:03:11.023674" elapsed="0.560631"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="PASS" start="2026-07-27T18:03:07.727271" elapsed="3.857098"/>
+</kw>
+<arg>Reservoir Block</arg>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>The standard Suite Setup gesture: launch the browser, login as
+sysadmin (defaults to the env-configured user), navigate to ${screen_name}.
+Page objects delegate their Open &lt;X&gt; Screen keyword here in one line.</doc>
+<status status="PASS" start="2026-07-27T18:02:59.503376" elapsed="12.081050"/>
+</kw>
+<kw name="Apply Navigator" owner="navigator">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:03:11.585420" level="INFO">Clicks the element 'css=[id="button:form:B"]'.</msg>
+<arg>css=[id="button:form:B"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:11.584987" elapsed="0.041588"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:03:11.627675" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-27T18:03:11.629942" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:03:11.626914" elapsed="0.003220"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:12.831526" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:11.630393" elapsed="1.201271"/>
+</kw>
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="PASS" start="2026-07-27T18:03:11.584678" elapsed="1.247108"/>
+</kw>
+<doc>Suite Setup: launch + login, open the Reservoir Block screen first (parents built first).</doc>
+<status status="PASS" start="2026-07-27T18:02:59.502144" elapsed="13.329708"/>
+</kw>
+<test id="s1-t1" name="TC01 Create Parent Block And Formation" line="28">
+<kw name="Insert Plain Object" owner="reservoir_block_formation_page">
+<kw name="Open New Object Form" owner="manage_object">
+<kw name="Hover" owner="Browser">
+<arg>xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Moves the virtual mouse and scrolls to the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:12.843689" elapsed="0.042155"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-07-27T18:03:12.890754" level="INFO">Waited for Element with selector xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object'] at state visible</msg>
+<arg>xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-07-27T18:03:12.886103" elapsed="0.004798"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:03:12.891608" level="INFO">Clicks the element 'xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']'.</msg>
+<arg>xpath=//ul[contains(@class,'ui-menu-child')]//li//a[normalize-space(.)='New Object']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:12.891093" elapsed="0.050297"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:03:12.942384" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-27T18:03:12.945317" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:03:12.941643" elapsed="0.003820"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:14.146740" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:12.945668" elapsed="1.201235"/>
+</kw>
+<doc>Hover the Insert toolbar menu and choose "New Object".
+Wait for the submenu item to be visible before clicking (robust vs a fixed sleep).</doc>
+<status status="PASS" start="2026-07-27T18:03:12.843272" elapsed="1.303750"/>
+</kw>
+<kw name="Fill OV Field By Label" owner="manage_object">
+<kw name="OV Field Id By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-27T18:03:14.162874" level="INFO">Attribute is: 'tab:tabPanel:objectForm:form:G:0:R:0:C:1:in'</msg>
+<msg time="2026-07-27T18:03:14.163066" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:0:C:1:in</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:14.148605" elapsed="0.014494"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-07-27T18:03:14.163219" elapsed="0.000196"/>
+</return>
+<msg time="2026-07-27T18:03:14.163576" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:0:C:1:in</msg>
+<var>${id}</var>
+<arg>${form}</arg>
+<arg>${label}</arg>
+<doc>Resolve the input id for a field by its LABEL in objectForm (no hardcoded row/column).</doc>
+<status status="PASS" start="2026-07-27T18:03:14.148307" elapsed="0.015293"/>
+</kw>
+<kw name="Fill EC Field" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-27T18:03:14.164714" level="INFO">Fills the text 'AUTOTEST_RFB_001' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:14.164221" elapsed="0.016772"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-27T18:03:14.192519" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-27T18:03:14.181374" elapsed="0.011405"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:14.594295" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:14.193104" elapsed="0.401400"/>
+</kw>
+<arg>${id}</arg>
+<arg>${value}</arg>
+<doc>Fill a text input by EC id and dispatch change/blur for EC validation.</doc>
+<status status="PASS" start="2026-07-27T18:03:14.163795" elapsed="0.430886"/>
+</kw>
+<arg>objectForm</arg>
+<arg>${code_label}</arg>
+<arg>${code}</arg>
+<doc>Fill a text field found by its LABEL in ${form}; reuses Fill EC Field (change/blur dispatch).</doc>
+<status status="PASS" start="2026-07-27T18:03:14.147798" elapsed="0.446996"/>
+</kw>
+<kw name="Fill OV Field By Label" owner="manage_object">
+<kw name="OV Field Id By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-27T18:03:14.613788" level="INFO">Attribute is: 'tab:tabPanel:objectForm:form:G:0:R:1:C:1:in'</msg>
+<msg time="2026-07-27T18:03:14.614019" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:1:C:1:in</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:14.597706" elapsed="0.016351"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-07-27T18:03:14.614230" elapsed="0.000269"/>
+</return>
+<msg time="2026-07-27T18:03:14.614905" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:1:C:1:in</msg>
+<var>${id}</var>
+<arg>${form}</arg>
+<arg>${label}</arg>
+<doc>Resolve the input id for a field by its LABEL in objectForm (no hardcoded row/column).</doc>
+<status status="PASS" start="2026-07-27T18:03:14.597014" elapsed="0.018042"/>
+</kw>
+<kw name="Fill EC Field" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-27T18:03:14.617498" level="INFO">Fills the text 'AUTOTEST RF Block 001' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:14.616290" elapsed="0.017435"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-27T18:03:14.642961" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-27T18:03:14.634143" elapsed="0.009200"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:15.045096" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:14.643738" elapsed="0.401521"/>
+</kw>
+<arg>${id}</arg>
+<arg>${value}</arg>
+<doc>Fill a text input by EC id and dispatch change/blur for EC validation.</doc>
+<status status="PASS" start="2026-07-27T18:03:14.615439" elapsed="0.429959"/>
+</kw>
+<arg>objectForm</arg>
+<arg>${name_label}</arg>
+<arg>${name}</arg>
+<doc>Fill a text field found by its LABEL in ${form}; reuses Fill EC Field (change/blur dispatch).</doc>
+<status status="PASS" start="2026-07-27T18:03:14.596057" elapsed="0.449429"/>
+</kw>
+<kw name="Fill OV Date By Label" owner="manage_object">
+<kw name="OV Field Id By Label" owner="manage_object">
+<kw name="Get Attribute" owner="Browser">
+<msg time="2026-07-27T18:03:15.059318" level="INFO">Attribute is: 'tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input'</msg>
+<msg time="2026-07-27T18:03:15.059530" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input</msg>
+<var>${id}</var>
+<arg>xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input</arg>
+<arg>id</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the HTML ``attribute`` of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:15.047701" elapsed="0.011867"/>
+</kw>
+<return>
+<value>${id}</value>
+<status status="PASS" start="2026-07-27T18:03:15.059687" elapsed="0.000189"/>
+</return>
+<msg time="2026-07-27T18:03:15.060048" level="INFO">${id} = tab:tabPanel:objectForm:form:G:0:R:2:C:1:da_input</msg>
+<var>${id}</var>
+<arg>${form}</arg>
+<arg>${label}</arg>
+<doc>Resolve the input id for a field by its LABEL in objectForm (no hardcoded row/column).</doc>
+<status status="PASS" start="2026-07-27T18:03:15.047324" elapsed="0.012752"/>
+</kw>
+<kw name="Fill EC Date" owner="table">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-07-27T18:03:15.061306" level="INFO">Fills the text '2000-01-01' in the given field.</msg>
+<arg>css=[id="${field_id}"]</arg>
+<arg>${value}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:15.060731" elapsed="0.012186"/>
+</kw>
+<kw name="Keyboard Key" owner="Browser">
+<arg>press</arg>
+<arg>Tab</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="PASS" start="2026-07-27T18:03:15.073231" elapsed="0.007855"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:15.682969" level="INFO">Slept 600 milliseconds.</msg>
+<arg>0.6s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:15.081395" elapsed="0.601790"/>
+</kw>
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-27T18:03:15.689417" level="INFO">JavaScript executed successfully.</msg>
+<arg>${None}</arg>
+<arg>() =&gt; { const e=document.getElementById('${field_id}'); if(e){e.dispatchEvent(new Event('change',{bubbles:true}));e.dispatchEvent(new Event('blur',{bubbles:true}));} }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-27T18:03:15.683481" elapsed="0.006111"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:16.090758" level="INFO">Slept 400 milliseconds.</msg>
+<arg>0.4s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:15.689832" elapsed="0.401075"/>
+</kw>
+<arg>${id}</arg>
+<arg>${value}</arg>
+<doc>Fill a da_input calendar field; Tab out triggers PrimeFaces validation.</doc>
+<status status="PASS" start="2026-07-27T18:03:15.060305" elapsed="1.030724"/>
+</kw>
+<arg>objectForm</arg>
+<arg>Start Date</arg>
+<arg>${start_date}</arg>
+<doc>Fill a date field found by its LABEL in ${form}; reuses Fill EC Date (Tab + change dispatch).</doc>
+<status status="PASS" start="2026-07-27T18:03:15.046663" elapsed="1.044436"/>
+</kw>
+<kw name="Save" owner="toolbar">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:03:16.092183" level="INFO">Clicks the element 'xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]'.</msg>
+<arg>xpath=//a[@title='Save [Ctrl+s]' and not(contains(@class,'ui-state-disabled'))]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:16.091727" elapsed="0.034272"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:03:16.127017" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-27T18:03:16.129373" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:03:16.126299" elapsed="0.003188"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:17.330564" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:16.129683" elapsed="1.201039"/>
+</kw>
+<doc>Click the Save toolbar button (only when enabled).</doc>
+<status status="PASS" start="2026-07-27T18:03:16.091341" elapsed="1.239550"/>
+</kw>
+<kw name="Apply Navigator" owner="navigator">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:03:17.332087" level="INFO">Clicks the element 'css=[id="button:form:B"]'.</msg>
+<arg>css=[id="button:form:B"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:17.331556" elapsed="0.038214"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-07-27T18:03:17.370976" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-07-27T18:03:17.373440" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-07-27T18:03:17.370097" elapsed="0.003483"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-07-27T18:03:18.574805" level="INFO">Slept 1 second 200 milliseconds.</msg>
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-07-27T18:03:17.373833" elapsed="1.201140"/>
+</kw>
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="PASS" start="2026-07-27T18:03:17.331176" elapsed="1.243940"/>
+</kw>
+<arg>Reservoir Block Code</arg>
+<arg>Reservoir Block Name</arg>
+<arg>${BLK_CODE}</arg>
+<arg>${BLK_NAME}</arg>
+<arg>${SD}</arg>
+<doc>On the current screen: New Object -&gt; Code/Name/Start Date -&gt; Save -&gt; GO.</doc>
+<status status="PASS" start="2026-07-27T18:03:12.842149" elapsed="5.733038"/>
+</kw>
+<kw name="Row Present" owner="reservoir_block_formation_page">
+<kw name="Row Should Exist" owner="table">
+<kw name="Row Exists" owner="table">
+<kw name="Get Table Rows" owner="table">
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-07-27T18:03:18.586564" level="INFO">JavaScript executed successfully.</msg>
+<msg time="2026-07-27T18:03:18.586957" level="INFO">${rows} = [['AS3_RB_1', 'AS3_Block_1', '2003-01-01', ''], ['AS3_RB_2', 'AS3_Block_2', '2003-01-01', ''], ['AS3_RB_3', 'AS3_Block_3', '2003-01-01', ''], ['AUTOTEST_RFB_001', 'AUTOTEST RF Block 001', '2000-01-01'...</msg>
+<var>${rows}</var>
+<arg>${None}</arg>
+<arg>() =&gt; { const t=document.getElementById('${table_id}'); if(!t) return []; const o=[]; t.querySelectorAll('tr').forEach(tr=&gt;{const c=[];tr.querySelectorAll('td').forEach(td=&gt;c.push((td.textContent||'').trim()));if(c.some(x=&gt;x))o.push(c);}); return o; }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.578162" elapsed="0.008838"/>
+</kw>
+<return>
+<value>${rows}</value>
+<status status="PASS" start="2026-07-27T18:03:18.587146" elapsed="0.000234"/>
+</return>
+<msg time="2026-07-27T18:03:18.587646" level="INFO">${rows} = [['AS3_RB_1', 'AS3_Block_1', '2003-01-01', ''], ['AS3_RB_2', 'AS3_Block_2', '2003-01-01', ''], ['AS3_RB_3', 'AS3_Block_3', '2003-01-01', ''], ['AUTOTEST_RFB_001', 'AUTOTEST RF Block 001', '2000-01-01'...</msg>
+<var>${rows}</var>
+<arg>${table_id}</arg>
+<doc>Return a list of non-empty cell-lists from a results table by id.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.577911" elapsed="0.009770"/>
+</kw>
+<for flavor="IN">
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-27T18:03:18.588801" level="INFO">${first} = AS3_RB_1</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.588430" elapsed="0.000421"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-27T18:03:18.589324" elapsed="0.000093"/>
+</return>
+<status status="NOT RUN" start="2026-07-27T18:03:18.588972" elapsed="0.000505"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:03:18.588945" elapsed="0.000575"/>
+</if>
+<var name="${row}">['AS3_RB_1', 'AS3_Block_1', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-27T18:03:18.588164" elapsed="0.001384"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-27T18:03:18.590401" level="INFO">${first} = AS3_RB_2</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.590082" elapsed="0.000354"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-27T18:03:18.590836" elapsed="0.000065"/>
+</return>
+<status status="NOT RUN" start="2026-07-27T18:03:18.590533" elapsed="0.000417"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:03:18.590513" elapsed="0.000475"/>
+</if>
+<var name="${row}">['AS3_RB_2', 'AS3_Block_2', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-27T18:03:18.589808" elapsed="0.001213"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-27T18:03:18.591584" level="INFO">${first} = AS3_RB_3</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.591342" elapsed="0.000271"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2026-07-27T18:03:18.591907" elapsed="0.000061"/>
+</return>
+<status status="NOT RUN" start="2026-07-27T18:03:18.591694" elapsed="0.000316"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:03:18.591678" elapsed="0.000366"/>
+</if>
+<var name="${row}">['AS3_RB_3', 'AS3_Block_3', '2003-01-01', '']</var>
+<status status="PASS" start="2026-07-27T18:03:18.591178" elapsed="0.000888"/>
+</iter>
+<iter>
+<kw name="Get From List" owner="Collections">
+<msg time="2026-07-27T18:03:18.592534" level="INFO">${first} = AUTOTEST_RFB_001</msg>
+<var>${first}</var>
+<arg>${row}</arg>
+<arg>0</arg>
+<doc>Returns the value specified with an ``index`` from ``list``.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.592329" elapsed="0.000233"/>
+</kw>
+<if>
+<branch type="IF" condition="'${first}' == '${code}'">
+<return>
+<value>${TRUE}</value>
+<status status="PASS" start="2026-07-27T18:03:18.592838" elapsed="0.000090"/>
+</return>
+<status status="PASS" start="2026-07-27T18:03:18.592637" elapsed="0.000338"/>
+</branch>
+<status status="PASS" start="2026-07-27T18:03:18.592623" elapsed="0.000392"/>
+</if>
+<var name="${row}">['AUTOTEST_RFB_001', 'AUTOTEST RF Block 001', '2000-01-01', '']</var>
+<status status="PASS" start="2026-07-27T18:03:18.592196" elapsed="0.000852"/>
+</iter>
+<var>${row}</var>
+<value>@{rows}</value>
+<status status="PASS" start="2026-07-27T18:03:18.587805" elapsed="0.005291"/>
+</for>
+<return>
+<value>${FALSE}</value>
+<status status="NOT RUN" start="2026-07-27T18:03:18.593165" elapsed="0.000055"/>
+</return>
+<msg time="2026-07-27T18:03:18.593352" level="INFO">${exists} = True</msg>
+<var>${exists}</var>
+<arg>${table_id}</arg>
+<arg>${code}</arg>
+<doc>True if a row whose first cell equals AUTOTEST_RFB_001 exists in the table.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.577610" elapsed="0.015768"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${exists}</arg>
+<arg>msg=Expected row ${code} to exist in ${table_id}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.593567" elapsed="0.000656"/>
+</kw>
+<arg>${OV_MANAGE_OBJECT_TABLE}</arg>
+<arg>${code}</arg>
+<doc>Assert a row with AUTOTEST_RFB_001 is present.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.576870" elapsed="0.017452"/>
+</kw>
+<arg>${BLK_CODE}</arg>
+<doc>Assert the object ${code} is present in the current screen's list.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.576182" elapsed="0.018202"/>
+</kw>
+<kw name="Code Should Be Present In View" owner="DbVerify">
+<arg>OV_RESV_BLOCK</arg>
+<arg>${BLK_CODE}</arg>
+<doc>Fail unless ``code`` appears in any string column of ``view`` (DB ground truth).</doc>
+<status status="PASS" start="2026-07-27T18:03:18.594508" elapsed="0.069840"/>
+</kw>
+<kw name="Go To Screen" owner="reservoir_block_formation_page">
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:03:18.672352" level="INFO">${visible} = 0</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.665902" elapsed="0.006530"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:03:18.678624" level="INFO">${toggle} = 1</msg>
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:18.673118" elapsed="0.005578"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:03:18.680267" level="INFO">Clicks the element 'css=[id="screenToolbar:form:minmaxMenu"]'.</msg>
+<msg time="2026-07-27T18:03:48.791132" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-1.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-1.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-07-27T18:03:48.791344" level="INFO">See also file:///C:/Projects/ChoongYin_OS/tmp/rbf_live/playwright-log.txt for additional details.</msg>
+<msg time="2026-07-27T18:03:48.791869" level="FAIL">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="FAIL" start="2026-07-27T18:03:18.679505" elapsed="30.122033">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.801897" elapsed="0.000145"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.802220" elapsed="0.000087"/>
+</kw>
+<status status="FAIL" start="2026-07-27T18:03:18.678908" elapsed="30.123508">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</branch>
+<status status="FAIL" start="2026-07-27T18:03:18.678865" elapsed="30.123645">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</if>
+<status status="FAIL" start="2026-07-27T18:03:18.672641" elapsed="30.129986">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</branch>
+<status status="FAIL" start="2026-07-27T18:03:18.672602" elapsed="30.130104">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="FAIL" start="2026-07-27T18:03:18.665551" elapsed="30.137299">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Type Text" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.803026" elapsed="0.000093"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=8s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.803256" elapsed="0.000076"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.803489" elapsed="0.000075"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.803693" elapsed="0.000064"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.803869" elapsed="0.000060"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.804038" elapsed="0.000082"/>
+</kw>
+<kw name="Get Text" owner="Browser">
+<var>${label}</var>
+<arg>css=[id="screenToolbar:form:screenLabel"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns text attribute of the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.804239" elapsed="0.000057"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${label}</arg>
+<arg>${screen_name}</arg>
+<arg>msg=Failed to navigate to ${screen_name}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.804406" elapsed="0.000061"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.804683" elapsed="0.000069"/>
+</kw>
+<arg>${screen}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="FAIL" start="2026-07-27T18:03:18.665144" elapsed="30.139752">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Apply Navigator" owner="navigator">
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.805099" elapsed="0.000077"/>
+</kw>
+<arg>Reservoir Formation</arg>
+<doc>Navigate to another EC screen in the SAME session, then load its list (GO).</doc>
+<status status="FAIL" start="2026-07-27T18:03:18.664679" elapsed="30.140599">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Insert Plain Object" owner="reservoir_block_formation_page">
+<arg>Reservoir Formation Code</arg>
+<arg>Reservoir Formation Name</arg>
+<arg>${FRM_CODE}</arg>
+<arg>${FRM_NAME}</arg>
+<arg>${SD}</arg>
+<doc>On the current screen: New Object -&gt; Code/Name/Start Date -&gt; Save -&gt; GO.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.805475" elapsed="0.000083"/>
+</kw>
+<kw name="Row Present" owner="reservoir_block_formation_page">
+<arg>${FRM_CODE}</arg>
+<doc>Assert the object ${code} is present in the current screen's list.</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.806375" elapsed="0.000116"/>
+</kw>
+<kw name="Code Should Be Present In View" owner="DbVerify">
+<arg>OV_RESV_FORMATION</arg>
+<arg>${FRM_CODE}</arg>
+<doc>Fail unless ``code`` appears in any string column of ``view`` (DB ground truth).</doc>
+<status status="NOT RUN" start="2026-07-27T18:03:48.806650" elapsed="0.000075"/>
+</kw>
+<doc>Insert a fresh Reservoir Block + Reservoir Formation; confirm both in DB.</doc>
+<tag>iud</tag>
+<tag>reservoir_block_formation</tag>
+<tag>setup</tag>
+<status status="FAIL" start="2026-07-27T18:03:12.831957" elapsed="35.974976">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</test>
+<test id="s1-t2" name="TC02 Insert Reservoir Block Formation Linking Both" line="39">
+<kw name="Go To Screen" owner="reservoir_block_formation_page">
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:03:48.831090" level="INFO">${visible} = 0</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:48.825252" elapsed="0.005906"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:03:48.837628" level="INFO">${toggle} = 1</msg>
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:03:48.831808" elapsed="0.005930"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:03:48.839189" level="INFO">Clicks the element 'css=[id="screenToolbar:form:minmaxMenu"]'.</msg>
+<msg time="2026-07-27T18:04:18.913661" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-2.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-2.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-07-27T18:04:18.913818" level="INFO">See also file:///C:/Projects/ChoongYin_OS/tmp/rbf_live/playwright-log.txt for additional details.</msg>
+<msg time="2026-07-27T18:04:18.914023" level="FAIL">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="FAIL" start="2026-07-27T18:03:48.838484" elapsed="30.077410">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.916228" elapsed="0.000127"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.916488" elapsed="0.000063"/>
+</kw>
+<status status="FAIL" start="2026-07-27T18:03:48.837953" elapsed="30.078683">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</branch>
+<status status="FAIL" start="2026-07-27T18:03:48.837910" elapsed="30.078805">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</if>
+<status status="FAIL" start="2026-07-27T18:03:48.831368" elapsed="30.085461">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</branch>
+<status status="FAIL" start="2026-07-27T18:03:48.831331" elapsed="30.085560">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="FAIL" start="2026-07-27T18:03:48.824897" elapsed="30.092127">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Type Text" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.917186" elapsed="0.000091"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=8s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.917397" elapsed="0.000057"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.917552" elapsed="0.000052"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.917694" elapsed="0.000049"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.917840" elapsed="0.000048"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.918071" elapsed="0.000133"/>
+</kw>
+<kw name="Get Text" owner="Browser">
+<var>${label}</var>
+<arg>css=[id="screenToolbar:form:screenLabel"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns text attribute of the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.918380" elapsed="0.000086"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${label}</arg>
+<arg>${screen_name}</arg>
+<arg>msg=Failed to navigate to ${screen_name}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.918584" elapsed="0.000049"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.918803" elapsed="0.000055"/>
+</kw>
+<arg>${screen}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="FAIL" start="2026-07-27T18:03:48.824354" elapsed="30.094628">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Apply Navigator" owner="navigator">
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.919133" elapsed="0.000060"/>
+</kw>
+<arg>Reservoir Block Formation</arg>
+<doc>Navigate to another EC screen in the SAME session, then load its list (GO).</doc>
+<status status="FAIL" start="2026-07-27T18:03:48.823660" elapsed="30.095623">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Insert Reservoir Block Formation" owner="reservoir_block_formation_page">
+<arg>${RBF_CODE}</arg>
+<arg>${RBF_NAME}</arg>
+<arg>${SD}</arg>
+<arg>${BLK_NAME}</arg>
+<arg>${FRM_NAME}</arg>
+<doc>New Object -&gt; Code/Name/Start Date, select Reservoir Block (populates Formation),
+then select Reservoir Formation -&gt; Save -&gt; GO. Block chosen BEFORE Formation (dependent dropdown).</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.919494" elapsed="0.000066"/>
+</kw>
+<kw name="Row Present" owner="reservoir_block_formation_page">
+<arg>${RBF_CODE}</arg>
+<doc>Assert the object ${code} is present in the current screen's list.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.920168" elapsed="0.000057"/>
+</kw>
+<kw name="Code Should Be Present In View" owner="DbVerify">
+<arg>OV_RESV_BLOCK_FORMATION</arg>
+<arg>${RBF_CODE}</arg>
+<doc>Fail unless ``code`` appears in any string column of ``view`` (DB ground truth).</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:18.920312" elapsed="0.000046"/>
+</kw>
+<doc>On RBF: select the new Block (populates Formation), then the new Formation; confirm in list + DB.</doc>
+<tag>insert</tag>
+<tag>iud</tag>
+<tag>reservoir_block_formation</tag>
+<status status="FAIL" start="2026-07-27T18:03:48.816156" elapsed="30.104345">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</test>
+<test id="s1-t3" name="TC03 Update Reservoir Block Formation" line="47">
+<kw name="Update Object Name By Label" owner="reservoir_block_formation_page">
+<kw name="Select Object Row" owner="manage_object">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:04:18.931836" level="INFO">Clicks the element 'xpath=//tbody[@id='manage_object_nav_nav:form:T_data']//span[normalize-space(text())='AUTOTEST_RFR_001']'.</msg>
+<msg time="2026-07-27T18:04:49.017980" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-3.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-3.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-07-27T18:04:49.018151" level="INFO">See also file:///C:/Projects/ChoongYin_OS/tmp/rbf_live/playwright-log.txt for additional details.</msg>
+<msg time="2026-07-27T18:04:49.018345" level="FAIL">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+</msg>
+<arg>xpath=//tbody[@id='${table_id}']//span[normalize-space(text())='${code}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="FAIL" start="2026-07-27T18:04:18.931383" elapsed="30.090085">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+</status>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:49.021856" elapsed="0.000169"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:49.022222" elapsed="0.000085"/>
+</kw>
+<arg>${OV_MANAGE_OBJECT_TABLE}</arg>
+<arg>${code}</arg>
+<doc>Select an object row by its code (text lives in a span child).</doc>
+<status status="FAIL" start="2026-07-27T18:04:18.931096" elapsed="30.091403">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+</status>
+</kw>
+<kw name="OV Field Id By Label" owner="manage_object">
+<var>${code_id}</var>
+<arg>updateAttributes</arg>
+<arg>${code_label}</arg>
+<doc>Resolve the input id for a field by its LABEL in ${form} (no hardcoded row/column).</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:49.023719" elapsed="0.000150"/>
+</kw>
+<kw name="Get Property" owner="Browser">
+<var>${loaded}</var>
+<arg>css=[id="${code_id}"]</arg>
+<arg>value</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the ``property`` of the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:49.024090" elapsed="0.000114"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${loaded}</arg>
+<arg>${code}</arg>
+<arg>msg=Row select failed - code not loaded</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:49.024353" elapsed="0.000084"/>
+</kw>
+<kw name="Fill OV Field By Label" owner="manage_object">
+<arg>updateAttributes</arg>
+<arg>${name_label}</arg>
+<arg>${new_name}</arg>
+<doc>Fill a text field found by its LABEL in ${form}; reuses Fill EC Field (change/blur dispatch).</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:49.025316" elapsed="0.000125"/>
+</kw>
+<kw name="Save" owner="toolbar">
+<doc>Click the Save toolbar button (only when enabled).</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:49.026057" elapsed="0.000282"/>
+</kw>
+<kw name="Apply Navigator" owner="navigator">
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:49.026641" elapsed="0.000107"/>
+</kw>
+<arg>Resv Block Formation Code</arg>
+<arg>Resv Block Formation Name</arg>
+<arg>${RBF_CODE}</arg>
+<arg>${RBF_NAME_UPD}</arg>
+<doc>Select ${code}, confirm loaded (code id by label), edit Name, Save, GO.</doc>
+<status status="FAIL" start="2026-07-27T18:04:18.930640" elapsed="30.096253">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+</status>
+</kw>
+<kw name="Field Should Equal In View" owner="DbVerify">
+<arg>OV_RESV_BLOCK_FORMATION</arg>
+<arg>${RBF_CODE}</arg>
+<arg>NAME</arg>
+<arg>${RBF_NAME_UPD}</arg>
+<doc>Robot keyword (raising): fail unless the CODE row's ``column`` equals ``expected`` in ``view``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:04:49.027094" elapsed="0.000105"/>
+</kw>
+<doc>Edit RBF Name; confirm DB ground truth.</doc>
+<tag>iud</tag>
+<tag>reservoir_block_formation</tag>
+<tag>update</tag>
+<status status="FAIL" start="2026-07-27T18:04:18.925936" elapsed="30.101483">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+</status>
+</test>
+<test id="s1-t4" name="TC04 Delete Reservoir Block Formation" line="53">
+<kw name="Delete Object By End Date" owner="reservoir_block_formation_page">
+<kw name="Select Object Row" owner="manage_object">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:04:49.046904" level="INFO">Clicks the element 'xpath=//tbody[@id='manage_object_nav_nav:form:T_data']//span[normalize-space(text())='AUTOTEST_RFR_001']'.</msg>
+<msg time="2026-07-27T18:05:19.140831" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-4.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-4.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-07-27T18:05:19.141012" level="INFO">See also file:///C:/Projects/ChoongYin_OS/tmp/rbf_live/playwright-log.txt for additional details.</msg>
+<msg time="2026-07-27T18:05:19.141195" level="FAIL">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+</msg>
+<arg>xpath=//tbody[@id='${table_id}']//span[normalize-space(text())='${code}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="FAIL" start="2026-07-27T18:04:49.046320" elapsed="30.097437">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+</status>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:19.144121" elapsed="0.000162"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:19.144476" elapsed="0.000153"/>
+</kw>
+<arg>${OV_MANAGE_OBJECT_TABLE}</arg>
+<arg>${code}</arg>
+<doc>Select an object row by its code (text lives in a span child).</doc>
+<status status="FAIL" start="2026-07-27T18:04:49.045802" elapsed="30.099052">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+</status>
+</kw>
+<kw name="Fill OV Date By Label" owner="manage_object">
+<arg>objectdates</arg>
+<arg>End Date</arg>
+<arg>${date}</arg>
+<doc>Fill a date field found by its LABEL in ${form}; reuses Fill EC Date (Tab + change dispatch).</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:19.145904" elapsed="0.000214"/>
+</kw>
+<kw name="Save" owner="toolbar">
+<doc>Click the Save toolbar button (only when enabled).</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:19.146425" elapsed="0.000133"/>
+</kw>
+<kw name="Apply Navigator" owner="navigator">
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:19.146741" elapsed="0.000084"/>
+</kw>
+<arg>${RBF_CODE}</arg>
+<arg>${SD}</arg>
+<doc>Select ${code}, set End Date = Start Date (true delete), Save, GO.</doc>
+<status status="FAIL" start="2026-07-27T18:04:49.044854" elapsed="30.102114">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+</status>
+</kw>
+<kw name="Row Absent" owner="reservoir_block_formation_page">
+<arg>${RBF_CODE}</arg>
+<doc>Assert the object ${code} is absent from the current screen's list.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:19.147861" elapsed="0.000140"/>
+</kw>
+<kw name="Code Should Be Absent In View" owner="DbVerify">
+<arg>OV_RESV_BLOCK_FORMATION</arg>
+<arg>${RBF_CODE}</arg>
+<doc>Fail if ``code`` appears in any string column of ``view`` (DB ground truth).</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:19.148172" elapsed="0.000084"/>
+</kw>
+<doc>Delete RBF via End Date = Start Date; confirm gone from list + DB.</doc>
+<tag>delete</tag>
+<tag>iud</tag>
+<tag>reservoir_block_formation</tag>
+<status status="FAIL" start="2026-07-27T18:04:49.036993" elapsed="30.111483">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('//tbody[@id=\'manage_object_nav_nav:form:T_data\']//span[normalize-space(text())=\'AUTOTEST_RFR_001\']').first()
+</status>
+</test>
+<test id="s1-t5" name="TC05 Tear Down Parents In Reverse Order" line="60">
+<kw name="Go To Screen" owner="reservoir_block_formation_page">
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:05:19.172017" level="INFO">${visible} = 0</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:05:19.165997" elapsed="0.006087"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:05:19.178649" level="INFO">${toggle} = 1</msg>
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:05:19.172846" elapsed="0.005880"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:05:19.180193" level="INFO">Clicks the element 'css=[id="screenToolbar:form:minmaxMenu"]'.</msg>
+<msg time="2026-07-27T18:05:49.263486" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-5.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-5.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-07-27T18:05:49.263626" level="INFO">See also file:///C:/Projects/ChoongYin_OS/tmp/rbf_live/playwright-log.txt for additional details.</msg>
+<msg time="2026-07-27T18:05:49.263822" level="FAIL">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="FAIL" start="2026-07-27T18:05:19.179413" elapsed="30.085807">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.265504" elapsed="0.000148"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.265769" elapsed="0.000058"/>
+</kw>
+<status status="FAIL" start="2026-07-27T18:05:19.178924" elapsed="30.086969">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</branch>
+<status status="FAIL" start="2026-07-27T18:05:19.178885" elapsed="30.087076">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</if>
+<status status="FAIL" start="2026-07-27T18:05:19.172315" elapsed="30.093716">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</branch>
+<status status="FAIL" start="2026-07-27T18:05:19.172270" elapsed="30.093812">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="FAIL" start="2026-07-27T18:05:19.165654" elapsed="30.100571">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Type Text" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.266356" elapsed="0.000064"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=8s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.266530" elapsed="0.000051"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.266684" elapsed="0.000047"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.266831" elapsed="0.000055"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.266993" elapsed="0.000053"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.267147" elapsed="0.000048"/>
+</kw>
+<kw name="Get Text" owner="Browser">
+<var>${label}</var>
+<arg>css=[id="screenToolbar:form:screenLabel"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns text attribute of the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.267286" elapsed="0.000044"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${label}</arg>
+<arg>${screen_name}</arg>
+<arg>msg=Failed to navigate to ${screen_name}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.267421" elapsed="0.000042"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.267625" elapsed="0.000056"/>
+</kw>
+<arg>${screen}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="FAIL" start="2026-07-27T18:05:19.165110" elapsed="30.102675">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Apply Navigator" owner="navigator">
+<doc>Click the navigator Go button to (re)load the list.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.267949" elapsed="0.000069"/>
+</kw>
+<arg>Reservoir Formation</arg>
+<doc>Navigate to another EC screen in the SAME session, then load its list (GO).</doc>
+<status status="FAIL" start="2026-07-27T18:05:19.164413" elapsed="30.103703">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</kw>
+<kw name="Delete Object By End Date" owner="reservoir_block_formation_page">
+<arg>${FRM_CODE}</arg>
+<arg>${SD}</arg>
+<doc>Select ${code}, set End Date = Start Date (true delete), Save, GO.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.268838" elapsed="0.000091"/>
+</kw>
+<kw name="Code Should Be Absent In View" owner="DbVerify">
+<arg>OV_RESV_FORMATION</arg>
+<arg>${FRM_CODE}</arg>
+<doc>Fail if ``code`` appears in any string column of ``view`` (DB ground truth).</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.269027" elapsed="0.000050"/>
+</kw>
+<kw name="Go To Screen" owner="reservoir_block_formation_page">
+<arg>Reservoir Block</arg>
+<doc>Navigate to another EC screen in the SAME session, then load its list (GO).</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.269194" elapsed="0.000049"/>
+</kw>
+<kw name="Delete Object By End Date" owner="reservoir_block_formation_page">
+<arg>${BLK_CODE}</arg>
+<arg>${SD}</arg>
+<doc>Select ${code}, set End Date = Start Date (true delete), Save, GO.</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.269799" elapsed="0.000061"/>
+</kw>
+<kw name="Code Should Be Absent In View" owner="DbVerify">
+<arg>OV_RESV_BLOCK</arg>
+<arg>${BLK_CODE}</arg>
+<doc>Fail if ``code`` appears in any string column of ``view`` (DB ground truth).</doc>
+<status status="NOT RUN" start="2026-07-27T18:05:49.269949" elapsed="0.000045"/>
+</kw>
+<doc>Delete Formation then Block (reverse dependency order); confirm both gone from DB.</doc>
+<tag>cleanup</tag>
+<tag>iud</tag>
+<tag>reservoir_block_formation</tag>
+<status status="FAIL" start="2026-07-27T18:05:19.157506" elapsed="30.112615">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    58 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</status>
+</test>
+<kw name="Tear Down Reservoir Block Formation Suite" type="TEARDOWN">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Go To Screen" owner="reservoir_block_formation_page">
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:05:49.284759" level="INFO">${visible} = 0</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:05:49.279847" elapsed="0.004985"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-07-27T18:05:49.289740" level="INFO">${toggle} = 1</msg>
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-07-27T18:05:49.285446" elapsed="0.004349"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<msg time="2026-07-27T18:05:49.290909" level="INFO">Clicks the element 'css=[id="screenToolbar:form:minmaxMenu"]'.</msg>
+<msg time="2026-07-27T18:06:19.377056" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-6.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-6.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-07-27T18:06:19.377217" level="INFO">See also file:///C:/Projects/ChoongYin_OS/tmp/rbf_live/playwright-log.txt for additional details.</msg>
+<msg time="2026-07-27T18:06:19.377456" level="FAIL">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="FAIL" start="2026-07-27T18:05:49.290363" elapsed="30.089215">TimeoutError: locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('[id="screenToolbar:form:minmaxMenu"]').first()
+    - locator resolved to &lt;a href="#" tabindex="0" role="menuitem" class="ui-menuitem-link" id="screenToolbar:form:minmaxMenu" title="Maximize/Minimize view [Ctrl+m]" onclick="try { EC.toggleMaxMinLayout(); } catch (err) {;}"&gt;…&lt;/a&gt;
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - &lt;div id="confirmationForm:confirmation_modal" class="ui-widget-overlay ui-dialog-mask"&gt;&lt;/div&gt; intercepts pointer events
+     - retrying click action
+       - waiting 500ms
