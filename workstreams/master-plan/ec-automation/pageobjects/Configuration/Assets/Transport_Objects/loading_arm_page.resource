@@ -1,6 +1,6 @@
 *** Settings ***
 Documentation       T3 (screen) - Loading Arm page object.
-...                 Screen: Configuration > Assets > Transport Objects > Loading Arm.
+...                 Screen: Configuration > Assets > Transport_Objects > Loading Arm.
 ...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator
 ...                 cascade + GO (capability Apply OV-GM Navigator First Available). Fields resolved
 ...                 BY LABEL (no hardcoded rows). Extra dropdowns + Op Production Unit first-available.

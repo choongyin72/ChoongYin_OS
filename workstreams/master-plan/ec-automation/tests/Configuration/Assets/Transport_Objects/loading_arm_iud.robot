@@ -1,10 +1,10 @@
 *** Settings ***
-Documentation       EC IUD Test - Loading Arm (Configuration > Assets > Transport Objects).
+Documentation       EC IUD Test - Loading Arm (Configuration > Assets > Transport_Objects).
 ...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
 ...                 DELETE = End Date = Start Date (true delete in OV_LOADING_ARM). NEVER touch existing data;
 ...                 a unique AUTOTEST_LA_<timestamp> code is generated per run.
 
-Resource            ../../../../pageobjects/Configuration/Assets/Transport Objects/loading_arm_page.resource
+Resource            ../../../../pageobjects/Configuration/Assets/Transport_Objects/loading_arm_page.resource
 
 Suite Setup         Set Up Loading Arm Suite
 Suite Teardown      Close EC

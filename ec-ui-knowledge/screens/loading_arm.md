@@ -1,7 +1,8 @@
 # Screen: Loading Arm
 
 - **Type:** OV-GM (EC Object Configuration, date-effective) - manage-object groupmodel; navigator-GATED.
-- **BF_CODE:**  - **Treeview:** Configuration > Assets > Transport Objects > Loading Arm
+- **BF_CODE:** CO.2078
+- **Treeview:** Configuration > Assets > Transport_Objects > Loading Arm
 - **DB view:** `OV_LOADING_ARM` (key `CODE`; `NAME`, `OBJECT_START/END_DATE`)
 - **Last verified:** 2026-07-30 - EC 14.2.4 - local sandbox - `verify_screen.py` OVERALL PASS (RF 4/4 pass + Playwright 8/8, DB-verified, self-clean)
 
@@ -22,7 +23,7 @@
 
 ## Automation (code in ec-automation)
 - **Playwright:** `py/loading_arm_iud.py` (shared engine `ec_object_iud.py` + `apply_ovgm_navigator`).
-- **RF:** T3 `pageobjects/Configuration/Assets/Transport Objects/loading_arm_page.resource` (**label-driven**) + suite `tests/Configuration/Assets/Transport Objects/loading_arm_iud.robot`.
+- **RF:** T3 `pageobjects/Configuration/Assets/Transport_Objects/loading_arm_page.resource` (**label-driven**) + suite `tests/Configuration/Assets/Transport_Objects/loading_arm_iud.robot`.
 - **Gate:** `verify_screen.py` -> OVERALL PASS.
 
 ## Quirks
