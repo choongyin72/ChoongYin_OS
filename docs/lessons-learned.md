@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v29** (R29 added 2026-07-06)
+> **Current rule version: v30** (R30 added 2026-07-30)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -37,6 +37,7 @@ _Worker sessions: read this before starting any automation work._
 | v27 | R27 | A squash-style milestone merge of a permanent standing-draft branch breaks shared history; rebase the continuation onto master (or use `git merge --no-ff`) before the branch's next milestone push, or expect real file conflicts | 2026-07-03 |
 | v28 | R28 | `CLAUDE.md` is auto-injected into every session's context (unlike other mandatory-read docs) — every review run checks `wc -l CLAUDE.md`; >200 lines = NICE-TO-HAVE (name pruning candidates), >400 lines = MUST-FIX | 2026-07-02 |
 | v29 | R29 | A scheduled/unattended runner MUST be sync/hash-verified against the branch tip before every run — a stale executing copy silently mass-produces artifacts in a superseded format while the commit history claims the fix is live | 2026-07-06 |
+| v30 | R30 | "Registry-first" is not satisfied by resolve_ec_screen.py + scan_ec_screen.py alone — the actual BF/screen code (e.g. `CO.2077`) MUST be resolved from `TV_CTRL_CONFIGURATION_STORAGE` (NAME='DefaultScreenTreeview') and written into the registry row, scorecard row, and JOURNAL.md title; a blank code defeats the registry's purpose even when no code was guessed | 2026-07-30 |
 
 ---
 
@@ -1937,5 +1938,30 @@ _Open PR triggers a full review (R14). #178's head `56ed452` is byte-identical t
 ### Reviewer process note (isolated worktree; stale main-checkout docs)
 
 - The main checkout (`C:\Projects\ChoongYin_OS`) is the Worker's permanent branch `feature/ec-screen-deepdive` at a stale tip (`a7a0a3d`, **107 commits behind master**), so the session-start mandatory-read `docs/lessons-learned.md`/`docs/review-log.md` there were the STALE **v23** copies; the live **v29** docs (R1-R29) were re-read from the `origin/master` copy in the worktree before any rule/version decision (MR4). ALL review-doc edits were made in an isolated `C:/tmp/wt-review-2026-07-17-0600` worktree off `origin/master`; the Worker's dirty permanent-branch checkout and all sibling `wt-*` worktrees (incl. the runner's `wt-ec-learn`) were never touched. Steps 4b/18's `git checkout master` in the main checkout would disrupt the parallel Worker session and were deliberately NOT run there.
+
+---
+
+## 2026-07-30 (on-demand) — Automated Review (71 new commits since #190/`ba27009`; 4 open PRs #255-#258, recovery batch after #252/#253 closed)
+
+_On-demand review requested by the owner outside the normal 06:00/14:00 schedule. Context: earlier the same day the Worker shipped Choke Model + Disposition Type via an unaudited batch generator that guessed BF codes/folders/screen-types, producing broken duplicates of already-shipped screens (#252/#253, self-closed by the Worker with an explanation). The Worker then recovered the generator (PR #254, merged) and rebuilt 4 Transport Objects screens registry-first: Channel (#255), Loading Arm (#256), Pilot Boat (#257), Tug Boat (#258)._
+
+### Rules (apply immediately, no exceptions)
+
+**R30 — "Registry-first" must resolve AND record the real screen code, not just avoid guessing one**
+`resolve_ec_screen.py` (DB metadata) + `scan_ec_screen.py` (live DOM) do not surface the BF/screen code (e.g. `CO.2077`) at all — that only comes from `TV_CTRL_CONFIGURATION_STORAGE.CONFIGURATION` (NAME='DefaultScreenTreeview'), a lookup already documented in project memory (`reference_ec_treeview_json_location.md`) and used correctly on every screen before this batch. All 4 PRs in this batch (#255-#258) shipped with the BF code column **blank** in the registry row, scorecard row, and JOURNAL.md title (e.g. "Channel ()" instead of "Channel (CO.2077)") — not a guessed/wrong code (the #252/#253 failure mode did NOT recur), but a silently incomplete registry entry that defeats the registry's purpose for the next worker/generator run. Verified independently: Channel=CO.2077, Loading Arm=CO.2078, Pilot Boat=CO.2081, Tug Boat=CO.2080 — all four are trivially resolvable from the treeview JSON and were simply never looked up. **Going forward: the registry-first step MUST include a treeview-JSON code lookup, and a blank code column is a MUST-FIX, not a cosmetic gap.**
+
+### Observations (good patterns to keep)
+
+- **The registry-first recovery genuinely worked for pattern correctness.** Independently re-ran `scan_ec_screen.py` live against the sandbox for Channel (not trusted from the PR body): confirmed OV-GM gated (3 mandatory nav dropdowns + GO), grid `manageObject:form:T_data`, mandatory fields Channel Code/Channel Name/Start Date — byte-for-byte matching the JOURNAL/CHECKLIST claims. The #252/#253 wrong-pattern-guessed-from-a-folder-name failure mode did not recur in any of the 4 PRs.
+- **VERIFY-REPORT.md / CHECKLIST.md integrity (R26) held across all 4** — every VERIFY-REPORT is genuinely auto-generated (OVERALL PASS, real gate exit codes) and no CHECKLIST tick contradicts it.
+- **PR #254 (tooling)** initially looked suspicious via `gh pr view --json files` (which listed a full unrelated Test Device deliverable as part of the diff) — a direct `git diff base_oid head_oid` proved that was a stale/misleading GitHub API artifact and the real diff is exactly `tmp/gen_ovgm.py` (383 lines), matching the PR body. Lesson for future reviewer sessions: **when `gh pr view --json files` looks inconsistent with the PR body, verify with a direct `git diff <base_oid> <head_oid>` before flagging** — the API field can reflect a stale comparison base.
+
+### Gaps still open (worker to address)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Backfill BF codes into #255 (CO.2077), #256 (CO.2078), #257 (CO.2081), #258 (CO.2080) — registry row, scorecard row, JOURNAL.md title (R30) | Worker | 🔴 High (blocks merge) |
+| CHECKLIST.md doc-drift in #255: evidence filename prefix listed as `cha_0[1-5]` vs actual `chn_0[1-5]`; RF path prose uses a space ("Transport Objects/...") vs the actual tracked underscore path ("Transport_Objects/...") — cosmetic only | Worker | 🟢 Low |
+| Orphan branch `feature/claude-md-no-shortcuts-rule` (commit `a4c0541`) self-numbers rules R30-R33 from the #250-#253 incident retro, but has no open PR and was never reviewer-extracted; it now collides with this session's real R30. Owner should decide: land it through review (renumbered from R31, since R30 is now taken) or fold its content into R30's incident note above | Owner | 🟡 Medium |
 
 ---
