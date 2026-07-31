@@ -54,7 +54,20 @@ def rows_for(screen):
     for label, path in (("registry", REG), ("scorecard", SC)):
         for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
             s = line.strip()
+<<<<<<< HEAD
             if s.startswith("| %s " % screen) or s.startswith("| %s (" % screen):
+=======
+            # EXACT first-cell match: a prefix test lets 'Pilot' pick up 'Pilot Boat' rows and
+            # could report another screen's family as a mismatch.
+            if not s.startswith("|"):
+                continue
+            cells = [x.strip() for x in s.split("|")[1:]]
+            if not cells:
+                continue
+            first = cells[0]
+            base = first.split("(")[0].strip()          # 'Truck (plain OV, CO.0264)' -> 'Truck'
+            if base == screen:
+>>>>>>> origin/feature/pilot-iud
                 out.append((label, s))
     return out
 
