@@ -17,3 +17,16 @@
 - **Generator note:** `tmp/gen_ov.py` (new plain-OV/Bank-family generator) reached insert+update
   green here; its audit therefore continues on a leaf object instead. NOT batch-used until one
   screen passes verify_screen end-to-end (R32).
+
+### Chemical Product - item-4 follow-up investigation (2026-07-31, read-only)
+Asked to find the intended delete gesture. Three distinct attempts, all evidenced, all negative:
+1. **Chemical Product screen, End=Start** -> EC banner *"Child record found. ... all child records must
+   be deleted first."* (tmp/cp_cleanup.png)
+2. **Chemical Product screen, toolbar Delete (minus icon)** -> submenu renders EMPTY (no delete entry).
+3. **'Manage Chemical Product' (CO.0261)** -> screen opens but the content area stays BLANK (loading
+   spinner, zero grids/tabs detected). tmp/manage_chem_product.png
+DB facts: `CHEM_USAGE_REPORT_CONF` is a **TABLE-class** (TV family) child with **no treeview screen of
+its own** (searched all CHEM*/USAGE*/REPORT* keys in DefaultScreenTreeview); `CHEM_PRODUCT` exposes no
+child-tab property. So the child appears to be maintainable only from some parent UI I have not found.
+**STOPPED per the 2-attempt delete rule - needs owner/SME input on the intended gesture.** Options if
+none exists: (a) ship the screen with an I-U only suite + documented delete limitation, or (b) leave parked.
