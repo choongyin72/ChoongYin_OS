@@ -21,7 +21,40 @@ screen = a["screen"]; view = a["view"].upper(); bf = a.get("bf", ""); base = a.g
 folder = a["folder"].strip("/"); slug = a["slug"]; sfolder = a["screen_folder"]
 code_l = a["code_label"]; name_l = a["name_label"]
 extra_dd = a.get("extra_dropdowns", []); popups = a.get("popups", []); has_op_pu = a.get("has_op_pu", True)
-nav = a.get("nav", ["Production Unit", "Area", "Facility Class 1"])
+nav = a.get("nav", [])          # issue #283: NO OV-GM default - gated screens must opt in
+# ---- family is EXPLICIT and REQUIRED (issue #283) ---------------------------------------
+# Inferring family from nav's truthiness silently mis-rendered any plain/custom/TV config that
+# forgot "nav": []. Now the caller must say which family it is, and we cross-check it against nav.
+FAMILIES = ("ovgm", "plain", "custom", "tv")
+family = (a.get("family") or "").strip().lower()
+if family not in FAMILIES:
+    sys.exit("ABORT: config needs an explicit \"family\" key - one of %s "
+             "(issue #283: family used to be guessed from nav's truthiness, which silently "
+             "mis-rendered plain-OV screens as OV-GM). Got %r." % (list(FAMILIES), a.get("family")))
+if family == "ovgm" and not nav:
+    sys.exit("ABORT: family='ovgm' requires a non-empty \"nav\" list (the navigator cascade levels).")
+if family != "ovgm" and nav:
+    sys.exit("ABORT: family=%r must NOT pass a \"nav\" cascade (got %r) - only OV-GM screens are "
+             "navigator-gated." % (family, nav))
+
+FAM_TEXT = {
+    "ovgm":   ("OV-GM (manage-object, groupmodel)", "manageObject:form:T_data"),
+    "plain":  ("PLAIN OV (Bank family)", None),
+    "custom": ("Custom-URL OV (no navigator GO; toolbar Refresh)", None),
+    "tv":     ("TV-style inline grid", None),
+}
+FAM_NAV_TXT = {
+    "plain":  "date-only navigator + GO (no cascade)",
+    "custom": "none (custom URL - grid loads directly; toolbar Refresh)",
+    "tv":     "per-screen context/date navigator (see SOW)",
+}
+FAM_TAG = {"ovgm": "OV-GM", "plain": "plain OV", "custom": "custom-URL OV", "tv": "TV-style"}
+FAM_DESC = {
+    "ovgm":   "OV-GM gated-navigator; label-driven; Op PU first-available",
+    "plain":  "plain OV (date-only navigator + GO, no cascade); label-driven",
+    "custom": "custom-URL OV (no navigator/GO; toolbar Refresh); label-driven",
+    "tv":     "TV-style inline grid (cell edits, per-screen delete gesture); label-driven",
+}
 date = a.get("date", "2026-07-30")
 tv = folder.replace("Configuration/Assets/", "Configuration > Assets > ").replace("/", " > ")
 bundle = EC / "screens" / folder / sfolder
@@ -181,9 +214,9 @@ if ("py/%s_iud.py" % slug) not in reg_txt and ("| %s |" % screen) not in reg_txt
     dd_r = ((" + " + ", ".join(extra_dd)) if extra_dd else "") + ((" + popup " + ", ".join(popups)) if popups else "")
     # family-aware row (issue #278): an EMPTY nav list must NOT render as " cascade + GO",
     # nor claim OV-GM / the manageObject grid - those belong to gated screens only.
-    nav_txt = (" -> ".join(nav) + " cascade + GO") if nav else "date-only navigator + GO (no cascade)"
-    fam_txt = "OV-GM (manage-object, groupmodel)" if nav else "PLAIN OV (Bank family / custom-URL - verify per screen)"
-    grid_txt = "manageObject:form:T_data" if nav else a.get("grid", "manage_object_nav_nav:form:T_data")
+    nav_txt = (" -> ".join(nav) + " cascade + GO") if family == "ovgm" else FAM_NAV_TXT[family]
+    fam_txt = FAM_TEXT[family][0]
+    grid_txt = FAM_TEXT[family][1] or a.get("grid", "manage_object_nav_nav:form:T_data")
     row = ("| %s | %s > %s (%s) | %s verify_screen PASS %s - RF %s + %s, "
            "DB-verified, self-clean; label-driven | `%s` (versioned) | %s | End Date = Start Date "
            "| `%s` | `pageobjects/%s/%s_page.resource`; driver `py/%s_iud.py` (mandatory %s/%s/Start Date%s) |\n"
@@ -199,11 +232,13 @@ else:
 sc = ROOT / "docs" / "automation-scorecard.md"
 sc_txt = sc.read_text(encoding="utf-8", errors="replace")
 # family-aware tag + descriptor (issue #278): plain-OV / custom-URL screens must not be labelled OV-GM
-fam_tag = "OV-GM" if nav else "plain OV"
-fam_desc = ("OV-GM gated-navigator; label-driven; Op PU first-available" if nav
-            else "plain OV (date-only navigator + GO, no cascade); label-driven")
+fam_tag = FAM_TAG[family]
+fam_desc = FAM_DESC[family]
 tag = "%s (%s, %s)" % (screen, fam_tag, bf)
-if tag not in sc_txt:
+# issue #283 test finding: keying idempotency on the family-aware tag appended DUPLICATES for
+# screens whose existing row used different family wording. Key on screen name + BF only.
+already = ("| %s (" % screen) in sc_txt and bf in sc_txt
+if not already:
     row = ("| %s | OK Done %s - RF %s + %s via verify_screen.py (OVERALL PASS), DB-verified vs %s (Name), "
            "self-clean; %s | see docs/ov-non-bank-targets.md |\n"
            % (tag, date, rf_txt, pw_txt, view, fam_desc))
