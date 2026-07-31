@@ -272,7 +272,19 @@ journal = '''# JOURNAL - %(screen)s (%(bf)s) %(fam_label)s IUD
            rf_txt=rf_txt, pw_txt=pw_txt, fam_label=fam_label, fam_grid=FAM_GRID_TXT[family],
            nav_txt=nav_txt, fam_lesson=FAM_LESSON[family], branch=_branch(), zerob=zerob,
            gen="tmp/gen_ovgm.py" if family == "ovgm" else "tmp/gen_ov.py")
-(bundle / "JOURNAL.md").write_text(journal, encoding="utf-8")
+# NEVER overwrite an existing JOURNAL.md. A packager re-run silently replaced Pilot's real
+# Pilot-vs-Pilot-Boat lesson with the template once already (found as a floating diff 2026-07-31).
+# A shape/length heuristic was tried first and FAILED its own test (it classed hand-edited journals as
+# generator-fresh), so this compares content exactly and defers to a human on any divergence.
+_jr = bundle / "JOURNAL.md"
+if not _jr.exists():
+    _jr.write_text(journal, encoding="utf-8")
+elif _jr.read_text(encoding="utf-8", errors="replace").strip() == journal.strip():
+    pass                                    # identical - nothing to do
+else:
+    (bundle / "JOURNAL.generated.md").write_text(journal, encoding="utf-8")
+    print("WARNING: existing JOURNAL.md differs from the generated one - KEPT yours, wrote "
+          "JOURNAL.generated.md beside it. Merge by hand; do not delete history.")
 
 # ---- #20 KB map -----------------------------------------------------------------
 kb = ROOT / "ec-ui-knowledge" / "screens" / ("%s.md" % slug)

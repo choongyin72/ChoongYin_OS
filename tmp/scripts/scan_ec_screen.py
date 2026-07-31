@@ -10,6 +10,7 @@ objectForm/updateAttributes/objectdates ids; for TV it reads the grid cells. REA
    SCREEN="Contract Area" py tmp/scripts/scan_ec_screen.py   (gated: auto-fills the Business Unit dd + GO)
 """
 import os
+import sys
 import oracledb
 from playwright.sync_api import sync_playwright
 
@@ -80,6 +81,32 @@ with sync_playwright() as p:
     mm = page.locator(css("screenToolbar:form:minmaxMenu"))
     if mm.count() and mm.first.is_visible():
         mm.first.click(); ajax(page)
+
+    # 0) SCREEN READINESS - added 2026-07-31. Without this the scan queried before the screen rendered
+    #    and printed navigator={} / grid=None for Report Group, which HAS both. An empty scan result is
+    #    indistinguishable from "this screen has no navigator", so it must never be reported as a fact.
+    _ready = False
+    for _ in range(30):                      # up to ~30s
+        _state = page.evaluate("""() => ({
+            nav: document.querySelectorAll("[id^='nav:form:G:']").length,
+            grid: document.querySelectorAll("[id$=':T_data']").length,
+            form: document.querySelectorAll("[id*='objectForm']").length,
+            go: ['go_button:form:B','button:form:B','navButton:form:B']
+                  .filter(i => document.getElementById(i)).length })""")
+        if _state["nav"] or _state["grid"] or _state["form"] or _state["go"]:
+            _ready = True
+            print("screen ready:", _state)
+            break
+        page.wait_for_timeout(1000)
+    if not _ready:
+        print("=" * 78)
+        print("SCAN ABORTED - the screen never rendered a navigator, grid, objectForm or GO button.")
+        print("An EMPTY scan is NOT evidence that the screen lacks these - do NOT record it as a shape.")
+        print("Re-run with EC_HEADED=1 and watch; the screen may need a different entry (custom URL).")
+        print("=" * 78)
+        b.close()
+        sys.exit(2)
+    page.wait_for_timeout(1200)              # let a late-rendering navigator settle
 
     # 1) toolbar New/Delete enabled-state (detect by ICON class - works for text menus AND icon-only buttons)
     tb = page.evaluate("""() => { const out={};

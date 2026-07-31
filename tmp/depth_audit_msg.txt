@@ -1,0 +1,20 @@
+test(gen): verify the RF import-depth fix across ALL folder shapes, not the 2 I happened to test
+
+My claim of "no regression" in #288 rested on ONE file being byte-identical (Report Group, 3 segments).
+That is thin evidence for a change to a path formula, so this checks every shipped RF file.
+
+tmp/audit_rf_import_depths.py - resolves each Resource/Library relative path against the file's own
+location and asserts the target EXISTS (the property that matters: a wrong depth silently fails to
+resolve, and RF reports it as "no keyword with name ... found", which points nowhere near a path).
+  290 RF files. Shapes present: 1-segment 20, 2-segment 10, 3-segment 253, 4-segment 7.
+  Result: ALL relative imports resolve. exit 0.
+
+tmp/check_depth_formula.py - compares the fix's formula ("../" * (segments + 1)) with the depth each real
+file actually uses, per shape:
+  1-segment used=2 formula=2 OK | 2-segment used=3 formula=3 OK
+  3-segment used=4 formula=4 OK | 4-segment used=5 formula=5 OK    mismatches: 0
+
+So the fix is BOTH necessary and correct: the old hardcoded 4 levels is right only for 3-segment folders,
+and 37 files across the other three shapes already exist in this repo - the generators would have emitted
+unresolvable imports for any new screen in those locations, failing with a symptom that points at
+keywords rather than paths.

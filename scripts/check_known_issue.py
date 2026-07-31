@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """STEP 0 on ANY EC blocker: have we already hit this? Run BEFORE the first live scan.
 
-    py tmp/check_known_issue.py "Chemical Product" CHEM_USAGE_REPORT_CONF
-    py tmp/check_known_issue.py "ORA-02292: integrity constraint ... child record found"
+    py scripts/check_known_issue.py "Chemical Product" CHEM_USAGE_REPORT_CONF
+    py scripts/check_known_issue.py "ORA-02292: integrity constraint ... child record found"
 
 Searches every place a past diagnosis could live, prints file:line hits, and exits 2 when it finds
 anything (2 = STOP AND READ THOSE FIRST), 0 when the ground is genuinely new.

@@ -40,9 +40,12 @@ Per screen: recon the parent-dd label + mandatory set (scan_mandatory) -> genera
 OVERALL PASS -> PR off master. Groups: B(20) C1/C2(10) D(3) F(1) A-OVGM(7) + Stream Item + well-hierarchy(4).
 Nav shape per screen in `tmp/ov_gm_55_nav_config.json`. Exclude groupmodel-off screens (verified) like Production Sub Unit.
 
-> OPEN RISK (2026-07-31, Message Group CO.0236): a parent-dd set to the captured navigator value
-> PERSISTED AS THE NEXT OPTION IN THE LIST (requested `Administration`, saved `Allocation`; both
-> panels offer identical lists). Cause not yet established - either the pick lands one row off, or
-> the write silently fails and EC defaults. Until this is settled, an OV-GM screen whose parent-dd
-> value MATTERS must have that value ASSERTED IN THE DB, not assumed from a green insert. Existing
-> suites assert only CODE and NAME. See tmp/OV_SWEEP_PARKED.md (Message Group).
+> RESOLVED 2026-07-31 (was logged here as an OPEN RISK - the wider fear is RETRACTED, with evidence).
+> On Message Group (CO.0236) a parent-dd set to 'Administration' PERSISTED as 'Allocation'. A read-only
+> probe (tmp/probe_dropdown_fidelity.py - nothing saved) set the field via `select_dropdown` both with
+> `__FIRST__` and with the explicit label and READ THE INPUT BACK: it holds 'Administration' in both
+> cases. **So the pick is faithful and the shared engine is NOT defective** - the divergence is introduced
+> at/after SUBMIT (EC-side derivation/override of FUNCTIONAL_AREA, mechanism not yet established).
+> Consequence: the other OV-GM screens' parent-dd handling is NOT implicated by this evidence. Still worth
+> doing when convenient: assert the parent-dd value in the DB, not just CODE/NAME, so an EC-side override
+> can never pass silently. Message Group stays parked - see tmp/OV_SWEEP_PARKED.md.
