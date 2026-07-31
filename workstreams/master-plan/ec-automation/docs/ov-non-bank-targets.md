@@ -18,13 +18,13 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 | CO.0021 | Facility Class 2 | OV_FCTY_CLASS_2 | Assets > Facility Objects | [ ] |
 | CO.0100 | Production Sub Unit | OV_PROD_SUB_UNIT | Assets > Basic Objects | [ ] |
 | CO.0102 | Constant Standard | OV_CONSTANT_STANDARD | Assets > Hydrocarbon Objects | [ ] |
-| CO.0158 | Report Group | OV_REPORT_GROUP | Assets > Facility Objects | [ ] |
+| CO.0158 | Report Group | OV_REPORT_GROUP | Assets > Facility Objects | [x] plain OV, live 4/4 |
 | CO.0191 | Task Process | OV_TASK_PROCESS | Task List | [x] #236 (custom-URL OV) |
 | CO.0193 | Action Trigger | OV_CONTROL_POINT | Business Action | [ ] |
 | CO.0227 | External Location | OV_EXTERNAL_LOCATION | Assets > Facility Objects | [ ] |
-| CO.0264 | Truck | OV_TRUCK | Assets > Transport Objects | [ ] |
-| CO.0265 | Trailer | OV_TRAILER | Assets > Transport Objects | [ ] |
-| CO.0266 | Driver | OV_DRIVER | Assets > Transport Objects | [ ] |
+| CO.0264 | Truck | OV_TRUCK | Assets > Transport Objects | [x] #277 (plain OV) |
+| CO.0265 | Trailer | OV_TRAILER | Assets > Transport Objects | [x] #279 (plain OV) |
+| CO.0266 | Driver | OV_DRIVER | Assets > Transport Objects | [x] #281 (plain OV) |
 | CO.1033 | Production Day Table | OV_PRODUCTION_DAY | System | [ ] |
 | CO.1049 | Conversion Group | OV_CONVERSION_GROUP | System > Units | [x] #236 (custom-URL OV) |
 | CO.1060 | Calculation Library | OV_CALC_LIBRARY | Assets > Calculation Objects | [x] #236 (custom-URL OV) |
@@ -107,6 +107,11 @@ failed; a follow-up probe found grid = `manageObject:form:T_data`, and `select_r
 (need grid_id=`manageObject:form:T_data` + GO reload + lazy-redraw wait R17 + insert parent-dd = nav scope).
 Only the **custom-URL** ones build with current tooling.
 
+> WARNING: the 'Flavour' column below started as a 2026-07-27 BATCH GUESS. Four rows
+> (Truck/Trailer/Driver/Report Group) were labelled OV-GM and proved to be plain OV on
+> contact - issue #278 came from trusting it. Treat any row without 'PROVEN' as a
+> hypothesis and SCAN the screen first.
+
 | BF | Screen | Flavour | grid_id | Phase |
 |---|---|---|---|---|
 | CO.1049 | Conversion Group | custom-URL | nav:form:T_data | **DONE #236** |
@@ -116,13 +121,13 @@ Only the **custom-URL** ones build with current tooling.
 | CO.0193 | Action Trigger | custom-URL (POPUP refs) | nav:form:T_data | (P) popup-picker capability (AT_TYPE_POPUP/TRIGGER_TYPE_POPUP mandatory) |
 | CO.0191 | Task Process | custom-URL | nav:form:T_data | **DONE #236** |
 | FC.0010 | Forecast | custom-URL | nav:form:T_data | (P) end-date-on-insert ADDED to generator, but FORECAST_TYPE (DB NOT NULL) also mandatory; filling Forecast Type first-available still rejected at Save (likely popup-picker, not dropdown) - 2 attempts, parked 2026-07-27 |
-| CO.0100 | Production Sub Unit | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
-| CO.0021 | Facility Class 2 | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
-| CO.0158 | Report Group | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
-| CO.0227 | External Location | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
-| CO.0264 | Truck | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
-| CO.0265 | Trailer | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
-| CO.0266 | Driver | **OV-GM** | manageObject:form:T_data | 2 (needs capability) |
+| CO.0100 | Production Sub Unit | **OV-GM** | manageObject:form:T_data | 2 (needs capability) -- **UNVERIFIED 2026-07-27 batch guess**; siblings in this block (Truck/Trailer/Driver/Report Group) all turned out plain OV, so SCAN before building. |
+| CO.0021 | Facility Class 2 | **OV-GM** | manageObject:form:T_data | 2 (needs capability) -- **UNVERIFIED 2026-07-27 batch guess**; siblings in this block (Truck/Trailer/Driver/Report Group) all turned out plain OV, so SCAN before building. |
+| CO.0158 | Report Group | **plain OV** (PROVEN live 2026-07-31) | report_group_table:form:T_data | **DONE** - verify_screen PASS (RF 4/4 + PW 8/8) |
+| CO.0227 | External Location | **OV-GM** | manageObject:form:T_data | 2 (needs capability) -- **UNVERIFIED 2026-07-27 batch guess**; siblings in this block (Truck/Trailer/Driver/Report Group) all turned out plain OV, so SCAN before building. |
+| CO.0264 | Truck | **plain OV** (PROVEN live, shipped) | manage_object_nav_nav:form:T_data | **DONE #277** |
+| CO.0265 | Trailer | **plain OV** (PROVEN live, shipped) | manage_object_nav_nav:form:T_data | **DONE #279** |
+| CO.0266 | Driver | **plain OV** (PROVEN live, shipped) | manage_object_nav_nav:form:T_data | **DONE #281** |
 | CO.0102 | Constant Standard | custom-URL grid cstandard:form:T_data | (P) standard New-Object menu gesture times out (custom toolbar) - needs individual insert-gesture recon; 2026-07-27 |
 | CD.0008 | Stream Item | (P) no :T_data grid renders on open (different layout / didn't open) - needs individual recon; 2026-07-27 |
 | CO.1033 | Production Day Table | custom-URL grid production_day:form:T_data | (P) INVARIANT (physical delete, not End=Start) - needs physical-delete capability; 2026-07-27 |

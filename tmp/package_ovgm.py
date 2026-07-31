@@ -16,6 +16,16 @@ from pathlib import Path
 
 ROOT = Path(r"C:\Projects\ChoongYin_OS")
 EC = ROOT / "workstreams" / "master-plan" / "ec-automation"
+def _branch():
+    """The JOURNAL used to hardcode `feature/ov-gm-<slug>` + "PR #244". Report the REAL branch."""
+    import subprocess
+    try:
+        r = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=str(ROOT),
+                           capture_output=True, text=True)
+        return r.stdout.strip() or "(unknown branch)"
+    except Exception:
+        return "(unknown branch)"
+
 a = json.loads(sys.argv[1])
 screen = a["screen"]; view = a["view"].upper(); bf = a.get("bf", ""); base = a.get("base", "")
 folder = a["folder"].strip("/"); slug = a["slug"]; sfolder = a["screen_folder"]
@@ -117,13 +127,103 @@ if src.exists():
     "screen": screen, "view": view, "verify_overall": "PASS",
     "rf": rf_txt, "pw": pw_txt, "date": date}, indent=1), encoding="utf-8")
 
+# ---- family-aware artifact text + a REAL check-existing grep ---------------------
+# (the CHECKLIST/JOURNAL/KB templates used to hardcode OV-GM wording on every screen)
+FAM_LABEL = {"ovgm": "OV-GM", "plain": "plain OV", "custom": "custom-URL OV", "tv": "TV-style",
+             "gatedpf": "gated OV (per-field nav)"}
+FAM_SPEC = {
+    "ovgm": "OV-GM specifics: navigator cascade %s first-available + GO; Op Production Unit "
+            "first-available for grid visibility." % (" -> ".join(nav) if nav else ""),
+    "plain": "Plain-OV specifics: date-only navigator + GO (no cascade); no Op PU gating.",
+    "custom": "Custom-URL specifics: grid loads directly from the screen URL; toolbar Refresh re-queries "
+              "(no navigator GO).",
+    "tv": "TV-style specifics: inline grid cell edits; per-screen delete gesture (see SOW).",
+    "gatedpf": "Gated per-field specifics: nav groups are PER FIELD (nav:form:G:<n>:R:1:C:0) + GO.",
+}
+# grid_txt/nav_txt are LOCAL to the registry-row function, so recompute them here from the same
+# module-level family tables (single source of truth, no second guess at the values).
+_grid = FAM_TEXT[family][1] or a.get("grid", "manage_object_nav_nav:form:T_data")
+nav_txt = ((" -> ".join(nav) + " cascade + GO") if family in ("ovgm", "gatedpf")
+           else FAM_NAV_TXT.get(family, "see SOW"))
+FAM_GRID_TXT = {"ovgm": "OV-GM (grid `manageObject:form:T_data`)",
+                "plain": "plain OV (Bank family, grid `%s`)" % _grid,
+                "custom": "custom-URL OV (grid `%s`)" % _grid,
+                "tv": "TV-style inline grid (`%s`)" % _grid,
+                "gatedpf": "gated OV, per-field nav groups (grid `%s`)" % _grid}
+KB_NAV = {
+    "ovgm": "cascade `nav:form:G:0:R:1:C:1..N:dd` (first-available) -> GO `#button:form:B`",
+    "plain": "date field `nav:form:G:0:R:1:C:0:da_input` -> GO `#button:form:B` (no cascade)",
+    "custom": "none - grid loads from the screen URL; re-query via toolbar Refresh `[Ctrl+r]`",
+    "tv": "per-screen context/date navigator (see SOW)",
+    "gatedpf": "PER-FIELD nav groups `nav:form:G:<n>:R:1:C:0` -> GO `#button:form:B`",
+}
+KB_GRID_NOTE = {"ovgm": " (empty until cascade + GO)", "plain": " (lists after GO)",
+                "custom": " (lists on open)", "tv": "", "gatedpf": " (empty until all nav fields + GO)"}
+KB_OPPU = {"ovgm": " - Op Production Unit (first-available, grid visibility)", "plain": "",
+           "custom": "", "tv": "", "gatedpf": ""}
+KB_ENGINE = {"ovgm": " + `apply_ovgm_navigator`", "plain": " + `click_go`", "custom": " + toolbar Refresh",
+             "tv": "", "gatedpf": " + per-field nav helpers"}
+KB_QUIRKS = {
+    "ovgm": "- OV-GM navigator-gated: grid empty until cascade + GO. First-available nav PU is a sparse test\n"
+            "  scope - NOT necessarily a valid Op Production Unit option, and it empties nav-scoped popups\n"
+            "  (see tmp/OV_SWEEP_PARKED.md); parent-dd + Op PU use first-available, probe per screen.",
+    "plain": "- Plain OV (Bank family): the navigator is a single DATE field + GO, no cascade and no Op PU.\n"
+             "- An UNSAVED CHANGES dialog (YES/NO) can block GO right after the End=Start close - answer YES\n"
+             "  (that commits the intended delete).",
+    "custom": "- Custom-URL OV: no navigator GO; the toolbar Refresh `[Ctrl+r]` is the re-query gesture.",
+    "tv": "- TV-style: rows are edited in place; confirm the delete gesture per screen.",
+    "gatedpf": "- Every nav group is a separate mandatory field; fill them all before GO or the grid stays empty.",
+}
+FAM_KB_TYPE = {
+    "ovgm": "OV-GM (EC Object Configuration, date-effective) - manage-object groupmodel; navigator-GATED.",
+    "plain": "Plain OV (EC Object Configuration, date-effective) - Bank family; date-only navigator + GO.",
+    "custom": "Custom-URL OV (EC Object Configuration, date-effective) - grid loads directly; toolbar Refresh.",
+    "tv": "TV-style table class - inline grid edits; per-screen delete gesture.",
+    "gatedpf": "Gated OV with PER-FIELD navigator groups (date-effective) + GO.",
+}
+FAM_LESSON = {
+    "ovgm": "- OV-GM: first-available nav scope + Op PU first-available lists the row after GO (parent-dd "
+            "need not equal the nav PU - probe per screen).",
+    "plain": "- Plain OV: date-only navigator + GO; no cascade and no Op PU to satisfy, so the grid lists "
+             "immediately after Save + GO.",
+    "custom": "- Custom-URL OV: no navigator GO; the toolbar Refresh is the re-query gesture.",
+    "tv": "- TV-style: the row is edited in place; confirm the delete gesture per screen.",
+    "gatedpf": "- Gated per-field nav: each nav group is its own field; fill every mandatory one before GO.",
+}
+fam_label = FAM_LABEL[family]
+
+# 0b is a CLAIM, so it must come from a real command: does anything OUTSIDE this build already
+# implement this screen? (Pre-ticking this was defect #2 above.)
+_own = {("%s_iud.py" % slug), ("%s_page.resource" % slug), ("%s_iud.robot" % slug), ("%s_sow.md" % slug),
+        ("%s.md" % slug)}
+_dupes = []
+for _f in EC.rglob("*"):
+    if not _f.is_file() or _f.suffix.lower() not in (".py", ".robot", ".resource"):
+        continue
+    if _f.name in _own or sfolder in _f.parts:
+        continue
+    try:
+        if slug in _f.read_text(encoding="utf-8", errors="replace"):
+            _dupes.append(_f.relative_to(EC).as_posix())
+    except Exception:
+        pass
+_shared_ok = {"py/ec_object_iud.py"}          # the shared engine legitimately dispatches by slug
+_dupes = [d for d in _dupes if d not in _shared_ok]
+zerob = ("0b grep ec-automation -> only this build (checked: %d other file(s) reference %r)"
+         % (len(_dupes), slug))
+zerob_tick = "x" if not _dupes else " "
+if _dupes:
+    zerob += " -- REVIEW: %s" % ", ".join(_dupes[:4])
+
 # ---- #7 CHECKLIST.md (ticks from the real VERIFY-REPORT) -------------------------
 dd_note = (" + dropdowns " + ", ".join(extra_dd)) if extra_dd else ""
 pp_note = (" + popups " + ", ".join(popups)) if popups else ""
 checklist = '''# %(screen)s - IUD Deliverable Checklist (vs docs/IUD-DELIVERABLE-CHECKLIST.md, 21 gates)
 
 ## Step 0 - check-existing gate
-- [x] 0a KB map created / 0b grep ec-automation -> only this build / 0c reused shared engine (ec_object_iud.py) + DbVerify + T2 (thin driver, no per-screen plumbing).
+- [x] 0a KB map created
+- [%(zerob_tick)s] %(zerob)s
+- [x] 0c reused shared engine (ec_object_iud.py) + DbVerify + T2 (thin driver).
 
 ## A. Bundle artifacts
 - [x] 1 `%(slug)s_sow.md` - [x] 2 `README.md` - [x] 3 `JOURNAL.md`
@@ -140,43 +240,45 @@ checklist = '''# %(screen)s - IUD Deliverable Checklist (vs docs/IUD-DELIVERABLE
 - [x] 14 FULL I-U-D - [x] 15 Self-clean 0 residual - [x] 16 hygiene exit 0
 
 ## D. Delivery
-- [x] 17 Registry row - [x] 18 Scorecard row - [x] 19 PR (R9 body)
+- [x] 17 Registry row - [x] 18 Scorecard row
+- [ ] 19 PR (R9 body) - CANNOT be ticked here: this file is written BEFORE the PR exists. Tick it in the PR body/commit, never at scaffold time (#235).
 
 ## E. Knowledge base
 - [x] 20 KB map `ec-ui-knowledge/screens/%(slug)s.md`
 - [x] 21 Reuse clause - N/A (new build); JOURNAL + evidence + KB map + VERIFY-REPORT all produced
 
 _Gates 10-16 RUN by `scripts/verify_screen.py` -> `VERIFY-REPORT.md` (OVERALL PASS); ticks from real exit codes.
-OV-GM specifics: navigator cascade %(nav)s first-available + GO%(dd_note)s%(pp_note)s; Op Production Unit first-available for grid visibility._
+%(fam_spec)s%(dd_note)s%(pp_note)s_
 ''' % dict(screen=screen, slug=slug, folder=folder, view=view, rf_txt=rf_txt, pw_txt=pw_txt,
-           screen_abbr=a.get("abbr", slug[:3]), nav=" -> ".join(nav), dd_note=dd_note, pp_note=pp_note)
+           screen_abbr=a.get("abbr", slug[:3]), nav=" -> ".join(nav), dd_note=dd_note,
+           pp_note=pp_note, fam_spec=FAM_SPEC[family], zerob=zerob, zerob_tick=zerob_tick)
 (bundle / "CHECKLIST.md").write_text(checklist, encoding="utf-8")
 
 # ---- #3 JOURNAL.md --------------------------------------------------------------
-journal = '''# JOURNAL - %(screen)s (%(bf)s) OV-GM IUD
+journal = '''# JOURNAL - %(screen)s (%(bf)s) %(fam_label)s IUD
 
 ## %(date)s
-- **Branch:** `feature/ov-gm-%(slug_dash)s` (stacked on the gated-navigator capability, PR #244).
-  Check-existing gate: grep ec-automation -> only this build; reused shared engine (ec_object_iud.py) + T2 + DbVerify.
-- **Recon** (`investigation/recon.py`, read-only + tmp/%(slug)s/config.json scan): OV-GM (grid
-  `manageObject:form:T_data`), navigator cascade %(nav)s. Mandatory %(code_l)s / %(name_l)s / Start Date%(dd_note)s%(pp_note)s.
-- **Built** (generator `tmp/gen_ovgm.py` -> proven Node/Chemical-Tank template): label-driven T3 (no hardcoded
-  ids); Playwright driver + RF T3/suite. Op Production Unit set first-available for grid visibility.
+- **Branch:** `%(branch)s`.
+  Check-existing gate: %(zerob)s; reused shared engine (ec_object_iud.py) + T2 + DbVerify.
+- **Recon** (`investigation/recon.py`, read-only + tmp/%(slug)s/config.json scan): %(fam_grid)s.
+  Nav: %(nav_txt)s. Mandatory %(code_l)s / %(name_l)s / Start Date%(dd_note)s%(pp_note)s.
+- **Built** (generator `%(gen)s`): label-driven T3 (no hardcoded ids); Playwright driver + RF T3/suite.
 - `verify_screen.py` -> **OVERALL PASS**: robocop 0, hygiene 0, dryrun 4/4, LIVE RF %(rf_txt)s, %(pw_txt)s. DB residual 0.
 
 ## Lessons
-- OV-GM: first-available nav scope + Op PU first-available lists the row after GO (parent-dd need not equal
-  the nav PU - probe per screen). Generic engine handled cascade/appear/absent/pagination with zero tuning.
+%(fam_lesson)s Generic engine handled the nav/appear/absent/pagination gestures with zero tuning.
 ''' % dict(screen=screen, bf=bf, date=date, slug=slug, slug_dash=slug.replace("_", "-"),
            nav=" -> ".join(nav), code_l=code_l, name_l=name_l, dd_note=dd_note, pp_note=pp_note,
-           rf_txt=rf_txt, pw_txt=pw_txt)
+           rf_txt=rf_txt, pw_txt=pw_txt, fam_label=fam_label, fam_grid=FAM_GRID_TXT[family],
+           nav_txt=nav_txt, fam_lesson=FAM_LESSON[family], branch=_branch(), zerob=zerob,
+           gen="tmp/gen_ovgm.py" if family == "ovgm" else "tmp/gen_ov.py")
 (bundle / "JOURNAL.md").write_text(journal, encoding="utf-8")
 
 # ---- #20 KB map -----------------------------------------------------------------
 kb = ROOT / "ec-ui-knowledge" / "screens" / ("%s.md" % slug)
 kb_txt = '''# Screen: %(screen)s
 
-- **Type:** OV-GM (EC Object Configuration, date-effective) - manage-object groupmodel; navigator-GATED.
+- **Type:** %(fam_type)s
 - **BF_CODE:** %(bf)s - **Treeview:** %(tv)s > %(screen)s
 - **DB view:** `%(view)s` (key `CODE`; `NAME`, `OBJECT_START/END_DATE`)
 - **Last verified:** %(date)s - EC 14.2.4 - local sandbox - `verify_screen.py` OVERALL PASS (RF %(rf_txt)s + %(pw_txt)s, DB-verified, self-clean)
@@ -185,29 +287,29 @@ kb_txt = '''# Screen: %(screen)s
 | Purpose | Selector |
 |---|---|
 | Open | search `%(screen)s` -> `label.tv-link` "%(screen)s" |
-| Navigator (gated) | cascade `nav:form:G:0:R:1:C:1..N:dd` = %(nav)s (first-available) -> GO `#button:form:B` |
-| Grid | `manageObject:form:T_data` (empty until cascade + GO) |
+| Navigator | %(kb_nav)s |
+| Grid | `%(kb_grid)s`%(kb_grid_note)s |
 | Insert (+) | hover `span.ui-icon-insert` -> "New Object" |
 | Save / GO | `//a[@title='Save [Ctrl+s]' and not(...disabled)]` / `#button:form:B` |
 
 ### New Object form (`objectForm`) - labels (T3 resolves BY LABEL)
-**%(code_l)s*** - **%(name_l)s*** - **Start Date*** (date)%(dd_note)s%(pp_note)s - Op Production Unit (first-available, grid visibility). (`*` mandatory)
+**%(code_l)s*** - **%(name_l)s*** - **Start Date*** (date)%(dd_note)s%(pp_note)s%(kb_oppu)s. (`*` mandatory)
 
 ### Update (`updateAttributes`) / Delete (`objectdates`)
 `%(code_l)s` (ro) - **`%(name_l)s`**. Delete: **`End Date`** = Start Date -> leaves `%(view)s`.
 
 ## Automation (code in ec-automation)
-- **Playwright:** `py/%(slug)s_iud.py` (shared engine `ec_object_iud.py` + `apply_ovgm_navigator`).
+- **Playwright:** `py/%(slug)s_iud.py` (shared engine `ec_object_iud.py`%(kb_engine)s).
 - **RF:** T3 `pageobjects/%(folder)s/%(slug)s_page.resource` (**label-driven**) + suite `tests/%(folder)s/%(slug)s_iud.robot`.
 - **Gate:** `verify_screen.py` -> OVERALL PASS.
 
 ## Quirks
-- OV-GM navigator-gated: grid empty until cascade + GO. First-available nav PU is a sparse test scope - it is
-  NOT necessarily a valid Op Production Unit option, and it empties nav-scoped popups (see issue OV_SWEEP_PARKED);
-  parent-dd + Op PU use first-available, probe per screen.
+%(kb_quirks)s
 ''' % dict(screen=screen, bf=bf, tv=tv, view=view, date=date, nav=" -> ".join(nav),
            code_l=code_l, name_l=name_l, dd_note=dd_note, pp_note=pp_note, slug=slug, folder=folder,
-           rf_txt=rf_txt, pw_txt=pw_txt)
+           rf_txt=rf_txt, pw_txt=pw_txt, fam_type=FAM_KB_TYPE[family], kb_nav=KB_NAV[family],
+           kb_grid=_grid, kb_grid_note=KB_GRID_NOTE[family], kb_oppu=KB_OPPU[family],
+           kb_engine=KB_ENGINE[family], kb_quirks=KB_QUIRKS[family])
 kb.write_text(kb_txt, encoding="utf-8")
 
 # ---- #17 registry row (idempotent) ----------------------------------------------

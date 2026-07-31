@@ -44,7 +44,7 @@ ins_block = "\n".join(ins)
 
 driver = '''"""%(screen)s - IUD driver (thin). Reuses shared engine ec_object_iud.py + DbVerify.py.
 
-PLAIN OV (Bank family, grid manage_object_nav_nav:form:T_data): navigator is date-only - no mandatory
+PLAIN OV (Bank family, grid %(grid_id)s): navigator is date-only - no mandatory
 cascade, just GO to populate the grid. Fields resolved BY LABEL; extra mandatory dropdowns set
 first-available. DELETE = End Date = Start Date. Template: bank_iud.py / disposition_type_iud.py.
 Run headed: EC_HEADED=1 py -X utf8 workstreams/master-plan/ec-automation/py/%(slug)s_iud.py
@@ -376,20 +376,20 @@ Set Up %(screen)s Suite
 sow = '''# SOW - %(screen)s IUD (%(folder_h)s)
 
 - **Screen:** %(screen)s   **BF:** %(bf)s   **View:** `%(view)s`   **Base:** `%(base)s`
-- **Type:** PLAIN OV (Bank family; grid `manage_object_nav_nav:form:T_data`), date-only navigator + GO, date-effective.
+- **Type:** PLAIN OV (Bank family; grid `%(grid)s`), date-only navigator + GO, date-effective.
 - Date-only navigator -> GO populates the grid; fields resolved BY LABEL; extra mandatory dropdowns first-available.
 - IUD: INSERT -> UPDATE(Name) -> DELETE(End=Start). Test data `%(cpfx)s<timestamp>`; self-clean = absent in %(view)s.
 - Deliverables: driver `py/%(slug)s_iud.py`, T3 `pageobjects/%(folder)s/%(slug)s_page.resource`,
   suite `tests/%(folder)s/%(slug)s_iud.robot`, this SOW, `VERIFY-REPORT.md` (auto-generated).
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, view=view, base=base,
-           cpfx=cpfx, slug=slug, folder=folder)
+           cpfx=cpfx, slug=slug, folder=folder, grid=grid_id)
 
 readme = '''# %(screen)s - EC Object IUD bundle
 
-**Screen:** %(folder_h)s > %(screen)s (BF %(bf)s). PLAIN OV (grid `manage_object_nav_nav:form:T_data`), date-only navigator + GO,
-date-effective. Built on the item-1 gated-navigator capability (PR #244). See `%(slug)s_sow.md` +
+**Screen:** %(folder_h)s > %(screen)s (BF %(bf)s). PLAIN OV (Bank family, grid `%(grid)s`),
+date-only navigator + GO (no cascade), date-effective. See `%(slug)s_sow.md` +
 `VERIFY-REPORT.md`. Driver `py/%(slug)s_iud.py`; T3/suite under `%(folder)s`.
-''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, slug=slug, folder=folder)
+''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, slug=slug, folder=folder, grid=grid_id)
 
 # ---- write ----
 (EC / "py" / ("%s_iud.py" % slug)).write_text(driver, encoding="utf-8")

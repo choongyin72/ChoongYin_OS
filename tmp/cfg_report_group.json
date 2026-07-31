@@ -1,0 +1,20 @@
+{
+  "screen": "Report Group",
+  "bf": "CO.0158",
+  "view": "OV_REPORT_GROUP",
+  "base": "REPORT_GROUP",
+  "folder": "Configuration/Assets/Facility_Objects",
+  "screen_folder": "Report_Group",
+  "slug": "report_group",
+  "abbr": "RG",
+  "code_prefix": "AUTOTEST_RG",
+  "code_label": "Reporting Group Code",
+  "name_label": "Reporting Group Name",
+  "grid": "report_group_table:form:T_data",
+  "has_op_pu": false,
+  "extra_texts": [["Description", "AUTOTEST Report Group description"]],
+  "extra_dropdowns": ["Business Area"],
+  "popups": [],
+  "family": "plain",
+  "nav": []
+}
