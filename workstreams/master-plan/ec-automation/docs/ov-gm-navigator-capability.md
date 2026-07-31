@@ -39,3 +39,10 @@ Per screen: recon the parent-dd label + mandatory set (scan_mandatory) -> genera
 (nav cascade in Open, parent-dd = nav top, grid manageObject) -> per-screen groupmodel check -> verify_screen
 OVERALL PASS -> PR off master. Groups: B(20) C1/C2(10) D(3) F(1) A-OVGM(7) + Stream Item + well-hierarchy(4).
 Nav shape per screen in `tmp/ov_gm_55_nav_config.json`. Exclude groupmodel-off screens (verified) like Production Sub Unit.
+
+> OPEN RISK (2026-07-31, Message Group CO.0236): a parent-dd set to the captured navigator value
+> PERSISTED AS THE NEXT OPTION IN THE LIST (requested `Administration`, saved `Allocation`; both
+> panels offer identical lists). Cause not yet established - either the pick lands one row off, or
+> the write silently fails and EC defaults. Until this is settled, an OV-GM screen whose parent-dd
+> value MATTERS must have that value ASSERTED IN THE DB, not assumed from a green insert. Existing
+> suites assert only CODE and NAME. See tmp/OV_SWEEP_PARKED.md (Message Group).

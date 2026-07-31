@@ -8,6 +8,7 @@ Usage: py tmp/gen_ovgm.py '<json>'
              code_label, name_label, screen_folder (Chemical_Stream),
              extra_dropdowns (list of mandatory dropdown labels, each first-available),
              has_op_pu (bool: set Op Production Unit first-available for grid visibility)
+             parent_dd (label of the form dd that must EQUAL the navigator's captured top-parent)
 All fields resolved BY LABEL in RF/driver (no hardcoded rows). Op PU + extra dds = __FIRST__ (probe-safe).
 """
 import json
@@ -18,9 +19,19 @@ EC = Path(r"C:\Projects\ChoongYin_OS\workstreams\master-plan\ec-automation")
 a = json.loads(sys.argv[1])
 screen = a["screen"]; view = a["view"].upper(); base = a.get("base", "")
 folder = a["folder"].strip("/"); slug = a["slug"]; abbr = a["abbr"]
+# relative depth must be computed, not hardcoded: `%(up)s` is only right for a 3-segment folder
+# (Message Group at Configuration/Messaging has 2 and every import silently failed to resolve)
+_up = "../" * (len(folder.split("/")) + 1)
 cpfx = a["code_prefix"]; code_l = a["code_label"]; name_l = a["name_label"]
 sfolder = a["screen_folder"]; bf = a.get("bf", "")
 extra_dd = a.get("extra_dropdowns", []); has_op_pu = a.get("has_op_pu", True)
+# parent_dd: the objectForm dropdown that MUST equal the navigator's captured top-parent, or the new row
+# lands outside the scope the grid is showing (Message Group: nav first = 'Administration' but the form's
+# first = 'ALLOCATION' -> insert persisted, grid never listed it). Do NOT also list it in
+# extra_dropdowns, or it gets set twice (second write wins, __FIRST__ would clobber the scope).
+parent_dd = a.get("parent_dd", "")
+assert parent_dd not in extra_dd, ("parent_dd %r must not also appear in extra_dropdowns - it would be "
+                                   "overwritten with __FIRST__" % parent_dd)
 popups = a.get("popups", [])   # mandatory Pick-from-EC-Object popup labels (first-available, nav-scoped)
 view_lc = view.lower()
 name_val = "AUTOTEST %s 001" % screen
@@ -37,6 +48,10 @@ for pp in popups:
     ins.append('                {"label": %r, "value": "__FIRST__", "kind": "popup"},' % pp)
 if has_op_pu:
     ins.append('                {"label": "Op Production Unit", "value": "__FIRST__", "kind": "dropdown"},')
+if parent_dd:
+    # value is the runtime variable `pu`, deliberately unquoted - insert_fields is built AFTER
+    # apply_ovgm_navigator() returns, so the captured top-parent is in scope here.
+    ins.append('                {"label": %r, "value": pu, "kind": "dropdown"},' % parent_dd)
 ins_block = "\n".join(ins)
 
 driver = '''"""%(screen)s - IUD driver (thin). Reuses shared engine ec_object_iud.py + DbVerify.py.
@@ -185,7 +200,7 @@ if __name__ == "__main__":
     print("Evidence:", EVID)
     sys.exit(0 if ok else 1)
 ''' % dict(screen=screen, slug=slug, view_lc=view_lc, cpfx=cpfx, name_val=name_val,
-           abbr=abbr, ins_block=ins_block, name_l=name_l)
+           abbr=abbr, ins_block=ins_block, name_l=name_l, up=_up)
 
 # ---- T3 insert keyword lines ----
 t3_ins = [
@@ -199,6 +214,8 @@ for pp in popups:
     t3_ins.append("    Pick OV Popup By Label       objectForm    %s    __FIRST__" % pp)
 if has_op_pu:
     t3_ins.append("    Fill OV Dropdown By Label    objectForm    Op Production Unit    __FIRST__")
+if parent_dd:
+    t3_ins.append("    Fill OV Dropdown By Label    objectForm    %s    ${GM_PU}" % parent_dd)
 t3_ins_block = "\n".join(t3_ins)
 
 t3 = '''*** Settings ***
@@ -209,9 +226,9 @@ Documentation       T3 (screen) - %(screen)s page object.
 ...                 BY LABEL (no hardcoded rows). Extra dropdowns + Op Production Unit first-available.
 
 Library             Browser
-Library             ../../../../libraries/DbVerify.py
-Resource            ../../../../resources/common.resource
-Resource            ../../../../resources/manage_object.resource
+Library             %(up)slibraries/DbVerify.py
+Resource            %(up)sresources/common.resource
+Resource            %(up)sresources/manage_object.resource
 
 
 *** Variables ***
@@ -278,7 +295,7 @@ Delete %(screen)s
     Delete Object Via End Date    ${TBL}    ${DEL_ENDDATE}    ${code}    ${date}
     Apply Navigator
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), view=view,
-           t3_ins_block=t3_ins_block, name_l=name_l)
+           t3_ins_block=t3_ins_block, name_l=name_l, up=_up)
 
 suite = '''*** Settings ***
 Documentation       EC IUD Test - %(screen)s (%(folder_h)s).
@@ -286,7 +303,7 @@ Documentation       EC IUD Test - %(screen)s (%(folder_h)s).
 ...                 DELETE = End Date = Start Date (true delete in %(view)s). NEVER touch existing data;
 ...                 a unique %(cpfx)s<timestamp> code is generated per run.
 
-Resource            ../../../../pageobjects/%(folder)s/%(slug)s_page.resource
+Resource            %(up)spageobjects/%(folder)s/%(slug)s_page.resource
 
 Suite Setup         Set Up %(screen)s Suite
 Suite Teardown      Close EC
@@ -340,7 +357,7 @@ Set Up %(screen)s Suite
     ${pu}=    Open %(screen)s Screen
     VAR    ${GM_PU}    ${pu}    scope=SUITE
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), view=view, cpfx=cpfx,
-           folder=folder, slug=slug, name_short=name_l.replace(" Code", "").replace(" Name", ""))
+           folder=folder, slug=slug, name_short=name_l.replace(" Code", "").replace(" Name", ""), up=_up)
 
 sow = '''# SOW - %(screen)s IUD (%(folder_h)s)
 
@@ -351,14 +368,14 @@ sow = '''# SOW - %(screen)s IUD (%(folder_h)s)
 - Deliverables: driver `py/%(slug)s_iud.py`, T3 `pageobjects/%(folder)s/%(slug)s_page.resource`,
   suite `tests/%(folder)s/%(slug)s_iud.robot`, this SOW, `VERIFY-REPORT.md` (auto-generated).
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, view=view, base=base,
-           cpfx=cpfx, slug=slug, folder=folder)
+           cpfx=cpfx, slug=slug, folder=folder, up=_up)
 
 readme = '''# %(screen)s - EC Object IUD bundle
 
 **Screen:** %(folder_h)s > %(screen)s (BF %(bf)s). OV-GM (grid `manageObject:form:T_data`), navigator-GATED,
 date-effective. Built on the item-1 gated-navigator capability (PR #244). See `%(slug)s_sow.md` +
 `VERIFY-REPORT.md`. Driver `py/%(slug)s_iud.py`; T3/suite under `%(folder)s`.
-''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, slug=slug, folder=folder)
+''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, slug=slug, folder=folder, up=_up)
 
 # ---- write ----
 (EC / "py" / ("%s_iud.py" % slug)).write_text(driver, encoding="utf-8")

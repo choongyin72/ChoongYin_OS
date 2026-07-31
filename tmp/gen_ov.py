@@ -18,6 +18,9 @@ EC = Path(r"C:\Projects\ChoongYin_OS\workstreams\master-plan\ec-automation")
 a = json.loads(sys.argv[1])
 screen = a["screen"]; view = a["view"].upper(); base = a.get("base", "")
 folder = a["folder"].strip("/"); slug = a["slug"]; abbr = a["abbr"]
+# relative depth must be computed, not hardcoded: `%(up)s` is only right for a 3-segment folder
+# (Message Group at Configuration/Messaging has 2 and every import silently failed to resolve)
+_up = "../" * (len(folder.split("/")) + 1)
 cpfx = a["code_prefix"]; code_l = a["code_label"]; name_l = a["name_label"]
 sfolder = a["screen_folder"]; bf = a.get("bf", "")
 extra_dd = a.get("extra_dropdowns", []); has_op_pu = a.get("has_op_pu", True)
@@ -212,7 +215,7 @@ if __name__ == "__main__":
     print("Evidence:", EVID)
     sys.exit(0 if ok else 1)
 ''' % dict(screen=screen, slug=slug, view_lc=view_lc, cpfx=cpfx, name_val=name_val,
-           abbr=abbr, ins_block=ins_block, name_l=name_l, grid_id=grid_id)
+           abbr=abbr, ins_block=ins_block, name_l=name_l, grid_id=grid_id, up=_up)
 
 # ---- T3 insert keyword lines ----
 t3_ins = [
@@ -238,9 +241,9 @@ Documentation       T3 (screen) - %(screen)s page object.
 ...                 dropdowns first-available. DELETE = End Date = Start Date.
 
 Library             Browser
-Library             ../../../../libraries/DbVerify.py
-Resource            ../../../../resources/common.resource
-Resource            ../../../../resources/manage_object.resource
+Library             %(up)slibraries/DbVerify.py
+Resource            %(up)sresources/common.resource
+Resource            %(up)sresources/manage_object.resource
 
 
 *** Variables ***
@@ -310,7 +313,7 @@ Delete %(screen)s
     Delete Object Via End Date    ${TBL}    ${DEL_ENDDATE}    ${code}    ${date}
     Apply Navigator
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), view=view,
-           t3_ins_block=t3_ins_block, name_l=name_l, grid_id=grid_id)
+           t3_ins_block=t3_ins_block, name_l=name_l, grid_id=grid_id, up=_up)
 
 suite = '''*** Settings ***
 Documentation       EC IUD Test - %(screen)s (%(folder_h)s).
@@ -318,7 +321,7 @@ Documentation       EC IUD Test - %(screen)s (%(folder_h)s).
 ...                 DELETE = End Date = Start Date (true delete in %(view)s). NEVER touch existing data;
 ...                 a unique %(cpfx)s<timestamp> code is generated per run.
 
-Resource            ../../../../pageobjects/%(folder)s/%(slug)s_page.resource
+Resource            %(up)spageobjects/%(folder)s/%(slug)s_page.resource
 
 Suite Setup         Set Up %(screen)s Suite
 Suite Teardown      Close EC
@@ -371,7 +374,7 @@ Set Up %(screen)s Suite
     Prepare IUD Object Data    %(cpfx)s    %(name_short)s
     Open %(screen)s Screen
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), view=view, cpfx=cpfx,
-           folder=folder, slug=slug, grid_id=grid_id, name_short=name_l.replace(" Code", "").replace(" Name", ""))
+           folder=folder, slug=slug, grid_id=grid_id, name_short=name_l.replace(" Code", "").replace(" Name", ""), up=_up)
 
 sow = '''# SOW - %(screen)s IUD (%(folder_h)s)
 
@@ -382,14 +385,14 @@ sow = '''# SOW - %(screen)s IUD (%(folder_h)s)
 - Deliverables: driver `py/%(slug)s_iud.py`, T3 `pageobjects/%(folder)s/%(slug)s_page.resource`,
   suite `tests/%(folder)s/%(slug)s_iud.robot`, this SOW, `VERIFY-REPORT.md` (auto-generated).
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, view=view, base=base,
-           cpfx=cpfx, slug=slug, folder=folder, grid=grid_id)
+           cpfx=cpfx, slug=slug, folder=folder, grid=grid_id, up=_up)
 
 readme = '''# %(screen)s - EC Object IUD bundle
 
 **Screen:** %(folder_h)s > %(screen)s (BF %(bf)s). PLAIN OV (Bank family, grid `%(grid)s`),
 date-only navigator + GO (no cascade), date-effective. See `%(slug)s_sow.md` +
 `VERIFY-REPORT.md`. Driver `py/%(slug)s_iud.py`; T3/suite under `%(folder)s`.
-''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, slug=slug, folder=folder, grid=grid_id)
+''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, slug=slug, folder=folder, grid=grid_id, up=_up)
 
 # ---- write ----
 (EC / "py" / ("%s_iud.py" % slug)).write_text(driver, encoding="utf-8")

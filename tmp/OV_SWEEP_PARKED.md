@@ -47,3 +47,35 @@ question outstanding.
 diagnosing. Three fresh scans (End=Start, toolbar Delete, Manage Chemical Product CO.0261) rediscovered
 a thinner version of what was already on disk. Screenshots kept anyway: tmp/cp_cleanup.png,
 tmp/manage_chem_product.png.
+
+## Message Group (CO.0236) - PARKED 2026-07-31 (owner decision; verified, not assumed)
+- **Family: genuinely OV-GM** (proven live, not inherited): navigator = Date + ONE mandatory dropdown
+  `Functional Area` at `nav:form:G:0:R:1:C:1:dd` + GO `button:form:B`; grid `manageObject:form:T_data`;
+  treeview Configuration > Messaging > Message Group. Mandatory insert fields: Message Group Code,
+  Start Date, Name, Functional Area (dd). End Date optional.
+- **Blocker: the insert PERSISTS but lands in the WRONG SCOPE, so the grid cannot list it.**
+  `db.code_present('OV_MESSAGE_GROUP', 'AUTOTEST_MG001')` = True after Save, yet
+  `wait_for_row` never sees it.
+- **NOT the documented groupmodel-off case** (my first read, corrected): the persisted row's
+  `FUNCTIONAL_AREA_CODE` is **ALLOCATION** while the navigator's captured scope is **Administration**.
+- **Read-only probe (tmp/probe_mg_fa_options.py, nothing saved):** the navigator panel and the objectForm
+  panel offer IDENTICAL option lists - `['Administration', 'Allocation', 'Billing', ...]` - with
+  `Administration` FIRST and `Allocation` SECOND. So the requested value is option 1 and the persisted
+  value is option 2.
+- **Two candidate causes, NOT yet distinguished (no evidence either way - do not treat as decided):**
+  1. the dropdown pick lands one row off in this panel shape; or
+  2. the dropdown write silently fails and EC saves a default of `Allocation`. (`insert_ui` PASSing only
+     means EC raised no error - it is not proof the dropdown took.)
+- **Why it stopped here:** 2 fix attempts used (bind the form dd to the captured nav value via the new
+  `parent_dd` key; then re-run) - both landed in ALLOCATION. The suspect code
+  (`select_dropdown` / `Fill OV Dropdown By Label`) is in the SHARED engine used by all 22 OV-GM screens,
+  so changing it needs the shared-file protocol (backup + canary + random sibling), not a fix inside a
+  screen build. **POSSIBLE WIDER IMPACT: if cause (1) is real, other OV-GM screens may have been writing
+  a NEIGHBOURING dropdown value all along - their assertions only check CODE and NAME, never the parent
+  dropdown.** Owner deferred this investigation; recorded so it is not lost.
+- **Sandbox left clean:** 3 rows my runs persisted (AUTOTEST_MG001 x2, AUTOTEST_MG20260731221346) closed
+  via End Date = Start Date through `OV_MESSAGE_GROUP` (full row logged first, 1 row per statement);
+  re-read shows **0 open AUTOTEST rows**.
+- **Bundle removed** (driver/T3/suite/screens dir): verify_screen FAILed, so the packager never ran and
+  no registry/scorecard/screen_families row exists. Kept: tmp/cfg_message_group.json,
+  tmp/recon_mg_nav.py, tmp/probe_mg_fa_options.py, tmp/selfclean_message_group.py so a resume is cheap.
