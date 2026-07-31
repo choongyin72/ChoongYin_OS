@@ -25,4 +25,4 @@
 - [x] 21 Reuse clause - N/A (new build); JOURNAL + evidence + KB map + VERIFY-REPORT all produced
 
 _Gates 10-16 RUN by `scripts/verify_screen.py` -> `VERIFY-REPORT.md` (OVERALL PASS); ticks from real exit codes.
-OV-GM specifics: navigator cascade  first-available + GO + dropdowns Trailer Type, UOM, Transport Company; Op Production Unit first-available for grid visibility._
+Plain-OV specifics: date-only navigator + GO (no cascade); no Op PU gating. + dropdowns Trailer Type, UOM, Transport Company_

@@ -25,4 +25,4 @@
 - [x] 21 Reuse clause - N/A (new build); JOURNAL + evidence + KB map + VERIFY-REPORT all produced
 
 _Gates 10-16 RUN by `scripts/verify_screen.py` -> `VERIFY-REPORT.md` (OVERALL PASS); ticks from real exit codes.
-Custom-URL OV specifics: NO navigator/GO (grid nav:form:T_data loads directly; reload = toolbar Refresh); 2 mandatory ref dropdowns (Contract Area Name, Contract Name) first-available; Start Date 2020-01-01 per ref-dd effectiveness (DB-checked)._
+Custom-URL specifics: grid loads directly from the screen URL; toolbar Refresh re-queries (no navigator GO)._

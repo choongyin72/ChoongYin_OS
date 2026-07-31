@@ -10,7 +10,7 @@
 |---|---|
 | Open | search `Create Calculation` -> `label.tv-link` "Create Calculation" |
 | Navigator (gated) | Date + ONE mandatory Calculation Context dd `nav:form:G:1:R:1:C:0:dd` (first-available; 14 contexts) -> GO `#button:form:B` |
-| Grid | `calculation:form:T_data` (empty until cascade + GO) |
+| Grid | `calculation:form:T_data` (empty until GO) |
 | Insert (+) | hover `span.ui-icon-insert` -> "New Object" |
 | Save / GO | `//a[@title='Save [Ctrl+s]' and not(...disabled)]` / `#button:form:B` |
 
@@ -21,7 +21,7 @@ Cells: **C0 Code*** / **C1 Name*** / **C2 Start Date*** (keystrokes+Tab) + **C4 
 UPDATE = select row -> VERSIONS grid `calculation_version:form:T:0:C0_in` (authoritative name; header C1 is a mirror). DELETE = select row -> **DELETE CALCULATION** button + YES (physical; NOT End=Start).
 
 ## Automation (code in ec-automation)
-- **Playwright:** `py/create_calculation_iud.py` (shared engine `ec_object_iud.py` + `apply_ovgm_navigator`).
+- **Playwright:** `py/create_calculation_iud.py` (shared engine `ec_object_iud.py`).
 - **RF:** T3 `pageobjects/Configuration/Assets/Calculation_Objects/create_calculation_page.resource` (**label-driven**) + suite `tests/Configuration/Assets/Calculation_Objects/create_calculation_iud.robot`.
 - **Gate:** `verify_screen.py` -> OVERALL PASS.
 

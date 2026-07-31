@@ -10,22 +10,22 @@
 |---|---|
 | Open | search `Truck` -> `label.tv-link` "Truck" |
 | Navigator | NONE - no nav fields; click GO `#button:form:B` to populate the grid |
-| Grid | `truck_object:form:T_data` (empty until cascade + GO) |
+| Grid | `truck_object:form:T_data` (empty until GO) |
 | Insert (+) | hover `span.ui-icon-insert` -> "New Object" |
 | Save / GO | `//a[@title='Save [Ctrl+s]' and not(...disabled)]` / `#button:form:B` |
 
 ### New Object form (`objectForm`) - labels (T3 resolves BY LABEL)
-**Truck Code*** - **Truck Name*** - **Start Date*** (date) + dropdowns UOM, Transport Company - Op Production Unit (first-available, grid visibility). (`*` mandatory)
+**Truck Code*** - **Truck Name*** - **Start Date*** (date) + dropdowns UOM, Transport Company. (`*` mandatory)
 
 ### Update (`updateAttributes`) / Delete (`objectdates`)
 `Truck Code` (ro) - **`Truck Name`**. Delete: **`End Date`** = Start Date -> leaves `OV_TRUCK`.
 
 ## Automation (code in ec-automation)
-- **Playwright:** `py/truck_iud.py` (shared engine `ec_object_iud.py` + `apply_ovgm_navigator`).
+- **Playwright:** `py/truck_iud.py` (shared engine `ec_object_iud.py` + `click_go`).
 - **RF:** T3 `pageobjects/Configuration/Assets/Transport_Objects/truck_page.resource` (**label-driven**) + suite `tests/Configuration/Assets/Transport_Objects/truck_iud.robot`.
 - **Gate:** `verify_screen.py` -> OVERALL PASS.
 
 ## Quirks
-- OV-GM navigator-gated: grid empty until cascade + GO. First-available nav PU is a sparse test scope - it is
-  NOT necessarily a valid Op Production Unit option, and it empties nav-scoped popups (see issue OV_SWEEP_PARKED);
-  9 MANDATORY fields (several render WHITE, not yellow): Code/Name/Start Date + Licence Plate No + Tractor Gross Vehicle Qty + Vehicle Gross Combined Qty + Unladen Truck Qty + UOM + Transport Company. Derive such sets from EC's save-time 'Required fields are empty' message, not the yellow-cell heuristic.
+- 9 MANDATORY fields (several render WHITE, not yellow): Code/Name/Start Date + Licence Plate No + Tractor Gross Vehicle Qty + Vehicle Gross Combined Qty + Unladen Truck Qty + UOM + Transport Company. Derive such sets from EC's save-time 'Required fields are empty' message, not the yellow-cell heuristic.
+- An UNSAVED CHANGES dialog (YES/NO) can block GO right after the End=Start close - answer YES
+  (that commits the intended delete).
