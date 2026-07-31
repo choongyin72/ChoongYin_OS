@@ -1,32 +1,15 @@
-# JOURNAL - Truck (CO.0264) plain-OV IUD + plain-OV GENERATOR audit
+# JOURNAL - Truck (CO.0264) plain OV IUD
 
 ## 2026-07-31
-- **Branch:** `feature/truck-iud`. Group A #5. Doubles as the end-to-end audit of the NEW plain-OV
-  (Bank-family) generator `tmp/gen_ov.py`, built because ~30 remaining Group A screens are plain OV
-  and only an OV-GM generator existed.
-- **Generator built by transforming the proven `gen_ovgm.py`** (grid id, date-only navigator, no Op PU,
-  Bank-family docs). **The audit exposed and fixed 6 real defects - none would have been caught by
-  reading the code alone:**
-  1. leftover `assert pu` from the OV-GM navigator -> NameError at runtime.
-  2. plain-OV grids do NOT lazily drop a closed row -> delete verification needed an explicit GO
-     re-query (`wait_for_row_absent` alone polls a stale grid).
-  3. re-opening the screen to refresh is NOT viable (the tv-link is not re-findable once open) ->
-     GO re-query instead.
-  4. **UNSAVED CHANGES dialog** (YES/NO) appears on plain-OV screens when a GO happens with a pending
-     edit (e.g. right after End=Start) and BLOCKS the GO button -> added `commit_unsaved_changes()`
-     at 4 call sites (YES commits the pending End Date, which is the intended delete).
-  5. grid id is not universal -> new `grid` config key (Truck uses `truck_object:form:T_data`).
-  6. many screens have mandatory FREE-TEXT extras -> new `extra_texts` config key; and the generated
-     insert keyword then broke robocop LEN03 -> template split into
-     `Fill <Screen> Mandatory Fields` + `Insert <Screen> Record` (LEN03-proof for any field count).
-- **Mandatory set discovered from EC itself, iteratively:** each save returned "Required fields are
-  empty. Please enter data for these fields: ..." naming the next missing one - Licence Plate No,
-  then 3 quantity fields, then Transport Company. This is MORE reliable than the yellow-cell scan
-  (several of these render white). Banked as a technique.
-- `verify_screen.py` -> **OVERALL PASS** (run 2; run 1 failed ONLY robocop LEN03, live 4/4 both runs):
-  robocop 0, hygiene 0, dryrun 4/4, LIVE RF 4/4, Playwright 8/8. Self-clean 0 residual.
+- **Branch:** `feature/ov-gm-truck` (branch name is historical; the gated-navigator/PR #244 claim was WRONG - this is a plain OV build).
+  Check-existing gate: grep ec-automation -> only this build; reused shared engine (ec_object_iud.py) + T2 + DbVerify.
+- **Recon** (`investigation/recon.py`, read-only + tmp/truck/config.json scan): plain OV (grid `truck_object:form:T_data`). Nav: date field `nav:form:G:0:R:1:C:0:da_input` -> GO `#button:form:B` (no cascade). Mandatory Truck Code / Truck Name / Start Date.
+- **Built** (generator `tmp/gen_ovgm.py` -> proven Node/Chemical-Tank template): label-driven T3 (no hardcoded
+  ids); Playwright driver + RF T3/suite.
+- `verify_screen.py` -> **OVERALL PASS**: robocop 0, hygiene 0, dryrun 4/4, LIVE RF 4/4 pass, Playwright 8/8. DB residual 0.
 
 ## Lessons
-- A generator is only proven by a full green screen: this one looked correct after transformation and
-  still had 6 runtime defects. R32 (never batch off an unaudited generator) earned its keep again.
-- When a save is rejected, EC's message is a FIELD SPEC - read it instead of guessing mandatory sets.
+- Plain OV: date-only navigator + GO; no cascade and no Op PU, so the grid lists straight after
+  Save + GO. Generic engine handled the nav/appear/absent/pagination gestures with zero tuning.
+
+_Family text corrected 2026-07-31 (prose only; code and gate results unchanged): this bundle shipped with OV-GM wording that does not describe this screen - the packager templates were OV-GM-only until then._

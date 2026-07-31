@@ -25,4 +25,4 @@
 - [x] 21 Reuse clause - N/A (new build); JOURNAL + evidence + KB map + VERIFY-REPORT all produced
 
 _Gates 10-16 RUN by `scripts/verify_screen.py` -> `VERIFY-REPORT.md` (OVERALL PASS); ticks from real exit codes.
-OV-GM specifics: navigator cascade Calculation Context first-available + GO + dropdowns Calculation Period, Calculation Type; Op Production Unit first-available for grid visibility._
+TV-style specifics: inline grid cell edits; per-screen delete gesture (see SOW)._

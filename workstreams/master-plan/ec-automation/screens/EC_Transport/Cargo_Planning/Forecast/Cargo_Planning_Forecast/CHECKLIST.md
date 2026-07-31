@@ -25,4 +25,4 @@
 - [x] 21 Reuse clause - N/A (new build); JOURNAL + evidence + KB map + VERIFY-REPORT all produced
 
 _Gates 10-16 RUN by `scripts/verify_screen.py` -> `VERIFY-REPORT.md` (OVERALL PASS); ticks from real exit codes.
-OV-GM specifics: navigator cascade Production Unit -> Area -> Facility Class 1 -> Storage first-available + GO + dropdowns Storage Name; Op Production Unit first-available for grid visibility._
+Gated per-field specifics: nav groups are PER FIELD (nav:form:G:<n>:R:1:C:0) + GO. + dropdowns Storage Name_

@@ -42,8 +42,31 @@ EXPECTED_ANY = {
 }
 
 # negated phrasings are legitimate ("date-only navigator + GO (no cascade)") - strip before scanning
-NEGATIONS = ["no cascade", "without cascade", "not ov-gm", "no navigator/go", "no navigator go",
-             "unusable", "n/a cascade"]
+NEGATIONS = [
+    # NEGATED phrasings are legitimate: "date-only navigator + GO (no cascade)" must not trip 'cascade'
+    "no cascade", "without cascade", "not ov-gm", "no navigator/go", "no navigator go",
+    "unusable", "n/a cascade",
+    "no op pu gating", "no op pu to satisfy", "no op pu.", "no op pu,", "and no op pu",
+    "no op production unit",
+    # a line that DESCRIBES the old wrong wording is a CORRECTION or history, not a defect - without
+    # these, fixing a defect would make the gate fail forever
+    "was wrong", "claim was", "family text corrected", "does not describe this screen",
+    "still said", "wording that does not", "is historical", "shipped with ov-gm wording",
+]
+
+
+# A line that is ABOUT the old wrong wording (a correction note, or history describing a past defect)
+# must be SKIPPED WHOLE - substring-scrubbing cannot help when e.g. the branch NAME itself contains
+# 'ov-gm'. Without this, fixing a defect would keep the gate red forever.
+META_LINE_MARKERS = [
+    "family text corrected", "claim was wrong", "branch name is historical", "still said",
+    "does not describe this screen", "was WRONG", "shipped with ov-gm wording",
+]
+
+
+def is_meta_line(line):
+    low = line.lower()
+    return any(m.lower() in low for m in META_LINE_MARKERS)
 
 
 def _strip_negations(row):
@@ -71,6 +94,34 @@ def rows_for(screen):
                 out.append((label, s))
     return out
 
+EC = ROOT / "workstreams" / "master-plan" / "ec-automation"
+
+
+def bundle_doc_mismatches(screen, family):
+    """CHECKLIST.md / JOURNAL.md / KB map - the files the row-only check never looked at, and exactly
+    where #265/#278/#283's wrong-family wording survived undetected on 6 merged screens."""
+    out = []
+    folder = screen.replace(" ", "_")
+    targets = []
+    for d in EC.rglob(folder):
+        if d.is_dir():
+            targets += [d / "CHECKLIST.md", d / "JOURNAL.md"]
+    targets.append(ROOT / "ec-ui-knowledge" / "screens" / (folder.lower() + ".md"))
+    for f in targets:
+        if not f.is_file():
+            continue
+        for n, line in enumerate(f.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
+            if not line.strip():
+                continue
+            if is_meta_line(line):
+                continue
+            scrub = _strip_negations(line)
+            hits = [t for t in FORBIDDEN.get(family, []) if t.lower() in scrub]
+            if hits:
+                out.append(("%s:%d" % (f.name, n), hits, line.strip()[:110]))
+    return out
+
+
 def main():
     if len(sys.argv) < 3:
         print(__doc__)
@@ -96,8 +147,16 @@ def main():
             print("MISSING (%s) - no %r vocabulary present (expected one of %s)"
                   % (label, family, EXPECTED_ANY[family]))
             print("   row: %s" % row[:220])
+    # the files the ROW-only check never looked at - where the defect class actually survived
+    docfails = bundle_doc_mismatches(screen, family)
+    if docfails:
+        bad = True
+        print("MISMATCH (bundle docs) - forbidden for family %r:" % family)
+        for where, hits, line in docfails:
+            print("   %-22s %s | %s" % (where, hits, line))
     if not bad:
-        print("OK: %d row(s) for %r use %r vocabulary consistently" % (len(found), screen, family))
+        print("OK: %d row(s) + bundle docs for %r use %r vocabulary consistently"
+              % (len(found), screen, family))
     return 1 if bad else 0
 
 if __name__ == "__main__":
