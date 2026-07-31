@@ -198,11 +198,15 @@ else:
 # ---- #18 scorecard row (idempotent) ---------------------------------------------
 sc = ROOT / "docs" / "automation-scorecard.md"
 sc_txt = sc.read_text(encoding="utf-8", errors="replace")
-tag = "%s (OV-GM, %s)" % (screen, bf)
+# family-aware tag + descriptor (issue #278): plain-OV / custom-URL screens must not be labelled OV-GM
+fam_tag = "OV-GM" if nav else "plain OV"
+fam_desc = ("OV-GM gated-navigator; label-driven; Op PU first-available" if nav
+            else "plain OV (date-only navigator + GO, no cascade); label-driven")
+tag = "%s (%s, %s)" % (screen, fam_tag, bf)
 if tag not in sc_txt:
     row = ("| %s | OK Done %s - RF %s + %s via verify_screen.py (OVERALL PASS), DB-verified vs %s (Name), "
-           "self-clean; OV-GM gated-navigator; label-driven; Op PU first-available | see docs/ov-non-bank-targets.md |\n"
-           % (tag, date, rf_txt, pw_txt, view))
+           "self-clean; %s | see docs/ov-non-bank-targets.md |\n"
+           % (tag, date, rf_txt, pw_txt, view, fam_desc))
     with sc.open("a", encoding="utf-8") as fh:
         fh.write(row)
     sc_added = True
