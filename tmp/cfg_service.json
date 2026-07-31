@@ -1,0 +1,27 @@
+{
+  "screen": "Service",
+  "bf": "CO.2103",
+  "view": "OV_SERVICE",
+  "base": "SERVICE",
+  "folder": "Configuration/Assets/Service_Objects",
+  "screen_folder": "Service",
+  "slug": "service",
+  "abbr": "SV",
+  "code_prefix": "AUTOTEST_SV",
+  "code_label": "Service Code",
+  "name_label": "Service Name",
+  "nav_value": "TS3 BU1",
+  "nav_levels": 1,
+  "start_date": "2011-01-01",
+  "extra_dropdowns": [
+    ["Service Template", "__FIRST__"],
+    ["Service Type", "__FIRST__"],
+    ["Service Status", "__FIRST__"],
+    ["Contract", "TS3 GTA Shipper A"],
+    ["Transport System", "TS3 Transport System"]
+  ],
+  "has_op_pu": false,
+  "popups": [],
+  "family": "ovgm",
+  "nav": ["Business Unit"]
+}
