@@ -105,6 +105,15 @@ Before ANY EC UI action (test, trace, save/update/delete):
 1. Read `ec-ui-knowledge/EC_UI_SOP.md` (screen actions) or `ec-ui-knowledge/EC_BUG_TRACE_SOP.md` (investigation).
 2. Check `ec-ui-knowledge/screens/<screen-name>.md` — if it exists, use those selectors directly; do NOT re-scan.
 3. Check `ec-ui-knowledge/EC_KNOWN_ISSUES.md` before diagnosing any bug.
+4. ⛔ **On ANY blocker/error/park candidate, RUN — never eyeball — the already-seen check BEFORE the first
+   live scan:** `py tmp/check_known_issue.py "<screen>" "<table / paste the raw ORA line>"`.
+   **Exit 2 = STOP and read the hits; do NOT re-investigate.** Exit 0 = new ground, scan away (then write
+   findings back the same session). It covers KNOWN_ISSUES + SOPs + `screens/*.md` + `OV_SWEEP_PARKED.md`
+   + lessons-learned + session-memory + the ec-automation docs, and auto-extracts ORA/FK/table tokens.
+   _Origin: 2026-07-31 — item 3 above already said "check KNOWN_ISSUES first" and I skipped it on Chemical
+   Product (CO.0072): three live scans, a THINNER answer than the file already held (in FOUR files), and an
+   EC **product defect** mis-classified as my own knowledge gap. Owner: "next times do a scan to check u
+   face such error problem or not." Prose I can skip -> replaced by an exit code._
 
 NEVER invent a selector, table name, or root cause. Tag every claim: `[from screens/x.md]` / `[from fresh scan]` / `[UNCONFIRMED — must verify]`. An `[UNCONFIRMED]` claim cannot be acted on — say "I don't know", then do ONE scan or ask.
 

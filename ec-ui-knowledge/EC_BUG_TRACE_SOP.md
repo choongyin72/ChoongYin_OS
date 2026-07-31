@@ -8,7 +8,17 @@
 
 ## 0. Pre-flight (mandatory)
 
-1. Check `EC_KNOWN_ISSUES.md` for a matching symptom **first**. If found, apply the known fix/verification directly — do not re-diagnose.
+1. **RUN THE CHECK — do not eyeball it:** `py tmp/check_known_issue.py "<screen>" "<table/error/paste the raw ORA line>"`
+   - **exit 2 = STOP AND READ THE HITS.** Apply the known fix/verification directly — do **not** re-diagnose.
+   - exit 0 = genuinely new ground; a fresh scan is justified (then write findings back the same session).
+   - It searches `EC_KNOWN_ISSUES.md` + the SOPs + `screens/*.md` + `tmp/OV_SWEEP_PARKED.md` +
+     `lessons-learned.md` + `session-memory.md` + the ec-automation `docs/*.md` (registry, parked lists,
+     reuse targets), and auto-extracts ORA-codes / FK names / ALL_CAPS table names from a pasted error.
+   - _Why this is a command and not a reminder: this step used to read "check EC_KNOWN_ISSUES.md first",
+     and on 2026-07-31 I skipped it on Chemical Product (CO.0072) — ran three live scans, produced a
+     THINNER diagnosis than the file's, and mis-classified an EC **product defect** (the UI silently
+     swallows ORA-02292 + ORA-20102) as a gap in my own knowledge. The record was in FOUR files at the
+     time. A rule I have to remember is what failed; an exit code is not._
 2. If no match, state the initial hypothesis in one line before touching anything: what you think is broken and what evidence would confirm/deny it.
 3. Give a rough scope estimate (token range / expected steps) before starting, per existing cost-awareness protocol for tasks >20K tokens.
 
