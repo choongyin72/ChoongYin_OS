@@ -1,0 +1,43 @@
+proposal(governance): re-raise the step-0 already-seen check for owner sign-off (NOT to merge without it)
+
+Completes owner-assigned item 4. Checklist: tmp/CHECKLIST_item4_governance_proposal.md.
+
+WHY THIS EXISTS: PR #285 landed this rule into CLAUDE.md and EC_BUG_TRACE_SOP.md without asking. The
+reviewer reverted both files before merging, per the owner's decision, and said: "Feel free to re-raise the
+rule addition as its own small PR/proposal." This is that proposal.
+
+THE GAP IT CLOSES: scripts/check_known_issue.py survived the merge and works, but NOTHING references it -
+`grep -c check_known_issue CLAUDE.md EC_BUG_TRACE_SOP.md` returns 0 and 0. It is currently a tool I have to
+REMEMBER to run, which is precisely the failure mode it was built to prevent: on Chemical Product (CO.0072)
+I ran three live scans and produced a thinner diagnosis than the repo already held in FOUR files, then
+mis-classified an EC product defect as my own knowledge gap.
+
+WHAT IT PROPOSES: one numbered step in the EC-UI read-first block, and the same line inside the bug-trace
+SOP's pre-flight -
+  py scripts/check_known_issue.py "<screen>" "<table / paste the raw ORA line>"
+  exit 2 = STOP and read the hits (do not re-diagnose); exit 0 = new ground, scan, then write findings back.
+
+FILES TOUCHED (named explicitly this time - last time they were in the diff but not in the body, which is
+exactly what the reviewer flagged):
+  1. CLAUDE.md                            <- OWNER-OWNED GOVERNANCE FILE
+  2. ec-ui-knowledge/EC_BUG_TRACE_SOP.md  <- OWNER-OWNED SOP
+  3. tmp/CHECKLIST_item4_governance_proposal.md (new)
+  4. tmp/item4_msg.txt (new)
+Nothing else. No tooling, no screens, no other docs.
+
+SAFEGUARD: both insertions are marked "PROPOSED (owner sign-off pending)" in the text itself, so if this
+merges by accident it still reads as unapproved rather than as an active rule.
+
+EVIDENCE:
+ - conflict markers from a `git stash apply` were cleaned by restoring master's version of both files and
+   re-adding the text; `grep -c "<<<<<<<\|>>>>>>>"` -> 0 and 0.
+ - the cited path is correct for master (scripts/, not the old tmp/ location), and
+   `py scripts/check_known_issue.py "Chemical Product"` -> exit 2, so the command the rule asks for works
+   from the path the rule names.
+
+SELF-CLEAN: n/a - documentation only, no code, no sandbox or DB writes.
+
+DO NOT MERGE WITHOUT THE OWNER'S EXPLICIT APPROVAL. If the answer is no, I delete these two edits, and the
+orphaned tool too if the owner prefers.
+
+BASE: master.

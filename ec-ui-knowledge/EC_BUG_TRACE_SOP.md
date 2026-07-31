@@ -9,6 +9,13 @@
 ## 0. Pre-flight (mandatory)
 
 1. Check `EC_KNOWN_ISSUES.md` for a matching symptom **first**. If found, apply the known fix/verification directly — do not re-diagnose.
+   - **PROPOSED (owner sign-off pending) — run it, don't eyeball it:**
+     `py scripts/check_known_issue.py "<screen>" "<table / paste the raw ORA line>"`
+     **exit 2 = STOP and read the hits** (apply the known finding, do not re-diagnose); exit 0 = genuinely
+     new ground, so scan — then write the findings back the same session.
+     _Origin: this step already existed as prose and I skipped it on Chemical Product (CO.0072), producing a
+     thinner diagnosis than the four files that already documented it. Reverted from PR #285 for landing
+     without permission; re-raised on its own for the owner's decision._
 2. If no match, state the initial hypothesis in one line before touching anything: what you think is broken and what evidence would confirm/deny it.
 3. Give a rough scope estimate (token range / expected steps) before starting, per existing cost-awareness protocol for tasks >20K tokens.
 
