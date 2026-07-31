@@ -1,0 +1,19 @@
+{
+  "screen": "Message Group",
+  "bf": "CO.0236",
+  "view": "OV_MESSAGE_GROUP",
+  "base": "MESSAGE_GROUP",
+  "folder": "Configuration/Messaging",
+  "screen_folder": "Message_Group",
+  "slug": "message_group",
+  "abbr": "MG",
+  "code_prefix": "AUTOTEST_MG",
+  "code_label": "Message Group Code",
+  "name_label": "Name",
+  "extra_dropdowns": [],
+  "parent_dd": "Functional Area",
+  "has_op_pu": false,
+  "popups": [],
+  "family": "ovgm",
+  "nav": ["Functional Area"]
+}
