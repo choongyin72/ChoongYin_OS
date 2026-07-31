@@ -1,0 +1,8 @@
+{
+ "screen": "Well Bore Interval",
+ "view": "OV_WELL_BORE_INTERVAL",
+ "verify_overall": "PASS",
+ "rf": "4/4 pass",
+ "pw": "Playwright 8/8",
+ "date": "2026-07-31"
+}
