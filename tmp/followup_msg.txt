@@ -1,0 +1,38 @@
+fix(pkg): JOURNAL divergence now ABORTS + record the select_dropdown silent-fallback gotcha
+
+Both items are the reviewer's follow-ups from #292, done as asked.
+
+1. THE JOURNAL GUARD SHIPPED THE WRONG FILE - MY DEFECT, now fixed.
+   The #289 guard wrote JOURNAL.generated.md on divergence and carried on. On Service that preserved the
+   OLDER JOURNAL.md (carrying a stale check-existing result: 8 false-positive hits) while the CORRECTED
+   version sat unnoticed in the sibling, and the reviewer had to consolidate by hand. The flawed assumption
+   was mine: "keep yours" presumes the existing file holds independently valuable hand-written content -
+   untrue when BOTH versions come from the same in-progress build.
+   Divergence now calls sys.exit with the two paths and explicit guidance: re-running inside the same build
+   -> the generated one is almost certainly right; existing file holds real history (Truck/Pilot) -> merge
+   the generated bits INTO it. A human decides; the default no longer picks silently.
+   PROVEN BY MAKING IT FIRE: re-packaging Service (whose JOURNAL the reviewer consolidated, so it now
+   diverges) -> exit 1 with the abort message. The sibling it wrote was removed, not shipped.
+
+2. THE select_dropdown SILENT-FALLBACK FINDING NOW HAS A PERMANENT HOME.
+   It only lived in #292's body and Service's JOURNAL, where no future build would see it. Added to
+   docs/ov-gm-navigator-capability.md with the VERBATIM engine comment, both observed cases (Service:
+   requested TS3 GTA Shipper A / TS3 Transport System, saved TRANS_INV_BLEND / TS5_TS; Message Group:
+   requested Administration=ADM, saved Allocation=ALLOCATION), the reason it went unnoticed (no suite
+   asserts dropdown values - only CODE and NAME), and the three checks to run when a dropdown value matters:
+   assert the stored value in the DB after resolving LABEL -> CODE; check date-effectivity before blaming the
+   engine (TEST_START_DATE_REFDD 2003-01-01 is NOT late enough for 2011+ objects); and probe the panel to
+   confirm an exact value is present, because select_dropdown will not report a miss.
+
+FILES TOUCHED: tmp/package_ovgm.py, workstreams/master-plan/ec-automation/docs/ov-gm-navigator-capability.md,
+tmp/followup_msg.txt. No governance file, no screen bundle, no shared engine change.
+
+GATES: scripts/check_bundle_hygiene.py -> RESULT PASS. git status shows only the two files above.
+
+SELF-CLEAN: n/a - tooling and documentation only; no sandbox or DB writes.
+
+RULES APPLIED: R9 (this body), R16/R20 (hygiene PASS), CLAUDE.md no-guessing (the guard was verified by
+making it fail, not by reading it), and the tool-change pre-flight point that a guard which has never fired
+is unproven.
+
+BASE: master.
