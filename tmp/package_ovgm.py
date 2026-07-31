@@ -25,15 +25,15 @@ nav = a.get("nav", [])          # issue #283: NO OV-GM default - gated screens m
 # ---- family is EXPLICIT and REQUIRED (issue #283) ---------------------------------------
 # Inferring family from nav's truthiness silently mis-rendered any plain/custom/TV config that
 # forgot "nav": []. Now the caller must say which family it is, and we cross-check it against nav.
-FAMILIES = ("ovgm", "plain", "custom", "tv")
+FAMILIES = ("ovgm", "plain", "custom", "tv", "gatedpf")
 family = (a.get("family") or "").strip().lower()
 if family not in FAMILIES:
     sys.exit("ABORT: config needs an explicit \"family\" key - one of %s "
              "(issue #283: family used to be guessed from nav's truthiness, which silently "
              "mis-rendered plain-OV screens as OV-GM). Got %r." % (list(FAMILIES), a.get("family")))
-if family == "ovgm" and not nav:
+if family in ("ovgm", "gatedpf") and not nav:
     sys.exit("ABORT: family='ovgm' requires a non-empty \"nav\" list (the navigator cascade levels).")
-if family != "ovgm" and nav:
+if family not in ("ovgm", "gatedpf") and nav:
     sys.exit("ABORT: family=%r must NOT pass a \"nav\" cascade (got %r) - only OV-GM screens are "
              "navigator-gated." % (family, nav))
 
@@ -42,18 +42,21 @@ FAM_TEXT = {
     "plain":  ("PLAIN OV (Bank family)", None),
     "custom": ("Custom-URL OV (no navigator GO; toolbar Refresh)", None),
     "tv":     ("TV-style inline grid", None),
+    "gatedpf": ("Gated OV, PER-FIELD nav groups", None),
 }
 FAM_NAV_TXT = {
     "plain":  "date-only navigator + GO (no cascade)",
     "custom": "none (custom URL - grid loads directly; toolbar Refresh)",
     "tv":     "per-screen context/date navigator (see SOW)",
 }
-FAM_TAG = {"ovgm": "OV-GM", "plain": "plain OV", "custom": "custom-URL OV", "tv": "TV-style"}
+FAM_TAG = {"ovgm": "OV-GM", "plain": "plain OV", "custom": "custom-URL OV", "tv": "TV-style",
+           "gatedpf": "gated OV per-field nav"}
 FAM_DESC = {
     "ovgm":   "OV-GM gated-navigator; label-driven; Op PU first-available",
     "plain":  "plain OV (date-only navigator + GO, no cascade); label-driven",
     "custom": "custom-URL OV (no navigator/GO; toolbar Refresh); label-driven",
     "tv":     "TV-style inline grid (cell edits, per-screen delete gesture); label-driven",
+    "gatedpf": "gated OV with PER-FIELD nav groups (custom grid); label-driven",
 }
 date = a.get("date", "2026-07-30")
 tv = folder.replace("Configuration/Assets/", "Configuration > Assets > ").replace("/", " > ")
@@ -247,6 +250,25 @@ if not already:
     sc_added = True
 else:
     sc_added = False
+
+# ---- family manifest + row self-check (item 2: exit-code gate, not my memory) -----------------
+FAM_MANIFEST = EC / "docs" / "screen_families.json"
+try:
+    _man = json.loads(FAM_MANIFEST.read_text(encoding="utf-8")) if FAM_MANIFEST.exists() else {}
+except Exception:
+    _man = {}
+_man[screen] = family
+FAM_MANIFEST.write_text(json.dumps(_man, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+_chk = ROOT / "tmp" / "check_row_vocab.py"
+if _chk.exists():
+    import subprocess
+    _rc = subprocess.run([sys.executable, "-X", "utf8", str(_chk), screen, family],
+                         capture_output=True, text=True, encoding="utf-8", errors="replace")
+    print(_rc.stdout.strip()[:400])
+    if _rc.returncode != 0:
+        sys.exit("ABORT: the registry/scorecard rows just written do NOT match family %r - see above. "
+                 "Fix the row wording (or the family) before shipping." % family)
 
 print("PACKAGED %s: evidence=%d png, CHECKLIST/JOURNAL/investigation/KB written; registry+=%s scorecard+=%s"
       % (screen, copied, reg_added, sc_added))

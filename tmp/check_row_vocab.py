@@ -28,6 +28,9 @@ FORBIDDEN = {
                "manageObject:form:T_data", "navigator-GATED", "gated-navigator"],
     "tv":     ["cascade", "groupmodel", "OV-GM", "Op PU", "navigator-GATED", "gated-navigator"],
     "ovgm":   ["date-only navigator", "no navigator", "custom-URL"],
+    # gated screens whose navigator uses PER-FIELD groups (G:1..G:N) rather than a single-row cascade,
+    # usually with a custom grid id - e.g. Cargo Planning Forecast, Well Bore, Perforation Interval
+    "gatedpf": ["date-only navigator", "no navigator", "custom-URL", "groupmodel"],
 }
 # tokens that SHOULD appear (at least one) for a given family - a weak positive signal
 EXPECTED_ANY = {
@@ -35,6 +38,7 @@ EXPECTED_ANY = {
     "custom": ["custom-URL", "Custom-URL", "no navigator"],
     "tv":     ["TV-style", "TV ", "table-class"],
     "ovgm":   ["OV-GM", "groupmodel", "cascade"],
+    "gatedpf": ["PER-FIELD", "per-field", "nav groups"],
 }
 
 # negated phrasings are legitimate ("date-only navigator + GO (no cascade)") - strip before scanning

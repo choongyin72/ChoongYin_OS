@@ -1,24 +1,8 @@
-
-## Chemical Product (CO.0072) - PARKED 2026-07-31 (verified, not assumed)
-- **Blocker:** EC auto-creates a child row in `CHEM_USAGE_REPORT_CONF` on every Chemical Product
-  insert. The End=Start delete is then REFUSED by EC with the banner: *"Child record found. It was
-  attempted to delete a row that has child records. In order to delete this row all child records
-  must be deleted first."* (screenshot: tmp/cp_cleanup.png)
-- **2 UI delete attempts, both failed (attempt limit reached):** (1) End=Start -> child-record error;
-  (2) toolbar Delete (minus icon) -> submenu renders EMPTY, no delete entry.
-- **No treeview screen found** that maintains CHEM_USAGE_REPORT_CONF (searched all 'usage'/'chemical
-  product' labels in DefaultScreenTreeview).
-- **Consequence:** a self-cleaning IUD suite cannot complete on this screen via the UI with current
-  knowledge - the delete leg has no proven UI path. Needs owner/SME input on the intended delete
-  gesture (or a child-aware delete step).
-- **Sandbox left clean:** the audit leftover (AUTOTEST_CP_001 + its 1 child row) was removed -
-  child row deleted at DB level (my own row, created 2026-07-31 11:13:16, full row logged), parent
-  then closed via the UI End=Start; DB-verified 0 AUTOTEST residual in OV_CHEM_PRODUCT.
-- **Generator note:** `tmp/gen_ov.py` (new plain-OV/Bank-family generator) reached insert+update
-  green here; its audit therefore continues on a leaf object instead. NOT batch-used until one
-  screen passes verify_screen end-to-end (R32).
-
-### Chemical Product - CLASSIFICATION CORRECTED 2026-07-31: EC PRODUCT DEFECT (already diagnosed)
+from pathlib import Path
+p = Path(r"C:\Projects\ChoongYin_OS\tmp\OV_SWEEP_PARKED.md")
+src = p.read_text(encoding="utf-8")
+i = src.index("### Chemical Product - item-4 follow-up investigation")
+src = src[:i] + '''### Chemical Product - CLASSIFICATION CORRECTED 2026-07-31: EC PRODUCT DEFECT (already diagnosed)
 **This was already fully diagnosed in `ec-ui-knowledge/EC_KNOWN_ISSUES.md` lines 202-219.** I wrongly
 re-investigated it and framed it as "needs owner/SME input on the intended gesture". It is not an
 unknown-gesture problem - it is a **product defect**, and the KB says so with deeper evidence than my
@@ -47,3 +31,6 @@ question outstanding.
 diagnosing. Three fresh scans (End=Start, toolbar Delete, Manage Chemical Product CO.0261) rediscovered
 a thinner version of what was already on disk. Screenshots kept anyway: tmp/cp_cleanup.png,
 tmp/manage_chem_product.png.
+'''
+p.write_text(src, encoding="utf-8")
+print("park entry reclassified as product defect")

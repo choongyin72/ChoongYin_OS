@@ -113,6 +113,29 @@ def checklist_contradictions(bundle_dir):
     return out
 
 
+def doc_row_family_mismatches():
+    """Item 2 gate: every screen in docs/screen_families.json must have registry + scorecard rows whose
+    wording matches its family. Catches the #265/#278/#283 class (OV-GM phrasing on a plain-OV screen)
+    by EXIT CODE on every verify_screen run, instead of relying on me remembering to grep."""
+    import json as _json
+    import subprocess as _sp
+    man = ROOT / "workstreams" / "master-plan" / "ec-automation" / "docs" / "screen_families.json"
+    chk = ROOT / "tmp" / "check_row_vocab.py"
+    if not man.exists() or not chk.exists():
+        return []
+    try:
+        fams = _json.loads(man.read_text(encoding="utf-8"))
+    except Exception as e:
+        return [("screen_families.json", "unreadable: %s" % e)]
+    out = []
+    for scr, fam in sorted(fams.items()):
+        r = _sp.run([sys.executable, "-X", "utf8", str(chk), scr, fam],
+                    capture_output=True, text=True, encoding="utf-8", errors="replace")
+        if r.returncode != 0:
+            out.append((scr, (r.stdout or r.stderr).strip().splitlines()[0][:160]))
+    return out
+
+
 def main():
     if not SCREENS.exists():
         print(f"[hygiene] screens dir not found: {SCREENS}"); return 0
@@ -140,6 +163,9 @@ def main():
         for msg in checklist_contradictions(vr.parent):
             contradictions.append((vr.parent.relative_to(ROOT), msg))
 
+    # doc-row family/vocabulary mismatches (item 2)
+    rowfails = doc_row_family_mismatches()
+
     print(f"[hygiene] scanned {len(bundles)} bundle(s) + {len(recon)} recon script(s)")
     if contradictions:
         print(f"\n[hygiene] FAIL - {len(contradictions)} CHECKLIST/VERIFY-REPORT contradiction(s) "
@@ -163,10 +189,15 @@ def main():
         print(f"\n[hygiene] FAIL - {len(fails)} hardcoded-credential line(s) in BUNDLES (R16 - use env vars):")
         for rel, ln, txt in fails:
             print(f"   {rel}:{ln}: {txt}")
-    if fails or nonascii or contradictions:
+    if rowfails:
+        print(f"\n[hygiene] FAIL - {len(rowfails)} screen(s) whose registry/scorecard row wording "
+              f"does not match their declared family (#265/#278/#283 class):")
+        for scr, msg in rowfails:
+            print(f"   {scr}: {msg}")
+    if fails or nonascii or contradictions or rowfails:
         print("\n[hygiene] RESULT: FAIL")
         return 1
-    print("\n[hygiene] RESULT: PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions")
+    print("\n[hygiene] RESULT: PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions, doc rows match declared families")
     return 0
 
 
