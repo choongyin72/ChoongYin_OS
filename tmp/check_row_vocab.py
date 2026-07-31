@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+"""Family-vocabulary validator for registry + scorecard rows (issue #278).
+
+WHY: a count-asserted string replace only proves the text I *intended* LANDED - it cannot prove the
+text is CORRECT. Twice now an OV-GM template phrase ("cascade + GO", "groupmodel", "Op PU",
+manageObject grid) shipped on a screen that is NOT OV-GM, past both a sibling column-diff and a
+count-assert. This check greps the row for family-INAPPROPRIATE vocabulary, which catches
+"present but wrong".
+
+Usage:  py tmp/check_row_vocab.py "<Screen Name>" <family>
+        family = ovgm | plain | custom | tv
+Exit 0 = clean, 1 = mismatch found (prints each offending token + the row).
+"""
+import sys
+from pathlib import Path
+
+sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+ROOT = Path(r"C:\Projects\ChoongYin_OS")
+REG = ROOT / "workstreams" / "master-plan" / "ec-automation" / "docs" / "ec_screen_registry.md"
+SC = ROOT / "docs" / "automation-scorecard.md"
+
+# tokens that must NOT appear for a given family
+FORBIDDEN = {
+    "plain":  ["cascade", "groupmodel", "OV-GM", "Op PU", "Op Production Unit",
+               "manageObject:form:T_data", "navigator-GATED", "gated-navigator"],
+    "custom": ["cascade", "groupmodel", "OV-GM", "Op PU", "Op Production Unit",
+               "manageObject:form:T_data", "navigator-GATED", "gated-navigator"],
+    "tv":     ["cascade", "groupmodel", "OV-GM", "Op PU", "navigator-GATED", "gated-navigator"],
+    "ovgm":   ["date-only navigator", "no navigator", "custom-URL"],
+}
+# tokens that SHOULD appear (at least one) for a given family - a weak positive signal
+EXPECTED_ANY = {
+    "plain":  ["PLAIN OV", "plain OV", "Bank family", "date-only navigator"],
+    "custom": ["custom-URL", "Custom-URL", "no navigator"],
+    "tv":     ["TV-style", "TV ", "table-class"],
+    "ovgm":   ["OV-GM", "groupmodel", "cascade"],
+}
+
+# negated phrasings are legitimate ("date-only navigator + GO (no cascade)") - strip before scanning
+NEGATIONS = ["no cascade", "without cascade", "not ov-gm", "no navigator/go", "no navigator go",
+             "unusable", "n/a cascade"]
+
+
+def _strip_negations(row):
+    low = row.lower()
+    for n in NEGATIONS:
+        low = low.replace(n, "")
+    return low
+
+
+def rows_for(screen):
+    out = []
+    for label, path in (("registry", REG), ("scorecard", SC)):
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            s = line.strip()
+            # EXACT first-cell match: a prefix test lets 'Pilot' pick up 'Pilot Boat' rows and
+            # could report another screen's family as a mismatch.
+            if not s.startswith("|"):
+                continue
+            cells = [x.strip() for x in s.split("|")[1:]]
+            if not cells:
+                continue
+            first = cells[0]
+            base = first.split("(")[0].strip()          # 'Truck (plain OV, CO.0264)' -> 'Truck'
+            if base == screen:
+                out.append((label, s))
+    return out
+
+def main():
+    if len(sys.argv) < 3:
+        print(__doc__)
+        return 2
+    screen, family = sys.argv[1], sys.argv[2].lower()
+    if family not in FORBIDDEN:
+        print("unknown family %r (use: %s)" % (family, "|".join(FORBIDDEN)))
+        return 2
+    found = rows_for(screen)
+    if not found:
+        print("FAIL: no registry/scorecard row found for %r" % screen)
+        return 1
+    bad = False
+    for label, row in found:
+        scan = _strip_negations(row)
+        hits = [t for t in FORBIDDEN[family] if t.lower() in scan]
+        if hits:
+            bad = True
+            print("MISMATCH (%s) - forbidden for family %r: %s" % (label, family, hits))
+            print("   row: %s" % row[:220])
+        if not any(t.lower() in row.lower() for t in EXPECTED_ANY[family]):
+            bad = True
+            print("MISSING (%s) - no %r vocabulary present (expected one of %s)"
+                  % (label, family, EXPECTED_ANY[family]))
+            print("   row: %s" % row[:220])
+    if not bad:
+        print("OK: %d row(s) for %r use %r vocabulary consistently" % (len(found), screen, family))
+    return 1 if bad else 0
+
+if __name__ == "__main__":
+    sys.exit(main())
