@@ -1,0 +1,13 @@
+fix(process): remaining files of the item-1..9 fix set (companion to the previous commit)
+
+The previous commit landed with only scripts/safe_commit.py staged: I ran the wrapper as what I intended
+to be a dry check of its own claim-guard, and it did the real thing. Everything else from that commit
+message belongs here - same change set, split only by my mis-step.
+
+Contents: scripts/check_known_issue.py (moved out of scratch tmp/), the scanner readiness fix,
+package_ovgm.py's JOURNAL-overwrite guard, the corrected EC_KNOWN_ISSUES remedy line, the resolved
+OV-GM dropdown finding in ov-gm-navigator-capability.md + tmp/OV_SWEEP_PARKED.md, and the evidence/probe
+scripts behind each of those.
+
+Still excluded on purpose: CLAUDE.md and ec-ui-knowledge/EC_BUG_TRACE_SOP.md, which carry my unasked
+governance edits and are waiting on the owner's approve-or-revert.

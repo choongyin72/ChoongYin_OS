@@ -34,11 +34,11 @@ re-scan produced:
 - KB remedy: remove the child config row(s) then End=Start; the generic engine
   (`py/ec_object_iud.py` `closeObjectRecord`) is NOT child-aware and would need extending.
 
-**One open discrepancy to resolve before anyone acts on the remedy** (flagging, not picking a side):
-KNOWN_ISSUES line 216 says the child is removable "via the Chemical Usage Report config screen", but my
-DefaultScreenTreeview search for CHEM*/USAGE*/REPORT* found no screen maintaining
-`CHEM_USAGE_REPORT_CONF` (a TABLE-class object). One of those two statements is wrong - [UNCONFIRMED],
-must be verified before the delete leg is automated.
+**Discrepancy RESOLVED 2026-07-31:** KNOWN_ISSUES claimed a 'Chemical Usage Report config
+screen'; there is none. Verified against DefaultScreenTreeview (1385 entries parsed, no
+matching label) and class_cnfg (`CHEM_USAGE_REPORT_CONF` = TABLE, no screen). KNOWN_ISSUES
+corrected. Consequence: the child is removable only at DB level, so the UI has NO delete path
+at all - this strengthens the product-defect classification.
 
 **Status: stays PARKED as a product-defect blocker, not as a missing-knowledge blocker.** No owner
 question outstanding.
@@ -62,10 +62,15 @@ tmp/manage_chem_product.png.
   panel offer IDENTICAL option lists - `['Administration', 'Allocation', 'Billing', ...]` - with
   `Administration` FIRST and `Allocation` SECOND. So the requested value is option 1 and the persisted
   value is option 2.
-- **Two candidate causes, NOT yet distinguished (no evidence either way - do not treat as decided):**
-  1. the dropdown pick lands one row off in this panel shape; or
-  2. the dropdown write silently fails and EC saves a default of `Allocation`. (`insert_ui` PASSing only
-     means EC raised no error - it is not proof the dropdown took.)
+- **CAUSE NOW DISTINGUISHED 2026-07-31 (read-only probe, nothing saved):** `select_dropdown` is
+  FAITHFUL - the form field reads back `Administration` both via `__FIRST__` and by explicit label before
+  any save. So the divergence is introduced **at/after SUBMIT**, not by the pick. The earlier worry that
+  the shared engine might be mis-picking on all 22 OV-GM screens is **RETRACTED** - evidence
+  tmp/probe_dropdown_fidelity.py.
+- **Still unknown (do not treat as decided):** the mechanism by which EC ends up writing
+  FUNCTIONAL_AREA_CODE='ALLOCATION' - candidates are an EC-side derivation/default overriding the
+  submitted value, or the persisted column not being the one this form field feeds. Needs a save-time
+  trace (EC log / IUD trigger read), which is why the screen stays parked.
 - **Why it stopped here:** 2 fix attempts used (bind the form dd to the captured nav value via the new
   `parent_dd` key; then re-run) - both landed in ALLOCATION. The suspect code
   (`select_dropdown` / `Fill OV Dropdown By Label`) is in the SHARED engine used by all 22 OV-GM screens,
