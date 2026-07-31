@@ -52,6 +52,15 @@ NEGATIONS = [
     # these, fixing a defect would make the gate fail forever
     "was wrong", "claim was", "family text corrected", "does not describe this screen",
     "still said", "wording that does not", "is historical", "shipped with ov-gm wording",
+    # a line that mentions OV-GM as a CONTRAST or historical cause (a different generator/navigator
+    # that was rejected, copied-from-by-mistake, or didn't exist yet) is not a claim about THIS
+    # screen's own family - real cases found restoring Truck/Contract Area Setup JOURNALs (issue #287
+    # review): "only an OV-GM generator existed" (explains why gen_ov.py was built), "the OV-GM
+    # generator does not fit" (explains why this screen was hand-built instead), "leftover ... from
+    # the OV-GM navigator" (describes a copy-paste bug, not this screen's type), "expects
+    # manageobject:form:t_data" (describes what the OV-GM generator expects, not what this screen uses).
+    "ov-gm generator existed", "ov-gm generator does not fit", "from the ov-gm navigator",
+    "expects manageobject:form:t_data",
 ]
 
 
