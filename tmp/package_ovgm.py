@@ -31,6 +31,11 @@ screen = a["screen"]; view = a["view"].upper(); bf = a.get("bf", ""); base = a.g
 folder = a["folder"].strip("/"); slug = a["slug"]; sfolder = a["screen_folder"]
 code_l = a["code_label"]; name_l = a["name_label"]
 extra_dd = a.get("extra_dropdowns", []); popups = a.get("popups", []); has_op_pu = a.get("has_op_pu", True)
+# gen_ovgm.py now accepts ["Label", "Value"] pairs as well as plain "Label" (Service needs exact values -
+# first-available would put the row outside the grid's scope). The docs only ever need the LABEL, so
+# normalise here; without this the packager died on `", ".join(extra_dd)` with a list item.
+extra_dd = [d if isinstance(d, str) else ("%s=%s" % (d[0], d[1]) if d[1] != "__FIRST__" else d[0])
+            for d in extra_dd]
 nav = a.get("nav", [])          # issue #283: NO OV-GM default - gated screens must opt in
 # ---- family is EXPLICIT and REQUIRED (issue #283) ---------------------------------------
 # Inferring family from nav's truthiness silently mis-rendered any plain/custom/TV config that
@@ -62,7 +67,11 @@ FAM_NAV_TXT = {
 FAM_TAG = {"ovgm": "OV-GM", "plain": "plain OV", "custom": "custom-URL OV", "tv": "TV-style",
            "gatedpf": "gated OV per-field nav"}
 FAM_DESC = {
-    "ovgm":   "OV-GM gated-navigator; label-driven; Op PU first-available",
+    # "Op PU first-available" is only TRUE when the screen actually has that field. Service (has_op_pu
+    # false) had the claim appended to its scorecard row anyway - the same wrong-detail class as #265/#278,
+    # caught by reading the appended row back.
+    "ovgm":   ("OV-GM gated-navigator; label-driven" +
+               ("; Op PU first-available" if has_op_pu else "; no Op PU on this screen")),
     "plain":  "plain OV (date-only navigator + GO, no cascade); label-driven",
     "custom": "custom-URL OV (no navigator/GO; toolbar Refresh); label-driven",
     "tv":     "TV-style inline grid (cell edits, per-screen delete gesture); label-driven",
@@ -203,7 +212,11 @@ for _f in EC.rglob("*"):
     if _f.name in _own or sfolder in _f.parts:
         continue
     try:
-        if slug in _f.read_text(encoding="utf-8", errors="replace"):
+        # Match the slug as an IDENTIFIER, not a bare substring: slug 'service' is a common English word
+        # and matched 8 unrelated Bank/Language/MIME investigation scripts, firing a false 0b failure.
+        # A real duplicate implementation would reference one of the generated artifact names.
+        _txt = _f.read_text(encoding="utf-8", errors="replace")
+        if any(tok in _txt for tok in ("%s_iud" % slug, "%s_page" % slug, "%s_sow" % slug)):
             _dupes.append(_f.relative_to(EC).as_posix())
     except Exception:
         pass

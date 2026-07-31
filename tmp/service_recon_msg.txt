@@ -1,0 +1,34 @@
+recon(service): Service (CO.2103) read-only recon COMPLETE - build not started
+
+Item 2 groundwork, banked so nothing is lost. No sandbox writes for this screen; every fact below came from
+an executed command or a file read.
+
+WHAT THE RECON ESTABLISHED (full detail in tmp/SERVICE_CO2103_RECON.md):
+ - Family is OV-GM, grid manageObject:form:T_data (stable across 3 scanner runs, after the grid-poll fix).
+ - Navigator: Date | Business Unit (only mandatory) | Contract Area | Contract.
+ - TRAP 1: apply_ovgm_navigator with the default levels=4 RAISES here - C:3 exists but has zero options for
+   the first-available BU. Only C:1 is mandatory and the grid renders with C:1 alone.
+ - TRAP 2 (the expensive one): OV_SERVICE has NO business-unit column; a row's scope comes from CONTRACT_ID.
+   The alphabetically-first BU 'EC LNG Norway' owns no contract areas or contracts, while all 43 existing
+   rows use contracts under area TS3_FIRM -> BU TS3_BU1. So first-available everywhere would have saved a row
+   that NEVER lists in the grid - exactly how Message Group failed. Caught before any live run.
+ - Values resolved code -> label (dropdowns show names, the DB stores codes - a distinction that produced a
+   false failure for me earlier today): BU 'TS3 BU1' = TS3_BU1; Contract 'TS3 GTA Shipper A' =
+   TS3_GTA_SHP_A; Transport System 'TS3 Transport System' = TS3_SYSTEM.
+ - 8 mandatory insert fields, all with options under the applied scope, so the screen IS insertable.
+ - Start date must be 2003-01-01 (TEST_START_DATE_REFDD): reference dropdowns only offer objects effective at
+   the form's start date.
+
+WHY THE BUILD IS NOT IN THIS COMMIT: gen_ovgm.py forces __FIRST__ everywhere and always calls
+apply_ovgm_navigator(levels=4). Service needs two opt-in capabilities - an explicit nav value with a level
+cap, and explicit values in extra_dropdowns - in BOTH the Playwright and RF layers. That is a substantial
+two-layer change plus a live-gated bundle, and starting it at the end of a long session is how half-finished
+work happens. Recon banked instead; the build resumes from tmp/SERVICE_CO2103_RECON.md with nothing to redo.
+
+FILES TOUCHED: tmp/SERVICE_CO2103_RECON.md, tmp/recon_service_dds.py, tmp/recon_service_scope.py,
+tmp/recon_service_bu.py, tmp/resolve_service_labels.py, tmp/resolve_service_labels2.py, tmp/find_views.py,
+tmp/cfg_service.json is NOT included (no config written yet), tmp/service_recon_msg.txt.
+
+SELF-CLEAN: n/a - read-only recon, no rows created on this screen.
+
+BASE: stacked on #290 (items 1+3).

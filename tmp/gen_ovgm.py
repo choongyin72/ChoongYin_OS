@@ -37,8 +37,15 @@ parent_dd = a.get("parent_dd", "")
 # Two flaws in the TEST had to be fixed first, neither in this code: start date 2000-01-01 (Op PU only
 # offers PUs effective at the form's start date; 'Production Unit' starts 2002-01-01) and comparing a UI
 # LABEL against the DB's CODE ('Production Unit' vs 'EEAL').
-assert parent_dd not in extra_dd, ("parent_dd %r must not also appear in extra_dropdowns - it would be "
+assert parent_dd not in [d if isinstance(d, str) else d[0] for d in extra_dd], ("parent_dd %r must not also appear in extra_dropdowns - it would be "
                                    "overwritten with __FIRST__" % parent_dd)
+nav_value = a.get("nav_value", "")      # explicit navigator C:1 value (else first-available)
+nav_levels = int(a.get("nav_levels", 4))  # cap the cascade; Service's C:3 is present but empty
+start_date = a.get("start_date", "2000-01-01")   # ref dropdowns only offer objects effective at this date
+NAV_DD = "nav:form:G:0:R:1:C:1:dd"      # C:1 = the first cascade level (C:0 is the Date field)
+# extra_dropdowns: "Label" (=> __FIRST__) or ["Label", "Value"] for a value that MUST be exact
+extra_dd_pairs = [(d, "__FIRST__") if isinstance(d, str) else (d[0], d[1]) for d in extra_dd]
+extra_dd_labels = [lbl for lbl, _ in extra_dd_pairs]
 popups = a.get("popups", [])   # mandatory Pick-from-EC-Object popup labels (first-available, nav-scoped)
 view_lc = view.lower()
 name_val = "AUTOTEST %s 001" % screen
@@ -49,8 +56,8 @@ ins = [
     '                {"label": %r, "value": NAME,       "kind": "text"},' % name_l,
     '                {"label": "Start Date", "value": START_DATE, "kind": "date"},',
 ]
-for d in extra_dd:
-    ins.append('                {"label": %r, "value": "__FIRST__", "kind": "dropdown"},' % d)
+for _lbl, _val in extra_dd_pairs:
+    ins.append('                {"label": %r, "value": %r, "kind": "dropdown"},' % (_lbl, _val))
 for pp in popups:
     ins.append('                {"label": %r, "value": "__FIRST__", "kind": "popup"},' % pp)
 if has_op_pu:
@@ -60,6 +67,21 @@ if parent_dd:
     # apply_ovgm_navigator() returns, so the captured top-parent is in scope here.
     ins.append('                {"label": %r, "value": pu, "kind": "dropdown"},' % parent_dd)
 ins_block = "\n".join(ins)
+
+# navigator blocks - explicit value (Area's proven pattern: Select option -> Apply Navigator) or the
+# existing first-available cascade. `pu` must end up holding the top-parent either way, because parent_dd
+# and the grid-visibility checks depend on it.
+if nav_value:
+    nav_block = ('            ec.select_dropdown(page, "%s_input", %r)\n'
+                 '            ec.click_go(page)\n'
+                 '            pu = %r' % (NAV_DD, nav_value, nav_value))
+    t3_nav_block = ('    Select EC Dropdown Option    ${NAV_DD}    %s\n'
+                    '    Apply Navigator\n'
+                    '    VAR    ${pu}    %s' % (nav_value, nav_value))   # VAR, not Set Variable (robocop DEPR05)
+else:
+    nav_block = "            pu = ec.apply_ovgm_navigator(page%s)" % (
+        "" if nav_levels == 4 else ", levels=%d" % nav_levels)
+    t3_nav_block = "    ${pu}=    Apply OV-GM Navigator First Available"
 
 driver = '''"""%(screen)s - IUD driver (thin). Reuses shared engine ec_object_iud.py + DbVerify.py.
 
@@ -93,7 +115,7 @@ SCREEN        = %(screen)r
 GRID_DATA_ID  = "manageObject:form:T_data"
 VIEW          = %(view_lc)r
 CODE          = os.environ.get("EC_CODE", "%(cpfx)s001")
-START_DATE    = "2000-01-01"
+START_DATE    = "%(start_date)s"
 END_DATE      = START_DATE
 NAME          = %(name_val)r
 NAME_UPD      = %(name_val)r + " UPDATED"
@@ -137,7 +159,7 @@ def main():
             ec.login(page, URL, USER, PW)
             print("  screen:", ec.open_object_screen(page, SCREEN))
             shot(page, "01_loaded")
-            pu = ec.apply_ovgm_navigator(page)
+%(nav_block)s
             results["nav_pu"] = "PASS: PU=%%r" %% pu
             print("  navigator applied; top-parent PU =", repr(pu))
             assert pu, "navigator cascade returned no top-parent PU"
@@ -207,7 +229,7 @@ if __name__ == "__main__":
     print("Evidence:", EVID)
     sys.exit(0 if ok else 1)
 ''' % dict(screen=screen, slug=slug, view_lc=view_lc, cpfx=cpfx, name_val=name_val,
-           abbr=abbr, ins_block=ins_block, name_l=name_l, up=_up)
+           abbr=abbr, ins_block=ins_block, name_l=name_l, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD)
 
 # ---- T3 insert keyword lines ----
 t3_ins = [
@@ -215,8 +237,8 @@ t3_ins = [
     "    Fill OV Field By Label       objectForm    %s    ${name}" % name_l,
     "    Fill OV Date By Label        objectForm    Start Date    ${start_date}",
 ]
-for d in extra_dd:
-    t3_ins.append("    Fill OV Dropdown By Label    objectForm    %s    __FIRST__" % d)
+for _lbl, _val in extra_dd_pairs:
+    t3_ins.append("    Fill OV Dropdown By Label    objectForm    %s    %s" % (_lbl, _val))
 for pp in popups:
     t3_ins.append("    Pick OV Popup By Label       objectForm    %s    __FIRST__" % pp)
 if has_op_pu:
@@ -243,6 +265,7 @@ ${SCR}              %(screen)s
 ${TBL}              manageObject:form:T_data
 ${DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 ${GM_PU}            ${EMPTY}
+${NAV_DD}            %(nav_dd)s
 
 
 *** Keywords ***
@@ -251,7 +274,7 @@ Open %(screen)s Screen
     ...    first-available + GO, RETURN the top-parent PU (grid empty until then).
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
     Launch EC And Open Screen    ${SCR}    ${user}    ${pass}
-    ${pu}=    Apply OV-GM Navigator First Available
+%(t3_nav_block)s
     RETURN    ${pu}
 
 %(screen)s Row Should Exist
@@ -302,7 +325,7 @@ Delete %(screen)s
     Delete Object Via End Date    ${TBL}    ${DEL_ENDDATE}    ${code}    ${date}
     Apply Navigator
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), view=view,
-           t3_ins_block=t3_ins_block, name_l=name_l, up=_up)
+           t3_ins_block=t3_ins_block, name_l=name_l, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD)
 
 suite = '''*** Settings ***
 Documentation       EC IUD Test - %(screen)s (%(folder_h)s).
@@ -322,7 +345,7 @@ Test Tags           iud    %(slug)s
 ${TEST_CODE}        ${EMPTY}
 ${OBJ_NAME}         ${EMPTY}
 ${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
+${START_DATE}       %(start_date)s
 ${END_DATE}         2000-01-01
 
 
@@ -364,7 +387,7 @@ Set Up %(screen)s Suite
     ${pu}=    Open %(screen)s Screen
     VAR    ${GM_PU}    ${pu}    scope=SUITE
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), view=view, cpfx=cpfx,
-           folder=folder, slug=slug, name_short=name_l.replace(" Code", "").replace(" Name", ""), up=_up)
+           folder=folder, slug=slug, name_short=name_l.replace(" Code", "").replace(" Name", ""), up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD)
 
 sow = '''# SOW - %(screen)s IUD (%(folder_h)s)
 
@@ -375,14 +398,14 @@ sow = '''# SOW - %(screen)s IUD (%(folder_h)s)
 - Deliverables: driver `py/%(slug)s_iud.py`, T3 `pageobjects/%(folder)s/%(slug)s_page.resource`,
   suite `tests/%(folder)s/%(slug)s_iud.robot`, this SOW, `VERIFY-REPORT.md` (auto-generated).
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, view=view, base=base,
-           cpfx=cpfx, slug=slug, folder=folder, up=_up)
+           cpfx=cpfx, slug=slug, folder=folder, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD)
 
 readme = '''# %(screen)s - EC Object IUD bundle
 
 **Screen:** %(folder_h)s > %(screen)s (BF %(bf)s). OV-GM (grid `manageObject:form:T_data`), navigator-GATED,
 date-effective. Built on the item-1 gated-navigator capability (PR #244). See `%(slug)s_sow.md` +
 `VERIFY-REPORT.md`. Driver `py/%(slug)s_iud.py`; T3/suite under `%(folder)s`.
-''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, slug=slug, folder=folder, up=_up)
+''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, slug=slug, folder=folder, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD)
 
 # ---- write ----
 (EC / "py" / ("%s_iud.py" % slug)).write_text(driver, encoding="utf-8")

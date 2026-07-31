@@ -1,0 +1,67 @@
+feat(iud): Service (CO.2103) - OV-GM IUD, live RF 4/4 + PW 8/8 DB-verified [item 2]
+
+Completes owner-assigned item 2. Checklist with ticks from real command output:
+tmp/CHECKLIST_item2_service.md. verify_screen.py -> OVERALL PASS, exit 0.
+
+GATES (auto-generated, not typed): robocop exit 0 | hygiene exit 0 | dryrun 4/4 | LIVE RF suite 4/4 pass
+0 fail | Playwright driver 8/8. DB ground truth vs OV_SERVICE (present after insert, NAME after update,
+absent after End Date = Start Date). Self-clean: 0 AUTOTEST rows left in OV_SERVICE.
+
+RECON FIRST - three traps caught before any live run, each of which would have wasted one:
+ - apply_ovgm_navigator's default levels=4 RAISES on this screen: navigator C:3 exists with ZERO options
+   for the first-available BU. Only C:1 (Business Unit) is mandatory -> nav_levels: 1.
+ - OV_SERVICE has NO business-unit column; a row's scope comes from CONTRACT_ID. The alphabetically first
+   BU ('EC LNG Norway') owns no contract areas or contracts, while all 43 existing rows use contracts under
+   area TS3_FIRM -> BU TS3_BU1. First-available everywhere would have saved a row that NEVER lists in the
+   grid - exactly how Message Group failed.
+ - dropdowns show NAMES, the DB stores CODES, so the values were resolved from the DB rather than assumed:
+   TS3 BU1=TS3_BU1, TS3 GTA Shipper A=TS3_GTA_SHP_A, TS3 Transport System=TS3_SYSTEM.
+
+TWO FAILURES DURING THE BUILD - both were MY INPUTS, neither was the engine:
+ 1. the explicit Contract/Transport System values were silently IGNORED; the row saved TRANS_INV_BLEND /
+    TS5_TS. Root cause found by READING THE ENGINE SOURCE: select_dropdown deliberately falls back to the
+    first option when the requested label is absent ("requested value absent -> retry accepting ANY (first)
+    option") - correct for cascade children, but it substitutes a wrong value with NO error. Worth knowing
+    repo-wide: no suite asserts dropdown values, so such a substitution passes unnoticed.
+ 2. why the labels were absent: a read-only panel probe showed 49 Contract options with NO TS3 entries and
+    only 'TS5 Transport System'. The DB explains it - TS3_GTA_SHP_A is effective 2011-01-01 -> 2031-01-01,
+    TS3_SYSTEM and BU TS3_BU1 from 2011-01-01, and every existing SERVICE row starts 2011-01-01. My
+    2003-01-01 predated all of them -> start_date: "2011-01-01".
+
+GENERATOR CAPABILITIES ADDED (opt-in, backwards-compatible, wired in BOTH the Playwright and RF layers):
+nav_value + nav_levels (explicit navigator value using Area's proven Select-option -> Apply-Navigator
+pattern), start_date override, and extra_dropdowns entries as ["Label","Value"] pairs. REGRESSION PROVEN: an
+old-style config still emits apply_ovgm_navigator(page), START_DATE "2000-01-01", Apply OV-GM Navigator
+First Available and ${START_DATE} 2000-01-01 unchanged; the only addition is an unused ${NAV_DD} T3
+variable, stated rather than hidden. robocop DEPR05 (Set Variable -> VAR) fixed in the TEMPLATE.
+
+TWO OF MY OWN ERRORS CAUGHT BY CHECKING, REPORTED NOT HIDDEN:
+ - the scorecard row I appended claimed "Op PU first-available" on a screen with has_op_pu: false - the same
+   wrong-detail class as #265/#278. Found by reading the appended row back; rows reverted, the descriptor
+   made conditional, re-appended. The 15 existing OV-GM rows that DO have Op PU are untouched.
+ - my generator REGRESSION run overwrote Node's shipped README.md (I pointed it at screen_folder "Node").
+   Caught via git status and restored; verified intact.
+ - 0b check-existing now matches IDENTIFIERS (service_iud/service_page/service_sow) instead of the bare word
+   "service", which had produced 8 false hits from unrelated Bank/Language/MIME scripts. Report Group
+   regression still ticks with 0 references.
+
+FILES TOUCHED: py/service_iud.py; pageobjects/Configuration/Assets/Service_Objects/service_page.resource;
+tests/Configuration/Assets/Service_Objects/service_iud.robot;
+screens/Configuration/Assets/Service_Objects/Service/ (SOW, README, JOURNAL, CHECKLIST, VERIFY-REPORT,
+investigation/, evidence/); ec-ui-knowledge/screens/service.md; docs/ec_screen_registry.md;
+docs/automation-scorecard.md; docs/screen_families.json; tmp/gen_ovgm.py; tmp/package_ovgm.py;
+tmp/cfg_service.json; tmp/run_pkg_service.py; tmp/verify_service.py; tmp/add_explicit_value_support.py;
+tmp/probe_service_panels.py; tmp/check_service_row.py; tmp/selfclean_service.py; tmp/check_ts3_dates.py;
+tmp/cfg_regress_node.json; tmp/CHECKLIST_item2_service.md; tmp/item2_msg.txt. No governance file touched.
+
+APPEND-ONLY (R23): registry, scorecard and screen_families each 1 insertion, 0 deletions.
+
+SELF-CLEAN: DB-verified - 0 AUTOTEST rows in OV_SERVICE; the row from the failed run closed via
+End Date = Start Date with the full row logged before the write.
+
+RULES APPLIED: R9 (this body), R16/R20 (hygiene PASS), R23 (pure appends), R32 (generator changes
+regression-proven), CLAUDE.md no-guessing (every value from a DB read or executed output), step-0 check run
+first, 2-attempt limit respected (the two failures were input corrections driven by evidence, and I stopped
+to read the engine source instead of retrying blind), no shared-engine change made.
+
+BASE: master.

@@ -1,0 +1,18 @@
+{
+  "screen": "Node",
+  "bf": "CO.1064",
+  "view": "OV_NODE",
+  "base": "NODE",
+  "folder": "Configuration/Assets/Calculation_Objects",
+  "screen_folder": "Node",
+  "slug": "node_regress",
+  "abbr": "ND",
+  "code_prefix": "AUTOTEST_ND_",
+  "code_label": "Node Code",
+  "name_label": "Node Name",
+  "extra_dropdowns": [],
+  "has_op_pu": true,
+  "popups": [],
+  "family": "ovgm",
+  "nav": ["Production Unit", "Area", "Facility Class 1"]
+}
