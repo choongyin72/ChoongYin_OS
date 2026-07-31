@@ -1,0 +1,60 @@
+fix(gen): parent_dd PROVEN end-to-end on Area (7/7) + scanner grid-detection flakiness fixed
+
+Completes owner-assigned items 1 and 3. Per-item checklists with ticks taken from real command output:
+tmp/CHECKLIST_item1_parent_dd.md, tmp/CHECKLIST_item3_tool_fixes.md.
+
+ITEM 1 - parent_dd is no longer an unproven capability sitting in master.
+Evidence: tmp/validate_parent_dd_area.py, live and self-cleaning -> OVERALL PASS 7/7, exit 0:
+  navigator holds 'Production Unit' | save no EC error | ROW LISTS IN THE GRID (the untested half) |
+  row present in ov_area | OV_AREA.OP_PRODUCTIONUNIT_CODE='EEAL' == the code for that PU name |
+  row absent after End=Start | 0 open AUTOTEST rows left.
+So the UNVALIDATED warning is REMOVED and replaced by the evidence in the code comment. (Had it failed, the
+pre-stated commitment was to DELETE parent_dd from the generator rather than leave a broken key in master.)
+
+Test bed chosen from shipped code, not assumption: Node was REJECTED because its own driver documents that
+its Op PU panel does not offer the navigator's PU at all - the run would have failed for a reason unrelated
+to the capability. Area was chosen because its T3 states the inserted row "must carry the same Op Production
+Unit to appear in the filtered grid" and its merged suite already passes ${NAV_PU} to both navigator and
+form - so the PATTERN was proven there and only MY WIRING (binding the CAPTURED value) was untested.
+
+THREE FLAWS WERE IN MY TEST, NONE IN THE CODE UNDER TEST - recorded because each nearly produced a false
+finding:
+ 1. filling all 4 nav levels raised "dropdown has no options" (C:3 exists but is empty) -> levels=1.
+ 2. start date 2000-01-01 meant the target PU was not offered at all (Op PU lists only PUs effective at the
+    form's start date; 'Production Unit' starts 2002-01-01). I was one step from reporting an EC engine
+    defect off my own bad input. Corrected to 2003-01-01, the value the merged suite uses.
+ 3. compared a UI LABEL to a DB CODE ('Production Unit' vs 'EEAL'). OV_PRODUCTIONUNIT confirms EEAL IS that
+    PU's code; the assertion now resolves label -> code.
+
+MESSAGE GROUP RE-CHECKED against flaw 3, since it could have been mis-parked for the same reason:
+OV_FUNCTIONAL_AREA shows Administration -> ADM and Allocation -> ALLOCATION. Message Group stored ALLOCATION
+while Administration was requested, so that row really did save the NEIGHBOURING option. Its park entry and
+the capability doc's retraction both remain accurate and needed no change - the divergence is SCREEN-SPECIFIC
+(identical wiring is correct on Area), which is exactly what those docs say.
+
+ITEM 3 - decision on the two uncommitted tool fixes: KEEP BOTH, because each fixed a demonstrated defect.
+ - scan_ec_screen.py grid detection was FLAKY: two consecutive Service scans returned `None` and
+   `manageObject:form:T_data`. Cause: readiness can be satisfied by navigator/GO while the grid has not
+   rendered, and on a gated screen the grid appears only after a second render. Now polls ~20s post-GO and,
+   if still absent, prints an explicit "do NOT record 'no grid' as this screen's shape" note.
+   Verified by REPETITION (the correct test for flakiness): 3/3 runs stable, exit 0. Regression-checked on a
+   different shape - Report Group still reports its date navigator, GO and report_group_table:form:T_data.
+ - the parent_dd marking, now superseded by item 1's evidence as described above.
+
+FILES TOUCHED: tmp/gen_ovgm.py, tmp/scripts/scan_ec_screen.py, tmp/validate_parent_dd_area.py,
+tmp/scan_service_thrice.py, tmp/check_eeal.py, tmp/check_eeal2.py, tmp/check_funcarea_codes.py,
+tmp/node_cols.py, tmp/verify_merged_work.py, tmp/CHECKLIST_item1_parent_dd.md,
+tmp/CHECKLIST_item3_tool_fixes.md, tmp/item13_msg.txt. No governance file is touched by this PR.
+
+REPO GATES: check_bundle_hygiene.py -> RESULT PASS (28 screens). Full robot --dryrun tests/ -> 635 tests,
+635 passed, 0 failed. No-loss diff on the 3 screens the #287 reviewer kept as-submitted -> 0 unexplained
+deletions.
+
+SELF-CLEAN: DB-verified. Every AUTOTEST row from the 3 validation runs closed via End Date = Start Date on
+OV_AREA (EC's delete), full row logged before any write; final read shows 0 open AUTOTEST rows.
+
+RULES APPLIED: R9 (this body), R16/R20 (hygiene PASS), CLAUDE.md no-guessing (every tick from executed
+output; three of my own test flaws found and reported rather than shipped as findings), 2-attempt limit
+respected, no shared-engine change made.
+
+BASE: master.

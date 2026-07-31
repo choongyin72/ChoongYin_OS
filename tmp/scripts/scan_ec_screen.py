@@ -150,10 +150,23 @@ with sync_playwright() as p:
         except Exception as e:
             print("   GO err:", str(e)[:60])
 
-    # 3) grid id (now populated, post-GO for gated screens)
-    grid = page.evaluate("""() => { const t=[...document.querySelectorAll("[id$=':T_data']")].filter(e=>e.offsetParent||e.querySelector('tr'));
-        return t.length? t[0].id : null; }""")
+    # 3) grid id - POLLED (added 2026-08-01). The readiness poll in step 0 can be satisfied by the
+    #    navigator/GO alone while the grid has not rendered, and on a gated screen the grid appears only
+    #    after a SECOND render (nav fill + GO). Without its own wait this was FLAKY: two consecutive
+    #    scans of Service returned `None` and `manageObject:form:T_data`. A flaky scan is worse than a
+    #    slow one - it silently records the wrong shape.
+    grid = None
+    for _ in range(20):                      # up to ~20s after GO
+        grid = page.evaluate("""() => { const t=[...document.querySelectorAll("[id$=':T_data']")]
+            .filter(e=>e.offsetParent||e.querySelector('tr'));
+            return t.length? t[0].id : null; }""")
+        if grid:
+            break
+        page.wait_for_timeout(1000)
     print("grid id:", grid)
+    if not grid:
+        print("   NOTE: no :T_data grid after ~20s post-GO. Do NOT record 'no grid' as this screen's")
+        print("         shape - it may need a different nav scope, or be a custom-URL/TV layout. Probe it.")
 
     if is_ov:
         # 4) UPDATE + DELETE FIRST (while the list is shown): select a data row -> updateAttributes + objectdates

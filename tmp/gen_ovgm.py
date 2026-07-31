@@ -30,6 +30,13 @@ extra_dd = a.get("extra_dropdowns", []); has_op_pu = a.get("has_op_pu", True)
 # first = 'ALLOCATION' -> insert persisted, grid never listed it). Do NOT also list it in
 # extra_dropdowns, or it gets set twice (second write wins, __FIRST__ would clobber the scope).
 parent_dd = a.get("parent_dd", "")
+# parent_dd VALIDATED 2026-08-01 end-to-end on Area (tmp/validate_parent_dd_area.py, 7/7 PASS, exit 0):
+# navigator set to a PU -> value captured -> bound into the form's Op Production Unit -> Save -> the row
+# LISTS in the grid -> OV_AREA.OP_PRODUCTIONUNIT_CODE == the code for that PU name -> End=Start removes it
+# -> 0 residual. Node was the wrong test bed (its Op PU panel does not offer the navigator's PU at all).
+# Two flaws in the TEST had to be fixed first, neither in this code: start date 2000-01-01 (Op PU only
+# offers PUs effective at the form's start date; 'Production Unit' starts 2002-01-01) and comparing a UI
+# LABEL against the DB's CODE ('Production Unit' vs 'EEAL').
 assert parent_dd not in extra_dd, ("parent_dd %r must not also appear in extra_dropdowns - it would be "
                                    "overwritten with __FIRST__" % parent_dd)
 popups = a.get("popups", [])   # mandatory Pick-from-EC-Object popup labels (first-available, nav-scoped)
