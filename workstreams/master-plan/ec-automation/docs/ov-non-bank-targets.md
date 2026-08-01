@@ -46,7 +46,7 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 | CO.0212 | Chemical Injection Point | OV_CHEM_INJ_POINT | Assets > Chemical Objects | [ ] |
 | CO.0224 | Shift | OV_SHIFT | Assets > Facility Objects | [ ] |
 | CO.0258 | Chemical Stream | OV_CHEM_STREAM | Assets > Chemical Objects | [ ] |
-| CO.0260 | Chemical Stream Hookup | OV_CHEM_STRM_HOOKUP | Assets > Chemical Objects | [ ] |
+| CO.0260 | Chemical Stream Hookup | OV_CHEM_STRM_HOOKUP | Assets > Chemical Objects | [x] OV-GM, live 4/4, mandatory-field gate |
 | CO.2004 | Lifting Account | OV_LIFTING_ACCOUNT | Assets > Transport Objects | [ ] |
 | CO.2077 | Channel | OV_CHANNEL | Assets > Transport Objects | [ ] |
 | CO.2078 | Loading Arm | OV_LOADING_ARM | Assets > Transport Objects | [ ] |
