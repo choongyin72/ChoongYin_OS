@@ -78,7 +78,7 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 |---|---|---|---|---|
 | CO.0019 | Facility Class 1 | OV_XFCTY_CLASS_1 | Assets > Facility Objects | [ ] |
 | CO.0205 | Collection Point | OV_COLLECTION_POINT | Assets > Facility Objects | [ ] |
-| CO.0244 | Operator Route | OV_OPERATOR_ROUTE | Assets > Facility Objects | [ ] |
+| CO.0244 | Operator Route | OV_OPERATOR_ROUTE | Assets > Facility Objects | [x] OV-GM, live 4/4, PROVEN nav (P3 PU/Area) |
 
 ## E. Well hierarchy  (2)
 | BF | Screen | OV_ view | Folder | Status |
