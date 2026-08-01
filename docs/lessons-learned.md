@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v30** (R30 added 2026-07-30)
+> **Current rule version: v33** (R31-R33 added 2026-08-01)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -38,6 +38,9 @@ _Worker sessions: read this before starting any automation work._
 | v28 | R28 | `CLAUDE.md` is auto-injected into every session's context (unlike other mandatory-read docs) — every review run checks `wc -l CLAUDE.md`; >200 lines = NICE-TO-HAVE (name pruning candidates), >400 lines = MUST-FIX | 2026-07-02 |
 | v29 | R29 | A scheduled/unattended runner MUST be sync/hash-verified against the branch tip before every run — a stale executing copy silently mass-produces artifacts in a superseded format while the commit history claims the fix is live | 2026-07-06 |
 | v30 | R30 | "Registry-first" is not satisfied by resolve_ec_screen.py + scan_ec_screen.py alone — the actual BF/screen code (e.g. `CO.2077`) MUST be resolved from `TV_CTRL_CONFIGURATION_STORAGE` (NAME='DefaultScreenTreeview') and written into the registry row, scorecard row, and JOURNAL.md title; a blank code defeats the registry's purpose even when no code was guessed | 2026-07-30 |
+| v31 | R31 | Diff a stacked PR against its real fork point (`git merge-base`), not current `origin/master` — comparing to current master shows an earlier-merged sibling's files as if they were this PR's own change/staleness | 2026-08-01 |
+| v32 | R32 | A text-correctness fix in the CHECKLIST/SOW/KB/registry/scorecard/JOURNAL layer is not complete until the SAME generated driver `.py`/T3 `.resource`/suite `.robot` doc strings are grepped for the identical stale claim — fixing one layer does not imply the layer below is also fixed | 2026-08-01 |
+| v33 | R33 | A PR whose declared `base` is another (now-merged-elsewhere) feature branch will not auto-flip to "merged" on GitHub even once its commits are verified ancestors of `master` — confirm via a retarget-to-`master` attempt (GitHub's "no new commits" error confirms zero diff remains), then close it manually with an explanation rather than leaving it showing a misleading open/unmerged state | 2026-08-01 |
 
 ---
 
@@ -1963,5 +1966,59 @@ _On-demand review requested by the owner outside the normal 06:00/14:00 schedule
 | Backfill BF codes into #255 (CO.2077), #256 (CO.2078), #257 (CO.2081), #258 (CO.2080) — registry row, scorecard row, JOURNAL.md title (R30) | Worker | 🔴 High (blocks merge) |
 | CHECKLIST.md doc-drift in #255: evidence filename prefix listed as `cha_0[1-5]` vs actual `chn_0[1-5]`; RF path prose uses a space ("Transport Objects/...") vs the actual tracked underscore path ("Transport_Objects/...") — cosmetic only | Worker | 🟢 Low |
 | Orphan branch `feature/claude-md-no-shortcuts-rule` (commit `a4c0541`) self-numbers rules R30-R33 from the #250-#253 incident retro, but has no open PR and was never reviewer-extracted; it now collides with this session's real R30. Owner should decide: land it through review (renumbered from R31, since R30 is now taken) or fold its content into R30's incident note above | Owner | 🟡 Medium |
+
+---
+
+## 2026-08-01 (on-demand) — Interactive Review/Merge Session (PRs #285-#298, handoff prep)
+
+_Extended interactive session where the owner directly requested review+merge of each PR as it was raised
+(not the scheduled 06:00/14:00 automated pass). Handling ~14 PRs end-to-end: #285-#293 (OV-GM navigator
+capabilities, JOURNAL-overwrite guard, select_dropdown fallback documentation), #294 (Area registry
+backfill), #295/#297/#298 (External Location/Collection Point/Contract Capacity IUD + three new nav
+strategies: `nav_mode=go_only`, `nav_values`, `nav_value`), #296 (`find_populated_scope.py` tool). Session
+ending with the owner planning to hand the reviewer role to a fresh Claude Code session — this entry plus
+the new `docs/PR-REVIEW-PROTOCOL.md` §"Reviewer merge discipline" section are written for that handoff._
+
+### Rules (R31-R33, see changelog above)
+
+### Observations (good patterns to keep)
+- **Independent verification via direct `git diff`/`git show`, never the PR body's own narrative, found
+  every real defect this session** — a destructive JOURNAL/KB regeneration (#287), an undisclosed
+  governance-file edit (#285), a literal unsubstituted `%s` in a registry row (#294), and the recurring
+  driver/T3/suite doc-string gap (#295/#297/#298). None of these were self-reported by the Worker's own
+  PR description; all were found by reading the actual diff content.
+- **Squash-merge-breaks-shared-ancestry problem for stacked PRs solved consistently via a scratch
+  worktree + real `--no-ff` merge + manual conflict resolution**, refined over the session to include a
+  full-tree conflict-marker sweep, a `.py` syntax check on every touched file, and (when a shared
+  vocabulary/hygiene validator exists) a re-run across every screen in the manifest before pushing — not
+  just the screen the PR itself touches.
+- **"Regression-proven" claims were re-proven, not accepted** — every generator/template change was
+  independently regenerated against both an unrelated already-shipped config and the PR's own new config,
+  diffed byte-for-byte, before merging.
+- **A clear, consistently-applied line between "Reviewer fixes directly" and "Reviewer returns to
+  Worker"**: mechanical/reconstructable content (single-line wording, an unambiguous placeholder
+  substitution, restoring content that exists unchanged elsewhere, a generator-root fix for a defect class
+  already fixed once in the same PR) was fixed directly with clear disclosure in the merge commit and PR
+  comment; genuinely new investigative/evidentiary content was never fabricated and went back to the
+  Worker instead.
+- **Governance files (`CLAUDE.md`, `EC_BUG_TRACE_SOP.md`) treated as categorically different** — an
+  undisclosed edit in #285 was excluded from that merge and explained to the Worker; the Worker's proper
+  re-raise as #291 (explicitly marked "PROPOSED, DO NOT MERGE WITHOUT OWNER APPROVAL") was surfaced to the
+  owner via an explicit approval question before merging, regardless of how reasonable the change looked.
+
+### Gaps (verified against GitHub API / repo state)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| **R32 in practice**: the same "fixed at the doc layer, not the driver/T3/suite layer" defect recurred on THREE independent capabilities in three consecutive PRs (#295 `nav_mode`, #297 `nav_values`, #298 `nav_value`) before being named as a pattern. Worth the Worker adding an explicit grep step (driver/T3/suite for `apply_ovgm_navigator`/`first-available`) to the packager's own re-verification, per the note left on #298 and filed as Issue #299 | Worker | 🟡 Medium |
+| PRs #297/#298 had to be closed manually (R33) rather than auto-detected as merged, since both were stacked with `base` = another feature branch. If the Worker's stacking convention continues, a future reviewer session should expect this every time and not read "still open" as "not actually merged" without checking `git merge-base --is-ancestor` first | Worker/Reviewer | 🟢 Low (now documented, R33) |
+| Orphan branch `feature/claude-md-no-shortcuts-rule` (flagged 2026-07-30, still unresolved) self-numbered R30-R33 for its own proposed rules; those numbers are now doubly taken (R30 by the 2026-07-30 registry-first rule, R31-R33 by this entry) — if that branch is ever revived it needs renumbering from R34, not R31 as the original gap note assumed | Owner | 🟡 Medium |
+
+### Handoff note (for the next Reviewer session)
+See `docs/PR-REVIEW-PROTOCOL.md` §"Reviewer merge discipline" (added this session) for the concrete
+techniques referenced above — the worktree-merge procedure, the fork-point-diff discipline, the full
+verification sweep, and the fix-directly-vs-return-to-Worker line. That section plus this entry are the
+durable record of what this session did differently from a fresh cold start; read both before the first
+PR review of a new session.
 
 ---

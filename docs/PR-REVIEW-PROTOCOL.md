@@ -101,3 +101,71 @@ artifacts SOW/README/JOURNAL/playwright/investigation/evidence/CHECKLIST · RF T
   the checklist doc) listing the exact gaps; re-review next run after the worker pushes fixes to the same branch.
 - This sits alongside the existing R-rules (R7/R9/R12/R13/R16/R20/R21/R23…); the reviewer may formalise it as an
   R# at its next run. Doc-only gaps need no code change.
+
+## Reviewer merge discipline (added 2026-08-01 — from an extended interactive review/merge session, PRs #285-#298)
+Written for a **fresh Reviewer session picking this up cold**: the written protocol above (session-start
+reads, MUST-FIX gating, PR body format) transfers on its own, but the habits below are what actually
+caught real defects across ~14 PRs in one session and are not otherwise written down anywhere.
+
+1. **Never trust a PR's own description of its diff — read the diff.** Every substantive finding this
+   session (a destructive JOURNAL/KB regeneration in #287, an undisclosed governance-file edit in #285, a
+   literal unsubstituted `%s` in #294, false "cascade"/"first-available" claims surviving one layer deeper
+   than the PR's own sweep in #295/#297/#298) was found by reading the actual `git diff`/`git show` content,
+   not by trusting the PR body's narrative of what it did. Treat the PR body as a claim to verify, not a
+   fact to summarize.
+2. **Diff against the PR's real fork point, not current `origin/master`.** For a stacked PR opened before
+   an earlier sibling merged, `git diff origin/master...HEAD` will show the earlier sibling's now-merged
+   files as part of "this PR's diff" — apparent changes to files like a shared generator script can be pure
+   staleness, not real conflicts. Use `git merge-base origin/master <branch>` to find the true fork point
+   and diff from there (`git diff <fork-point>...<branch>`) before concluding anything is missing, added,
+   or reverted.
+3. **For stacked/parallel PRs, merge via a scratch worktree, never trust squash-merge.** Squash-merging a
+   PR whose branch shares history with another open PR breaks that shared ancestry and orphans the sibling.
+   Instead: `git worktree add --detach <path> origin/master`, then a real
+   `git merge --no-ff --no-commit origin/<branch>`, resolve conflicts by hand (append-only docs: keep both
+   sides if textually different, "ours" if byte-identical — verify byte-identical with `diff`, don't assume
+   it from a matching first line), `git commit`, then `git push origin HEAD:refs/heads/master` (R24 applies
+   here too — a bare `push origin master` from a detached worktree pushes the wrong ref). GitHub auto-detects
+   the source PR as merged once its commits are ancestors of `master` — **except** when the PR's own declared
+   base is another feature branch rather than `master` (see item 6).
+4. **Before every push: full verification sweep, not just "the one gate I touched".**
+   - Conflict-marker sweep: `grep -rl '^<<<<<<<\|^=======$\|^>>>>>>>' . | grep -v '.git/'`.
+   - `python3 -c "import ast; ast.parse(open(f).read())"` on every touched `.py` file.
+   - Non-ASCII scan on any touched doc row (`[c for c in text if ord(c) > 127]`) per R18/R20.
+   - If a shared vocabulary/hygiene validator exists (e.g. `check_row_vocab.py`), re-run it across **every**
+     screen in the manifest, not just the one this PR touches — a generator/template fix can silently break
+     an unrelated already-shipped screen's wording.
+   - When regeneration tooling changed, regenerate an UNRELATED already-shipped config through both the old
+     and new generator and diff the output — "regression-proven" is a claim to re-prove, not to accept.
+5. **A fixed text-correctness defect at one layer often recurs one layer deeper.** Three separate PRs this
+   session (#295, #297, #298) each correctly hunted down a stale "cascade"/"first-available" claim across
+   the CHECKLIST/SOW/KB/registry/scorecard/JOURNAL layer, and each time the identical false claim was still
+   present, unfixed, in the driver `.py` docstring and the T3/suite `.resource`/`.robot` Settings and keyword
+   `[Documentation]` strings — the artifacts a future engineer actually reads to understand runtime behavior.
+   When a doc-correctness fix touches a template/generator, grep the files that generator actually PRODUCES
+   for the same stale phrase before calling the sweep complete, not just the markdown layer.
+6. **A PR stacked on another (unmerged) feature branch as its `base` will not auto-flip to "merged" on
+   GitHub, even after its commits are verified ancestors of `master`.** GitHub's merge-detection checks the
+   PR's *declared* base branch, not `master` generally. After merging such a PR via the worktree technique
+   above, confirm nothing was lost with `git merge-base --is-ancestor <branch> origin/master`, then try
+   retargeting the PR to `base: master` — if GitHub refuses with "no new commits between base branch and
+   head branch", that confirms zero diff remains (the merge was complete), and the PR should be **closed
+   manually** with a comment explaining why, rather than left open showing a misleading "unmerged" state.
+7. **Reviewer may fix a defect directly, with disclosure, when the correct content is already
+   known/reconstructable** — a single-line registry/scorecard wording error, a template placeholder with an
+   unambiguous substitution value from elsewhere in the same PR, restoring content that already exists
+   unchanged elsewhere in git history, a generator-root fix for a defect class already fixed once in the
+   same PR. **Never fabricate genuinely new investigative/evidentiary content** (JOURNAL narrative for work
+   not done, DB evidence, screenshots, root-cause claims not backed by something already on record) — that
+   goes back to the Worker. When fixing directly, say so plainly in the merge commit and the PR comment;
+   never let a hand-fix look indistinguishable from what the Worker shipped.
+8. **Governance files (`CLAUDE.md`, `ec-ui-knowledge/EC_BUG_TRACE_SOP.md`) are categorically different from
+   every other doc.** Any Worker edit to them — however reasonable it looks, however confident the Reviewer
+   is in its correctness — requires an explicit owner decision before merging, and must be disclosed in the
+   PR body's "Files touched" list. If undisclosed, exclude just those files from the merge
+   (`git checkout HEAD -- <file>` inside the merge worktree, before committing) and tell the Worker why,
+   rather than rejecting the whole PR or merging the governance change unreviewed.
+9. **When all currently-open PRs are handled, standalone feedback for the Worker goes in a GitHub Issue,
+   not a comment on a closed PR.** The Worker's own session-start protocol (`CLAUDE.md` step 6-7) only scans
+   *open* Issues and *open* PRs — a comment left on an already-merged/closed PR will not surface again on its
+   own. File an Issue when the feedback isn't tied to a PR that's still open.
