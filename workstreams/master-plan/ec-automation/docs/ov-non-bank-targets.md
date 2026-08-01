@@ -70,8 +70,8 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 | CO.2016 | Contract | OV_CONTRACT | Assets > Contract Objects | [ ] |
 | CO.2044 | Contract Capacity | OV_CONTRACT_CAPACITY | Assets > Contract Objects | [ ] |
 | CO.2054 | Contract Inventory | OV_CONTRACT_INVENTORY | Assets > Contract Objects | [ ] |
-| RC.0058 | Division Order | OV_DIVISION_ORDER | Royalty > Royalty USA | [ ] |
-| RC.0059 | Royalty Contract | OV_ROYALTY_CONTRACT | Royalty > Royalty Canada | [ ] |
+| RC.0058 | Division Order | OV_DIVISION_ORDER | Royalty > Royalty USA | (P) misclassified - genuinely TV not OV-GM - see Parked table |
+| RC.0059 | Royalty Contract | OV_ROYALTY_CONTRACT | Royalty > Royalty Canada | (P) 2nd dropdown mis-persists + read-only view trigger - see Parked table |
 
 ## D. Production Unit + Area  (3)
 | BF | Screen | OV_ view | Folder | Status |
@@ -154,3 +154,11 @@ R&D, not a quick build. **PARKED pending a dedicated OV-GM capability session.**
 | Constant Standard (CO.0102) | custom toolbar - standard New-Object menu gesture times out |
 | Stream Item (CD.0008) | no :T_data grid renders on open |
 | Production Day Table (CO.1033) | INVARIANT (physical delete, not End=Start) - needs physical-delete capability |
+| Message Group (CO.0236) | OV-GM, wrong-scope dropdown pick. Self-cleaned. Recovered from an unmerged branch. |
+| Facility Class 2 (CO.0021) | OV-GM go_only nav, insert persists but grid never lists it. Self-cleaned. |
+| Planned Well (CO.0247) | OV-GM, insert landed in the WRONG class (OV_WELL not OV_PLANNED_WELL). Self-cleaned via child-first SQL delete. |
+| Price Index (CO.3009) | OV-GM, 2nd of 2 sequential dropdowns silently persisted the wrong value 3x. Self-cleaned x2. |
+| Price Object (CO.3016) | OV-GM, insert persists correctly but pager-walk click times out on a 5-page grid. Self-cleaned x2. |
+| Property (SP.0059) | OV-GM, Save SILENTLY fails - `ec.ec_error()` misses a real visible error banner. Nothing persisted. |
+| Division Order (RC.0058) | NOT OV-GM at all - `resolve_ec_screen.py` shows `CLASS_TYPE=DATA` -> genuinely TV-style (classes BEARER/DIVISION_ORDER/DIVISION_ORDER_SHARE), the backlog doc's Group C2 classification was wrong for this screen. Needs the TV generator/pattern, not gen_ovgm.py - not attempted this session (out of scope for the OV-GM tooling in hand). No live action taken, nothing to self-clean. |
+| Royalty Contract (RC.0059) | OV-GM, 2 sequential extra dropdowns (Contract Template, Contract Area) - the SECOND (Contract Area) silently persisted the wrong value (`SS2_CA` instead of the intended `CA_AB`/Alberta) - same recurring class of bug as Price Index. SEPARATE finding: `OV_ROYALTY_CONTRACT`'s own IUD trigger explicitly rejects UPDATE ("the ROYALTY_CONTRACT class is a read-only class") - raw SQL End=Start is blocked by design; cleanup required the live UI's own close gesture (found the mis-scoped row under the WRONG Business Unit scope - `SS2 BU`, matching the mis-persisted Contract Area's real owner - not `Royalty Canada` as intended). Self-cleaned via the UI, 0 residual confirmed. No bundle shipped. |
