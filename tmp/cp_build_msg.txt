@@ -1,0 +1,67 @@
+feat(iud): Collection Point (CO.0205) - OV-GM IUD, live 4/4 + PW 8/8 [uses find_populated_scope.py + new nav_values]
+
+One task, one PR. Checklist: tmp/CHECKLIST_collection_point.md. verify_screen.py -> OVERALL PASS, exit 0,
+FIRST live run.
+
+FIRST SCREEN BUILT USING THE NEW TOOL FROM #296. The navigator has a 3-level MANDATORY cascade (Production
+Unit -> Area -> Operator Route). Live scan showed the same trap as Message Group/Service: first-available
+Production Unit's Area/Route children came back empty. Instead of a bespoke live-debugging session (the
+pattern that recurred twice before), ONE command settled it:
+  py scripts/find_populated_scope.py OV_COLLECTION_POINT
+  -> CP_PRODUCTIONUNIT_CODE [('P3_PU',3),('FRMW_PU',1)]; CP_AREA_CODE [('P3_AREA',3),...];
+     CP_OPERATOR_ROUTE_CODE [('P3_ROUTE_1',2),...]
+Verified the 3 codes are genuinely LINKED (not independently-popular-but-unrelated) with a direct query on
+ov_collection_point before trusting them, then resolved to labels: P3 Production Unit / P3 Area /
+Oper Route 1. A read-only probe under that scope confirmed the grid loads with 2 rows and only 3 mandatory
+form fields (Code/Name/Start Date) - the 3 scope dropdowns exist but are optional, bound explicitly anyway
+so the new row stays in the visible scope.
+
+NEW CAPABILITY: nav_values (list), for a multi-level cascade where the existing nav_value (singular, from
+#292) is the wrong shape - it sets only C:1 then clicks GO immediately, which would leave C:2/C:3 unfilled
+on this screen and fail live. nav_values sets one explicit value PER LEVEL, in order (a later level's
+options only render once its parent is selected). Regression proven: an old-style cascade config still
+emits the identical apply_ovgm_navigator/assert-pu body.
+
+GATES (first live run): robocop 0 | hygiene 0 | dryrun 4/4 | LIVE RF suite 4/4 pass 0 fail | Playwright 8/8.
+
+FOUND, BY READING EVERY ARTIFACT BACK, A 4TH DISTINCT SITE OF THE SAME TEXT-CORRECTNESS DEFECT CLASS:
+registry/scorecard/JOURNAL got the right cascade text by coincidence (they read the config's `nav` list),
+but the CHECKLIST footer, SOW, and KB Navigator/Quirks lines all still said "first-available" on a screen
+using PROVEN explicit values - the opposite of true. All made nav_is_explicit-aware. BONUS defect found in
+the same pass, independent of nav_values: kb_oppu= never checked has_op_pu at all (unconditional on family),
+so this screen's KB claimed an Op Production Unit field it does not have. Fixed alongside. Regression
+proven on an old-style config: SOW still says "first-available" unchanged.
+
+THE #293 JOURNAL-OVERWRITE GUARD FIRED, EXACTLY AS DESIGNED: re-packaging after the template fix produced a
+real divergence (old JOURNAL had the pre-fix wording, the regenerated one had the fix) -> guard ABORTED
+with exit 1 and wrote JOURNAL.generated.md rather than silently picking one. Per the guard's own message
+("re-running inside the SAME build -> the generated one is almost certainly right"), verified the generated
+text was correct, then used it. This is the exact protection built after #292 shipped the wrong file
+silently, now proven working on a live build rather than only in a synthetic test.
+
+RE-VERIFIED, not assumed fixed: grep for "first-available" across all 6 artifacts + KB (excluding the
+"PROVEN explicit" phrasing) -> 0 residual. Idempotency: re-run -> registry+=False scorecard+=False.
+verify_screen.py re-run after the template fix -> still OVERALL PASS.
+
+FILES TOUCHED: py/collection_point_iud.py; pageobjects/.../collection_point_page.resource;
+tests/.../collection_point_iud.robot; screens/.../Collection_Point/ (SOW, README, JOURNAL, CHECKLIST,
+VERIFY-REPORT, investigation/, evidence/); ec-ui-knowledge/screens/collection_point.md;
+docs/ec_screen_registry.md; docs/automation-scorecard.md; docs/screen_families.json; tmp/gen_ovgm.py;
+tmp/package_ovgm.py; tmp/cfg_collection_point.json; tmp/resolve_cp_labels.py; tmp/check_cp_cascade_link.py;
+tmp/probe_cp_form.py; tmp/verify_cp.py; tmp/run_pkg_cp.py; tmp/CHECKLIST_collection_point.md;
+tmp/cp_build_msg.txt. No governance file, no shared engine change.
+
+APPEND-ONLY (R23): registry, scorecard and manifest each 1 insertion, 0 deletions.
+
+SELF-CLEAN: suite self-cleans in-suite; gate 15 (self-clean) passed inside verify_screen's live run.
+
+RULES APPLIED: R9 (this body), R16/R20 (hygiene PASS), R23 (pure appends), R32 (generator change
+regression-proven), CLAUDE.md no-guessing (scope proven by DB query + link verification, not assumed),
+step-0 check + find_populated_scope.py run first per the owner's mandate to mechanize this lesson.
+
+STACKING NOTE (stated, not silent): this branch is stacked on the still-OPEN #295 (External Location),
+because Collection Point's nav_values addition sits alongside External Location's nav_mode=go_only in the
+same generator file. Both are independent capabilities; this PR does not depend on #295's review outcome
+for its own correctness, but its diff will include #295's commits until #295 merges.
+
+BASE: feature/external-location-iud (see stacking note above).

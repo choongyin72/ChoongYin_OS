@@ -48,6 +48,14 @@ nav_value = a.get("nav_value", "")      # explicit navigator C:1 value (else fir
 nav_mode = (a.get("nav_mode") or "").strip().lower()
 assert nav_mode in ("", "go_only"), "nav_mode must be '' or 'go_only', got %r" % nav_mode
 assert not (nav_mode == "go_only" and nav_value), "go_only means no navigator value is selected"
+# nav_values: explicit value PER CASCADE LEVEL (C:1, C:2, C:3, ...), for a multi-level cascade where
+# first-available at C:1 breaks a LATER level (Collection Point: PU -> Area -> Operator Route, all 3
+# mandatory; the first-available PU's Area/Route children came back empty and apply_ovgm_navigator's
+# blind first-available-at-every-level would raise "dropdown has no options" exactly like Service's C:3).
+# Distinct from nav_value (single C:1 value + immediate GO, used when only C:1 matters).
+nav_values = a.get("nav_values", [])
+assert not (nav_value and nav_values), "use nav_value (single level) OR nav_values (multi-level), not both"
+assert not (nav_mode == "go_only" and nav_values), "go_only means no navigator values are selected"
 nav_levels = int(a.get("nav_levels", 4))  # cap the cascade; Service's C:3 is present but empty
 start_date = a.get("start_date", "2000-01-01")   # ref dropdowns only offer objects effective at this date
 NAV_DD = "nav:form:G:0:R:1:C:1:dd"      # C:1 = the first cascade level (C:0 is the Date field)
@@ -90,6 +98,16 @@ if nav_mode == "go_only":
                  '            pu = None           # legitimately None on this screen; do NOT assert it')
     t3_nav_block = ("    Apply Navigator\n"
                     "    VAR    ${pu}    ${EMPTY}    # optional filters only - no scope value to capture")
+elif nav_values:
+    # one explicit value per cascade level (C:1, C:2, ...), each set BEFORE the next is queried - a later
+    # level's options only render once its parent is selected, same ordering apply_ovgm_navigator uses.
+    _dd_ids = ["nav:form:G:0:R:1:C:%d:dd" % (i + 1) for i in range(len(nav_values))]
+    nav_block = "\n".join(
+        '            ec.select_dropdown(page, "%s_input", %r)' % (d, v) for d, v in zip(_dd_ids, nav_values)
+    ) + "\n            ec.click_go(page)\n            pu = %r" % nav_values[0]
+    t3_nav_block = "\n".join(
+        '    Select EC Dropdown Option    %s    %s' % (d, v) for d, v in zip(_dd_ids, nav_values)
+    ) + "\n    Apply Navigator\n    VAR    ${pu}    %s" % nav_values[0]
 elif nav_value:
     nav_block = ('            ec.select_dropdown(page, "%s_input", %r)\n'
                  '            ec.click_go(page)\n'
@@ -108,6 +126,10 @@ else:
 sow_gated = ", NO mandatory nav scope (GO only)" if nav_mode == "go_only" else ", navigator-GATED"
 sow_nav_line = (("GO only (navigator fields are optional filters, no mandatory scope); fields BY LABEL.")
                 if nav_mode == "go_only" else
+                "Navigator cascade (PROVEN explicit values, not first-available) + GO; fields BY LABEL%s."
+                % (" + extra dropdowns + Op Production Unit first-available" if has_op_pu else
+                   " + extra dropdowns" if extra_dd_pairs else "")
+                if nav_values else
                 "Navigator cascade first-available + GO; fields BY LABEL%s." % (
                     " + extra dropdowns + Op Production Unit first-available" if has_op_pu else
                     " + extra dropdowns" if extra_dd_pairs else ""))
@@ -118,10 +140,20 @@ sow_nav_line = (("GO only (navigator fields are optional filters, no mandatory s
 # robot suite header + keyword doc that all still claimed "navigator-GATED (cascade + GO)" / "fill the
 # navigator cascade" / "Extra dropdowns + Op Production Unit first-available" - none of which is true when
 # nav_mode="go_only". Fixed at the same root as sow_gated/sow_nav_line, not patched per-artifact.
+#
+# The SAME gap recurred independently for nav_values (Collection Point, #297): the driver docstring still
+# said "Built on the gated-navigator capability (apply_ovgm_navigator)" and the T3 said "capability Apply
+# OV-GM Navigator First Available" - both factually wrong, since a nav_values screen's %(nav_block)s calls
+# ec.select_dropdown() per level directly and never calls apply_ovgm_navigator at all. Handled here as a
+# third branch, same root fix.
 driver_doc_body = (
     "OV-GM (grid manageObject:form:T_data), GO only - the navigator has no mandatory scope (fields are\n"
     "optional filters); the grid loads on GO alone. Fields by label."
     if nav_mode == "go_only" else
+    "OV-GM (grid manageObject:form:T_data) = navigator-GATED (cascade + GO before the grid loads). The\n"
+    "cascade uses PROVEN explicit values (scripts/find_populated_scope.py), not apply_ovgm_navigator's\n"
+    "first-available - first-available broke a later level on this screen. Fields by label."
+    if nav_values else
     "OV-GM (grid manageObject:form:T_data) = navigator-GATED (cascade + GO before the grid loads). Built on the\n"
     "gated-navigator capability (apply_ovgm_navigator). Fields by label. Extra dropdowns + Op Production Unit set\n"
     "first-available (probe per screen - the nav PU is not necessarily a valid Op PU option)."
@@ -131,6 +163,10 @@ t3_settings_doc = (
     "...                 no mandatory scope (fields are optional filters). Fields resolved BY LABEL (no\n"
     "...                 hardcoded rows)."
     if nav_mode == "go_only" else
+    "...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator cascade\n"
+    "...                 + GO. Cascade values are PROVEN explicit values (scripts/find_populated_scope.py),\n"
+    "...                 not first-available. Fields resolved BY LABEL (no hardcoded rows)."
+    if nav_values else
     "...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator\n"
     "...                 cascade + GO (capability Apply OV-GM Navigator First Available). Fields resolved\n"
     "...                 BY LABEL (no hardcoded rows). Extra dropdowns + Op Production Unit first-available."
@@ -139,18 +175,27 @@ t3_open_kw_doc = (
     "    [Documentation]    Suite Setup: launch, login, navigate, GO alone (no mandatory nav scope on\n"
     "    ...    this screen); RETURN the top-parent PU, which is legitimately ${EMPTY} here."
     if nav_mode == "go_only" else
+    "    [Documentation]    Suite Setup: launch, login, navigate, fill the navigator cascade with PROVEN\n"
+    "    ...    explicit values (not first-available) + GO, RETURN the top-parent PU."
+    if nav_values else
     "    [Documentation]    Suite Setup: launch, login, navigate, fill the OV-GM navigator cascade\n"
     "    ...    first-available + GO, RETURN the top-parent PU (grid empty until then)."
 )
 suite_settings_doc = (
     "...                 OV-GM (manage-object, groupmodel): grid loads on GO alone (no mandatory nav scope)."
     if nav_mode == "go_only" else
+    "...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade (PROVEN\n"
+    "...                 explicit values, not first-available)."
+    if nav_values else
     "...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade."
 )
 suite_setup_kw_doc = (
     "    [Documentation]    Generate a unique test code/name, open the screen (GO alone, no mandatory nav"
     "\n    ...    scope on this screen)."
     if nav_mode == "go_only" else
+    "    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade"
+    "\n    ...    with PROVEN explicit values (not first-available)."
+    if nav_values else
     "    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade."
 )
 tc02_doc = (

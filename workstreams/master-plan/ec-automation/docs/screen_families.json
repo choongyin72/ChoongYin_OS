@@ -5,6 +5,7 @@
   "Chemical Injection Point": "ovgm",
   "Chemical Stream": "ovgm",
   "Chemical Tank": "ovgm",
+  "Collection Point": "ovgm",
   "Contract Area Setup": "custom",
   "Create Calculation": "tv",
   "Driver": "plain",
