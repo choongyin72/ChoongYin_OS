@@ -62,7 +62,7 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 | CO.3009 | Price Index | OV_PRICE_INDEX | Assets > Sales Objects | [ ] |
 | CO.3016 | Price Object | OV_PRICE_OBJECT | Assets > Sales Objects | [ ] |
 | CO.3024 | Price Rate | OV_PRICE_RATE | Assets > Sales Objects | [ ] |
-| SP.0059 | Property | OV_PROPERTY | Assets > Data Mapping Objects | [ ] |
+| SP.0059 | Property | OV_PROPERTY | Assets > Data Mapping Objects | (P) silent Save failure + ec_error() gap - see Parked table |
 
 ## C2. Business Unit + Contract Area  (5)
 | BF | Screen | OV_ view | Folder | Status |
@@ -154,3 +154,9 @@ R&D, not a quick build. **PARKED pending a dedicated OV-GM capability session.**
 | Constant Standard (CO.0102) | custom toolbar - standard New-Object menu gesture times out |
 | Stream Item (CD.0008) | no :T_data grid renders on open |
 | Production Day Table (CO.1033) | INVARIANT (physical delete, not End=Start) - needs physical-delete capability |
+| Message Group (CO.0236) (2026-07-31, recovered 2026-08-01) | OV-GM, wrong-scope dropdown pick. Self-cleaned. Recovered from an unmerged branch. |
+| Facility Class 2 (CO.0021) (2026-08-01) | OV-GM go_only nav, insert persists but grid never lists it. Self-cleaned, 0 residual. |
+| Planned Well (CO.0247) (2026-08-01) | OV-GM, insert landed in the WRONG class. Self-cleaned via child-first SQL delete. |
+| Price Index (CO.3009) (2026-08-02) | OV-GM, 2nd of 2 sequential dropdowns silently persisted the wrong value 3x. Self-cleaned x2. |
+| Price Object (CO.3016) (2026-08-02) | OV-GM, insert persists correctly but pager-walk click times out on a 5-page grid. Self-cleaned x2. |
+| Property (SP.0059) (2026-08-02) | OV-GM, single (optional) BU nav; mandatory fields = Code/Name/Start Date only. Insert-Save SILENTLY FAILS - `ec.ec_error(page)` returns EMPTY, yet a real, visible red error banner ("Object not found. The referenced object could not be found.") is shown on screen (confirmed via screenshot). Reproduced 3 times with different codes/names, always the identical banner. No mandatory-yellow field was empty at Save time (checked live). Root cause of the underlying "referenced object" not isolated (possibly the auto-defaulted "Use as Property" checkbox or the auto-bound Business Unit Name field triggering a server-side reference check that fails for a brand-new object) - stopped at the 3rd attempt. **Separately and more importantly**: this exposes a real gap in the shared `ec_error()` detector - it does not recognize this screen's error-banner markup, so a driver relying on it alone would report a FALSE PASS on a Save that never persisted. Nothing ever persisted (0 rows at any point) - no residual, nothing to self-clean. No bundle shipped. |
