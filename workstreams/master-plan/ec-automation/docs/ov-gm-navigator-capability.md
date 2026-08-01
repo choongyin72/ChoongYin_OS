@@ -49,3 +49,37 @@ Nav shape per screen in `tmp/ov_gm_55_nav_config.json`. Exclude groupmodel-off s
 > Consequence: the other OV-GM screens' parent-dd handling is NOT implicated by this evidence. Still worth
 > doing when convenient: assert the parent-dd value in the DB, not just CODE/NAME, so an EC-side override
 > can never pass silently. Message Group stays parked - see tmp/OV_SWEEP_PARKED.md.
+
+## ⚠ ENGINE GOTCHA - `select_dropdown` SILENTLY falls back to the first option (found 2026-08-01, Service CO.2103)
+
+`py/ec_object_iud.py select_dropdown()` substitutes the FIRST available option when the requested label is
+not present in the panel, with **no error and no log line**. Verbatim from the source:
+
+```
+# value None/''/'__FIRST__' => take the first available option; also used as fallback when a
+# requested value isn't in the panel (cascade child: its options only appear once the parent
+# dropdown - filled earlier in form order - is selected). So cascade + stale values both resolve.
+...
+elif opt is not None:
+    opt = None  # requested value absent -> retry accepting ANY (first) option
+```
+
+The fallback is DELIBERATE and useful for cascade children. The danger is that a wrong value looks exactly
+like a right one:
+
+- **Service (CO.2103):** asked for contract `TS3 GTA Shipper A` + transport system `TS3 Transport System`;
+  the row saved `TRANS_INV_BLEND` / `TS5_TS` with a green insert. Root cause was date-effectivity - those
+  objects start 2011-01-01 and the form's start date was 2003-01-01, so the labels were genuinely absent
+  from the panels (49 Contract options, none of them TS3).
+- **Message Group (CO.0236):** asked for `Administration` (code ADM), saved `Allocation` (code ALLOCATION).
+
+**Why nobody noticed for so long: no suite asserts dropdown values - only CODE and NAME.** A substituted
+reference value therefore passes every existing gate.
+
+**What to do on any screen where a dropdown value MATTERS (scope/parent/reference):**
+1. assert the stored value in the DB, not just CODE/NAME - resolving UI LABEL -> DB CODE first
+   (`'Production Unit'` is stored as `EEAL`; comparing label to code produces a false failure).
+2. check date-effectivity before blaming the engine: reference dropdowns only offer objects effective at the
+   form's **Start Date** (`TEST_START_DATE_REFDD` = 2003-01-01 is NOT late enough for 2011+ objects).
+3. if a value must be exact, verify it is present in the panel (read-only probe) rather than trusting that
+   `select_dropdown` will report a miss - it will not.
