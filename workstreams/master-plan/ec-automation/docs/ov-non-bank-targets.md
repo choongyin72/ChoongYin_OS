@@ -61,7 +61,7 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 | CO.2103 | Service | OV_SERVICE | Assets > Service Objects | [ ] |
 | CO.3009 | Price Index | OV_PRICE_INDEX | Assets > Sales Objects | [ ] |
 | CO.3016 | Price Object | OV_PRICE_OBJECT | Assets > Sales Objects | [ ] |
-| CO.3024 | Price Rate | OV_PRICE_RATE | Assets > Sales Objects | [ ] |
+| CO.3024 | Price Rate | OV_PRICE_RATE | Assets > Sales Objects | [x] OV-GM, live 4/4, BU=SS2 BU (parent_dd worked here) |
 | SP.0059 | Property | OV_PROPERTY | Assets > Data Mapping Objects | [ ] |
 
 ## C2. Business Unit + Contract Area  (5)
