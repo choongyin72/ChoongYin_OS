@@ -311,9 +311,21 @@ if not _jr.exists():
 elif _jr.read_text(encoding="utf-8", errors="replace").strip() == journal.strip():
     pass                                    # identical - nothing to do
 else:
+    # FAIL LOUDLY on divergence (fixed 2026-08-01 after the #292 merge). The guard used to write the
+    # sibling and carry on, which shipped the WRONG file on Service: for a FIRST-TIME build there is no
+    # independently-written content to protect, so "keep yours" preserved the OLDER JOURNAL (with a stale
+    # check-existing result) while the corrected one sat unnoticed in JOURNAL.generated.md. The reviewer
+    # had to consolidate them by hand. Divergence now stops the packager so a human decides which is right,
+    # instead of the default silently choosing.
     (bundle / "JOURNAL.generated.md").write_text(journal, encoding="utf-8")
-    print("WARNING: existing JOURNAL.md differs from the generated one - KEPT yours, wrote "
-          "JOURNAL.generated.md beside it. Merge by hand; do not delete history.")
+    sys.exit("ABORT: JOURNAL.md differs from what the generator would write.\n"
+             "   kept:      %s\n"
+             "   generated: %s\n"
+             "   DECIDE WHICH IS CORRECT, then delete the other and re-run. Do not ship both.\n"
+             "   - re-running inside the SAME build? the generated one is almost certainly the right one\n"
+             "     (this is exactly how Service shipped a stale check-existing result - see #292).\n"
+             "   - existing file holds hand-written history (Truck/Pilot)? merge the generated bits INTO it."
+             % ((bundle / "JOURNAL.md"), (bundle / "JOURNAL.generated.md")))
 
 # ---- #20 KB map -----------------------------------------------------------------
 kb = ROOT / "ec-ui-knowledge" / "screens" / ("%s.md" % slug)
