@@ -11,6 +11,13 @@ session start. It evolves only via PR (append-only edits — see §Shared-file d
   findings, extracts actionable rules into `docs/lessons-learned.md` (via its own `review/` PR).
 - **Human** (Choong-Yin): reviews; the merge is performed by the reviewer session / human, never the worker.
 
+> **SCHEDULE UPDATE (2026-08-01): the automated 06:00/14:00 AWST scheduled reviewer trigger has been
+> DISABLED by the owner.** The "daily 06:00 AWST" phrasing above is now historical, not current practice —
+> do not wait for a timer that will not fire. The Reviewer role now runs **on-demand, interactively**: the
+> owner asks directly in chat ("review raised PRs and merge", "any raised PRs?") and the Reviewer session
+> checks GitHub state and acts immediately in that same turn. See "Reviewer per-PR checklist" below for
+> what to run through on each such request.
+
 ## Branch & PR conventions
 - **Branch naming:** `feature/<short-task-name>` (worker), `review/feedback-YYYY-MM-DD` (reviewer).
 - **Base:** branch INDEPENDENT tasks off `master`; branch DEPENDENT tasks off the parent branch.
@@ -169,3 +176,48 @@ caught real defects across ~14 PRs in one session and are not otherwise written 
    not a comment on a closed PR.** The Worker's own session-start protocol (`CLAUDE.md` step 6-7) only scans
    *open* Issues and *open* PRs — a comment left on an already-merged/closed PR will not surface again on its
    own. File an Issue when the feedback isn't tied to a PR that's still open.
+
+## Reviewer per-PR checklist (added 2026-08-01 — run through this EVERY review pass, not just at first onboarding)
+
+### A. Start of the review pass
+- [ ] `git fetch origin master` — confirm remote access works before relying on it.
+- [ ] List open PRs in `choongyin72/ChoongYin_OS` — this is the actual work queue (no schedule fires it).
+- [ ] List open Issues — check for anything left for the Worker (or for you) not yet closed.
+- [ ] If it's been a while since this session last read them: skim `docs/lessons-learned.md`'s changelog
+      table for any new R# since you last checked, and `docs/session-memory.md` for new owner decisions.
+- [ ] Note any PR whose title/body says `depends on #N` or is stacked on another feature branch —
+      reviewing/merging order matters for these (item 6 in "Reviewer merge discipline" above).
+
+### B. Per PR — verify, don't trust
+- [ ] Read the PR body once for context, then treat every claim in it as unverified.
+- [ ] Get the true diff: if the PR could be stacked, `git merge-base origin/master <branch>` first, then
+      diff from that fork point — NOT blindly against current `origin/master` (item 2 above).
+- [ ] Read the actual changed file contents for anything substantive (registry/scorecard/KB/JOURNAL rows,
+      generator/template code, driver/T3/suite bundles) — a file list or diff stat is not enough.
+- [ ] EC Object IUD PRs: spot-check the real 21-item `docs/IUD-DELIVERABLE-CHECKLIST.md` substance behind
+      each tick, not just that the box is checked (R26).
+- [ ] If a text-correctness fix touches CHECKLIST/SOW/KB/registry/scorecard/JOURNAL, also grep the actual
+      GENERATED driver `.py` / T3 `.resource` / suite `.robot` files for the same stale claim (R32) —
+      this recurred 3 PRs in a row before being caught.
+- [ ] If a generator/template script changed, regenerate an UNRELATED already-shipped screen's config
+      through both the old and new version and diff byte-for-byte before trusting "no regression."
+- [ ] `CLAUDE.md` or `ec-ui-knowledge/EC_BUG_TRACE_SOP.md` touched? STOP — this needs an explicit owner
+      decision (`AskUserQuestion`) before merging that part, regardless of how reasonable it looks (item 8).
+- [ ] Decide fix-directly (mechanical/reconstructable, disclosed) vs. return-to-Worker (anything genuinely
+      new/investigative) per item 7 above.
+
+### C. Merge
+- [ ] Stacked, or any hand-fix needed → worktree merge (`git worktree add --detach`, real
+      `git merge --no-ff --no-commit`, resolve by hand, `git commit`, `git push origin HEAD:refs/heads/master`).
+      Never a bare `push origin master` from a detached worktree (R24).
+- [ ] Full sweep before pushing: conflict-marker grep, `ast.parse` on every touched `.py`, non-ASCII scan on
+      touched doc rows, and (if it exists) the shared vocab/hygiene validator across the WHOLE manifest.
+- [ ] After push: confirm the PR flipped to `merged: true`. If its `base` was another feature branch and it
+      didn't, verify `git merge-base --is-ancestor <branch> origin/master`, try retargeting `base: master`
+      (a "no new commits" error confirms zero diff remains), then close it manually with a comment (item 6).
+
+### D. After merge
+- [ ] Post a PR comment stating exactly what was verified and any fix folded in — never let a hand-fix look
+      indistinguishable from what the Worker shipped.
+- [ ] A recurring pattern worth remembering → append a dated entry + next R# to `docs/lessons-learned.md`.
+- [ ] Feedback for the Worker with no PR left open to carry it → file a GitHub Issue, not a stray comment.
