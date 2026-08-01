@@ -221,3 +221,44 @@ caught real defects across ~14 PRs in one session and are not otherwise written 
       indistinguishable from what the Worker shipped.
 - [ ] A recurring pattern worth remembering → append a dated entry + next R# to `docs/lessons-learned.md`.
 - [ ] Feedback for the Worker with no PR left open to carry it → file a GitHub Issue, not a stray comment.
+
+## Reviewer note — 2026-08-02 batch, docs-only PRs #307/#309/#310/#311/#313/#315
+
+These 6 PRs are **docs-only** (`ov-non-bank-targets.md` park-record additions, zero code diff) from a
+single-session OV-GM backlog sweep (8 screens parked, 6 screens shipped separately in #304/#306/#308/
+#312/#314/#316). Per-PR reviewer instructions were already posted as PR comments at merge time (2026-08-01)
+— this entry is the durable copy so a fresh Reviewer session cold-reading this doc doesn't have to dig
+through GitHub comments to find them, per the "don't let a finding live only on an unmerged branch"
+lesson this same sweep already re-learned once (Message Group's park record was lost this way and had to
+be recovered from a stale branch — see #307's own commit body).
+
+**Merge bar for all 6** (no regression risk, no code changed): confirm no shared-engine file
+(`ec_object_iud.py` / `manage_object.resource` / `common.resource`) was touched, spot-check one DB
+self-clean claim per PR (`SELECT COUNT(*) FROM <view> WHERE CODE LIKE 'AUTOTEST%'` = 0), then merge.
+
+**Follow-ups worth tracking past the merge (none should block it):**
+- **#307** (Message Group + Facility Class 2) — Message Group's suspected shared-engine dropdown bug
+  (`select_dropdown`) was never confirmed systemic; Area's later `parent_dd` test passed 7/7 on the same
+  mechanism. File an issue to formally close or confirm, rather than leaving it a loose thread across the
+  22 OV-GM screens that use the same call.
+- **#309** (Planned Well) — insert landed in the WRONG EC class (`WELL` not `PLANNED_WELL`, same base
+  tables, discriminated only by `CLASS_NAME`) via the toolbar's "New Object" gesture. Root cause
+  (menu-item disambiguation vs a scope-binding gap) not isolated. Worth checking whether other screens
+  with an ambiguous "New Object" submenu share it.
+- **#310** (Price Index) + **#315** (Royalty Contract) — both hit the SAME symptom: the 2nd of 2
+  sequential dropdowns in the New-Object form silently persists the wrong value. NOT universal — Price
+  Rate (#312) and Contract (#316) used the identical shape (2 sequential dropdowns) and worked correctly.
+  Worth a dedicated repro session across all 4 screens (2 broken, 2 working) to isolate the actual
+  trigger condition instead of it staying "sometimes happens."
+- **#311** (Price Object) — real gap in the shared `row_exists`/`wait_for_row` pager-walk helper: the
+  "next" button click times out (30s) on a grid scope large enough to paginate (5 pages here). Every
+  OV-GM screen shipped before this one had a small enough scope to stay on page 1. **Recommend a tracked
+  issue** — a fix touches the shared engine and needs the backup+canary+random-sibling protocol, not a
+  quick patch.
+- **#313** (Property) — **highest priority of the six.** `ec.ec_error(page)` returned EMPTY after a Save
+  that silently failed, while a real, visible red error banner ("Object not found. The referenced object
+  could not be found.") was on screen (screenshot in the PR). Every already-shipped OV/OV-GM driver's
+  `insert_ui: PASS` step relies on this exact function. **Recommend spot-checking 2-3 already-merged
+  screens'** evidence screenshots against their claimed PASS/DB-verified status — if `ec_error()` has
+  blind spots on other screens' banner markup too, some already-"shipped" screens could carry the same
+  undetected gap.
