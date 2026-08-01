@@ -1,0 +1,8 @@
+{
+ "screen": "Contract Inventory",
+ "view": "OV_CONTRACT_INVENTORY",
+ "verify_overall": "PASS",
+ "rf": "4/4 pass",
+ "pw": "Playwright 8/8",
+ "date": "2026-08-02"
+}

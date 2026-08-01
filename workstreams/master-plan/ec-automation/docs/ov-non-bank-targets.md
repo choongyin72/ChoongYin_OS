@@ -69,7 +69,7 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 |---|---|---|---|---|
 | CO.2016 | Contract | OV_CONTRACT | Assets > Contract Objects | [ ] |
 | CO.2044 | Contract Capacity | OV_CONTRACT_CAPACITY | Assets > Contract Objects | [ ] |
-| CO.2054 | Contract Inventory | OV_CONTRACT_INVENTORY | Assets > Contract Objects | [ ] |
+| CO.2054 | Contract Inventory | OV_CONTRACT_INVENTORY | Assets > Contract Objects | [x] OV-GM, live 4/4, PROVEN chain TS5 BU->TS5 Contract Area->TS5 Shipper C |
 | RC.0058 | Division Order | OV_DIVISION_ORDER | Royalty > Royalty USA | [ ] |
 | RC.0059 | Royalty Contract | OV_ROYALTY_CONTRACT | Royalty > Royalty Canada | [ ] |
 
