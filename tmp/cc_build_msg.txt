@@ -1,0 +1,77 @@
+feat(iud): Contract Capacity (CO.2044) - OV-GM IUD, live 4/4 + PW 8/8 [TABLE-class OV-GM shape + 2 generator gaps closed]
+
+One task, one PR. Checklist: tmp/CHECKLIST_contract_capacity.md. verify_screen.py -> OVERALL PASS, exit 0,
+FIRST live run.
+
+RECON CAUGHT A REAL CLASSIFICATION CONTRADICTION BEFORE BUILDING: this class resolves to CLASS_TYPE=TABLE
+(3 distinct classes share the label), which by the scanner's OV/TV binary should be a TV inline-edit grid -
+but no blank insert row was ever found. Probed live instead of trusting the assumption: the Insert toolbar
+produces "New Object"/"New Version" menu items (OV-style) and a full 42-field objectForm renders. This
+screen is genuinely OV-GM shaped despite its TABLE classification - the OV/TV binary the scanner assumes
+does not hold universally, and needed a live probe to override it rather than a guess either way.
+
+SCOPE TRAP, caught with find_populated_scope.py (#296) + a linkage check, same pattern as Collection Point:
+CONTRACT_CODE's top individual values are TS3_*, OPERATIONAL_LOCATIONS_CODE's top individual values are
+TS5_* - different prefixes, a red flag. Verified directly: the two most INDIVIDUALLY popular values are NOT
+linked to each other in any real row (TS3_FIRM2 pairs only with TS3 locations; TS5_DP_GP_GSP pairs only with
+TS5 contracts). Using them together would have reproduced the "saved outside the visible scope" failure a
+third time. Chose the genuinely co-occurring pair instead: TS5_FTR_SHB_01 + TS5_DP_GP_GSP.
+
+Two more traps resolved without guessing:
+ - date-effectivity (same class as the Area validation): default start date 2000-01-01 hid the target
+   contract entirely (0 panel options); corrected to 2020-01-01.
+ - Location Name's label: a plausible SUBSTRING GUESS ("TS5 Gas Pool" for code TS5_DP_GP_GSP) was explicitly
+   REJECTED rather than shipped. Resolved exactly instead - read the linked row's OPERATIONAL_LOCATIONS_ID,
+   found the actual backing view (OV_DELIVERY_POINT) by object_id -> "TS5 Domestic Gas Storage".
+ - nav Business Unit resolved via the same 2-hop contract-area chain used for Service: TS5_FTR_SHB_01 ->
+   TS5_CA -> TS5_BU.
+
+GATES (first live run): robocop 0 | hygiene 0 | dryrun 4/4 | LIVE RF suite 4/4 pass 0 fail | Playwright 8/8.
+
+TWO MORE GENERATOR GAPS FOUND, from reading every artifact back rather than trusting the fix already made
+for Collection Point:
+ 1. `nav_is_explicit` (added for Collection Point's `nav_values`, plural) never checked the OLDER `nav_value`
+    (singular, #292) mechanism - Contract Capacity correctly uses the singular form (only 1 nav level), so
+    its CHECKLIST/SOW/KB/JOURNAL still said "first-available" despite an explicit value. Same defect class
+    recurring because two mechanisms exist and only one was covered. Fixed to check both; `sow_nav_line` in
+    gen_ovgm.py had the identical gap, fixed alongside. Regression proven: an old-style config's SOW still
+    says "first-available", unchanged.
+ 2. STRUCTURAL: this branch started from feature/scope-probe-tool (off plain master), which does NOT carry
+    the has_op_pu/nav_is_explicit fixes that exist only on the unmerged Collection Point/External Location
+    branch chain - so the first packaging pass reproduced BOTH already-fixed defects. Resolved by MERGING
+    the branch chains together (not re-fixing a third time in a new place). Flagged for the owner: until
+    #295/#296/#297 merge to master, every new branch risks re-shipping these same fixed defects.
+
+THE #293 JOURNAL-OVERWRITE GUARD FIRED AGAIN, correctly: re-packaging after the nav_is_explicit fix produced
+a real divergence -> ABORTED exit 1, wrote JOURNAL.generated.md. Verified the generated text was accurate,
+then used it - second real-build confirmation of this guard, not a synthetic test.
+
+RE-VERIFIED: grep "first-available" across all 6 artifacts + KB -> 0 false claims (remaining hits are the
+correct "PROVEN explicit values, not first-available" phrasing). Idempotency: re-run -> registry+=False
+scorecard+=False. verify_screen.py re-run after both fixes -> still OVERALL PASS.
+
+FILES TOUCHED: py/contract_capacity_iud.py; pageobjects/.../contract_capacity_page.resource;
+tests/.../contract_capacity_iud.robot; screens/.../Contract_Capacity/ (SOW, README, JOURNAL, CHECKLIST,
+VERIFY-REPORT, investigation/, evidence/); ec-ui-knowledge/screens/contract_capacity.md;
+docs/ec_screen_registry.md (3-way merge, all 3 screens' rows kept); docs/automation-scorecard.md (same);
+docs/screen_families.json; tmp/gen_ovgm.py; tmp/package_ovgm.py; tmp/cfg_contract_capacity.json; recon/probe
+scripts (tmp/probe_cc_*.py, tmp/resolve_cc_*.py, tmp/check_cc_*.py, tmp/find_loc*.py,
+tmp/resolve_oploc_*.py); tmp/verify_cc.py; tmp/run_pkg_cc.py; tmp/CHECKLIST_contract_capacity.md;
+tmp/cc_build_msg.txt. No governance file, no shared engine change.
+
+APPEND-ONLY (R23): registry, scorecard and manifest - 3-way merge conflict resolved by keeping ALL THREE
+screens' independent rows (External Location, Collection Point, Contract Capacity), no content lost.
+
+SELF-CLEAN: suite self-cleans in-suite; gate 15 (self-clean) passed inside verify_screen's live run.
+
+RULES APPLIED: R9 (this body), R16/R20 (hygiene PASS), R23 (pure appends, verified after merge), R32
+(generator changes regression-proven), CLAUDE.md no-guessing (a plausible label guess was explicitly
+rejected and resolved exactly instead; scope proven by DB query + linkage check, not assumed),
+find_populated_scope.py run first per the owner's mandate.
+
+STACKING NOTE (stated, not silent): based on feature/collection-point-iud (which is based on
+feature/external-location-iud), because this branch needed those branches' generator fixes merged in to
+avoid re-shipping already-fixed defects. Independent screen; does not depend on their review outcome for
+its own correctness, but carries their commits until they merge.
+
+BASE: feature/collection-point-iud (see stacking note).

@@ -129,7 +129,7 @@ sow_nav_line = (("GO only (navigator fields are optional filters, no mandatory s
                 "Navigator cascade (PROVEN explicit values, not first-available) + GO; fields BY LABEL%s."
                 % (" + extra dropdowns + Op Production Unit first-available" if has_op_pu else
                    " + extra dropdowns" if extra_dd_pairs else "")
-                if nav_values else
+                if (nav_values or nav_value) else
                 "Navigator cascade first-available + GO; fields BY LABEL%s." % (
                     " + extra dropdowns + Op Production Unit first-available" if has_op_pu else
                     " + extra dropdowns" if extra_dd_pairs else ""))
@@ -145,15 +145,19 @@ sow_nav_line = (("GO only (navigator fields are optional filters, no mandatory s
 # said "Built on the gated-navigator capability (apply_ovgm_navigator)" and the T3 said "capability Apply
 # OV-GM Navigator First Available" - both factually wrong, since a nav_values screen's %(nav_block)s calls
 # ec.select_dropdown() per level directly and never calls apply_ovgm_navigator at all. Handled here as a
-# third branch, same root fix.
+# third branch, same root fix. nav_value (singular, the OLDER #292 mechanism used by Service and Contract
+# Capacity) has the identical property - its nav_block also calls select_dropdown directly, never
+# apply_ovgm_navigator - so it shares the same branch as nav_values below (both mean "explicit value(s),
+# not first-available"; only the cascade depth differs).
 driver_doc_body = (
     "OV-GM (grid manageObject:form:T_data), GO only - the navigator has no mandatory scope (fields are\n"
     "optional filters); the grid loads on GO alone. Fields by label."
     if nav_mode == "go_only" else
     "OV-GM (grid manageObject:form:T_data) = navigator-GATED (cascade + GO before the grid loads). The\n"
-    "cascade uses PROVEN explicit values (scripts/find_populated_scope.py), not apply_ovgm_navigator's\n"
-    "first-available - first-available broke a later level on this screen. Fields by label."
-    if nav_values else
+    "nav value(s) are PROVEN explicit values (scripts/find_populated_scope.py), not\n"
+    "apply_ovgm_navigator's first-available - first-available was not guaranteed to have real data\n"
+    "underneath on this screen. Fields by label."
+    if (nav_values or nav_value) else
     "OV-GM (grid manageObject:form:T_data) = navigator-GATED (cascade + GO before the grid loads). Built on the\n"
     "gated-navigator capability (apply_ovgm_navigator). Fields by label. Extra dropdowns + Op Production Unit set\n"
     "first-available (probe per screen - the nav PU is not necessarily a valid Op PU option)."
@@ -166,7 +170,7 @@ t3_settings_doc = (
     "...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator cascade\n"
     "...                 + GO. Cascade values are PROVEN explicit values (scripts/find_populated_scope.py),\n"
     "...                 not first-available. Fields resolved BY LABEL (no hardcoded rows)."
-    if nav_values else
+    if (nav_values or nav_value) else
     "...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator\n"
     "...                 cascade + GO (capability Apply OV-GM Navigator First Available). Fields resolved\n"
     "...                 BY LABEL (no hardcoded rows). Extra dropdowns + Op Production Unit first-available."
@@ -177,7 +181,7 @@ t3_open_kw_doc = (
     if nav_mode == "go_only" else
     "    [Documentation]    Suite Setup: launch, login, navigate, fill the navigator cascade with PROVEN\n"
     "    ...    explicit values (not first-available) + GO, RETURN the top-parent PU."
-    if nav_values else
+    if (nav_values or nav_value) else
     "    [Documentation]    Suite Setup: launch, login, navigate, fill the OV-GM navigator cascade\n"
     "    ...    first-available + GO, RETURN the top-parent PU (grid empty until then)."
 )
@@ -186,7 +190,7 @@ suite_settings_doc = (
     if nav_mode == "go_only" else
     "...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade (PROVEN\n"
     "...                 explicit values, not first-available)."
-    if nav_values else
+    if (nav_values or nav_value) else
     "...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade."
 )
 suite_setup_kw_doc = (
@@ -195,7 +199,7 @@ suite_setup_kw_doc = (
     if nav_mode == "go_only" else
     "    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade"
     "\n    ...    with PROVEN explicit values (not first-available)."
-    if nav_values else
+    if (nav_values or nav_value) else
     "    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade."
 )
 tc02_doc = (
