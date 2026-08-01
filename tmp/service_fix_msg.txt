@@ -1,0 +1,52 @@
+fix(service+pkg): correct Service's stale cascade claim + close a 4th generated-file layer (recon.py)
+
+Owner: "u complete 1 and 2 items first". Checklist: tmp/CHECKLIST_service_fix.md.
+
+ITEM 1 - Service's CHECKLIST.md on master said "navigator cascade Business Unit first-available + GO;
+Op Production Unit first-available" - both false (Service uses explicit nav_value="TS3 BU1",
+has_op_pu=false). Fixed by regenerating from the current (post-#300) templates, not hand-editing text.
+
+Doing that surfaced a REAL, PREVIOUSLY-UNVERIFIED DEFECT one layer deeper: service_iud.py said "Built on
+the gated-navigator capability (apply_ovgm_navigator)" and service_page.resource said "Apply OV-GM
+Navigator First Available" / "Op Production Unit first-available" - both flatly false, confirmed by reading
+full context (no negation, not a false positive). This is exactly the class #300 fixed for Contract
+Capacity/Collection Point/External Location, just never applied to Service because it predates
+nav_is_explicit. Regenerated driver/T3/suite from the current templates; RE-RAN THE LIVE GATE (not just
+docs) after regenerating code files - verify_screen.py -> OVERALL PASS, robocop 0, hygiene 0, dryrun 4/4,
+LIVE RF 4/4, Playwright 8/8, confirming the docstring fix didn't change runtime behaviour. Repackaged ->
+sweep prints clean; read the whole bundle back -> 0 residual false claims; idempotent re-run
+(registry+=False scorecard+=False). No other screen's bundle touched.
+
+A 4TH GENERATED-FILE LAYER FOUND DURING THIS FIX, outside #300's original scope: investigation/recon.py's
+OWN docstring claims "Reruns the scan used to build this bundle", but the code always called
+apply_ovgm_navigator() unconditionally - confirmed the SAME bug exists on Contract Capacity's already-shipped
+recon.py too, so it's a generic template gap, not Service-specific. For any explicit-value screen, running
+this script would silently apply an UNPROVEN first-available scope instead of the one actually used to
+build it - contradicting the file's own stated purpose. Fixed at the template root (recon_nav_block in
+package_ovgm.py, mirroring gen_ovgm.py's 4-way branch) and added recon.py to the sweep's file list.
+
+MY FIRST NEGATIVE-TEST ATTEMPT FOR recon.py WAS STRUCTURALLY INVALID, caught before trusting the result:
+editing the already-written recon.py and re-running the packager proves nothing, because the packager
+REWRITES recon.py from the template every run, silently overwriting the injection before the sweep could
+see it. Fixed by reverting the TEMPLATE itself to the original unconditional call, confirming the sweep
+catches its OWN regenerated (bad) output at recon.py:19, then restoring the real fix and diff-confirming
+byte-identical. Also unit-tested all 4 branches in isolation (go_only, nav_values, nav_value, unchanged
+default) without needing a full live-gate cycle on a throwaway screen.
+
+ITEM 2 - tmp/negtest_artifact_sweep.py's hardcoded absolute path (reviewer NICE-TO-HAVE on #300), plus the
+2 new negtest scripts written during this fix, all switched to Path(__file__).resolve().parents[1].
+Verified it resolves to the repo root.
+
+FILES TOUCHED: tmp/package_ovgm.py (recon_nav_block + sweep file-list fix), Service's own bundle
+(py/service_iud.py, T3, suite, screens/.../Service/* incl. regenerated evidence from the live re-run),
+ec-ui-knowledge/screens/service.md, tmp/negtest_artifact_sweep.py, tmp/negtest_recon_sweep.py,
+tmp/negtest_recon_template.py, tmp/test_recon_block_logic.py, tmp/CHECKLIST_service_fix.md,
+tmp/service_fix_msg.txt. No governance file, no shared engine, no OTHER screen's bundle.
+
+SELF-CLEAN: n/a for the packager fix; Service's live re-run self-cleans in-suite (gate 15 passed).
+
+RULES APPLIED: R9 (this body), R16/R20 (hygiene PASS), CLAUDE.md no-guessing (the recon.py defect confirmed
+by reading full context before calling it a defect; the negative test's own flaw caught and fixed rather
+than trusted), tool-change pre-flight (guard proven correct by reverting the template, not the output).
+
+BASE: master.

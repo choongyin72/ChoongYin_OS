@@ -2,7 +2,9 @@
 uses nav_value/nav_is_explicit=True) and confirm the sweep catches it. File restored afterwards."""
 import subprocess
 from pathlib import Path
-R = Path(r"C:\Projects\ChoongYin_OS")
+# repo-relative, not hardcoded (reviewer NICE-TO-HAVE on #300: this script is only useful if it works on
+# any checkout location, not just this machine's path).
+R = Path(__file__).resolve().parents[1]
 f = R / "workstreams/master-plan/ec-automation/py/contract_capacity_iud.py"
 orig = f.read_text(encoding="utf-8")
 bad = orig.replace(

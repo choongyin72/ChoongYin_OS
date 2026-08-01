@@ -1,8 +1,9 @@
 """Service - IUD driver (thin). Reuses shared engine ec_object_iud.py + DbVerify.py.
 
-OV-GM (grid manageObject:form:T_data) = navigator-GATED (cascade + GO before the grid loads). Built on the
-gated-navigator capability (apply_ovgm_navigator). Fields by label. Extra dropdowns + Op Production Unit set
-first-available (probe per screen - the nav PU is not necessarily a valid Op PU option).
+OV-GM (grid manageObject:form:T_data) = navigator-GATED (cascade + GO before the grid loads). The
+nav value(s) are PROVEN explicit values (scripts/find_populated_scope.py), not
+apply_ovgm_navigator's first-available - first-available was not guaranteed to have real data
+underneath on this screen. Fields by label.
 Run headed: EC_HEADED=1 py -X utf8 workstreams/master-plan/ec-automation/py/service_iud.py
 """
 import os
