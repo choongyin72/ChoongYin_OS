@@ -1,0 +1,66 @@
+feat(iud): External Location (CO.0227) - OV-GM IUD, live 4/4 + PW 8/8 [new capability: nav_mode go_only]
+
+One task, one PR. Checklist: tmp/CHECKLIST_external_location.md. verify_screen.py -> OVERALL PASS, exit 0.
+
+GATES (first live run): robocop 0 | hygiene 0 | dryrun 4/4 | LIVE RF suite 4/4 pass 0 fail | Playwright 8/8.
+
+RECON CAUGHT TWO THINGS BEFORE ANY LIVE RUN:
+ - the navigator has 4 fields (Date/Ext Loc Code/Ext Loc Name/Type), ALL OPTIONAL - not a scope cascade but
+   search filters. The scanner's readiness-poll note ("do NOT record 'no grid' as this screen's shape")
+   correctly stopped me treating the first empty scan as fact; a follow-up GO-with-no-filters probe showed
+   the grid loads with 15 rows. ov-non-bank-targets.md:127 called this OV-GM "needs capability" from the
+   2026-07-27 batch guess - the THIRD screen that doc has been wrong about (after Report Group and
+   Truck/Trailer/Driver). Its Flavour column should never be trusted without a live scan.
+ - the insert-form's real mandatory labels are "External Location Code"/"External Location Name", not the
+   abbreviated "Ext Loc Code/Name" a naive read of the navigator filters would suggest. Probed AFTER GO
+   (the scan never reached the form, since there was no mandatory dropdown to trigger the gated-nav path)
+   and corrected before the live run, not discovered by a failed one.
+
+NEW CAPABILITY: nav_mode="go_only", wired in BOTH the Playwright driver and RF T3. Root cause read from
+source, not guessed: apply_ovgm_navigator looks for C:1..N dropdowns; none exist here, so it returns None,
+and the driver's UNCONDITIONAL assert pu then kills an otherwise-correct run. The assert is removed ONLY
+for this mode - not weakened for the other 30 OV-GM screens. Regression proven: an old-style cascade config
+still emits the identical driver body (diffed byte-for-byte before/after this session's edits).
+
+SIX FILES CARRIED FALSE "cascade" TEXT, FOUND BY READING EVERY ARTIFACT BACK, NOT ONE GREP: the first
+packaging attempt used a FAKE nav:["(filters only, no scope)"] entry just to satisfy an assert, and it
+printed verbatim - "(filters only, no scope) cascade + GO" - into the registry row. Same defect class
+appeared independently in the scorecard, JOURNAL, KB map (both its Navigator line and its Quirks paragraph),
+the CHECKLIST footer, and - found only by checking the OV-GM SOW/README templates too, not just
+package_ovgm.py - the SOW and README both said "navigator-GATED"/"Navigator cascade first-available". Fixed
+at the ROOT: added a real nav_mode key to the packager (no more fake nav entries needed) and made every one
+of those six templates nav_mode-aware. Also removed a leftover false "Built on the item-1 gated-navigator
+capability (PR #244)" claim from the OV-GM README template while I was there - already removed from the
+plain-OV generator earlier this session; now consistent across both.
+
+RE-VERIFIED, not assumed fixed: grep for cascade/navigator-GATED/Op Production Unit first-available/PR #244
+across all 6 artifacts + the KB map -> 0 residual hits. Idempotency: second package run -> registry+=False
+scorecard+=False. verify_screen.py re-run after the template fix -> still OVERALL PASS.
+
+KNOWN FOLLOW-UP, DELIBERATELY NOT DONE HERE (scope discipline): check_row_vocab.py's FORBIDDEN/EXPECTED_ANY
+tables are keyed by family only, so they cannot yet detect "cascade" claimed on a go_only screen -
+screen_families.json only stores the family string, not nav_mode. That needs a manifest schema extension,
+which is a separate, smaller task; this PR's protection is the packager fix at the source plus the hand
+verification above.
+
+FILES TOUCHED: py/external_location_iud.py; pageobjects/.../external_location_page.resource;
+tests/.../external_location_iud.robot; screens/.../External_Location/ (SOW, README, JOURNAL, CHECKLIST,
+VERIFY-REPORT, investigation/, evidence/); ec-ui-knowledge/screens/external_location.md;
+docs/ec_screen_registry.md; docs/automation-scorecard.md; docs/screen_families.json; tmp/gen_ovgm.py;
+tmp/package_ovgm.py; tmp/cfg_external_location.json; tmp/EXTERNAL_LOCATION_CO0227_RECON.md;
+tmp/probe_extloc.py; tmp/probe_extloc_form.py; tmp/run_pkg_extloc.py; tmp/verify_extloc.py;
+tmp/CHECKLIST_external_location.md; tmp/extloc_build_msg.txt. Removed tmp/cfg_regress_node.json (retired -
+it collided with the real Node bundle's screen_folder, which twice this session overwrote Node's shipped
+README; replaced by tmp/cfg_regress_gonode.json, a non-colliding name). No governance file, no shared
+engine change.
+
+APPEND-ONLY (R23): registry, scorecard and manifest each 1 insertion, 0 deletions.
+
+SELF-CLEAN: suite self-cleans in-suite; gate 15 (self-clean) passed inside verify_screen's live RF run.
+
+RULES APPLIED: R9 (this body), R16/R20 (hygiene PASS), R23 (pure appends), R32 (generator change
+regression-proven byte-for-byte), CLAUDE.md no-guessing (labels/scope/family all from executed probes),
+step-0 check run first, narrowest-edit discipline honoured while still fixing the ROOT template rather than
+patching six output files by hand.
+
+BASE: master (this branch also carries the earlier read-only recon commit).

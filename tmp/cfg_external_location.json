@@ -1,0 +1,19 @@
+{
+  "screen": "External Location",
+  "bf": "CO.0227",
+  "view": "OV_EXTERNAL_LOCATION",
+  "base": "EXTERNAL_LOCATION",
+  "folder": "Configuration/Assets/Facility_Objects",
+  "screen_folder": "External_Location",
+  "slug": "external_location",
+  "abbr": "EL",
+  "code_prefix": "AUTOTEST_EL",
+  "code_label": "External Location Code",
+  "name_label": "External Location Name",
+  "nav_mode": "go_only",
+  "extra_dropdowns": [],
+  "has_op_pu": false,
+  "popups": [],
+  "family": "ovgm",
+  "nav": []
+}
