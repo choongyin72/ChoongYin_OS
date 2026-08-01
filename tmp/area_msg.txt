@@ -1,0 +1,41 @@
+fix(docs): record Area (CO.0003) - a BUILT screen that was invisible to the registry and to hygiene
+
+One task, one PR. Checklist: tmp/CHECKLIST_area_rows.md.
+
+THE FINDING: Area has a T3, a suite and a Playwright driver in the repo, but 0 registry rows and no entry in
+screen_families.json. Two consequences, both verified rather than assumed:
+ - the Group A remaining count treated a fully built screen as unbuilt (this is why I flagged doubt about my
+   own "25 remaining" figure before re-verifying it);
+ - screen_families.json is what drives hygiene's doc-row family gate, so Area's rows were never gated at all.
+
+ROWS EARNED, NOT ASSERTED: verify_screen.py --name Area -> OVERALL PASS, exit 0 (robocop 0, hygiene 0,
+dryrun 4/4, LIVE RF suite 4/4 pass 0 fail, Playwright driver 6/6). The row text is taken from that report.
+BF code CO.0003 resolved from DefaultScreenTreeview; OV_AREA has 28 rows.
+
+NARROWEST EDIT (the #287 lesson): appended the 3 missing rows ONLY. I did not run the full packager - Area
+already has its own README/SOW/investigation/evidence, and regenerating would risk overwriting content I did
+not write. No CHECKLIST/JOURNAL/KB was created for Area here; that is a separate decision and is deliberately
+not bundled into this PR.
+
+The registry row states the real constraint for this screen rather than generic wording: Op Production Unit
+must EQUAL the navigator PU or the new row does not appear in the filtered grid. (That is also the behaviour
+that let me validate parent_dd on Area in #290.)
+
+VERIFICATION: check_row_vocab.py "Area" ovgm -> exit 0. R23 append-only - registry, scorecard and manifest
+each 1 insertion, 0 deletions. check_bundle_hygiene.py -> RESULT PASS with Area now inside the gate
+(manifest 30 -> 31 screens).
+
+FILES TOUCHED: workstreams/master-plan/ec-automation/docs/ec_screen_registry.md,
+workstreams/master-plan/ec-automation/docs/screen_families.json, docs/automation-scorecard.md,
+workstreams/master-plan/ec-automation/screens/Configuration/Assets/Basic_Objects/Area/VERIFY-REPORT.md (new,
+from the run), tmp/add_area_rows.py, tmp/bf_area.py, tmp/verify_area.py, tmp/CHECKLIST_area_rows.md,
+tmp/area_msg.txt. No governance file, no shared engine change.
+
+SELF-CLEAN: Area's suite self-cleans in-suite; gate 15 passed, no AUTOTEST residue.
+
+RULES APPLIED: R9 (this body), R16/R20 (hygiene PASS), R23 (pure appends), CLAUDE.md no-guessing (BF from the
+treeview, row text from the executed report), narrowest-edit discipline from the #287 damage.
+
+GROUP A NOW: 13 done + Area = 14 recorded, 2 parked, 24 remaining to build.
+
+BASE: master.
