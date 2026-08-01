@@ -1,0 +1,55 @@
+fix(pkg): sweep the GENERATED driver/T3/suite files for stale cascade text (closes #299)
+
+Owner asked "any mistake u had done?" - answer is the #299 reviewer feedback, acted on here directly.
+Checklist: tmp/CHECKLIST_artifact_sweep.md.
+
+THE GAP: on 3 consecutive PRs (#295, #297, #298), each time a new "explicit value, not first-available"
+capability shipped, I correctly swept CHECKLIST/SOW/KB/registry/scorecard/JOURNAL for the stale claim, but
+the SAME false text survived one layer deeper - the generated driver .py docstring and T3/suite
+[Documentation] strings, which come from gen_ovgm.py's templates, not package_ovgm.py's checks. The
+reviewer already fixed those 6 template sites during review (confirmed: git diff master -- tmp/gen_ovgm.py
+is empty this session). What was missing was a CHECK that keeps them honest going forward -
+package_ovgm.py had a doc-layer check but nothing for the generated code files themselves. Added.
+
+THE CHECK FAILED ITS OWN FIRST TWO RUNS - both caught before shipping, not papered over:
+ 1. flagged the REVIEWER'S OWN CORRECT text on Contract Capacity ("PROVEN explicit values, not
+    first-available") as if it were the bare claim - same negation-blindness class already fixed twice
+    today in check_row_vocab.py. Also wrongly forbade "navigator-GATED" for nav_value/nav_values screens,
+    which ARE still gated (only go_only isn't).
+ 2. after an exact-phrase negation list, Collection Point beat it with a NEW phrasing of the same contrast
+    ("not X's first-available - first-available broke a later level"). Generalised: any line with "not"
+    anywhere alongside the forbidden term is a legitimate contrast - stop enumerating exact phrases.
+ 3. STILL failed - the sentence wraps across SOURCE LINES ("not apply_ovgm_navigator's" on one line,
+    "first-available" recurring on the next), so a per-line check can't see it. Rewritten as a WINDOWED
+    check over the whole file text (80 chars before each match) rather than per physical line.
+
+VERIFIED CLEAN on all 3 real screens using explicit-nav capabilities: Contract Capacity (nav_value),
+Collection Point (nav_values), External Location (nav_mode=go_only) - all print
+"driver/T3/suite artifact sweep: clean".
+
+THE GUARD PROVEN TO STILL CATCH A REAL DEFECT: injected a genuine stale claim into Contract Capacity's
+generated driver ("Built on the gated-navigator capability (apply_ovgm_navigator), first-available.") ->
+ABORT fired, both phrases named with file:line. File restored immediately after
+(tmp/negtest_artifact_sweep.py).
+
+A GENUINE PRE-EXISTING FINDING, DELIBERATELY NOT FIXED HERE: Service's (#292, predates nav_is_explicit)
+CHECKLIST.md on master still says "navigator cascade Business Unit first-available + GO; Op Production
+Unit first-available" - false, since Service uses nav_value="TS3 BU1" (explicit) and has_op_pu=false.
+Whether Service's DEEPER driver/T3/suite layer is also stale is UNVERIFIED - the new sweep hit the
+pre-existing JOURNAL branch-name guard before it could run, and I did not force past it since mutating an
+already-merged screen's bundle is outside this task. Reported, not silently fixed or silently dropped.
+
+SIDE EFFECTS OF TESTING CAUGHT AND REVERTED: repeated re-packaging during testing wrote test-branch
+JOURNAL/evidence noise into the 3 real screens' ALREADY-MERGED bundles. None of that belongs in this PR -
+git restore'd every file except tmp/package_ovgm.py before committing.
+
+FILES TOUCHED: tmp/package_ovgm.py (the fix), tmp/negtest_artifact_sweep.py, tmp/CHECKLIST_artifact_sweep.md,
+tmp/artifact_sweep_msg.txt. No governance file, no shared engine, no screen bundle.
+
+SELF-CLEAN: n/a - tooling only; the negative-test injection was reverted in the same script run.
+
+RULES APPLIED: R9 (this body), CLAUDE.md no-guessing (every claim proven by running the check, including 2
+rounds of self-correction when it produced false positives), tool-change pre-flight (guard proven by making
+it fail on purpose, not just passing on known-good input).
+
+BASE: master.

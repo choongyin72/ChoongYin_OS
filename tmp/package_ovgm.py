@@ -465,6 +465,65 @@ if _chk.exists():
         sys.exit("ABORT: the registry/scorecard rows just written do NOT match family %r - see above. "
                  "Fix the row wording (or the family) before shipping." % family)
 
+# ---- Issue #299 (reviewer feedback on #295/#297/#298): the doc-layer sweep above (CHECKLIST/SOW/KB/
+# registry/scorecard/JOURNAL) has a proven blind spot - the exact same stale "cascade"/"first-available"/
+# "apply_ovgm_navigator" text can survive ONE LAYER DEEPER, in the GENERATED driver .py docstring and the
+# T3 .resource / suite .robot Settings + [Documentation] strings, because those come from gen_ovgm.py's
+# templates, not package_ovgm.py's. This recurred on 3 consecutive PRs (#295 go_only, #297 nav_values,
+# #298 nav_value) before the reviewer caught it. Check the ACTUAL GENERATED FILES for this build, using
+# the same nav_mode/nav_is_explicit facts already computed above - not a doc-layer proxy.
+if nav_mode == "go_only" or nav_is_explicit:
+    # FIRST ATTEMPT AT THIS CHECK FAILED ITS OWN FIRST RUN (found on Contract Capacity): it flagged the
+    # reviewer's own CORRECT text - "PROVEN explicit values, NOT first-available" - as if it were the bare
+    # false claim. Two bugs, same class as check_row_vocab.py's NEGATIONS/META_LINE_MARKERS fixed earlier
+    # today: (1) "navigator-GATED" is only FALSE for go_only screens - nav_value/nav_values screens ARE
+    # still gated, just not first-available, so it must not be forbidden for them; (2) "first-available"/
+    # "apply_ovgm_navigator" must be negation-stripped before matching, or "not first-available" trips as
+    # if it were "first-available".
+    # Two rounds of exact-phrase negation lists both got beaten by a NEW phrasing of the same "not X's
+    # first-available - first-available <explains why it broke>" contrast (Contract Capacity: "was not
+    # guaranteed"; Collection Point: "broke a later level"). Enumerating exact phrases is whack-a-mole -
+    # generalise instead: if the word "not" appears ANYWHERE on the line together with the forbidden term,
+    # treat the whole line as a legitimate contrast/explanation and skip it, rather than trying to prove
+    # the negation is adjacent to that specific occurrence.
+    _stale = {"apply_ovgm_navigator", "first-available"}
+    if nav_mode == "go_only":
+        _stale |= {"navigator-gated", "gated-navigator capability", "cascade + go"}
+    # These templates wrap ONE sentence across multiple SOURCE lines for readability, so "not" can sit on
+    # the line ABOVE the forbidden term (found on Collection Point: "not apply_ovgm_navigator's" is line 4,
+    # "first-available" appears again on line 5 - a per-line check cannot see across that boundary).
+    # Check a CHARACTER WINDOW of the whole file text instead of per physical line.
+    _driver_path = EC / "py" / ("%s_iud.py" % slug)
+    _t3_path = EC / "pageobjects" / folder / ("%s_page.resource" % slug)
+    _suite_path = EC / "tests" / folder / ("%s_iud.robot" % slug)
+    _hits = []
+    for _f in (_driver_path, _t3_path, _suite_path):
+        if not _f.is_file():
+            continue
+        _txt = _f.read_text(encoding="utf-8", errors="replace")
+        _low_txt = _txt.lower()
+        for _s in _stale:
+            _pos = 0
+            while True:
+                _i = _low_txt.find(_s, _pos)
+                if _i == -1:
+                    break
+                _window = _low_txt[max(0, _i - 80):_i + len(_s) + 20]
+                if "not" not in _window:
+                    _n = _txt.count("\n", 0, _i) + 1
+                    _line_start = _txt.rfind("\n", 0, _i) + 1
+                    _line_end = _txt.find("\n", _i)
+                    _line_txt = _txt[_line_start:_line_end if _line_end != -1 else None]
+                    _hits.append("%s:%d [%s] %s" % (_f.name, _n, _s, _line_txt.strip()[:100]))
+                _pos = _i + len(_s)
+    if _hits:
+        sys.exit("ABORT: stale cascade/first-available text found in the GENERATED driver/T3/suite files "
+                 "(the layer #299 flagged) - this screen uses nav_mode=%r / nav_is_explicit=%r, so none of "
+                 "these strings should appear (negation-stripped):\n   "
+                 % (nav_mode, nav_is_explicit) + "\n   ".join(_hits))
+    print("driver/T3/suite artifact sweep: clean (checked %s)" %
+          ", ".join(p.name for p in (_driver_path, _t3_path, _suite_path) if p.is_file()))
+
 print("PACKAGED %s: evidence=%d png, CHECKLIST/JOURNAL/investigation/KB written; registry+=%s scorecard+=%s"
       % (screen, copied, reg_added, sc_added))
 print("  bundle:", bundle)
