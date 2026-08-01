@@ -41,7 +41,9 @@ nav = a.get("nav", [])          # issue #283: NO OV-GM default - gated screens m
 # "first-available" - found on Collection Point: CHECKLIST/SOW/KB still said "first-available" even
 # though the config used explicit values via nav_values, because those 3 templates never checked for it
 # (only registry/scorecard/JOURNAL used the `nav` list text, which happened to be right by coincidence).
-nav_is_explicit = bool(a.get("nav_values"))
+# checked BOTH mechanisms - missed nav_value (singular, #292) on the first pass and still said
+# "first-available" on Contract Capacity's CHECKLIST/SOW/KB/JOURNAL despite an explicit nav_value.
+nav_is_explicit = bool(a.get("nav_values")) or bool(a.get("nav_value"))
 # nav_mode "go_only": OV-GM by grid/toolbar shape, but the navigator has NO mandatory scope - fields are
 # optional FILTERS and GO alone loads the grid (External Location CO.0227). Found because the first attempt
 # passed a FAKE nav entry ("(filters only, no scope)") just to satisfy the non-empty-nav assert below, and

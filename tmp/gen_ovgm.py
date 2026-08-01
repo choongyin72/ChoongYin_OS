@@ -129,7 +129,7 @@ sow_nav_line = (("GO only (navigator fields are optional filters, no mandatory s
                 "Navigator cascade (PROVEN explicit values, not first-available) + GO; fields BY LABEL%s."
                 % (" + extra dropdowns + Op Production Unit first-available" if has_op_pu else
                    " + extra dropdowns" if extra_dd_pairs else "")
-                if nav_values else
+                if (nav_values or nav_value) else
                 "Navigator cascade first-available + GO; fields BY LABEL%s." % (
                     " + extra dropdowns + Op Production Unit first-available" if has_op_pu else
                     " + extra dropdowns" if extra_dd_pairs else ""))

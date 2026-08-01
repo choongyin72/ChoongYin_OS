@@ -1,0 +1,23 @@
+{
+  "screen": "Contract Capacity",
+  "bf": "CO.2044",
+  "view": "OV_CONTRACT_CAPACITY",
+  "base": "CONTRACT_CAPACITY",
+  "folder": "Configuration/Assets/Contract_Objects",
+  "screen_folder": "Contract_Capacity",
+  "slug": "contract_capacity",
+  "abbr": "CC",
+  "code_prefix": "AUTOTEST_CC",
+  "code_label": "Contract Capacity Code",
+  "name_label": "Contract Capacity Name",
+  "nav_value": "TS5 BU",
+  "start_date": "2020-01-01",
+  "extra_dropdowns": [
+    ["Contract Name", "TS5 Shipper B Firm"],
+    ["Location Name", "TS5 Domestic Gas Storage"]
+  ],
+  "has_op_pu": false,
+  "popups": [],
+  "family": "ovgm",
+  "nav": ["Business Unit"]
+}

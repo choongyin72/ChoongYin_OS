@@ -1,0 +1,11 @@
+import oracledb
+def a(s): return str(s).encode("ascii","replace").decode("ascii")
+con = oracledb.connect(user="ECKERNEL_EC", password="energy", dsn="localhost:1521/ORCL")
+cur = con.cursor()
+cur.execute("""select table_name from all_tab_columns where column_name='OPERATIONAL_LOCATIONS_ID'""")
+print(a("tables with OPERATIONAL_LOCATIONS_ID: %s" % [r[0] for r in cur.fetchall()]))
+cur.execute("select class_name, class_type from class_cnfg where class_name like '%LOCATION%' and class_name like '%OPERATIONAL%'")
+print(a("class_cnfg matches: %s" % cur.fetchall()))
+cur.execute("select class_name from class_cnfg where class_name like '%OPER%LOC%'")
+print(a("broader: %s" % cur.fetchall()))
+cur.close(); con.close()
