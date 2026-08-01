@@ -67,7 +67,7 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 ## C2. Business Unit + Contract Area  (5)
 | BF | Screen | OV_ view | Folder | Status |
 |---|---|---|---|---|
-| CO.2016 | Contract | OV_CONTRACT | Assets > Contract Objects | [ ] |
+| CO.2016 | Contract | OV_CONTRACT | Assets > Contract Objects | [x] OV-GM, live 4/4, BU=TS5 BU (single-page scope, avoided pager bug) |
 | CO.2044 | Contract Capacity | OV_CONTRACT_CAPACITY | Assets > Contract Objects | [ ] |
 | CO.2054 | Contract Inventory | OV_CONTRACT_INVENTORY | Assets > Contract Objects | [x] OV-GM, live 4/4, PROVEN chain TS5 BU->TS5 Contract Area->TS5 Shipper C |
 | RC.0058 | Division Order | OV_DIVISION_ORDER | Royalty > Royalty USA | [ ] |
