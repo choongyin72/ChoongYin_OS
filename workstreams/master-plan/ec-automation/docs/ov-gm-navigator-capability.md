@@ -83,3 +83,35 @@ reference value therefore passes every existing gate.
    form's **Start Date** (`TEST_START_DATE_REFDD` = 2003-01-01 is NOT late enough for 2011+ objects).
 3. if a value must be exact, verify it is present in the panel (read-only probe) rather than trusting that
    `select_dropdown` will report a miss - it will not.
+
+## MANDATORY pre-build step (2026-08-01): `scripts/find_populated_scope.py`
+
+The scope trap above (Message Group; Service's contract/transport system) recurred a THIRD time on
+Collection Point (first-available Production Unit's cascade children came back empty) before this was
+built as a reusable command instead of a doc paragraph someone has to remember to consult.
+
+**Run this before the first live attempt on any OV-GM screen with a mandatory nav cascade or a
+scope-dependent form dropdown (Contract, Transport System, Production Unit, Operator Route, Functional
+Area, ...):**
+
+```
+py scripts/find_populated_scope.py <OV_VIEW_NAME>
+```
+
+It queries the view's OWN existing rows (ground truth) and reports which scope-code values actually recur,
+so a nav/dropdown value can be chosen from a PROVEN scope instead of "first available". Exit 1 if the view
+has zero rows - that is a genuine unknown (probe the panels directly or ask), not something to skip past.
+
+Proven on all three known failure cases in one command each, immediately:
+ - `OV_MESSAGE_GROUP` -> `FUNCTIONAL_AREA_CODE [('EC', 2), ('MHM13_PROD', 2)]` - never `Administration`,
+   which is exactly why that requested value diverged when the row saved `Allocation` instead.
+ - `OV_SERVICE` -> `CONTRACT_CODE` top value `TS3_FIRM2` (10 rows); `TRANSPORT_SYSTEM_CODE` -> `TS3_SYSTEM`
+   (all 43 rows) - confirms `TS3_GTA_SHP_A`/`TS3_SYSTEM` were legitimate but minority values.
+ - `OV_COLLECTION_POINT` -> `CP_PRODUCTIONUNIT_CODE [('P3_PU', 3), ('FRMW_PU', 1)]` - neither is the
+   alphabetically-first PU the cascade would otherwise try.
+
+Deliberately not fully automated: it reports candidates, it does not pick one or resolve CODE -> display
+LABEL for you (that varies by cross-reference class - one targeted query per label, same as
+`tmp/resolve_service_labels.py`'s pattern). The judgment of which scope to build against stays with
+whoever is building the screen; what changes is that the judgment is now made from a proven fact, in one
+command, before the first live attempt - not after a failed one.

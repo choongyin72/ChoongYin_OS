@@ -1,0 +1,56 @@
+feat(tools): find_populated_scope.py - mechanize the recurring "first-available scope trap" lesson
+
+Owner's diagnosis: the same defect was hit 3 times as 3 separate live-debugging sessions (Message Group,
+Service, Collection Point) and each time I only wrote it up afterward as a doc paragraph - which is prose I
+can skip, not a check that forces me to look. "You should build up your knowledge base so you know how to
+resolve it when you encounter it, and NOT fix it each time" - this is the fix, as a command, not a note.
+
+THE TOOL: scripts/find_populated_scope.py <VIEW> queries the view's OWN existing rows for the most-used
+value of every candidate scope column (Contract, Transport System, Production Unit, Operator Route,
+Functional Area, ...), so a nav/dropdown value is chosen from PROVEN data instead of "first available".
+Lives in scripts/ (a keeper), not tmp/ (scratch), per the working-files convention.
+
+PROVEN AGAINST ALL 3 KNOWN FAILURE CASES, in one command each - this is what each one would have shown
+BEFORE any live attempt, instead of after a failed one:
+ - OV_MESSAGE_GROUP -> FUNCTIONAL_AREA_CODE [('EC',2),('MHM13_PROD',2)] - Administration was NEVER a used
+   value; the tool would have flagged the requested value as unproven before Save, not after.
+ - OV_SERVICE -> CONTRACT_CODE top TS3_FIRM2 (10 of 43); TRANSPORT_SYSTEM_CODE -> TS3_SYSTEM (43/43) -
+   confirms TS3_GTA_SHP_A/TS3_SYSTEM were legitimate but minority values, exactly the class of choice this
+   tool is meant to inform.
+ - OV_COLLECTION_POINT -> CP_PRODUCTIONUNIT_CODE [('P3_PU',3),('FRMW_PU',1)] - neither is the
+   alphabetically-first PU the cascade was about to try when this session was stopped.
+
+GUARDS TESTED BY MAKING THEM FAIL, not assumed to work:
+ - zero-row view (found OV_TEST_OC_EXT by sampling) -> exit 1, explicit "do not default to __FIRST__ and
+   hope" message - this exit code exists so the "nothing to learn from" case cannot be silently skipped.
+ - nonexistent view name -> exit 2 with a clear message.
+ - sanity-checked on 2 ALREADY-SHIPPED screens (OV_NODE, OV_AREA) - ran clean; OV_AREA genuinely has both
+   OP_PRODUCTIONUNIT_CODE and CP_PRODUCTIONUNIT_CODE, verified as real schema (re-ran, read full output)
+   rather than assumed to be a tool bug.
+
+DELIBERATELY NOT OVER-AUTOMATED: it reports candidates: it does not pick a value or resolve CODE -> display
+LABEL for you (that varies by cross-reference class and is safer as one targeted query per case, same
+pattern as tmp/resolve_service_labels.py). It replaces the AD-HOC DB SCRIPT step of recon - which I wrote
+slightly differently 3 times - with ONE reusable, tested command. The judgment of which scope to build
+against stays with the builder.
+
+DOCUMENTED in ov-gm-navigator-capability.md (a working doc under ec-automation/docs/ already edited in
+#293, not a locked governance file) as a MANDATORY pre-build step, with all 3 proof cases quoted verbatim.
+Did NOT touch CLAUDE.md or any *_SOP.md.
+
+FILES TOUCHED: scripts/find_populated_scope.py (new),
+workstreams/master-plan/ec-automation/docs/ov-gm-navigator-capability.md, tmp/find_empty_view.py,
+tmp/find_empty_view2.py, tmp/CHECKLIST_scope_probe_tool.md, tmp/scope_probe_msg.txt.
+
+GATES: check_bundle_hygiene.py -> RESULT PASS.
+
+SELF-CLEAN: n/a - read-only queries only, no DB writes.
+
+NOT DONE HERE, DELIBERATELY: whether to make this step enforced (wired into a pre-flight/skill) rather than
+documented-mandatory. Left as a follow-up so this PR stays scoped to the tool itself.
+
+RULES APPLIED: R9 (this body), R16/R20 (hygiene PASS), CLAUDE.md no-guessing (every claim proven by running
+the tool, not asserted), tool-change pre-flight (guards tested by making them fail; sanity-checked on
+already-shipped screens before trusting the output).
+
+BASE: master.
