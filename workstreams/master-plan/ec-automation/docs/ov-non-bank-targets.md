@@ -60,7 +60,7 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 |---|---|---|---|---|
 | CO.2103 | Service | OV_SERVICE | Assets > Service Objects | [ ] |
 | CO.3009 | Price Index | OV_PRICE_INDEX | Assets > Sales Objects | [ ] |
-| CO.3016 | Price Object | OV_PRICE_OBJECT | Assets > Sales Objects | [ ] |
+| CO.3016 | Price Object | OV_PRICE_OBJECT | Assets > Sales Objects | (P) pager-walk click timeout (5-page grid), self-cleaned - see Parked table |
 | CO.3024 | Price Rate | OV_PRICE_RATE | Assets > Sales Objects | [ ] |
 | SP.0059 | Property | OV_PROPERTY | Assets > Data Mapping Objects | [ ] |
 
@@ -154,3 +154,8 @@ R&D, not a quick build. **PARKED pending a dedicated OV-GM capability session.**
 | Constant Standard (CO.0102) | custom toolbar - standard New-Object menu gesture times out |
 | Stream Item (CD.0008) | no :T_data grid renders on open |
 | Production Day Table (CO.1033) | INVARIANT (physical delete, not End=Start) - needs physical-delete capability |
+| Message Group (CO.0236) (2026-07-31, recovered 2026-08-01) | OV-GM, insert PERSISTS but lands in WRONG SCOPE (Functional Area dropdown pick mismatch). Suspect the shared dropdown-fill engine; stopped at 2-attempt limit. Self-cleaned. Recovered from an unmerged branch. |
+| Facility Class 2 (CO.0021) (2026-08-01) | OV-GM go_only nav, insert persists correctly but grid never lists it regardless of nav date. Self-cleaned, 0 residual. No bundle shipped. |
+| Planned Well (CO.0247) (2026-08-01) | OV-GM, insert landed in the WRONG class (OV_WELL not OV_PLANNED_WELL - same base tables, different CLASS_NAME); all scope columns NULL. Self-cleaned via child-first SQL delete. No bundle shipped. |
+| Price Index (CO.3009) (2026-08-02) | OV-GM, 2 sequential dropdowns (Frequency then Business Unit/parent_dd) - the second silently persisted the WRONG value 3x, including with an explicit wait (rules out a timing race). Self-cleaned x2. No bundle shipped. Flag: Area's "validated 7/7" parent_dd was only ever tested with ONE dropdown, not two in sequence. |
+| Price Object (CO.3016) (2026-08-02) | OV-GM, single BU nav (PROVEN "ECP Norway", real rows list correctly). Insert persists CORRECTLY (no wrong-scope value this time - Business Unit left unset since it's optional here). Blocker is DIFFERENT: the grid under this scope paginates (5 pages, `(1 of 5)`), and the shared `row_exists`/`wait_for_row` pager-walk helper's "next" button CLICK times out (30s) - the locator resolves to a real, visible button but the click itself hangs, not a scope/value mismatch. Confirmed the new row is genuinely absent from page 1 (`row_on_current_page`=False) so it must be on a later page; never got there because the pager click hung. Stopped at the 2-attempt limit rather than debug the shared pagination-walk mechanism without the shared-file protocol. Self-cleaned (DB End=Start) x2, 0 residual. No bundle shipped. Flag: this may be a genuine multi-page-grid gap in the shared engine, worth a dedicated look - most shipped OV-GM screens so far had small enough scopes to stay on page 1. |
