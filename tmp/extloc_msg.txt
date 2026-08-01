@@ -1,0 +1,31 @@
+recon(external-location): CO.0227 read-only recon COMPLETE - build blocked on a missing GO-only nav mode
+
+Banked so nothing is lost. No sandbox writes. Full detail: tmp/EXTERNAL_LOCATION_CO0227_RECON.md.
+
+WHAT IT IS: OV screen, custom URL /com.ec.prod.co.screens/external_location, grid
+manageObject:form:T_data which loads 15 rows on GO with NO filters set. Navigator is per-field and ALL
+OPTIONAL - Date | Ext Loc Code | Ext Loc Name | Type - i.e. search filters, not a scope cascade.
+
+THE DOC WAS WRONG AGAIN: ov-non-bank-targets.md:127 lists this as OV-GM "needs capability" from the
+2026-07-27 batch guess. The grid id is right by coincidence; there is no mandatory nav scope at all, so it is
+not a groupmodel cascade screen. My own UNVERIFIED warning on that row (added after the Report Group
+mislabel) was justified - and the scanner's new loud "do NOT record 'no grid' as this screen's shape" note is
+what stopped me recording an empty shape as fact.
+
+WHY THE BUILD IS NOT IN THIS COMMIT: gen_ovgm.py's driver does `pu = ec.apply_ovgm_navigator(page)` then
+`assert pu`. apply_ovgm_navigator looks for nav:form:G:0:R:1:C:1..N dropdowns; none exist here, so it breaks
+out immediately, clicks GO (the correct gesture) and returns None - and the assert then kills the run. The RF
+T3 has the same shape. A GO-only navigator mode is needed in BOTH layers, plus a check that the family
+vocabulary tables legitimately accept "per-field nav groups + manageObject grid" rather than bending the
+wording to fit. That is a real capability change and it belongs in its own task/PR with its own live gate,
+not rushed onto the end of this one.
+
+ALSO STILL UNKNOWN: the insert-form fields. The scan captured none because it never clicked GO (there was no
+mandatory dropdown to trigger the gated-nav path), so the New-Object form was never opened. They need a scan
+taken AFTER GO.
+
+FILES TOUCHED: tmp/EXTERNAL_LOCATION_CO0227_RECON.md, tmp/probe_extloc.py, tmp/extloc_msg.txt.
+
+SELF-CLEAN: n/a - read-only recon, nothing created on the screen.
+
+BASE: master.

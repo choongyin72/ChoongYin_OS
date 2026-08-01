@@ -1,0 +1,19 @@
+{
+  "screen": "Collection Point",
+  "bf": "CO.0205",
+  "view": "OV_COLLECTION_POINT",
+  "base": "COLLECTION_POINT",
+  "folder": "Configuration/Assets/Facility_Objects",
+  "screen_folder": "Collection_Point",
+  "slug": "collection_point",
+  "abbr": "CP",
+  "code_prefix": "AUTOTEST_CP",
+  "code_label": "Collection Point Code",
+  "name_label": "Collection Point Name",
+  "nav_values": ["P3 Production Unit", "P3 Area", "Oper Route 1"],
+  "extra_dropdowns": [],
+  "has_op_pu": false,
+  "popups": [],
+  "family": "ovgm",
+  "nav": ["Production Unit", "Area", "Operator Route"]
+}
