@@ -51,6 +51,25 @@ nav_is_explicit = bool(a.get("nav_values")) or bool(a.get("nav_value"))
 # false, in three files. nav_mode is the honest way to say this, not a workaround nav value.
 nav_mode = (a.get("nav_mode") or "").strip().lower()
 assert nav_mode in ("", "go_only"), "nav_mode must be '' or 'go_only', got %r" % nav_mode
+# recon.py's OWN docstring claims "Reruns the scan used to build this bundle", but it always called
+# apply_ovgm_navigator() unconditionally - a 4TH generated-file layer with the #299/#300 defect that the
+# driver/T3/suite sweep never covered (found while fixing Service's #300 follow-up). For an explicit-value
+# screen this would silently apply an UNPROVEN first-available scope instead of the one actually used.
+_nav_value_cfg = a.get("nav_value", "")
+_nav_values_cfg = a.get("nav_values", [])
+if nav_mode == "go_only":
+    recon_nav_block = ("    ec.click_go(pg)   # navigator fields are optional filters - GO alone loads\n"
+                       "    pu = None           # legitimately None on this screen")
+elif _nav_values_cfg:
+    _recon_dd_ids = ["nav:form:G:0:R:1:C:%d:dd" % (i + 1) for i in range(len(_nav_values_cfg))]
+    recon_nav_block = "\n".join(
+        '    ec.select_dropdown(pg, "%s_input", %r)' % (d, v) for d, v in zip(_recon_dd_ids, _nav_values_cfg)
+    ) + "\n    ec.click_go(pg)\n    pu = %r" % _nav_values_cfg[0]
+elif _nav_value_cfg:
+    recon_nav_block = ('    ec.select_dropdown(pg, "nav:form:G:0:R:1:C:1:dd_input", %r)\n'
+                       '    ec.click_go(pg)\n    pu = %r' % (_nav_value_cfg, _nav_value_cfg))
+else:
+    recon_nav_block = "    pu = ec.apply_ovgm_navigator(pg)"
 # ---- family is EXPLICIT and REQUIRED (issue #283) ---------------------------------------
 # Inferring family from nav's truthiness silently mis-rendered any plain/custom/TV config that
 # forgot "nav": []. Now the caller must say which family it is, and we cross-check it against nav.
@@ -134,12 +153,12 @@ with sync_playwright() as p:
     pg = br.new_context(ignore_https_errors=True, viewport={"width": 1920, "height": 1080}).new_page()
     ec.login(pg, URL, USER, PW)
     ec.open_object_screen(pg, %(screen)r)
-    pu = ec.apply_ovgm_navigator(pg)
+%(recon_nav_block)s
     print("nav top-parent PU:", pu)
     ec._open_new_object(pg); pg.wait_for_timeout(600)
     print("recon: New-Object form opened (read-only, no Save). View = %(view)s.")
     br.close()
-''' % dict(screen=screen, view=view)
+''' % dict(screen=screen, view=view, recon_nav_block=recon_nav_block)
 inv = bundle / "investigation"; inv.mkdir(parents=True, exist_ok=True)
 (inv / "recon.py").write_text(recon, encoding="utf-8")
 
@@ -496,8 +515,13 @@ if nav_mode == "go_only" or nav_is_explicit:
     _driver_path = EC / "py" / ("%s_iud.py" % slug)
     _t3_path = EC / "pageobjects" / folder / ("%s_page.resource" % slug)
     _suite_path = EC / "tests" / folder / ("%s_iud.robot" % slug)
+    # investigation/recon.py is a 4TH generated-code layer the original #300 sweep never covered - found
+    # while fixing Service's follow-up: its own docstring claims "reruns the scan used to build this
+    # bundle" but the code always called apply_ovgm_navigator() unconditionally (fixed above at the source
+    # via recon_nav_block; this ALSO checks the written file so a future template regression cannot ship).
+    _recon_path = bundle / "investigation" / "recon.py"
     _hits = []
-    for _f in (_driver_path, _t3_path, _suite_path):
+    for _f in (_driver_path, _t3_path, _suite_path, _recon_path):
         if not _f.is_file():
             continue
         _txt = _f.read_text(encoding="utf-8", errors="replace")
@@ -521,8 +545,8 @@ if nav_mode == "go_only" or nav_is_explicit:
                  "(the layer #299 flagged) - this screen uses nav_mode=%r / nav_is_explicit=%r, so none of "
                  "these strings should appear (negation-stripped):\n   "
                  % (nav_mode, nav_is_explicit) + "\n   ".join(_hits))
-    print("driver/T3/suite artifact sweep: clean (checked %s)" %
-          ", ".join(p.name for p in (_driver_path, _t3_path, _suite_path) if p.is_file()))
+    print("driver/T3/suite/recon artifact sweep: clean (checked %s)" %
+          ", ".join(p.name for p in (_driver_path, _t3_path, _suite_path, _recon_path) if p.is_file()))
 
 print("PACKAGED %s: evidence=%d png, CHECKLIST/JOURNAL/investigation/KB written; registry+=%s scorecard+=%s"
       % (screen, copied, reg_added, sc_added))

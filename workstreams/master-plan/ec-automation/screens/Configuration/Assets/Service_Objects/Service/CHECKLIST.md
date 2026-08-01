@@ -28,4 +28,4 @@
 - [x] 21 Reuse clause - N/A (new build); JOURNAL + evidence + KB map + VERIFY-REPORT all produced
 
 _Gates 10-16 RUN by `scripts/verify_screen.py` -> `VERIFY-REPORT.md` (OVERALL PASS); ticks from real exit codes.
-OV-GM specifics: navigator cascade Business Unit first-available + GO; Op Production Unit first-available for grid visibility. + dropdowns Service Template, Service Type, Service Status, Contract=TS3 GTA Shipper A, Transport System=TS3 Transport System_
+OV-GM specifics: navigator cascade Business Unit (PROVEN explicit values, not first-available) + GO. + dropdowns Service Template, Service Type, Service Status, Contract=TS3 GTA Shipper A, Transport System=TS3 Transport System_

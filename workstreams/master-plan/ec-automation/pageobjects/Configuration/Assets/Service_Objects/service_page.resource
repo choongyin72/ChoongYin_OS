@@ -1,9 +1,9 @@
 *** Settings ***
 Documentation       T3 (screen) - Service page object.
 ...                 Screen: Configuration > Assets > Service_Objects > Service.
-...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator
-...                 cascade + GO (capability Apply OV-GM Navigator First Available). Fields resolved
-...                 BY LABEL (no hardcoded rows). Extra dropdowns + Op Production Unit first-available.
+...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator cascade
+...                 + GO. Cascade values are PROVEN explicit values (scripts/find_populated_scope.py),
+...                 not first-available. Fields resolved BY LABEL (no hardcoded rows).
 
 Library             Browser
 Library             ../../../../libraries/DbVerify.py
@@ -21,8 +21,8 @@ ${NAV_DD}            nav:form:G:0:R:1:C:1:dd
 
 *** Keywords ***
 Open Service Screen
-    [Documentation]    Suite Setup: launch, login, navigate, fill the OV-GM navigator cascade
-    ...    first-available + GO, RETURN the top-parent PU (grid empty until then).
+    [Documentation]    Suite Setup: launch, login, navigate, fill the navigator cascade with PROVEN
+    ...    explicit values (not first-available) + GO, RETURN the top-parent PU.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
     Launch EC And Open Screen    ${SCR}    ${user}    ${pass}
     Select EC Dropdown Option    ${NAV_DD}    TS3 BU1

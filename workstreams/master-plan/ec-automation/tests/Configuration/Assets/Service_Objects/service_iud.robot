@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation       EC IUD Test - Service (Configuration > Assets > Service_Objects).
-...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
+...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade (PROVEN
+...                 explicit values, not first-available).
 ...                 DELETE = End Date = Start Date (true delete in OV_SERVICE). NEVER touch existing data;
 ...                 a unique AUTOTEST_SV<timestamp> code is generated per run.
 
@@ -53,7 +54,8 @@ TC04 Delete Service
 
 *** Keywords ***
 Set Up Service Suite
-    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade.
+    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade
+    ...    with PROVEN explicit values (not first-available).
     Prepare IUD Object Data    AUTOTEST_SV    Service
     ${pu}=    Open Service Screen
     VAR    ${GM_PU}    ${pu}    scope=SUITE
