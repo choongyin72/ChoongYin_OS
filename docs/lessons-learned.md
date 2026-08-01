@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v33** (R31-R33 added 2026-08-01)
+> **Current rule version: v34** (R34 added 2026-08-01)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -41,6 +41,7 @@ _Worker sessions: read this before starting any automation work._
 | v31 | R31 | Diff a stacked PR against its real fork point (`git merge-base`), not current `origin/master` — comparing to current master shows an earlier-merged sibling's files as if they were this PR's own change/staleness | 2026-08-01 |
 | v32 | R32 | A text-correctness fix in the CHECKLIST/SOW/KB/registry/scorecard/JOURNAL layer is not complete until the SAME generated driver `.py`/T3 `.resource`/suite `.robot` doc strings are grepped for the identical stale claim — fixing one layer does not imply the layer below is also fixed | 2026-08-01 |
 | v33 | R33 | A PR whose declared `base` is another (now-merged-elsewhere) feature branch will not auto-flip to "merged" on GitHub even once its commits are verified ancestors of `master` — confirm via a retarget-to-`master` attempt (GitHub's "no new commits" error confirms zero diff remains), then close it manually with an explanation rather than leaving it showing a misleading open/unmerged state | 2026-08-01 |
+| v34 | R34 | A "check the generated files for stale claims" guard (R32) is only as complete as its enumerated file list — a 4th generator-output layer (`investigation/recon.py`) carried the identical stale-claim defect and was found only by accident, one PR after the guard shipped; when adding such a guard, first enumerate ALL file types a generator produces for a screen, not just the ones already known to be affected | 2026-08-01 |
 
 ---
 
@@ -2022,3 +2023,30 @@ durable record of what this session did differently from a fresh cold start; rea
 PR review of a new session.
 
 ---
+
+## 2026-08-01 (on-demand) — PRs #300, #302
+
+### Rules (R34, see changelog above)
+
+### Observations (good patterns to keep)
+- **Worker caught its own negative-test flaw before trusting the result** (#302): the first attempt to
+  prove the new `recon.py` sweep worked edited the already-written output file, which the packager
+  silently overwrites from the template every run — invalidating the test. Fixed by reverting the
+  *template*, confirming the sweep caught its own regenerated bad output, then restoring the real fix and
+  diff-confirming byte-identical. This is the same rigor pattern already praised on 2026-07-31 (keeping
+  failed-attempt evidence, narrating "run 1 failed on X" instead of hiding it) — still holding up.
+- **Isolation unit-testing of branch logic without a live gate cycle** (`test_recon_block_logic.py`,
+  #302): all 4 `recon_nav_block` branches verified in isolation via `exec()` on the extracted code block,
+  re-run independently by the reviewer with identical results. Cheaper and more reliable than requiring a
+  full live EC run to prove pure string-generation logic.
+- **A disclosed, deliberately-unfixed finding stayed disclosed, not silently dropped**: #300 flagged
+  Service's stale CHECKLIST text as unverified-deeper and out of scope; #302 (a follow-up PR, not a
+  reviewer chase) picked it up, fixed it, and surfaced a NEW 4th-layer finding (Contract Capacity's
+  `recon.py`) rather than declaring victory once Service was clean — filed as Issue #303.
+
+### Gaps (verified against GitHub API / repo state)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Contract Capacity's (and possibly Collection Point's / External Location's) already-shipped `investigation/recon.py` carries the pre-R34 unconditional `apply_ovgm_navigator()` call despite being explicit-nav screens — filed as Issue #303 | Worker | 🟡 Medium |
+
