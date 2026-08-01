@@ -7,6 +7,7 @@
   "Contract Area Setup": "custom",
   "Create Calculation": "tv",
   "Driver": "plain",
+  "External Location": "ovgm",
   "Facility Class 1": "ovgm",
   "Lifting Account": "ovgm",
   "Loading Arm": "ovgm",

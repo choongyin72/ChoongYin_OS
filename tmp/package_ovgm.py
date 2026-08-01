@@ -37,6 +37,13 @@ extra_dd = a.get("extra_dropdowns", []); popups = a.get("popups", []); has_op_pu
 extra_dd = [d if isinstance(d, str) else ("%s=%s" % (d[0], d[1]) if d[1] != "__FIRST__" else d[0])
             for d in extra_dd]
 nav = a.get("nav", [])          # issue #283: NO OV-GM default - gated screens must opt in
+# nav_mode "go_only": OV-GM by grid/toolbar shape, but the navigator has NO mandatory scope - fields are
+# optional FILTERS and GO alone loads the grid (External Location CO.0227). Found because the first attempt
+# passed a FAKE nav entry ("(filters only, no scope)") just to satisfy the non-empty-nav assert below, and
+# that fake entry then printed as "(filters only, no scope) cascade + GO" in the registry/JOURNAL/KB -
+# false, in three files. nav_mode is the honest way to say this, not a workaround nav value.
+nav_mode = (a.get("nav_mode") or "").strip().lower()
+assert nav_mode in ("", "go_only"), "nav_mode must be '' or 'go_only', got %r" % nav_mode
 # ---- family is EXPLICIT and REQUIRED (issue #283) ---------------------------------------
 # Inferring family from nav's truthiness silently mis-rendered any plain/custom/TV config that
 # forgot "nav": []. Now the caller must say which family it is, and we cross-check it against nav.
@@ -46,8 +53,11 @@ if family not in FAMILIES:
     sys.exit("ABORT: config needs an explicit \"family\" key - one of %s "
              "(issue #283: family used to be guessed from nav's truthiness, which silently "
              "mis-rendered plain-OV screens as OV-GM). Got %r." % (list(FAMILIES), a.get("family")))
-if family in ("ovgm", "gatedpf") and not nav:
-    sys.exit("ABORT: family='ovgm' requires a non-empty \"nav\" list (the navigator cascade levels).")
+if family in ("ovgm", "gatedpf") and not nav and nav_mode != "go_only":
+    sys.exit("ABORT: family='ovgm' requires a non-empty \"nav\" list (the navigator cascade levels), "
+             "or nav_mode='go_only' for a screen with no mandatory scope.")
+if nav_mode == "go_only":
+    nav = []   # go_only screens genuinely have no cascade - do not fake a nav entry to pass the assert
 if family not in ("ovgm", "gatedpf") and nav:
     sys.exit("ABORT: family=%r must NOT pass a \"nav\" cascade (got %r) - only OV-GM screens are "
              "navigator-gated." % (family, nav))
@@ -70,7 +80,8 @@ FAM_DESC = {
     # "Op PU first-available" is only TRUE when the screen actually has that field. Service (has_op_pu
     # false) had the claim appended to its scorecard row anyway - the same wrong-detail class as #265/#278,
     # caught by reading the appended row back.
-    "ovgm":   ("OV-GM gated-navigator; label-driven" +
+    "ovgm":   (("OV-GM, GO only (no mandatory nav scope)" if nav_mode == "go_only"
+               else "OV-GM gated-navigator") + "; label-driven" +
                ("; Op PU first-available" if has_op_pu else "; no Op PU on this screen")),
     "plain":  "plain OV (date-only navigator + GO, no cascade); label-driven",
     "custom": "custom-URL OV (no navigator/GO; toolbar Refresh); label-driven",
@@ -141,8 +152,11 @@ if src.exists():
 FAM_LABEL = {"ovgm": "OV-GM", "plain": "plain OV", "custom": "custom-URL OV", "tv": "TV-style",
              "gatedpf": "gated OV (per-field nav)"}
 FAM_SPEC = {
-    "ovgm": "OV-GM specifics: navigator cascade %s first-available + GO; Op Production Unit "
-            "first-available for grid visibility." % (" -> ".join(nav) if nav else ""),
+    "ovgm": ("OV-GM specifics: GO only (navigator fields are optional filters, no mandatory scope)."
+             if nav_mode == "go_only" else
+             "OV-GM specifics: navigator cascade %s first-available + GO%s." % (
+                 " -> ".join(nav) if nav else "",
+                 "; Op Production Unit first-available for grid visibility" if has_op_pu else "")),
     "plain": "Plain-OV specifics: date-only navigator + GO (no cascade); no Op PU gating.",
     "custom": "Custom-URL specifics: grid loads directly from the screen URL; toolbar Refresh re-queries "
               "(no navigator GO).",
@@ -152,7 +166,9 @@ FAM_SPEC = {
 # grid_txt/nav_txt are LOCAL to the registry-row function, so recompute them here from the same
 # module-level family tables (single source of truth, no second guess at the values).
 _grid = FAM_TEXT[family][1] or a.get("grid", "manage_object_nav_nav:form:T_data")
-nav_txt = ((" -> ".join(nav) + " cascade + GO") if family in ("ovgm", "gatedpf")
+GO_ONLY_NAV_TXT = "GO only (navigator fields are optional filters, no mandatory scope)"
+nav_txt = (GO_ONLY_NAV_TXT if nav_mode == "go_only" else
+           (" -> ".join(nav) + " cascade + GO") if family in ("ovgm", "gatedpf")
            else FAM_NAV_TXT.get(family, "see SOW"))
 FAM_GRID_TXT = {"ovgm": "OV-GM (grid `manageObject:form:T_data`)",
                 "plain": "plain OV (Bank family, grid `%s`)" % _grid,
@@ -332,9 +348,17 @@ kb_txt = '''# Screen: %(screen)s
 %(kb_quirks)s
 ''' % dict(screen=screen, bf=bf, tv=tv, view=view, date=date, nav=" -> ".join(nav),
            code_l=code_l, name_l=name_l, dd_note=dd_note, pp_note=pp_note, slug=slug, folder=folder,
-           rf_txt=rf_txt, pw_txt=pw_txt, fam_type=FAM_KB_TYPE[family], kb_nav=KB_NAV[family],
-           kb_grid=_grid, kb_grid_note=KB_GRID_NOTE[family], kb_oppu=KB_OPPU[family],
-           kb_engine=KB_ENGINE[family], kb_quirks=KB_QUIRKS[family])
+           rf_txt=rf_txt, pw_txt=pw_txt,
+           fam_type=(FAM_KB_TYPE[family] + (" NO mandatory nav scope - fields are optional filters."
+                                            if nav_mode == "go_only" else "")),
+           kb_nav=(GO_ONLY_NAV_TXT if nav_mode == "go_only" else KB_NAV[family]),
+           kb_grid=_grid,
+           kb_grid_note=(" (lists on GO with no filters set)" if nav_mode == "go_only" else KB_GRID_NOTE[family]),
+           kb_oppu=("" if nav_mode == "go_only" else KB_OPPU[family]),
+           kb_engine=(" + `click_go`" if nav_mode == "go_only" else KB_ENGINE[family]),
+           kb_quirks=("- GO-only navigator: fields are optional FILTERS (not a scope cascade) - GO alone "
+                      "loads the grid. Do not assume a mandatory scope exists on every OV-GM-shaped screen."
+                      if nav_mode == "go_only" else KB_QUIRKS[family]))
 kb.write_text(kb_txt, encoding="utf-8")
 
 # ---- #17 registry row (idempotent) ----------------------------------------------
@@ -344,8 +368,9 @@ if ("py/%s_iud.py" % slug) not in reg_txt and ("| %s |" % screen) not in reg_txt
     dd_r = ((" + " + ", ".join(extra_dd)) if extra_dd else "") + ((" + popup " + ", ".join(popups)) if popups else "")
     # family-aware row (issue #278): an EMPTY nav list must NOT render as " cascade + GO",
     # nor claim OV-GM / the manageObject grid - those belong to gated screens only.
-    nav_txt = (" -> ".join(nav) + " cascade + GO") if family == "ovgm" else FAM_NAV_TXT[family]
-    fam_txt = FAM_TEXT[family][0]
+    nav_txt = (GO_ONLY_NAV_TXT if nav_mode == "go_only" else
+               (" -> ".join(nav) + " cascade + GO") if family == "ovgm" else FAM_NAV_TXT[family])
+    fam_txt = FAM_TEXT[family][0] + (" - no mandatory nav scope" if nav_mode == "go_only" else "")
     grid_txt = FAM_TEXT[family][1] or a.get("grid", "manage_object_nav_nav:form:T_data")
     row = ("| %s | %s > %s (%s) | %s verify_screen PASS %s - RF %s + %s, "
            "DB-verified, self-clean; label-driven | `%s` (versioned) | %s | End Date = Start Date "

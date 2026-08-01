@@ -40,6 +40,14 @@ parent_dd = a.get("parent_dd", "")
 assert parent_dd not in [d if isinstance(d, str) else d[0] for d in extra_dd], ("parent_dd %r must not also appear in extra_dropdowns - it would be "
                                    "overwritten with __FIRST__" % parent_dd)
 nav_value = a.get("nav_value", "")      # explicit navigator C:1 value (else first-available)
+# nav_mode "go_only": the navigator has NO mandatory scope - its fields are optional FILTERS and the grid
+# loads on a bare GO (External Location CO.0227: Date | Ext Loc Code | Ext Loc Name | Type, all optional,
+# 15 rows after GO with nothing set). apply_ovgm_navigator returns None there because no C:1..N dropdown
+# exists, and the driver's `assert pu` then kills an otherwise correct run. In this mode a None top-parent
+# is LEGITIMATE, so the assert is omitted rather than weakened for every screen.
+nav_mode = (a.get("nav_mode") or "").strip().lower()
+assert nav_mode in ("", "go_only"), "nav_mode must be '' or 'go_only', got %r" % nav_mode
+assert not (nav_mode == "go_only" and nav_value), "go_only means no navigator value is selected"
 nav_levels = int(a.get("nav_levels", 4))  # cap the cascade; Service's C:3 is present but empty
 start_date = a.get("start_date", "2000-01-01")   # ref dropdowns only offer objects effective at this date
 NAV_DD = "nav:form:G:0:R:1:C:1:dd"      # C:1 = the first cascade level (C:0 is the Date field)
@@ -71,7 +79,18 @@ ins_block = "\n".join(ins)
 # navigator blocks - explicit value (Area's proven pattern: Select option -> Apply Navigator) or the
 # existing first-available cascade. `pu` must end up holding the top-parent either way, because parent_dd
 # and the grid-visibility checks depend on it.
-if nav_value:
+# the assert is REMOVED only for go_only, where a None top-parent is correct - not weakened for every screen
+pu_assert = ('            # nav_mode=go_only: pu is legitimately None (optional filters, no scope)'
+             if nav_mode == "go_only"
+             else '            assert pu, "navigator cascade returned no top-parent PU"')
+if nav_mode == "go_only":
+    # no scope to select: the nav fields are optional filters and GO alone loads the grid
+    nav_block = ('            ec.click_go(page)   # navigator fields are optional FILTERS - GO alone loads\n'
+                 '            ec.wait_ajax(page)\n'
+                 '            pu = None           # legitimately None on this screen; do NOT assert it')
+    t3_nav_block = ("    Apply Navigator\n"
+                    "    VAR    ${pu}    ${EMPTY}    # optional filters only - no scope value to capture")
+elif nav_value:
     nav_block = ('            ec.select_dropdown(page, "%s_input", %r)\n'
                  '            ec.click_go(page)\n'
                  '            pu = %r' % (NAV_DD, nav_value, nav_value))
@@ -82,6 +101,16 @@ else:
     nav_block = "            pu = ec.apply_ovgm_navigator(page%s)" % (
         "" if nav_levels == 4 else ", levels=%d" % nav_levels)
     t3_nav_block = "    ${pu}=    Apply OV-GM Navigator First Available"
+
+# SOW/README text: "navigator-GATED" and "cascade first-available" are FALSE on a go_only screen (found on
+# External Location, whose CHECKLIST/SOW still claimed a cascade after the registry/scorecard/JOURNAL/KB
+# were already fixed - same defect class in two more sites).
+sow_gated = ", NO mandatory nav scope (GO only)" if nav_mode == "go_only" else ", navigator-GATED"
+sow_nav_line = (("GO only (navigator fields are optional filters, no mandatory scope); fields BY LABEL.")
+                if nav_mode == "go_only" else
+                "Navigator cascade first-available + GO; fields BY LABEL%s." % (
+                    " + extra dropdowns + Op Production Unit first-available" if has_op_pu else
+                    " + extra dropdowns" if extra_dd_pairs else ""))
 
 driver = '''"""%(screen)s - IUD driver (thin). Reuses shared engine ec_object_iud.py + DbVerify.py.
 
@@ -162,7 +191,7 @@ def main():
 %(nav_block)s
             results["nav_pu"] = "PASS: PU=%%r" %% pu
             print("  navigator applied; top-parent PU =", repr(pu))
-            assert pu, "navigator cascade returned no top-parent PU"
+%(pu_assert)s
 
             insert_fields = [
 %(ins_block)s
@@ -229,7 +258,7 @@ if __name__ == "__main__":
     print("Evidence:", EVID)
     sys.exit(0 if ok else 1)
 ''' % dict(screen=screen, slug=slug, view_lc=view_lc, cpfx=cpfx, name_val=name_val,
-           abbr=abbr, ins_block=ins_block, name_l=name_l, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD)
+           abbr=abbr, ins_block=ins_block, name_l=name_l, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD, pu_assert=pu_assert)
 
 # ---- T3 insert keyword lines ----
 t3_ins = [
@@ -325,7 +354,7 @@ Delete %(screen)s
     Delete Object Via End Date    ${TBL}    ${DEL_ENDDATE}    ${code}    ${date}
     Apply Navigator
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), view=view,
-           t3_ins_block=t3_ins_block, name_l=name_l, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD)
+           t3_ins_block=t3_ins_block, name_l=name_l, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD, pu_assert=pu_assert)
 
 suite = '''*** Settings ***
 Documentation       EC IUD Test - %(screen)s (%(folder_h)s).
@@ -387,25 +416,27 @@ Set Up %(screen)s Suite
     ${pu}=    Open %(screen)s Screen
     VAR    ${GM_PU}    ${pu}    scope=SUITE
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), view=view, cpfx=cpfx,
-           folder=folder, slug=slug, name_short=name_l.replace(" Code", "").replace(" Name", ""), up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD)
+           folder=folder, slug=slug, name_short=name_l.replace(" Code", "").replace(" Name", ""), up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD, pu_assert=pu_assert)
 
 sow = '''# SOW - %(screen)s IUD (%(folder_h)s)
 
 - **Screen:** %(screen)s   **BF:** %(bf)s   **View:** `%(view)s`   **Base:** `%(base)s`
-- **Type:** OV-GM (manage-object, groupmodel; grid `manageObject:form:T_data`), navigator-GATED, date-effective.
-- Navigator cascade first-available + GO; fields BY LABEL; extra dropdowns + Op Production Unit first-available.
+- **Type:** OV-GM (manage-object, groupmodel; grid `manageObject:form:T_data`)%(sow_gated)s, date-effective.
+- %(sow_nav_line)s
 - IUD: INSERT -> UPDATE(Name) -> DELETE(End=Start). Test data `%(cpfx)s<timestamp>`; self-clean = absent in %(view)s.
 - Deliverables: driver `py/%(slug)s_iud.py`, T3 `pageobjects/%(folder)s/%(slug)s_page.resource`,
   suite `tests/%(folder)s/%(slug)s_iud.robot`, this SOW, `VERIFY-REPORT.md` (auto-generated).
 ''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, view=view, base=base,
-           cpfx=cpfx, slug=slug, folder=folder, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD)
+           cpfx=cpfx, slug=slug, folder=folder, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD, pu_assert=pu_assert,
+           sow_gated=sow_gated, sow_nav_line=sow_nav_line)
 
 readme = '''# %(screen)s - EC Object IUD bundle
 
-**Screen:** %(folder_h)s > %(screen)s (BF %(bf)s). OV-GM (grid `manageObject:form:T_data`), navigator-GATED,
-date-effective. Built on the item-1 gated-navigator capability (PR #244). See `%(slug)s_sow.md` +
+**Screen:** %(folder_h)s > %(screen)s (BF %(bf)s). OV-GM (grid `manageObject:form:T_data`)%(sow_gated)s,
+date-effective. See `%(slug)s_sow.md` +
 `VERIFY-REPORT.md`. Driver `py/%(slug)s_iud.py`; T3/suite under `%(folder)s`.
-''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, slug=slug, folder=folder, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD)
+''' % dict(screen=screen, folder_h=folder.replace("/", " > "), bf=bf, slug=slug, folder=folder, up=_up, nav_block=nav_block, start_date=start_date, t3_nav_block=t3_nav_block, nav_dd=NAV_DD, pu_assert=pu_assert,
+           sow_gated=sow_gated)
 
 # ---- write ----
 (EC / "py" / ("%s_iud.py" % slug)).write_text(driver, encoding="utf-8")
