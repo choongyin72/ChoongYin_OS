@@ -37,6 +37,11 @@ extra_dd = a.get("extra_dropdowns", []); popups = a.get("popups", []); has_op_pu
 extra_dd = [d if isinstance(d, str) else ("%s=%s" % (d[0], d[1]) if d[1] != "__FIRST__" else d[0])
             for d in extra_dd]
 nav = a.get("nav", [])          # issue #283: NO OV-GM default - gated screens must opt in
+# nav_values means the cascade was set to PROVEN explicit values (find_populated_scope.py), not
+# "first-available" - found on Collection Point: CHECKLIST/SOW/KB still said "first-available" even
+# though the config used explicit values via nav_values, because those 3 templates never checked for it
+# (only registry/scorecard/JOURNAL used the `nav` list text, which happened to be right by coincidence).
+nav_is_explicit = bool(a.get("nav_values"))
 # nav_mode "go_only": OV-GM by grid/toolbar shape, but the navigator has NO mandatory scope - fields are
 # optional FILTERS and GO alone loads the grid (External Location CO.0227). Found because the first attempt
 # passed a FAKE nav entry ("(filters only, no scope)") just to satisfy the non-empty-nav assert below, and
@@ -154,6 +159,10 @@ FAM_LABEL = {"ovgm": "OV-GM", "plain": "plain OV", "custom": "custom-URL OV", "t
 FAM_SPEC = {
     "ovgm": ("OV-GM specifics: GO only (navigator fields are optional filters, no mandatory scope)."
              if nav_mode == "go_only" else
+             "OV-GM specifics: navigator cascade %s (PROVEN explicit values, not first-available) + GO%s."
+             % (" -> ".join(nav) if nav else "",
+                "; Op Production Unit first-available for grid visibility" if has_op_pu else "")
+             if nav_is_explicit else
              "OV-GM specifics: navigator cascade %s first-available + GO%s." % (
                  " -> ".join(nav) if nav else "",
                  "; Op Production Unit first-available for grid visibility" if has_op_pu else "")),
@@ -176,6 +185,8 @@ FAM_GRID_TXT = {"ovgm": "OV-GM (grid `manageObject:form:T_data`)",
                 "tv": "TV-style inline grid (`%s`)" % _grid,
                 "gatedpf": "gated OV, per-field nav groups (grid `%s`)" % _grid}
 KB_NAV = {
+    # nav_is_explicit overrides this at use-site (see kb_nav= below) - found on Collection Point, whose
+    # cascade uses PROVEN values from find_populated_scope.py, not first-available.
     "ovgm": "cascade `nav:form:G:0:R:1:C:1..N:dd` (first-available) -> GO `#button:form:B`",
     "plain": "date field `nav:form:G:0:R:1:C:0:da_input` -> GO `#button:form:B` (no cascade)",
     "custom": "none - grid loads from the screen URL; re-query via toolbar Refresh `[Ctrl+r]`",
@@ -299,7 +310,11 @@ journal = '''# JOURNAL - %(screen)s (%(bf)s) %(fam_label)s IUD
 ''' % dict(screen=screen, bf=bf, date=date, slug=slug, slug_dash=slug.replace("_", "-"),
            nav=" -> ".join(nav), code_l=code_l, name_l=name_l, dd_note=dd_note, pp_note=pp_note,
            rf_txt=rf_txt, pw_txt=pw_txt, fam_label=fam_label, fam_grid=FAM_GRID_TXT[family],
-           nav_txt=nav_txt, fam_lesson=FAM_LESSON[family], branch=_branch(), zerob=zerob,
+           nav_txt=nav_txt,
+           fam_lesson=("- OV-GM: nav cascade uses PROVEN explicit values (scripts/find_populated_scope.py),"
+                       " not first-available - do not assume the first option has usable data underneath."
+                       if nav_is_explicit and family == "ovgm" else FAM_LESSON[family]),
+           branch=_branch(), zerob=zerob,
            gen="tmp/gen_ovgm.py" if family == "ovgm" else "tmp/gen_ov.py")
 # NEVER overwrite an existing JOURNAL.md. A packager re-run silently replaced Pilot's real
 # Pilot-vs-Pilot-Boat lesson with the template once already (found as a floating diff 2026-07-31).
@@ -363,14 +378,22 @@ kb_txt = '''# Screen: %(screen)s
            rf_txt=rf_txt, pw_txt=pw_txt,
            fam_type=(FAM_KB_TYPE[family] + (" NO mandatory nav scope - fields are optional filters."
                                             if nav_mode == "go_only" else "")),
-           kb_nav=(GO_ONLY_NAV_TXT if nav_mode == "go_only" else KB_NAV[family]),
+           kb_nav=(GO_ONLY_NAV_TXT if nav_mode == "go_only" else
+                  "cascade `nav:form:G:0:R:1:C:1..N:dd` (PROVEN explicit values, not first-available) -> "
+                  "GO `#button:form:B`" if nav_is_explicit else KB_NAV[family]),
            kb_grid=_grid,
            kb_grid_note=(" (lists on GO with no filters set)" if nav_mode == "go_only" else KB_GRID_NOTE[family]),
-           kb_oppu=("" if nav_mode == "go_only" else KB_OPPU[family]),
+           # kb_oppu used to be unconditional on family, ignoring has_op_pu entirely - found on Collection
+           # Point (has_op_pu=False) whose KB still claimed "Op Production Unit (first-available)".
+           kb_oppu=("" if (nav_mode == "go_only" or family != "ovgm" or not has_op_pu) else KB_OPPU[family]),
            kb_engine=(" + `click_go`" if nav_mode == "go_only" else KB_ENGINE[family]),
            kb_quirks=("- GO-only navigator: fields are optional FILTERS (not a scope cascade) - GO alone "
                       "loads the grid. Do not assume a mandatory scope exists on every OV-GM-shaped screen."
-                      if nav_mode == "go_only" else KB_QUIRKS[family]))
+                      if nav_mode == "go_only" else
+                      "- OV-GM: nav cascade uses PROVEN explicit values from `scripts/find_populated_"
+                      "scope.py` (not first-available) - the alphabetically/positionally-first option is "
+                      "NOT guaranteed to have data underneath it; see ov-gm-navigator-capability.md."
+                      if nav_is_explicit and family == "ovgm" else KB_QUIRKS[family]))
 kb.write_text(kb_txt, encoding="utf-8")
 
 # ---- #17 registry row (idempotent) ----------------------------------------------
