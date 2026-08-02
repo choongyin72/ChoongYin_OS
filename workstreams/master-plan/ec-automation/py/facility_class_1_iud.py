@@ -1,8 +1,8 @@
 """Facility Class 1 - IUD driver (thin). Reuses shared engine ec_object_iud.py + DbVerify.py.
 
 OV-GM (grid manageObject:form:T_data) = navigator-GATED (cascade + GO before the grid loads). Built on the
-gated-navigator capability (apply_ovgm_navigator). Fields by label. Extra dropdowns + Op Production Unit set
-first-available (probe per screen - the nav PU is not necessarily a valid Op PU option).
+gated-navigator capability (apply_ovgm_navigator). Fields by label. No Op Production Unit field or extra
+dropdowns on this screen (confirmed live).
 Run headed: EC_HEADED=1 py -X utf8 workstreams/master-plan/ec-automation/py/facility_class_1_iud.py
 """
 import os

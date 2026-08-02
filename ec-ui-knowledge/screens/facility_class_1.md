@@ -15,7 +15,7 @@
 | Save / GO | `//a[@title='Save [Ctrl+s]' and not(...disabled)]` / `#button:form:B` |
 
 ### New Object form (`objectForm`) - labels (T3 resolves BY LABEL)
-**Facility Class 1 Code*** - **Facility Class 1 Name*** - **Start Date*** (date) - Op Production Unit (first-available, grid visibility). (`*` mandatory)
+**Facility Class 1 Code*** - **Facility Class 1 Name*** - **Start Date*** (date). No Op Production Unit field or extra dropdowns on this screen (confirmed live). (`*` mandatory)
 
 ### Update (`updateAttributes`) / Delete (`objectdates`)
 `Facility Class 1 Code` (ro) - **`Facility Class 1 Name`**. Delete: **`End Date`** = Start Date -> leaves `OV_FCTY_CLASS_1`.
@@ -26,6 +26,6 @@
 - **Gate:** `verify_screen.py` -> OVERALL PASS.
 
 ## Quirks
-- OV-GM navigator-gated: grid empty until cascade + GO. First-available nav PU is a sparse test scope - it is
-  NOT necessarily a valid Op Production Unit option, and it empties nav-scoped popups (see issue OV_SWEEP_PARKED);
-  parent-dd + Op PU use first-available, probe per screen.
+- OV-GM navigator-gated: grid empty until cascade + GO. No Op Production Unit field or extra dropdowns on
+  this screen (confirmed live) - the sparse-test-scope Op PU caveat that applies to other OV-GM screens
+  does not apply here.
