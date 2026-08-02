@@ -20,45 +20,45 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 | CO.0102 | Constant Standard | OV_CONSTANT_STANDARD | Assets > Hydrocarbon Objects | [ ] |
 | CO.0158 | Report Group | OV_REPORT_GROUP | Assets > Facility Objects | [x] plain OV, live 4/4 |
 | CO.0191 | Task Process | OV_TASK_PROCESS | Task List | [x] #236 (custom-URL OV) |
-| CO.0193 | Action Trigger | OV_CONTROL_POINT | Business Action | [ ] |
-| CO.0227 | External Location | OV_EXTERNAL_LOCATION | Assets > Facility Objects | [ ] |
+| CO.0193 | Action Trigger | OV_CONTROL_POINT | Business Action | [x] custom-URL OV, live 7/7 (shipped 2026-08-01) |
+| CO.0227 | External Location | OV_EXTERNAL_LOCATION | Assets > Facility Objects | [x] OV-GM GO-only, live 8/8 (shipped 2026-08-01) |
 | CO.0264 | Truck | OV_TRUCK | Assets > Transport Objects | [x] #277 (plain OV) |
 | CO.0265 | Trailer | OV_TRAILER | Assets > Transport Objects | [x] #279 (plain OV) |
 | CO.0266 | Driver | OV_DRIVER | Assets > Transport Objects | [x] #281 (plain OV) |
 | CO.1033 | Production Day Table | OV_PRODUCTION_DAY | System | [ ] |
 | CO.1049 | Conversion Group | OV_CONVERSION_GROUP | System > Units | [x] #236 (custom-URL OV) |
 | CO.1060 | Calculation Library | OV_CALC_LIBRARY | Assets > Calculation Objects | [x] #236 (custom-URL OV) |
-| CO.2038 | Contract Area Setup | OV_CONTRACT_AREA_SETUP | Assets > Contract Objects | [ ] |
+| CO.2038 | Contract Area Setup | OV_CONTRACT_AREA_SETUP | Assets > Contract Objects | [x] custom-URL OV, live 7/7 (shipped 2026-07-30) |
 | FC.0010 | Forecast | OV_FORECAST_GROUP | Forecasting | [ ] |
 
 ## B. Production Unit + Area + Facility Class 1  (20)
 | BF | Screen | OV_ view | Folder | Status |
 |---|---|---|---|---|
-| CD.0006 | Node | OV_NODE | Assets > Calculation Objects | [ ] |
-| CO.0034 | Storage | OV_STORAGE | Assets > Tank and Storage Objects | [ ] |
-| CO.0040 | Test Separator | OV_TESTSEPARATOR | Assets > Facility Objects | [ ] |
-| CO.0042 | Production Separator | OV_PRODSEPARATOR | Assets > Facility Objects | [ ] |
-| CO.0049 | Well | OV_WELL | Assets > Well and Reservoir Objects | [ ] |
-| CO.0051 | Well Hole | OV_WELL_HOLE | Assets > Well and Reservoir Objects | [ ] |
-| CO.0070 | Chemical Tank | OV_CHEM_TANK | Assets > Chemical Objects | [ ] |
-| CO.0108 | Well Hookup | OV_WELL_HOOKUP | Assets > Facility Objects | [ ] |
-| CO.0123 | Test Device | OV_TEST_DEVICE | Assets > Equipment Objects | [ ] |
-| CO.0212 | Chemical Injection Point | OV_CHEM_INJ_POINT | Assets > Chemical Objects | [ ] |
-| CO.0224 | Shift | OV_SHIFT | Assets > Facility Objects | [ ] |
-| CO.0258 | Chemical Stream | OV_CHEM_STREAM | Assets > Chemical Objects | [ ] |
+| CD.0006 | Node | OV_NODE | Assets > Calculation Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.0034 | Storage | OV_STORAGE | Assets > Tank and Storage Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.0040 | Test Separator | OV_TESTSEPARATOR | Assets > Facility Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.0042 | Production Separator | OV_PRODSEPARATOR | Assets > Facility Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.0049 | Well | OV_WELL | Assets > Well and Reservoir Objects | [x] OV-GM SPECIFIC-P1 nav, live 8/8 (shipped 2026-07-30) |
+| CO.0051 | Well Hole | OV_WELL_HOLE | Assets > Well and Reservoir Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-31) |
+| CO.0070 | Chemical Tank | OV_CHEM_TANK | Assets > Chemical Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.0108 | Well Hookup | OV_WELL_HOOKUP | Assets > Facility Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.0123 | Test Device | OV_TEST_DEVICE | Assets > Equipment Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.0212 | Chemical Injection Point | OV_CHEM_INJ_POINT | Assets > Chemical Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.0224 | Shift | OV_SHIFT | Assets > Facility Objects | [x] OV-GM + mandatory free-text Start Time, live 8/8 (shipped 2026-07-31) |
+| CO.0258 | Chemical Stream | OV_CHEM_STREAM | Assets > Chemical Objects | [x] OV-GM + From Connection POPUP, live 8/8 (shipped 2026-07-30) |
 | CO.0260 | Chemical Stream Hookup | OV_CHEM_STRM_HOOKUP | Assets > Chemical Objects | [x] OV-GM, live 4/4, mandatory-field gate |
-| CO.2004 | Lifting Account | OV_LIFTING_ACCOUNT | Assets > Transport Objects | [ ] |
-| CO.2077 | Channel | OV_CHANNEL | Assets > Transport Objects | [ ] |
-| CO.2078 | Loading Arm | OV_LOADING_ARM | Assets > Transport Objects | [ ] |
-| CO.2079 | Pilot | OV_PILOT | Assets > Transport Objects | [ ] |
-| CO.2080 | Tug Boat | OV_TUG_BOAT | Assets > Transport Objects | [ ] |
-| CO.2081 | Pilot Boat | OV_PILOT_BOAT | Assets > Transport Objects | [ ] |
-| CP.0030 | Cargo Planning Forecast | OV_FCST_MNGR_FCST_LIST | Cargo Planning > Forecast | [ ] |
+| CO.2004 | Lifting Account | OV_LIFTING_ACCOUNT | Assets > Transport Objects | [x] OV-GM 4-level nav, live 8/8 (shipped 2026-07-30) |
+| CO.2077 | Channel | OV_CHANNEL | Assets > Transport Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.2078 | Loading Arm | OV_LOADING_ARM | Assets > Transport Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.2079 | Pilot | OV_PILOT | Assets > Transport Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-31) |
+| CO.2080 | Tug Boat | OV_TUG_BOAT | Assets > Transport Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.2081 | Pilot Boat | OV_PILOT_BOAT | Assets > Transport Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CP.0030 | Cargo Planning Forecast | OV_FCST_MNGR_FCST_LIST | Cargo Planning > Forecast | [x] custom forecast-manager OV, live 8/8 (shipped 2026-07-31) |
 
 ## C1. Business Unit only  (5)
 | BF | Screen | OV_ view | Folder | Status |
 |---|---|---|---|---|
-| CO.2103 | Service | OV_SERVICE | Assets > Service Objects | [ ] |
+| CO.2103 | Service | OV_SERVICE | Assets > Service Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-08-01) |
 | CO.3009 | Price Index | OV_PRICE_INDEX | Assets > Sales Objects | [x] OV-GM, live 4/4 - was a test-data date mismatch, not a bug - see Parked table |
 | CO.3016 | Price Object | OV_PRICE_OBJECT | Assets > Sales Objects | (P) pager-walk click timeout (5-page grid), self-cleaned - see Parked table |
 | CO.3024 | Price Rate | OV_PRICE_RATE | Assets > Sales Objects | [x] OV-GM, live 4/4, BU=SS2 BU (parent_dd worked here) |
@@ -68,29 +68,29 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 | BF | Screen | OV_ view | Folder | Status |
 |---|---|---|---|---|
 | CO.2016 | Contract | OV_CONTRACT | Assets > Contract Objects | [x] OV-GM, live 4/4, BU=TS5 BU (single-page scope, avoided pager bug) |
-| CO.2044 | Contract Capacity | OV_CONTRACT_CAPACITY | Assets > Contract Objects | [ ] |
-| CO.2054 | Contract Inventory | OV_CONTRACT_INVENTORY | Assets > Contract Objects | [ ] |
+| CO.2044 | Contract Capacity | OV_CONTRACT_CAPACITY | Assets > Contract Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-08-01) |
+| CO.2054 | Contract Inventory | OV_CONTRACT_INVENTORY | Assets > Contract Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-08-02) |
 | RC.0058 | Division Order | OV_DIVISION_ORDER | Royalty > Royalty USA | (P) previously mis-scoped as TV - actually OV-GM, buildable now with gen_ovgm.py - see Parked table |
 | RC.0059 | Royalty Contract | OV_ROYALTY_CONTRACT | Royalty > Royalty Canada | (P) EC-genuine child-record defect on DELETE (Royalty Fixed Percentage Canada template auto-provisions CNTR_PG_SETUP) - Insert/Update OK - see Parked table |
 
 ## D. Production Unit + Area  (3)
 | BF | Screen | OV_ view | Folder | Status |
 |---|---|---|---|---|
-| CO.0019 | Facility Class 1 | OV_XFCTY_CLASS_1 | Assets > Facility Objects | [ ] |
-| CO.0205 | Collection Point | OV_COLLECTION_POINT | Assets > Facility Objects | [ ] |
+| CO.0019 | Facility Class 1 | OV_XFCTY_CLASS_1 | Assets > Facility Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-07-30) |
+| CO.0205 | Collection Point | OV_COLLECTION_POINT | Assets > Facility Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-08-01) |
 | CO.0244 | Operator Route | OV_OPERATOR_ROUTE | Assets > Facility Objects | [x] OV-GM, live 4/4, PROVEN nav (P3 PU/Area) |
 
 ## E. Well hierarchy  (2)
 | BF | Screen | OV_ view | Folder | Status |
 |---|---|---|---|---|
-| CO.0054 | Well Bore | OV_WELL_BORE | Assets > Well and Reservoir Objects | [ ] |
+| CO.0054 | Well Bore | OV_WELL_BORE | Assets > Well and Reservoir Objects | [x] OV-GM per-field nav + Well POPUP, live 8/8 (shipped 2026-07-31) |
 | CO.0247 | Planned Well | OV_PLANNED_WELL | Assets > Well and Reservoir Objects | (P) wrong-class insert, self-cleaned - see Parked table |
 
 ## E3. Well hierarchy (deepest)  (2)
 | BF | Screen | OV_ view | Folder | Status |
 |---|---|---|---|---|
-| CO.0057 | Well Bore Interval | OV_WELL_BORE_INTERVAL | Assets > Well and Reservoir Objects | [ ] |
-| CO.0153 | Perforation Interval | OV_PERF_INTERVAL | Assets > Well and Reservoir Objects | [ ] |
+| CO.0057 | Well Bore Interval | OV_WELL_BORE_INTERVAL | Assets > Well and Reservoir Objects | [x] OV-GM 6-group nav + Well Bore POPUP, live 8/8 (shipped 2026-07-31) |
+| CO.0153 | Perforation Interval | OV_PERF_INTERVAL | Assets > Well and Reservoir Objects | [x] OV-GM 7-group nav + POPUP + dd, live 8/8 (shipped 2026-07-31) |
 
 ## F. Functional Area  (1)
 | BF | Screen | OV_ view | Folder | Status |
