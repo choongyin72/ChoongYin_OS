@@ -16,7 +16,8 @@ with sync_playwright() as p:
     pg = br.new_context(ignore_https_errors=True, viewport={"width": 1920, "height": 1080}).new_page()
     ec.login(pg, URL, USER, PW)
     ec.open_object_screen(pg, 'External Location')
-    pu = ec.apply_ovgm_navigator(pg)
+    ec.click_go(pg)   # navigator fields are optional FILTERS - GO alone loads
+    pu = None         # legitimately None on this screen; do NOT assert it
     print("nav top-parent PU:", pu)
     ec._open_new_object(pg); pg.wait_for_timeout(600)
     print("recon: New-Object form opened (read-only, no Save). View = OV_EXTERNAL_LOCATION.")
