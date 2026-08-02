@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v34** (R34 added 2026-08-01)
+> **Current rule version: v35** (R35 added 2026-08-02)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -42,6 +42,7 @@ _Worker sessions: read this before starting any automation work._
 | v32 | R32 | A text-correctness fix in the CHECKLIST/SOW/KB/registry/scorecard/JOURNAL layer is not complete until the SAME generated driver `.py`/T3 `.resource`/suite `.robot` doc strings are grepped for the identical stale claim — fixing one layer does not imply the layer below is also fixed | 2026-08-01 |
 | v33 | R33 | A PR whose declared `base` is another (now-merged-elsewhere) feature branch will not auto-flip to "merged" on GitHub even once its commits are verified ancestors of `master` — confirm via a retarget-to-`master` attempt (GitHub's "no new commits" error confirms zero diff remains), then close it manually with an explanation rather than leaving it showing a misleading open/unmerged state | 2026-08-01 |
 | v34 | R34 | A "check the generated files for stale claims" guard (R32) is only as complete as its enumerated file list — a 4th generator-output layer (`investigation/recon.py`) carried the identical stale-claim defect and was found only by accident, one PR after the guard shipped; when adding such a guard, first enumerate ALL file types a generator produces for a screen, not just the ones already known to be affected | 2026-08-01 |
+| v35 | R35 | When multiple docs-only PRs each carry forward the SAME predecessor park-record rows (because each branched before an earlier sibling merged), the generic append-only "keep both sides" conflict resolution DUPLICATES rows — resolve by KEY (screen name, not exact line text or whole-hunk pick), and never assume the branch's own carried-forward copy is the most up-to-date one; check which side actually diverges from the 3-way merge base (`git checkout --conflict=diff3`) before choosing | 2026-08-02 |
 
 ---
 
@@ -2050,3 +2051,30 @@ PR review of a new session.
 |-----|-------|----------|
 | Contract Capacity's (and possibly Collection Point's / External Location's) already-shipped `investigation/recon.py` carries the pre-R34 unconditional `apply_ovgm_navigator()` call despite being explicit-nav screens — filed as Issue #303 | Worker | 🟡 Medium |
 
+
+## 2026-08-02 (on-demand) — 6 code PRs (#304/#306/#308/#312/#314/#316) + 1 review-protocol PR (#317) + 6 docs-only park PRs (#307/#309/#310/#311/#313/#315)
+
+### Rules (R35, see changelog above)
+
+### Observations (good patterns to keep)
+- **The Worker wrote reviewer instructions directly into the durable doc, not just as GitHub comments**
+  (#317's "Reviewer note" section in `PR-REVIEW-PROTOCOL.md`) — this is exactly the right response to the
+  "a PR comment doesn't survive a fresh session" lesson this same doc already teaches. Every one of the 6
+  park PRs also carried a matching PR-comment instruction, giving two independent, consistent copies of the
+  merge bar.
+- **Every self-clean claim across all 6 park PRs was verified against the LIVE EC database this session**
+  (`oracledb` access worked from the reviewer environment) — not just screenshots or trusted PR text. This
+  is a meaningfully stronger verification bar than prior sessions had access to; use it going forward
+  whenever available.
+- **A reviewer-side script bug was caught before it corrupted a doc, twice** (#309's first regex-based
+  resolve silently concatenated two table rows onto one line; #313's key-extractor matched on the whole
+  first-cell text and produced literal duplicate rows) — both caught by an explicit post-resolve dup-count
+  check (`grep -c "^| <ScreenName>"` for every screen name involved), not by assuming the script ran
+  correctly. Always add this check after any scripted conflict resolution on a shared append-only doc.
+
+### Gaps (verified against GitHub API / repo state)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| The recurring append-only conflict class (4 PRs this session: #309/#310/#311/#313) exists because each park-record PR branched before its immediate predecessor merged — issue #299 already recommended rebasing onto latest master right before opening a PR; this session shows the cost compounds (2 script bugs, ~30 min of careful row-keyed resolution) when the recommendation isn't followed on a run of sequential docs-only PRs | Worker | 🟡 Medium |
+| `ec.ec_error()`'s substring-filter gap (#319), the shared pager-walk timeout on multi-page grids (#321), and `gen_ovgm.py`'s `has_op_pu` template gap (#318) are all real shared-engine defects surfaced this session but deliberately not fixed inline (each needs the backup+canary+random-sibling protocol) — tracked as issues, not yet scheduled | Worker | 🟡 Medium |
