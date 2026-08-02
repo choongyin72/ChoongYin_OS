@@ -439,12 +439,23 @@ def apply_ovgm_navigator(page, levels=4, row=1):
 
 
 def ec_error(page):
-    txt = page.evaluate(
+    """Detects EC's own error banner by its STRUCTURAL marker (the ErrorRowClass row / ui-icon-ec-ERROR
+    icon PrimeFaces renders for any error message), not by substring-matching the message text. The
+    prior substring check ("Error" in txt or "Required" in txt) missed real error banners whose text
+    didn't happen to contain either word (e.g. Property's "Object not found. The referenced object could
+    not be found." - issue #319) while every message this function is meant to catch, including that
+    one, carries the same class marker (confirmed live on both a "Required fields" validation error and
+    the "Object not found" case)."""
+    info = page.evaluate(
         """() => { const n = document.getElementById('ECNotificationArea')
             || document.getElementById('ECClientNotificationArea');
-            return n ? n.textContent.trim() : ''; }"""
+            if (!n) return {has_error: false, txt: ''};
+            const has_error = !!n.querySelector('.ErrorRowClass, [class*="ui-icon-ec-ERROR"]');
+            return {has_error: has_error, txt: n.textContent.trim()}; }"""
     )
-    return txt.replace("EC.jsMessage.clear();", "").strip()[:200] if ("Error" in txt or "Required" in txt) else ""
+    if not info["has_error"]:
+        return ""
+    return info["txt"].replace("EC.jsMessage.clear();", "").strip()[:200]
 
 
 # ---------------------------------------------------------------- I / U / D
