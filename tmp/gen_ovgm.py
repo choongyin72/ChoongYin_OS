@@ -149,6 +149,21 @@ sow_nav_line = (("GO only (navigator fields are optional filters, no mandatory s
 # Capacity) has the identical property - its nav_block also calls select_dropdown directly, never
 # apply_ovgm_navigator - so it shares the same branch as nav_values below (both mean "explicit value(s),
 # not first-available"; only the cascade depth differs).
+# Issue #318: the default (first-available cascade) branch's tail claim must be gated on has_op_pu /
+# extra_dd_pairs the same way sow_nav_line already is above - a screen with has_op_pu=False and no extra
+# dropdowns (e.g. Chemical Stream Hookup, #306) got a FALSE "Extra dropdowns + Op Production Unit set
+# first-available" claim, hand-patched per-screen 3 times before being fixed here at the generator root.
+_default_tail = (
+    " Extra dropdowns + Op Production Unit set first-available (probe per screen - the nav PU is not\n"
+    "necessarily a valid Op PU option)."
+    if has_op_pu and extra_dd_pairs else
+    " Op Production Unit set first-available (probe per screen - the nav PU is not necessarily a valid\n"
+    "Op PU option)."
+    if has_op_pu else
+    " Extra dropdowns set first-available (probe per screen)."
+    if extra_dd_pairs else
+    " No Op Production Unit field or extra dropdowns on this screen (confirmed live)."
+)
 driver_doc_body = (
     "OV-GM (grid manageObject:form:T_data), GO only - the navigator has no mandatory scope (fields are\n"
     "optional filters); the grid loads on GO alone. Fields by label."
@@ -159,8 +174,7 @@ driver_doc_body = (
     "underneath on this screen. Fields by label."
     if (nav_values or nav_value) else
     "OV-GM (grid manageObject:form:T_data) = navigator-GATED (cascade + GO before the grid loads). Built on the\n"
-    "gated-navigator capability (apply_ovgm_navigator). Fields by label. Extra dropdowns + Op Production Unit set\n"
-    "first-available (probe per screen - the nav PU is not necessarily a valid Op PU option)."
+    "gated-navigator capability (apply_ovgm_navigator). Fields by label." + _default_tail
 )
 t3_settings_doc = (
     "...                 OV-GM (manage-object, groupmodel): the grid loads on GO ALONE - the navigator has\n"
@@ -173,7 +187,7 @@ t3_settings_doc = (
     if (nav_values or nav_value) else
     "...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator\n"
     "...                 cascade + GO (capability Apply OV-GM Navigator First Available). Fields resolved\n"
-    "...                 BY LABEL (no hardcoded rows). Extra dropdowns + Op Production Unit first-available."
+    "...                 BY LABEL (no hardcoded rows)." + _default_tail
 )
 t3_open_kw_doc = (
     "    [Documentation]    Suite Setup: launch, login, navigate, GO alone (no mandatory nav scope on\n"

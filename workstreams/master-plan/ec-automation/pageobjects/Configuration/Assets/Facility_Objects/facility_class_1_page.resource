@@ -3,7 +3,8 @@ Documentation       T3 (screen) - Facility Class 1 page object.
 ...                 Screen: Configuration > Assets > Facility_Objects > Facility Class 1.
 ...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator
 ...                 cascade + GO (capability Apply OV-GM Navigator First Available). Fields resolved
-...                 BY LABEL (no hardcoded rows). Extra dropdowns + Op Production Unit first-available.
+...                 BY LABEL (no hardcoded rows). No Op Production Unit field or extra dropdowns on this
+...                 screen (confirmed live).
 
 Library             Browser
 Library             ../../../../libraries/DbVerify.py
