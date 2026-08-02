@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Read-only: Well Bore's mandatory 'Well' popup - inner frame structure + real grid id."""
+import os
 import sys
 from pathlib import Path
 
@@ -11,7 +12,7 @@ from playwright.sync_api import sync_playwright
 with sync_playwright() as p:
     br = p.chromium.launch(headless=True, args=["--ignore-certificate-errors"])
     pg = br.new_context(ignore_https_errors=True, viewport={"width": 1920, "height": 1080}).new_page()
-    ec.login(pg, "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/", "sysadmin", "sysadmin")
+    ec.login(pg, "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/", os.environ.get("EC_USER", "sysadmin"), os.environ.get("EC_PASS", "sysadmin"))
     ec.open_object_screen(pg, "Well Bore")
     pg.wait_for_timeout(1500)
     for g, val in ((1, "P1 Production Unit"), (2, "P1 Area"), (3, "P1 Facility 1"), (4, "P1 W008 OP")):

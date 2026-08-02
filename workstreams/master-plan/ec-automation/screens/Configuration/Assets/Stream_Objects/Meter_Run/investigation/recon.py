@@ -43,7 +43,7 @@ URL="https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/"
 with sync_playwright() as p:
     br=p.chromium.launch(headless=True,args=["--ignore-certificate-errors"])
     pg=br.new_context(ignore_https_errors=True,viewport={"width":1920,"height":1080}).new_page()
-    ec.login(pg,URL,"sysadmin","sysadmin")
+    ec.login(pg, URL, os.environ.get("EC_USER", "sysadmin"), os.environ.get("EC_PASS", "sysadmin"))
     print("\nscreen:", ec.open_object_screen(pg,"Meter Run"))
     ec.click_go(pg)
     rows=ec._rows(pg,"manage_object_nav_nav:form:T_data")

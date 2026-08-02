@@ -4,6 +4,7 @@ codes, insert-form field plan (labels via :C:0:la, mandatory markers, kinds),
 update/date plans via first-row select where rows exist, and OV_* view
 discovery verified against a real grid code.
 Output: tmp/screen_scan/financial_objects_recon.json"""
+import os
 import json
 import re
 from pathlib import Path
@@ -138,8 +139,8 @@ with sync_playwright() as p:
     page = ctx.new_page()
     page.on("dialog", lambda d: d.accept())
     page.goto(EC_URL, wait_until="domcontentloaded", timeout=45000)
-    page.fill("#username", "sysadmin")
-    page.fill("#password", "sysadmin")
+    page.fill("#username", os.environ.get("EC_USER", "sysadmin"))
+    page.fill("#password", os.environ.get("EC_PASS", "sysadmin"))
     page.click("#kc-login")
     page.wait_for_url("**/dashboard**", timeout=60000)
     page.wait_for_timeout(1500)

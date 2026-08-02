@@ -66,7 +66,7 @@ with sync_playwright() as p:
     ctx = browser.new_context(ignore_https_errors=True, viewport={'width': 1920, 'height': 1080})
     page = ctx.new_page()
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin'); page.fill('#password', 'sysadmin'); page.click('#kc-login')
+    page.fill('#username', os.environ.get("EC_USER", "sysadmin")); page.fill('#password', os.environ.get("EC_PASS", "sysadmin")); page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000); page.wait_for_load_state('networkidle', timeout=30000)
     si = page.locator('#menu\\:searchForm\\:searchTxt'); si.wait_for(state='visible')
     si.clear(); si.type('Equipment', delay=60); page.wait_for_load_state('networkidle', timeout=8000); page.wait_for_timeout(500)

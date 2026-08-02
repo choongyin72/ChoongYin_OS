@@ -99,7 +99,7 @@ with sync_playwright() as p:
 
     # login + navigate
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin'); page.fill('#password', 'sysadmin')
+    page.fill('#username', os.environ.get("EC_USER", "sysadmin")); page.fill('#password', os.environ.get("EC_PASS", "sysadmin"))
     page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000)
     page.wait_for_load_state('networkidle', timeout=30000)

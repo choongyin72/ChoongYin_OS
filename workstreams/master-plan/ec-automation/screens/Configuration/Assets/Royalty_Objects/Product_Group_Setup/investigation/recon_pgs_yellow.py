@@ -22,7 +22,7 @@ with sync_playwright() as p:
         pg.locator("xpath=//li[contains(@class,'ui-menu-parent')][.//span[contains(@class,'ui-icon-insert')]]").first.hover(); pg.wait_for_timeout(700)
         pg.locator(f"xpath=//ul[contains(@class,'ui-menu-child')]//a[normalize-space(.)='{label}']").first.click(); ajax()
     pg.goto(EC_URL,wait_until="domcontentloaded",timeout=40000)
-    pg.fill("#username","sysadmin"); pg.fill("#password","sysadmin"); pg.click("#kc-login")
+    pg.fill("#username", os.environ.get("EC_USER", "sysadmin")); pg.fill("#password", os.environ.get("EC_PASS", "sysadmin")); pg.click("#kc-login")
     pg.wait_for_url("**/dashboard**",timeout=60000); ajax()
     si=pg.locator('#menu\:searchForm\:searchTxt'); si.wait_for(state="visible",timeout=15000)
     si.clear(); si.type("Product Group Setup",delay=40); pg.wait_for_load_state("networkidle",timeout=10000); pg.wait_for_timeout(500)

@@ -3,6 +3,7 @@ A) banner probes for Customer / Vendor / Company Contact / Sub Field (replicate
    suite fill incl. extras, Save, capture banner + DB presence; cleanup if saved)
 B) Commercial Entity: select first row, dump updateAttributes field ids/values
 C) leftover sweep (Commercial Entity TC04 failed after a successful insert)"""
+import os
 import json
 import time
 from pathlib import Path
@@ -81,8 +82,8 @@ with sync_playwright() as p:
     page = ctx.new_page()
     page.on("dialog", lambda d: d.accept())
     page.goto(EC_URL, wait_until="domcontentloaded", timeout=45000)
-    page.fill("#username", "sysadmin")
-    page.fill("#password", "sysadmin")
+    page.fill("#username", os.environ.get("EC_USER", "sysadmin"))
+    page.fill("#password", os.environ.get("EC_PASS", "sysadmin"))
     page.click("#kc-login")
     page.wait_for_url("**/dashboard**", timeout=60000)
     page.wait_for_timeout(1500)

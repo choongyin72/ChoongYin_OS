@@ -4,6 +4,7 @@
 2. Object List Setup: List Class=FIN_ACCOUNT, Object List='OPEX GL Equipment
    Rental', GO -> capture item grid id + current items + Insert row mechanics
    (open Insert > Object List Item, dump new-row DOM)."""
+import os
 import json
 from pathlib import Path
 
@@ -53,8 +54,8 @@ with sync_playwright() as p:
     page = ctx.new_page()
     page.on("dialog", lambda d: d.accept())
     page.goto(EC_URL, wait_until="domcontentloaded", timeout=45000)
-    page.fill("#username", "sysadmin")
-    page.fill("#password", "sysadmin")
+    page.fill("#username", os.environ.get("EC_USER", "sysadmin"))
+    page.fill("#password", os.environ.get("EC_PASS", "sysadmin"))
     page.click("#kc-login")
     page.wait_for_url("**/dashboard**", timeout=60000)
     page.wait_for_timeout(1500)

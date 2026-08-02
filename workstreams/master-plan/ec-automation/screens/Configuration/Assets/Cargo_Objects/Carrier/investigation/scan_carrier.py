@@ -63,7 +63,7 @@ with sync_playwright() as p:
     b = p.chromium.launch(headless=not HEADED, slow_mo=600 if HEADED else 0, args=["--ignore-certificate-errors"])
     page = b.new_context(ignore_https_errors=True, viewport={"width": 1900, "height": 1000}).new_page()
     page.goto(EC_URL, wait_until="domcontentloaded", timeout=45000)
-    page.fill("#username", "sysadmin"); page.fill("#password", "sysadmin"); page.click("#kc-login")
+    page.fill("#username", os.environ.get("EC_USER", "sysadmin")); page.fill("#password", os.environ.get("EC_PASS", "sysadmin")); page.click("#kc-login")
     page.wait_for_selector(css("menu:searchForm:searchTxt"), timeout=60000); ajax(page)
     box = page.locator(css("menu:searchForm:searchTxt")); box.click(); box.fill(""); box.type(SCREEN, delay=45); ajax(page, 7000)
     tv_link = page.locator(f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='{SCREEN}']").first

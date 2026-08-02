@@ -5,6 +5,7 @@ C) OLS: FIN_ACCOUNT + 'OPEX GL Equipment Rental' + GO -> existing item values;
    then Insert > Object List Item (scoped to the INSERT menu) -> new-row inputs.
 D) DB: tables/views named like OBJECT_LIST (verify target for OLS items).
 Nothing is saved anywhere."""
+import os
 import json
 from pathlib import Path
 
@@ -84,8 +85,8 @@ with sync_playwright() as p:
     page = ctx.new_page()
     page.on("dialog", lambda d: d.accept())
     page.goto(EC_URL, wait_until="domcontentloaded", timeout=45000)
-    page.fill("#username", "sysadmin")
-    page.fill("#password", "sysadmin")
+    page.fill("#username", os.environ.get("EC_USER", "sysadmin"))
+    page.fill("#password", os.environ.get("EC_PASS", "sysadmin"))
     page.click("#kc-login")
     page.wait_for_url("**/dashboard**", timeout=60000)
     page.wait_for_timeout(1500)

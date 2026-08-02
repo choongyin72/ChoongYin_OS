@@ -16,7 +16,9 @@ with sync_playwright() as p:
     pg = br.new_context(ignore_https_errors=True, viewport={"width": 1920, "height": 1080}).new_page()
     ec.login(pg, URL, USER, PW)
     ec.open_object_screen(pg, 'Contract Capacity')
-    pu = ec.apply_ovgm_navigator(pg)
+    ec.select_dropdown(pg, "nav:form:G:0:R:1:C:1:dd_input", 'TS5 BU')
+    ec.click_go(pg)
+    pu = 'TS5 BU'
     print("nav top-parent PU:", pu)
     ec._open_new_object(pg); pg.wait_for_timeout(600)
     print("recon: New-Object form opened (read-only, no Save). View = OV_CONTRACT_CAPACITY.")

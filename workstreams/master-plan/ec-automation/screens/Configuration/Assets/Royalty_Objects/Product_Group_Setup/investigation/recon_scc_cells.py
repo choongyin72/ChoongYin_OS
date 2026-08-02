@@ -17,7 +17,7 @@ with sync_playwright() as p:
         base=g.replace("_data","")
         return pg.evaluate("""(b)=>{const o=[];document.querySelectorAll('[id^="'+b+':"]').forEach(e=>{if(e.tagName!=='INPUT'||e.type==='hidden')return;const m=e.id.match(/T:(\d+):C(\d+)/);if(!m)return;o.push(e.id);});return o;}""",base)
     pg.goto(EC_URL,wait_until="domcontentloaded",timeout=40000)
-    pg.fill("#username","sysadmin"); pg.fill("#password","sysadmin"); pg.click("#kc-login")
+    pg.fill("#username", os.environ.get("EC_USER", "sysadmin")); pg.fill("#password", os.environ.get("EC_PASS", "sysadmin")); pg.click("#kc-login")
     pg.wait_for_url("**/dashboard**",timeout=60000); ajax()
     si=pg.locator('#menu\:searchForm\:searchTxt'); si.wait_for(state="visible",timeout=15000)
     si.clear(); si.type("Product Group Setup",delay=40); pg.wait_for_load_state("networkidle",timeout=10000); pg.wait_for_timeout(500)

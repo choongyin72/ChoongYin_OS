@@ -3,6 +3,7 @@ financial_objects_recon.py: direct-URL navigation, grid id + first codes,
 labelled insert/update/date plans, OV view discovery verified by a grid code.
 Also dumps groupmodel navigator dd options for Field / Sub Field.
 Output: tmp/screen_scan/commercial_objects_recon.json"""
+import os
 import json
 import re
 from pathlib import Path
@@ -160,8 +161,8 @@ with sync_playwright() as p:
     page = ctx.new_page()
     page.on("dialog", lambda d: d.accept())
     page.goto(EC_URL, wait_until="domcontentloaded", timeout=45000)
-    page.fill("#username", "sysadmin")
-    page.fill("#password", "sysadmin")
+    page.fill("#username", os.environ.get("EC_USER", "sysadmin"))
+    page.fill("#password", os.environ.get("EC_PASS", "sysadmin"))
     page.click("#kc-login")
     page.wait_for_url("**/dashboard**", timeout=60000)
     page.wait_for_timeout(1500)

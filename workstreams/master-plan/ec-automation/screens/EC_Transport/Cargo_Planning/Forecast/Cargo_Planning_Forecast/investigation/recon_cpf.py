@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Read-only recon: Cargo Planning Forecast under P1 scope - nav ids, insert menu items,
 NEW OBJECT panel field ids. Screenshots at each step."""
+import os
 import sys
 from pathlib import Path
 
@@ -12,7 +13,7 @@ from playwright.sync_api import sync_playwright
 with sync_playwright() as p:
     br = p.chromium.launch(headless=True, args=["--ignore-certificate-errors"])
     pg = br.new_context(ignore_https_errors=True, viewport={"width": 1920, "height": 1080}).new_page()
-    ec.login(pg, "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/", "sysadmin", "sysadmin")
+    ec.login(pg, "https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/", os.environ.get("EC_USER", "sysadmin"), os.environ.get("EC_PASS", "sysadmin"))
     ec.open_object_screen(pg, "Cargo Planning Forecast")
     pg.wait_for_timeout(1500)
     pg.screenshot(path=r"C:\Projects\ChoongYin_OS\tmp\cpf_01_loaded.png")

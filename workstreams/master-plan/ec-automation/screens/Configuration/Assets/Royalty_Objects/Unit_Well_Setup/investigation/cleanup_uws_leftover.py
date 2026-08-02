@@ -2,6 +2,7 @@
 SAVED-row cell ids (a saved row renders C0 as text C0_in, not calendar C0_da_input).
 Nav to UNIT_3 -> find row by perf interval -> dump its cell ids -> select a safe cell ->
 Delete 'Well Setup' -> Save -> verify DV_UNIT_WELL_SETUP back to 0. Local sandbox."""
+import os
 import os, oracledb
 from playwright.sync_api import sync_playwright
 
@@ -40,7 +41,7 @@ with sync_playwright() as p:
             "for(const e of t.querySelectorAll(\"input[id$='C2_dd_input']\")){if((e.value||'')===x){const m=e.id.match(/:T:(\\d+):/);if(m)return +m[1];}}return -1;}", [GRID, v])
 
     pg.goto(EC_URL, wait_until="domcontentloaded", timeout=30000)
-    pg.fill("#username", "sysadmin"); pg.fill("#password", "sysadmin"); pg.click("#kc-login")
+    pg.fill("#username", os.environ.get("EC_USER", "sysadmin")); pg.fill("#password", os.environ.get("EC_PASS", "sysadmin")); pg.click("#kc-login")
     pg.wait_for_url("**/dashboard**", timeout=60000); ajax()
     si = pg.locator(_css("menu:searchForm:searchTxt")); si.clear(); si.type("Unit - Well Setup", delay=50); ajax(8000)
     pg.locator("xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Unit - Well Setup']").first.click(); ajax()
