@@ -4,6 +4,7 @@ each step to find why tr[data-item-label='Production Unit'] never shows:
 2. pick 'Production Unit', GO
 3. New Object form; fill code/name like the suite (incl date Tab-out)
 4. open Op PU dd -> dump panel structure + visibility + item presence."""
+import os
 import json
 import time
 from pathlib import Path
@@ -32,8 +33,8 @@ with sync_playwright() as p:
     ctx = b.new_context(ignore_https_errors=True, viewport={"width": 1680, "height": 1200})
     page = ctx.new_page()
     page.goto(EC_URL, wait_until="domcontentloaded", timeout=45000)
-    page.fill("#username", "sysadmin")
-    page.fill("#password", "sysadmin")
+    page.fill("#username", os.environ.get("EC_USER", "sysadmin"))
+    page.fill("#password", os.environ.get("EC_PASS", "sysadmin"))
     page.click("#kc-login")
     page.wait_for_url("**/dashboard**", timeout=60000)
     page.wait_for_timeout(1500)

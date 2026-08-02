@@ -1,6 +1,7 @@
 """Replicate the OLS item insert exactly as the suite does, Save, and capture:
 EC messages/banner, the new row's cell states (mandatory/yellow), screenshot.
 If the save unexpectedly SUCCEEDS, delete the row again (leave no trace)."""
+import os
 import json
 from pathlib import Path
 
@@ -48,8 +49,8 @@ with sync_playwright() as p:
     ctx = b.new_context(ignore_https_errors=True, viewport={"width": 1680, "height": 1200})
     page = ctx.new_page()
     page.goto(EC_URL, wait_until="domcontentloaded", timeout=45000)
-    page.fill("#username", "sysadmin")
-    page.fill("#password", "sysadmin")
+    page.fill("#username", os.environ.get("EC_USER", "sysadmin"))
+    page.fill("#password", os.environ.get("EC_PASS", "sysadmin"))
     page.click("#kc-login")
     page.wait_for_url("**/dashboard**", timeout=60000)
     page.wait_for_timeout(1500)

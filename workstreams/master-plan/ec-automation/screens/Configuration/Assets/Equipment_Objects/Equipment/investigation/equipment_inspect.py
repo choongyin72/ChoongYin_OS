@@ -4,6 +4,7 @@ Captures: navigator (5 filter dropdowns) IDs + current values, Go/arrow button,
 toolbar (incl. the - button), the equipment table, and the objectForm /
 updateAttributes / objectdates field IDs. NEVER saves - observation only.
 """
+import os
 from playwright.sync_api import sync_playwright
 from pathlib import Path
 import json, os
@@ -56,7 +57,7 @@ with sync_playwright() as p:
 
     # -- LOGIN --
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin'); page.fill('#password', 'sysadmin')
+    page.fill('#username', os.environ.get("EC_USER", "sysadmin")); page.fill('#password', os.environ.get("EC_PASS", "sysadmin"))
     page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000)
     page.wait_for_load_state('networkidle', timeout=30000)

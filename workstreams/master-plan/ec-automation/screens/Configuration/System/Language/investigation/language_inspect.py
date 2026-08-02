@@ -1,5 +1,6 @@
 """READ-ONLY recon of the Language screen (Table class). No save. Dumps grid id,
 cell input ids, toolbar, insert/delete submenu labels, and the search breadcrumb."""
+import os
 from playwright.sync_api import sync_playwright
 
 EC_URL = 'https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/'
@@ -9,7 +10,7 @@ with sync_playwright() as p:
     ctx = b.new_context(ignore_https_errors=True, viewport={'width': 1680, 'height': 1050})
     page = ctx.new_page()
     page.goto(EC_URL, wait_until='domcontentloaded', timeout=30000)
-    page.fill('#username', 'sysadmin'); page.fill('#password', 'sysadmin'); page.click('#kc-login')
+    page.fill('#username', os.environ.get("EC_USER", "sysadmin")); page.fill('#password', os.environ.get("EC_PASS", "sysadmin")); page.click('#kc-login')
     page.wait_for_url('**/dashboard**', timeout=60000); page.wait_for_load_state('networkidle', timeout=30000)
     si = page.locator('#menu\\:searchForm\\:searchTxt'); si.wait_for(state='visible')
     si.clear(); si.type('Language', delay=60); page.wait_for_load_state('networkidle', timeout=8000); page.wait_for_timeout(800)

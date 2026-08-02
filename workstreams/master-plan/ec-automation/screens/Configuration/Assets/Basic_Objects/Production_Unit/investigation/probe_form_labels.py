@@ -1,5 +1,6 @@
 """READ-ONLY: open Production Unit, open New Object form, dump every element id
 + text under the objectForm grid to learn the label id pattern."""
+import os
 import json
 from playwright.sync_api import sync_playwright
 
@@ -20,8 +21,8 @@ with sync_playwright() as p:
     ctx = b.new_context(ignore_https_errors=True, viewport={"width": 1680, "height": 1200})
     page = ctx.new_page()
     page.goto(EC_URL, wait_until="domcontentloaded", timeout=45000)
-    page.fill("#username", "sysadmin")
-    page.fill("#password", "sysadmin")
+    page.fill("#username", os.environ.get("EC_USER", "sysadmin"))
+    page.fill("#password", os.environ.get("EC_PASS", "sysadmin"))
     page.click("#kc-login")
     page.wait_for_url("**/dashboard**", timeout=60000)
     page.wait_for_timeout(1500)

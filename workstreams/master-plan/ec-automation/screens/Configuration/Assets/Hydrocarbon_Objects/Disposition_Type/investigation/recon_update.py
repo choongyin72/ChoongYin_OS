@@ -26,7 +26,7 @@ def dump(pg, form):
 with sync_playwright() as p:
     br = p.chromium.launch(headless=True, args=["--ignore-certificate-errors"])
     pg = br.new_context(ignore_https_errors=True, viewport={"width":1920,"height":1080}).new_page()
-    ec.login(pg, URL, "sysadmin", "sysadmin"); ec.open_object_screen(pg, "Disposition Type"); ec.click_go(pg)
+    ec.login(pg, URL, os.environ.get("EC_USER", "sysadmin"), os.environ.get("EC_PASS", "sysadmin")); ec.open_object_screen(pg, "Disposition Type"); ec.click_go(pg)
     ec.insertObjectRecord(pg, GRID, [
         {"label":"Disposition Code","value":CODE,"kind":"text"},
         {"label":"Disposition Name","value":"AUTOTEST recon","kind":"text"},

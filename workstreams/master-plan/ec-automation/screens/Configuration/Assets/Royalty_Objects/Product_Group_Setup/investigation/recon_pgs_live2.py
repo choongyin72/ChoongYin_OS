@@ -56,7 +56,7 @@ with sync_playwright() as p:
         except Exception as e: return ["ERR " + str(e)[:50]]
 
     pg.goto(EC_URL, wait_until="domcontentloaded", timeout=40000)
-    pg.fill("#username", "sysadmin"); pg.fill("#password", "sysadmin"); pg.click("#kc-login")
+    pg.fill("#username", os.environ.get("EC_USER", "sysadmin")); pg.fill("#password", os.environ.get("EC_PASS", "sysadmin")); pg.click("#kc-login")
     pg.wait_for_url("**/dashboard**", timeout=60000); ajax()
     si = pg.locator('#menu\\:searchForm\\:searchTxt'); si.wait_for(state="visible", timeout=15000)
     si.clear(); si.type(SCREEN, delay=40); pg.wait_for_load_state("networkidle", timeout=10000); pg.wait_for_timeout(500)

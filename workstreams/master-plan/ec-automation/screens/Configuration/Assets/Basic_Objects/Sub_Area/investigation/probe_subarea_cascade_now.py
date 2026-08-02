@@ -1,6 +1,7 @@
 """READ-ONLY: Sub Area screen - pick PU 'Production Unit', dump the Area
 cascade dropdown's CURRENT options + the navigator date, plus OV_AREA rows
 under that PU from the DB for comparison."""
+import os
 import json
 from pathlib import Path
 
@@ -26,8 +27,8 @@ with sync_playwright() as p:
     ctx = b.new_context(ignore_https_errors=True, viewport={"width": 1680, "height": 1200})
     page = ctx.new_page()
     page.goto(EC_URL, wait_until="domcontentloaded", timeout=45000)
-    page.fill("#username", "sysadmin")
-    page.fill("#password", "sysadmin")
+    page.fill("#username", os.environ.get("EC_USER", "sysadmin"))
+    page.fill("#password", os.environ.get("EC_PASS", "sysadmin"))
     page.click("#kc-login")
     page.wait_for_url("**/dashboard**", timeout=60000)
     page.wait_for_timeout(1500)

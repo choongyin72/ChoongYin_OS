@@ -1,4 +1,5 @@
 """Recon updateAttributes + objectdates ids for Report Area RF T3 (temp insert -> dump -> close)."""
+import os
 import sys
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -20,7 +21,7 @@ def dump(pg, form):
 with sync_playwright() as p:
     br = p.chromium.launch(headless=True, args=["--ignore-certificate-errors"])
     pg = br.new_context(ignore_https_errors=True, viewport={"width":1920,"height":1080}).new_page()
-    ec.login(pg, URL, "sysadmin", "sysadmin"); ec.open_object_screen(pg, "Report Area"); ec.click_go(pg)
+    ec.login(pg, URL, os.environ.get("EC_USER", "sysadmin"), os.environ.get("EC_PASS", "sysadmin")); ec.open_object_screen(pg, "Report Area"); ec.click_go(pg)
     ec.insertObjectRecord(pg, GRID, [
         {"label":"Report Area Code","value":CODE,"kind":"text"},
         {"label":"Report Area Name","value":"AUTOTEST recon","kind":"text"},
