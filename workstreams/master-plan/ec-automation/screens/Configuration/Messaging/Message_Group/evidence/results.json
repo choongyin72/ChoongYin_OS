@@ -1,0 +1,8 @@
+{
+ "screen": "Message Group",
+ "view": "OV_MESSAGE_GROUP",
+ "verify_overall": "PASS",
+ "rf": "4/4 pass",
+ "pw": "8/8 ALL PASS",
+ "date": "2026-08-02"
+}
