@@ -162,3 +162,24 @@ R&D, not a quick build. **PARKED pending a dedicated OV-GM capability session.**
 | Property (SP.0059) | OV-GM, Save SILENTLY fails - `ec.ec_error()` misses a real visible error banner. Nothing persisted. |
 | Division Order (RC.0058) | NOT OV-GM at all - `resolve_ec_screen.py` shows `CLASS_TYPE=DATA` -> genuinely TV-style (classes BEARER/DIVISION_ORDER/DIVISION_ORDER_SHARE), the backlog doc's Group C2 classification was wrong for this screen. Needs the TV generator/pattern, not gen_ovgm.py - not attempted this session (out of scope for the OV-GM tooling in hand). No live action taken, nothing to self-clean. |
 | Royalty Contract (RC.0059) | OV-GM, 2 sequential extra dropdowns (Contract Template, Contract Area) - the SECOND (Contract Area) silently persisted the wrong value (`SS2_CA` instead of the intended `CA_AB`/Alberta) - same recurring class of bug as Price Index. SEPARATE finding: `OV_ROYALTY_CONTRACT`'s own IUD trigger explicitly rejects UPDATE ("the ROYALTY_CONTRACT class is a read-only class") - raw SQL End=Start is blocked by design; cleanup required the live UI's own close gesture (found the mis-scoped row under the WRONG Business Unit scope - `SS2 BU`, matching the mis-persisted Contract Area's real owner - not `Royalty Canada` as intended). Self-cleaned via the UI, 0 residual confirmed. No bundle shipped. |
+
+### Backlog classification audit (2026-08-02, closes Issue #320)
+Ran a batch `class_property_cnfg`/`class_cnfg` check across all 55 backlog rows (label -> class_name ->
+`CLASS_TYPE`), plus a targeted re-check of the 5 screens parked on 2026-07-27 (Production Sub Unit,
+Forecast, Constant Standard, Stream Item, Production Day Table) in case any of THOSE were also secretly
+TV-not-OV rather than genuinely blocked for their stated reason.
+
+**Result: Division Order (RC.0058) was the ONLY genuine TV-vs-OV misclassification in the entire backlog.**
+- The 5 earlier-parked screens all confirmed `CLASS_TYPE=OBJECT` at the class_cnfg level - their park
+  reasons (groupmodel-not-enabled, toolbar timeout, INVARIANT physical-delete, mandatory FORECAST_TYPE)
+  stand as genuinely OV-specific blockers, not misclassification.
+- The batch check's label-match heuristic flagged 4 screens as "candidate mismatch" (Well, Test Device,
+  Contract Capacity, Division Order) because their display label text also matches unrelated
+  child/lookup/interface classes (e.g. `FORECAST_WELL`, `ACTIVE_INJ_RESULT_DEVICE`,
+  `CAPACITY_REL_CNTR_CAP`) that happen to share the same LABEL property value. Well/Test Device/Contract
+  Capacity are all proven-working, correctly-classified OV screens (shipped this session with live
+  RF+Playwright PASS) - those 3 flags were false positives from label-collision noise, not real
+  misclassifications. Only Division Order's flag was real (confirmed independently by the live
+  `scan_ec_screen.py` DOM-open scan showing `CLASS_TYPE=DATA`, which is authoritative over a DB label-match
+  heuristic alone).
+- No other screen in the 55-row backlog needs reclassification.
