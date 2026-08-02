@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v35** (R35 added 2026-08-02)
+> **Current rule version: v36** (R36 added 2026-08-02)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -43,6 +43,7 @@ _Worker sessions: read this before starting any automation work._
 | v33 | R33 | A PR whose declared `base` is another (now-merged-elsewhere) feature branch will not auto-flip to "merged" on GitHub even once its commits are verified ancestors of `master` — confirm via a retarget-to-`master` attempt (GitHub's "no new commits" error confirms zero diff remains), then close it manually with an explanation rather than leaving it showing a misleading open/unmerged state | 2026-08-01 |
 | v34 | R34 | A "check the generated files for stale claims" guard (R32) is only as complete as its enumerated file list — a 4th generator-output layer (`investigation/recon.py`) carried the identical stale-claim defect and was found only by accident, one PR after the guard shipped; when adding such a guard, first enumerate ALL file types a generator produces for a screen, not just the ones already known to be affected | 2026-08-01 |
 | v35 | R35 | When multiple docs-only PRs each carry forward the SAME predecessor park-record rows (because each branched before an earlier sibling merged), the generic append-only "keep both sides" conflict resolution DUPLICATES rows — resolve by KEY (screen name, not exact line text or whole-hunk pick), and never assume the branch's own carried-forward copy is the most up-to-date one; check which side actually diverges from the 3-way merge base (`git checkout --conflict=diff3`) before choosing | 2026-08-02 |
+| v36 | MR5 | A reviewer verifying a batch classification audit (e.g. "N screens checked, only 1 misclassified") must spot-check the SPECIFIC conclusion on the actual class in question, not just approve of the audit's general methodology — PR #323's audit correctly resolved 3 label-collision false positives (Well/Test Device/Contract Capacity) but never actually checked `DIVISION_ORDER` itself (only `BEARER`, the first of 3 label-matching classes), and a reviewer who found the methodology sound approved the wrong conclusion anyway; caught only when PR #334 re-investigated Division Order specifically | 2026-08-02 |
 
 ---
 
@@ -2078,3 +2079,28 @@ PR review of a new session.
 |-----|-------|----------|
 | The recurring append-only conflict class (4 PRs this session: #309/#310/#311/#313) exists because each park-record PR branched before its immediate predecessor merged — issue #299 already recommended rebasing onto latest master right before opening a PR; this session shows the cost compounds (2 script bugs, ~30 min of careful row-keyed resolution) when the recommendation isn't followed on a run of sequential docs-only PRs | Worker | 🟡 Medium |
 | `ec.ec_error()`'s substring-filter gap (#319), the shared pager-walk timeout on multi-page grids (#321), and `gen_ovgm.py`'s `has_op_pu` template gap (#318) are all real shared-engine defects surfaced this session but deliberately not fixed inline (each needs the backup+canary+random-sibling protocol) — tracked as issues, not yet scheduled | Worker | 🟡 Medium |
+
+## 2026-08-02 (on-demand) — PRs #329-#334 (Property/Price Index/Royalty Contract/Message Group/Facility Class 2/Division Order)
+
+### Rules (MR5, see changelog above)
+
+### Observations (good patterns to keep)
+- **The Worker's own investigation caught and corrected a prior investigation's wrong conclusion**
+  (#334: Division Order is genuinely OV-GM, not TV as #315/#320/#323 concluded) — disclosed plainly as
+  a correction, not silently. Independently re-verified via live DB before merging; confirmed accurate.
+- **A recurring root cause (test-data date must be >= referenced object's own effective date) was
+  correctly generalized across 4 screens** (Property #329, Price Index #330, Royalty Contract #331,
+  Message Group #332) rather than each being investigated as an unrelated shared-engine defect — this
+  is exactly the right instinct once the pattern repeats twice.
+- **Reviewer disclosure gap self-caught**: PR comments posted on #329-#334 don't resurface for the
+  Worker once those PRs close — per this project's own session-start protocol (open PRs/issues only).
+  Two follow-ups (Royalty Contract's outstanding self-clean debt; the ASCII-scope gap in
+  `check_bundle_hygiene.py`) were re-filed as standalone Issues (#336, #337) after the owner asked
+  directly whether the Worker had actually been informed.
+
+### Gaps (verified against GitHub API / repo state)
+
+| Gap | Owner | Priority |
+|-----|-------|----------|
+| Royalty Contract's `AUTOTEST_RC_001` + 10 `CNTR_PG_SETUP` rows remain live in the sandbox pending an owner decision on cleanup method/authorization — Issue #336 | Owner | 🔴 High (live residual test data) |
+| `check_bundle_hygiene.py`'s ASCII scan doesn't cover general docs (`ov-non-bank-targets.md` picked up 3 emoji chars in #331) — Issue #337 | Worker | 🟢 Low |
