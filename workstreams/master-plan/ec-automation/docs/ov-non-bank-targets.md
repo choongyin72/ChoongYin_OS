@@ -29,7 +29,7 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 | CO.1049 | Conversion Group | OV_CONVERSION_GROUP | System > Units | [x] #236 (custom-URL OV) |
 | CO.1060 | Calculation Library | OV_CALC_LIBRARY | Assets > Calculation Objects | [x] #236 (custom-URL OV) |
 | CO.2038 | Contract Area Setup | OV_CONTRACT_AREA_SETUP | Assets > Contract Objects | [ ] |
-| FC.0010 | Forecast | OV_FORECAST_GROUP | Forecasting | [ ] |
+| FC.0010 | Forecast | OV_FORECAST_GROUP (UNCONFIRMED - see Parked table, likely wrong) | Forecasting | (P) class resolution mismatch, self-cleaned via UI - see Parked table |
 
 ## B. Production Unit + Area + Facility Class 1  (20)
 | BF | Screen | OV_ view | Folder | Status |
@@ -150,7 +150,7 @@ R&D, not a quick build. **PARKED pending a dedicated OV-GM capability session.**
 | Screen | Reason |
 |---|---|
 | Production Sub Unit (CO.0100) | OV-GM grid never lists inserts (groupmodel-not-enabled); DB persists |
-| Forecast (FC.0010) | FORECAST_TYPE (DB NOT NULL) mandatory + likely popup-picker; Save rejected after 2 attempts |
+| Forecast (FC.0010) | **RE-ATTEMPTED 2026-08-02, STILL PARKED - NEW blocker, original reason superseded.** The original park reason (FORECAST_TYPE DB NOT NULL + likely-popup-picker, Save rejected) did NOT reproduce on retry - Forecast Type shows as NOT mandatory on live scan, and 5 test inserts leaving it blank all succeeded (Insert + Update + Delete all worked via the standard `objectdates`/`updateAttributes` OV gestures, confirmed live, self-cleaned via `closeObjectRecord()`, 0 residual). **The actual blocker found this round: `resolve_ec_screen.py`'s class resolution is WRONG for this specific BF code.** The tool resolves screen label "Forecast" -> class `FORECAST_GROUP` via `class_property_cnfg` (the ONLY class with that exact LABEL, confirmed - no ambiguity like Division Order had), but the live screen's data does NOT land in `FORECAST_GROUP` or `OV_FORECAST_GROUP` (checked both, fresh connections, twice - genuinely 0 matching rows even while the test data was live in the UI grid). The screen's own content-frame URL is `com.ec.tran.fc.screens/forecast` (a dedicated custom module, distinct from a generic Manage-Object screen), and its insert form is internally named `new_fcst` (not the standard `objectForm`) - both signals that this BF code (FC.0010, treeview key `TRAN_FC_CREATE`) is bound to a DIFFERENT underlying class than what LABEL-based lookup finds. Root cause NOT isolated (the real base table/view was not identified despite substantial live+DB investigation - searched FCST_MEMBER and other FCST_* candidates, no match); stopped rather than keep grinding on table identification alone. Self-clean confirmed via the UI (0 rows left visible in the grid) even without knowing the true table name. **Next step if resumed:** capture the actual PrimeFaces AJAX request/response during Save (network intercept) to read the real bound class from the server's own response, rather than guessing table names. |
 | Constant Standard (CO.0102) | custom toolbar - standard New-Object menu gesture times out |
 | Stream Item (CD.0008) | no :T_data grid renders on open |
 | Production Day Table (CO.1033) | INVARIANT (physical delete, not End=Start) - needs physical-delete capability |
