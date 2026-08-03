@@ -1,0 +1,19 @@
+{
+  "screen": "Maintain Contact Group Set",
+  "bf": "CO.0225",
+  "view": "OV_CONTACT_GROUP_SET",
+  "base": "CONTACT_GROUP",
+  "folder": "Configuration/Messaging",
+  "screen_folder": "Contact_Group_Set",
+  "slug": "contact_group_set",
+  "abbr": "cgs",
+  "code_prefix": "AUTOTEST_CGS_",
+  "code_label": "Contact Group Set Code",
+  "name_label": "Name",
+  "extra_dropdowns": [],
+  "has_op_pu": false,
+  "popups": [],
+  "parent_dd": "Functional Area",
+  "nav_levels": 1,
+  "start_date": "2020-01-01"
+}
