@@ -1,0 +1,19 @@
+{
+  "screen": "Price Object",
+  "bf": "CO.3016",
+  "view": "OV_PRICE_OBJECT",
+  "base": "PRODUCT_PRICE",
+  "folder": "Configuration/Assets/Sales_Objects",
+  "screen_folder": "Price_Object",
+  "slug": "price_object",
+  "abbr": "po",
+  "code_prefix": "AUTOTEST_PO_",
+  "code_label": "Price Object Code",
+  "name_label": "Price Object Name",
+  "extra_dropdowns": ["Product Name", "Price Concept", "UOM", "Price Rounding Rule"],
+  "has_op_pu": false,
+  "popups": [],
+  "parent_dd": "Business Unit",
+  "nav_levels": 1,
+  "start_date": "2020-01-01"
+}
