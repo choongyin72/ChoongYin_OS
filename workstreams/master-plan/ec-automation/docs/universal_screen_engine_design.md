@@ -198,7 +198,17 @@ The classifier generalizes cleanly across OV, OV-GM+popup, and TV shapes without
 branching in its own logic — every fix above was a genuine structural-signature correction (id suffix,
 CSS class, panel visibility), not a special case for one screen.
 
-**Recommended next steps (not yet done):** (a) revisit finding #6 with a fresh debugging pass on Bank;
-(b) run against the remaining ~172 known-covered screens per the original Phase 1 plan, batched, to see
-what other shapes (e.g. multi-tab, N1 daily-status grids, PC parent-child) expose; (c) only then move to
+**5th screen tested: Object List Setup (PC family) — new, unfixed finding.** Navigator generalized
+correctly (2 separate mandatory-dropdown groups, `G:1`/`G:2` - a shape none of the first 4 screens had,
+matching PC's "navigator picks parent class + object" description), but **grid and form regions both
+came back empty** (`grid.id: null`). Root cause not yet investigated: PC's actual item-list element
+evidently does NOT use the `[id$=':T_data']` id convention every OV/OV-GM/TV screen so far has used - a
+different structural signature this classifier doesn't know about yet. Logged honestly as new,
+unresolved scope rather than guessed at - needs a dedicated DOM inspection of a live PC screen (same
+methodology as the `:pin`/`ECPopupCell` discovery) before attempting a fix.
+
+**Recommended next steps (not yet done):** (a) investigate PC's actual grid/list id convention (new
+finding above) - likely the next-highest-value fix, since PC is a whole family with zero current
+coverage; (b) run against the remaining ~171 known-covered screens per the original Phase 1 plan, batched,
+to see what other shapes (e.g. multi-tab, N1 daily-status grids, 3-tier PC) expose; (c) only then move to
 Phase 2 (interaction layer).
