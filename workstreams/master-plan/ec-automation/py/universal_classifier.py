@@ -52,7 +52,14 @@ def classify_dd(page, dd_input_id):
     try:
         btn = page.locator(css(base + "_button")).first
         btn.scroll_into_view_if_needed(timeout=5000)
-        btn.click()
+        # Fixed 2026-08-13 (Price Object): this click had no explicit timeout, so a stuck/obscured
+        # button (confirmed live: elementFromPoint at the button's center returned a different,
+        # empty-id <span> sitting on top of it - likely a label/tooltip overlay during a busy
+        # row-select-then-scan sequence) could block for Playwright's full 30s default. Observed 9
+        # such stalls in one run (~270s wasted). Root cause not fully pinned down (a direct repro
+        # via Insert form succeeded), so capping the wait instead of chasing an unproven fix - same
+        # principle as the earlier row-select 5s cap: bound the cost of an optimistic action.
+        btn.click(timeout=8000)
         # poll up to ~2.5s instead of a fixed 700ms - fixed 2026-08-12 after Contract screen showed
         # 7 dd fields deep in a long scrollable form returning 'unknown_after_probe' with the old
         # fixed wait (PrimeFaces panel/dialog render time varies with form depth/AJAX load).

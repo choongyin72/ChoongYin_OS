@@ -373,6 +373,37 @@ looked suspicious at first glance and were investigated with the same rigor as e
 **Batch 3 final tally: 15/15 structurally correct, zero classifier bugs found.** First batch where
 investigation confirmed everything was already right rather than surfacing a new fix.
 
-**Recommended next steps (not yet done):** (a) continue Batch 4+ through the remaining ~129 registry
+## 12. Batch 4 findings (2026-08-13) - one real fix (click-timeout cap), one unresolved isolated case
+
+15 more screens, prioritizing new discriminators (junction/multi-object, forecast-manager,
+TV-context-gated dual grid) over the ~30 near-duplicate OV-GM clones now in the registry.
+
+**Price Object - click-stall mitigated (root cause not fully pinned down).** 9 `probe_err: Locator.
+click: Timeout 30000ms exceeded` in one run (~270s wasted) trying to open dropdown panels in the
+Update form. Investigated: `elementFromPoint` at the button's center returned a DIFFERENT, empty-id
+`<span>` sitting on top of it - something overlaps the button, at least intermittently (a direct repro
+via the Insert form's equivalent field succeeded cleanly). Root cause not conclusively identified (looks
+like a transient overlay/label during a busy row-select-then-scan sequence), so rather than force an
+unproven fix, capped `classify_dd`'s initial button click at 8s instead of Playwright's 30s default -
+same principle as the earlier row-select cap: bound the cost of an optimistic action instead of
+chasing a fix I can't fully prove. Re-ran clean (0 errors); verified no regression on Bank. Committed.
+
+**Stream Item - screen open failure, INVESTIGATED, NOT RESOLVED, documented honestly.** Unlike
+Validation Overview's naming mismatch, the exact "Stream Item" tv-link genuinely exists, is visible,
+and its `onclick="EC.treeview.onClick(event, 'STREAM_ITEM', false)"` handler is correctly wired.
+Clicking it (direct click, force-click, +Escape, +4s extra wait) triggers a real AJAX round-trip to
+the actual screen URL (`manage_stream_item/CLASS_NAME/STREAM_ITEM.jsf`) that reports success in the
+console - but no `manage_stream_item`-related element ever appears anywhere in the DOM afterward, and
+the search-results overlay never closes (`searchOverlayVisible: true` throughout). Checked for a
+separate content iframe (none - `page.frames` count of 2 is the main frame + an unrelated blank
+utility frame, not a distinct content frame). No further generic Playwright technique tried resolved
+it. **Stopping investigation here** per the escalate-after-repeated-attempts principle - this looks
+like a genuine, isolated issue specific to this one screen (every other ~57 screens tested open via
+the identical mechanism without issue), not a generalizable classifier gap. Logged as unresolved,
+not force-fixed, not silently dropped - same spirit as the registry's own PARKED screens.
+
+**Batch 4 tally: 13/15 clean, 1 mitigated (Price Object), 1 unresolved isolated case (Stream Item).**
+
+**Recommended next steps (not yet done):** (a) continue Batch 5+ through the remaining ~114 registry
 screens, stripping client-context descriptors from screen names first; (b) only then move to Phase 2
 (interaction layer).
