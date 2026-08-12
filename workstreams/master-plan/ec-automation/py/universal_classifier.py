@@ -115,7 +115,18 @@ def scan_grid_columns(page, grid_id):
         if (bodyRows.length) {
             [...bodyRows[0].querySelectorAll('td')].forEach((td, idx) => {
                 const inputEl = td.querySelector('[id]');
-                sampleCellIds[idx] = inputEl ? inputEl.id : (td.id || null);
+                let cellId = inputEl ? inputEl.id : (td.id || null);
+                // Fixed 2026-08-12 (Object List Setup, Object Code field): querySelector('[id]')
+                // matches the FIRST id-bearing element in DOM order, which for a dropdown-in-grid
+                // cell is the outer '<id>_dd' wrapper span, not the nested '<id>_dd_input' the user
+                // actually types/reads from - confirmed live (typing into the wrapper did nothing;
+                // the real target is the child input). If the resolved id ends in '_dd', prefer its
+                // nested '_input' child when present, same convention as form-level dd_input fields.
+                if (cellId && cellId.endsWith('_dd')) {
+                    const nested = document.getElementById(cellId + '_input');
+                    if (nested) cellId = nested.id;
+                }
+                sampleCellIds[idx] = cellId;
             });
         }
         headers.forEach(h => { h.sample_cell_id = sampleCellIds[h.index] || null; });
