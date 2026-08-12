@@ -18,6 +18,14 @@ EC_URL = os.environ.get("EC_URL", "https://ap-f0a7g341jn6d.corp.quorumsoftware.c
 SCREEN = os.environ.get("SCREEN", "Bank")
 HEADED = os.environ.get("EC_HEADED", "0") == "1"
 YELLOW = "rgb(252, 249, 192)"
+# Optional hint (2026-08-12, Object List Setup finding): for a screen whose 1st-level cascade
+# dropdown has a huge option count with a sparse valid-data fraction (confirmed: 295 List Class
+# options, only 2 actually populated), blind cycling can't reliably find one in bounded attempts.
+# A quick READ-ONLY DB check (same query style as tmp/scripts) can find a known-good value in
+# seconds - this env var lets that value be supplied, tried FIRST, before falling back to blind
+# cycling. Keeps the classifier itself DOM-only/generic by default; this is an opt-in assist, not a
+# baked-in per-screen dependency.
+NAV_HINT_OPTION = os.environ.get("NAV_HINT_OPTION")
 
 
 def css(fid):
@@ -306,35 +314,32 @@ def classify_screen(screen_name):
         result["regions"]["navigator"] = {"fields": nav_out, "go": nav_fields_raw["go"]}
 
         # --- REGION 3: grid ---
-        grid_id = None
-        for _ in range(20):
-            grid_id = page.evaluate(
-                """() => { const t=[...document.querySelectorAll("[id$=':T_data']")].filter(e=>e.offsetParent||e.querySelector('tr'));
-                return t.length? t[0].id : null; }"""
-            )
-            if grid_id:
-                break
-            page.wait_for_timeout(1000)
+        def _poll_grid_id(rounds=20):
+            gid = None
+            for _ in range(rounds):
+                gid = page.evaluate(
+                    """() => { const t=[...document.querySelectorAll("[id$=':T_data']")].filter(e=>e.offsetParent||e.querySelector('tr'));
+                    return t.length? t[0].id : null; }"""
+                )
+                if gid:
+                    break
+                page.wait_for_timeout(1000)
+            return gid
 
-        # Fallback (2026-08-12, Contract finding): mandatory-yellow only marks fields required to
-        # SAVE, not fields required to LIST/filter the grid - Contract Area is never yellow but the
-        # grid stays empty without it. If the grid has zero rows, try filling any remaining
-        # enabled-but-still-empty nav dropdown (regardless of color) once, then re-check.
-        # KNOWN REMAINING GAP: this still picks the FIRST available option per dropdown (same
-        # strategy as scan_ec_screen.py), which can land on a structurally-valid but data-empty
-        # combination (confirmed live: BU='EC LNG Norway' + CA='NO LNG Europe ECLNG Norway' -> 0
-        # rows). Column/primitive/mandatory facts are still correct even when this happens; only
-        # sample_cell_id (which needs an actual row to sample) is unavailable in that case. Smarter
-        # option-picking (prefer a combination known to have data) is future work, not fixed here.
-        row_count = page.evaluate("(gid) => gid ? document.querySelectorAll('#'+gid.replace(/:/g,'\\\\:')+' tr[data-ri]').length : 0", grid_id) if grid_id else 0
-        if grid_id and row_count == 0:
+        grid_id = _poll_grid_id()
+
+        # Fallback (2026-08-12, Contract + Object List Setup finding): mandatory-yellow only marks
+        # fields required to SAVE, not fields required to LIST/filter the grid - some nav fields are
+        # never yellow but the grid stays empty without them. If the grid has zero rows, try filling
+        # any remaining enabled-but-still-empty nav dropdown (regardless of color) once, then re-check.
+        def _fill_leftover_enabled_dds():
             leftover = page.evaluate(
                 """() => { const out=[]; document.querySelectorAll("[id^='nav:form:G:'][id$='dd_input']").forEach(e=>{
                 const disabled = e.disabled || e.closest('.ui-state-disabled')!=null;
                 if (!disabled && !e.value) out.push(e.id); });
                 return out; }"""
             )
-            filled_leftover = False
+            any_now = False
             for did in leftover:
                 ddp = did[: -len("_input")]
                 try:
@@ -344,16 +349,103 @@ def classify_screen(screen_name):
                     opt.wait_for(state="visible", timeout=6000)
                     opt.click()
                     ajax(page, 12000)
-                    filled_leftover = True
+                    any_now = True
                 except Exception:
                     pass
-            if filled_leftover:
-                try:
-                    go_id2 = nav_fields_raw["go"][0] if nav_fields_raw["go"] else "button:form:B"
-                    page.locator(css(go_id2)).first.click()
-                    ajax(page, 20000)
-                except Exception:
-                    pass
+            return any_now
+
+        def _click_go():
+            try:
+                go_id2 = nav_fields_raw["go"][0] if nav_fields_raw["go"] else "button:form:B"
+                page.locator(css(go_id2)).first.click()
+                ajax(page, 20000)
+            except Exception:
+                pass
+
+        def _row_count(gid):
+            return page.evaluate("(gid) => gid ? document.querySelectorAll('#'+gid.replace(/:/g,'\\\\:')+' tr[data-ri]').length : 0", gid) if gid else 0
+
+        if grid_id and _row_count(grid_id) == 0:
+            if _fill_leftover_enabled_dds():
+                _click_go()
+                grid_id = _poll_grid_id(rounds=8) or grid_id
+
+        # 2nd fallback (2026-08-12, Object List Setup finding): "pick the first available option" can
+        # choose a 1st-level value (e.g. List Class 'ALLOC_NETWORK') that has ZERO valid combinations
+        # downstream - its dependent dd then has no options at all, so filling it silently no-ops, and
+        # the grid/tab element may not even RENDER at all (grid_id stays None, not just 0 rows) -
+        # confirmed live: List Class 'FIN_WBS' has real data, the alphabetically-first option doesn't.
+        # If grid_id is still missing OR has 0 rows, cycle through the FIRST mandatory dd's other
+        # options (up to 8), re-filling every dependent dd fresh each time and RE-POLLING grid_id (not
+        # just row count) after each GO, until a combination actually produces a rendered, non-empty
+        # grid or attempts run out. Bounded and generic - not specific to this screen.
+        if not grid_id or _row_count(grid_id) == 0:
+            first_grp_dd = min(
+                (f for f in nav_fields_raw["fields"] if f["kind"] == "dd_input"),
+                key=lambda x: x["grp"], default=None,
+            )
+            if first_grp_dd:
+                ddp = first_grp_dd["id"][: -len("_input")]
+                found_populated = False
+                tried = 0
+                # try the hinted value first, if supplied and present among the real options
+                if NAV_HINT_OPTION:
+                    try:
+                        page.locator(css(ddp + "_button")).first.click()
+                        page.wait_for_timeout(900)
+                        hint_opt = page.locator(f"xpath=//*[@id='{ddp}_panel']//tr[@data-item-label='{NAV_HINT_OPTION}']").first
+                        hint_opt.wait_for(state="visible", timeout=6000)
+                        hint_opt.click()
+                        ajax(page, 12000)
+                        tried += 1
+                        _fill_leftover_enabled_dds()
+                        _click_go()
+                        candidate = _poll_grid_id(rounds=8)
+                        if candidate and _row_count(candidate) > 0:
+                            grid_id = candidate
+                            found_populated = True
+                        elif candidate:
+                            grid_id = candidate
+                    except Exception:
+                        try:
+                            page.keyboard.press("Escape")
+                        except Exception:
+                            pass
+                for attempt in range(15 if not found_populated else 0):
+                    try:
+                        page.locator(css(ddp + "_button")).first.click()
+                        page.wait_for_timeout(900)
+                        opts = page.locator(f"xpath=//*[@id='{ddp}_panel']//tr[@data-item-label]")
+                        opts.first.wait_for(state="visible", timeout=6000)
+                        n = opts.count()
+                        if attempt >= n:
+                            page.keyboard.press("Escape")
+                            break
+                        opts.nth(attempt).click()
+                        ajax(page, 12000)
+                        tried += 1
+                    except Exception:
+                        break
+                    _fill_leftover_enabled_dds()
+                    _click_go()
+                    candidate = _poll_grid_id(rounds=8)
+                    if candidate and _row_count(candidate) > 0:
+                        grid_id = candidate
+                        found_populated = True
+                        break
+                    if candidate:
+                        grid_id = candidate
+                if not found_populated and tried > 0:
+                    # Honest signal (2026-08-12, Object List Setup): a pure-DOM classifier with no DB
+                    # assistance cannot reliably find a populated combination when the valid-data
+                    # fraction of the option space is small (confirmed: 295 List Class options, only a
+                    # handful actually have configured Object Lists) - a bounded retry is the right
+                    # amount of effort, not a bug to keep chasing. Say so explicitly instead of a bare
+                    # unexplained null.
+                    result["unrecognized"].append(
+                        f"grid_never_populated_after_{tried}_cascade_retry_attempts_on_first_nav_dd "
+                        f"(likely sparse valid-combination space, not a classifier defect)"
+                    )
 
         columns = scan_grid_columns(page, grid_id)
         result["regions"]["grid"] = {"id": grid_id, "column_count": len(columns), "columns": columns}

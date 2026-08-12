@@ -198,17 +198,40 @@ The classifier generalizes cleanly across OV, OV-GM+popup, and TV shapes without
 branching in its own logic — every fix above was a genuine structural-signature correction (id suffix,
 CSS class, panel visibility), not a special case for one screen.
 
-**5th screen tested: Object List Setup (PC family) — new, unfixed finding.** Navigator generalized
-correctly (2 separate mandatory-dropdown groups, `G:1`/`G:2` - a shape none of the first 4 screens had,
-matching PC's "navigator picks parent class + object" description), but **grid and form regions both
-came back empty** (`grid.id: null`). Root cause not yet investigated: PC's actual item-list element
-evidently does NOT use the `[id$=':T_data']` id convention every OV/OV-GM/TV screen so far has used - a
-different structural signature this classifier doesn't know about yet. Logged honestly as new,
-unresolved scope rather than guessed at - needs a dedicated DOM inspection of a live PC screen (same
-methodology as the `:pin`/`ECPopupCell` discovery) before attempting a fix.
+**5th screen tested: Object List Setup (PC family) — initial finding CORRECTED, then fully resolved.**
+First pass: navigator generalized correctly (2 separate mandatory-dropdown groups, `G:1`/`G:2` - a shape
+none of the first 4 screens had), but grid/form came back empty. Initially misdiagnosed as "PC uses a
+different grid-id convention" - **wrong**, confirmed by live manual test: `[id$=':T_data']` matches PC's
+grid (`tab:tabPanel:object_list_table:form:T_data`) perfectly fine. The REAL cause: List Class has **295
+options**, and blind "pick the first available" (`ALLOC_NETWORK`, `ALLOC_NETWORK_GROUP`, ...) landed on
+values with zero configured Object Lists - the dependent dropdown then has no options, the grid/tab
+element doesn't even render (not just 0 rows - `grid_id` itself resolves to `None`), and 15 bounded
+sequential retries still weren't enough (owner: "trace the notes .md files / query the DB relationship
+instead of brute-forcing"). **Fix, per the owner's redirect:** a one-time READ-ONLY DB check
+(`OV_OBJECT_LIST` joined to `OBJECT_LIST_SETUP` by `object_id`, grouped by `generic_class_name`) found
+only 2 of 295 classes (`FIN_WBS`, `FIN_ACCOUNT`) actually populated in seconds - far faster than blind UI
+cycling. Added an opt-in `NAV_HINT_OPTION` env var: tried first (by exact `data-item-label` match)
+before falling back to blind cycling, keeping the classifier itself DOM-only/generic by default while
+letting a quick DB check (or the `ec-screens/notes/` corpus, see below) supply a known-good starting
+value for screens with a large, sparse cascade-option space.
+**Result with the hint (`NAV_HINT_OPTION=FIN_WBS`):** grid renders with **9 real columns** - Daytime,
+End Date, Object Code (dropdown-in-grid), Split Share, Comments, Sort Order, Create Object
+(checkbox-in-grid), Priority, Role (dropdown-in-grid) - all `sample_cell_id`s resolved, including the
+first checkbox-in-grid and dropdown-in-grid widget types seen so far.
+Both nav dropdowns were correctly flagged `mandatory:true` in the very first pass this time (unlike
+Contract's 2nd-level case) - PC's 2 dds are structurally sibling-mandatory, not parent-gated, so no
+iterative rescan was even needed here.
+**Note on the help corpus:** `DeepDiveLearnings/ec-screens/notes/` (per-BF_CODE markdown, most/all of
+EC's online-help) was checked first per the owner's redirect - it mis-resolved (`CD.0131`/`CD.0132` both
+point to the plain OV `Object List`, not the PC `Object List Setup`), so the direct DB query was the
+right fallback, not the notes corpus alone. Worth remembering for future screens: check the notes first,
+but cross-verify against a direct DB query when the two don't obviously agree.
+**Minor remaining inefficiency (not a correctness bug):** the classifier's row-select/Insert-form scan
+(built for OV's modal-form pattern) doesn't know PC has no such form at all, so it burns a ~30s timeout
+before correctly returning an empty `form` region. Low-value fix (skip the attempt if no `objectForm`
+container exists structurally) - not done tonight, logged for later.
 
-**Recommended next steps (not yet done):** (a) investigate PC's actual grid/list id convention (new
-finding above) - likely the next-highest-value fix, since PC is a whole family with zero current
-coverage; (b) run against the remaining ~171 known-covered screens per the original Phase 1 plan, batched,
-to see what other shapes (e.g. multi-tab, N1 daily-status grids, 3-tier PC) expose; (c) only then move to
-Phase 2 (interaction layer).
+**Recommended next steps (not yet done):** (a) skip the wasted 30s form-scan attempt on PC-shaped
+screens (the minor inefficiency above); (b) run against the remaining ~171 known-covered screens per the
+original Phase 1 plan, batched, to see what other shapes (e.g. multi-tab, N1 daily-status grids, 3-tier
+PC) expose; (c) only then move to Phase 2 (interaction layer).
