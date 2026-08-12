@@ -351,6 +351,28 @@ affected screens are still correct and unaffected; only "sample real data for a 
 these specifically. Flagging as an accepted Phase 1 limitation for deep-cascade screens, revisit only
 if/when cell-sampling on one of these 6 specific screens is actually needed for something.
 
-**Recommended next steps (not yet done):** (a) continue Batch 3+ through the remaining ~144 registry
+## 11. Batch 3 findings (2026-08-13) - zero real bugs, two readings verified correct under scrutiny
+
+15 more screens (heavy on N1 siblings across object classes, plus a 3rd PC instance). Two results
+looked suspicious at first glance and were investigated with the same rigor as every prior finding -
+**both turned out to be the classifier correctly reporting real facts, not bugs:**
+
+- **Tract - Well Setup `DISABLED/DISABLED`** - looked like a regression of the PC toolbar-timing fix
+  (Unit - Well Setup now reads `enabled/enabled`). Investigated: `TRACT` has only 4 rows total in the
+  whole DB, and the nav's picked Unit Agreement has none of them as children - the cascade genuinely
+  never completes, so Insert staying disabled is accurate. Same root cause category as the
+  already-documented Alarms finding, just surfacing as a toolbar symptom instead of an empty grid.
+- **Well Gas Component Analysis `enabled/enabled`** - looked inconsistent with sibling Stream/Oil
+  Component Analysis (`DISABLED/DISABLED`), despite the registry describing them as siblings of the
+  same pattern. Direct DOM check: the real Insert `<li>` has zero disabled markers, and the grid
+  genuinely has a row - the live evidence is unambiguous. This screen apparently has different
+  (fuller) CRUD capability than its documented siblings; trusted the live ground truth over the
+  registry's shared-pattern framing. Its `row_select_scan_err` timeout is the same already-known
+  expected behavior as Nomination Cycle (TV-style editable grid, not OV's click-row pattern).
+
+**Batch 3 final tally: 15/15 structurally correct, zero classifier bugs found.** First batch where
+investigation confirmed everything was already right rather than surfacing a new fix.
+
+**Recommended next steps (not yet done):** (a) continue Batch 4+ through the remaining ~129 registry
 screens, stripping client-context descriptors from screen names first; (b) only then move to Phase 2
 (interaction layer).
