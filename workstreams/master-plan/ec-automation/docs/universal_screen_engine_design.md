@@ -318,6 +318,39 @@ before assuming a bug.
 
 **Batch 1 final tally: 12/12 screens classify fully cleanly, zero open items.**
 
-**Recommended next steps (not yet done):** (a) continue Batch 2+ through the remaining ~159 registry
+## 10. Batch 2 findings (2026-08-12) - PC toolbar-timing bug fixed; deep-cascade scope boundary documented
+
+Ran 15 more screens, prioritizing genuinely new shapes (N1 tank/composition/sub-daily variants, N2
+allocation-run, N3 status-process, EVENT-LOG, 3-tier PC). **Zero exceptions, zero unresolved
+primitives across all 15** - the fixes hold at scale. Two things worth reporting, not just "clean":
+
+**Toolbar timing bug - FIXED.** Unit - Well Setup (PC) read `DISABLED/DISABLED`, contradicting
+Object List Setup's `enabled/enabled` for the same family. Confirmed live: the toolbar check ran in
+Region 1, BEFORE the navigator's cascade-fill (Region 2) - and this screen's Insert genuinely IS
+disabled until a valid parent scope (Unit Agreement) is selected, matching real business logic (you
+can't insert a well-setup member without knowing which unit it belongs to). Checking too early gave a
+technically-true-at-that-moment but misleading reading. Fixed: moved the whole toolbar check to run
+AFTER the cascade-fill+GO sequence, so it reads the screen's settled/navigated state. Verified: Unit -
+Well Setup now `enabled/enabled`; N1 still `DISABLED/DISABLED` (genuinely disabled regardless of nav);
+Bank still `enabled/DISABLED` (ungated, unaffected). No regressions. Committed `7c50aacf`.
+
+**Deep multi-level cascade sparse-data problem - INVESTIGATED, documented as a Phase 1 scope
+boundary, not force-fixed.** 6 of 15 screens (all N1/N2/N3/EVENT-LOG, each with 4-8 nav fields -
+notably deeper than the 1-2 level cascades fixed so far) hit the "grid never populated" limitation.
+Investigated one representative case fully: **Alarms** (3-level BU→PU→Area cascade) has only **4 rows
+total in its entire backing table** (`FCTY_DAY_ALARM`), all dated 2011, all belonging to one specific
+facility. Tested the obvious hypothesis - set the nav date to 2011-01-01 (matching the real data) with
+dropdowns left at first-available - **still 0 rows**. This proves the blocker isn't just the
+never-touched date field; it's that a 3-level dropdown chain needs to resolve to the EXACT facility
+hierarchy that owns those 4 rows, and blind first-option cycling across 3 independent levels has very
+low odds of landing there by chance. Resolving this per-screen would require a dedicated DB query to
+trace the specific object's BU→PU→Area parentage (the same kind of investigation Object List Setup's
+fix needed, but one level deeper) - genuinely screen-specific work, not a one-time generic classifier
+change. **Decision: not fixed now.** Structural facts (columns, primitives, mandatory flags) for all 6
+affected screens are still correct and unaffected; only "sample real data for a cell" is blocked for
+these specifically. Flagging as an accepted Phase 1 limitation for deep-cascade screens, revisit only
+if/when cell-sampling on one of these 6 specific screens is actually needed for something.
+
+**Recommended next steps (not yet done):** (a) continue Batch 3+ through the remaining ~144 registry
 screens, stripping client-context descriptors from screen names first; (b) only then move to Phase 2
 (interaction layer).
