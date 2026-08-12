@@ -56,8 +56,11 @@ def classify_dd(page, dd_input_id):
         # poll up to ~2.5s instead of a fixed 700ms - fixed 2026-08-12 after Contract screen showed
         # 7 dd fields deep in a long scrollable form returning 'unknown_after_probe' with the old
         # fixed wait (PrimeFaces panel/dialog render time varies with form depth/AJAX load).
+        # Extended to ~7s (2026-08-12, Area's "System of Measurement" dd): confirmed live this
+        # specific dropdown's panel genuinely takes ~6s to render (likely a larger/slower dataset),
+        # exceeding the old 2.5s window even though nothing was actually wrong.
         verdict = "unknown_after_probe"
-        for _ in range(5):
+        for _ in range(14):
             page.wait_for_timeout(500)
             verdict = page.evaluate(
                 """(base) => {
