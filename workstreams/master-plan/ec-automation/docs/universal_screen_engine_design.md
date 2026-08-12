@@ -231,7 +231,64 @@ but cross-verify against a direct DB query when the two don't obviously agree.
 before correctly returning an empty `form` region. Low-value fix (skip the attempt if no `objectForm`
 container exists structurally) - not done tonight, logged for later.
 
-**Recommended next steps (not yet done):** (a) skip the wasted 30s form-scan attempt on PC-shaped
-screens (the minor inefficiency above); (b) run against the remaining ~171 known-covered screens per the
-original Phase 1 plan, batched, to see what other shapes (e.g. multi-tab, N1 daily-status grids, 3-tier
-PC) expose; (c) only then move to Phase 2 (interaction layer).
+**PC form-scan inefficiency — FIXED (2026-08-12):** capped the row-select probe's click at 5s instead
+of Playwright's 30s default. Verified no regression on Bank (where the click genuinely needs to
+succeed). This was the right amount of patience for an optimistic probe, not a wait for something
+expected to happen.
+
+**Grid-cell dropdown `sample_cell_id` — FIXED (2026-08-12, live-tested with the owner).** Owner asked
+to try selecting a FIELD in the Object List Setup grid live; found the "Object Code" grid-cell dropdown
+couldn't actually be typed into via its reported `sample_cell_id` (`...C2_dd`) - that id is the OUTER
+wrapper `<span class="ui-autocomplete">`, not the nested `<...C2_dd_input>` that's the real interactive
+element (confirmed live: typing into the wrapper did nothing; typing into the nested input correctly
+triggered the type-to-search autocomplete and returned real matching Object Codes). `scan_grid_columns`
+now resolves any `_dd`-suffixed cell id to its nested `_input` child, same convention as form-level
+`dd_input` fields.
+
+## 9. Batch 1 breadth-pass findings (2026-08-12) - a major toolbar-detection bug found and fixed
+
+Ran the classifier against 12 structurally diverse, already-known registry screens (Area, Analysis
+Point, Account, Regulatory Permits, Nomination Cycle, Daily Production Well Status 1, Validation
+Overview - Pluto Scarborough, Field, Transport System, Production Unit, Carrier, Sub Field). 10/12
+classified cleanly on first pass. Two genuine findings, one of which turned into a significant,
+cross-cutting bug affecting EVERY screen tested so far (Bank/Contract/Meter included), not just the
+screen that exposed it - reported here bug-by-bug, since the investigation itself is instructive.
+
+**Toolbar Insert/Delete disabled-detection - THREE separate bugs found and fixed, via one investigation:**
+1. **`closest('li,a')` stops at the nearer `<a>` ancestor**, never reaching the `<li>` that actually
+   carries `ui-submenu-state-disabled` (span → a → li - the `<a>` matches first). Confirmed live on
+   **Daily Production Well Status 1 (N1)**: its Insert/Delete `<li>` genuinely IS disabled (matching the
+   long-documented "N1 = update-only" convention), but this bug always missed it and reported `enabled`.
+   Fixed: `closest('li')` only.
+2. **`document.querySelector('.ui-icon-insert')` is unscoped (whole page), and the class is NOT
+   unique** - a personalization/settings menu elsewhere on the page can reuse the same icon class and
+   get matched instead of the real toolbar icon (same root cause as the earlier `:pin` discovery, but
+   for icon classes this time, not id suffixes). Confirmed by directly hovering the matched element on
+   N1: it opened a "system of measurement override" settings menu, not a record-insert menu. Fixed:
+   scope the query to inside the toolbar container (`[id^="screenToolbar"]`) only.
+3. **Even scoped, `dis()` tested `li.outerHTML` (the ENTIRE subtree HTML) instead of `li.className`** -
+   any disabled marker ANYWHERE inside that li's full nested HTML matched the regex, including nested
+   sub-items. Confirmed live on **Contract**: its Insert flyout has multiple sub-items (`New Object` +
+   `New Version`), and `New Version` being legitimately disabled (no row selected) falsely flagged the
+   WHOLE Insert action as disabled, even though `New Object` itself was fully available - and had
+   already been proven to work moments earlier in the same run. Fixed: test `li.className` only.
+
+**Verification, three-way, after all three fixes:** Contract `insert:enabled / delete:DISABLED`
+(matches - Insert genuinely works, Delete-via-toolbar is disabled because deletion happens via
+End-Date-editing in the form instead); N1 `insert:DISABLED / delete:DISABLED` (matches the documented
+update-only convention); Bank `insert:enabled / delete:DISABLED` (same OV convention as Contract).
+**This means every earlier "clean" toolbar reading for Bank/Contract/Meter before this fix was
+questionable** - the structural facts (grid, form fields, mandatory flags) those runs captured are
+unaffected, but their toolbar `insert`/`delete` values specifically should not be trusted from before
+this fix landed.
+
+**Other Batch 1 findings, not yet resolved:**
+- **Validation Overview - Pluto Scarborough**: the screen never opened at all - the tv-link click timed
+  out after 30s. Not yet diagnosed (unknown whether it's a treeview-label mismatch, a genuinely
+  slow-loading screen, or something else). Real gap, open.
+- Two isolated `unknown_after_probe` fields (Area's "System of Measurement" dd; N1's first cascade nav
+  dd `G:1`, while `G:2`-`G:4` resolved fine) - not yet investigated, lower priority than the above.
+
+**Recommended next steps (not yet done):** (a) diagnose why Validation Overview never opens; (b)
+investigate the two isolated `unknown_after_probe` fields; (c) continue Batch 2+ through the remaining
+~159 registry screens; (d) only then move to Phase 2 (interaction layer).
