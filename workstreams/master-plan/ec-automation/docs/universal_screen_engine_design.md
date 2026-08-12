@@ -404,6 +404,34 @@ not force-fixed, not silently dropped - same spirit as the registry's own PARKED
 
 **Batch 4 tally: 13/15 clean, 1 mitigated (Price Object), 1 unresolved isolated case (Stream Item).**
 
-**Recommended next steps (not yet done):** (a) continue Batch 5+ through the remaining ~114 registry
-screens, stripping client-context descriptors from screen names first; (b) only then move to Phase 2
-(interaction layer).
+## 13. Batch 5 findings (2026-08-13) - one naming fix, click-stall confirmed RECURRING (not one-off)
+
+15 more screens, mostly domain-variety sampling now that all distinct structural shapes are proven.
+Registry now essentially exhausted for genuinely new shapes - remaining rows are near-duplicate
+OV-GM/plain-OV clones (~113 of ~175 total).
+
+**Contact Group Set open-failure - RESOLVED, naming mismatch.** Real treeview label is "Maintain
+Contact Group Set", not "Contact Group Set" - same class as Validation Overview. Verified clean with
+the correct name.
+
+**Click-stall (Price Object, Batch 4) CONFIRMED RECURRING - Service and Contract Capacity hit the
+same `probe_err` timeout (5 and 3 occurrences respectively), all clustered consecutively in the same
+`updateAttributes` (row-select-derived Update) form.** Investigated a second time, same methodology as
+Price Object: replicated the exact click sequence via the Insert form's equivalent fields (which share
+identical field structure) - every click succeeded cleanly, no lingering panel detected before any
+click (`panel state BEFORE click = {'exists': False}` for all 9 fields tested). **Root cause still not
+identified after two genuine investigation attempts** - the failure is specific to the row-select
+context and doesn't reproduce via a controlled Insert-form repro. Per the escalate-after-repeated-
+attempts principle, stopping further root-cause investigation here. The 8s timeout cap (already
+shipped for Price Object) bounds the cost and doesn't corrupt results - affected fields are correctly
+flagged `probe_err`, not silently misclassified. Accepting this as a known, bounded, unresolved-at-
+root-cause limitation rather than continuing to grind on it.
+
+**Batch 5 tally: 13/15 clean, 1 fixed (naming), 1 confirmed-recurring-but-bounded (click-stall).**
+
+**Overall Phase 1 breadth-pass status: 77 of 175 registered screens tested across 5 batches.** Every
+genuinely distinct structural shape in the registry has now been exercised at least once. The
+remaining ~98 screens are overwhelmingly near-duplicate clones of shapes already proven clean -
+continuing to mechanically test all of them has sharply diminishing value. Recommend either (a) a
+lighter final sampling pass (10-15 more, purely as a broader confidence check) then declaring the
+breadth pass complete, or (b) stopping here and moving to Phase 2 (interaction layer) - owner's call.
