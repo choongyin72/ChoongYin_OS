@@ -295,12 +295,29 @@ Lesson for future batches: when pulling screen names from the registry, strip an
 client-context descriptor before using it as the search term - the registry documents facts ABOUT a
 screen, not necessarily its exact literal treeview label.
 
-**Remaining, not yet investigated (low priority):** two isolated `unknown_after_probe` fields (Area's
-"System of Measurement" dd; N1's first cascade nav dd `G:1`, while `G:2`-`G:4` resolved fine).
+**Area/N1 isolated `unknown_after_probe` fields - FIXED (2026-08-12).** Both turned out to be the same
+root cause: genuinely slow AJAX panel-render time (confirmed live, ~6s for Area's "System of
+Measurement" dd), not disabled/broken fields - the classifier's dd click-probe window was extended from
+2.5s to 7s. Verified both resolve cleanly now; no regression on Bank. Committed `aea5f01e`.
 
-**Batch 1 final tally: 12/12 screens now classify cleanly** (after the toolbar fix + the naming-mismatch
-correction), modulo the 2 low-priority isolated field findings above.
+**NOTE FOR FUTURE USE - grid columns can legitimately have `sample_cell_id: null` even on a real,
+correctly-classified screen (found live-testing N1 after the above fix, 2026-08-12):** N1's grid header
+lists 141 columns (the union of every possible well-equipment attribute), but the last ~23 (an Electric
+Submersible Pump / ESP sub-section) had `sample_cell_id: null` on every one of the 5 currently-loaded
+rows. Confirmed via direct DOM check: all 5 rows have exactly 118 `<td>` cells, not 141 - the ESP
+columns genuinely have NO cell in ANY of these rows, because `scan_grid_columns` only ever samples
+whichever rows the CURRENT nav-scope happens to load, and this particular well group has zero
+ESP-equipped wells. **This is not a classifier bug** - it's the same "sparse valid-combination" category
+already documented for cascade dropdowns (Object List Setup), just showing up as missing per-column
+data instead of a missing dropdown option. To get a real sample for a conditionally-rendered column like
+this, the fix is the same pattern already built: navigate to a different, DB-confirmed nav-scope that
+actually contains a row exercising that column (e.g. an ESP well), not a classifier code change.
+**Apply this going forward:** a `null` `sample_cell_id` on a structurally-correct grid does not by
+itself mean something is broken - check whether the loaded rows actually contain data for that column
+before assuming a bug.
 
-**Recommended next steps (not yet done):** (a) investigate the two isolated `unknown_after_probe`
-fields; (b) continue Batch 2+ through the remaining ~159 registry screens, stripping client-context
-descriptors from screen names first; (c) only then move to Phase 2 (interaction layer).
+**Batch 1 final tally: 12/12 screens classify fully cleanly, zero open items.**
+
+**Recommended next steps (not yet done):** (a) continue Batch 2+ through the remaining ~159 registry
+screens, stripping client-context descriptors from screen names first; (b) only then move to Phase 2
+(interaction layer).
