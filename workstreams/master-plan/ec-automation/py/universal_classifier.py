@@ -247,36 +247,6 @@ def classify_screen(screen_name):
             return result
         page.wait_for_timeout(1200)
 
-        # --- REGION 1: toolbar ---
-        toolbar = page.evaluate(
-            """() => { const out={};
-            // Fixed 2026-08-12 (Contract vs N1 comparison): 'ui-icon-insert' is NOT unique page-wide -
-            // a personalization/settings menu elsewhere on the page can share the same icon class, and
-            // document.querySelector (first DOM match) can grab THAT instead of the real toolbar icon,
-            // giving a wrong reading (confirmed: Contract's real Insert <li> has no disabled class at
-            // all, but the unscoped query matched something else that did). Scope the search to inside
-            // the actual toolbar container only.
-            const scope = document.querySelector('[id^="screenToolbar"]') || document;
-            const find=(...cs)=>{for(const c of cs){const e=scope.querySelector('span.'+c)||scope.querySelector('.'+c); if(e) return e;} return null;};
-            // Fixed 2026-08-12 (Daily Production Well Status 1, N1): closest('li,a') stops at the
-            // NEARER <a> ancestor (span -> a -> li) and never reaches the <li> that actually carries
-            // 'ui-submenu-state-disabled' - confirmed live, N1's Insert/Delete <li> genuinely IS
-            // disabled (matching the documented N1 convention), but this check always missed it and
-            // reported 'enabled'. closest('li') alone reaches the real disabling ancestor.
-            // Fixed 2026-08-12 (Contract): testing li.outerHTML (not li.className) matches ANY
-            // disabled marker ANYWHERE in the li's full subtree HTML, including nested sub-items
-            // (e.g. Contract's Insert flyout has both "New Object" and "New Version" - "New Version"
-            // can be legitimately disabled with no row selected while "New Object" itself is fully
-            // available, but outerHTML-matching falsely flagged the WHOLE Insert action as disabled
-            // because of that unrelated nested item). Test only the li's OWN class attribute.
-            const dis=e=>{const li=e&&e.closest('li'); return li? /ui-state-disabled|ui-submenu-state-disabled/.test(li.className):false;};
-            const ins=find('ui-icon-insert','ui-icon-add'); const del=find('ui-icon-delete','ui-icon-remove','ui-icon-trash');
-            if(ins) out.insert = dis(ins)?'DISABLED':'enabled';
-            if(del) out.delete = dis(del)?'DISABLED':'enabled';
-            return out; }"""
-        )
-        result["regions"]["toolbar"] = toolbar
-
         # --- REGION 2: navigator ---
         nav_fields_raw = page.evaluate(
             """() => { const out=[]; document.querySelectorAll("[id^='nav:form:G:']").forEach(e=>{
@@ -330,6 +300,42 @@ def classify_screen(screen_name):
                 ajax(page, 20000)
             except Exception:
                 pass
+
+        # --- REGION 1: toolbar ---
+        # Fixed 2026-08-12 (Unit - Well Setup, PC): checking toolbar state BEFORE the nav cascade is
+        # filled gives a technically-true-at-that-moment but MISLEADING reading for gated/PC screens,
+        # where Insert genuinely IS disabled until a valid parent scope is selected - confirmed live,
+        # Insert's <li> carries 'ui-submenu-state-disabled' before nav fill, and it's gone after GO.
+        # Moved this whole check to AFTER the cascade-fill+GO sequence above, so it reads the screen's
+        # settled/navigated state, matching how a real user would actually judge availability.
+        toolbar = page.evaluate(
+            """() => { const out={};
+            // Fixed 2026-08-12 (Contract vs N1 comparison): 'ui-icon-insert' is NOT unique page-wide -
+            // a personalization/settings menu elsewhere on the page can share the same icon class, and
+            // document.querySelector (first DOM match) can grab THAT instead of the real toolbar icon,
+            // giving a wrong reading (confirmed: Contract's real Insert <li> has no disabled class at
+            // all, but the unscoped query matched something else that did). Scope the search to inside
+            // the actual toolbar container only.
+            const scope = document.querySelector('[id^="screenToolbar"]') || document;
+            const find=(...cs)=>{for(const c of cs){const e=scope.querySelector('span.'+c)||scope.querySelector('.'+c); if(e) return e;} return null;};
+            // Fixed 2026-08-12 (Daily Production Well Status 1, N1): closest('li,a') stops at the
+            // NEARER <a> ancestor (span -> a -> li) and never reaches the <li> that actually carries
+            // 'ui-submenu-state-disabled' - confirmed live, N1's Insert/Delete <li> genuinely IS
+            // disabled (matching the documented N1 convention), but this check always missed it and
+            // reported 'enabled'. closest('li') alone reaches the real disabling ancestor.
+            // Fixed 2026-08-12 (Contract): testing li.outerHTML (not li.className) matches ANY
+            // disabled marker ANYWHERE in the li's full subtree HTML, including nested sub-items
+            // (e.g. Contract's Insert flyout has both "New Object" and "New Version" - "New Version"
+            // can be legitimately disabled with no row selected while "New Object" itself is fully
+            // available, but outerHTML-matching falsely flagged the WHOLE Insert action as disabled
+            // because of that unrelated nested item). Test only the li's OWN class attribute.
+            const dis=e=>{const li=e&&e.closest('li'); return li? /ui-state-disabled|ui-submenu-state-disabled/.test(li.className):false;};
+            const ins=find('ui-icon-insert','ui-icon-add'); const del=find('ui-icon-delete','ui-icon-remove','ui-icon-trash');
+            if(ins) out.insert = dis(ins)?'DISABLED':'enabled';
+            if(del) out.delete = dis(del)?'DISABLED':'enabled';
+            return out; }"""
+        )
+        result["regions"]["toolbar"] = toolbar
 
         # NOW classify each nav dd's primitive - fixed 2026-08-12: doing this BEFORE the cascade-fill
         # loop above probed a still-disabled dependent field (Contract Area, disabled until Business
