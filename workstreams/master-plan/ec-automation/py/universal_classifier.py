@@ -462,11 +462,16 @@ def classify_screen(screen_name):
         result["regions"]["grid"] = {"id": grid_id, "column_count": len(columns), "columns": columns}
 
         # --- REGION 4: form (row-select -> updateAttributes/objectdates; else Insert -> objectForm) ---
+        # Fixed 2026-08-12 (Object List Setup): this whole block is an OPTIMISTIC probe - "does this
+        # screen use OV's click-a-row-to-edit modal-form pattern" - which PC/TV screens don't. It was
+        # using Playwright's default 30s click timeout, burning ~30s on every PC/TV screen before
+        # correctly falling through to an empty form region. A short explicit timeout is the right
+        # amount of patience for a probe, not a wait for something expected to actually happen.
         form_fields = []
         try:
             sp = page.locator(f"xpath=//*[@id='{grid_id}']//tr//span[normalize-space(text())!='']").first
             if grid_id and sp.count():
-                sp.click()
+                sp.click(timeout=5000)
                 ajax(page)
                 page.wait_for_timeout(1200)
                 for f in scan_region_fields(page, "updateAttributes:form"):
