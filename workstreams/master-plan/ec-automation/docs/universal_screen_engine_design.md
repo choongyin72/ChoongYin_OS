@@ -282,13 +282,25 @@ questionable** - the structural facts (grid, form fields, mandatory flags) those
 unaffected, but their toolbar `insert`/`delete` values specifically should not be trusted from before
 this fix landed.
 
-**Other Batch 1 findings, not yet resolved:**
-- **Validation Overview - Pluto Scarborough**: the screen never opened at all - the tv-link click timed
-  out after 30s. Not yet diagnosed (unknown whether it's a treeview-label mismatch, a genuinely
-  slow-loading screen, or something else). Real gap, open.
-- Two isolated `unknown_after_probe` fields (Area's "System of Measurement" dd; N1's first cascade nav
-  dd `G:1`, while `G:2`-`G:4` resolved fine) - not yet investigated, lower priority than the above.
+**"Validation Overview - Pluto Scarborough" open-failure — RESOLVED, not a classifier bug.** The
+screen's actual treeview label is just **"Validation Overview"** - "Pluto Scarborough" is a
+client-context descriptor added to the registry's screen name for documentation clarity, never part of
+the literal link text (confirmed: a live search returned exactly 4 tv-links - "Validation Overview",
+"Validation Overview by Facility", "Flush Cache", "Dashboard" - none matching the full registry string).
+The exact-match locator correctly found zero matches and correctly timed out; there was nothing to fix
+in the classifier. Re-run with the correct name: fully clean, zero unresolved fields - toolbar
+`DISABLED/DISABLED` (correct, this is a run-only screen with no CRUD at all), navigator correctly found
+the 2-field date range (From/To), grid correctly captured its 3 real columns (Group, Status, Summary).
+Lesson for future batches: when pulling screen names from the registry, strip any trailing
+client-context descriptor before using it as the search term - the registry documents facts ABOUT a
+screen, not necessarily its exact literal treeview label.
 
-**Recommended next steps (not yet done):** (a) diagnose why Validation Overview never opens; (b)
-investigate the two isolated `unknown_after_probe` fields; (c) continue Batch 2+ through the remaining
-~159 registry screens; (d) only then move to Phase 2 (interaction layer).
+**Remaining, not yet investigated (low priority):** two isolated `unknown_after_probe` fields (Area's
+"System of Measurement" dd; N1's first cascade nav dd `G:1`, while `G:2`-`G:4` resolved fine).
+
+**Batch 1 final tally: 12/12 screens now classify cleanly** (after the toolbar fix + the naming-mismatch
+correction), modulo the 2 low-priority isolated field findings above.
+
+**Recommended next steps (not yet done):** (a) investigate the two isolated `unknown_after_probe`
+fields; (b) continue Batch 2+ through the remaining ~159 registry screens, stripping client-context
+descriptors from screen names first; (c) only then move to Phase 2 (interaction layer).
