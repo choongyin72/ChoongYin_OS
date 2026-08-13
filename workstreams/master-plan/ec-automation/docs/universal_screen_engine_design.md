@@ -644,3 +644,196 @@ DB-verified PASS, no behavior change on the exemplar the fixes weren't targeting
 validated end-to-end on both structurally distinct exemplars, DB-verified, self-cleaning, zero
 regression). Not yet done (per the same phased plan, unstarted): Phase 3 (rewrite
 `gen_ov_screen.py`/`gen_ovgm.py` to consume the engine) and Phase 4 (pilot on new uncovered screens).
+
+## 18. Phase 3 step 1 - OV-GM navigator-cascade support added to the engine (2026-08-13)
+
+Owner authorized Phase 3. First gap identified before any generator rewrite could start: Phase 2's
+`engine.py` was validated only on Bank and Language - **neither has a navigator at all**, so the
+OV-GM cascade (Business Unit -> Production Unit -> Area -> ...) that every existing `gen_ovgm.py`
+bundle depends on had zero engine-level coverage. Building that first, since the generator rewrite
+can't proceed without it.
+
+**Added `Engine.apply_navigator(values=None, levels=4, row=1)`** - generic and structural, no
+per-screen hardcoding (matches the standing "resolve by label/structure, never hardcode" rule).
+Unifies the 4 modes the string-templated generators currently express as separate code paths
+(`nav_mode='go_only'`, `nav_values=[...]`, `nav_value=...`, default first-available cascade) into
+ONE method: pass explicit `values` for known-good scope values (the `NAV_HINT_OPTION` pattern from
+Phase 1), omit for first-available cascade, and a screen with no cascade columns at all degrades
+automatically to a bare GO with no separate flag needed - the absence of `nav:form:G:0:R:<row>:C:*`
+columns already says everything.
+
+**Validated live against Node** (OV-GM, 3-level mandatory cascade: Production Unit -> Area ->
+Facility Class 1; already-shipped, RF 4/4 + Playwright 8/8 exemplar per the registry) - full
+navigator cascade + Insert -> Update -> Delete through the engine alone, DB-verified at every step,
+self-cleaned to zero residual.
+
+**Real defect found and fixed while validating (not the navigator code - a `Save` error-detection
+gap):** the first Node insert attempt failed silently - DB check showed no row, but `ec_error()`
+checked right after `click('Save')` returned `''` (no error), even though EC's own banner DID say
+`'Required fields are empty... Calculation Sequence Number'`. Root-caused: `click('Save')` calls
+`_refresh_field_map()` immediately afterward, which probes every `dd_input` field via `classify_dd()`
+- a live click+Escape - as a side effect of "just reading labels." That probe dismisses EC's error
+notification before the caller ever gets to check it, so **any code built on the engine would
+silently believe a failed Save had succeeded.** This is exactly the class of failure the
+verification-echo elsewhere in this layer exists to prevent, just on the Save path instead of a
+field write. **Fix:** `click('Save')` now checks `ec_error()` (the same structural, non-substring
+detector already proven in `ec_object_iud.py`) immediately after the click, BEFORE the refresh runs,
+and raises a new `SaveFailed` exception if EC reports one - matching the exact ordering
+`ec_object_iud.py`'s own `insertObjectRecord`/`updateObjectRecord` already use. Confirmed the fix
+raises correctly on a deliberately-incomplete Save, then re-ran the full Node cycle clean.
+(Separately: the missing mandatory field itself was a gap in my own quick test script, not a
+classifier or engine defect - Node's proven driver already documents "Calculation Sequence Number"
+as an extra mandatory field beyond the plain-OV set; I hadn't done fresh recon before writing the
+test and trusted an abbreviated registry summary instead.)
+
+**Regression check:** re-ran Bank (OV) and Language (TV) again after both changes landed - both
+still 3/3 DB-verified PASS, unchanged.
+
+**Status: engine-level OV-GM support proven on one exemplar (Node).** Not yet done: validating
+`apply_navigator(values=[...])` (the explicit-value path, for a sparse-cascade screen where
+first-available has no valid combination) against a live screen - Node's cascade happened to have a
+populated first-available option throughout, so only the default path has live evidence so far.
+Next: the actual generator rewrite (`gen_ov_iud_bundle.py` first, then `gen_ovgm.py`), each
+regression-checked against an already-shipped exemplar before being trusted on anything new.
+
+## 19. Phase 3 step 2 - gen_ov_iud_bundle.py rewritten to consume the engine (2026-08-13)
+
+Rewrote `tools/generators/gen_ov_iud_bundle.py`'s `playwright_py()` - the function that emits the
+Playwright driver half of a plain-OV IUD bundle. Before: ~400 generated lines per bundle, hardcoding
+row-index field ids (`R:0=Code, R:1=Name, R:2=Start Date`, `objectdates R:0:C:3=EndDate`) and
+reimplementing `fill`/`fill_date`/`do_save`/`click_go`/`select_row`/`get_ec_error` from scratch in
+every single generated file - the exact "each family/generator re-solves the same DOM-mechanics
+problem independently" duplication the original design (section 1) set out to eliminate. After: the
+generated driver imports `engine.py` and resolves every field by LABEL (`eng.fill('Code', ...)`,
+`eng.toolbar('New Object')`, `eng.click('Save')` - which now raises `SaveFailed` itself, so the
+generated code no longer needs its own error-banner check). File size: 762 -> 583 lines overall (the
+generated-driver template shrank from ~400 to ~215 lines - most of the reduction is gesture logic
+that moved into the shared, already-tested `engine.py` instead of being re-emitted per screen).
+
+Added two new optional parameters - `code_label='Code'`, `name_label='Name'` - since the OLD
+template never actually knew the real field LABEL text (it assumed a fixed row position works for
+any screen in the family); the new label-driven version genuinely needs the real label, matching
+the same recon-input principle every other per-screen parameter (`view`, `code_prefix`, `rc_code`)
+already follows. Defaults match Bank, the exemplar this generator has always targeted.
+
+**Real bug found and fixed while regression-testing (a code-quality catch, not a business-logic
+one):** the first version of the rewritten `row_exists()` helper passed two separate positional
+arguments to Playwright's `page.evaluate(script, arg)`, which only accepts one - `TypeError: takes
+from 2 to 3 positional arguments but 4 were given`, caught immediately on the first live run.
+**Fix:** pass a single `[GRID_ID, code]` array and destructure it in the JS callback signature
+(`([gid, code]) => {{...}}`) - the standard Playwright pattern for multi-value `evaluate()` calls.
+
+**Regression check:** generated a fresh Bank bundle through the rewritten generator (using a
+throwaway slug so it wouldn't collide with the real shipped bundle), ran it live end-to-end - full
+Insert -> Update -> Delete, matching Phase 2's already-proven Bank result exactly, self-cleaned to
+zero residual (confirmed via a direct DB re-check, not just the driver's own PASS claim). No
+generator-produced file was committed from this test run; only the generator source itself changed.
+
+**Status: gen_ov_iud_bundle.py (plain OV) done.** Remaining for Phase 3: `gen_ovgm.py` (OV-GM),
+same treatment, regression-checked against Node or Chemical Tank.
+
+## 20. Phase 3 step 3 - OV-GM generator (2026-08-13) - new file instead of rewriting the legacy one
+
+The legacy `tmp/gen_ovgm.py` (589 lines) was assessed as too high-risk to rewrite in place: it's a
+single old-style `%`-substitution template (not separable into functions like
+`gen_ov_iud_bundle.py` was), and it carries ~15 already-shipped screens' worth of individually
+referenced historical bug fixes (issues #295/#297/#306/#318/#324) across 4 navigator modes, all
+mixed together with the RF T3/robot/SOW/README templating. A careless edit risked silently
+regressing every screen that already depends on it. Raised this risk explicitly before touching
+anything; owner's call (paraphrased): reuse the already-proven code rather than rewrite the legacy
+file.
+
+**Built `tools/generators/gen_ovgm_iud_bundle.py`** - a new, independent file, NOT a rewrite of
+`tmp/gen_ovgm.py` (that file is untouched, zero regression risk to anything it already generates).
+Reuses the exact engine-driven pattern already proven in `gen_ov_iud_bundle.py`'s rewritten
+`playwright_py()`, extended with exactly one addition OV-GM needs: a call to `Engine.
+apply_navigator(values=NAV_VALUES, levels=NAV_LEVELS)` before Insert - the Phase 3-step-1 method
+built and validated on Node earlier in this session. Extra mandatory fields beyond Code/Name/Start
+Date (Node's Calculation Sequence Number; Chemical Tank's Measure unit + Op Production Unit) are
+passed as a generic `extra_fields` list using the SAME `{{label, value, kind}}` convention
+`ec_object_iud.py`'s `insertObjectRecord`/`updateObjectRecord` already use - not a new convention,
+reusing what's already proven. Per the design's own boundary (section 5 point 4), this only
+generates the Playwright-driver half; RF T3/robot/SOW/README generation is out of scope and
+untouched (still `tmp/gen_ovgm.py`'s job, unchanged).
+
+**Regression-checked against BOTH already-shipped OV-GM exemplars, not just one** (given the
+elevated risk assessment above): generated a throwaway-slug bundle for **Node** (Calculation
+Sequence Number extra field) and **Chemical Tank** (Measure unit + Op Production Unit extra
+dropdown fields) and ran each live end-to-end. Both: navigator cascade captured the correct
+top-parent, full Insert -> Update -> Delete, all DB-verified (`OV_NODE`/`OV_CHEM_TANK`, independent
+re-check, not just the driver's own claim), self-cleaned to zero residual. **Both passed on the
+first live run** - no bugs found this time, likely because the pattern being reused (engine.py +
+its `_save()`/`SaveFailed`/`apply_navigator()`) was already proven twice before (Node directly via
+engine.py, and the whole gesture template via `gen_ov_iud_bundle.py`'s Bank regression check).
+
+**Phase 3 status: COMPLETE.** All three steps done: (1) `engine.py` extended with OV-GM navigator
+support, validated on Node; (2) `gen_ov_iud_bundle.py` rewritten, validated on Bank; (3) a new
+OV-GM generator built (not a risky in-place rewrite of the legacy one), validated on Node AND
+Chemical Tank. Per the original phased plan (section 7), Phase 4 (pilot the new engine-driven path
+on 3-5 genuinely new, uncovered screens, honest before/after effort comparison) is next and remains
+unstarted.
+
+## 21. Post-Phase-3 classifier fix - N1 navigator label lookup (2026-08-13)
+
+Owner asked for a live headed demo on Daily Gas Stream Status (N1 status-grid family - explicitly
+outside Phase 3's OV/OV-GM scope). First recon found `Engine._by_label` came back completely empty
+for this screen's navigator, despite the Phase 1 classifier already having found 4 real nav fields
+there in an earlier batch. Root-caused via `scan_region_fields`'s raw output: all 4 fields existed
+but every one had an empty `label` - not a screen problem, a classifier gap.
+
+**Root cause (confirmed via live DOM inspection):** this navigator layout puts each field in its
+OWN group (`nav:form:G:1`, `G:2`, `G:3` - one dropdown per group), with the label sitting ABOVE the
+field - same group and column, one row up (`nav:form:G:1:R:0:C:0:la` = "Production Unit", directly
+above `nav:form:G:1:R:1:C:0:dd_input`) - not to its LEFT at all, which is the only direction
+`scan_region_fields`'s label lookup tried. OV/OV-GM's navigators never hit this because their
+cascade fields all share ONE group (`G:0`) with multiple columns, so the leftward search always had
+something to find.
+
+**Fix:** added an UPWARD fallback (same group+column, decrementing row) to `scan_region_fields()`,
+tried only when the existing leftward search comes up empty - so it can't override a leftward match
+already proven correct on OV/OV-GM, only fill in cases where leftward genuinely finds nothing.
+Confirmed live: Daily Gas Stream Status's 4 nav fields now resolve to 'Date'/'Production
+Unit'/'Area'/'Facility Class 1' correctly.
+
+**Regression check (elevated, since this touches the shared classifier used by every prior
+exemplar):** re-ran Bank, Language, and Node - all still 3/3 DB-verified PASS, no behavior change.
+One incidental improvement noticed, not a regression: Bank's own navigator Date filter field (which
+had no label detectable before, since Bank has nothing to its left either) is now also correctly
+labeled 'Date' via the same upward fallback - previously silently unusable by label, now usable,
+with no change to Bank's IUD result.
+
+**Status: N1's navigator can now be resolved by label.** Whether `engine.py` can actually DRIVE an
+N1 status grid end-to-end (edit-in-place via `grid_cell()`, no Insert/Update/Delete since N1 toolbar
+disables both) is a separate, still-untested question - this fix only unblocks the navigator step.
+N1 support was never in Phase 3's scope; this is exploratory groundwork for a future phase, not a
+Phase 3 deliverable.
+
+## 22. Live headed demo - Daily Gas Stream Status (N1), full edit-in-place cycle (2026-08-13)
+
+Ran the actual demo the label fix above unblocked. `eng.select()` filled Production Unit/Area/
+Facility Class 1 by label successfully (confirming section 21's fix works end-to-end, not just for
+the raw scan). First-available landed on a zero-row scope (`AS1 EC Exploration Norway` - the same
+sparse-cascade class already accepted in Phase 1), so the demo added a bounded retry across the
+live Production Unit option list (same principle as the classifier's own sparse-cascade handling) -
+found data on the 2nd try (`AS2 EC Exploration Norway`, 4 rows).
+
+**Real bug found and fixed:** `_GridCellHandle.set()` failed to clear a cell back to an empty
+value - `Control+A` then `type('')` is a no-op (typing zero characters doesn't touch the selection),
+so the cell stayed at its edited value instead of reverting. Confirmed live: restoring the demo's
+'Override [Sm3]' cell (whose original value was genuinely `''`) threw `VerificationEchoFailed`,
+correctly catching its own failure rather than silently reporting success - exactly what the
+verification-echo is for. **Fix:** press `Delete` after `Control+A` (unconditionally), then only
+type if the target value is non-empty - clears correctly in both the empty and non-empty case.
+Regression-checked: Language (the other `grid_cell()` consumer) still 3/3 DB-verified PASS.
+
+**Demo result, live headed:** navigator filled by label -> bounded retry found real data -> grid
+cell edited (`''` -> `'12.5'`, DOM-verified) -> restored (`'12.5'` -> `''`, DOM-verified). **Save was
+deliberately never clicked** - this screen holds real production-style rows, not `AUTOTEST_` test
+data, so nothing was persisted to the DB; the edit and restore both happened client-side only,
+confirmed via the DOM re-read each time, matching the same rigor (never touch real data on
+assumption) already standing for this kind of screen.
+
+This is now genuine, live-proven groundwork toward N1 support (navigator by label + grid-cell
+edit-in-place both work), though still not a claimed "N1 phase" - no Save-and-persist cycle has
+been proven yet, and this was exploratory work outside Phase 3's own scope, not a Phase 3
+deliverable itself.

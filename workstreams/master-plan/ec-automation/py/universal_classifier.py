@@ -173,7 +173,15 @@ def scan_region_fields(page, id_prefix):
     Label lookup searches LEFTWARD from the field's own column for the nearest labeled cell in the
     same row (fixed 2026-08-12: a fixed 'always use C:0' lookup mislabels every column after the
     first label - e.g. objectdates' End Date at C:3 was reporting the C:1 row's 'Start Date' label
-    because C:0 is the ONLY label cell it ever checked)."""
+    because C:0 is the ONLY label cell it ever checked).
+
+    Fixed 2026-08-13 (Daily Gas Stream Status navigator): some navigator layouts put each field in
+    its OWN group (G:1/G:2/G:3, one dropdown per group) with the label ABOVE the field - same group
+    and column, row R:0 vs the field's R:1 - not to its left at all (confirmed live via DOM
+    inspection: `nav:form:G:1:R:0:C:0:la` = 'Production Unit', directly above
+    `nav:form:G:1:R:1:C:0:dd_input`). Leftward search alone found nothing (there's no C:-1), so this
+    adds an UPWARD fallback within the same group+column - tried only when leftward comes up empty,
+    so it can't override the leftward match already proven correct for OV/OV-GM's field-groups."""
     return page.evaluate(
         """(sub) => [...document.querySelectorAll('input,select,textarea')]
         .filter(e=>e.id && e.id.includes(sub) && e.type!=='hidden')
@@ -181,10 +189,15 @@ def scan_region_fields(page, id_prefix):
         + YELLOW
         + """';
             let lab='';
-            const m=e.id.match(/^(.*:R:\\d+):C:(\\d+):/);
-            if(m){ const rowPfx=m[1]; const myCol=parseInt(m[2],10);
+            const m=e.id.match(/^(.*:R:)(\\d+):C:(\\d+):/);
+            if(m){ const grpPfx=m[1]; const myRow=parseInt(m[2],10); const myCol=parseInt(m[3],10);
+                const rowPfx=grpPfx+myRow;
                 for(let c=myCol-1;c>=0 && !lab;c--){
                     const lc=document.getElementById(rowPfx+':C:'+c+':la')||document.getElementById(rowPfx+':C:'+c+':out')||document.querySelector("[id^='"+rowPfx+":C:"+c+"']");
+                    if(lc){ const t=(lc.innerText||lc.value||'').trim(); if(t) lab=t; }
+                }
+                for(let r=myRow-1;r>=0 && !lab;r--){
+                    const lc=document.getElementById(grpPfx+r+':C:'+myCol+':la')||document.getElementById(grpPfx+r+':C:'+myCol+':out');
                     if(lc){ const t=(lc.innerText||lc.value||'').trim(); if(t) lab=t; }
                 }
             }

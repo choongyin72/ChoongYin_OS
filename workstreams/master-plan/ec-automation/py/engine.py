@@ -37,6 +37,7 @@ from universal_classifier import (  # noqa: E402
     USER,
     PW,
 )
+from ec_object_iud import ec_error  # noqa: E402 - proven structural (not text-substring) error-banner detector
 from playwright.sync_api import sync_playwright  # noqa: E402
 
 
@@ -47,6 +48,17 @@ class FieldNotFound(LookupError):
 class VerificationEchoFailed(AssertionError):
     """Raised when a fill/select call's post-write DOM re-read doesn't match what was set -
     the class of silent failure this layer exists to catch (CD.0024)."""
+
+
+class SaveFailed(RuntimeError):
+    """Raised when EC's own error banner reports a Save-time validation failure (e.g. a missing
+    mandatory field) - confirmed live, Node: `ec_error()` checked immediately after the click
+    correctly reports 'Required fields are empty...', but checking it after `click()`'s automatic
+    `_refresh_field_map()` call instead reads '' - that refresh probes every dd_input field via a
+    live click+Escape (classify_dd), which dismisses EC's own notification banner as a side
+    effect. So error-detection must happen BEFORE any refresh, not left to the caller to remember
+    to check first - `click('Save')` now raises this itself rather than silently reporting
+    success by omission, the same failure class the verification-echo elsewhere exists to catch."""
 
 
 def _norm(s):
@@ -176,16 +188,65 @@ class Engine:
         """Named top-level actions: 'Save', 'GO'. For toolbar menu actions use toolbar()."""
         if action == "Save":
             self._save()
+            err = ec_error(self.page)  # MUST run before _refresh_field_map() - see SaveFailed
+            if err:
+                raise SaveFailed(err)
         elif action == "GO":
-            for gid in ("go_button:form:B", "button:form:B", "navButton:form:B", "buttongo:form:B"):
-                loc = self.page.locator(css(gid))
-                if loc.count() and loc.first.is_visible():
-                    loc.first.click()
-                    ajax(self.page, 20000)
-                    break
+            self._click_go()
         else:
             raise ValueError(f"Unknown action {action!r} - use toolbar() for menu items")
         self._refresh_field_map()
+
+    def _click_go(self):
+        """Structural GO-id list - same set proven in the Phase 1 classifier's readiness gate
+        (includes 'buttongo:form:B', the id that caused the Stream Item open-failure before it
+        was added there). Not every screen has a GO button (custom-URL OVs use toolbar Refresh
+        instead) - a no-op here is legitimate, not an error."""
+        for gid in ("go_button:form:B", "button:form:B", "navButton:form:B", "buttongo:form:B"):
+            loc = self.page.locator(css(gid))
+            if loc.count() and loc.first.is_visible():
+                loc.first.click()
+                ajax(self.page, 20000)
+                return True
+        return False
+
+    def apply_navigator(self, values=None, levels=4, row=1):
+        """OV-GM navigator cascade - generic, structural, no per-screen hardcoding. The grid on an
+        OV-GM screen is empty until a cascade of navigator dropdowns (Business Unit -> Production
+        Unit -> Area -> ...) is set + GO; child options only render once the parent is chosen.
+
+        - `values=None` (default): fill each column C:1..`levels` FIRST-AVAILABLE, parent before
+          child (ports `ec_object_iud.py`'s proven `apply_ovgm_navigator()`).
+        - `values=[...]`: fill C:1..len(values) with these EXACT values instead of first-available
+          (for a screen where the default first option has no valid downstream combination -
+          the same class of gotcha the classifier's `NAV_HINT_OPTION` exists to work around).
+        - No `nav:form:G:0:R:<row>:C:*:dd_input` columns exist at all (a screen with only optional
+          filters, or none): the loop naturally does nothing and this degrades automatically to a
+          bare GO - no separate "go_only" mode flag needed, unlike the string-templated generators'
+          current design, since the absence of columns already says everything.
+
+        Returns the C:1 (top-parent) value actually selected, or None (legitimately, on a
+        go_only-shaped screen - callers must not assert this is non-None unconditionally)."""
+        top = None
+        for col in range(1, levels + 1):
+            dd = f"nav:form:G:0:R:{row}:C:{col}:dd_input"
+            loc = self.page.locator(css(dd))
+            if loc.count() == 0:
+                break
+            want = values[col - 1] if values and col <= len(values) else "__FIRST__"
+            base = dd[: -len("_input")]
+            self.page.locator(css(base + "_button")).first.click()
+            want_first = want == "__FIRST__"
+            any_opt = f"xpath=//*[@id='{base}_panel']//tr[@data-item-label and normalize-space(@data-item-label)!='']"
+            opt = any_opt if want_first else f"xpath=//*[@id='{base}_panel']//tr[normalize-space(@data-item-label)='{want}']"
+            self.page.locator(opt).first.wait_for(state="visible", timeout=6000)
+            self.page.locator(opt).first.click()
+            ajax(self.page, 12000)
+            if col == 1:
+                top = self.page.locator(css(dd)).first.input_value()
+        self._click_go()
+        self._refresh_field_map()
+        return top
 
     def _save(self, attempts=2):
         """Same 2-strike logic already proven in ec_object_iud.py's save(): an enabled Save link
@@ -403,15 +464,23 @@ class _GridCellHandle:
         return loc.input_value() if loc.count() else None
 
     def set(self, value):
+        """Confirmed live (Daily Gas Stream Status, clearing a cell back to its original empty
+        value): Control+A then type(str(value)) is a no-op for value='' - typing zero characters
+        leaves the selection alone and the cell unchanged. Delete after Control+A actually clears
+        the selection, so it works for both the empty and non-empty case (typing after Delete on
+        an empty target is equivalent to typing after a successful select-all-replace)."""
         page = self.engine.page
         loc = page.locator(css(self.cell_id)).first
         loc.click()
         page.keyboard.press("Control+A")
-        page.keyboard.type(str(value), delay=25)
+        page.keyboard.press("Delete")
+        text = str(value)
+        if text:
+            page.keyboard.type(text, delay=25)
         page.keyboard.press("Tab")
         ajax(page)
         actual = loc.input_value()
-        if _norm(actual) != _norm(str(value)):
+        if _norm(actual) != _norm(text):
             raise VerificationEchoFailed(f"grid_cell.set({value!r}): DOM re-read shows {actual!r}")
         return actual
 
