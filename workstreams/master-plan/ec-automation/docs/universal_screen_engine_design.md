@@ -644,3 +644,54 @@ DB-verified PASS, no behavior change on the exemplar the fixes weren't targeting
 validated end-to-end on both structurally distinct exemplars, DB-verified, self-cleaning, zero
 regression). Not yet done (per the same phased plan, unstarted): Phase 3 (rewrite
 `gen_ov_screen.py`/`gen_ovgm.py` to consume the engine) and Phase 4 (pilot on new uncovered screens).
+
+## 18. Phase 3 step 1 - OV-GM navigator-cascade support added to the engine (2026-08-13)
+
+Owner authorized Phase 3. First gap identified before any generator rewrite could start: Phase 2's
+`engine.py` was validated only on Bank and Language - **neither has a navigator at all**, so the
+OV-GM cascade (Business Unit -> Production Unit -> Area -> ...) that every existing `gen_ovgm.py`
+bundle depends on had zero engine-level coverage. Building that first, since the generator rewrite
+can't proceed without it.
+
+**Added `Engine.apply_navigator(values=None, levels=4, row=1)`** - generic and structural, no
+per-screen hardcoding (matches the standing "resolve by label/structure, never hardcode" rule).
+Unifies the 4 modes the string-templated generators currently express as separate code paths
+(`nav_mode='go_only'`, `nav_values=[...]`, `nav_value=...`, default first-available cascade) into
+ONE method: pass explicit `values` for known-good scope values (the `NAV_HINT_OPTION` pattern from
+Phase 1), omit for first-available cascade, and a screen with no cascade columns at all degrades
+automatically to a bare GO with no separate flag needed - the absence of `nav:form:G:0:R:<row>:C:*`
+columns already says everything.
+
+**Validated live against Node** (OV-GM, 3-level mandatory cascade: Production Unit -> Area ->
+Facility Class 1; already-shipped, RF 4/4 + Playwright 8/8 exemplar per the registry) - full
+navigator cascade + Insert -> Update -> Delete through the engine alone, DB-verified at every step,
+self-cleaned to zero residual.
+
+**Real defect found and fixed while validating (not the navigator code - a `Save` error-detection
+gap):** the first Node insert attempt failed silently - DB check showed no row, but `ec_error()`
+checked right after `click('Save')` returned `''` (no error), even though EC's own banner DID say
+`'Required fields are empty... Calculation Sequence Number'`. Root-caused: `click('Save')` calls
+`_refresh_field_map()` immediately afterward, which probes every `dd_input` field via `classify_dd()`
+- a live click+Escape - as a side effect of "just reading labels." That probe dismisses EC's error
+notification before the caller ever gets to check it, so **any code built on the engine would
+silently believe a failed Save had succeeded.** This is exactly the class of failure the
+verification-echo elsewhere in this layer exists to prevent, just on the Save path instead of a
+field write. **Fix:** `click('Save')` now checks `ec_error()` (the same structural, non-substring
+detector already proven in `ec_object_iud.py`) immediately after the click, BEFORE the refresh runs,
+and raises a new `SaveFailed` exception if EC reports one - matching the exact ordering
+`ec_object_iud.py`'s own `insertObjectRecord`/`updateObjectRecord` already use. Confirmed the fix
+raises correctly on a deliberately-incomplete Save, then re-ran the full Node cycle clean.
+(Separately: the missing mandatory field itself was a gap in my own quick test script, not a
+classifier or engine defect - Node's proven driver already documents "Calculation Sequence Number"
+as an extra mandatory field beyond the plain-OV set; I hadn't done fresh recon before writing the
+test and trusted an abbreviated registry summary instead.)
+
+**Regression check:** re-ran Bank (OV) and Language (TV) again after both changes landed - both
+still 3/3 DB-verified PASS, unchanged.
+
+**Status: engine-level OV-GM support proven on one exemplar (Node).** Not yet done: validating
+`apply_navigator(values=[...])` (the explicit-value path, for a sparse-cascade screen where
+first-available has no valid combination) against a live screen - Node's cascade happened to have a
+populated first-available option throughout, so only the default path has live evidence so far.
+Next: the actual generator rewrite (`gen_ov_iud_bundle.py` first, then `gen_ovgm.py`), each
+regression-checked against an already-shipped exemplar before being trusted on anything new.
