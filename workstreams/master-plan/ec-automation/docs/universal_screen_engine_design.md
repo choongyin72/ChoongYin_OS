@@ -807,3 +807,33 @@ N1 status grid end-to-end (edit-in-place via `grid_cell()`, no Insert/Update/Del
 disables both) is a separate, still-untested question - this fix only unblocks the navigator step.
 N1 support was never in Phase 3's scope; this is exploratory groundwork for a future phase, not a
 Phase 3 deliverable.
+
+## 22. Live headed demo - Daily Gas Stream Status (N1), full edit-in-place cycle (2026-08-13)
+
+Ran the actual demo the label fix above unblocked. `eng.select()` filled Production Unit/Area/
+Facility Class 1 by label successfully (confirming section 21's fix works end-to-end, not just for
+the raw scan). First-available landed on a zero-row scope (`AS1 EC Exploration Norway` - the same
+sparse-cascade class already accepted in Phase 1), so the demo added a bounded retry across the
+live Production Unit option list (same principle as the classifier's own sparse-cascade handling) -
+found data on the 2nd try (`AS2 EC Exploration Norway`, 4 rows).
+
+**Real bug found and fixed:** `_GridCellHandle.set()` failed to clear a cell back to an empty
+value - `Control+A` then `type('')` is a no-op (typing zero characters doesn't touch the selection),
+so the cell stayed at its edited value instead of reverting. Confirmed live: restoring the demo's
+'Override [Sm3]' cell (whose original value was genuinely `''`) threw `VerificationEchoFailed`,
+correctly catching its own failure rather than silently reporting success - exactly what the
+verification-echo is for. **Fix:** press `Delete` after `Control+A` (unconditionally), then only
+type if the target value is non-empty - clears correctly in both the empty and non-empty case.
+Regression-checked: Language (the other `grid_cell()` consumer) still 3/3 DB-verified PASS.
+
+**Demo result, live headed:** navigator filled by label -> bounded retry found real data -> grid
+cell edited (`''` -> `'12.5'`, DOM-verified) -> restored (`'12.5'` -> `''`, DOM-verified). **Save was
+deliberately never clicked** - this screen holds real production-style rows, not `AUTOTEST_` test
+data, so nothing was persisted to the DB; the edit and restore both happened client-side only,
+confirmed via the DOM re-read each time, matching the same rigor (never touch real data on
+assumption) already standing for this kind of screen.
+
+This is now genuine, live-proven groundwork toward N1 support (navigator by label + grid-cell
+edit-in-place both work), though still not a claimed "N1 phase" - no Save-and-persist cycle has
+been proven yet, and this was exploratory work outside Phase 3's own scope, not a Phase 3
+deliverable itself.

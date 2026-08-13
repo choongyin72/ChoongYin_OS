@@ -464,15 +464,23 @@ class _GridCellHandle:
         return loc.input_value() if loc.count() else None
 
     def set(self, value):
+        """Confirmed live (Daily Gas Stream Status, clearing a cell back to its original empty
+        value): Control+A then type(str(value)) is a no-op for value='' - typing zero characters
+        leaves the selection alone and the cell unchanged. Delete after Control+A actually clears
+        the selection, so it works for both the empty and non-empty case (typing after Delete on
+        an empty target is equivalent to typing after a successful select-all-replace)."""
         page = self.engine.page
         loc = page.locator(css(self.cell_id)).first
         loc.click()
         page.keyboard.press("Control+A")
-        page.keyboard.type(str(value), delay=25)
+        page.keyboard.press("Delete")
+        text = str(value)
+        if text:
+            page.keyboard.type(text, delay=25)
         page.keyboard.press("Tab")
         ajax(page)
         actual = loc.input_value()
-        if _norm(actual) != _norm(str(value)):
+        if _norm(actual) != _norm(text):
             raise VerificationEchoFailed(f"grid_cell.set({value!r}): DOM re-read shows {actual!r}")
         return actual
 
