@@ -772,3 +772,38 @@ OV-GM generator built (not a risky in-place rewrite of the legacy one), validate
 Chemical Tank. Per the original phased plan (section 7), Phase 4 (pilot the new engine-driven path
 on 3-5 genuinely new, uncovered screens, honest before/after effort comparison) is next and remains
 unstarted.
+
+## 21. Post-Phase-3 classifier fix - N1 navigator label lookup (2026-08-13)
+
+Owner asked for a live headed demo on Daily Gas Stream Status (N1 status-grid family - explicitly
+outside Phase 3's OV/OV-GM scope). First recon found `Engine._by_label` came back completely empty
+for this screen's navigator, despite the Phase 1 classifier already having found 4 real nav fields
+there in an earlier batch. Root-caused via `scan_region_fields`'s raw output: all 4 fields existed
+but every one had an empty `label` - not a screen problem, a classifier gap.
+
+**Root cause (confirmed via live DOM inspection):** this navigator layout puts each field in its
+OWN group (`nav:form:G:1`, `G:2`, `G:3` - one dropdown per group), with the label sitting ABOVE the
+field - same group and column, one row up (`nav:form:G:1:R:0:C:0:la` = "Production Unit", directly
+above `nav:form:G:1:R:1:C:0:dd_input`) - not to its LEFT at all, which is the only direction
+`scan_region_fields`'s label lookup tried. OV/OV-GM's navigators never hit this because their
+cascade fields all share ONE group (`G:0`) with multiple columns, so the leftward search always had
+something to find.
+
+**Fix:** added an UPWARD fallback (same group+column, decrementing row) to `scan_region_fields()`,
+tried only when the existing leftward search comes up empty - so it can't override a leftward match
+already proven correct on OV/OV-GM, only fill in cases where leftward genuinely finds nothing.
+Confirmed live: Daily Gas Stream Status's 4 nav fields now resolve to 'Date'/'Production
+Unit'/'Area'/'Facility Class 1' correctly.
+
+**Regression check (elevated, since this touches the shared classifier used by every prior
+exemplar):** re-ran Bank, Language, and Node - all still 3/3 DB-verified PASS, no behavior change.
+One incidental improvement noticed, not a regression: Bank's own navigator Date filter field (which
+had no label detectable before, since Bank has nothing to its left either) is now also correctly
+labeled 'Date' via the same upward fallback - previously silently unusable by label, now usable,
+with no change to Bank's IUD result.
+
+**Status: N1's navigator can now be resolved by label.** Whether `engine.py` can actually DRIVE an
+N1 status grid end-to-end (edit-in-place via `grid_cell()`, no Insert/Update/Delete since N1 toolbar
+disables both) is a separate, still-untested question - this fix only unblocks the navigator step.
+N1 support was never in Phase 3's scope; this is exploratory groundwork for a future phase, not a
+Phase 3 deliverable.
