@@ -695,3 +695,39 @@ first-available has no valid combination) against a live screen - Node's cascade
 populated first-available option throughout, so only the default path has live evidence so far.
 Next: the actual generator rewrite (`gen_ov_iud_bundle.py` first, then `gen_ovgm.py`), each
 regression-checked against an already-shipped exemplar before being trusted on anything new.
+
+## 19. Phase 3 step 2 - gen_ov_iud_bundle.py rewritten to consume the engine (2026-08-13)
+
+Rewrote `tools/generators/gen_ov_iud_bundle.py`'s `playwright_py()` - the function that emits the
+Playwright driver half of a plain-OV IUD bundle. Before: ~400 generated lines per bundle, hardcoding
+row-index field ids (`R:0=Code, R:1=Name, R:2=Start Date`, `objectdates R:0:C:3=EndDate`) and
+reimplementing `fill`/`fill_date`/`do_save`/`click_go`/`select_row`/`get_ec_error` from scratch in
+every single generated file - the exact "each family/generator re-solves the same DOM-mechanics
+problem independently" duplication the original design (section 1) set out to eliminate. After: the
+generated driver imports `engine.py` and resolves every field by LABEL (`eng.fill('Code', ...)`,
+`eng.toolbar('New Object')`, `eng.click('Save')` - which now raises `SaveFailed` itself, so the
+generated code no longer needs its own error-banner check). File size: 762 -> 583 lines overall (the
+generated-driver template shrank from ~400 to ~215 lines - most of the reduction is gesture logic
+that moved into the shared, already-tested `engine.py` instead of being re-emitted per screen).
+
+Added two new optional parameters - `code_label='Code'`, `name_label='Name'` - since the OLD
+template never actually knew the real field LABEL text (it assumed a fixed row position works for
+any screen in the family); the new label-driven version genuinely needs the real label, matching
+the same recon-input principle every other per-screen parameter (`view`, `code_prefix`, `rc_code`)
+already follows. Defaults match Bank, the exemplar this generator has always targeted.
+
+**Real bug found and fixed while regression-testing (a code-quality catch, not a business-logic
+one):** the first version of the rewritten `row_exists()` helper passed two separate positional
+arguments to Playwright's `page.evaluate(script, arg)`, which only accepts one - `TypeError: takes
+from 2 to 3 positional arguments but 4 were given`, caught immediately on the first live run.
+**Fix:** pass a single `[GRID_ID, code]` array and destructure it in the JS callback signature
+(`([gid, code]) => {{...}}`) - the standard Playwright pattern for multi-value `evaluate()` calls.
+
+**Regression check:** generated a fresh Bank bundle through the rewritten generator (using a
+throwaway slug so it wouldn't collide with the real shipped bundle), ran it live end-to-end - full
+Insert -> Update -> Delete, matching Phase 2's already-proven Bank result exactly, self-cleaned to
+zero residual (confirmed via a direct DB re-check, not just the driver's own PASS claim). No
+generator-produced file was committed from this test run; only the generator source itself changed.
+
+**Status: gen_ov_iud_bundle.py (plain OV) done.** Remaining for Phase 3: `gen_ovgm.py` (OV-GM),
+same treatment, regression-checked against Node or Chemical Tank.
