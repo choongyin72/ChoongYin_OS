@@ -242,7 +242,7 @@ def classify_screen(screen_name):
                 nav: document.querySelectorAll("[id^='nav:form:G:']").length,
                 grid: document.querySelectorAll("[id$=':T_data']").length,
                 form: document.querySelectorAll("[id*='objectForm']").length,
-                go: ['go_button:form:B','button:form:B','navButton:form:B'].filter(i => document.getElementById(i)).length })"""
+                go: ['go_button:form:B','button:form:B','navButton:form:B','buttongo:form:B'].filter(i => document.getElementById(i)).length })"""
             )
             if state["nav"] or state["grid"] or state["form"] or state["go"]:
                 ready = True
@@ -262,7 +262,7 @@ def classify_screen(screen_name):
             + YELLOW
             + """';
             out.push({id:e.id, grp:m[1], kind:m[2], mandatory:y}); });
-            const go=['go_button:form:B','button:form:B','navButton:form:B'].filter(id=>document.getElementById(id));
+            const go=['go_button:form:B','button:form:B','navButton:form:B','buttongo:form:B'].filter(id=>document.getElementById(id));
             return {fields:[...new Map(out.map(o=>[o.id,o])).values()], go}; }"""
         )
         # gated nav: fill mandatory dds first-option + GO so grid/form render, same as scan_ec_screen.py.

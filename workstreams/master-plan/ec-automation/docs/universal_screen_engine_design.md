@@ -435,3 +435,94 @@ remaining ~98 screens are overwhelmingly near-duplicate clones of shapes already
 continuing to mechanically test all of them has sharply diminishing value. Recommend either (a) a
 lighter final sampling pass (10-15 more, purely as a broader confidence check) then declaring the
 breadth pass complete, or (b) stopping here and moving to Phase 2 (interaction layer) - owner's call.
+
+## 14. Batches 6-11 (2026-08-13) - full registry coverage completed, findings logged not fixed
+
+Owner directed a change of approach for this stretch: run all remaining batches back-to-back, LOG any
+finding without stopping to investigate/fix, then do one consolidated fix pass at the end (see §15).
+98 screens tested across 6 batches (6 through 11), bringing total coverage to **175/175 - the entire
+registry**.
+
+**Batch 6 (15 screens: Equipment, MIME Type Mapping, Business Unit, Country, State, Object List, Cost
+Centre, Currency, Company, Customer, Vendor, Delivery Point, Commercial Entity, Company Contact,
+Licence): clean.** Equipment hit the already-accepted sparse-cascade limitation; not a new bug.
+
+**Batch 7 (15 screens: County, Region, DOA Credit Limit, WBS, Delivery Stream, Nomination Point,
+Pipeline Segment, Transport Zone, Daily Gas Stream Status, Daily Oil Stream Status, Stream Oil
+Component Analysis, Royalty Depositor, Document Date Term, Port, Well): clean.** Stream Oil Component
+Analysis hit the sparse-cascade limitation; not new.
+
+**Batch 8 (15 screens: Exchange Rate Source, Payment Scheme, Product Description, Revenue Order,
+Sales Order, VAT Code, Cost Object Mapping, MMS Lease, Operator Lease, Production Sub Unit, Pipeline,
+Daily Water Stream Status, Document Received Term, Berth, Canal): 15/15 clean, zero findings.**
+
+**Batch 9 (15 screens: Revenue Stream Category, Split Item Other, Reservoir Block, Reservoir
+Formation, Blend, Chemical Transport Tank, Calculation Context, Dummy Tag Event Object, Transactional
+Inventory Layout Set, HCB System, Data Extract Set, Document Template, Transactional Inventory
+Properties, Storage Flow, UOP Key): 15/15 clean, zero findings.**
+
+**Batch 10 (15 screens: Process Train, Calculation Group Context, Deferment Group, EC Code Object,
+Conversion Group, Document Sequence, Calculation Library, Task Process, Production Separator, Test
+Device, Channel, Loading Arm, Tug Boat, Facility Class 1, Storage): 14/15 clean.** Deferment Group's
+treeview link click timed out at 30s - a SECOND occurrence of the open-failure class first seen on
+Stream Item (Batch 5). Channel and Tug Boat hit the sparse-cascade limitation; not new. Logged, not
+investigated at the time (per the batch-then-fix approach).
+
+**Batch 11 / FINAL (7 screens: Chemical Stream, Shift, Chemical Stream Hookup, Price Rate, Property,
+Price Index, Division Order): 6/7 clean.** Chemical Stream hit the click-stall pattern (3x `probe_err`
+dropdown-click timeouts) - a FOURTH occurrence of the class first seen on Price Object (Batch 4). Shift,
+Chemical Stream Hookup, and Division Order hit the sparse-cascade limitation; not new.
+
+**Full-registry tally: 175/175 screens tested. Findings requiring the consolidated fix pass: Stream
+Item + Deferment Group (open-failure, 2 occurrences), Price Object/Service/Contract Capacity/Chemical
+Stream (click-stall, 4 occurrences). All other flagged items across every batch are the already-
+accepted sparse valid-combination limitation (grid can't be reached by blind cascade-cycling when the
+dropdown's valid combinations are sparse) - confirmed via DB row counts on multiple screens, not a
+classifier defect.**
+
+## 15. Consolidated fix pass (2026-08-13)
+
+**Item 1 - Stream Item open-failure: RESOLVED.** Root cause: `classify_screen()`'s readiness gate and
+GO-button-id lists (4 locations in `universal_classifier.py`) hardcoded
+`['go_button:form:B','button:form:B','navButton:form:B']` and never included `buttongo:form:B` -
+Stream Item's real GO button id. Live investigation confirmed the tv-link click always succeeded (8s);
+the screen's readiness gate then looped the full 30s because none of its known ids matched, and
+falsely reported `SCREEN_NEVER_RENDERED_NAV_GRID_FORM_OR_GO`. Clicking `buttongo:form:B` directly
+populated 4 real grids (`nav:form:T_data`, 2 tab-panel grids, `RunningJobs:form:T_data`), proving the
+screen works fine once the right button is found. **Fix:** added `'buttongo:form:B'` to the go-id list
+in both places it's defined (readiness gate + nav-fields-raw scan); the two `go_id`/`go_id2` fallback
+sites already consume that list so no separate edit was needed there. **Regression check:** re-ran
+Stream Item (now classifies clean, 0 unrecognized, 59 form fields resolved) + Bank + Contract (both
+unchanged) - no regression. This is the exact same defect class independently flagged in GitHub Issue
+#345 (against a different codebase's `ec_object_iud.py`), confirming it's a recurring EC-specific
+gotcha (some screens use a non-standard GO button id) worth remembering generally, not a one-off typo.
+
+**Item 2 - Deferment Group open-failure: NOT a code bug - environment/registration-state issue,
+documented not fixed.** DB confirms the class is real and correctly configured
+(`CLASS_CNFG.DEFERMENT_GROUP` = OBJECT/VERSIONED; `CLASS_PROPERTY_CNFG.LABEL` = literally "Deferment
+Group", matching the registry exactly). But the live menu search for the exact term "Deferment Group"
+returns "No records found"; searching "Deferment" alone returns 12 unrelated results, none matching.
+The registry row claims this screen was live-verified 4/4 RF + 7/7 Playwright on 2026-07-26 - something
+has changed on this sandbox since then (search index staleness, or the screen's menu/treeview wiring
+was later removed) that is outside the classifier's control. Not investigated further per the escalate-
+after-repeated-attempts principle (this is an EC environment-state question, not a script defect) -
+flagged for a manual UI check (e.g. does the screen still appear if navigated to directly via
+treeview folders, or does a cache flush restore it) rather than further code changes.
+
+**Item 3 - Click-stall (Price Object / Service / Contract Capacity / Chemical Stream): still
+unresolved at root cause, now confirmed a 4th time.** Consistent with Batches 4-5's findings - the
+stall is specific to the row-select-derived Update form context and does not reproduce via a
+controlled Insert-form repro. Per the same escalate-after-repeated-attempts principle already applied
+in Batch 5, not re-investigating a third time without new information; the existing 8s timeout cap
+continues to bound the cost (fields are correctly flagged `probe_err`, never silently misclassified).
+Accepting as a known, bounded, unresolved-at-root-cause limitation.
+
+**Item 4 - Sparse valid-combination limitation: reconfirmed, not a bug.** Now observed on 10 screens
+total across all batches (Alarms, Tract, Equipment, Stream Oil Component Analysis, Channel, Tug Boat,
+Chemical Stream, Shift, Chemical Stream Hookup, Division Order). Consistent with the DB-verified root
+cause established in Batches 2-3 (genuinely sparse data, not a classifier defect) - no further action.
+
+**Fix pass tally: 1 fixed (Stream Item), 1 documented as environment/out-of-scope (Deferment Group), 2
+accepted as known bounded limitations (click-stall, sparse-cascade). Universal Screen Engine Phase 1
+breadth pass is now COMPLETE: 175/175 registry screens tested, every finding resolved or explicitly
+accounted for.**
