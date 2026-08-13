@@ -731,3 +731,44 @@ generator-produced file was committed from this test run; only the generator sou
 
 **Status: gen_ov_iud_bundle.py (plain OV) done.** Remaining for Phase 3: `gen_ovgm.py` (OV-GM),
 same treatment, regression-checked against Node or Chemical Tank.
+
+## 20. Phase 3 step 3 - OV-GM generator (2026-08-13) - new file instead of rewriting the legacy one
+
+The legacy `tmp/gen_ovgm.py` (589 lines) was assessed as too high-risk to rewrite in place: it's a
+single old-style `%`-substitution template (not separable into functions like
+`gen_ov_iud_bundle.py` was), and it carries ~15 already-shipped screens' worth of individually
+referenced historical bug fixes (issues #295/#297/#306/#318/#324) across 4 navigator modes, all
+mixed together with the RF T3/robot/SOW/README templating. A careless edit risked silently
+regressing every screen that already depends on it. Raised this risk explicitly before touching
+anything; owner's call (paraphrased): reuse the already-proven code rather than rewrite the legacy
+file.
+
+**Built `tools/generators/gen_ovgm_iud_bundle.py`** - a new, independent file, NOT a rewrite of
+`tmp/gen_ovgm.py` (that file is untouched, zero regression risk to anything it already generates).
+Reuses the exact engine-driven pattern already proven in `gen_ov_iud_bundle.py`'s rewritten
+`playwright_py()`, extended with exactly one addition OV-GM needs: a call to `Engine.
+apply_navigator(values=NAV_VALUES, levels=NAV_LEVELS)` before Insert - the Phase 3-step-1 method
+built and validated on Node earlier in this session. Extra mandatory fields beyond Code/Name/Start
+Date (Node's Calculation Sequence Number; Chemical Tank's Measure unit + Op Production Unit) are
+passed as a generic `extra_fields` list using the SAME `{{label, value, kind}}` convention
+`ec_object_iud.py`'s `insertObjectRecord`/`updateObjectRecord` already use - not a new convention,
+reusing what's already proven. Per the design's own boundary (section 5 point 4), this only
+generates the Playwright-driver half; RF T3/robot/SOW/README generation is out of scope and
+untouched (still `tmp/gen_ovgm.py`'s job, unchanged).
+
+**Regression-checked against BOTH already-shipped OV-GM exemplars, not just one** (given the
+elevated risk assessment above): generated a throwaway-slug bundle for **Node** (Calculation
+Sequence Number extra field) and **Chemical Tank** (Measure unit + Op Production Unit extra
+dropdown fields) and ran each live end-to-end. Both: navigator cascade captured the correct
+top-parent, full Insert -> Update -> Delete, all DB-verified (`OV_NODE`/`OV_CHEM_TANK`, independent
+re-check, not just the driver's own claim), self-cleaned to zero residual. **Both passed on the
+first live run** - no bugs found this time, likely because the pattern being reused (engine.py +
+its `_save()`/`SaveFailed`/`apply_navigator()`) was already proven twice before (Node directly via
+engine.py, and the whole gesture template via `gen_ov_iud_bundle.py`'s Bank regression check).
+
+**Phase 3 status: COMPLETE.** All three steps done: (1) `engine.py` extended with OV-GM navigator
+support, validated on Node; (2) `gen_ov_iud_bundle.py` rewritten, validated on Bank; (3) a new
+OV-GM generator built (not a risky in-place rewrite of the legacy one), validated on Node AND
+Chemical Tank. Per the original phased plan (section 7), Phase 4 (pilot the new engine-driven path
+on 3-5 genuinely new, uncovered screens, honest before/after effort comparison) is next and remains
+unstarted.
