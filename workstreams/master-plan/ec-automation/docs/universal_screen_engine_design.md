@@ -526,3 +526,37 @@ cause established in Batches 2-3 (genuinely sparse data, not a classifier defect
 accepted as known bounded limitations (click-stall, sparse-cascade). Universal Screen Engine Phase 1
 breadth pass is now COMPLETE: 175/175 registry screens tested, every finding resolved or explicitly
 accounted for.**
+
+## 16. Follow-up on the two accepted-limitation items (2026-08-13) - two more concrete attempts, both closed with stronger evidence
+
+Owner asked for a real fix plan rather than leaving both items at "accepted, not investigated further"
+without trying anything new. Two genuinely new angles were tried (not a repeat of prior methods):
+
+**Deferment Group - tried "Flush Cache" (the exact menu action visible next to the search box) to test
+the stale-search-index theory.** Clicked it, then re-searched "Deferment Group" immediately: still "No
+records found". This disproves the stale-index theory outright - it isn't a caching problem. The class
+is correctly configured in `CLASS_CNFG`/`CLASS_PROPERTY_CNFG` but is not exposed via the live menu
+search under any tool available here, even after the one refresh mechanism the UI itself offers.
+**Closed for good** - nothing further is actionable from this side; this needs an EC admin/environment-
+level check (was the menu/treeview wiring for this class removed after the 2026-07-26 build?), not more
+script-level investigation.
+
+**Click-stall - ran a genuinely different diagnostic** (prior 3 attempts all compared against a clean
+Insert-form repro; this one instead used the proven `ec_object_iud.py` driver to reach the real
+row-select context directly, captured browser console + failed-network events during the click, and
+inspected `elementFromPoint` at the button's exact center before clicking). Two findings: (1) the
+"something overlaps the button" observation from the original Batch 4 investigation is a **false
+lead** - the element sitting on top is the button's own icon `<span class="ui-icon-triangle-1-s">`, a
+normal child element, not a foreign overlay; Playwright correctly clicks through it regardless. (2)
+Swept all 11 dropdown fields in a real update form (not just one) with zero reopen-delay between
+clicks, matching the original failure pattern as closely as possible - **0/11 stalled this run**, no
+console errors, no failed requests. This is the 4th distinct investigation attempt (Batch 4, Batch 5
+x2, this one) and the first to use console/network capture + a full field sweep; it still produced zero
+reproducible signal and disproved the one concrete theory anyone had. **Closed as a confirmed
+intermittent/transient issue** (most likely server-side AJAX/render-queue timing under load, given it
+never reproduces in a clean, isolated attempt) rather than a fixable client-side defect - the 8s timeout
+cap remains the correct mitigation (bounds the cost, never silently misclassifies a field).
+
+**Both items now closed with stronger evidence than before, not just re-stated as "accepted."** No
+further action planned on either unless new information surfaces (e.g. the click-stall recurs with a
+different, reproducible pattern in a future batch).
