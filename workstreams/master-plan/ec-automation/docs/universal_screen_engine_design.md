@@ -560,3 +560,87 @@ cap remains the correct mitigation (bounds the cost, never silently misclassifie
 **Both items now closed with stronger evidence than before, not just re-stated as "accepted."** No
 further action planned on either unless new information surfaces (e.g. the click-stall recurs with a
 different, reproducible pattern in a future batch).
+
+## 17. Phase 2 - Interaction layer built and validated (2026-08-13)
+
+Owner authorized Phase 2 per the original phased plan (section 7): build the interaction layer,
+validate against already-covered screens by re-running their proven IUD flows through the new engine
+instead of hand-built per-screen code, DB-verified, self-cleaning.
+
+**Built:** `workstreams/master-plan/ec-automation/py/engine.py` - a generic `Engine` class driven by
+the Phase 1 classifier's field/primitive map, not per-family branching. Public API: `fill(label, value)`,
+`select(label, value)`, `check(label, value)`, `resolve_popup(label).pick_by_code(value)`,
+`click('Save'|'GO')`, `toolbar(action, icon=None)`, `select_row(grid_id, code)` (OV),
+`select_grid_row(grid_id, value)` (TV), `grid_cell(grid_id, row, col_label).set(value)/.get()`,
+`find_grid_row(grid_id, value)`. Every write call re-reads the DOM afterward (verification-echo) -
+the exact mechanism the original design called for to catch a CD.0024-class silent failure.
+
+**Validated against the two structurally distinct exemplars the Phase 1 classifier itself was first
+proven on** (matching section 7's "re-run existing suites, compare pass/fail" acceptance criterion,
+adapted to a Playwright-level rather than RF-level comparison given no pre-existing RF suite covers
+either screen under this exact naming): **Bank** (OV, plain, form-driven) and **Language** (TV,
+grid-cell-driven, no navigator/form region at all). Both ran a full **Insert -> Update -> Delete**
+cycle entirely through the generic engine (no hardcoded field ids anywhere in the test scripts - every
+field/action resolved by label or column header), DB-verified at every step, self-cleaned to zero
+residual. Genuinely different code paths were exercised: Bank never touches `grid_cell()`/
+`select_grid_row()`; Language never touches `fill()`'s date-handling, `select()`, or `resolve_popup()`.
+
+**Real bugs found and fixed while building this (not hypothetical - every one surfaced by an actual
+failed validation run, root-caused via DB/DOM evidence before fixing):**
+
+1. **Date fields: the visible/typed value can be wrong even though nothing looks wrong client-side.**
+   Confirmed live (Bank's Start Date): the field's calendar widget carries its real expected format in
+   `data-p-pattern` (e.g. `'yyyy-MM-dd'`). A value typed in a different format (`'01/01/2020'`) displays
+   correctly in the DOM `.value`, raises no client-side error, but the widget's underlying date model
+   never parses it - Save then fails server-side ("Required fields are empty") for that field, with
+   every client-side signal having looked fine. Root-caused by reading `ec_error()` (the same
+   structural error-banner detector already proven in `ec_object_iud.py`) after a Save attempt, not by
+   guessing. **Fix:** `_reformat_date_to_pattern()` reads the field's own `data-p-pattern` and
+   reformats the caller's value to match it generically, rather than assuming one fixed format.
+
+2. **The Save link's `title` attribute is not a reliable locator - EC blanks it after first use.**
+   Confirmed live on BOTH Bank and Language: EC's PrimeFaces tooltip widget sets the anchor's native
+   `title` to `''` after the first hover/interaction on that toolbar (moving the tooltip text into its
+   own floating widget), while the link itself stays fully enabled and clickable. A `@title='Save
+   [Ctrl+s]'` locator - the exact pattern already used in `ec_object_iud.py` and the `ec-screen-
+   automation` skill's own cookbook - therefore finds **zero matches** after the very first Save on a
+   screen, not a "still disabled" false negative but a genuinely wrong search key. **Fix:** locate by
+   the `.ui-icon-save` icon class + check the ancestor `<li>`'s own class for the disabled marker (the
+   same structural-signature technique already proven for toolbar disabled-detection in the Phase 1
+   classifier) - EC does not mutate this. Worth carrying back into `ec_object_iud.py`/the skill cookbook
+   at some point, since they'd hit the exact same failure on a screen requiring 2+ Saves in one session.
+
+3. **A row's grid position is not stable across a Save - confirmed on TV, matches an existing OV
+   principle.** Language: after Save, a just-inserted row moved from index 1 (where it was filled) to
+   index 8 (the end) - not left where it was. Any code that remembers a row index across a Save and
+   reuses it operates on the WRONG row silently (no error - it just edits whatever row happens to sit
+   at that index now). This is the exact same "never trust position, resolve by identity" principle
+   already established for OV row-select elsewhere in this codebase, now confirmed true for TV grids
+   too. **Fix:** `find_grid_row(grid_id, value)` re-resolves a row's current index by scanning cell
+   *values* (not text content - grid cells are `<input>` elements, so `td.textContent` is always empty
+   regardless of the cell's actual value) every time, never reused across a Save.
+
+4. **TV's Insert/Delete flyout link text is the class's own label, not a fixed generic string - and
+   the SAME text appears under both icons.** Confirmed live, Language: both the Insert and Delete
+   toolbar icons' flyouts contain a link literally labeled `'Language'` - identical text under two
+   different icons. A text-only flyout search (the approach that works fine for OV's fixed `'New
+   Object'`/`'Delete'` strings) is genuinely ambiguous for TV and will click the wrong icon's flyout.
+   **Fix:** `toolbar(action, icon=None)` accepts an optional `icon='insert'|'delete'` hint to pin the
+   search when the text is ambiguous (always true for TV); OV callers passing fixed unique strings are
+   unaffected (default `icon=None` searches both, unchanged behavior).
+
+5. **(Caught this one myself, not the engine's fault) VARCHAR2 column-length limits are real and EC
+   fails silently past them.** An early Language update test used a 36-character value against a
+   `VARCHAR2(32)` `NAME` column - the DOM showed the full typed value with no client-side error, Save
+   "succeeded" with no exception, but the DB never persisted the change (silent server-side rejection).
+   Traced via the DB schema (`all_tab_columns`), not assumed. Not an engine defect - a test-data
+   authoring mistake - but worth naming here since it looked identical to bug #2 above until root-
+   caused, and is a real trap for anyone writing test data against an unfamiliar EC table.
+
+**Regression check:** re-ran Bank's full cycle again after all of the above fixes landed - still 3/3
+DB-verified PASS, no behavior change on the exemplar the fixes weren't targeting.
+
+**Phase 2 status: COMPLETE per section 7's acceptance criterion** (generic interaction layer built,
+validated end-to-end on both structurally distinct exemplars, DB-verified, self-cleaning, zero
+regression). Not yet done (per the same phased plan, unstarted): Phase 3 (rewrite
+`gen_ov_screen.py`/`gen_ovgm.py` to consume the engine) and Phase 4 (pilot on new uncovered screens).
