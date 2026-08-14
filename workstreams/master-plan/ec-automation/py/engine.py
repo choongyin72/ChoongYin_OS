@@ -92,8 +92,20 @@ class Engine:
                     continue
                 primitive = classify_field_by_id(page, f) if source != "navigator" else _nav_primitive(f)
                 fields.append({**f, "primitive": primitive, "source": source})
-        # last-wins on duplicate labels across sources is fine - only one form is visible at a time
-        self._by_label = {_norm(f["label"]): f for f in fields}
+        # Fixed 2026-08-14 (Project Data Mapping Setup, Phase 4 pilot 3 / Issue #361): plain
+        # last-wins on duplicate labels breaks when a navigator FILTER field and an objectForm
+        # field share a label (e.g. "Property") and are both visible at once (New Object form
+        # open, navigator still on-screen) - navigator is scanned last, so it silently shadowed
+        # the real, mandatory objectForm field, and Save failed with "Required fields are
+        # empty... Property[CONTRACT_AREA_POPUP]" even though a value had been set on the
+        # (wrong) navigator field. Save only ever acts on the form, never the nav filter, so a
+        # non-navigator source must always win a label collision, regardless of scan order.
+        self._by_label = {}
+        for f in fields:
+            key = _norm(f["label"])
+            existing = self._by_label.get(key)
+            if existing is None or existing["source"] == "navigator":
+                self._by_label[key] = f
 
     def _field(self, label):
         f = self._by_label.get(_norm(label))
