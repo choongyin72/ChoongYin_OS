@@ -186,14 +186,32 @@ Set Up {name} Suite
 
 
 def playwright_py(name, slug, code_prefix, view, code_default, code_label='Code', name_label='Name',
-                   grid_id='manage_object_nav_nav:form:T_data'):
+                   grid_id='manage_object_nav_nav:form:T_data', extra_fields=None):
     """Phase 3 rewrite (2026-08-13): delegates every gesture to the Universal Screen Engine's
     Phase 2 interaction layer (workstreams/master-plan/ec-automation/py/engine.py) instead of
     reimplementing fill/save/select-row/error-detection per generated file with hardcoded
     row-index field ids (R:0=Code, R:1=Name, ...). Fields are resolved by LABEL at runtime, the
     same way every already-shipped bundle's proven driver works - `code_label`/`name_label` are
     the caller's recon input (default 'Code'/'Name' matches the Bank exemplar this generator was
-    built from), not a baked-in assumption. See docs/universal_screen_engine_design.md section 18."""
+    built from), not a baked-in assumption. See docs/universal_screen_engine_design.md section 18.
+
+    `extra_fields` (added for Financial Item Definition, Phase 4 pilot): same {label, value,
+    kind} convention gen_ovgm_iud_bundle.py already uses - for screens whose mandatory set is
+    bigger than Code/Name/Start Date, a real and common case once building genuinely new
+    screens rather than only re-generating already-proven ones."""
+    extra_fields = extra_fields or []
+    extra_fill_lines = []
+    for ef in extra_fields:
+        kind = ef['kind']
+        value = ef['value']
+        label = ef['label']
+        if kind == 'dropdown':
+            extra_fill_lines.append(f"    eng.select({label!r}, {value!r})")
+        elif kind == 'popup':
+            extra_fill_lines.append(f"    eng.resolve_popup({label!r}).pick_by_code({value!r})")
+        else:
+            extra_fill_lines.append(f"    eng.fill({label!r}, {value!r})")
+    extra_fill_block = chr(10).join(extra_fill_lines)
     return f'''"""
 EC IUD {name} - engine-driven (Phase 3, Universal Screen Engine).
 Manage-Object (OV) screen, Bank family. No hardcoded field ids - every field ({code_label!r},
@@ -258,13 +276,11 @@ def ss(page, label):
     return fname
 
 
-def row_exists(page, code):
-    return page.evaluate(
-        """([gid, code]) => {{ const tb = document.getElementById(gid); if (!tb) return false;
-        return Array.from(tb.querySelectorAll('tr')).some(tr =>
-            Array.from(tr.querySelectorAll('td')).some(td => td.textContent.trim() === code)); }}""",
-        [GRID_ID, code],
-    )
+def row_exists(code):
+    """Delegates to Engine.row_exists() - pagination-aware (confirmed live, Financial Item
+    Definition: a 24-row table paginates at 20/page; a naive current-page-only DOM check reported
+    a false 'not found' for a row that had genuinely persisted onto page 2)."""
+    return eng.row_exists(GRID_ID, code)
 
 
 with sync_playwright() as p:
@@ -284,7 +300,7 @@ with sync_playwright() as p:
 
     # -- CLEAN STATE / PRE-CLEANUP ----------------------------------------------
     print('\\n=== CLEAN STATE ===')
-    if row_exists(page, TEST_CODE):
+    if row_exists(TEST_CODE):
         print('  Pre-existing AUTOTEST found - expiring to clean up')
         if eng.select_row(GRID_ID, TEST_CODE):
             eng.fill('End Date', END_DATE)
@@ -293,13 +309,13 @@ with sync_playwright() as p:
             except SaveFailed as e:
                 print(f'  [WARN] pre-cleanup save reported: {{e}}')
             eng.click('GO')
-            print(f'  Cleanup: still_in_table={{row_exists(page, TEST_CODE)}}')
+            print(f'  Cleanup: still_in_table={{row_exists(TEST_CODE)}}')
         results['pre_cleanup'] = 'done'
         open_screen(page, SCREEN_NAME)
         eng = Engine(page, SCREEN_NAME)
         print('  Screen refreshed after pre-cleanup')
 
-    results['clean'] = 'CLEAN' if not row_exists(page, TEST_CODE) else 'PRE-EXISTED+EXPIRED'
+    results['clean'] = 'CLEAN' if not row_exists(TEST_CODE) else 'PRE-EXISTED+EXPIRED'
     ss(page, 'clean_state')
 
     # -- INSERT -------------------------------------------------------------
@@ -308,6 +324,7 @@ with sync_playwright() as p:
     eng.fill(CODE_LABEL, TEST_CODE);      print(f'  {{CODE_LABEL}}: {{TEST_CODE}}')
     eng.fill(NAME_LABEL, TEST_NAME);      print(f'  {{NAME_LABEL}}: {{TEST_NAME}}')
     eng.fill('Start Date', START_DATE);   print(f'  Start Date: {{START_DATE}}')
+{extra_fill_block}
     ss(page, 'insert_filled')
 
     try:
@@ -317,7 +334,7 @@ with sync_playwright() as p:
         results['insert'] = f'FAIL err={{e}}'
     ss(page, 'insert_saved')
     eng.click('GO')
-    exists = row_exists(page, TEST_CODE)
+    exists = row_exists(TEST_CODE)
     print(f'  AUTOTEST in table: {{exists}}')
     if results['insert'] == 'PASS' and not exists:
         results['insert'] = 'FAIL - saved but row not visible after GO'
@@ -341,7 +358,7 @@ with sync_playwright() as p:
             ss(page, 'update_saved')
             eng.click('GO')
             if update_saved:
-                still_there = row_exists(page, TEST_CODE)
+                still_there = row_exists(TEST_CODE)
                 results['update'] = 'PASS' if still_there else 'FAIL - row missing after update'
             print(f'  UPDATE: {{results["update"]}}')
         else:
@@ -370,7 +387,7 @@ with sync_playwright() as p:
             ss(page, 'delete_saved')
             eng.click('GO')
 
-            still_visible = row_exists(page, TEST_CODE)
+            still_visible = row_exists(TEST_CODE)
             print(f'  Still in table after delete: {{still_visible}}')
             if delete_saved and not still_visible:
                 print(f'  DELETE PASS: removed (EndDate=StartDate={{END_DATE}}), gone from {view}')
