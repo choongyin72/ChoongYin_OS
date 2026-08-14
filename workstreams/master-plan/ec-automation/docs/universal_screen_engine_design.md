@@ -1062,3 +1062,52 @@ investigation concluded.
 
 Item 3 from Issue #361 (`test111`-blocked residuals) is unchanged - still blocked, still left
 untouched, still logged, not re-attempted this session.
+
+**Update (2026-08-14, later same day):** owner confirmed `test111` was safe to delete and ran the
+delete themselves (`UPDATE OV_COST_MAPPING SET END_DATE = DAYTIME WHERE CODE = 'test111'; COMMIT;`
+- an explicit, owner-executed action; the agent's own attempts to touch `test111` were correctly
+blocked twice by the permission system pending exactly this kind of unambiguous confirmation).
+`AUTOTEST_PROJ01` and `AUTOTEST_PROP01` deleted immediately after, DB-verified absent
+(`OV_CONTRACT` / `OV_CONTRACT_AREA` both 0 rows). Deleting `AUTOTEST_PROP01` required discovering
+its real Business Unit scope first (`SS1 BU`, not `EC LNG Norway` - the navigator filter originally
+used to browse to it when it was created and the form's actual `Business Unit Name` field value are
+independent, the same nav-filter-vs-form-field split already named as the root cause of this
+Issue's item 1). **Issue #361 fully closed** - all 3 tracked items resolved.
+
+## 25. Phase 4 verdict - engine adoption decision (2026-08-14)
+
+Per section 7's Phase 4 goal ("pilot on 3-5 new screens... before declaring it the default path for
+all new screens"), with pilots 1-3 and Issue #361's follow-up now complete, the decision:
+
+**The engine is the default path for new OV/TV screens, with named exceptions - not an
+unconditional default yet.** For any new screen: start with the engine and its generators the same
+way pilots 1-3 did, no separate up-front judgment call about whether to use it. During recon
+(the classifier scan, before any code is generated), watch for pilot 3's 3 concrete warning signs -
+these are the fingerprints of a screen that will NOT get a clean generated bundle on the first pass:
+
+1. A dropdown-shaped field that shows an empty/"No records found" panel on click and only returns
+   results once real text is typed (a server-side type-to-search autocomplete, not a full-list
+   dropdown or a true popup dialog - a 3rd distinct widget behavior beyond what `classify_dd()`
+   currently names).
+2. Inserting a valid record requires selecting values that themselves only exist if OTHER
+   master-data screens were populated first (a multi-level FK-scoped dependency chain, not a
+   single self-contained screen).
+3. Save enforces a rule across multiple fields (e.g. "Either X or Y must be chosen") that isn't
+   visible as a simple per-field mandatory-yellow flag anywhere in the form.
+
+If NONE of these appear (pilots 1-2's shape, and the large majority of plain master-data OV/TV
+screens already characterised in `docs/db-first-coverage-audit.md`): proceed exactly like pilots
+1-2 - expect a fast, mostly-generated build, full I-U-D, comfortably under an hour, using the
+existing `gen_ov_iud_bundle.py`/`gen_tv_iud_bundle.py`/`gen_ovgm_iud_bundle.py` generators as-is.
+
+If ONE OR MORE appear (pilot 3's shape): do not expect the generator to produce a working bundle
+unmodified. Budget real live investigation time (traced via `CLASS_ATTR_PROPERTY_CNFG`/
+`class_cnfg`, never guessed), expect to build supporting master data across other screens first,
+and treat it as its own scoped piece of work rather than a quick generator run. None of the 3
+generators built so far model conditional cross-field validation or multi-level FK-popup chains
+structurally - that remains a real, open capability gap, not something to paper over by forcing a
+pilot-3-shaped screen through the same fast path as pilots 1-2.
+
+This decision should be revisited if a future screen of pilot 3's shape is built and the generators
+gain structural support for one or more of the 3 warning signs above - at that point the exception
+list shrinks, not the default-path principle itself.
