@@ -232,16 +232,44 @@ class Engine:
         - `values=[...]`: fill C:1..len(values) with these EXACT values instead of first-available
           (for a screen where the default first option has no valid downstream combination -
           the same class of gotcha the classifier's `NAV_HINT_OPTION` exists to work around).
-        - No `nav:form:G:0:R:<row>:C:*:dd_input` columns exist at all (a screen with only optional
+        - No `nav:form:G:*:R:<row>:C:*:dd_input` columns exist at all (a screen with only optional
           filters, or none): the loop naturally does nothing and this degrades automatically to a
           bare GO - no separate "go_only" mode flag needed, unlike the string-templated generators'
           current design, since the absence of columns already says everything.
 
+        Fixed 2026-08-14 (Issue #335 - Property screen): this used to hardcode every column to
+        group `G:0` (`nav:form:G:0:R:<row>:C:<col>:dd_input`), assuming Date and every mandatory
+        dropdown always share one navigator group. Confirmed live this doesn't hold: Property puts
+        Date in `G:0` but its Business Unit dropdown in a SEPARATE group `G:1` (also at column
+        `C:0`, not `C:1`) - the old hardcoded pattern found nothing, broke out of the loop
+        immediately, and silently applied no navigator filter at all. Fixed by discovering every
+        `dd_input` under `nav:form` for this `row` live, across ANY group/column, sorted by
+        (group, column) ascending - matching EC's own parent-before-child visual ordering - instead
+        of assuming a fixed group index. Re-discovered FRESH on every iteration (not computed once
+        upfront): a child dropdown's element does not exist in the DOM at all until its parent has
+        been selected, so a one-time scan taken before any selection would never see it.
+
         Returns the C:1 (top-parent) value actually selected, or None (legitimately, on a
         go_only-shaped screen - callers must not assert this is non-None unconditionally)."""
         top = None
+
+        def _discover():
+            return self.page.evaluate(
+                """(row) => {
+                const re = new RegExp('^nav:form:G:(\\\\d+):R:' + row + ':C:(\\\\d+):dd_input$');
+                return Array.from(document.querySelectorAll('input[id^="nav:form:G:"]'))
+                    .map(e => { const m = e.id.match(re); return m ? {g: parseInt(m[1],10), c: parseInt(m[2],10), id: e.id} : null; })
+                    .filter(Boolean)
+                    .sort((a, b) => a.g - b.g || a.c - b.c);
+            }""",
+                row,
+            )
+
         for col in range(1, levels + 1):
-            dd = f"nav:form:G:0:R:{row}:C:{col}:dd_input"
+            found = _discover()
+            if len(found) < col:
+                break
+            dd = found[col - 1]["id"]
             loc = self.page.locator(css(dd))
             if loc.count() == 0:
                 break
