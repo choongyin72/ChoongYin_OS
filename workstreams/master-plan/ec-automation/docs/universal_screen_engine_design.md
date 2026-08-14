@@ -1177,16 +1177,41 @@ the `updateAttributes` (Update) form and swept all 11 dropdown fields back-to-ba
 - **Proper pacing** (click, wait for `ajax()` to settle + a ~1.5s buffer, THEN Escape, then next
   field): **0/11 fields stalled** - same screen, same row, same 11 fields, only the pacing changed.
 
-**Conclusion: this was very likely never an EC defect at all** - it was 4 separate investigation
-scripts (across this project's history) all making the same untested assumption that every dropdown
-field responds equally fast. Service, Contract Capacity, and Chemical Stream were not individually
-re-tested with proper pacing this session, but given the identical symptom (stalls clustered right
-after the first 1-2 fast fields, every screen), the same explanation is the leading theory pending
-confirmation.
+**Owner explicitly required this NOT be left as an inferred theory** - "all r similar as price
+object" is an assumption, not a fact; each of the other 3 screens was independently traced and
+tested the same way (real `OV_*` row -> FK chain via SQL, never a guessed navigator combination)
+before drawing any conclusion about them:
+
+- **Service** (Business Unit `TS3 BU1`, traced from `OV_SERVICE` row `TS3_SERVICE_LOCATION_A_TO_K`
+  -> Contract `TS3_GTA_SHP_A` -> Contract Area `TS3_FIRM`): rushed pacing **8/9 stalled**; proper
+  pacing **0/9 stalled**. Confirmed, same cause.
+- **Contract Capacity** (Business Unit `TS3 BU1` -> Contract Area `TS3_FIRM` -> Contract
+  `TS3_FIRM1`, traced from a real `OV_CONTRACT_CAPACITY` row): an initial single-level navigator
+  guess (Business Unit only) landed on an empty grid - this screen's navigator is a full 3-level
+  cascade like Price Object, not the single-level the registry's short description implied; the
+  FULL traced chain was required. With that: rushed pacing **3/5 stalled**; proper pacing **0/5
+  stalled**. Confirmed, same cause.
+- **Chemical Stream** (Production Unit `P1 Production Unit` -> Area `P1 Area` -> Facility Class 1
+  `P1 Facility 1`, traced from a real `OV_CHEM_STREAM` row): rushed pacing **0/21 stalled** - did
+  NOT reproduce the symptom at all, unlike the other 3 screens under identical rushed-pacing
+  conditions. The proper-pacing re-run then hit an unrelated leftover confirmation-modal dialog
+  blocking the next row click (a separate script-state bug in the re-navigation step, not the
+  click-stall pattern) before a clean comparison could complete. **Left honestly as inconclusive**
+  rather than assumed to match the other 3.
+
+**Conclusion: CONFIRMED on 3 of 4 screens with real, independent before/after evidence each**
+(Price Object, Service, Contract Capacity) - not inferred from a shared symptom. Chemical Stream
+remains genuinely unverified; it may have a different cause, may simply not exhibit the issue under
+these particular data/timing conditions, or may need the unrelated modal issue resolved first to
+get a clean test. This item is closed on the 3 confirmed screens; Chemical Stream would need its
+own dedicated investigation if revisited, since it did not reproduce the pattern this time.
 
 **Lesson for this project's own methodology, saved to memory (`feedback_buffer_time_field_by_
-Field`):** any live automation sweeping multiple fields back-to-back - dropdowns, grid cells, form
+field`):** any live automation sweeping multiple fields back-to-back - dropdowns, grid cells, form
 fields - must wait for each field's own loading/settle state to genuinely finish before moving to
-the next, not a fixed short delay assumed uniform across all fields. This is the second correction
-this session following the same pattern as Deferment Group (section 26) - checking one's own
-tooling/methodology assumptions before escalating something as an external defect.
+the next, not a fixed short delay assumed uniform across all fields. Also reinforced this session:
+never generalize a confirmed finding from one instance to "similar" instances without independently
+verifying each one - a screen sharing a symptom is a hypothesis to test, not a fact to state. This
+is the second correction this session following the same pattern as Deferment Group (section 26) -
+checking one's own tooling/methodology assumptions before escalating something as an external
+defect, and verifying each claim individually rather than pattern-matching.
