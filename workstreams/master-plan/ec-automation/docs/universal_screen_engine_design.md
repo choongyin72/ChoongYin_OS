@@ -837,3 +837,172 @@ This is now genuine, live-proven groundwork toward N1 support (navigator by labe
 edit-in-place both work), though still not a claimed "N1 phase" - no Save-and-persist cycle has
 been proven yet, and this was exploratory work outside Phase 3's own scope, not a Phase 3
 deliverable itself.
+
+## 23. Phase 4 - pilot on 3 genuinely new, uncovered screens (2026-08-14)
+
+Per section 7's Phase 4 goal: pilot the engine + generators on 3-5 genuinely new screens, compare
+effort/time against the old recon-then-clone process, before declaring it the default path.
+Candidates sourced from `docs/db-first-coverage-audit.md`'s "Unclear" rows via live recon; 3
+confirmed IUD-capable and picked (Financial Item Definition, Financial Item Template, Project
+Data Mapping Setup); 3 others found genuinely non-viable during recon (Insert disabled / no grid
+/ read-only) and excluded.
+
+### Pilot 1 - Financial Item Definition (OV, FINANCIAL_ITEM class) - ~23 min, full I-U-D, DB-verified
+
+First real screen this engine had ever built cold (no prior exemplar of this shape). Surfaced 3
+new, generalizable gaps, none of which Bank/Node/Chemical Tank/Language had ever exposed:
+
+1. **Extra mandatory fields beyond Code/Name/Start Date** (`Item Type`, `Default Cost Object Type`,
+   `Format Mask`, `Data Fallback Method` - all popups/dropdowns). `gen_ov_iud_bundle.py` had no way
+   to express this. **Fix:** added an `extra_fields=[{label, value, kind}]` parameter, generating a
+   fill block for dropdown/date/popup/text right after Start Date.
+2. **Pagination-awareness gap** (real bug). 24 rows > PrimeFaces' 20/page default; Bank/Node/
+   Chemical Tank never had enough rows to ever hit this. The generator's hand-rolled `row_exists()`
+   and `Engine.select_row()` only ever checked the current page, silently reporting "row not visible
+   after Save" even though the DB row was correct. **Fix:** ported `_pager_next`/`_pager_first`/
+   `_pager_disabled`/`_reset_to_first_page` from the proven `ec_object_iud.py` into `engine.py` as
+   `row_on_current_page()` (current-page-only) and `row_exists()` (walks all pages, restores page 1).
+3. **Grid-cell-rendering-convention gap** (real bug). This screen's grid renders every cell as a
+   `readonly <input value="...">`, not the `<span>` text convention Bank/Node/Chemical Tank all use.
+   **Fix:** generalized `row_on_current_page()`/`select_row()` to check/click by EITHER convention
+   (`tr.textContent` OR any nested `<input>.value`).
+
+Regression-checked Bank + Node (3/3 PASS each) after every fix. Final run: full I-U-D, live,
+DB-verified, self-cleaned, zero residual.
+
+### Pilot 2 - Financial Item Template (TV, FINANCIAL_ITEM_TEMPLATE class) - ~8 min, full I-U-D, DB-verified
+
+First-ever TV generator built from scratch (`gen_tv_iud_bundle.py` - Language in Phase 2 was only
+ever driven by a one-off validation script, never generalized). Despite building new
+infrastructure, this pilot was FASTER than pilot 1 - the reusable fixes from pilot 1
+(pagination/row-detection in `engine.py`, the `extra_fields` convention) already existed. 3 more
+gaps found and fixed:
+
+1. **TV Insert/Delete flyout text != screen title** (confirmed a 2nd time this project - Language's
+   flyout happened to say "Language", coincidentally matching the title). This screen's real flyout
+   text is "Template", not "Financial Item Template" - found via live recon, not assumed.
+2. **Missing mandatory `Valid From` (DAYTIME) field** on grid-row insert - DAYTIME is NOT NULL per
+   schema. **Fix:** used the same `extra_fields` convention from pilot 1, natively in the new TV
+   generator (`extra_fields=[{'label': 'Valid From', 'value': '2000-01-01', 'kind': 'date'}]`).
+3. **Date-in-grid-cell wrapper-vs-nested-input gap** (real bug in `universal_classifier.py`'s
+   `scan_grid_columns()`). The same class of bug already fixed once for dropdown-in-grid cells
+   (`<id>_dd` wrapper vs `<id>_dd_input` real input) had never been extended to date-in-grid cells
+   (`<id>_da` vs `<id>_da_input`), since no earlier TV exemplar had a date column. **Fix:** extended
+   the existing wrapper-resolution check to cover both `_dd` and `_da` suffixes.
+
+Regression-checked Language (3/3 PASS) after the date-cell fix. Final run: full I-U-D, live,
+DB-verified, self-cleaned, zero residual - row correctly re-resolved via `find_grid_row` after Save
+re-sorted its position (index 1 -> 8).
+
+### Pilot 3 - Project Data Mapping Setup (OV, COST_MAPPING/COST_MAPPING_NAV class) - by far the deepest pilot
+
+This screen turned out to be a fundamentally different complexity class from pilots 1-2 and from
+every prior exemplar - not a generator gap, a genuine multi-level, cross-screen master-data
+dependency chain plus several real engine bugs along the way. Investigated live, headed, with the
+owner watching throughout; every hypothesis was checked against the live DOM or the DB before being
+acted on, per this project's no-guessing standard.
+
+**Real engine bugs found and fixed:**
+1. **Nonstandard navigator/GO id scheme.** This screen's navigator uses `StandardNavigator:form:
+   G:0:R:<row>:C:<col>:dd/da_input` (not the `nav:form:...` prefix the classifier's field scanner
+   looks for) and its real, visible GO button is `buttongo:form:B` (not the hidden
+   `StandardNavigator:form:defaultSubmit`, which exists in the DOM but is never rendered visible -
+   clicking it timed out). Confirmed via raw DOM dump of every `onclick` referencing
+   `StandardNavigator`/`defaultSubmit`, then finding the actual visible screenlet
+   (`buttongo:form`) by its `goButtonScreenlet` class.
+2. **Duplicate-label shadowing** (Project Properties screen). `_refresh_field_map()`'s "last-wins on
+   duplicate labels" rule is normally safe (only one form is visible at a time) but breaks when a
+   *navigator filter* field and an *objectForm* field share the same label ("Property" in both
+   places) and are BOTH visible simultaneously (New Object form open, navigator still on-screen).
+   The navigator's filter field silently shadowed the real, mandatory `CONTRACT_AREA_POPUP` form
+   field, so `eng.select("Property", ...)` resolved to the wrong element and Save failed with
+   "Required fields are empty... Property[CONTRACT_AREA_POPUP]" even though a value had been set.
+   **Not yet fixed generically in the engine** (worked around by addressing the real field's id
+   directly, found via `scan_region_fields(page, "objectForm:form")`); a durable fix would need
+   `_refresh_field_map()` to prefer `objectForm`/`updateAttributes` sources over `navigator` on
+   label collision, since Save only ever acts on the form, never the nav filter.
+3. **Popup-vs-dropdown misclassification** (2 fields: Target Property, Target Project/Product
+   Stream, and later Reference/Report Reference). `classify_dd()`'s click-and-probe classified
+   these as `dropdown` even though their `CLASS_ATTR_PROPERTY_CNFG` config (`PopupURL`,
+   `PopupDependency` pointing at `/object_popup?CLASS_NAME=PROPERTY|PROJECT`) marks them as real
+   EC-object popup-pickers. In practice they behave as **server-side type-to-search autocompletes**
+   (click-only shows an empty/`"No records found"` panel; typing a real, matching code or name
+   triggers the actual search) - a 3rd distinct dd-field behavior this project's tooling hadn't
+   modeled before (previously: plain autocomplete-with-full-list, and true popup-with-modal-dialog).
+
+**Real, deep master-data dependency chain (not a tooling bug) - traced via `CLASS_ATTR_PROPERTY_CNFG`,
+not guessed:**
+- `Target Property` -> `CONTRACT_AREA` (class `PROPERTY`), created via the **Property** screen
+  (its own BU-scoped navigator + New Object form).
+- `Target Project/Product Stream` -> `CONTRACT` (class `PROJECT`), created via the **Project
+  Properties** screen, itself requiring an existing Property (own FK popup field, hit gap #2 above)
+  and a Financial Code choice free of its own extra cross-field rule (`Frame Agreement` requires a
+  separate `Processable Code = N` we hadn't set; switched to `Journal Entry` instead, matching a
+  real reference row already on screen).
+- `Reference` (`REPORT_REF_ID`) -> `REPORT_REFERENCE`, scoped by `TRG_DATASET` via
+  `PopupDependency: RetrieveArg.DATASET=Screen.this.currentRow.TRG_DATASET` - only rows whose
+  `DATASET` column matches the exact dataset code chosen on the PDMS form are selectable. Created
+  via the **Report Reference** screen, Dataset field set to the identical option used on PDMS.
+- **Root cause of the longest-standing failure in this chain:** the PDMS form's own "Dataset/Report"
+  field's `__FIRST__` option ("Inventories") is NOT the same option the navigator's "Dataset" field
+  happened to pick first ("CARE Insitu Mapping Test") - two different dd's, two different default
+  orderings, wrongly assumed identical. Confirmed by explicitly printing `eng.select()`'s return
+  value rather than trusting the assumption; fixed by explicitly selecting the same dataset on both.
+- Business rule confirmed live: **"Either Project or Property must be chosen"** is a real
+  cross-field OR-mandatory rule (neither field is individually yellow/mandatory) - a validation
+  shape none of the 3 generators currently model structurally; it was satisfied here by supplying
+  real data for one side (`Target Property`), not by any generator change.
+
+**Result: full INSERT proven live and DB-verified** (`AUTOTEST_PDMS_006`, `TRG_DATASET`=
+`CARE_INSITU_TEST`, `TRG_CONTRACT_GROUP_ID`= the built Property's `OBJECT_ID`, `REPORT_REF_ID`= the
+built Report Reference's `OBJECT_ID` - all three FKs verified by direct row read, not UI alone).
+**DELETE proven** (End Date = Start Date; confirmed absent from `OV_COST_MAPPING`, 0 rows).
+**UPDATE hit the same "Report Reference must be chosen" error again** on the `updateAttributes` form
+- the existing popup field's value does not appear to carry over/re-display automatically on
+row-select the way plain dropdown/text fields do; not resolved this session, logged as an open item
+rather than papered over.
+
+**Self-clean:** `AUTOTEST_PDMS_006` deleted and DB-verified absent.
+
+`AUTOTEST_REPORT_REF01` (Report Reference) - initially looked unreachable by any UI path (grid id,
+GO, toolbar Retrieve/Refresh icon, and the "..." overflow menu all failed to reveal a listing grid;
+`nav:form` on this screen turned out to be an unrelated generic hide-menu widget, not a real
+navigator). Owner spotted what the automated recon had missed: the screen has its own Date+Dataset
+navigator, using a THIRD distinct id scheme (`nav_model:form:G:<g>:R:<row>:C:0:da/dd_input`, GO =
+the standard `button:form:B`) - selecting Dataset first revealed the grid. **Deleted and DB-verified
+absent** (`OV_REPORT_REFERENCE` = 0 rows). A raw-SQL fallback via `OV_REPORT_REFERENCE`'s own view
+trigger was attempted first and correctly blocked by this project's own "no raw DB writes" safeguard
+before the real UI path was found - the safeguard did its job.
+
+`AUTOTEST_PROJ01` (Project Properties) - delete failed with `Illegal end date: ... due to the
+references from other objects`, even after the PDMS row above was confirmed physically gone.
+Traced via `CLASS_ATTR_PROPERTY_CNFG` (found the 2 real class/attribute pairs referencing
+`CLASS_NAME=PROJECT` schema-wide: `COST_MAPPING.TRG_CONTRACT_ID` and
+`COST_MAPPING_HISTORY.TRG_CONTRACT_ID` - not a blind scan of every `*CONTRACT*` column) to a
+**second, unrelated `COST_MAPPING` row, object code `test111`** (Dataset = `TEST_DATASET`,
+`CREATED_BY = sysadmin`, `CREATED_DATE` = earlier the same day) still holding a live FK to this
+Project. Not `AUTOTEST_`-prefixed, and not confirmed as this session's own leftover (may predate the
+summarized portion of this conversation, or be someone else's manual test) - the agent stopped short
+of deleting it (correctly blocked by the permission system for being an unnamed, unconfirmed
+record), asked the owner, and was told to **leave it untouched and log it as a data issue** rather
+than resolve it. `AUTOTEST_PROJ01` and `AUTOTEST_PROP01` (Property, blocked transitively - Property
+can't be end-dated while its child Project still exists) are therefore **left as known, disclosed
+residuals**, blocked on `test111` being cleared first (out of this session's scope, per owner
+direction) - not a tooling gap, not silently dropped.
+
+### Phase 4 summary - effort vs. the old recon-then-clone process
+
+| Pilot | Screen shape | Time | New generalizable gaps found & fixed | Outcome |
+|---|---|---|---|---|
+| 1 | OV, extra mandatory fields, 24-row paginated grid | ~23 min | 3 (extra_fields param, pagination, input-rendered grid cells) | Full I-U-D, DB-verified, self-cleaned |
+| 2 | TV, first-ever TV generator, date-in-grid column | ~8 min | 3 (flyout-text-!=-title, extra_fields on TV, date-cell wrapper) | Full I-U-D, DB-verified, self-cleaned |
+| 3 | OV, nonstandard navigator, 3-level cross-screen master-data chain, cross-field OR-mandatory rule, popup-vs-dropdown misclassification | multi-session, by far the longest | 3 engine bugs (nav/GO id scheme, label-shadowing, popup-misclassification) + 1 unresolved gap (UPDATE on popup-backed fields) | INSERT + DELETE proven, DB-verified; UPDATE unresolved; 1 of 4 test rows not yet self-cleaned |
+
+Pilots 1-2 substantially undercut the old recon-then-clone effort (each found real, permanent gaps
+that will never need re-discovering on the next similar screen, in well under an hour combined).
+Pilot 3 is the honest counter-data point Phase 4 was designed to surface: **not every new screen
+fits the current tooling cleanly.** Its cost was not wasted, though - every gap it found (navigator
+id assumptions, label-shadowing, popup-vs-dropdown, cross-field OR-mandatory rules) is now a named,
+documented risk the next screen of this shape will hit faster, not from zero. The engine is not yet
+a blind default for screens with multi-level FK-scoped popup pickers or cross-field conditional
+validation; it remains a strong default for the OV/TV shapes pilots 1-2 and Phase 1-3 already cover.

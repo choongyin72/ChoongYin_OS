@@ -135,7 +135,12 @@ def scan_grid_columns(page, grid_id):
                 // actually types/reads from - confirmed live (typing into the wrapper did nothing;
                 // the real target is the child input). If the resolved id ends in '_dd', prefer its
                 // nested '_input' child when present, same convention as form-level dd_input fields.
-                if (cellId && cellId.endsWith('_dd')) {
+                // Fixed 2026-08-14 (Financial Item Template, Phase 4 pilot): the SAME wrapper-vs-
+                // nested-input gap exists for date-in-grid cells - '<id>_da' is a calendar widget
+                // wrapper span, not itself an <input>; Playwright's input_value()/fill() throw
+                // 'Node is not an <input>' when pointed at it directly. Confirmed live: the real
+                // target is '<id>_da_input', identical convention to the dropdown case above.
+                if (cellId && (cellId.endsWith('_dd') || cellId.endsWith('_da'))) {
                     const nested = document.getElementById(cellId + '_input');
                     if (nested) cellId = nested.id;
                 }

@@ -326,16 +326,119 @@ class Engine:
         ajax(self.page)
         self._refresh_field_map()
 
-    def select_row(self, grid_id, code):
-        """OV-style row-select: click the grid row whose text contains `code`, opening the
-        row-select form (updateAttributes/objectdates). Returns True/False. Re-derives the field
-        map afterward. NOT the right gesture for TV grids (see select_grid_row) - OV rows render
-        their cell values as <span> text in the un-selected state; TV cells are <input> elements
-        from the start, so a span-text filter never matches (confirmed live, Language)."""
-        span = self.page.locator(f"css=#{grid_id.replace(':', chr(92) + ':')} span").filter(has_text=code).first
-        if span.count() == 0:
+    def _pager_next(self, grid_id):
+        """PrimeFaces datatable 'next page' control, scoped to this grid's own container
+        (the tbody id minus '_data'); falls back to a page-wide selector if that container
+        can't be matched. Returns None if no paginator is present (single-page grid)."""
+        table_id = grid_id[: -len("_data")] if grid_id.endswith("_data") else grid_id
+        scoped = self.page.locator(f"css=#{table_id.replace(':', chr(92) + ':')} .ui-paginator-next").first
+        if scoped.count():
+            return scoped
+        loose = self.page.locator("css=.ui-paginator-next").first
+        return loose if loose.count() else None
+
+    def _pager_first(self, grid_id):
+        table_id = grid_id[: -len("_data")] if grid_id.endswith("_data") else grid_id
+        scoped = self.page.locator(f"css=#{table_id.replace(':', chr(92) + ':')} .ui-paginator-first").first
+        if scoped.count():
+            return scoped
+        loose = self.page.locator("css=.ui-paginator-first").first
+        return loose if loose.count() else None
+
+    @staticmethod
+    def _pager_disabled(loc):
+        return "ui-state-disabled" in ((loc.get_attribute("class") or "") if loc else "")
+
+    def _reset_to_first_page(self, grid_id):
+        first = self._pager_first(grid_id)
+        if first and not self._pager_disabled(first):
+            first.click()
+            ajax(self.page)
+            self.page.wait_for_timeout(300)
+
+    def row_on_current_page(self, grid_id, code):
+        """Membership on the currently-rendered page only, no pager navigation. Checks BOTH
+        rendered text (span-based OV rows, e.g. Bank/Node) AND input .value (confirmed live,
+        Financial Item Definition: its list grid renders every cell as a readonly <input
+        value="..."> - the SAME convention TV grids use for editable cells, just marked readonly
+        here - so a span-only or textContent-only check finds nothing even though the row is
+        genuinely present and visible)."""
+        return self.page.evaluate(
+            """([gid, code]) => { const tb = document.getElementById(gid); if (!tb) return false;
+            return Array.from(tb.querySelectorAll('tr[data-ri]')).some(tr => {
+                if (tr.textContent.includes(code)) return true;
+                return Array.from(tr.querySelectorAll('input')).some(inp => inp.value === code);
+            }); }""",
+            [grid_id, code],
+        )
+
+    def row_exists(self, grid_id, code):
+        """Membership across ALL paginator pages, not just the current one - confirmed live,
+        Financial Item Definition: 24 rows (> PrimeFaces' 20-per-page default) meant a freshly
+        inserted row could sort onto page 2, and a current-page-only check reported a false
+        'row not visible' even though the DB insert had genuinely succeeded (Bank/Node/Chemical
+        Tank never exposed this - their few-row AUTOTEST scopes never paginated). Walks next-page
+        until found or the pager is exhausted, then restores page 1. A single-page grid (no
+        paginator) collapses to the plain current-page check - fully backward compatible."""
+        if self.row_on_current_page(grid_id, code):
+            return True
+        nxt = self._pager_next(grid_id)
+        if nxt is None:
             return False
-        span.click()
+        found, guard = False, 0
+        while not self._pager_disabled(nxt) and guard < 100:
+            nxt.click()
+            ajax(self.page)
+            self.page.wait_for_timeout(350)
+            if self.row_on_current_page(grid_id, code):
+                found = True
+                break
+            nxt = self._pager_next(grid_id)
+            guard += 1
+        self._reset_to_first_page(grid_id)
+        return found
+
+    def select_row(self, grid_id, code):
+        """OV-style row-select: click the grid row whose text (or, for readonly-input-rendered
+        grids, cell VALUE) contains `code`, opening the row-select form (updateAttributes/
+        objectdates). Returns True/False. Re-derives the field map afterward. NOT the right
+        gesture for TV grids (see select_grid_row) - editable TV rows are a live edit surface,
+        not a click-to-open-a-separate-form flow.
+
+        Click target (confirmed live, Financial Item Definition - the first screen whose list
+        grid renders EVERY cell as a readonly `<input value="...">`, same as Bank/Node's rendered
+        text-span rows visually, but with zero `<span>` elements to click): click the identified
+        `tr[data-ri]` itself, resolved by the same text-or-value match `row_on_current_page()`
+        uses, instead of assuming a `<span>` exists inside it - a `tr` click works whether the row
+        renders spans or readonly inputs, since PrimeFaces' row-select handler is bound to the
+        row, not to any specific child element.
+
+        Pagination-aware (ported from `ec_object_iud.py`'s proven `select_row()`, confirmed live
+        the hard way on the same screen - the original version only ever looked at the
+        currently-rendered page, so a row sorted onto page 2 was silently unselectable)."""
+        if not self.row_on_current_page(grid_id, code):
+            nxt = self._pager_next(grid_id)
+            guard = 0
+            while nxt is not None and not self._pager_disabled(nxt) and guard < 100:
+                nxt.click()
+                ajax(self.page)
+                self.page.wait_for_timeout(350)
+                if self.row_on_current_page(grid_id, code):
+                    break
+                nxt = self._pager_next(grid_id)
+                guard += 1
+        row_index = self.page.evaluate(
+            """([gid, code]) => { const tb = document.getElementById(gid); if (!tb) return -1;
+            const rows = Array.from(tb.querySelectorAll('tr[data-ri]'));
+            const idx = rows.findIndex(tr => tr.textContent.includes(code) ||
+                Array.from(tr.querySelectorAll('input')).some(inp => inp.value === code));
+            return idx >= 0 ? parseInt(rows[idx].getAttribute('data-ri'), 10) : -1; }""",
+            [grid_id, code],
+        )
+        if row_index < 0:
+            return False
+        tr = self.page.locator(f"css=#{grid_id.replace(':', chr(92) + ':')} tr[data-ri='{row_index}']").first
+        tr.click()
         ajax(self.page)
         self.page.wait_for_timeout(600)
         self._refresh_field_map()
