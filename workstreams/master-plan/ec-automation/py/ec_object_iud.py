@@ -405,13 +405,22 @@ def save(page, attempts=2):
 
 
 def click_go(page):
-    """Reload the object list. Manage-object OV: click the navigator GO (button:form:B). Custom-URL OV:
-    NO GO button -> reload via the toolbar Refresh icon instead (grid = nav:form:T_data). Generalises both."""
-    go = page.locator("#button\\:form\\:B")
-    if go.count() > 0 and go.is_visible():
-        go.first.click()
-        wait_ajax(page)
-        return
+    """Reload the object list. Manage-object OV: click the navigator GO. Custom-URL OV:
+    NO GO button -> reload via the toolbar Refresh icon instead (grid = nav:form:T_data). Generalises both.
+
+    Fixed 2026-08-14 (Issue #345 - Stream Item false "no grid renders" negative): a single
+    hardcoded GO id (`button:form:B`) silently fell through to Refresh (which does NOT apply
+    the navigator filter) on any screen whose real GO button uses a different id - confirmed
+    live, Stream Item's real GO is `buttongo:form:B`, producing a misleading "no data" result
+    on a screen that actually had 14 pages of real rows. Same structural id list already
+    proven in the newer engine.py's _click_go() (Universal Screen Engine project) - ported
+    here so the older per-screen driver gets the same fix, not just new-engine screens."""
+    for gid in ("go_button:form:B", "button:form:B", "navButton:form:B", "buttongo:form:B"):
+        go = page.locator("#" + gid.replace(":", "\\:"))
+        if go.count() > 0 and go.is_visible():
+            go.first.click()
+            wait_ajax(page)
+            return
     rf = page.locator("xpath=//a[starts-with(@title,'Refresh') and not(contains(@class,'ui-state-disabled'))]")
     if rf.count() > 0 and rf.first.is_visible():
         rf.first.click()
