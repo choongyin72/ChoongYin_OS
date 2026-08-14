@@ -1006,3 +1006,59 @@ id assumptions, label-shadowing, popup-vs-dropdown, cross-field OR-mandatory rul
 documented risk the next screen of this shape will hit faster, not from zero. The engine is not yet
 a blind default for screens with multi-level FK-scoped popup pickers or cross-field conditional
 validation; it remains a strong default for the OV/TV shapes pilots 1-2 and Phase 1-3 already cover.
+
+## 24. Issue #361 follow-up (2026-08-14) - label-shadowing durable fix + UPDATE-on-popup-fields root cause
+
+Reviewer merged PR #360 clean and filed Issue #361 tracking pilot 3's 3 open items. Items 1 and 2
+below actioned and resolved this session; item 3 (`test111`-blocked residuals) remains blocked
+pending owner clearance, unchanged from section 23. A 3rd, unrelated flakiness was found and
+investigated along the way (below) but NOT resolved - explicitly not counted as one of the 3
+tracked items.
+
+**1. `_refresh_field_map()` label-shadowing - fixed.** Per section 23's proposed fix: the
+label->field map no longer does plain last-wins across scan sources. A `navigator`-sourced field
+can never overwrite an already-present `objectForm`/`updateAttributes`/`objectdates` entry on
+label collision, since Save only ever acts on the form. Structural fix, not a per-screen
+workaround - any future screen with a same-labeled nav-filter + form-field pair is now safe by
+default.
+
+**2. UPDATE-on-popup-fields - root cause narrowed, not an engine bug.** Rebuilt the exact
+scenario live: inserted a fresh row with both `Target Property` and `Reference` popup fields set,
+then row-selected it back onto the `updateAttributes` form. Result: **`Target Property` correctly
+re-displays its saved value; `Reference` shows blank** - same popup-search widget mechanism, same
+form, only one of the two fails to re-render. This rules out "popup fields never carry over" as
+the pattern (section 23's earlier framing) - it's specific to this one field, almost certainly an
+EC-side rendering behavior (config differences between `TRG_CONTRACT_GROUP_ID` and `REPORT_REF_ID`
+not fully traced - out of reach without PL/SQL source access, only config tables). **Workaround
+confirmed live and DB-verified:** re-supplying the field's already-correct value before Save (via
+the same type-and-pick gesture used on Insert) makes UPDATE succeed - `REPORT_REF_ID` persisted
+correctly after Save. Recommendation for any future generator/driver touching a popup-backed field
+on UPDATE: never trust the field's on-screen value after row-select for this widget type - always
+explicitly re-supply it before Save, the same way Insert does.
+
+**3. `open_screen()` navigation-timing flakiness - investigated, NOT fixed (reverted an unverified
+attempt rather than ship it).** Hit repeatedly this session: calling `open_screen()` a 2nd time in
+one page session (any cleanup/multi-screen script) intermittently times out waiting for the menu
+search box (`menu:searchForm:searchTxt` resolves `hidden`). First hypothesis - a leftover open
+dropdown panel covering it, fixable with `Escape` + an explicit visibility wait - was implemented,
+then **disproven by its own regression check**: a deliberately isolated repro (fresh headless
+session, open Property, check `box.is_visible()` with NO other interaction at all) showed the box
+already hidden immediately, and stayed hidden through a full 30s explicit wait AND a 30s `.fill()`
+call - longer than Playwright's own default actionability timeout. Tried a 2nd hypothesis
+(Property's Business Unit navigator panel needs to be interacted with once, e.g. select+GO, before
+the header frees up) - also disproven, same result before and after. Root cause not found; the
+symptom is real but its trigger condition still isn't understood, and every attempted fix so far
+either does nothing or (the `Escape`+wait version) reduces the effective wait budget below
+Playwright's own built-in default, which could make matters worse. **Reverted the change** rather
+than commit an unverified "fix" - the `open_screen()` function is unchanged from before this
+session's investigation. Left as a known, disclosed, unresolved flakiness for a future session with
+more room to instrument the actual DOM/CSS transition happening (screen recording of the exact
+moment the box hides/reveals, not just polling `is_visible()`).
+
+**Self-clean:** investigation used a fresh test row (`AUTOTEST_PDMS_UPD01`) and a re-created
+`AUTOTEST_REPORT_REF01` (the original was already deleted in section 23's cleanup) - both deleted
+and DB-verified absent (`OV_COST_MAPPING` / `OV_REPORT_REFERENCE` both 0 rows) after the
+investigation concluded.
+
+Item 3 from Issue #361 (`test111`-blocked residuals) is unchanged - still blocked, still left
+untouched, still logged, not re-attempted this session.
