@@ -106,7 +106,12 @@ def classify_dd(page, dd_input_id, cache=None):
                 break
         page.keyboard.press("Escape")
         page.wait_for_timeout(300)
-        if cache is not None:
+        # Reviewer note on #372 (2026-08-15): only cache a SETTLED verdict ('dropdown'/'popup'), not
+        # 'unknown_after_probe' or a 'probe_err: ...' - those mean the probe itself didn't resolve
+        # (e.g. a genuinely slow-rendering panel, or a transient click/scroll failure), and caching
+        # them would wrongly lock the field into "unclassifiable" for the rest of the session even
+        # though a later probe might succeed once the page settles.
+        if cache is not None and verdict not in ("unknown_after_probe",) and not verdict.startswith("probe_err"):
             cache[dd_input_id] = verdict
         return verdict
     except Exception as e:
