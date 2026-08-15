@@ -1236,3 +1236,28 @@ fresh live run (not just repackaging the old draft evidence) - `AUTOTEST_FID_006
 
 **Pilot 3 (Project Data Mapping Setup) has the identical gap** - not closed in this pass, held for
 a separate owner decision on scope.
+
+## 29. Canonical engine regression canary - MANDATORY pre-push gate (2026-08-16, Issue #376 item 1)
+
+`engine.py`/`universal_classifier.py` changed in 8 PRs over 3 days (2026-08-13 to 2026-08-15), and
+every single change proved itself with a one-off script in `tmp/` (e.g.
+`bank_new_engine_cache_proof.py`) that was never committed or reused. RF's shared T1/T2 files have
+had the R12 canary-regression protocol for months; the engine had nothing equivalent - a real gap,
+flagged by the reviewer's cross-PR retrospective (Issue #376).
+
+**Fix:** `py/engine_canary.py` - drives Bank (OV manage-object) and Language (TV inline-editable
+grid) through a full Insert->Update->Delete cycle via the engine, DB-verifying self-clean for both.
+These two are the simplest, most-proven exemplar of each screen family the engine supports - if a
+change to `engine.py`/`universal_classifier.py` breaks either, it is very likely to break every
+other screen built on the same primitives.
+
+```
+EC_HEADED=0 py -X utf8 workstreams/master-plan/ec-automation/py/engine_canary.py
+```
+Exits 0 only if both screens' full I-U-D cycle passes AND DB-verify confirms 0 residual for both.
+
+**MANDATORY: run this before pushing any change to `engine.py` or `universal_classifier.py`** - the
+same rule R12 already applies to shared T1/T2 RF files, extended to the engine's own shared code.
+Verified twice in a row (headed then headless) at authoring time, both PASS, both independently
+DB-confirmed 0 residual (`AUTOTEST_CANARY_BANK` in `OV_BANK`, `ZZ` in `T_BASIS_LANGUAGE`).
+
