@@ -1,8 +1,8 @@
 *** Settings ***
-Documentation       LIVE VALIDATION smoke test for resources/contract_attribute.resource — proves
+Documentation       LIVE VALIDATION smoke test for resources/contract_attribute.resource - proves
 ...                 the RF port of contract_attribute_helpers.py actually works against a real EC
 ...                 screen (Sale Contract Attributes, local sandbox), not just in theory. Uses
-...                 SS1_Contract_A row 13 (Parent Contract) — pre-existing test data already proven
+...                 SS1_Contract_A row 13 (Parent Contract) - pre-existing test data already proven
 ...                 non-protected + safely self-cleaning during the Python-side validation
 ...                 (2026-08-09). Set -> verify -> Delete -> verify blank again, so the sandbox is
 ...                 left exactly as found. TC04/TC05 close out the checkbox and protected-attribute
@@ -49,7 +49,7 @@ TC03 Delete Restores Blank
 
 TC04 Checkbox Edit Round Trip
     [Documentation]    "Enforce Take or Pay" (row 8) already has a value (Y) on every contract
-    ...    template checked on this sandbox — no naturally blank checkbox exists to exercise the
+    ...    template checked on this sandbox - no naturally blank checkbox exists to exercise the
     ...    combined Insert+checkbox path, so this proves the checkbox EDIT (existing-value) path
     ...    instead: toggle to N, verify, toggle back to Y (self-clean), verify restored.
     [Tags]    checkbox
