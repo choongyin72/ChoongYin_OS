@@ -1111,3 +1111,41 @@ pilot-3-shaped screen through the same fast path as pilots 1-2.
 This decision should be revisited if a future screen of pilot 3's shape is built and the generators
 gain structural support for one or more of the 3 warning signs above - at that point the exception
 list shrinks, not the default-path principle itself.
+
+## 26. Correction - Deferment Group's REAL root cause was role-based access, not an EC environment defect (2026-08-14)
+
+Sections 15-16 concluded Deferment Group's open-failure was "NOT a code bug - environment/
+registration-state issue" and later "closed for good... needs an EC admin/environment-level check"
+after a Flush Cache attempt also failed. **That conclusion was wrong** - it never checked the right
+layer.
+
+Investigated further this session with 2 independent live navigation attempts (menu search, then
+treeview browsing via Configuration -> Assets -> Facility Objects - both failed identically, headed
+and headless) plus a DB check of `CLASS_CNFG`/`CLASS_PROPERTY_CNFG` and the treeview registration
+JSON (`TV_CTRL_CONFIGURATION_STORAGE`) - both showed the class and its treeview node correctly
+configured (`disabled: false`, correct label, correct path). This ruled out class config and
+treeview registration as the cause, but STOPPED THERE and (wrongly) concluded "environment defect"
+without checking the one remaining layer: role-based screen access.
+
+**Owner supplied a screenshot of the live Object Maintenance / Access screen showing ALL 5 roles
+(Installation Manager, Operator, System Administrator, Supervisor, Reservoir Group) set to "No
+access" for this screen.** Confirmed against the DB independently: `TV_T_BASIS_ACCESS` for
+`OBJECT_ID=1087` (`/com.ec.frmw.co.screens/manage_object_nav/CLASS_NAME/DEFERMENT_GROUP`) shows
+`LEVEL_ID=0` ("No access") on all 5 rows - matching the screenshot exactly. **This is the real,
+complete explanation**: the screen is invisible via both menu search and treeview browsing because
+NO role can see it, not because of any product defect, cache staleness, or environment sync gap.
+`sysadmin`'s own effective role - whichever one it resolves to - is one of the 5 already confirmed
+locked out.
+
+**Lesson for this project's own methodology:** EC screen visibility has (at least) 3 independent
+config layers - class definition (`CLASS_CNFG`), treeview registration (`TV_CTRL_CONFIGURATION_
+STORAGE`), and role-based access (`TV_T_BASIS_ACCESS`) - matching the `ec-screen-registration-
+builder` skill's own stated chain (Business Function -> Business Function Profile -> Treeview node
+-> Role Access). Checking only the first two and concluding "environment defect" when a screen is
+unreachable is an incomplete diagnosis - the access layer must be checked before escalating
+anything as a product/environment issue.
+
+**Status:** not a code fix. Whether to grant role access is a live-sandbox security-config decision
+requiring explicit owner authorization, not something to change unilaterally - see open-items
+tracker item 3 for the two options (grant access if the screen should be usable, or accept "No
+access" as intentional and close this as never having been a real defect).
