@@ -1,10 +1,10 @@
 *** Settings ***
-Documentation       T2 pattern — Contract Attribute screen family (Sale/Revenue/Transport Contract
+Documentation       T2 pattern - Contract Attribute screen family (Sale/Revenue/Transport Contract
 ...                 Attributes are the SAME JSF component: com.ec.tran.co.screens/contract_attribute,
 ...                 differing only by URL ACCESS_COLUMN=SALE_CODE|REVN_CODE|TRAN_CODE). Verified
 ...                 cross-screen and cross-environment (CLP ECaaS TEST + this repo's local sandbox)
 ...                 2026-08-09. Ported from the validated Playwright module
-...                 ../libraries/contract_attribute_helpers.py — see that file's docstring for the
+...                 ../libraries/contract_attribute_helpers.py - see that file's docstring for the
 ...                 full mechanism writeup, and ec-ui-knowledge/screens/contract-attributes-family.md
 ...                 for the cross-screen doc. Screen-specific nav values/row indices live in the T3
 ...                 page object; this layer is the shared attribute-grid mechanics.
@@ -37,7 +37,7 @@ Set Contract Attribute Navigator
 
 Set Contract Attribute Nav Field
     [Documentation]    Set one cascading nav dropdown at nav:form:G:0:R:1:${column}:dd by exact
-    ...    data-item-label match (mirrors Set Navigator Filter, but that keyword hardcodes C:0 —
+    ...    data-item-label match (mirrors Set Navigator Filter, but that keyword hardcodes C:0  -
     ...    this screen's fields sit at C:1/C:2/C:3).
     [Arguments]    ${column}    ${value}
     VAR    ${dd}=    nav:form:G:0:R:1:${column}:dd
@@ -51,7 +51,7 @@ Set Contract Attribute Nav Field
 Click Contract Attribute Row
     [Documentation]    Click the value cell (td index 1) of grid row ${row_idx} (0-based) to
     ...    select it. On a never-before-set attribute this selects the row but does NOT reveal an
-    ...    edit field — check Contract Attribute Edit Field Kind afterwards.
+    ...    edit field - check Contract Attribute Edit Field Kind afterwards.
     [Arguments]    ${row_idx}
     Evaluate JavaScript    css=[id="${CA_GRID_ID}"]
     ...    (el) => { const row = el.querySelectorAll('tr')[${row_idx}]; if(row){ const tds = row.querySelectorAll('td'); if(tds[1]) tds[1].click(); } }
@@ -65,7 +65,7 @@ Get Contract Attribute Row Label
     RETURN    ${label}
 
 Get Contract Attribute Row Value
-    [Documentation]    Return grid row ${row_idx}'s current value (td index 1 text) — read this
+    [Documentation]    Return grid row ${row_idx}'s current value (td index 1 text) - read this
     ...    AFTER Save Contract Attribute to verify persistence (ground truth, not the optimistic
     ...    client state).
     [Arguments]    ${row_idx}
@@ -75,7 +75,7 @@ Get Contract Attribute Row Value
 
 Contract Attribute Edit Field Kind
     [Documentation]    Return which edit-field kind is present at the fixed version:form:T:0:C1_
-    ...    id: 'in' (plain input), 'dd' (dropdown), 'cb' (checkbox), or 'none' (never-set — needs
+    ...    id: 'in' (plain input), 'dd' (dropdown), 'cb' (checkbox), or 'none' (never-set - needs
     ...    Insert Contract Attribute Version first).
     ${n_in}=    Get Element Count    css=[id="${CA_VALUE_IN}"]
     IF    ${n_in} > 0    RETURN    in
@@ -100,7 +100,7 @@ Click Text If Present
 Insert Contract Attribute Version
     [Documentation]    Toolbar Insert(+) -> "Attribute Version" submenu (menuBar link index 2 ->
     ...    hover -> index 3 -> click), for a row that has never had a value. Returns PROTECTED if
-    ...    EC refuses ("Not allowed to insert protected attributes" — a real per-attribute business
+    ...    EC refuses ("Not allowed to insert protected attributes" - a real per-attribute business
     ...    rule, not a bug; dismisses the dialog via OK), else OK.
     VAR    ${links}=    css=[id="${CA_MENUBAR_ID}"] a
     Hover    ${links} >> nth=2
@@ -116,9 +116,9 @@ Insert Contract Attribute Version
     RETURN    OK
 
 Set Contract Attribute Daytime
-    [Documentation]    Fill the new version row's Daytime field if it's currently blank —
+    [Documentation]    Fill the new version row's Daytime field if it's currently blank  -
     ...    MANDATORY for a first-time version, or Save silently no-ops (no error, but the value
-    ...    never actually persists — only caught by a later Refresh throwing an unsaved-changes
+    ...    never actually persists - only caught by a later Refresh throwing an unsaved-changes
     ...    modal). No-op if the field already has a date.
     [Arguments]    ${date}
     ${n}=    Get Element Count    css=[id="${CA_DAYTIME_IN}"]
@@ -143,7 +143,7 @@ Set Contract Attribute Checkbox
 
 Select Contract Attribute Dropdown
     [Documentation]    Pick the option in the value dropdown whose data-item-label contains
-    ...    ${value} (substring match — labels can carry odd dash characters).
+    ...    ${value} (substring match - labels can carry odd dash characters).
     [Arguments]    ${value}
     Click    css=[id="${CA_VALUE_DD_BTN}"]
     Sleep    0.7s
@@ -154,7 +154,7 @@ Select Contract Attribute Dropdown
 
 Save Contract Attribute
     [Documentation]    Save via the toolbar menuBar link index 0. The shared Save keyword's
-    ...    title-based xpath is unreliable on THIS toolbar — use position instead.
+    ...    title-based xpath is unreliable on THIS toolbar - use position instead.
     Click    css=[id="${CA_MENUBAR_ID}"] a >> nth=0
     Wait For Load State    networkidle    timeout=15s
     Sleep    1.2s
@@ -176,8 +176,8 @@ Set Contract Attribute Value
     [Documentation]    Set the value of the attribute at grid row ${row_idx}. For a plain/numeric
     ...    attribute pass the text value; for a checkbox pass Y/N; for a dropdown/object-reference
     ...    attribute pass the label substring to match. ${daytime} (YYYY-MM-DD) is required the
-    ...    first time an attribute is ever set on this contract — harmless to always pass it.
-    ...    Returns OK (and saves), or PROTECTED (no save attempted) if EC refuses the insert —
+    ...    first time an attribute is ever set on this contract - harmless to always pass it.
+    ...    Returns OK (and saves), or PROTECTED (no save attempted) if EC refuses the insert  -
     ...    callers should assert on this return value rather than assume success.
     [Arguments]    ${row_idx}    ${value}    ${daytime}=${EMPTY}
     ${kind}=    Ensure Contract Attribute Editable    ${row_idx}
@@ -208,9 +208,9 @@ Hover And Click Enabled Menu Item
 
 Delete Contract Attribute Value
     [Documentation]    Delete the version at grid row ${row_idx}, restoring it to never-set/blank
-    ...    — the exact inverse of Set Contract Attribute Value, for self-cleaning test data. Fails
+    ...    - the exact inverse of Set Contract Attribute Value, for self-cleaning test data. Fails
     ...    loudly if the row has no existing version to remove (Delete->Attribute Version is
-    ...    disabled in that case — a real guard, not a flake).
+    ...    disabled in that case - a real guard, not a flake).
     [Arguments]    ${row_idx}
     Click Contract Attribute Row    ${row_idx}
     Hover And Click Enabled Menu Item    6    7
