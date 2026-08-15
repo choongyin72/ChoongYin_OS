@@ -71,6 +71,12 @@ class Engine:
     def __init__(self, page, screen_name):
         self.page = page
         self.screen_name = screen_name
+        # Fixed 2026-08-15 (Bank): classify_dd()'s dropdown-vs-popup probe is a real live click on
+        # the field - structurally correct only once per screen session, since it never changes for
+        # an already-open screen. Without this cache, _refresh_field_map() (called after every
+        # action) re-probed EVERY dd_input field, including ones the current task never touches
+        # (e.g. Bank's optional Country field got re-clicked on every Insert/Save/row-select).
+        self._dd_cache = {}
         self._refresh_field_map()
 
     # ---------------------------------------------------------------- field resolution
@@ -90,7 +96,7 @@ class Engine:
             for f in scan_region_fields(page, prefix):
                 if not f["label"]:
                     continue
-                primitive = classify_field_by_id(page, f) if source != "navigator" else _nav_primitive(f)
+                primitive = classify_field_by_id(page, f, cache=self._dd_cache) if source != "navigator" else _nav_primitive(f)
                 fields.append({**f, "primitive": primitive, "source": source})
         # Fixed 2026-08-14 (Project Data Mapping Setup, Phase 4 pilot 3 / Issue #361): plain
         # last-wins on duplicate labels breaks when a navigator FILTER field and an objectForm
@@ -106,6 +112,28 @@ class Engine:
             existing = self._by_label.get(key)
             if existing is None or existing["source"] == "navigator":
                 self._by_label[key] = f
+
+    def field_inventory(self, grid_id=None):
+        """Read-only, structured snapshot of every fillable field currently visible on this screen,
+        grouped by region: 'navigator', 'objectForm' (Insert), 'updateAttributes'/'objectdates'
+        (row-select/Update/Delete), and - if a grid_id is supplied - 'grid_columns'. Each form/nav
+        entry carries label + mandatory (yellow) + primitive (text/date/dropdown/checkbox/popup).
+
+        Built entirely from the field map _refresh_field_map() already maintains (self._by_label) -
+        no extra live probing beyond what's already been scanned/cached. Intended as the single
+        place to answer "what actually needs filling on this screen" before writing task-specific
+        fill()/select() calls, instead of guessing or re-scanning ad hoc per task."""
+        by_source = {}
+        for f in self._by_label.values():
+            by_source.setdefault(f["source"], []).append(
+                {"label": f["label"], "mandatory": f["mandatory"], "primitive": f["primitive"]}
+            )
+        inventory = {src: sorted(fields, key=lambda x: x["label"]) for src, fields in by_source.items()}
+        if grid_id:
+            inventory["grid_columns"] = [
+                {"label": c["label"]} for c in scan_grid_columns(self.page, grid_id) if c.get("label")
+            ]
+        return inventory
 
     def _field(self, label):
         f = self._by_label.get(_norm(label))

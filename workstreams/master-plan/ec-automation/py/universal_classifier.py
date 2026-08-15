@@ -43,14 +43,27 @@ def ajax(page, t=15000):
     page.wait_for_timeout(900)
 
 
-def classify_dd(page, dd_input_id):
+def classify_dd(page, dd_input_id, cache=None):
     """A dd_input field is either an autocomplete DROPDOWN (opens a small _panel with rows carrying
     data-item-label) or an EC-object PICKER POPUP (opens a separate modal/dialog instead). PrimeFaces
     does not render the _panel div into the DOM until the button is actually clicked once, so a pure
     static-DOM check cannot tell them apart (confirmed live on Bank's Country field - fell through to
     'popup_unconfirmed' even though it is a genuine dropdown). Fixed 2026-08-12: click-and-inspect
     probe - click the button, look at what rendered, then close it - still read-only (no Save, no
-    data entered), same class of action as scan_ec_screen.py already does for gated nav dropdowns."""
+    data entered), same class of action as scan_ec_screen.py already does for gated nav dropdowns.
+
+    Fixed 2026-08-15 (Bank, engine.py re-probing): a field's dropdown-vs-popup classification is
+    structural and never changes for the life of an open screen session, but `Engine._refresh_field_map()`
+    calls this on EVERY refresh (construction, after New Object, after every Save, after every
+    row-select) - so an unrelated optional field like Bank's Country got re-clicked and re-probed
+    repeatedly within a single I-U-D run, visibly re-opening/closing its dropdown live even though the
+    task never touches it (owner caught this happening live). Fix: an optional `cache` dict, keyed by
+    `dd_input_id`, that the caller can supply and reuse across refreshes - `Engine` now owns one such
+    cache per instance so each dropdown is probed at most once per open screen session. `cache=None`
+    (default) preserves the original always-probe behavior for Phase 1's `classify_screen`, which has
+    no equivalent long-lived session to cache across."""
+    if cache is not None and dd_input_id in cache:
+        return cache[dd_input_id]
     base = dd_input_id[: -len("_input")]
     try:
         btn = page.locator(css(base + "_button")).first
@@ -93,6 +106,8 @@ def classify_dd(page, dd_input_id):
                 break
         page.keyboard.press("Escape")
         page.wait_for_timeout(300)
+        if cache is not None:
+            cache[dd_input_id] = verdict
         return verdict
     except Exception as e:
         return f"probe_err: {str(e)[:60]}"
@@ -154,14 +169,17 @@ def scan_grid_columns(page, grid_id):
     )
 
 
-def classify_field_by_id(page, f):
+def classify_field_by_id(page, f, cache=None):
     """Shared primitive classifier for any field dict from scan_region_fields(). Fixed 2026-08-12
     (Meter's 'Delivery Point Name'/'Delivery Stream Name'): a ':pin' id suffix is EC's OWN explicit
     popup-picker convention - confirmed live via DOM inspection, the field's parent div carries class
     'ECPopupCell' and its companion button id is '<field>B' (not '_button'). This is a reliable
     structural signature, NOT a heuristic - no click-probe needed for popups at all, unlike
     dropdown-vs-popup on a plain 'dd_input' field (classify_dd) where EC's markup doesn't
-    pre-distinguish them and a probe is genuinely required."""
+    pre-distinguish them and a probe is genuinely required.
+
+    `cache` is passed straight through to classify_dd() - see its docstring (2026-08-15 fix) for why
+    it exists: lets a long-lived caller (Engine) avoid re-probing the same dropdown on every refresh."""
     if f["type"] == "checkbox":
         return "checkbox"
     if f["id"].endswith("da_input"):
@@ -169,7 +187,7 @@ def classify_field_by_id(page, f):
     if f["id"].endswith("pin"):
         return "popup"
     if f["id"].endswith("dd_input"):
-        return classify_dd(page, f["id"])
+        return classify_dd(page, f["id"], cache=cache)
     return "text"
 
 
