@@ -1149,3 +1149,69 @@ anything as a product/environment issue.
 requiring explicit owner authorization, not something to change unilaterally - see open-items
 tracker item 3 for the two options (grant access if the screen should be usable, or accept "No
 access" as intentional and close this as never having been a real defect).
+
+## 27. Correction - the "click-stall" bug (Price Object/Service/Contract Capacity/Chemical Stream) was a self-inflicted test-pacing artifact (2026-08-15)
+
+Sections 12-16 documented 4 investigation attempts (Batches 4, 5 x2, and a console/network-capture
+attempt) across 4 screens, all concluding "confirmed intermittent/transient, root cause not
+identified" and mitigating with an 8-second click-timeout cap. **That conclusion was incomplete** -
+none of the 4 attempts questioned the investigation script's OWN pacing between fields.
+
+Owner explained the missing piece: different dropdown fields query different underlying tables at
+genuinely different speeds - some simple/fast lookups, some complex/slower joins - so response time
+legitimately varies per field. Every prior investigation script (including this session's own first
+attempt) clicked each dropdown, then pressed Escape and moved to the next field after only a fixed,
+short delay (~100ms), assuming uniform speed across all fields. If a field's query was still
+in-flight when the next click interrupted it, that could leave the page in a state that blocks every
+subsequent click - a self-inflicted artifact of the TEST'S pacing, not the EC screen itself.
+
+**Live-reproduced both ways on Price Object, single variable changed, real data (not guessed):**
+traced a guaranteed-valid navigator chain top-down from an actual `OV_PRICE_OBJECT` row (`SS1_
+PO_CNTRA` -> Contract `SS1_CONTRACT_A` -> Contract Area `SS1_CA` -> Business Unit `SS1_BU`) instead
+of cycling through "first-available" navigator combinations blindly (which hit the already-known
+sparse-cascade limitation at 2 different levels before this). With that chain, reached a real row on
+the `updateAttributes` (Update) form and swept all 11 dropdown fields back-to-back:
+- **Rushed pacing** (click, Escape after ~100ms, next field immediately): **9/11 fields stalled**,
+  each timing out at 8s - the exact same symptom as every prior "unexplained" occurrence, and the
+  first 2 fields (fast, simple lookups) succeeded while every field after them failed identically.
+- **Proper pacing** (click, wait for `ajax()` to settle + a ~1.5s buffer, THEN Escape, then next
+  field): **0/11 fields stalled** - same screen, same row, same 11 fields, only the pacing changed.
+
+**Owner explicitly required this NOT be left as an inferred theory** - "all r similar as price
+object" is an assumption, not a fact; each of the other 3 screens was independently traced and
+tested the same way (real `OV_*` row -> FK chain via SQL, never a guessed navigator combination)
+before drawing any conclusion about them:
+
+- **Service** (Business Unit `TS3 BU1`, traced from `OV_SERVICE` row `TS3_SERVICE_LOCATION_A_TO_K`
+  -> Contract `TS3_GTA_SHP_A` -> Contract Area `TS3_FIRM`): rushed pacing **8/9 stalled**; proper
+  pacing **0/9 stalled**. Confirmed, same cause.
+- **Contract Capacity** (Business Unit `TS3 BU1` -> Contract Area `TS3_FIRM` -> Contract
+  `TS3_FIRM1`, traced from a real `OV_CONTRACT_CAPACITY` row): an initial single-level navigator
+  guess (Business Unit only) landed on an empty grid - this screen's navigator is a full 3-level
+  cascade like Price Object, not the single-level the registry's short description implied; the
+  FULL traced chain was required. With that: rushed pacing **3/5 stalled**; proper pacing **0/5
+  stalled**. Confirmed, same cause.
+- **Chemical Stream** (Production Unit `P1 Production Unit` -> Area `P1 Area` -> Facility Class 1
+  `P1 Facility 1`, traced from a real `OV_CHEM_STREAM` row): rushed pacing **0/21 stalled** - did
+  NOT reproduce the symptom at all, unlike the other 3 screens under identical rushed-pacing
+  conditions. The proper-pacing re-run then hit an unrelated leftover confirmation-modal dialog
+  blocking the next row click (a separate script-state bug in the re-navigation step, not the
+  click-stall pattern) before a clean comparison could complete. **Left honestly as inconclusive**
+  rather than assumed to match the other 3.
+
+**Conclusion: CONFIRMED on 3 of 4 screens with real, independent before/after evidence each**
+(Price Object, Service, Contract Capacity) - not inferred from a shared symptom. Chemical Stream
+remains genuinely unverified; it may have a different cause, may simply not exhibit the issue under
+these particular data/timing conditions, or may need the unrelated modal issue resolved first to
+get a clean test. This item is closed on the 3 confirmed screens; Chemical Stream would need its
+own dedicated investigation if revisited, since it did not reproduce the pattern this time.
+
+**Lesson for this project's own methodology, saved to memory (`feedback_buffer_time_field_by_
+field`):** any live automation sweeping multiple fields back-to-back - dropdowns, grid cells, form
+fields - must wait for each field's own loading/settle state to genuinely finish before moving to
+the next, not a fixed short delay assumed uniform across all fields. Also reinforced this session:
+never generalize a confirmed finding from one instance to "similar" instances without independently
+verifying each one - a screen sharing a symptom is a hypothesis to test, not a fact to state. This
+is the second correction this session following the same pattern as Deferment Group (section 26) -
+checking one's own tooling/methodology assumptions before escalating something as an external
+defect, and verifying each claim individually rather than pattern-matching.
