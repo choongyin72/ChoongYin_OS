@@ -1215,3 +1215,24 @@ verifying each one - a screen sharing a symptom is a hypothesis to test, not a f
 is the second correction this session following the same pattern as Deferment Group (section 26) -
 checking one's own tooling/methodology assumptions before escalating something as an external
 defect, and verifying each claim individually rather than pattern-matching.
+
+## 28. Phase 4 Pilots 1+2 - closing the packaging gap (2026-08-16)
+
+Section 23's Pilots 1 (Financial Item Definition) and 2 (Financial Item Template) were genuinely
+built, live-verified, and DB-verified at the time (2026-08-14) - but the commits' purpose was
+proving the engine/generator work on new screen shapes, so neither pilot was ever packaged into a
+`screens/` bundle, given a registry row, or a scorecard row. Found as a real documentation gap
+during a 2026-08-16 cleanup pass (draft evidence screenshots were sitting in
+`docs/EC/screenshots/iud_fin_item_def/`+`_template/` instead of the project's real `evidence/`
+convention, with no registry/scorecard entry anywhere).
+
+Closed by: re-deriving each screen's real treeview path from `tmp/treeview.json` (never recorded
+in the original pilot commits - `EC Revenue > Financial Item > Financial Item Definition`/
+`Financial Item Template`), building thin `screens/` bundles (SOW/README/JOURNAL/evidence) that
+point back to this section for the full engine-gap narrative rather than duplicating it, adding
+registry + scorecard rows, and a KB selector map for each screen. Both screens re-verified with a
+fresh live run (not just repackaging the old draft evidence) - `AUTOTEST_FID_006` and
+`AUTOTEST_FIT_001`, both full Insert-Update-Delete, DB-verified 0 residual.
+
+**Pilot 3 (Project Data Mapping Setup) has the identical gap** - not closed in this pass, held for
+a separate owner decision on scope.
