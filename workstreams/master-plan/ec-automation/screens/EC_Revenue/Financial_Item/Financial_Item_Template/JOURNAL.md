@@ -23,11 +23,23 @@ gap as Financial Item Definition).
   grid).
 
 ## Done well
-- Diagnosed the row-resolution failure via a direct live DOM dump (`tmp/recon_fit_grid_insert.py`)
-  instead of trying random row-index guesses.
+- Diagnosed the row-resolution failure via a direct live DOM dump
+  (`investigation/recon_blank_row_diagnosis.py`) instead of trying random row-index guesses.
 - Confirmed navigator fields are genuinely optional (not gating) via `field_inventory()` before
   assuming they needed to be filled - matches this project's "only fill needed fields" rule.
 
 ## Evidence
 `evidence/01_loaded.png` through `07_final_state.png` - fresh 2026-08-16 run. DB re-check: 0 rows
 for `AUTOTEST_FIT_001` in `FINANCIAL_ITEM_TEMPLATE` after delete (physical removal confirmed).
+
+## Reviewer follow-up (2026-08-16)
+Reviewer MUST-FIX caught two additional incomplete bundle-artifact items missed in the first pass:
+`playwright/ec_iud_financial_item_template.py` (bundle-local delegator, was missing) and
+`investigation/` (the real recon scripts were sitting in `tmp/`, never moved into the bundle).
+Both fixed: `playwright/ec_iud_financial_item_template.py` added (thin delegator, `parents[5]`,
+path verified live); `investigation/` now holds `recon_menu_path_and_fields.py` +
+`recon_treeview_tooltip.py` (shared recon with Financial Item Definition - both screens' paths
+were found in the same script run) and `recon_blank_row_diagnosis.py` +
+`verify_db_residual.py` (screen-specific, renamed from their original `tmp/` filenames).
+`CHECKLIST.md`/`VERIFY-REPORT.md` remain open pending the owner's RF-layer scope decision (see
+PR #379 discussion) - not fixed in this follow-up.

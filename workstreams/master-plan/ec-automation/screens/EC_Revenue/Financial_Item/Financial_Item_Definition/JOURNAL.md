@@ -34,3 +34,16 @@ scorecard row - a real documentation gap for an already-proven-working screen, f
 ## Evidence
 `evidence/01_loaded.png` through `07_final_state.png` - fresh 2026-08-16 run. DB re-check: 0 rows
 for `AUTOTEST_FID_006` in `OV_FINANCIAL_ITEM` after delete.
+
+## Reviewer follow-up (2026-08-16)
+Reviewer MUST-FIX caught two additional incomplete bundle-artifact items missed in the first pass:
+`playwright/ec_iud_financial_item_definition.py` (bundle-local delegator, was missing - the
+driver only existed at `py/financial_item_definition_iud.py`) and `investigation/` (the real recon
+scripts that produced this JOURNAL's claims were sitting in `tmp/`, never moved into the bundle).
+Both fixed: `playwright/ec_iud_financial_item_definition.py` added (thin delegator, path verified
+live - `parents[5]`, not `parents[6]` like the deeper Royalty Contract bundle, since this screen's
+path has one fewer folder level); `investigation/` now holds `recon_menu_path_and_fields.py` +
+`recon_treeview_tooltip.py` (shared recon, also copied into Financial Item Template's folder -
+both screens' paths were found in the same script run) and `recon_insert_mandatory_fields.py` +
+`verify_db_residual.py` (screen-specific). `CHECKLIST.md`/`VERIFY-REPORT.md` remain open pending
+the owner's RF-layer scope decision (see PR #379 discussion) - not fixed in this follow-up.
