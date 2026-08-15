@@ -1,7 +1,8 @@
 """check_bundle_hygiene.py - enforce R16 (no hardcoded creds) + R20 (ASCII-only) on EC Playwright bundles.
 
 Two static gates over screens/**/playwright/*.py, ec-automation/py/*.py (canonical drivers +
-shared engine), and screens/**/investigation/*.py:
+shared engine), tools/generators/*.py, ec-automation/libraries/*.py (added 2026-08-16, Issue #376
+item 2 - these were never scanned before), and screens/**/investigation/*.py:
   * R16 - a hardcoded credential literal NOT read from the environment is a FAILURE in BUNDLES (exit 1);
     in throwaway investigation/ recon scripts it only WARNs (they should use tmp/scripts/ec_session.py).
   * R20 - ANY non-ASCII byte (em-dash, box-drawing, check/cross, smart quotes...) in EITHER glob is a
@@ -23,6 +24,12 @@ ROOT = Path(os.environ.get("REPO_ROOT") or Path(__file__).resolve().parents[1])
 EC = ROOT / "workstreams" / "master-plan" / "ec-automation"
 SCREENS = EC / "screens"
 PYDIR = EC / "py"   # canonical driver location (drivers + shared engine) - was NOT scanned pre-2026-07-26
+GENDIR = ROOT / "tools" / "generators"    # bundle generators - NOT scanned pre-2026-08-16 (Issue #376 item 2).
+LIBDIR = EC / "libraries"                 # shared DbVerify.py + helper modules - same scope gap, same fix.
+# Note: engine.py/universal_classifier.py (the #357 R16 slip) live under PYDIR, already scanned since
+# 2026-07-26 - that slip got through because hygiene wasn't run as a HABIT on every .py-touching PR, not
+# because of a missing glob. This scope extension (generators/libraries) closes a separate, real gap;
+# the habit itself has no code fix - "run it before any push with Python in the diff" (Issue #376 item 2).
 
 CRED_LITERAL = re.compile(r"""['"]sysadmin['"]""")
 FILL_HARDCODED = re.compile(r"""#(?:username|password)['"]\s*,\s*['"][^'"]+['"]""")
@@ -144,6 +151,10 @@ def main():
     bundles = sorted(SCREENS.glob("**/playwright/*.py"))
     if PYDIR.exists():
         bundles += sorted(PYDIR.glob("*.py"))
+    if GENDIR.exists():
+        bundles += sorted(GENDIR.glob("*.py"))
+    if LIBDIR.exists():
+        bundles += sorted(LIBDIR.glob("*.py"))
     recon = sorted(SCREENS.glob("**/investigation/*.py"))
     fails, warns, nonascii = [], [], []
     for f in bundles:

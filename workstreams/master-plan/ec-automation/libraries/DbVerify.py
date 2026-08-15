@@ -1,4 +1,4 @@
-"""Robot Framework keyword library — verify EC data at the DATABASE (ground truth).
+"""Robot Framework keyword library - verify EC data at the DATABASE (ground truth).
 
 The web UI can lie (optimistic client state, silent rejects, pagination); the DB
 is the source of truth. These keywords let a suite assert presence/absence of a
@@ -76,7 +76,7 @@ def view_row_count(view):
 def check_log_count(check_id, daytime):
     """Count CTRL_CHECK_LOG rows for a check rule (CHECK_ID) on a DAYTIME (YYYY-MM-DD).
 
-    This is EC's validation OUTPUT table — a row per rule violation produced when a
+    This is EC's validation OUTPUT table - a row per rule violation produced when a
     check group is run. Used to assert a UI-triggered validation matches DB ground truth.
     """
     conn = _connect()
@@ -148,7 +148,7 @@ def distinct_violation_objects_for_rule(check_id, daytime):
 def frozen_distinct_violation_objects(check_id, daytime):
     """Faithful oracle for a FROZEN function-rule (ZWP_P_TOOLTIP.getValFrozenValue).
 
-    distinct_violation_objects_for_rule() can't handle these — their WHERE_FORMULA vars are
+    distinct_violation_objects_for_rule() can't handle these - their WHERE_FORMULA vars are
     a package name + 'FROZEN' const, not columns. So derive the oracle from the rule's OWN
     func-params: read TABLE_ID + the P_VALUE column + P_ATTRIBUTE const, then COUNT(DISTINCT
     OBJECT_ID) where getValFrozenValue(...) = 'FROZEN' on ``daytime``. Stays faithful to the
@@ -263,7 +263,7 @@ def day_status_value_should_be(table, object_id, daytime, column, expected):
     """Fail unless an N1 day-status measured value equals ``expected`` (numeric-tolerant).
 
     The trustworthy oracle for the N1 edit-in-place pattern: after the screen Save, assert the
-    value really persisted to the (well x day) row — not that the grid optimistically showed it.
+    value really persisted to the (well x day) row - not that the grid optimistically showed it.
     """
     actual = day_status_value(table, object_id, daytime, column)
     expected_is_null = expected is None or (isinstance(expected, str) and expected.strip() == "")
@@ -284,7 +284,7 @@ def day_status_value_should_be(table, object_id, daytime, column, expected):
 def reset_day_status_value(table, object_id, daytime, column, value=None):
     """TEST-TEARDOWN ONLY: restore an N1 day-status measured cell to ``value`` (default NULL).
 
-    NOT an oracle — the sole DB *write* in this library, used to leave the sandbox exactly as found
+    NOT an oracle - the sole DB *write* in this library, used to leave the sandbox exactly as found
     after an edit-in-place test whose cell was NULL-original (so a faithful UI "revert to empty" is
     unreliable: clearing a cell can pop a save-confirmation modal). The assertion that proves coverage
     is still the UI->DB write verified read-only by ``day_status_value_should_be``; this only cleans up.
@@ -308,7 +308,7 @@ def reset_day_status_value(table, object_id, daytime, column, value=None):
 
 # --- N1 sub-daily: intraday (datetime-keyed) day-status value ------------------------------------
 # Sub-daily status tables (e.g. PWEL_SUB_DAY_STATUS) key on (OBJECT_ID, DAYTIME, SUMMER_TIME) where
-# DAYTIME carries the TIME-OF-DAY — many intraday rows per object per day. So the daily helpers
+# DAYTIME carries the TIME-OF-DAY - many intraday rows per object per day. So the daily helpers
 # (which match TRUNC(DAYTIME)=date) would hit ALL the day's rows; these match the specific interval
 # by date + hour-of-day (HH:MI). On a clean hourly day with a single SUMMER_TIME value, (object,
 # date, HH:MI) uniquely identifies the row; ``summer_time`` can be passed to disambiguate a DST
@@ -345,7 +345,7 @@ def sub_day_status_value_should_be(table, object_id, date, hhmi, column, expecte
     """Fail unless a sub-daily measured value equals ``expected`` (numeric-tolerant; None = NULL).
 
     The trustworthy oracle for the sub-daily N1 edit-in-place pattern: after the screen Save, assert
-    the value really persisted to the (object x interval) row — proving the cell maps to ``column``
+    the value really persisted to the (object x interval) row - proving the cell maps to ``column``
     AND the datetime key resolves to exactly one intraday row.
     """
     actual = sub_day_status_value(table, object_id, date, hhmi, column, summer_time)
@@ -369,7 +369,7 @@ def sub_day_status_value_should_be_approx(table, object_id, date, hhmi, column, 
 
     For UNIT-bearing columns (pressure/rate/temp) the EC grid shows configured units while the DB
     stores base/SI units (see reference_ec_ui_db_unit_conversion). A write-verify therefore checks
-    DB_after ~= typed_display / factor, where the factor is derived live from UI_before / DB_before —
+    DB_after ~= typed_display / factor, where the factor is derived live from UI_before / DB_before  - 
     so an exact equality would spuriously fail on the unit conversion + rounding. None = no row.
     """
     actual = sub_day_status_value(table, object_id, date, hhmi, column, summer_time)
@@ -387,7 +387,7 @@ def sub_day_status_value_should_be_approx(table, object_id, date, hhmi, column, 
 
 def reset_sub_day_status_value(table, object_id, date, hhmi, column, value=None):
     """TEST-TEARDOWN ONLY: restore a sub-daily measured cell to ``value`` (default NULL) for the
-    (OBJECT_ID, date, HH:MI) interval — leaves the sandbox as found after a null-original edit test.
+    (OBJECT_ID, date, HH:MI) interval - leaves the sandbox as found after a null-original edit test.
     Same role as ``reset_day_status_value`` for the daily grid. Returns rows updated."""
     _safe(table)
     _safe(column)
@@ -411,7 +411,7 @@ def reset_sub_day_status_value(table, object_id, date, hhmi, column, value=None)
 # An allocation calc RUN distributes measured field/stream totals onto wells/streams, writing per-
 # object quantities to the *_DAY_ALLOC tables (e.g. PWEL_DAY_ALLOC, key OBJECT_ID+DAYTIME). The
 # calc-engine critique (DeepDiveLearnings/ecpedia-efk/calc-engine-insights.md) gives the invariants
-# a correct allocation must satisfy — the "conservation oracle". The cheapest, always-true invariant
+# a correct allocation must satisfy - the "conservation oracle". The cheapest, always-true invariant
 # is NO NEGATIVES: an allocated physical volume/mass/energy can never be < 0. (Sum-to-total and
 # day->month roll-up need the network->members->measured-total mapping; staged as a later extension.)
 
@@ -477,7 +477,7 @@ def allocation_conservation_should_hold(table, daytime):
     if int(rows) == 0:
         raise AssertionError(
             f"Conservation check FAILED: {table} has NO allocation rows on {daytime} "
-            f"(nothing to verify — wrong date or the run wrote nothing)"
+            f"(nothing to verify - wrong date or the run wrote nothing)"
         )
     neg = allocation_negative_count(table, daytime)
     if int(neg) != 0:
@@ -494,7 +494,7 @@ def allocation_conservation_should_hold(table, daytime):
 # node; see DeepDiveLearnings/ec-bpm/ec-worker-and-scheduler.md), so the suite polls the DB for the
 # result. Ground-truth oracle = the engine's ROWS_UPDATED self-report AND the actual RECORD_STATUS
 # transition count in the data must AGREE. Self-clean = DB-restore V->P (the EC reverse process
-# lifts 0 rows here, so a scoped restore is the reliable teardown — like reset_day_status_value).
+# lifts 0 rows here, so a scoped restore is the reliable teardown - like reset_day_status_value).
 
 _STATUS_FAMILY_SQL = (
     "SELECT table_name FROM all_tables WHERE owner = :o "
@@ -506,7 +506,7 @@ _STATUS_FAMILY_SQL = (
 def _status_family_tables(cur):
     """The day-status family: every %DAY_STATUS table + STRM_DAY_STREAM + OBJECT_DAY_WEATHER
     (excluding journal %JN tables). The proven P1_FwdUpd lift writes only within this family, and a
-    broad 6382-table scan confirmed nothing outside it changes — so scoping the V-count oracle and
+    broad 6382-table scan confirmed nothing outside it changes - so scoping the V-count oracle and
     the restore to this family is both correct and fast (~10 tables)."""
     cur.execute(_STATUS_FAMILY_SQL, o=os.environ.get("EC_DB_USER", "ECKERNEL_EC"))
     return [r[0] for r in cur.fetchall()]
@@ -537,7 +537,7 @@ def status_process_run_count(process_id, daytime):
     """COUNT(*) of STAT_PROCESS_STATUS log rows for ``process_id`` on ``daytime``.
 
     STAT_PROCESS_STATUS is an append-only run log (one row per run), so absence of a run can't be
-    asserted once a prior run has logged — the suite captures this baseline, fires the run, then
+    asserted once a prior run has logged - the suite captures this baseline, fires the run, then
     polls for a +1 delta to prove a FRESH run landed.
     """
     conn = _connect()
@@ -575,7 +575,7 @@ def latest_status_process_rows_updated(process_id, daytime):
 
 def restore_record_status_family(daytime, from_status="V", to_status="P"):
     """TEST-TEARDOWN ONLY: restore RECORD_STATUS on ``daytime`` from ``from_status`` back to
-    ``to_status`` across the whole day-status family — leaves the sandbox exactly as found after a
+    ``to_status`` across the whole day-status family - leaves the sandbox exactly as found after a
     status-process P->V lift. The EC reverse process lifts 0 rows here, so this scoped DB-restore is
     the reliable self-clean (the only RECORD_STATUS write in this library). Returns rows restored."""
     conn = _connect()
@@ -622,7 +622,7 @@ def record_status_family_count_month(month_date, status):
 
 def restore_record_status_family_month(month_date, from_status="A", to_status="P"):
     """TEST-TEARDOWN ONLY (MONTH grain): restore RECORD_STATUS across EVERY day of the calendar month
-    of ``month_date`` over the day-status family — the month-grain counterpart of
+    of ``month_date`` over the day-status family - the month-grain counterpart of
     restore_record_status_family, for a monthly status process whose lift may span the whole month
     (a single-day restore would leave residual 'A' on the other days). Returns rows restored."""
     conn = _connect()
@@ -659,7 +659,7 @@ def code_should_be_absent_in_view(view, code):
 # --- N-notify: MHM message-journal oracle (notification tests) -----------------------------------
 # Stock EC MHM journals every handled message in MHM_MSG (DIRECTION I/O, MSG_TYPE, STATUS, SUBJECT,
 # SENDER, RECIPIENT). A notification test sends/triggers a message then asserts a NEW MHM_MSG row for
-# the message type (delta over a captured baseline — MHM_MSG is append-only, like STAT_PROCESS_STATUS).
+# the message type (delta over a captured baseline - MHM_MSG is append-only, like STAT_PROCESS_STATUS).
 # See DeepDiveLearnings/ec-mhm/ for the model + the AOPA/CLP client contrasts.
 
 def message_journal_count(msg_type, direction="O"):
@@ -713,7 +713,7 @@ def message_journal_latest(msg_type, direction="O"):
 
 def message_journal_new_row_should_exist(msg_type, baseline_count, direction="O"):
     """Fail unless MHM_MSG has MORE rows for ``msg_type`` than ``baseline_count`` (a fresh message was
-    journaled by the send). The delta oracle — robust to the append-only journal's pre-existing rows."""
+    journaled by the send). The delta oracle - robust to the append-only journal's pre-existing rows."""
     now = message_journal_count(msg_type, direction)
     if int(now) <= int(baseline_count):
         raise AssertionError(
@@ -755,7 +755,7 @@ def component_value_should_be(view, object_id, daytime, component_no, column, ex
     """Fail unless a per-component composition value equals ``expected`` (numeric-tolerant; None = NULL).
 
     The trustworthy oracle for the composition edit-in-place pattern: after the screen Save, assert the
-    edited component's value really persisted to the (object, day, component) row — and, used on a
+    edited component's value really persisted to the (object, day, component) row - and, used on a
     second untouched component, that Save did NOT silently normalize/rescale the whole set."""
     actual = component_value(view, object_id, daytime, component_no, column)
     expected_is_null = expected is None or (isinstance(expected, str) and expected.strip() == "")
