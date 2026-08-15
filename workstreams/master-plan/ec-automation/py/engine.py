@@ -153,23 +153,53 @@ class Engine:
 
     def select(self, label, value):
         """dropdown field. Click the button, match the panel row by data-item-label, close.
-        Verification-echo: re-reads the dd's displayed label afterward."""
+        Verification-echo: re-reads the dd's displayed label afterward.
+
+        Type-to-search fallback (open-items tracker #4, root-caused on Project Data Mapping
+        Setup / Phase 4 pilot 3): some `dd_input` fields are server-side type-to-search
+        autocompletes - the panel renders visible but stays EMPTY ("No records found") until
+        real text is typed, confirmed live on Target Property/Reference (clicking the button
+        alone never showed options regardless of how much real backing data existed; typing a
+        substring of the real code/name triggered the actual server search). `classify_dd()`
+        currently classifies these identically to a plain full-list dropdown (`'dropdown'`
+        primitive) - both share the same `ui-autocomplete-panel` structure, so the caller has
+        no way to know in advance which behavior a given field has. Fix: try the plain
+        click-only path first (fast, correct for the common full-list case); if no option ever
+        renders and a real search value was given (not `__FIRST__`), type that value into the
+        input to trigger the search, then retry - unifying both widget behaviors under one
+        gesture instead of requiring a separate primitive or per-screen workaround."""
         f = self._field(label)
         if f["primitive"] != "dropdown":
             raise ValueError(f"select() called on a '{f['primitive']}' field ({label!r})")
         base = f["id"][: -len("_input")]
+        loc_input = self.page.locator(css(f["id"])).first
         self.page.locator(css(base + "_button")).first.click()
         want_first = value in (None, "", "__FIRST__")
         any_opt = f"xpath=//*[@id='{base}_panel']//tr[@data-item-label and normalize-space(@data-item-label)!='']"
-        opt = any_opt if want_first else f"xpath=//*[@id='{base}_panel']//tr[normalize-space(@data-item-label)='{value}']"
-        loc = self.page.locator(opt).first
-        loc.wait_for(state="visible", timeout=6000)
+        exact_opt = f"xpath=//*[@id='{base}_panel']//tr[normalize-space(@data-item-label)='{value}']"
+        contains_opt = f"xpath=//*[@id='{base}_panel']//tr[@data-item-label and contains(@data-item-label,'{value}')]"
+        loc = self.page.locator(any_opt if want_first else exact_opt).first
+        try:
+            loc.wait_for(state="visible", timeout=6000)
+        except Exception:
+            if want_first:
+                raise FieldNotFound(
+                    f"select({label!r}, '__FIRST__'): panel never showed any option - this is "
+                    f"likely a type-to-search field with no default list; '__FIRST__' cannot "
+                    f"resolve it, a real search value is required"
+                )
+            self.page.keyboard.press("Escape")
+            self.page.wait_for_timeout(300)
+            loc_input.click(force=True)
+            loc_input.type(str(value), delay=80)
+            self.page.wait_for_timeout(1500)
+            loc = self.page.locator(contains_opt).first
+            loc.wait_for(state="visible", timeout=6000)
         picked_label = loc.get_attribute("data-item-label")
         loc.click()
         ajax(self.page)
-        actual = self.page.locator(css(f["id"])).first.input_value()
-        target = picked_label if want_first else value
-        if _norm(actual) != _norm(target):
+        actual = loc_input.input_value()
+        if _norm(actual) != _norm(picked_label):
             raise VerificationEchoFailed(f"select({label!r}, {value!r}): DOM re-read shows {actual!r} after select")
         self._refresh_field_map()
         return actual
