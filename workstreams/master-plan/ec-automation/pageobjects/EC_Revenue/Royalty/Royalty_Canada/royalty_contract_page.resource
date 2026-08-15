@@ -88,6 +88,12 @@ Update Royalty Contract Name
 
 Delete Royalty Contract
     [Documentation]    Delete via End Date = Start Date (EC true delete), save + reload.
+    ...    WARNING: PERMANENTLY OUT OF SCOPE on this screen (owner-confirmed 2026-08-15, closes
+    ...    Issue #336) - calling this WILL fail with EC's own "Child record found... all child
+    ...    records must be deleted first" error for any contract using Template "Royalty Fixed
+    ...    Percentage Canada" (auto-provisions CNTR_PG_SETUP child rows with no UI path to remove
+    ...    them). Kept for reference/future use only, not called by the current suite - see
+    ...    ../../../screens/EC_Revenue/Royalty/Royalty_Canada/Royalty_Contract/investigation/ROOT_CAUSE_delete_blocked.md.
     [Arguments]    ${code}    ${date}
     Delete Object Via End Date    ${TBL}    ${DEL_ENDDATE}    ${code}    ${date}
     Apply Navigator
