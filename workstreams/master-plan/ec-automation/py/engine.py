@@ -638,7 +638,22 @@ def open_screen(page, screen_name, user=USER, pw=PW):
         page.click("#kc-login")
         page.wait_for_selector(css("menu:searchForm:searchTxt"), timeout=60000)
         ajax(page)
+    # Fixed 2026-08-14 (Universal Screen Engine open-items tracker #1): root-caused via live DOM
+    # instrumentation (logging computed style + ancestor chain, not blind is_visible() polling).
+    # This function's OWN trailing action below (`minmaxMenu` click, "expand to full page") closes
+    # #ec-menu-container_0 (the panel the search box lives in) at the END of every call - so a 2nd
+    # open_screen() call in the same page session finds the search box genuinely display:none
+    # (confirmed live: box.offsetParent is null, ancestor #ec-menu-container_0 carries class
+    # 'hidden' + computed display:none), not merely covered by a stray panel as first assumed.
+    # Self-inflicted: the function never re-opens the panel it closed last time before trying to
+    # use the search box inside it. Fix: re-expand first if the box isn't visible.
     box = page.locator(css("menu:searchForm:searchTxt"))
+    if not box.is_visible():
+        mm_reopen = page.locator(css("screenToolbar:form:minmaxMenu"))
+        if mm_reopen.count() and mm_reopen.first.is_visible():
+            mm_reopen.first.click()
+            ajax(page)
+            box.wait_for(state="visible", timeout=10000)
     box.click()
     box.fill("")
     box.type(screen_name, delay=45)
