@@ -68,3 +68,37 @@ too shallow. Count is now 21 hard gates._
 > - [ ] **#N** — `<item>` — `<what's missing / which evidence>`
 > - [ ] **#M** — `<item>` — `<...>`
 > Complete these, tick them in the bundle `CHECKLIST.md`, and push to this branch. Re-review next run. No code change needed for doc-only gaps.
+
+---
+
+## F. Engine-only bundle variant (owner-approved 2026-08-16, PR #379)
+
+For a screen built via the Universal Screen Engine (`workstreams/master-plan/ec-automation/py/engine.py`)
+where an RF T3/suite has not yet been built, items **8, 9** (RF T3/suite) and their dependent gates
+**10, 11, 12** (robocop-on-RF, `--dryrun`, live RF suite) may be **explicitly deferred** rather than
+built or faked as passing - this is a reduced-but-honest shape, not silently equivalent to full "Done."
+
+**How the deferral must be recorded (all of these, not a subset):**
+- [ ] **8/9** in `CHECKLIST.md` stay unticked, each with a one-line reason (e.g. "screen built via
+      engine.py, not the classic T2/T3 pattern - will revisit once RF can call the engine directly").
+- [ ] **10/11/12** in `CHECKLIST.md` and `VERIFY-REPORT.md` stay unticked, marked N/A with the same
+      reason - never ticked from a partial or assumed run.
+- `VERIFY-REPORT.md` is **hand-assembled** (since `scripts/verify_screen.py` requires `--t3`/`--suite`
+      and cannot run without RF files) - it must self-declare this plainly at the top, cite the exact
+      command + exit code for every tick it DOES make (Playwright driver, hygiene, DB ground-truth,
+      full I-U-D, self-clean), and state **OVERALL: PARTIAL PASS** - never a bare "PASS" implying gates
+      that didn't run.
+- Registry (`docs/ec_screen_registry.md`) and scorecard (`docs/automation-scorecard.md`) rows say
+      **"OK Done (engine-only bundle)"**, not a bare "OK Done" - with the RF deferral called out in the
+      row text, not just implied by reading the linked bundle.
+- Items 4-7 (playwright driver + delegator, investigation/, evidence/, this CHECKLIST) and 13-21
+      (DB ground-truth, full I-U-D, self-clean, hygiene, delivery, KB) are **NOT reduced** by this
+      variant - they still apply in full, backed by real evidence, same as any other screen.
+
+**When this variant does NOT apply:** a screen with an existing RF suite that's merely out of date,
+a screen where building the RF layer is trivial (reusing an already-proven T2 pattern with no new
+gestures), or a screen the owner has not explicitly approved for this treatment. Defaulting to this
+variant to avoid RF work is exactly the shortcut this checklist exists to prevent - use it only when
+the owner has approved it for that specific screen, as was done for Financial Item Definition/Template.
+
+This variant does not replace or loosen items A-E for any screen NOT explicitly approved for it.
