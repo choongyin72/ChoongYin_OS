@@ -1,0 +1,23 @@
+fix(issue-385): items 2+3 - Pilot 3 tracker row + vocab-check portability
+
+Item 2: universal_screen_engine_open_items.md - added item 7 recording the
+Pilot 3 (Project Data Mapping Setup) packaging decision as its own tracked
+row (PR #379 deferred it inline but never gave it a home of its own).
+
+Item 3: tmp/check_row_vocab.py - root cause of the reviewer's Linux-environment
+crash was a hardcoded Windows absolute path (Path(r"C:\Projects\ChoongYin_OS")).
+Fixed to the same portable pattern check_bundle_hygiene.py already uses
+(REPO_ROOT env var, else parents[1] from __file__). Verified the fix live:
+Royalty Contract (no special chars in its row) now returns real mismatch
+output instead of a crash. Bank separately returns "no row found" because its
+registry row is literally "| star Bank |" (a pre-existing, unrelated quirk in
+rows_for()'s exact-name match, confirmed NOT caused by this fix since a
+plain-named row works correctly) - out of scope for this portability fix.
+
+Also added the optional hardening the reviewer suggested: check_bundle_hygiene.py's
+doc_row_family_mismatches() now wraps the subprocess call in try/except so a
+genuine per-screen failure degrades to one readable "vocab check unavailable: <reason>"
+line instead of a raw traceback. Verified: py scripts/check_bundle_hygiene.py still
+exits 0/PASS after the change.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
