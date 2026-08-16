@@ -348,6 +348,16 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   (b) suite TC chaining forward→assert V then approve→assert A (dual oracle ROWS_UPDATED + family
   count; restore A→P). Then optionally path 2 (Monthly screen T3 for P1_FwdUpdPar1). Other unblocked:
   N2 sum-to-total; daily N1 clones. Held for user: disable broken "Daily Offshore Process" schedule.
+- 2026-08-08 (idle, user-invited "play with local sandbox, any topic, no need to ask"): Picked up
+  N3 monthly V→A (top backlog item) at its 2026-06-15 checkpoint. Read-only recon
+  (`tmp/scripts/n3_monthly_scope2.py`/`scope3.py`) CORRECTED the prior "no-WHERE, 19,659 rows" note:
+  `P1_FwdUpdPar1`'s `STAT_PROCESS_TASK` rows DO carry `WHERE_CLAUSE = op_fcty_1_code=
+  'P1_FCTY_STATUS_PROCESS'` (facility-scoped, not full-table); that column isn't on `IWEL_DAY_STATUS`
+  directly (`ORA-00904`) — needs an OBJECT_ID→facility join, not yet mapped. Also confirmed
+  `IWEL_DAY_STATUS` is 100% RECORD_STATUS='P' right now (0 at 'V') — nothing is currently approvable;
+  the daily forward (P→V) must run first, as the design doc already planned. No writes made — parked
+  at a clean read-only checkpoint. Full detail + next unblock step in
+  `pattern_n3_status_process_design.md` §"CORRECTION + blast-radius recon (2026-08-08)".
 - (next blocks append here…)
 
 ## Operating rules (always)

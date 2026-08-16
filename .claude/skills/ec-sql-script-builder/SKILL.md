@@ -70,6 +70,14 @@ line (`VERIFIED <date>` with how, or `RUNTIME-VERIFY PENDING` with why). Note an
 - **Some view columns are DERIVED, not settable.** e.g. on `TV_JOB_SCHEDULE`, `START_DATE`/`SCHEDULE_TYPE` persist
   via a view UPDATE, but `NEXT_FIRE_TIME`/`STATUS` are computed by the app (a raw UPDATE won't stick; `WAITING`
   needs a QRTZ trigger the app creates on save). Know what SQL can and cannot set; don't fake derived state.
+  **Always read the view's actual `CREATE OR REPLACE VIEW` source before writing an update-insert against
+  it** — don't infer settable columns from a `SELECT *`/`all_tab_columns` column list alone, since that
+  can't distinguish a real base-table column from a `LEFT JOIN`/function-derived one with the same name.
+  Confirmed example: `TV_T_BASIS_ACCESS.LEVEL_NAME`/`OBJECT_NAME`/`APP_NAME` are joined in from
+  `TV_T_BASIS_LEVEL`/`TV_T_BASIS_OBJECT`/`TV_T_BASIS_ROLE`, and `OBJECT_DESCR` comes from a function call
+  (`ec_t_basis_object.object_descr(OBJECT_ID)`) — none of the four are real `T_BASIS_ACCESS` columns. Only
+  `ROLE_ID`, `LEVEL_ID`, `OBJECT_ID`, `CLASS_NAME`, `APP_ID`, plus the standard audit/REV columns, are
+  genuinely settable; writing to the derived ones is pointless (silently overwritten on next read) or errors.
 - **Schedules: teardown must remove ALL qrtz child rows** — `qrtz_simple_triggers` (ONCE), `qrtz_cron_triggers`,
   `qrtz_blob_triggers`, `qrtz_fired_triggers`, `qrtz_triggers`, `qrtz_job_details` — child-first, or you hit
   `FK_QRTZ_SIMPLE_TRIGGERS_1` / similar.
@@ -93,23 +101,24 @@ Refactor is where speed turns dangerous: a fresh build that *looks* done can be 
 - One controlled change at a time; verify the actual result before the next change.
 
 ## 7. Skeleton
+Naming/casing (per user correction 2026-08-07, ECSR-35669): local variables prefixed `lv_` (not `v_`),
+no `constant` keyword, `DECLARE`/`BEGIN`/`END` and datatypes (`VARCHAR2`/`NUMBER`/`DATE`) uppercase.
+No "Style:"/"STATUS:" boilerplate line in the header comment — just the substantive what/why.
 ```sql
 -- =====================================================================================================
--- <CREATE|TEARDOWN> <object> <CODE>.  <one-line purpose>
--- Style: OV_ views, FK by code, update-insert (UPDATE; IF SQL%ROWCOUNT=0 THEN INSERT), REV_TEXT, no MERGE,
---        no exception, no COMMIT.  STATUS: <VERIFIED yyyy-mm-dd how | RUNTIME-VERIFY PENDING why>
+-- <CREATE|TEARDOWN> <object> <CODE>.  <one-line purpose, plus any non-obvious why>
 -- =====================================================================================================
-declare
-  v_code constant varchar2(30) := '<CODE>';
-  v_rev  constant varchar2(30) := 'ECPR-XXXX';
-  v_sd   constant date         := to_date('2000-01-01','YYYY-MM-DD');
-begin
-  UPDATE OV_x SET <cols>, rev_text = v_rev WHERE code = v_code;
+DECLARE
+  lv_code VARCHAR2(30) := '<CODE>';
+  lv_rev  VARCHAR2(30) := 'ECPR-XXXX';
+  lv_sd   DATE         := TO_DATE('2000-01-01','YYYY-MM-DD');
+BEGIN
+  UPDATE OV_x SET <cols>, rev_text = lv_rev WHERE code = lv_code;
   IF SQL%ROWCOUNT = 0 THEN
-    INSERT INTO OV_x (code, <cols>, rev_text) VALUES (v_code, <vals>, v_rev);
+    INSERT INTO OV_x (code, <cols>, rev_text) VALUES (lv_code, <vals>, lv_rev);
   END IF;
   -- … child objects, parent→child …
-end;
+END;
 /
 ```
 
