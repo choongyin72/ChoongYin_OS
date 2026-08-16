@@ -165,35 +165,20 @@ docs/lessons-learned.md to check for new rules added by the reviewer session.
 Context compression does NOT re-read this file automatically — you must do it
 explicitly. New rules from the reviewer take effect immediately when you read them.
 
-## Why this matters
-A reviewer session runs daily at 06:00 AWST and appends new rules to
-docs/lessons-learned.md based on analysis of your recent commits. If you are
-in a long-running session that started before 20:00, you will miss those rules
-unless you re-read the file yourself mid-session.
+A reviewer session runs daily at 06:00 AWST and appends new rules there based on
+analysis of your recent commits — if your session started before 20:00, you will
+miss those rules unless you re-read the file yourself mid-session.
 
 ---
 
-GIT Project Folder   : C:\DEV\GIT\woodside_impl_pluto_12839
-EC Web App Url       : https://app-plutodev.woodside-pluto.tieto-og.cloud/
-EC WebUser Id        : sysadmin
-EC Web User Password : Sysadmin@01
-EC DB Url            : db.plutodev.woodside-pluto.tieto-og.cloud:1521/plutodev
-EC DB User Id        : ECKERNEL_EC
-EC DB User Password  : energy
-
-Java                 : C:\Tools\java\zulu21.36.17-ca-jdk21.0.4-win_x64
-VS Code              : C:\Tools\Microsoft VS Code\Code.exe
-Maven                : C:\Tools\maven\apache-maven-3.8.4-bin
-Python               : C:\Tools\python\Python314
-Notepad++            : C:\Program Files\Notepad++
 # Verified Data Sources (2026-06-02)
 
 ## Project
 - Woodside Git Repo : C:\DEV\GIT\woodside_impl_pluto_12839
 
 ## Web & DB
-- EC Web App        : https://app-plutodev.woodside-pluto.tieto-og.cloud/ (user: sysadmin)
-- EC Database       : db.plutodev.woodside-pluto.tieto-og.cloud:1521/plutodev (user: ECKERNEL_EC)
+- EC Web App        : https://app-plutodev.woodside-pluto.tieto-og.cloud/ (user: sysadmin / pass: Sysadmin@01)
+- EC Database       : db.plutodev.woodside-pluto.tieto-og.cloud:1521/plutodev (user: ECKERNEL_EC / pass: energy)
 
 ## Tools (verified paths)
 - Java 21           : C:\Tools\java\zulu21.36.17-ca-jdk21.0.4-win_x64\bin\java.exe
