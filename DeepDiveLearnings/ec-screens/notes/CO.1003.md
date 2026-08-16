@@ -20,3 +20,6 @@ process/config (no data class -- e.g. a process trigger, rule/formula editor or 
 
 ## Help (field-description images -- local online-help corpus 14.2.5)
 _(no field-description images in corpus for this BF_CODE)_
+
+## Live sandbox capture (2026-08-11/12, local sandbox -- real data, not the online-help corpus)
+![CO.1003 live capture](CO.1003_live_1.jpg)
