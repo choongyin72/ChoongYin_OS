@@ -302,12 +302,27 @@ class Engine:
 
     # ---------------------------------------------------------------- actions
     def click(self, action):
-        """Named top-level actions: 'Save', 'GO'. For toolbar menu actions use toolbar()."""
+        """Named top-level actions: 'Save', 'GO'. For toolbar menu actions use toolbar().
+
+        Fixed 2026-08-17 (External Location, round-2 stability test): every existing hand-written
+        driver's insertObjectRecord/updateObjectRecord/closeObjectRecord (ec_object_iud.py) calls
+        click_go() immediately after save() - this Engine's click("Save") never did. Confirmed live
+        this is a real gap, not cosmetic: right after a fresh Insert+Save, select_row() can return
+        False because the grid was never re-queried, so a caller falls through to reading a field
+        from whatever form is still in the DOM - on External Location this resolved 'Start Date' to
+        the stale (still-present, unrefreshed) objectForm field instead of the real objectdates one,
+        showing a wrong value that then made the following End=Start delete fail with EC's own
+        'Illegal end date... references from other objects' error. Reproduced on a completely fresh,
+        never-before-touched code (ruling out session/data contamination) - a real engine defect, not
+        a screen limitation or test-harness gap. Re-querying via GO here (a no-op on screens with no
+        GO button, e.g. Bank's custom-URL OV - confirmed safe, canary still passes) matches every
+        proven driver's own behavior instead of leaving the grid state stale after Save."""
         if action == "Save":
             self._save()
             err = ec_error(self.page)  # MUST run before _refresh_field_map() - see SaveFailed
             if err:
                 raise SaveFailed(err)
+            self._click_go()
         elif action == "GO":
             self._click_go()
         else:
