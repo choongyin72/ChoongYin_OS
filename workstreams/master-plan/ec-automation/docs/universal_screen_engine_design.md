@@ -990,6 +990,48 @@ can't be end-dated while its child Project still exists) are therefore **left as
 residuals**, blocked on `test111` being cleared first (out of this session's scope, per owner
 direction) - not a tooling gap, not silently dropped.
 
+#### Follow-up (2026-08-16) - can the cross-screen dependency chain be auto-detected?
+
+The chain above (`Target Property` -> Property screen, `Target Project` -> Project Properties
+screen, `Reference` -> Report Reference screen, scoped by matching Dataset) was traced entirely by
+hand at the time. Investigated whether EC's own metadata could detect this automatically, for
+open-items tracker item #4 gap (b). Real DB queries (not guesses) against the class-config tables
+confirmed:
+
+- **`CLASS_REL_CNFG`** (filtered to `RELATION_TYPE = 'OBJECT'`) gives a clean, structured
+  `(CLASS_NAME, RELATION_NAME, REF_CLASS_NAME)` list - queried for `COST_MAPPING`, it returned
+  exactly the real chain: `REPORT_REF -> REPORT_REFERENCE`, `TRG_CONTRACT -> CONTRACT`,
+  `TRG_CONTRACT_GROUP -> CONTRACT_AREA`, etc. A same-named table, `CLASS_DEPENDENCY_CNFG`, was
+  checked FIRST and ruled out live (0 rows for `COST_MAPPING`; its real content is class
+  inheritance/polymorphism - `DEPENDENCY_TYPE='IMPLEMENTS'` - not field-level FK dependencies) -
+  the table name alone was not trusted without querying real data.
+- **`CLASS_ATTR_PROPERTY_CNFG`**'s `PopupDependency` property (already used manually for Pilot 3)
+  gives the cross-field scoping rule on top, e.g. `REPORT_REF_ID`'s row confirms
+  `RetrieveArg.DATASET=Screen.this.currentRow.TRG_DATASET` - matching the real "must choose the
+  same Dataset on both fields" constraint found the hard way originally.
+- "Which screen builds class X" is separately answered by the existing
+  `DeepDiveLearnings/ec-screens/notes/*.md` corpus (grep the class name in each note's URL line) -
+  no new tooling needed for that half.
+
+**Deliberately not built into a generator feature yet.** Only one real screen (this Pilot 3 case)
+has ever been traced this way - turning it into a generic "auto-detect and build the dependency
+chain" feature off a single validated example would repeat the exact mistake this project
+corrected on Chemical Stream (open-items item #6): generalizing a confirmed finding from one
+instance without independently verifying it holds on others. Parked until 2-3 more real
+cross-screen dependency chains have been traced the same way to confirm the query approach
+actually generalizes. Investigation scripts: `tmp/investigate_class_dependency_tables.py` (schema
++ row counts for all 10 candidate tables), `tmp/check_class_dependency_cost_mapping.py` (ruled out
+`CLASS_DEPENDENCY_CNFG` with a real query before trusting the name alone),
+`tmp/check_cost_mapping_dependency_source.py` (confirmed `CLASS_REL_CNFG` +
+`CLASS_ATTR_PROPERTY_CNFG` reproduce the real chain).
+
+Also confirmed as a new investigation tool for future gap-b work: the EC application server's own
+log is reachable via `docker logs` on the **local sandbox's** `ec-app` container (`docker ps` shows
+2 containers from the same image - `ec-app` for web/UI requests, `ec-worker` for background/
+scheduled jobs; the web-facing `ec-app` is the relevant one for a live Save/validation failure).
+This does NOT extend to any cloud-hosted EC environment - local sandbox only (memory
+`feedback_docker_server_log_local_only`).
+
 ### Phase 4 summary - effort vs. the old recon-then-clone process
 
 | Pilot | Screen shape | Time | New generalizable gaps found & fixed | Outcome |
