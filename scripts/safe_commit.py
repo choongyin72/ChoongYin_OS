@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Mechanical enforcement of the three git rules I broke on 2026-07-31 by relying on attention.
+"""Mechanical enforcement of the git rules I broke by relying on attention (2026-07-31, then
+2026-08-16 - Issue #385 item 1).
 
   py scripts/safe_commit.py --msg-file tmp/msg.txt --paths <p1> <p2> ... [--push <branch>]
 
@@ -17,6 +18,17 @@ WHAT IT ENFORCES (each as an exit code, not a reminder):
 
  3. SYNC BEFORE PUSH, ALWAYS. With --push it runs `git fetch origin master` + `git merge origin/master`
     and only then pushes, recording the real output in the commit trailer.
+
+ 4. HYGIENE GATE, MECHANIZED (Issue #385 item 1). If ANY staged path ends in `.py`, this script RUNS
+    `scripts/check_bundle_hygiene.py` itself and aborts (unstages, exits 1) on a non-zero exit - never a
+    prose reminder to "remember to run hygiene". Origin: PR #382's own note said the #357 R16 slip "was a
+    habit gap... the habit itself has no code fix" - true only until the habit is wired into tooling.
+
+ 5. ENGINE CANARY GATE, MECHANIZED (Issue #385 item 1). If any staged path is
+    `workstreams/master-plan/ec-automation/py/engine.py` or `.../universal_classifier.py`, this script
+    RUNS `py/engine_canary.py` itself (headless) and aborts on a non-zero exit or non-"ALL PASS" output -
+    a change to the shared engine cannot be committed without a fresh, real regression proof, not a
+    remembered "I ran it earlier".
 
 Prints the staged set BEFORE committing - the check that catches a mistake must precede the irreversible
 step, not follow it (I caught the add -u accident with `git show --stat` afterwards).
@@ -112,6 +124,33 @@ def main():
     if not staged:
         print("ABORT: nothing staged")
         return 1
+
+    # ---- 2. hygiene + engine-canary gates, MECHANIZED (Issue #385 item 1) -------------------------
+    if any(s.endswith(".py") for s in staged):
+        print(a("\n[gate] .py file(s) staged - running scripts/check_bundle_hygiene.py ..."))
+        r = subprocess.run([sys.executable, str(ROOT / "scripts" / "check_bundle_hygiene.py")],
+                           cwd=str(ROOT), capture_output=True, text=True, encoding="utf-8", errors="replace")
+        print(a((r.stdout or "") + (r.stderr or "")))
+        if r.returncode != 0:
+            print(a("ABORT: check_bundle_hygiene.py FAILED (exit=%d) - fix the reported issue(s), "
+                     "then re-run. Not a prose reminder - this gate runs the tool itself." % r.returncode))
+            git("reset", "-q")
+            return 1
+
+    _ENGINE_FILES = ("workstreams/master-plan/ec-automation/py/engine.py",
+                      "workstreams/master-plan/ec-automation/py/universal_classifier.py")
+    if any(s in _ENGINE_FILES for s in staged):
+        canary = ROOT / "workstreams" / "master-plan" / "ec-automation" / "py" / "engine_canary.py"
+        print(a("\n[gate] engine.py/universal_classifier.py staged - running %s (headless) ..." % canary))
+        r = subprocess.run([sys.executable, "-X", "utf8", str(canary)],
+                           cwd=str(ROOT), capture_output=True, text=True, encoding="utf-8", errors="replace",
+                           env={**__import__("os").environ, "EC_HEADED": "0"})
+        print(a((r.stdout or "") + (r.stderr or "")))
+        if r.returncode != 0 or "ALL PASS" not in (r.stdout or ""):
+            print(a("ABORT: engine_canary.py did not report ALL PASS (exit=%d) - a change to the shared "
+                     "engine cannot be committed without a fresh, real regression proof." % r.returncode))
+            git("reset", "-q")
+            return 1
 
     # ---- 3. sync FIRST when we intend to push, so the trailer states a fact -----------------------
     trailer = ""

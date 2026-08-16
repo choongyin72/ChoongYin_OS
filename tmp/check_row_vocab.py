@@ -11,12 +11,17 @@ Usage:  py tmp/check_row_vocab.py "<Screen Name>" <family>
         family = ovgm | plain | custom | tv
 Exit 0 = clean, 1 = mismatch found (prints each offending token + the row).
 """
+import os
 import sys
 from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-ROOT = Path(r"C:\Projects\ChoongYin_OS")
+# Fixed 2026-08-16 (Issue #385 item 3): was a hardcoded Windows absolute path - crashed with
+# FileNotFoundError (raw traceback) on every screen in a non-Windows reviewer environment, since
+# the path simply doesn't exist there. Same portable pattern already used by
+# scripts/check_bundle_hygiene.py (the caller of this script).
+ROOT = Path(os.environ.get("REPO_ROOT") or Path(__file__).resolve().parents[1])
 REG = ROOT / "workstreams" / "master-plan" / "ec-automation" / "docs" / "ec_screen_registry.md"
 SC = ROOT / "docs" / "automation-scorecard.md"
 

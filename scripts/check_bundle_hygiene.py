@@ -136,8 +136,14 @@ def doc_row_family_mismatches():
         return [("screen_families.json", "unreadable: %s" % e)]
     out = []
     for scr, fam in sorted(fams.items()):
-        r = _sp.run([sys.executable, "-X", "utf8", str(chk), scr, fam],
-                    capture_output=True, text=True, encoding="utf-8", errors="replace")
+        try:
+            r = _sp.run([sys.executable, "-X", "utf8", str(chk), scr, fam],
+                        capture_output=True, text=True, encoding="utf-8", errors="replace")
+        except Exception as e:
+            # degrade to ONE readable line instead of a raw traceback per screen (Issue #385 item 3
+            # optional hardening) - e.g. sys.executable unusable in a stripped-down CI image
+            out.append((scr, "vocab check unavailable: %s" % e))
+            continue
         if r.returncode != 0:
             out.append((scr, (r.stdout or r.stderr).strip().splitlines()[0][:160]))
     return out
