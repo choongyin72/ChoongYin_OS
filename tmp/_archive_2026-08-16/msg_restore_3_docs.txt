@@ -1,0 +1,31 @@
+docs: recover 3 doc edits parked in a stash (owner 2026-08-07/08 session)
+
+Recovered from git stash@{0} (parked while switching branches for engine canary work) -
+these 3 small, already-written edits had no PR and were never lost, just stuck:
+
+1. .claude/skills/ec-sql-script-builder/SKILL.md - two additions: (a) a verify-before-assume
+   rule to always read a view's real CREATE OR REPLACE VIEW source before writing an
+   update-insert against it, with a confirmed TV_T_BASIS_ACCESS example (4 columns that look
+   settable but are actually joined-in/function-derived); (b) the SQL skeleton's naming
+   convention updated per an explicit owner correction (2026-08-07, ECSR-35669) - lv_ prefix
+   instead of v_, no `constant` keyword, uppercase DECLARE/BEGIN/END and datatypes, dropped
+   the old Style:/STATUS: boilerplate header line.
+
+2. DeepDiveLearnings/SELF-LEARNING-BACKLOG.md - one dated log entry (2026-08-08) recording a
+   self-learning session on the N3 monthly V->A status-process backlog item; points to item 3
+   below for the full write-up.
+
+3. workstreams/master-plan/ec-automation/docs/pattern_n3_status_process_design.md - the
+   investigation itself: corrects an earlier wrong assumption in this same doc (the task's
+   WHERE_CLAUSE is facility-scoped, not empty; the scoping column requires an unmapped
+   object-hierarchy join; live DB check found IWEL_DAY_STATUS 100% at status 'P', 0 rows at
+   'V' - nothing currently approvable, confirming the existing plan to run the daily forward
+   P->V first is mandatory). Read-only recon, no writes made; parked at this checkpoint.
+
+Recovery note: the live working-tree copies of these 3 files had diverged from the stash's
+pre-existing base only in line-ending representation (CRLF vs the stash extraction's LF) -
+confirmed via `diff --strip-trailing-cr` before overwriting, so no real content was at risk
+of being clobbered. Restored with CRLF preserved; diff is clean (pure additions matching the
+stash content, no line-ending churn).
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>

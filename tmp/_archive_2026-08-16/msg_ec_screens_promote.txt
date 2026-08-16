@@ -1,0 +1,19 @@
+docs(ec-screens): promote orphaned EC Screens/ captures into the deep-dive notes corpus
+
+The user-facing "EC Screens/" folder (13 System Administration screenshots, captured
+2026-08-11/12 against the local sandbox) was sitting untracked with no consumer anywhere
+in the repo - found while investigating the session's "Item 2" cleanup backlog. Deep-dive
+confirmed all 13 map 1:1 onto BF_CODEs that already have notes in
+DeepDiveLearnings/ec-screens/notes/ (CO.1000/1001/1002/1003/1004/1005/1006/1007/1009/1010/
+1011/1078/1095), each of which previously only had a generic online-help corpus screenshot.
+
+Per owner decision: promoted rather than discarded. Copied the 15 images (2 screens had 2
+shots each) into notes/ as <BF_CODE>_live_N.jpg, and appended a new "Live sandbox capture"
+section to each of the 13 .md files (append-only - existing "Help (...)" sections from the
+online-help corpus are untouched) so the real-data captures are distinguished from the
+generic help-doc images and are now findable/referenced, not orphaned.
+
+No CHECKLIST.md change needed - these BF_CODEs were already ticked done (note-file
+existence is what the checklist tracks); this only enriches existing notes.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>

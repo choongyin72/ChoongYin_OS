@@ -1,0 +1,12 @@
+feat(safe-commit): mechanize the hygiene + engine-canary gates
+
+Closes item 1 of Issue #385: don't leave engine_canary.py + check_bundle_hygiene.py as prose
+reminders. Extended scripts/safe_commit.py so:
+- any staged .py file automatically runs check_bundle_hygiene.py and aborts the commit on failure
+- any staged engine.py/universal_classifier.py change automatically runs engine_canary.py
+  (headless) and aborts unless it reports ALL PASS
+
+Same lesson as verify_screen.py's auto-ticks: a rule in prose loses to attention drift, a rule in
+an exit code doesn't.
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
