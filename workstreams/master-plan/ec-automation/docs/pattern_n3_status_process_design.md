@@ -310,3 +310,23 @@ Took build path 2 (monthly grain). Recon `tmp/scripts/n3_monthly_*` (read-only):
   (1) blast radius (pick a modest-volume month first); (2) oracle grain — the exact-equality
   data-count==ROWS_UPDATED uses a single-date family count; if the lift spans the month, add a
   month-range DbVerify helper. Robust gating proof = ROWS_UPDATED>0 + Approved-family delta>0.
+
+### CORRECTION + blast-radius recon (2026-08-08, read-only, `tmp/scripts/n3_monthly_scope2.py`/`scope3.py`)
+Re-checked before attempting the first live run — two things in the note above needed correcting:
+- **It is NOT no-WHERE.** `STAT_PROCESS_TASK` for `P1_FwdUpdPar1` carries
+  `WHERE_CLAUSE = op_fcty_1_code='P1_FCTY_STATUS_PROCESS'` on both tasks (Task 10 Air / Task 20 CO2,
+  both targeting physical **`IWEL_DAY_STATUS`**, not two separate tables as the logical `TABLE_ID`
+  names IWEL_DAY_STATUS_AIR/_CO2 implied). So the real lift is facility-scoped, not the full 20,803-row
+  table — the earlier "19,659 rows" figure was an overcount from not applying this filter.
+- **`op_fcty_1_code` is NOT a column on `IWEL_DAY_STATUS`** (`ORA-00904`) — it must be resolved via a
+  join through the well/injection-object hierarchy (`OBJECT_ID` → the IWEL well object → its parent
+  facility), the same object-cascade resolution N1's IWEL screen already does for its navigator. Not
+  yet mapped for this table.
+- **Current data state: `IWEL_DAY_STATUS` is 100% RECORD_STATUS='P'** (20,803/20,803) — **zero rows at
+  'V'**. Since `P1_FwdUpdPar1` approves V→A, there is currently nothing to approve. Confirms the design
+  doc's own plan ("stage V first via the daily forward") is mandatory, not optional, on this sandbox.
+- **Next step to unblock (not yet done):** resolve the `OBJECT_ID`→facility join (likely via `OV_IWEL`
+  or the injection-well hierarchy used by N1's IWEL screen) to size the ACTUAL `P1_FCTY_STATUS_PROCESS`-
+  scoped row count per day/month, THEN run the daily forward (P→V) scoped to that facility on one date,
+  THEN the monthly approve on that same month — giving a small, known, and reversible blast radius before
+  ever setting `LIVE_OK:yes`. Parked here at a clean read-only checkpoint (no writes made this pass).
