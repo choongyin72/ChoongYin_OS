@@ -1,5 +1,5 @@
 # EC Automation Scorecard
-_Last updated: 2026-06-28_
+_Last updated: 2026-08-16_
 
 ## N-Series Patterns (Production Data Interaction)
 
