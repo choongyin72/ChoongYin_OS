@@ -41,6 +41,34 @@ def ajax(page, t=15000):
     except Exception:
         pass
     page.wait_for_timeout(900)
+    _dismiss_unsaved_changes_dialog(page)
+
+
+def _dismiss_unsaved_changes_dialog(page):
+    """EC's own genuine "Unsaved Changes" confirmation (real ids/labels confirmed live,
+    2026-08-16, Universal Screen Engine open-items tracker #6b): fires whenever a field was
+    changed but never Saved and the caller then attempts an action that would discard it
+    (open_screen() navigating away, select_row() opening a different record's Update Attributes
+    form, etc.) - not tied to one specific action, so a fix inside open_screen() alone was
+    insufficient (confirmed live: the same dialog re-appeared on a later select_row() call after
+    being dismissed once for navigation). Centralizing the check here in ajax() - the one
+    function nearly every state-changing action already calls - means every caller is covered
+    without hunting down and patching each action individually as new trigger points are found.
+
+    Always clicks NO (confirmationForm:nobtn) - discard the unsaved change and let the caller's
+    action proceed. Never CANCEL (would silently abort the caller's action, stranding it on the
+    old state) and never YES (this function has no way to judge whether a half-filled form is
+    safe to persist). A well-behaved caller should never hit this in the first place - every real
+    IUD driver Saves/closes the record before moving on - this only guards callers (chiefly
+    investigation/recon scripts) that intentionally leave a form dirty."""
+    no_btn = page.locator(css("confirmationForm:nobtn"))
+    if no_btn.count() and no_btn.first.is_visible():
+        no_btn.first.click()
+        try:
+            page.wait_for_load_state("networkidle", timeout=8000)
+        except Exception:
+            pass
+        page.wait_for_timeout(500)
 
 
 def classify_dd(page, dd_input_id, cache=None):

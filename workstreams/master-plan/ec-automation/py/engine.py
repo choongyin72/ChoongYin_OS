@@ -720,6 +720,10 @@ def open_screen(page, screen_name, user=USER, pw=PW):
         f"xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='{screen_name}']"
     ).first
     tv_link.click()
+    # Universal Screen Engine open-items tracker #6b: if the previous screen was left dirty, this
+    # click triggers EC's genuine "Unsaved Changes" dialog - handled centrally inside ajax() (see
+    # universal_classifier._dismiss_unsaved_changes_dialog) since the same dialog can also appear
+    # on other actions (e.g. select_row() opening a different record), not just navigation.
     ajax(page)
     mm = page.locator(css("screenToolbar:form:minmaxMenu"))
     if mm.count() and mm.first.is_visible():

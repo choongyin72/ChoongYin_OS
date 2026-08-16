@@ -18,7 +18,22 @@
 **Chemical Stream Code*** - **Chemical Stream Name*** - **Start Date*** (date) + **Chemical Stream Type*** (first-available) + **From Connection*** POPUP (stream_node_ref_popup: inner Object Type dd `nav:form:G:4` = CHEM_TANK -> inner GO `button:form:B` -> grid `manage_object_nav_nav:form:T_data`, first row; screen-LOCAL picker - generic PopupList helpers do not fit). Start Date is R:0, BEFORE Code. (`*` mandatory)
 
 ### Update (`updateAttributes`) / Delete (`objectdates`)
-`Chemical Stream Code` (ro) - **`Chemical Stream Name`**. Delete: **`End Date`** = Start Date -> leaves `OV_CHEM_STREAM`.
+**Corrected 2026-08-16 (was stale - previously listed only Code/Name):** live `field_inventory()`
+scan found **36 fields**, not 2. All optional (no mandatory yellow on Update). 21 are dropdowns:
+`Actual Dosage Method`, `Alloc Data Frequency`, `Alloc Fixed`, `Alloc Period`,
+`Chemical Stream Type`, `Class Attribute`, `Class Name`, `Cp Area`, `Cp Collection Point`,
+`Cp Operator Route`, `Cp Production Unit`, `Geo Area`, `Geo Field`, `Injection Phase`, `Op Area`,
+`Op Facility Class 1`, `Op Production Unit`, `Stream Category`, `Stream Phase`, `Stream Type`,
+`Usage Reporting`. 3 are popups: `From Connection`, `Production Object`, `To Connection`. The rest
+are text (`Chemical Stream Code` ro, `Chemical Stream Name`, `Actual Rate Method`,
+`Actual Rate Source`, `Latitude`, `Longitude`, `Maximum Flow Rate [L/d]`,
+`Minimum Measurable Flow Rate [L/d]`, `Sort Order`, `Stream Node Diagram Label`,
+`Target Dosage [ppm]`, `Target Rate Method`). Delete: **`End Date`** = Start Date -> leaves
+`OV_CHEM_STREAM`.
+
+Note: `Alloc Data Frequency`/`Cp Area`/`Cp Collection Point`/`Cp Operator Route`/`Geo Field` are
+type-to-search autocompletes with no default list - `select(label, "__FIRST__")` cannot resolve
+these (confirmed live), a real search value is required.
 
 ## Automation (code in ec-automation)
 - **Playwright:** `py/chemical_stream_iud.py` (shared engine `ec_object_iud.py` + `apply_ovgm_navigator`).
