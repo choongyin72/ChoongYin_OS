@@ -222,6 +222,18 @@ class Engine:
             ok = re.sub(r"\W", "", actual) == re.sub(r"\W", "", typed_value)
         else:
             ok = _norm(actual) == _norm(typed_value)
+            if not ok:
+                # Fixed 2026-08-17 (Meter Run, batch-3 stability test): a numeric text field can
+                # come back auto-formatted by EC itself (e.g. typed '1' redisplays as '1.00') -
+                # confirmed a real, successful fill, not a failure; the real hand-written driver
+                # (ec_object_iud.py's fill_field()) has no verification-echo at all, so it never
+                # hit this false negative. Only fall back to a numeric-equality check when BOTH
+                # sides actually parse as numbers - a genuine text mismatch (wrong value entirely)
+                # must still fail as before.
+                try:
+                    ok = float(actual) == float(typed_value)
+                except ValueError:
+                    ok = False
         if not ok:
             raise VerificationEchoFailed(f"fill({label!r}, {value!r}): DOM re-read shows {actual!r} after fill")
         return actual
