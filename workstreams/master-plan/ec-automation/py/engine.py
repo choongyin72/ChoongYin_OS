@@ -29,7 +29,6 @@ from universal_classifier import (  # noqa: E402
     css,
     ajax,
     classify_dd,
-    classify_field_by_id,
     scan_region_fields,
     scan_grid_columns,
     EC_URL,
@@ -65,6 +64,36 @@ def _norm(s):
     return (s or "").strip().lower()
 
 
+def _classify_static(f, dd_cache):
+    """Resolve the free (no-click-required) primitives from id/type alone - checkbox, date,
+    popup (':pin' suffix), and plain text are all structurally determined by EC's own markup
+    conventions, no interaction needed. A 'dd_input'-suffixed field is genuinely ambiguous
+    (dropdown vs popup-picker) without a live click (classify_dd) - checks `dd_cache` first
+    (a field already resolved earlier this session is free to look up again) and only returns
+    the placeholder 'dropdown_or_popup' for a genuinely never-seen id.
+
+    Fixed 2026-08-16 (owner-directed): _refresh_field_map() used to call classify_field_by_id()
+    eagerly for every visible field, which click-probed EVERY 'dd_input' field on the form the
+    moment it appeared - including fields the current task never touches (Project Data Mapping
+    Setup's New Object form has ~11 dropdown fields; a task using only 2-3 of them still triggered
+    a live click on all 11). Only the dd_input case ever required a click at all - every other
+    primitive was already free. Deferring resolution of just that one case to first actual use
+    (see Engine._resolve_primitive) means untouched fields are never clicked. Checking dd_cache
+    here (not just inside _resolve_primitive) matters because fill()/select()/check() all call
+    _refresh_field_map() again at the end (Save/New Object/row-select can change which form is
+    showing) - without this cache check, that rebuild would reset an already-resolved field straight
+    back to the unresolved placeholder every time, even though nothing about it actually changed."""
+    if f["type"] == "checkbox":
+        return "checkbox"
+    if f["id"].endswith("da_input"):
+        return "date"
+    if f["id"].endswith("pin"):
+        return "popup"
+    if f["id"].endswith("dd_input"):
+        return dd_cache.get(f["id"], "dropdown_or_popup")
+    return "text"
+
+
 class Engine:
     """One instance = one open, already-navigated EC screen. Build via open_screen()."""
 
@@ -78,6 +107,16 @@ class Engine:
         # (e.g. Bank's optional Country field got re-clicked on every Insert/Save/row-select).
         self._dd_cache = {}
         self._refresh_field_map()
+
+    def _resolve_primitive(self, f):
+        """Lazily resolve a field's real primitive on first actual use (fill/select/check/
+        resolve_popup/_field). Only 'dropdown_or_popup' (the placeholder _classify_static() leaves
+        for any 'dd_input' field) ever needs this - everything else was already resolved for free
+        at scan time. Mutates the field dict in place (self._by_label holds the same dict objects
+        _refresh_field_map() built), so once resolved it stays resolved until the next refresh."""
+        if f["primitive"] == "dropdown_or_popup":
+            f["primitive"] = classify_dd(self.page, f["id"], cache=self._dd_cache)
+        return f["primitive"]
 
     # ---------------------------------------------------------------- field resolution
     def _refresh_field_map(self):
@@ -96,7 +135,7 @@ class Engine:
             for f in scan_region_fields(page, prefix):
                 if not f["label"]:
                     continue
-                primitive = classify_field_by_id(page, f, cache=self._dd_cache) if source != "navigator" else _nav_primitive(f)
+                primitive = _classify_static(f, self._dd_cache) if source != "navigator" else _nav_primitive(f)
                 fields.append({**f, "primitive": primitive, "source": source})
         # Fixed 2026-08-14 (Project Data Mapping Setup, Phase 4 pilot 3 / Issue #361): plain
         # last-wins on duplicate labels breaks when a navigator FILTER field and an objectForm
@@ -122,7 +161,14 @@ class Engine:
         Built entirely from the field map _refresh_field_map() already maintains (self._by_label) -
         no extra live probing beyond what's already been scanned/cached. Intended as the single
         place to answer "what actually needs filling on this screen" before writing task-specific
-        fill()/select() calls, instead of guessing or re-scanning ad hoc per task."""
+        fill()/select() calls, instead of guessing or re-scanning ad hoc per task.
+
+        Fixed 2026-08-16 (lazy dd classification): a 'dd_input' field this Engine instance has never
+        actually fill()/select()-ed yet will show `primitive: "dropdown_or_popup"` here rather than
+        a resolved "dropdown"/"popup" - deliberately, since resolving it requires the live click this
+        change was built to avoid on untouched fields. Call fill()/select() on a specific field (or
+        add a one-off `self._resolve_primitive(self._field(label))` if inventory-time certainty is
+        genuinely needed) to force resolution for that one field."""
         by_source = {}
         for f in self._by_label.values():
             by_source.setdefault(f["source"], []).append(
@@ -140,6 +186,7 @@ class Engine:
         if not f:
             raise FieldNotFound(f"No visible field labeled '{label}' on {self.screen_name!r} "
                                  f"(known labels: {sorted(x['label'] for x in self._by_label.values())})")
+        self._resolve_primitive(f)
         return f
 
     # ---------------------------------------------------------------- primitives
