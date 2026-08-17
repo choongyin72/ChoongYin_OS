@@ -1,0 +1,130 @@
+{
+  "Dummy Tag Event Object": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 25.5
+  },
+  "Split Item Other": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 24.2
+  },
+  "Test Separator": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 31.2
+  },
+  "Transactional Inventory Layout Set": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 25.2
+  },
+  "Transactional Inventory Properties": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 28.0
+  },
+  "UOP Key": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 29.2
+  },
+  "Well Hole": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 33.4
+  },
+  "Well Hookup": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 30.7
+  },
+  "Financial Item Definition": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 36.3
+  },
+  "Financial Item Template": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 24.5
+  },
+  "Project Data Mapping Setup": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 41.9
+  },
+  "Reservoir Block Formation": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 98.7
+  },
+  "Stream Item": {
+    "insert": "PASS",
+    "update": "SKIPPED (EC scheduler job not configured, by design)",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 68.4
+  },
+  "Well Bore": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 34.1
+  },
+  "Well Bore Interval": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 36.2
+  },
+  "Create Calculation": {
+    "insert": "PASS",
+    "update": "PASS",
+    "delete": "PASS",
+    "self_clean": "CLEAN",
+    "error": null,
+    "elapsed_s": 31.3
+  }
+}
