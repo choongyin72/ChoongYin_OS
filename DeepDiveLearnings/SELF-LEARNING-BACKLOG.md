@@ -358,6 +358,23 @@ continue learning.** Log the blocker + outcome (resolved / skipped) in the Block
   the daily forward (P→V) must run first, as the design doc already planned. No writes made — parked
   at a clean read-only checkpoint. Full detail + next unblock step in
   `pattern_n3_status_process_design.md` §"CORRECTION + blast-radius recon (2026-08-08)".
+- 2026-08-17 (owner-directed session, full day): **Universal Screen Engine stability program CLOSED
+  — 92/92 screens with an existing hand-written driver now tested (6 rounds of ~15-16 each, PRs
+  #398/#399/#400).** This is a DIFFERENT, newer coverage track than the N1/N2/N3 pattern work above
+  (that work covers daily-status/allocation/status-process RUN screens; this covers plain-OV/OV-GM/
+  TV master-data IUD screens via the generic, label-driven `engine.py`+`universal_classifier.py`,
+  not per-screen hand-written drivers). Real engine defects found+fixed across the program:
+  GO-after-Save gap, numeric-fill verification-echo tolerance, draggable off-screen popup dialogs
+  (`ensure_dialog_in_view()`), `apply_navigator()`'s `levels` default silently over-filtering when
+  a caller's explicit `values` list is shorter than the real nav column count. Round 6 found zero
+  new engine defects - both its failures were test-harness bugs (a `find_grid_row()` contract
+  misread; a dependent dropdown searched by Name where its real key is Code - see
+  [[feedback_own_code_first_before_blaming_external]] for the process lesson from that one).
+  **Next real gap in the engine-coverage track:** the ~1,365 EC screens with NO existing driver at
+  all are still untested by anything - `universal_classifier.py`'s read-only Phase-1 scan could
+  safely triage that population (CRUD-capable vs not, plain vs complex nav/popup shape) without any
+  live writes, which is the natural next step whenever this track is picked up again - see the
+  engine's own JOURNAL files under `workstreams/master-plan/ec-automation/docs/` for full detail.
 - (next blocks append here…)
 
 ## Operating rules (always)
