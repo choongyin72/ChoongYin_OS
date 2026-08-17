@@ -70,6 +70,25 @@
   another test script to keep probing around it.** A second, third, or further script written
   after a live failure to test a NEW theory is itself the trial-and-error this whole section
   already bans - wrapping a guess in more Python does not make it not a guess.
+- ⛔ **REPEAT OFFENCE 2026-08-17 (Contract Inventory) — VERIFY THE ROW BEFORE ACTING ON IT, EVERY
+  SINGLE TIME, BEFORE SAVE/UPDATE/DELETE.** `select_row()`/`select_grid_row()` match by substring
+  across a row's whole rendered text, not by an exact Code-column check - if a wrong navigator
+  scope leaves my own newly-inserted row invisible, this can silently select a completely
+  different, REAL, unrelated production record instead, and I acted on it without checking. Root
+  cause: a 3-level navigator cascade (Business Unit -> Contract Area -> Contract) where I only
+  filled 2 levels; the visible grid was scoped wrong, my own row was off-screen, and the row that
+  WAS visible (`TS5_OBA_FO_PEP_INV`, a real production object) got its Name overwritten to my
+  test value on "Update", then its End Date attempted on "Delete" (correctly rejected by EC's own
+  child-reference check - which is what first looked like a screen defect, but was actually me
+  editing the wrong live object). Recovered via EC's own audit journal table (`<TABLE>_JN`
+  convention - captures the before-image of every UPD/INS/DEL with a real timestamp), not a
+  guess - restore via that path, never assume a sibling-naming pattern is close enough. Owner:
+  "did u check the data u updated and try to delete is the data u had inserted newly... U NEVER
+  CHECK U pick a right data to do yr tasks." **Rule: after ANY row-select, before Save/Update/
+  Delete, verify the selected row's own Code field (read it back from the form) matches the exact
+  code I intended - not "a row is showing in the grid," not "the search found something." If it
+  doesn't match, STOP immediately and do not Save.** This applies even when I already believe the
+  navigator scope is correct - the verification is the safeguard for when that belief is wrong.
 
 ## STOP: CONFIRM BEFORE PROCEED - get explicit owner approval before ANY action (hard rule)
 - Before starting ANY new build/task/live-run/git action/next step, I MUST have the owner's EXPLICIT
