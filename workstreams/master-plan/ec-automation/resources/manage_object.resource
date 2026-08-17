@@ -143,6 +143,54 @@ Pick OV Popup By Label
         Pick From EC Object Popup    ${id}    ${value}
     END
 
+# --- Properties-driven Insert (data-driven form fill, no fixed per-field arguments) ------------
+# A properties file (column=value, read via libraries/PropertiesReader.py) drives WHICH fields get
+# filled and WITH WHAT, so a screen's insert data lives in a plain text file, not hardcoded RF
+# arguments. Each field's INPUT KIND (text/date/dropdown/popup) is auto-detected live from the DOM
+# by label - the caller's properties file never has to say what kind a field is.
+
+Fill OV Field By Label Any Kind
+    [Documentation]    Fill a field found by LABEL in ${form}, auto-detecting whether it's a
+    ...    dropdown, date, popup, or plain text field - so a properties-file-driven caller never
+    ...    has to know a field's kind ahead of time. Dropdown is checked FIRST and separately
+    ...    (not via the generic OV Field Id By Label) because a dropdown's "following-sibling"
+    ...    tableCell holds TWO input nodes (dd_input + dd_hinput) - the generic single-//input
+    ...    xpath trips Browser strict mode on those, exactly the gotcha Fill OV Dropdown By Label
+    ...    already documents. __FIRST__ picks the first available option for a dropdown/popup.
+    [Arguments]    ${form}    ${label}    ${value}
+    ${dd_count}=    Get Element Count
+    ...    xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[contains(@id,'dd_input')]
+    IF    ${dd_count} > 0
+        Fill OV Dropdown By Label    ${form}    ${label}    ${value}
+    ELSE
+        ${pin_count}=    Get Element Count
+        ...    xpath=//span[contains(@class,'ECCell') and contains(@id,'${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[substring(@id, string-length(@id) - 3) = ':pin']
+        IF    ${pin_count} > 0
+            Pick OV Popup By Label    ${form}    ${label}    ${value}
+        ELSE
+            ${id}=    OV Field Id By Label    ${form}    ${label}
+            IF    '${id}'[-8:] == 'da_input'
+                Fill EC Date    ${id}    ${value}
+            ELSE
+                Fill EC Field    ${id}    ${value}
+            END
+        END
+    END
+
+Insert Object From Properties
+    [Documentation]    Open the New Object form and fill EVERY field named in ${properties_path}
+    ...    (a column=value file read via PropertiesReader.Read Properties), auto-detecting each
+    ...    field's kind by label. Then Save + reload the list. Returns the resolved Code value
+    ...    (read from the properties file's own "Code" entry) so the caller can assert on it.
+    [Arguments]    ${properties_path}
+    ${data}=    Read Properties    ${properties_path}
+    Open New Object Form
+    FOR    ${label}    IN    @{data.keys()}
+        Fill OV Field By Label Any Kind    objectForm    ${label}    ${data}[${label}]
+    END
+    Save And Refresh List
+    RETURN    ${data}[Code]
+
 Apply OV-GM Navigator First Available
     [Documentation]    OV-GM (grid manageObject:form:T_data) is navigator-GATED: the grid is empty until a
     ...    cascade of navigator dropdowns is set + GO. Fill nav:form:G:0:R:${row}:C:1..N dd FIRST-AVAILABLE
