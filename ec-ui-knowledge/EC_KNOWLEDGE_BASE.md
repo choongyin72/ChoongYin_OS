@@ -68,6 +68,28 @@ Confirmed via real queries 2026-08-16 (investigating Universal Screen Engine ope
   touches as many columns as you list in `values`; only pass a higher `levels` explicitly if you
   genuinely intend to also touch further columns.
 
+## Category: Dropdown option matching key (Name vs Code)
+
+- **Two dropdowns on the SAME form can key their internal `data-item-label` differently** -
+  confirmed live, Reservoir Block Formation's New Object form: the "Reservoir Block" dropdown's
+  `data-item-label` is the object's **Name** (e.g. `"AUTOTEST R6 RBF Block"`), while the very next
+  field, "Reservoir Formation", keys its `data-item-label` by the object's **Code**
+  (`"AUTOTEST_R6_RBFF"`) even though the panel's visible row shows BOTH Code and Name side by
+  side. Searching/selecting by Name on the Formation field silently finds nothing, even though the
+  option is genuinely present and visible to a human - there is no error, just an empty-looking
+  match.
+- **Never assume the same key convention holds across sibling dropdowns on one form** - dump the
+  panel's raw HTML (`data-item-label`/`data-item-value` attributes, not just what's visually
+  rendered) before writing a select() call's search value, the first time you touch a new field.
+  A script reporting "option not found"/timing out is NOT proof the option is missing - it may
+  just be searching by the wrong attribute. Open the dropdown and read the real content first.
+- The project's own pre-existing hand-written driver (`reservoir_block_formation_iud.py`) has this
+  same latent mistake (searches Reservoir Formation by Name) - it never surfaced there because
+  `ec_object_iud.select_dropdown()` silently falls back to "pick whatever's first available" when
+  the requested value isn't found, rather than raising an error. That fallback hides a real
+  targeting bug: the driver may have never verified it was linking to the SPECIFIC Formation it
+  intended, only that Save succeeded.
+
 ## Category: Project Data Mapping Setup (SP.0039, class COST_MAPPING)
 
 - Navigator uses a NONSTANDARD scheme: `StandardNavigator:form:G:0:R:<row>:C:<col>:dd/da_input`
