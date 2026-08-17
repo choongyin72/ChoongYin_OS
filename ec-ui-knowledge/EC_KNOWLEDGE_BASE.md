@@ -52,6 +52,22 @@ Confirmed via real queries 2026-08-16 (investigating Universal Screen Engine ope
   automatically inside the engine's shared `_PopupHandle.pick_by_code()`. Screen-local custom
   popup handlers must call it themselves after the popup opens.
 
+## Category: OV-GM navigator behavior (general rules)
+
+- **Not every OV-GM screen's extra navigator columns are true parent-gated cascade children** -
+  some screens (confirmed live, Service) render ALL their nav columns (`nav:form:G:*:R:1:C:1..3`)
+  in the DOM upfront, independent of each other, rather than a child only appearing once its parent
+  is chosen (contrast with Property, where Date and Business Unit sit in separate groups but are
+  still genuinely independent - see the 2026-08-14 fix note in `apply_navigator()`'s docstring).
+- **`engine.py`'s `apply_navigator(values=[...])` defaults `levels` to `len(values)`** (fixed
+  2026-08-17, round-5 stability test) precisely because of this: on a screen with more nav columns
+  than the caller lists, defaulting to a flat `levels=4` used to silently fill the EXTRA columns
+  with `__FIRST__` too, even when the caller never asked for them - confirmed live on Service, this
+  narrowed a 20-row grid down to 1 unrelated row, making a freshly-inserted object invisible with no
+  error. Pass `levels=None` (the default) when mirroring a real hand-written driver that only ever
+  touches as many columns as you list in `values`; only pass a higher `levels` explicitly if you
+  genuinely intend to also touch further columns.
+
 ## Category: Project Data Mapping Setup (SP.0039, class COST_MAPPING)
 
 - Navigator uses a NONSTANDARD scheme: `StandardNavigator:form:G:0:R:<row>:C:<col>:dd/da_input`

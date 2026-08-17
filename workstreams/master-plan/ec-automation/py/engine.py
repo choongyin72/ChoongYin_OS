@@ -354,16 +354,17 @@ class Engine:
                 return True
         return False
 
-    def apply_navigator(self, values=None, levels=4, row=1):
+    def apply_navigator(self, values=None, levels=None, row=1):
         """OV-GM navigator cascade - generic, structural, no per-screen hardcoding. The grid on an
         OV-GM screen is empty until a cascade of navigator dropdowns (Business Unit -> Production
         Unit -> Area -> ...) is set + GO; child options only render once the parent is chosen.
 
-        - `values=None` (default): fill each column C:1..`levels` FIRST-AVAILABLE, parent before
-          child (ports `ec_object_iud.py`'s proven `apply_ovgm_navigator()`).
+        - `values=None` (default): fill each column C:1..`levels` (default 4) FIRST-AVAILABLE,
+          parent before child (ports `ec_object_iud.py`'s proven `apply_ovgm_navigator()`).
         - `values=[...]`: fill C:1..len(values) with these EXACT values instead of first-available
           (for a screen where the default first option has no valid downstream combination -
           the same class of gotcha the classifier's `NAV_HINT_OPTION` exists to work around).
+          `levels` defaults to `len(values)` here - see the 2026-08-17 fix note below for why.
         - No `nav:form:G:*:R:<row>:C:*:dd_input` columns exist at all (a screen with only optional
           filters, or none): the loop naturally does nothing and this degrades automatically to a
           bare GO - no separate "go_only" mode flag needed, unlike the string-templated generators'
@@ -381,8 +382,24 @@ class Engine:
         upfront): a child dropdown's element does not exist in the DOM at all until its parent has
         been selected, so a one-time scan taken before any selection would never see it.
 
+        Fixed 2026-08-17 (Service, round-5 stability test): `levels` used to default to a flat 4
+        regardless of `values`, so a caller passing `values=["TS3 BU1"]` on a screen whose extra
+        nav columns are NOT parent-gated (all present in the DOM upfront, unlike Property's true
+        cascade) got those extra columns silently filled with `__FIRST__` too - two filters the
+        caller never asked for. Confirmed live: this narrowed Service's grid from its real 20 rows
+        down to 1 unrelated row, hiding a freshly-inserted object entirely (no error - it just
+        vanished from the grid). The real hand-written driver only ever sets C:1 and clicks GO,
+        never touching C:2/C:3. Root-caused via direct comparison: `apply_navigator(values=["TS3
+        BU1"], levels=1)` correctly showed all 20 rows including the hidden one; the default
+        `levels=4` call showed only 1. Fix: when `values` is given and `levels` is not explicitly
+        overridden, default `levels` to `len(values)` - matching every real driver's own
+        touch-only-what-I-set behavior. `values=None` (first-available mode) keeps defaulting to 4,
+        unchanged, since that path has no caller-supplied list to size against.
+
         Returns the C:1 (top-parent) value actually selected, or None (legitimately, on a
         go_only-shaped screen - callers must not assert this is non-None unconditionally)."""
+        if levels is None:
+            levels = len(values) if values else 4
         top = None
 
         def _discover():
