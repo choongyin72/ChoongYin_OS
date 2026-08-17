@@ -23,6 +23,72 @@
   by the real run; (2) `scripts/check_bundle_hygiene.py` FAILS the build if ANY `CHECKLIST.md` claim
   contradicts its `VERIFY-REPORT.md` (per-gate by number/keyword + OVERALL). If I ever fear I broke a rule,
   I STOP, say so plainly, verify against real facts, and record the lesson here.
+- ⛔ **REPEAT OFFENCE 2026-08-17 — applies to test/harness code too, not just production drivers.**
+  Built a 15-screen stability-test harness for the Universal Screen Engine by EXTRAPOLATING
+  navigator scope/values and mandatory fields from the simplest screens (Bank/Canal/Port - no
+  navigator, few fields) onto 10 different screens (Channel/Contract/Pilot/Tug Boat/Property/
+  Driver/Truck/Trailer/Well) that actually needed an OV-GM navigator cascade, an explicit
+  non-first-available scope value, or extra mandatory fields - all of which were already sitting,
+  unread, in that screen's own existing hand-written driver (`workstreams/master-plan/ec-automation/
+  py/*_iud.py`). Produced a false "10 engine failures" report and wasted a review cycle; the engine
+  itself had zero defects (no `engine.py`/`universal_classifier.py` diff, `engine_canary.py` still
+  PASS) - every failure was my own unverified assumption. **Before writing ANY new test/automation
+  config for an EC screen (nav scope, mandatory fields, dates, grid ids) - check that screen's own
+  existing driver, `docs/ec_screen_registry.md`, or a live DB/DOM recon FIRST. Never assume it
+  matches a "similar-looking" screen's pattern.** If no existing driver/registry entry exists,
+  that's unknown territory - recon it live before writing config, same as any other EC UI task.
+- **Standing order (owner, 2026-08-17) on what to do INSTEAD of guessing, in order:**
+  1. If a fact is genuinely unknown, **deep-dive the ChoongYin_OS repo/system itself first** to find
+     a real answer or workaround (existing drivers, registry, DB, docs, JOURNAL entries) - this
+     system almost always already has the answer written down from prior work; the failure mode is
+     not checking, not the answer being unavailable.
+  2. **Only if that genuine, thorough deep-dive still can't resolve it** - STOP the work entirely
+     and ping the owner for help/advice. Never fall back to guessing as a substitute for either step.
+  3. Guessing is banned because of what it actually costs the owner: not just tokens or rework, but
+     **TIME - which nothing can buy back.** A wrong guess doesn't save effort, it moves a larger,
+     un-refundable cost onto the owner (their time catching it, my tokens/time redoing it properly,
+     eroded trust in a rule already stated). This is not about the owner rushing or chasing me for
+     speed - the owner explicitly was not - the shortcut was self-manufactured, not externally
+     pressured, which makes it entirely mine to own and stop doing.
+- ⛔ **REPEAT OFFENCE 2026-08-17 (External Location IUD) — NEVER DO BLIND TEST: a repeated live-test
+  FAILURE is a stop-and-ask signal, not a hypothesis-generation prompt.** Root-caused External
+  Location's real IUD blocker (a required navigator "Type" filter = "Well", undocumented as
+  mandatory) only after the owner gave the exact steps directly. Before that, each failed live
+  attempt triggered ANOTHER automated theory and ANOTHER script (label collision, tr-vs-span
+  row-click difference, GO-after-Save timing, the form's own Type field mandatoriness) instead of
+  stopping to ask the simplest question: "is there a navigator filter I'm missing?" Owner: "every
+  time something failed, my default move was to write another script and generate another
+  hypothesis, instead of stopping and asking the simplest question first... NEVER DO BLIND TEST."
+  Compounding error in the OTHER direction, same incident: the registry documented "no mandatory
+  nav scope" for this screen, and I trusted that correctly at first - but once live behavior
+  repeatedly contradicted it, I built more test complexity around it instead of going back to
+  question that documented fact or asking about it. Owner: "said 'no mandatory nav scope' for this
+  screen.. then u should no need to find one to fill... thats simple rule to survive... we dont
+  seek for trouble." **Rule: trust a documented/stated fact by default - don't hunt for unstated
+  requirements. But the moment reality contradicts that fact via a genuine, REPRODUCIBLE live
+  failure (not a one-off), STOP and ask directly for the real procedure, rather than writing
+  another test script to keep probing around it.** A second, third, or further script written
+  after a live failure to test a NEW theory is itself the trial-and-error this whole section
+  already bans - wrapping a guess in more Python does not make it not a guess.
+- ⛔ **REPEAT OFFENCE 2026-08-17 (Contract Inventory) — VERIFY THE ROW BEFORE ACTING ON IT, EVERY
+  SINGLE TIME, BEFORE SAVE/UPDATE/DELETE.** `select_row()`/`select_grid_row()` match by substring
+  across a row's whole rendered text, not by an exact Code-column check - if a wrong navigator
+  scope leaves my own newly-inserted row invisible, this can silently select a completely
+  different, REAL, unrelated production record instead, and I acted on it without checking. Root
+  cause: a 3-level navigator cascade (Business Unit -> Contract Area -> Contract) where I only
+  filled 2 levels; the visible grid was scoped wrong, my own row was off-screen, and the row that
+  WAS visible (`TS5_OBA_FO_PEP_INV`, a real production object) got its Name overwritten to my
+  test value on "Update", then its End Date attempted on "Delete" (correctly rejected by EC's own
+  child-reference check - which is what first looked like a screen defect, but was actually me
+  editing the wrong live object). Recovered via EC's own audit journal table (`<TABLE>_JN`
+  convention - captures the before-image of every UPD/INS/DEL with a real timestamp), not a
+  guess - restore via that path, never assume a sibling-naming pattern is close enough. Owner:
+  "did u check the data u updated and try to delete is the data u had inserted newly... U NEVER
+  CHECK U pick a right data to do yr tasks." **Rule: after ANY row-select, before Save/Update/
+  Delete, verify the selected row's own Code field (read it back from the form) matches the exact
+  code I intended - not "a row is showing in the grid," not "the search found something." If it
+  doesn't match, STOP immediately and do not Save.** This applies even when I already believe the
+  navigator scope is correct - the verification is the safeguard for when that belief is wrong.
 
 ## STOP: CONFIRM BEFORE PROCEED - get explicit owner approval before ANY action (hard rule)
 - Before starting ANY new build/task/live-run/git action/next step, I MUST have the owner's EXPLICIT

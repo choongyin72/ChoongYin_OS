@@ -44,3 +44,11 @@ these (confirmed live), a real search value is required.
 - OV-GM navigator-gated: grid empty until cascade + GO. First-available nav PU is a sparse test scope - it is
   NOT necessarily a valid Op Production Unit option, and it empties nav-scoped popups (see issue OV_SWEEP_PARKED);
   navigator needs SPECIFIC P1 values; the From Connection popup needs INNER driving (Object Type + GO) - 'empty source' errors can mean undriven popup, not missing data.
+- **Fixed 2026-08-17: the From Connection popup dialog can render mostly/fully BELOW the visible
+  viewport** (triggered from a field far down the long New Object form). Scrolling (page-level or
+  `scrollIntoView`) does NOT fix this - confirmed by direct measurement, the dialog's position is
+  independent of document scroll. It's a PrimeFaces `.ui-dialog`, draggable via its own
+  `.ui-dialog-titlebar.ui-draggable-handle` - drag it (real mouse down/move/up) to near the top of
+  the screen and normal clicks work afterward. See `ensure_dialog_in_view()` in `engine.py` and
+  `reference_ec_popup_dialog_draggable` memory for the general technique (applies to any EC popup,
+  not just this screen).

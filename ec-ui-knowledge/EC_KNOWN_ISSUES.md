@@ -220,3 +220,31 @@ Reproduced live: End Date fills + Save (button) + `ec_error`='' but `object_end_
 
 **Notes:**
 Lesson for the OV IUD sweep: classify screens on **delete complexity** (child FKs / trigger rules), not just mandatory-dropdown presence, BEFORE building — an insert-only build leaves an un-deletable residual. Sibling dropdown screen HCB System (CD.0097) deletes cleanly via End=Start, so this is Chemical-Product-specific, not dropdown-wide.
+
+### EC UI's "Object not found" banner hides the real cause — always check server.log for the real ORA code
+
+**Status:** Confirmed (general EC UI behavior, not screen-specific)
+**Environment(s) seen:** Local sandbox `localhost:1521/ORCL` (ECKERNEL_EC), EC 14.2.4. 2026-08-17, Chemical Stream.
+**Related case:** Universal Screen Engine round-3 stability testing, item 1 (Chemical Stream popup).
+
+**Symptom:**
+Save fails with a generic, unhelpful UI banner: **"Object not found. The referenced object could not be found."** — no field name, no reason, nothing actionable. Owner: "the error message throw by the EC system in screen also not clear enough... not been mentioned clearly."
+
+**Root cause:**
+EC's UI genuinely swallows the specific database-trigger error and only surfaces its own generic wrapper text. The REAL reason only exists in the app server log (`ec-app`/`ec-worker` container, local Docker only — never check cloud), e.g.:
+```
+ORA-20106: Referred object P1 CT001 has a start date later than this objects start date.
+  at ECKERNEL_EC.ECDP_OBJECTS, line 1519
+  at ECKERNEL_EC.ECC_CHEM_STREAM, line 878
+  at ECKERNEL_EC.IUD_CHEM_STREAM, line 39 (trigger, RAISE_APPLICATION_ERROR)
+```
+In this case: a picked reference-popup object (P1 CT001, a chemical tank) has an `OBJECT_START_DATE` LATER than the record being saved — a genuine date-effectivity mismatch, not a missing/deleted object. The generic banner gives zero indication this is a date problem specifically.
+
+**Fix / resolution:**
+Not fixable from the automation/UI side — this is an EC product UX characteristic. The practical workaround: whenever the UI shows a vague "Object not found" (or any other generically-worded EC error), **check the `ec-app`/`ec-worker` docker container logs** (`docker logs <container> --since <window> | grep -B5 -A30 "<key phrase from the UI banner>"`) for the real `ORA-XXXXX` message before assuming a root cause — the specific PL/SQL trigger error is always present there even when the UI omits it.
+
+**Verification:**
+Reproduced live: UI showed only the generic banner; `docker logs EC01_ec-app.1.<id>` for the same request window contained the full `ORA-20106` trace with the exact object code and the precise date-effectivity reason.
+
+**Notes:**
+This is the SAME class of UI-swallows-the-real-error behavior already documented for OV_CHEM_PRODUCT's delete above — treat "generic EC error banner" as a signal to check server.log, not a dead end. Likely applies broadly across EC screens, not just Chemical Stream.

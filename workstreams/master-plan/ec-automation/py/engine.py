@@ -222,6 +222,18 @@ class Engine:
             ok = re.sub(r"\W", "", actual) == re.sub(r"\W", "", typed_value)
         else:
             ok = _norm(actual) == _norm(typed_value)
+            if not ok:
+                # Fixed 2026-08-17 (Meter Run, batch-3 stability test): a numeric text field can
+                # come back auto-formatted by EC itself (e.g. typed '1' redisplays as '1.00') -
+                # confirmed a real, successful fill, not a failure; the real hand-written driver
+                # (ec_object_iud.py's fill_field()) has no verification-echo at all, so it never
+                # hit this false negative. Only fall back to a numeric-equality check when BOTH
+                # sides actually parse as numbers - a genuine text mismatch (wrong value entirely)
+                # must still fail as before.
+                try:
+                    ok = float(actual) == float(typed_value)
+                except ValueError:
+                    ok = False
         if not ok:
             raise VerificationEchoFailed(f"fill({label!r}, {value!r}): DOM re-read shows {actual!r} after fill")
         return actual
@@ -302,12 +314,27 @@ class Engine:
 
     # ---------------------------------------------------------------- actions
     def click(self, action):
-        """Named top-level actions: 'Save', 'GO'. For toolbar menu actions use toolbar()."""
+        """Named top-level actions: 'Save', 'GO'. For toolbar menu actions use toolbar().
+
+        Fixed 2026-08-17 (External Location, round-2 stability test): every existing hand-written
+        driver's insertObjectRecord/updateObjectRecord/closeObjectRecord (ec_object_iud.py) calls
+        click_go() immediately after save() - this Engine's click("Save") never did. Confirmed live
+        this is a real gap, not cosmetic: right after a fresh Insert+Save, select_row() can return
+        False because the grid was never re-queried, so a caller falls through to reading a field
+        from whatever form is still in the DOM - on External Location this resolved 'Start Date' to
+        the stale (still-present, unrefreshed) objectForm field instead of the real objectdates one,
+        showing a wrong value that then made the following End=Start delete fail with EC's own
+        'Illegal end date... references from other objects' error. Reproduced on a completely fresh,
+        never-before-touched code (ruling out session/data contamination) - a real engine defect, not
+        a screen limitation or test-harness gap. Re-querying via GO here (a no-op on screens with no
+        GO button, e.g. Bank's custom-URL OV - confirmed safe, canary still passes) matches every
+        proven driver's own behavior instead of leaving the grid state stale after Save."""
         if action == "Save":
             self._save()
             err = ec_error(self.page)  # MUST run before _refresh_field_map() - see SaveFailed
             if err:
                 raise SaveFailed(err)
+            self._click_go()
         elif action == "GO":
             self._click_go()
         else:
@@ -677,6 +704,46 @@ def _nav_primitive(f):
     return "text"
 
 
+def ensure_dialog_in_view(page, timeout=3000):
+    """Fixed 2026-08-17 (Chemical Stream, item 1 of the flagged round-3 issues): EC's popup
+    dialogs (PrimeFaces .ui-dialog, draggable via their own .ui-dialog-titlebar header) can
+    render appearing far down a long insert form and end up mostly or fully below the visible
+    viewport - confirmed live via direct measurement (title bar at y=889 on a 1080px-tall
+    viewport). Neither page-level scrolling NOR element.scrollIntoView() moves it at all
+    (measured: window.scrollY stayed 0, the dialog's own position barely changed) - the dialog's
+    position is independent of document scroll. Owner-diagnosed fix: it's a DRAGGABLE dialog: a
+    real mouse down/move/up sequence on its own title bar repositions the whole thing, exactly
+    like a human would drag it. Confirmed live, reproduced twice: dragging the title bar to near
+    the top of the screen brings its full content into a normal Playwright-clickable position -
+    no coordinate-click hack or bigger viewport needed. No-op if the dialog is already
+    comfortably in view (title bar in the top 30% of the viewport) - safe to call unconditionally
+    after any popup/dialog opens, not just when a caller suspects a problem."""
+    try:
+        titlebar = page.locator(".ui-dialog-titlebar.ui-draggable-handle").last
+        titlebar.wait_for(state="visible", timeout=timeout)
+    except Exception:
+        return False
+    box = titlebar.bounding_box()
+    if not box:
+        return False
+    viewport_h = page.evaluate("() => window.innerHeight")
+    if box["y"] < viewport_h * 0.3:
+        return False
+    start_x = box["x"] + box["width"] / 2
+    start_y = box["y"] + box["height"] / 2
+    target_y = 120
+    page.mouse.move(start_x, start_y)
+    page.mouse.down()
+    steps = 15
+    for i in range(1, steps + 1):
+        cur_y = start_y + (target_y - start_y) * i / steps
+        page.mouse.move(start_x, cur_y)
+        page.wait_for_timeout(20)
+    page.mouse.up()
+    page.wait_for_timeout(300)
+    return True
+
+
 class _PopupHandle:
     def __init__(self, engine, pin_id):
         self.engine = engine
@@ -687,6 +754,7 @@ class _PopupHandle:
         page.evaluate("(id) => { const b = document.getElementById(id + 'B'); if (b) b.click(); }", self.pin_id)
         popup_grid = page.locator("xpath=//table[contains(@id,'PopupList') and contains(@id,':T_data')]").first
         popup_grid.wait_for(state="visible", timeout=10000)
+        ensure_dialog_in_view(page)
         want_first = value in (None, "", "__FIRST__")
         row = (
             popup_grid.locator("xpath=.//tr[@data-ri]").first
