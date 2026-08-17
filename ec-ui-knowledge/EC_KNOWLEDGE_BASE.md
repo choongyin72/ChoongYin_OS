@@ -30,6 +30,28 @@ Confirmed via real queries 2026-08-16 (investigating Universal Screen Engine ope
   correct option retrievable and selectable, Save persists it correctly with zero data loss).
 - Full technique for tracing a "field can't retrieve data" symptom: `EC_BUG_TRACE_SOP.md` section 9.
 
+## Category: Popup/dialog behavior (general rules)
+
+- **A popup/dialog picker can render mostly or fully BELOW the visible viewport** when triggered
+  from a field far down a long insert/update form (confirmed live, Chemical Stream's mandatory
+  "From Connection" picker: dialog title bar measured at y=889 on a 1080px-tall viewport). This
+  shows up as Playwright reporting the target element "visible, enabled, stable" but "outside of
+  the viewport" on every retry.
+- **Neither page-level scrolling nor `element.scrollIntoView()` fixes this** - confirmed by direct
+  measurement both ways: `window.scrollY` stayed at `0` and the dialog's own bounding box barely
+  moved (9px) after a `scrollIntoView({block:'center'})` call. The dialog's position is
+  independent of document scroll, unlike what its appearance in the page suggests.
+- **The real fix: these are PrimeFaces `.ui-dialog` widgets, draggable via their own**
+  **`.ui-dialog-titlebar.ui-draggable-handle` header** - a real mouse down/move/up sequence on the
+  title bar repositions the whole dialog, exactly like a human dragging it. Confirmed live,
+  reproduced multiple times across different data (different Start Dates): dragging the title bar
+  to near the top of the screen makes the dialog's full content reachable by normal
+  locator-based clicks - no bigger viewport, no raw-coordinate click hack needed.
+- Reusable helper: `ensure_dialog_in_view(page)` in `workstreams/master-plan/ec-automation/py/
+  engine.py` - no-ops if the dialog is already comfortably in the top 30% of the viewport, called
+  automatically inside the engine's shared `_PopupHandle.pick_by_code()`. Screen-local custom
+  popup handlers must call it themselves after the popup opens.
+
 ## Category: Project Data Mapping Setup (SP.0039, class COST_MAPPING)
 
 - Navigator uses a NONSTANDARD scheme: `StandardNavigator:form:G:0:R:<row>:C:<col>:dd/da_input`
