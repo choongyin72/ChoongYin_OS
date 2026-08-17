@@ -704,6 +704,46 @@ def _nav_primitive(f):
     return "text"
 
 
+def ensure_dialog_in_view(page, timeout=3000):
+    """Fixed 2026-08-17 (Chemical Stream, item 1 of the flagged round-3 issues): EC's popup
+    dialogs (PrimeFaces .ui-dialog, draggable via their own .ui-dialog-titlebar header) can
+    render appearing far down a long insert form and end up mostly or fully below the visible
+    viewport - confirmed live via direct measurement (title bar at y=889 on a 1080px-tall
+    viewport). Neither page-level scrolling NOR element.scrollIntoView() moves it at all
+    (measured: window.scrollY stayed 0, the dialog's own position barely changed) - the dialog's
+    position is independent of document scroll. Owner-diagnosed fix: it's a DRAGGABLE dialog: a
+    real mouse down/move/up sequence on its own title bar repositions the whole thing, exactly
+    like a human would drag it. Confirmed live, reproduced twice: dragging the title bar to near
+    the top of the screen brings its full content into a normal Playwright-clickable position -
+    no coordinate-click hack or bigger viewport needed. No-op if the dialog is already
+    comfortably in view (title bar in the top 30% of the viewport) - safe to call unconditionally
+    after any popup/dialog opens, not just when a caller suspects a problem."""
+    try:
+        titlebar = page.locator(".ui-dialog-titlebar.ui-draggable-handle").last
+        titlebar.wait_for(state="visible", timeout=timeout)
+    except Exception:
+        return False
+    box = titlebar.bounding_box()
+    if not box:
+        return False
+    viewport_h = page.evaluate("() => window.innerHeight")
+    if box["y"] < viewport_h * 0.3:
+        return False
+    start_x = box["x"] + box["width"] / 2
+    start_y = box["y"] + box["height"] / 2
+    target_y = 120
+    page.mouse.move(start_x, start_y)
+    page.mouse.down()
+    steps = 15
+    for i in range(1, steps + 1):
+        cur_y = start_y + (target_y - start_y) * i / steps
+        page.mouse.move(start_x, cur_y)
+        page.wait_for_timeout(20)
+    page.mouse.up()
+    page.wait_for_timeout(300)
+    return True
+
+
 class _PopupHandle:
     def __init__(self, engine, pin_id):
         self.engine = engine
@@ -714,6 +754,7 @@ class _PopupHandle:
         page.evaluate("(id) => { const b = document.getElementById(id + 'B'); if (b) b.click(); }", self.pin_id)
         popup_grid = page.locator("xpath=//table[contains(@id,'PopupList') and contains(@id,':T_data')]").first
         popup_grid.wait_for(state="visible", timeout=10000)
+        ensure_dialog_in_view(page)
         want_first = value in (None, "", "__FIRST__")
         row = (
             popup_grid.locator("xpath=.//tr[@data-ri]").first
