@@ -32,3 +32,9 @@ SLOWMO = os.environ.get("EC_SLOWMO", "0 ms")
 #   (see registry: "EC Object Start Date = Version Filter"). Keep >= 2003-01-01.
 TEST_START_DATE = os.environ.get("EC_TEST_START_DATE", "2000-01-01")
 TEST_START_DATE_REFDD = os.environ.get("EC_TEST_START_DATE_REFDD", "2003-01-01")
+
+# Screenshot capture on/off (owner-requested 2026-08-18): Capture Step (utils.resource) checks
+# this before taking a screenshot. Default ON (existing behavior unchanged) - set
+# EC_CAPTURE_SCREENSHOTS=0/false to skip every screenshot in a run (e.g. a fast regression pass
+# that doesn't need per-step evidence).
+CAPTURE_SCREENSHOTS = os.environ.get("EC_CAPTURE_SCREENSHOTS", "true").lower() in ("1", "true", "yes")

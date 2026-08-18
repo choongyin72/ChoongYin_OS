@@ -43,6 +43,7 @@ Login To EC Application
     ...    shared file should not hardcode. A future login-flow change (SSO/MFA/renamed field id)
     ...    is a one-place edit to Fill EC Login Form, not a per-screen duplicate fix.
     Fill EC Login Form    ${BANK_EC_USER}    ${BANK_EC_PASS}
+    Capture Step    ${TEST NAME}_login
 
 Open Bank Screen
     [Documentation]    Navigate to the Bank screen. Assumes the caller already logged in this
@@ -50,6 +51,7 @@ Open Bank Screen
     ...    bundles launch+login (owner-requested 2026-08-18, so every test case gets its own
     ...    explicit Login/Logout step instead of one shared Suite Setup/Teardown login).
     Navigate To Screen    ${BANK_SCREEN}
+    Capture Step    ${TEST NAME}_open_screen
 
 Bank Row Should Exist
     [Documentation]    Assert a bank with ${code} is present in the list.
@@ -128,8 +130,8 @@ Insert Bank From Properties
     ...    label, auto-detecting its kind (text/date/dropdown/popup) live - so the fields filled
     ...    and their values live entirely in the properties file, not in this keyword or the
     ...    suite. Returns the Code that was inserted (read back from the properties file).
-    [Arguments]    ${properties_path}=${BANK_INSERT_PROPERTIES}
-    ${code}=    Insert Object From Properties    ${properties_path}
+    [Arguments]    ${properties_path}=${BANK_INSERT_PROPERTIES}    ${pre_save_screenshot}=${EMPTY}
+    ${code}=    Insert Object From Properties    ${properties_path}    ${pre_save_screenshot}
     RETURN    ${code}
 
 Insert Bank Record And Save
@@ -139,9 +141,11 @@ Insert Bank Record And Save
     ...    UNCHANGED. Also owns the integrity check that the inserted Code matches the suite's
     ...    ${TEST_CODE} (moved in from the test case, owner-requested 2026-08-18) - this keyword
     ...    fails on its own if testdata/bank_insert.properties' Code ever drifts out of sync with
-    ...    the suite variable, instead of the test case asserting it separately.
+    ...    the suite variable, instead of the test case asserting it separately. The TC02 evidence
+    ...    screenshot is captured BEFORE Save is clicked (owner-requested 2026-08-18 - passed
+    ...    through to Insert Object From Properties, which fills every field first).
     [Arguments]    ${properties_path}=${BANK_INSERT_PROPERTIES}
-    ${code}=    Insert Bank From Properties    ${properties_path}
+    ${code}=    Insert Bank From Properties    ${properties_path}    ${TEST NAME}_action
     Should Be Equal    ${code}    ${TEST_CODE}
     ...    msg=testdata/bank_insert.properties Code does not match the suite's ${TEST_CODE}
     RETURN    ${code}
@@ -171,7 +175,7 @@ Verify Bank Record Exists
     Bank Row Should Exist    ${code}
     Find Bank    ${code}
     Bank Form Should Match Properties    ${BANK_INSERT_PROPERTIES}
-    Capture Step    bank_tc02_inserted
+    Capture Step    ${TEST NAME}_verify
 
 Update Bank Name
     [Documentation]    Select the bank, confirm it loaded, edit Name, Save. The Code field
@@ -199,17 +203,20 @@ Update Bank From Properties
     ...    Row-identity is verified (Code read back) before anything is written, same safeguard
     ...    as Update Bank Name. Returns the applied {label: value} dict so the caller can DB-verify
     ...    against exactly what was set, without duplicating the values as separate suite variables.
-    [Arguments]    ${code}    ${properties_path}=${BANK_UPDATE_PROPERTIES}
+    [Arguments]    ${code}    ${properties_path}=${BANK_UPDATE_PROPERTIES}    ${pre_save_screenshot}=${EMPTY}
     ${data}=    Update Object From Properties    ${BANK_TABLE}    ${code}    ${properties_path}
+    ...    ${pre_save_screenshot}
     RETURN    ${data}
 
 Update Bank Record And Save
     [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Update Bank
     ...    From Properties, called with ZERO arguments (defaults ${code} to the suite's
     ...    ${TEST_CODE}) - underlying mechanics UNCHANGED. Returns the applied {label: value}
-    ...    dict, same as Update Bank From Properties.
+    ...    dict, same as Update Bank From Properties. The TC03 evidence screenshot is captured
+    ...    BEFORE Save is clicked (owner-requested 2026-08-18 - passed through to Update Object
+    ...    From Properties, which fills every field first).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${BANK_UPDATE_PROPERTIES}
-    ${data}=    Update Bank From Properties    ${code}    ${properties_path}
+    ${data}=    Update Bank From Properties    ${code}    ${properties_path}    ${TEST NAME}_action
     RETURN    ${data}
 
 Verify Bank Record Updated
@@ -228,7 +235,7 @@ Verify Bank Record Updated
     [Arguments]    ${code}=${TEST_CODE}
     Find Bank    ${code}
     Bank Form Should Match Properties    ${BANK_UPDATE_PROPERTIES}    Name    Description
-    Capture Step    bank_tc03_updated
+    Capture Step    ${TEST NAME}_verify
 
 Find Bank
     [Documentation]    Locate the bank row by ${code} and select it (loads updateAttributes),
@@ -246,6 +253,7 @@ Find Bank Record
     ...    mechanics (select + row-identity check) UNCHANGED.
     [Arguments]    ${code}=${TEST_CODE}
     Find Bank    ${code}
+    Capture Step    ${TEST NAME}_action
 
 Bank Row Should Match Properties
     [Documentation]    Assert the grid row for ${code} shows Code/Name/Start Date matching
@@ -289,13 +297,17 @@ Verify Bank Record Found
     [Arguments]    ${code}=${TEST_CODE}
     Bank Row Should Match Properties    ${code}
     Bank Form Should Match Properties
-    Capture Step    bank_tc04_verified
+    Capture Step    ${TEST NAME}_verify
 
 Delete Bank
     [Documentation]    Select the bank, set End Date = Start Date (true delete), Save.
+    ...    Captures the TC05 evidence screenshot right after the End Date is filled but
+    ...    BEFORE Save is clicked (owner-requested 2026-08-18) - showing the data as entered,
+    ...    not the after-save/reloaded-grid state.
     [Arguments]    ${code}    ${date}
     Select Object Row    ${BANK_TABLE}    ${code}
     Delete Object By Zero-Length Window    ${BANK_DEL_ENDDATE}    ${date}
+    Capture Step    ${TEST NAME}_action
     Save
     Apply Navigator
 
@@ -316,7 +328,7 @@ Verify Bank Record Removed
     [Arguments]    ${code}=${TEST_CODE}
     Bank Row Should Not Exist    ${code}
     Bank Should Not Exist In DB    ${code}
-    Capture Step    bank_tc05_deleted
+    Capture Step    ${TEST NAME}_verify
 
 Verify Bank Record Does Not Exist
     [Documentation]    Friendly-narrative wrapper around the TC01 clean-state check, called with
@@ -325,4 +337,4 @@ Verify Bank Record Does Not Exist
     ...    the TC01 evidence screenshot (moved in from the test case's own Capture Step line).
     [Arguments]    ${code}=${TEST_CODE}
     Bank Row Should Not Exist    ${code}
-    Capture Step    bank_tc01_clean
+    Capture Step    ${TEST NAME}_verify

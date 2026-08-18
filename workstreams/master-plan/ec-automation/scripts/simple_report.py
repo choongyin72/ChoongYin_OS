@@ -22,6 +22,7 @@ Usage:
 If output.html is omitted, writes simple_report.html next to output.xml.
 """
 import base64
+import glob
 import html
 import os
 import sys
@@ -85,27 +86,21 @@ def process_flow_step(kw):
     return doc
 
 
-def find_capture_step_screenshot(test, result_dir):
+def find_capture_step_screenshots(test, result_dir):
     # Convention in this suite: "Capture Step    <label>" screenshots to <label>.png in the same
-    # directory as output.xml (see resources/utils.resource). Searches RECURSIVELY, not just
-    # test.body's top level - a screen's page-resource file may call Capture Step from INSIDE one
-    # of its own keywords (e.g. bank_page.resource's Verify Bank Record Exists), not directly in
-    # the test case body, so a top-level-only scan would miss it.
-    def walk(items):
-        for kw in items:
-            if kw.type != kw.KEYWORD:
-                continue
-            if kw.name == "Capture Step" and kw.args:
-                label = kw.args[0]
-                png = os.path.join(result_dir, f"{label}.png")
-                if os.path.isfile(png):
-                    return png
-            found = walk(kw.body)
-            if found:
-                return found
-        return None
-
-    return walk(test.body)
+    # directory as output.xml (see resources/utils.resource). Labels use ${TEST NAME} (owner-
+    # requested 2026-08-18: one screenshot per business step, e.g. login/open screen/action/
+    # verify/logout) so kw.args can't be used to reconstruct the filename - robot.api's Keyword
+    # .args reports the UNRESOLVED source text ('${TEST NAME}_login'), not the runtime-resolved
+    # value, for EVERY keyword call in this result model, not just this one. Globbing by test
+    # name instead sidesteps that entirely: every screenshot for this test starts with
+    # "<test.name>_", so glob + sort by file mtime (creation order = execution order) recovers
+    # them correctly regardless of how the label was constructed. Empty list if
+    # EC_CAPTURE_SCREENSHOTS was off for the run (no .png files exist to find).
+    pattern = os.path.join(result_dir, f"{glob.escape(test.name)}_*.png")
+    matches = glob.glob(pattern)
+    matches.sort(key=os.path.getmtime)
+    return matches
 
 
 def build_rows(result, result_dir):
@@ -113,27 +108,30 @@ def build_rows(result, result_dir):
 
     class Collector(ResultVisitor):
         def visit_test(self, test):
-            steps = [
-                process_flow_step(kw) for kw in test.body
+            top_level = [
+                kw for kw in test.body
                 if kw.type == kw.KEYWORD and kw.name != "Capture Step"
             ]
+            steps = [process_flow_step(kw) for kw in top_level]
+            statuses = [kw.status for kw in top_level]
             rows.append({
                 "name": test.name,
                 "status": test.status,
                 "steps": steps,
-                "screenshot": find_capture_step_screenshot(test, result_dir),
+                "step_statuses": statuses,
+                "screenshots": find_capture_step_screenshots(test, result_dir),
             })
 
     result.visit(Collector())
     return rows
 
 
-def embed_image(path):
+def screenshot_link(path):
     if not path:
-        return ""
-    with open(path, "rb") as f:
-        b64 = base64.b64encode(f.read()).decode("ascii")
-    return f'<img src="data:image/png;base64,{b64}" style="max-width:480px;border:1px solid #ccc">'
+        return "<em>(no screenshot)</em>"
+    # Relative to the report file (both live in the same result_dir), so the link keeps
+    # working as long as the .html and the .png files are moved/copied together.
+    return f'<a href="{html.escape(os.path.basename(path))}" target="_blank">View</a>'
 
 
 def render_html(rows, suite_name):
@@ -145,24 +143,30 @@ def render_html(rows, suite_name):
         "table{border-collapse:collapse;width:100%}",
         "th,td{border:1px solid #ccc;padding:8px;vertical-align:top;text-align:left}",
         "th{background:#f0f0f0}",
+        ".center{text-align:center}",
         ".PASS{color:#2e7d32;font-weight:bold}",
         ".FAIL{color:#c62828;font-weight:bold}",
-        "ol{margin:0;padding-left:18px}",
+        ".test-name{font-weight:bold;background:#fafafa}",
         "</style></head><body>",
         f"<h2>{html.escape(suite_name)} - Simple Test Report</h2>",
         "<table>",
-        "<tr><th>Test Name</th><th>Process Flow</th><th>Screenshot</th><th>Status</th></tr>",
+        "<tr><th>Test Name</th><th>#</th><th>Process Flow</th><th class='center'>Screenshot</th><th class='center'>Status</th></tr>",
     ]
     for row in rows:
-        step_list = "".join(f"<li>{html.escape(s)}</li>" for s in row["steps"])
-        parts.append(
-            "<tr>"
-            f"<td>{html.escape(row['name'])}</td>"
-            f"<td><ol>{step_list}</ol></td>"
-            f"<td>{embed_image(row['screenshot'])}</td>"
-            f"<td class='{row['status']}'>{row['status']}</td>"
-            "</tr>"
-        )
+        n_steps = len(row["steps"])
+        for i in range(n_steps):
+            shot = row["screenshots"][i] if i < len(row["screenshots"]) else None
+            status = row["step_statuses"][i]
+            parts.append("<tr>")
+            if i == 0:
+                # Test name spans every step-row for this test (rowspan), so each step still
+                # gets its OWN <tr> (own border line) instead of being nested inside one cell.
+                parts.append(f"<td class='test-name' rowspan='{n_steps}'>{html.escape(row['name'])}</td>")
+            parts.append(f"<td>{i + 1}</td>")
+            parts.append(f"<td>{html.escape(row['steps'][i])}</td>")
+            parts.append(f"<td class='center'>{screenshot_link(shot)}</td>")
+            parts.append(f"<td class='center {status}'>{status}</td>")
+            parts.append("</tr>")
     parts.append("</table></body></html>")
     return "\n".join(parts)
 

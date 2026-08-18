@@ -73,6 +73,7 @@ Logout From EC Application
     ...    logout and redirects to the Keycloak login page (#username field re-appears).
     Click    xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]
     Wait For Elements State    css=[id="username"]    visible    timeout=15s
+    Capture Step    ${TEST NAME}_logout
 
 Ensure Logged Out From EC Application
     [Documentation]    Test Teardown safety net (owner discovered this gap live, 2026-08-18): if a
