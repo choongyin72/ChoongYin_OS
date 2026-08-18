@@ -249,11 +249,18 @@ Insert Object From Properties
     ...    (a column=value file read via PropertiesReader.Read Properties), auto-detecting each
     ...    field's kind by label. Then Save + reload the list. Returns the resolved Code value
     ...    (read from the properties file's own "Code" entry) so the caller can assert on it.
-    [Arguments]    ${properties_path}
+    ...    If ${pre_save_screenshot} is given, a screenshot is captured right after every field
+    ...    is filled but BEFORE Save is clicked (owner-requested 2026-08-18: evidence of what was
+    ...    entered, not the after-save/reloaded-grid state). Optional and backward-compatible -
+    ...    no screenshot at all if omitted.
+    [Arguments]    ${properties_path}    ${pre_save_screenshot}=${EMPTY}
     ${data}=    Read Properties    ${properties_path}
     Open New Object Form
     FOR    ${label}    IN    @{data.keys()}
         Fill OV Field By Label Any Kind    objectForm    ${label}    ${data}[${label}]
+    END
+    IF    '${pre_save_screenshot}' != ''
+        Capture Step    ${pre_save_screenshot}
     END
     Save And Refresh List
     RETURN    ${data}[Code]
@@ -266,7 +273,11 @@ Update Object From Properties
     ...    Update side. Only list fields that actually exist in updateAttributes in the properties
     ...    file - Code is typically read-only there, and date fields usually live in a separate
     ...    objectdates form, not updateAttributes (confirmed on Bank).
-    [Arguments]    ${table_id}    ${code}    ${properties_path}
+    ...    If ${pre_save_screenshot} is given, a screenshot is captured right after every field
+    ...    is filled but BEFORE Save is clicked (owner-requested 2026-08-18: evidence of what was
+    ...    entered, not the after-save/reloaded-grid state). Optional and backward-compatible -
+    ...    no screenshot at all if omitted.
+    [Arguments]    ${table_id}    ${code}    ${properties_path}    ${pre_save_screenshot}=${EMPTY}
     Select Object Row    ${table_id}    ${code}
     ${code_id}=    OV Field Id By Label    updateAttributes    Code
     ${loaded}=    Get Property    css=[id="${code_id}"]    value
@@ -274,6 +285,9 @@ Update Object From Properties
     ${data}=    Read Properties    ${properties_path}
     FOR    ${label}    IN    @{data.keys()}
         Fill OV Field By Label Any Kind    updateAttributes    ${label}    ${data}[${label}]
+    END
+    IF    '${pre_save_screenshot}' != ''
+        Capture Step    ${pre_save_screenshot}
     END
     Save And Refresh List
     RETURN    ${data}

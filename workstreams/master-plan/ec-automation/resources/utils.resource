@@ -3,6 +3,7 @@ Documentation       T1 area — cross-cutting helpers: unique code generation, e
 
 Library             DateTime
 Library             Browser
+Variables           environment.py
 
 
 *** Keywords ***
@@ -26,6 +27,11 @@ Prepare IUD Object Data
     RETURN    ${code}
 
 Capture Step
-    [Documentation]    Take a screenshot into the output dir with a step label.
+    [Documentation]    Take a screenshot into the output dir with a step label - unless
+    ...    ${CAPTURE_SCREENSHOTS} (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+    ...    which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+    ...    per-step evidence capture entirely).
     [Arguments]    ${label}
-    Take Screenshot    filename=${OUTPUT_DIR}/${label}
+    IF    ${CAPTURE_SCREENSHOTS}
+        Take Screenshot    filename=${OUTPUT_DIR}/${label}
+    END
