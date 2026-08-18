@@ -29,6 +29,15 @@ Confirmed via real queries 2026-08-16 (investigating Universal Screen Engine ope
   once opened (confirmed case: Project Data Mapping Setup's Reference field - blank on row-select,
   correct option retrievable and selectable, Save persists it correctly with zero data loss).
 - Full technique for tracing a "field can't retrieve data" symptom: `EC_BUG_TRACE_SOP.md` section 9.
+- **A dropdown/reference field's DISPLAYED text and its underlying DATABASE value are often
+  different representations** - confirmed live (2026-08-18, Bank/Country): the screen shows
+  `"The Netherlands"`, but `ov_bank.COUNTRY_CODE` stores `'NL'` (a code, not the display text).
+  Never assume a raw DB column holds what the screen shows for a mapped/reference field. General
+  verification rule (see `workstreams/master-plan/ec-automation/docs/rf-suite-styles.md` point 5
+  for the full RF-testing writeup): verify a display-mapped field against the SCREEN (read its live
+  value, e.g. via a label-driven `Get OV Field Value By Label`-style keyword), not against a raw DB
+  column - reserve DB comparison for plain-text fields where the stored value equals the display
+  value, or for existence/absence checks (no representation-mismatch risk there).
 
 ## Category: Popup/dialog behavior (general rules)
 
