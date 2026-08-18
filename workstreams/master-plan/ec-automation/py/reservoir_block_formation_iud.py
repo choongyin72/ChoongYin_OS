@@ -117,7 +117,14 @@ def main():
                 {"label": "Resv Block Formation Name", "value": RBF_NAME, "kind": "text"},
                 {"label": "Start Date", "value": SD, "kind": "date"},
                 {"label": "Reservoir Block", "value": BLK_NAME, "kind": "dropdown"},
-                {"label": "Reservoir Formation", "value": FRM_NAME, "kind": "dropdown"}]))
+                # "Reservoir Formation"'s dropdown keys its data-item-label by CODE, not Name -
+                # unlike its sibling "Reservoir Block" above, which keys by Name (confirmed live,
+                # round-6 stability testing, docs/JOURNAL-engine-stability-round6.md). This driver
+                # previously searched by FRM_NAME here, which the shared select_dropdown() silently
+                # treats as "value not found -> fall back to first available" rather than raising -
+                # so every historical PASS from this driver proved A Formation was linked, never
+                # proved it was the INTENDED one (Issue #401).
+                {"label": "Reservoir Formation", "value": FRM_CODE, "kind": "dropdown"}]))
             def _v_rbf_ins():
                 assert ec.wait_for_row(page, GRID, RBF_CODE), "RBF not in grid"
                 assert db.code_present(RBF_VIEW, RBF_CODE), "RBF not in ov"
