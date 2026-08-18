@@ -7,11 +7,18 @@ Documentation       EC IUD Test - Bank (Configuration > Assets > Financial Objec
 ...                 before this was wired in. Every run must complete TC05 (delete) so the code is
 ...                 free for the next run - EC never lets a DELETED code be reused, but this fixed
 ...                 code only stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout (owner-requested 2026-08-18) on
+...                 ONE browser opened once in Suite Setup - not 5 separate browser launches. This
+...                 is a conscious tradeoff: 5 real logins instead of 1 costs real runtime, and
+...                 TC03/TC04/TC05 still depend on TC02's inserted record existing (the per-TC
+...                 login/logout makes each TC LOOK self-contained, it does not remove that data
+...                 dependency) - accepted deliberately for a client-readable process-flow report.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Financial_Objects/bank_page.resource
 
-Suite Setup         Set Up Bank Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    bank
 
@@ -34,66 +41,35 @@ ${OBJ_DESC_UPD}      Bank of China UPDATED
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test bank does not exist before inserting.
-    [Tags]    clean-state
-    Bank Row Should Not Exist    ${TEST_CODE}
-    Capture Step    bank_tc01_clean
-
-TC02 Insert New Bank
-    [Documentation]    Insert a new bank DATA-DRIVEN from testdata/bank_insert.properties
-    ...    (owner-requested 2026-08-17) - the fields filled and their values live in that file,
-    ...    not in this test. Confirms it appears in the list and every column the properties
-    ...    file set actually persisted correctly in ov_bank.
-    [Tags]    insert
-    ${inserted_code}=    Insert Bank From Properties
-    Should Be Equal    ${inserted_code}    ${TEST_CODE}
-    ...    msg=testdata/bank_insert.properties Code does not match the suite's ${TEST_CODE}
-    Bank Row Should Exist    ${TEST_CODE}
-    Bank Should Exist In DB    ${TEST_CODE}
-    Bank Fields Should Equal In DB    ${TEST_CODE}
-    ...    DESCRIPTION=${OBJ_DESC}    ADDRESS_1=${OBJ_ADDR1}    BANK_SWIFT_CODE=${OBJ_SWIFT}
-    Capture Step    bank_tc02_inserted
-
-TC03 Update Bank Details
-    [Documentation]    Update the bank DATA-DRIVEN from testdata/bank_update.properties
-    ...    (owner-requested 2026-08-18, same pattern as TC02's properties-driven Insert) - located
-    ...    by ${TEST_CODE}, then every field the properties file specifies is applied. Confirms
-    ...    the list reflects the new name and every column the file set actually persisted in
-    ...    ov_bank.
-    [Tags]    update
-    Update Bank From Properties    ${TEST_CODE}
-    Bank Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Bank Fields Should Equal In DB    ${TEST_CODE}
-    ...    NAME=${OBJ_NAME_UPD}    DESCRIPTION=${OBJ_DESC_UPD}
-    Capture Step    bank_tc03_updated
-
-TC04 Find And Verify Bank
-    [Documentation]    Find the bank by ${TEST_CODE}, then verify its TABLE GRID data and its FORM
-    ...    RECORD data both match testdata/bank_form_verify.properties (owner-requested 2026-08-18) - the
-    ...    expected CURRENT state after TC02 Insert + TC03 Update. This is a live-DOM round-trip
-    ...    check (grid row text + updateAttributes form fields), independent of the DB assertions
-    ...    already run in TC02/TC03 - it catches a UI/mapping regression that a DB-only check would
-    ...    miss (the DB can be correct while the UI shows something else).
-    [Tags]    verify
-    Find Bank    ${TEST_CODE}
-    Bank Row Should Match Properties    ${TEST_CODE}
-    Bank Form Should Match Properties
-    Capture Step    bank_tc04_verified
-
-TC05 Delete Bank
-    [Documentation]    Delete via End Date = Start Date and confirm the bank is gone.
-    [Tags]    delete    cleanup
-    Delete Bank    ${TEST_CODE}    ${END_DATE}
-    Bank Row Should Not Exist    ${TEST_CODE}
-    Bank Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    bank_tc05_deleted
-
-
-*** Keywords ***
-Set Up Bank Suite
-    [Documentation]    Open the Bank screen. Uses the FIXED test code ${TEST_CODE}
-    ...    (BANK_CHINA) declared above, not a generated unique code - so a re-run only
-    ...    works if the prior run's TC05 delete actually completed (EC never lets a
-    ...    deleted code be reused, but a fixed code IS reusable across runs as long as
-    ...    each run cleans up after itself, unlike the AUTOTEST_BNK_<timestamp> scheme).
+    Login To EC Application
     Open Bank Screen
+    Verify Bank Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Bank Data
+    Login To EC Application
+    Open Bank Screen
+    Insert Bank Record And Save
+    Verify Bank Record Exists
+    Logout From EC Application
+
+TC03 Update Bank Data
+    Login To EC Application
+    Open Bank Screen
+    Update Bank Record And Save
+    Verify Bank Record Updated
+    Logout From EC Application
+
+TC04 Find Bank Data
+    Login To EC Application
+    Open Bank Screen
+    Find Bank Record
+    Verify Bank Record Found
+    Logout From EC Application
+
+TC05 Delete Bank Data
+    Login To EC Application
+    Open Bank Screen
+    Delete Bank Record And Save
+    Verify Bank Record Removed
+    Logout From EC Application

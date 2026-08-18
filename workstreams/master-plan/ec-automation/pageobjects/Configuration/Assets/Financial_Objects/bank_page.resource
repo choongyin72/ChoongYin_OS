@@ -32,12 +32,24 @@ ${BANK_DEL_ENDDATE}     tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
+Login To EC Application
+    [Documentation]    Authenticate as Bank's OWN credentials (${BANK_EC_USER}/${BANK_EC_PASS}
+    ...    from credentials.py) on the current page - works whether this is the very first login
+    ...    (page freshly loaded on the login form via the shared T1 Open EC Application) or a
+    ...    re-login after Logout From EC Application (same login form, not a new page/tab).
+    ...    Screen-specific wrapper (owner-requested 2026-08-18: bank_iud.robot's test cases call
+    ...    this with ZERO arguments) that calls the shared T1 Fill EC Login Form for the actual
+    ...    login mechanics - kept here only to supply Bank's own credential defaults, which a
+    ...    shared file should not hardcode. A future login-flow change (SSO/MFA/renamed field id)
+    ...    is a one-place edit to Fill EC Login Form, not a per-screen duplicate fix.
+    Fill EC Login Form    ${BANK_EC_USER}    ${BANK_EC_PASS}
+
 Open Bank Screen
-    [Documentation]    Suite Setup: launch, login as ${user} (defaults to Bank's own
-    ...    credentials.py, not the shared environment.py), navigate to the Bank screen.
-    ...    Pass a different user for role tests.
-    [Arguments]    ${user}=${BANK_EC_USER}    ${pass}=${BANK_EC_PASS}
-    Launch EC And Open Screen    ${BANK_SCREEN}    ${user}    ${pass}
+    [Documentation]    Navigate to the Bank screen. Assumes the caller already logged in this
+    ...    test case (via Login To EC Application) - this keyword ONLY navigates, it no longer
+    ...    bundles launch+login (owner-requested 2026-08-18, so every test case gets its own
+    ...    explicit Login/Logout step instead of one shared Suite Setup/Teardown login).
+    Navigate To Screen    ${BANK_SCREEN}
 
 Bank Row Should Exist
     [Documentation]    Assert a bank with ${code} is present in the list.
@@ -120,6 +132,47 @@ Insert Bank From Properties
     ${code}=    Insert Object From Properties    ${properties_path}
     RETURN    ${code}
 
+Insert Bank Record And Save
+    [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Insert Bank
+    ...    From Properties, purely so bank_iud.robot's test case body reads as a plain business
+    ...    step with ZERO arguments - the underlying mechanics (properties-file-driven insert) are
+    ...    UNCHANGED. Also owns the integrity check that the inserted Code matches the suite's
+    ...    ${TEST_CODE} (moved in from the test case, owner-requested 2026-08-18) - this keyword
+    ...    fails on its own if testdata/bank_insert.properties' Code ever drifts out of sync with
+    ...    the suite variable, instead of the test case asserting it separately.
+    [Arguments]    ${properties_path}=${BANK_INSERT_PROPERTIES}
+    ${code}=    Insert Bank From Properties    ${properties_path}
+    Should Be Equal    ${code}    ${TEST_CODE}
+    ...    msg=testdata/bank_insert.properties Code does not match the suite's ${TEST_CODE}
+    RETURN    ${code}
+
+Verify Bank Record Exists
+    [Documentation]    Friendly-narrative wrapper around the TC02 verification, called with ZERO
+    ...    arguments (owner-requested 2026-08-18): defaults ${code} to the suite's ${TEST_CODE}.
+    ...    PURE SCREEN verification (owner-requested 2026-08-18: no DB check at all here), reusing
+    ...    the SAME existing keyword TC04 already uses for its form check - just pointed at
+    ...    testdata/bank_insert.properties (the file used to insert) instead of its own default
+    ...    bank_form_verify.properties, since that represents the state AFTER TC03's update, not
+    ...    the just-inserted state:
+    ...    1. Bank Row Should Exist - the grid shows the row.
+    ...    2. Find Bank - selects the row, loading updateAttributes.
+    ...    3. Bank Form Should Match Properties - compares every field's LIVE SCREEN value (via
+    ...       Get OV Field Value By Label) to the properties file: Code, Name, Description, Swift
+    ...       Code, Address Line 1-3, Country. Country is screen-compared deliberately, not
+    ...       DB-compared - a live recon (2026-08-18) proved the DB stores an internal code (e.g.
+    ...       COUNTRY_CODE 'NL' for an existing Netherlands record), not the display text the
+    ...       properties file and the screen both show.
+    ...    NOTE (owner-decided 2026-08-18): Start Date is NOT verified anywhere in this keyword -
+    ...    it only exists as a grid column, not a form field, and the grid-level check (Bank Row
+    ...    Should Match Properties) was deliberately dropped here.
+    ...    Also captures the TC02 evidence screenshot (Capture Step - evidence capture, not a
+    ...    business step, excluded from the friendly report same as elsewhere).
+    [Arguments]    ${code}=${TEST_CODE}
+    Bank Row Should Exist    ${code}
+    Find Bank    ${code}
+    Bank Form Should Match Properties    ${BANK_INSERT_PROPERTIES}
+    Capture Step    bank_tc02_inserted
+
 Update Bank Name
     [Documentation]    Select the bank, confirm it loaded, edit Name, Save. The Code field
     ...    is resolved BY LABEL each call (not a hardcoded id) so a row-load check never
@@ -150,6 +203,33 @@ Update Bank From Properties
     ${data}=    Update Object From Properties    ${BANK_TABLE}    ${code}    ${properties_path}
     RETURN    ${data}
 
+Update Bank Record And Save
+    [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Update Bank
+    ...    From Properties, called with ZERO arguments (defaults ${code} to the suite's
+    ...    ${TEST_CODE}) - underlying mechanics UNCHANGED. Returns the applied {label: value}
+    ...    dict, same as Update Bank From Properties.
+    [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${BANK_UPDATE_PROPERTIES}
+    ${data}=    Update Bank From Properties    ${code}    ${properties_path}
+    RETURN    ${data}
+
+Verify Bank Record Updated
+    [Documentation]    Friendly-narrative wrapper around the TC03 verification, called with ZERO
+    ...    arguments (owner-requested 2026-08-18): defaults ${code} to the suite's ${TEST_CODE}.
+    ...    PURE SCREEN verification (owner-requested 2026-08-18: no DB check), matching TC02's
+    ...    pattern - reuses the SAME existing keyword (Bank Form Should Match Properties), pointed
+    ...    at testdata/bank_update.properties (the file used to update) with an explicit label
+    ...    override of just Name/Description, since that's the only fields that file has (unlike
+    ...    the default bank_form_verify.properties, which has the full field set):
+    ...    1. Find Bank - selects the row, loading updateAttributes.
+    ...    2. Bank Form Should Match Properties - compares Name/Description's LIVE SCREEN value
+    ...       (via Get OV Field Value By Label) to testdata/bank_update.properties.
+    ...    Also captures the TC03 evidence screenshot (moved in from the test case's own Capture
+    ...    Step line).
+    [Arguments]    ${code}=${TEST_CODE}
+    Find Bank    ${code}
+    Bank Form Should Match Properties    ${BANK_UPDATE_PROPERTIES}    Name    Description
+    Capture Step    bank_tc03_updated
+
 Find Bank
     [Documentation]    Locate the bank row by ${code} and select it (loads updateAttributes),
     ...    verifying row-identity (Code read back) before returning - so a caller can then safely
@@ -160,28 +240,56 @@ Find Bank
     ${loaded}=    Get Property    css=[id="${code_id}"]    value
     Should Be Equal    ${loaded}    ${code}    msg=Find Bank failed - code not loaded
 
+Find Bank Record
+    [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Find Bank,
+    ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}) - underlying
+    ...    mechanics (select + row-identity check) UNCHANGED.
+    [Arguments]    ${code}=${TEST_CODE}
+    Find Bank    ${code}
+
 Bank Row Should Match Properties
     [Documentation]    Assert the grid row for ${code} shows Code/Name/Start Date matching
     ...    ${properties_path} (testdata/bank_grid_verify.properties by default - its OWN dedicated
     ...    file, owner-requested 2026-08-18, since the grid genuinely shows fewer columns than the
-    ...    form record). Every key in that file is checked (End Date is correctly absent from it -
-    ...    it stays blank until the object is deleted, so it's never a real grid-check target).
-    [Arguments]    ${code}    ${properties_path}=${BANK_GRID_VERIFY_PROPERTIES}
+    ...    form record). If @{labels} is given, ONLY those labels are checked against the grid -
+    ...    needed when ${properties_path} is a FULLER file (e.g. bank_insert.properties, which also
+    ...    has Description/Swift Code/etc. that are never shown in the grid and would always fail
+    ...    here); if omitted, every key in the file is checked (correct when the file is already
+    ...    grid-only, like bank_grid_verify.properties).
+    [Arguments]    ${code}    ${properties_path}=${BANK_GRID_VERIFY_PROPERTIES}    @{labels}
     Verify Object Row Fields From Properties    ${BANK_TABLE}    ${code}    ${properties_path}
+    ...    @{labels}
 
 Bank Form Should Match Properties
-    [Documentation]    Assert every field named in ${properties_path} (testdata/bank_form_verify.
-    ...    properties by default) shows the expected value live in the updateAttributes form - a
-    ...    round-trip UI check independent of the DB assertions already run in TC02/TC03. Caller
-    ...    must already have selected the row (e.g. via Find Bank) before calling this.
-    ...    "Start Date" is EXCLUDED here even though it's in the properties file - the live
-    ...    field-inventory scan (2026-08-17) confirmed updateAttributes has no Start Date field
-    ...    (it lives only in objectdates); Bank Row Should Match Properties already covers it via
-    ...    the grid instead.
-    [Arguments]    ${properties_path}=${BANK_FORM_VERIFY_PROPERTIES}
-    Verify Object Form Fields From Properties    updateAttributes    ${properties_path}
-    ...    Code    Name    Description    Swift Code
+    [Documentation]    Assert fields shows the expected value live in the updateAttributes form -
+    ...    a round-trip UI check reading straight off the screen. Caller must already have
+    ...    selected the row (e.g. via Find Bank) before calling this.
+    ...    If @{labels} is given, ONLY those labels are checked (needed when ${properties_path} is
+    ...    a SMALLER file than the default - e.g. testdata/bank_update.properties only has
+    ...    Name/Description, so checking the full default label set against it would error looking
+    ...    up keys that file doesn't have). If omitted, defaults to Code/Name/Description/Swift
+    ...    Code/Address Line 1-3/Country (the full field set, correct for the default
+    ...    testdata/bank_form_verify.properties). "Start Date" is never included by default - the
+    ...    live field-inventory scan (2026-08-17) confirmed updateAttributes has no Start Date
+    ...    field (it lives only in objectdates); Bank Row Should Match Properties covers it via the
+    ...    grid instead, where applicable.
+    [Arguments]    ${properties_path}=${BANK_FORM_VERIFY_PROPERTIES}    @{labels}
+    ${default_labels}=    Create List    Code    Name    Description    Swift Code
     ...    Address Line 1    Address Line 2    Address Line 3    Country
+    ${use_labels}=    Set Variable If    ${labels}    ${labels}    ${default_labels}
+    Verify Object Form Fields From Properties    updateAttributes    ${properties_path}
+    ...    @{use_labels}
+
+Verify Bank Record Found
+    [Documentation]    Friendly-narrative wrapper around the TC04 verification, called with ZERO
+    ...    arguments (defaults ${code} to the suite's ${TEST_CODE}, owner-requested 2026-08-18):
+    ...    confirms BOTH the grid AND the full form record match the expected data - the SAME two
+    ...    existing live-DOM round-trip keywords, just called under one name. Also captures the
+    ...    TC04 evidence screenshot (moved in from the test case's own Capture Step line).
+    [Arguments]    ${code}=${TEST_CODE}
+    Bank Row Should Match Properties    ${code}
+    Bank Form Should Match Properties
+    Capture Step    bank_tc04_verified
 
 Delete Bank
     [Documentation]    Select the bank, set End Date = Start Date (true delete), Save.
@@ -190,3 +298,31 @@ Delete Bank
     Delete Object By Zero-Length Window    ${BANK_DEL_ENDDATE}    ${date}
     Save
     Apply Navigator
+
+Delete Bank Record And Save
+    [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Delete Bank,
+    ...    called with ZERO arguments (defaults ${code}/${date} to the suite's
+    ...    ${TEST_CODE}/${END_DATE}) - underlying mechanics (End Date = Start Date true delete)
+    ...    UNCHANGED.
+    [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Delete Bank    ${code}    ${date}
+
+Verify Bank Record Removed
+    [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with ZERO
+    ...    arguments (defaults ${code} to the suite's ${TEST_CODE}, owner-requested 2026-08-18):
+    ...    confirms ${code} is absent from BOTH the grid AND the database - the SAME two existing
+    ...    DB-ground-truth keywords, just called under one name. Also captures the TC05 evidence
+    ...    screenshot (moved in from the test case's own Capture Step line).
+    [Arguments]    ${code}=${TEST_CODE}
+    Bank Row Should Not Exist    ${code}
+    Bank Should Not Exist In DB    ${code}
+    Capture Step    bank_tc05_deleted
+
+Verify Bank Record Does Not Exist
+    [Documentation]    Friendly-narrative wrapper around the TC01 clean-state check, called with
+    ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}, owner-requested
+    ...    2026-08-18) - underlying mechanics (Bank Row Should Not Exist) UNCHANGED. Also captures
+    ...    the TC01 evidence screenshot (moved in from the test case's own Capture Step line).
+    [Arguments]    ${code}=${TEST_CODE}
+    Bank Row Should Not Exist    ${code}
+    Capture Step    bank_tc01_clean
