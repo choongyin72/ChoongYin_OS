@@ -143,6 +143,141 @@ Pick OV Popup By Label
         Pick From EC Object Popup    ${id}    ${value}
     END
 
+# --- Properties-driven read-back / verify (round-trip check, no fixed per-field arguments) -----
+# The write-side counterpart to Fill OV Field By Label Any Kind: reads a field's CURRENT value
+# instead of setting it, using the same kind-detection order, so a properties file can drive
+# VERIFICATION the same way it drives INSERT/UPDATE.
+
+Get OV Field Value By Label
+    [Documentation]    Read back the CURRENT value of a field found by LABEL in ${form}, using the
+    ...    SAME kind-detection order as Fill OV Field By Label Any Kind (dropdown dd_input checked
+    ...    first to avoid the dd_input/dd_hinput dual-node strict-mode trip, then popup pin, then
+    ...    the generic single-input case) so a read-back always targets the same node a fill would
+    ...    have written to.
+    [Arguments]    ${form}    ${label}
+    ${dd_count}=    Get Element Count
+    ...    xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[contains(@id,'dd_input')]
+    IF    ${dd_count} > 0
+        ${id}=    Get Attribute
+        ...    xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[contains(@id,'dd_input')]
+        ...    id
+    ELSE
+        ${pin_count}=    Get Element Count
+        ...    xpath=//span[contains(@class,'ECCell') and contains(@id,'${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[substring(@id, string-length(@id) - 3) = ':pin']
+        IF    ${pin_count} > 0
+            ${id}=    Get Attribute
+            ...    xpath=//span[contains(@class,'ECCell') and contains(@id,'${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[substring(@id, string-length(@id) - 3) = ':pin']
+            ...    id
+        ELSE
+            ${id}=    OV Field Id By Label    ${form}    ${label}
+        END
+    END
+    ${value}=    Get Property    css=[id="${id}"]    value
+    RETURN    ${value}
+
+Verify Object Form Fields From Properties
+    [Documentation]    Read fields from ${form} (by label, auto-detecting kind via Get OV Field
+    ...    Value By Label) and assert each equals ${properties_path}'s value for that label - a
+    ...    live-DOM round-trip check that the UI actually SHOWS what was saved, on top of (not
+    ...    instead of) DB verification. Caller must already have the row selected/form loaded.
+    ...    If @{labels} is given, only THOSE labels are checked (use this when ${form} doesn't
+    ...    contain every field the properties file lists - e.g. updateAttributes has no Start Date,
+    ...    that lives only in objectdates). If @{labels} is empty, every key in the file is checked.
+    [Arguments]    ${form}    ${properties_path}    @{labels}
+    ${data}=    Read Properties    ${properties_path}
+    ${keys}=    Set Variable If    ${labels}    ${labels}    ${data.keys()}
+    FOR    ${label}    IN    @{keys}
+        ${expected}=    Set Variable    ${data}[${label}]
+        ${actual}=    Get OV Field Value By Label    ${form}    ${label}
+        Should Be Equal    ${actual}    ${expected}
+        ...    msg=Field '${label}' shows '${actual}' in ${form}, expected '${expected}'
+    END
+
+Verify Object Row Fields From Properties
+    [Documentation]    Assert the grid row for ${code} in ${table_id} displays each field named in
+    ...    ${properties_path} (grid-column labels only, e.g. Code/Name/Start Date - the grid shows
+    ...    far fewer columns than the form, so this should point at a DEDICATED grid-only properties
+    ...    file, not the full form-record one). If @{labels} is given, only THOSE labels are checked
+    ...    instead of every key in the file. Only pass/list labels that are REAL grid columns on
+    ...    this screen (confirmed by a live field-inventory scan) - a form-only field (e.g.
+    ...    Description) is never shown in the grid and would always fail here.
+    [Arguments]    ${table_id}    ${code}    ${properties_path}    @{labels}
+    ${data}=    Read Properties    ${properties_path}
+    ${keys}=    Set Variable If    ${labels}    ${labels}    ${data.keys()}
+    ${row}=    Get Text    xpath=//tbody[@id='${table_id}']//tr[.//span[normalize-space(text())='${code}']]
+    FOR    ${label}    IN    @{keys}
+        Should Contain    ${row}    ${data}[${label}]
+        ...    msg=Grid row ${code} missing ${label}='${data}[${label}]'
+    END
+
+# --- Properties-driven Insert (data-driven form fill, no fixed per-field arguments) ------------
+# A properties file (column=value, read via libraries/PropertiesReader.py) drives WHICH fields get
+# filled and WITH WHAT, so a screen's insert data lives in a plain text file, not hardcoded RF
+# arguments. Each field's INPUT KIND (text/date/dropdown/popup) is auto-detected live from the DOM
+# by label - the caller's properties file never has to say what kind a field is.
+
+Fill OV Field By Label Any Kind
+    [Documentation]    Fill a field found by LABEL in ${form}, auto-detecting whether it's a
+    ...    dropdown, date, popup, or plain text field - so a properties-file-driven caller never
+    ...    has to know a field's kind ahead of time. Dropdown is checked FIRST and separately
+    ...    (not via the generic OV Field Id By Label) because a dropdown's "following-sibling"
+    ...    tableCell holds TWO input nodes (dd_input + dd_hinput) - the generic single-//input
+    ...    xpath trips Browser strict mode on those, exactly the gotcha Fill OV Dropdown By Label
+    ...    already documents. __FIRST__ picks the first available option for a dropdown/popup.
+    [Arguments]    ${form}    ${label}    ${value}
+    ${dd_count}=    Get Element Count
+    ...    xpath=//span[contains(@class,'ECCell') and contains(@id,':${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[contains(@id,'dd_input')]
+    IF    ${dd_count} > 0
+        Fill OV Dropdown By Label    ${form}    ${label}    ${value}
+    ELSE
+        ${pin_count}=    Get Element Count
+        ...    xpath=//span[contains(@class,'ECCell') and contains(@id,'${form}:form:') and normalize-space(text())='${label}']/ancestor::div[contains(@class,'tableCell')][1]/following-sibling::div[contains(@class,'tableCell')][1]//input[substring(@id, string-length(@id) - 3) = ':pin']
+        IF    ${pin_count} > 0
+            Pick OV Popup By Label    ${form}    ${label}    ${value}
+        ELSE
+            ${id}=    OV Field Id By Label    ${form}    ${label}
+            IF    '${id}'[-8:] == 'da_input'
+                Fill EC Date    ${id}    ${value}
+            ELSE
+                Fill EC Field    ${id}    ${value}
+            END
+        END
+    END
+
+Insert Object From Properties
+    [Documentation]    Open the New Object form and fill EVERY field named in ${properties_path}
+    ...    (a column=value file read via PropertiesReader.Read Properties), auto-detecting each
+    ...    field's kind by label. Then Save + reload the list. Returns the resolved Code value
+    ...    (read from the properties file's own "Code" entry) so the caller can assert on it.
+    [Arguments]    ${properties_path}
+    ${data}=    Read Properties    ${properties_path}
+    Open New Object Form
+    FOR    ${label}    IN    @{data.keys()}
+        Fill OV Field By Label Any Kind    objectForm    ${label}    ${data}[${label}]
+    END
+    Save And Refresh List
+    RETURN    ${data}[Code]
+
+Update Object From Properties
+    [Documentation]    Select the row for ${code}, verify it's really the intended row (read Code
+    ...    back from updateAttributes BEFORE writing anything - row-identity check), then fill
+    ...    EVERY field named in ${properties_path} into updateAttributes, auto-detecting each
+    ...    field's kind by label. Save + reload. Mirrors Insert Object From Properties for the
+    ...    Update side. Only list fields that actually exist in updateAttributes in the properties
+    ...    file - Code is typically read-only there, and date fields usually live in a separate
+    ...    objectdates form, not updateAttributes (confirmed on Bank).
+    [Arguments]    ${table_id}    ${code}    ${properties_path}
+    Select Object Row    ${table_id}    ${code}
+    ${code_id}=    OV Field Id By Label    updateAttributes    Code
+    ${loaded}=    Get Property    css=[id="${code_id}"]    value
+    Should Be Equal    ${loaded}    ${code}    msg=Row select failed - code not loaded
+    ${data}=    Read Properties    ${properties_path}
+    FOR    ${label}    IN    @{data.keys()}
+        Fill OV Field By Label Any Kind    updateAttributes    ${label}    ${data}[${label}]
+    END
+    Save And Refresh List
+    RETURN    ${data}
+
 Apply OV-GM Navigator First Available
     [Documentation]    OV-GM (grid manageObject:form:T_data) is navigator-GATED: the grid is empty until a
     ...    cascade of navigator dropdowns is set + GO. Fill nav:form:G:0:R:${row}:C:1..N dd FIRST-AVAILABLE

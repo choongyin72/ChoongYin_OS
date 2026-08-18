@@ -2,58 +2,74 @@
 Documentation       EC IUD Test - Bank (Configuration > Assets > Financial Objects > Bank).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in ov_bank).
 ...                 Layered: this test -> bank_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. A unique AUTOTEST_BNK_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+...                 NEVER touch existing data. Uses a FIXED test code (BANK_CHINA, owner-requested
+...                 2026-08-17) rather than a generated unique code - confirmed absent from ov_bank
+...                 before this was wired in. Every run must complete TC05 (delete) so the code is
+...                 free for the next run - EC never lets a DELETED code be reused, but this fixed
+...                 code only stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout (owner-requested 2026-08-18) on
+...                 ONE browser opened once in Suite Setup - not 5 separate browser launches. This
+...                 is a conscious tradeoff: 5 real logins instead of 1 costs real runtime, and
+...                 TC03/TC04/TC05 still depend on TC02's inserted record existing (the per-TC
+...                 login/logout makes each TC LOOK self-contained, it does not remove that data
+...                 dependency) - accepted deliberately for a client-readable process-flow report.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Financial_Objects/bank_page.resource
 
-Suite Setup         Set Up Bank Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    bank
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}        ${EMPTY}
-${OBJ_NAME_UPD}    ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        BANK_CHINA
+${OBJ_NAME}        Bank of China (Hong Kong) Ltd.
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# These 3 values must stay in sync with testdata/bank_insert.properties - TC02 DB-verifies
+# them against what that file actually set, not an independent assumption.
+${OBJ_DESC}         Bank of China
+${OBJ_ADDR1}        Bank of China Tower Branch
+${OBJ_SWIFT}        BKCHHKHH
+# These 2 values must stay in sync with testdata/bank_update.properties - TC03 DB-verifies
+# them against what that file actually set, not an independent assumption.
+${OBJ_NAME_UPD}      Bank of China (Hong Kong) Ltd. UPDATED
+${OBJ_DESC_UPD}      Bank of China UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test bank does not exist before inserting.
-    [Tags]    clean-state
-    Bank Row Should Not Exist    ${TEST_CODE}
-    Capture Step    bank_tc01_clean
-
-TC02 Insert New Bank
-    [Documentation]    Insert a new bank and confirm it appears in the list.
-    [Tags]    insert
-    Insert Bank Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Bank Row Should Exist    ${TEST_CODE}
-    Bank Should Exist In DB    ${TEST_CODE}
-    Capture Step    bank_tc02_inserted
-
-TC03 Update Bank Name
-    [Documentation]    Edit the bank name and confirm the list reflects the change.
-    [Tags]    update
-    Update Bank Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Bank Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    bank_tc03_updated
-
-TC04 Delete Bank
-    [Documentation]    Delete via End Date = Start Date and confirm the bank is gone.
-    [Tags]    delete    cleanup
-    Delete Bank    ${TEST_CODE}    ${END_DATE}
-    Bank Row Should Not Exist    ${TEST_CODE}
-    Bank Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    bank_tc04_deleted
-
-
-*** Keywords ***
-Set Up Bank Suite
-    [Documentation]    Generate a unique test code/name, then open the Bank screen.
-    Prepare IUD Object Data    AUTOTEST_BNK_    Bank
+    Login To EC Application
     Open Bank Screen
+    Verify Bank Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Bank Data
+    Login To EC Application
+    Open Bank Screen
+    Insert Bank Record And Save
+    Verify Bank Record Exists
+    Logout From EC Application
+
+TC03 Update Bank Data
+    Login To EC Application
+    Open Bank Screen
+    Update Bank Record And Save
+    Verify Bank Record Updated
+    Logout From EC Application
+
+TC04 Find Bank Data
+    Login To EC Application
+    Open Bank Screen
+    Find Bank Record
+    Verify Bank Record Found
+    Logout From EC Application
+
+TC05 Delete Bank Data
+    Login To EC Application
+    Open Bank Screen
+    Delete Bank Record And Save
+    Verify Bank Record Removed
+    Logout From EC Application
