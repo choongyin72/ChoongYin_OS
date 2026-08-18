@@ -14,7 +14,10 @@ Variables           ../../../../resources/credentials.py
 
 *** Variables ***
 ${BANK_SCREEN}          Bank
-${BANK_ENTRY_PROPERTIES}    ${CURDIR}/../../../../testdata/bank_entry.properties
+${BANK_INSERT_PROPERTIES}    ${CURDIR}/../../../../testdata/bank_insert.properties
+${BANK_UPDATE_PROPERTIES}    ${CURDIR}/../../../../testdata/bank_update.properties
+${BANK_FORM_VERIFY_PROPERTIES}    ${CURDIR}/../../../../testdata/bank_form_verify.properties
+${BANK_GRID_VERIFY_PROPERTIES}    ${CURDIR}/../../../../testdata/bank_grid_verify.properties
 # Grid id: reuse T2's centralized constant instead of re-hardcoding the same literal
 # string (manage_object.resource defines this ONCE specifically so no T3 duplicates it).
 ${BANK_TABLE}           ${OV_MANAGE_OBJECT_TABLE}
@@ -109,11 +112,11 @@ Insert Bank Record
 
 Insert Bank From Properties
     [Documentation]    Insert a new bank by reading EVERY column=value entry from
-    ...    ${BANK_ENTRY_PROPERTIES} (testdata/bank_entry.properties) and filling each field by
+    ...    ${BANK_INSERT_PROPERTIES} (testdata/bank_insert.properties) and filling each field by
     ...    label, auto-detecting its kind (text/date/dropdown/popup) live - so the fields filled
     ...    and their values live entirely in the properties file, not in this keyword or the
     ...    suite. Returns the Code that was inserted (read back from the properties file).
-    [Arguments]    ${properties_path}=${BANK_ENTRY_PROPERTIES}
+    [Arguments]    ${properties_path}=${BANK_INSERT_PROPERTIES}
     ${code}=    Insert Object From Properties    ${properties_path}
     RETURN    ${code}
 
@@ -121,6 +124,11 @@ Update Bank Name
     [Documentation]    Select the bank, confirm it loaded, edit Name, Save. The Code field
     ...    is resolved BY LABEL each call (not a hardcoded id) so a row-load check never
     ...    silently reads the wrong field if the update form's layout ever shifts.
+    ...    NOT called by TC03 currently (TC03 uses "Update Bank From Properties") - kept as a
+    ...    working, narrower option. Owner flagged 2026-08-18 that its NAME is questionable
+    ...    (a real OV_BANK update covers more than just Name) - restored 2026-08-18 after being
+    ...    wrongly deleted on an assumption; owner has not said to remove or rename it, so it
+    ...    stays exactly as it was until told otherwise.
     [Arguments]    ${code}    ${new_name}
     Select Object Row    ${BANK_TABLE}    ${code}
     ${code_id}=    OV Field Id By Label    updateAttributes    Code
@@ -129,6 +137,51 @@ Update Bank Name
     Fill OV Field By Label    updateAttributes    Name    ${new_name}
     Save
     Apply Navigator
+
+Update Bank From Properties
+    [Documentation]    Update the bank identified by ${code} by reading EVERY column=value entry
+    ...    from ${properties_path} (testdata/bank_update.properties) and filling each field by
+    ...    label into updateAttributes, auto-detecting its kind - so the fields updated and their
+    ...    new values live entirely in the properties file, not in this keyword or the suite.
+    ...    Row-identity is verified (Code read back) before anything is written, same safeguard
+    ...    as Update Bank Name. Returns the applied {label: value} dict so the caller can DB-verify
+    ...    against exactly what was set, without duplicating the values as separate suite variables.
+    [Arguments]    ${code}    ${properties_path}=${BANK_UPDATE_PROPERTIES}
+    ${data}=    Update Object From Properties    ${BANK_TABLE}    ${code}    ${properties_path}
+    RETURN    ${data}
+
+Find Bank
+    [Documentation]    Locate the bank row by ${code} and select it (loads updateAttributes),
+    ...    verifying row-identity (Code read back) before returning - so a caller can then safely
+    ...    read/verify its form fields. Same row-identity safeguard as Update Bank From Properties.
+    [Arguments]    ${code}
+    Select Object Row    ${BANK_TABLE}    ${code}
+    ${code_id}=    OV Field Id By Label    updateAttributes    Code
+    ${loaded}=    Get Property    css=[id="${code_id}"]    value
+    Should Be Equal    ${loaded}    ${code}    msg=Find Bank failed - code not loaded
+
+Bank Row Should Match Properties
+    [Documentation]    Assert the grid row for ${code} shows Code/Name/Start Date matching
+    ...    ${properties_path} (testdata/bank_grid_verify.properties by default - its OWN dedicated
+    ...    file, owner-requested 2026-08-18, since the grid genuinely shows fewer columns than the
+    ...    form record). Every key in that file is checked (End Date is correctly absent from it -
+    ...    it stays blank until the object is deleted, so it's never a real grid-check target).
+    [Arguments]    ${code}    ${properties_path}=${BANK_GRID_VERIFY_PROPERTIES}
+    Verify Object Row Fields From Properties    ${BANK_TABLE}    ${code}    ${properties_path}
+
+Bank Form Should Match Properties
+    [Documentation]    Assert every field named in ${properties_path} (testdata/bank_form_verify.
+    ...    properties by default) shows the expected value live in the updateAttributes form - a
+    ...    round-trip UI check independent of the DB assertions already run in TC02/TC03. Caller
+    ...    must already have selected the row (e.g. via Find Bank) before calling this.
+    ...    "Start Date" is EXCLUDED here even though it's in the properties file - the live
+    ...    field-inventory scan (2026-08-17) confirmed updateAttributes has no Start Date field
+    ...    (it lives only in objectdates); Bank Row Should Match Properties already covers it via
+    ...    the grid instead.
+    [Arguments]    ${properties_path}=${BANK_FORM_VERIFY_PROPERTIES}
+    Verify Object Form Fields From Properties    updateAttributes    ${properties_path}
+    ...    Code    Name    Description    Swift Code
+    ...    Address Line 1    Address Line 2    Address Line 3    Country
 
 Delete Bank
     [Documentation]    Select the bank, set End Date = Start Date (true delete), Save.

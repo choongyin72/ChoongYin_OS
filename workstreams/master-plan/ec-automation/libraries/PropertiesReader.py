@@ -1,6 +1,6 @@
 """Plain-module RF library (same convention as DbVerify.py) - reads a simple key=value
 properties file into a dict, for data-driven form fills (e.g. Insert Bank Record from
-testdata/bank_entry.properties). One entry per line, '#' starts a full-line comment, blank
+testdata/bank_insert.properties). One entry per line, '#' starts a full-line comment, blank
 lines ignored. No section headers, no escaping - deliberately simple for this project's use case.
 """
 
