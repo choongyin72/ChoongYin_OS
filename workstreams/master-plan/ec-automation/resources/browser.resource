@@ -71,9 +71,15 @@ Logout From EC Application
     ...    2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
     ...    Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
     ...    logout and redirects to the Keycloak login page (#username field re-appears).
+    ...    Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+    ...    this T1 file has no dependency on another T1 file - a suite importing browser.resource
+    ...    alone still works (R21 review note, 2026-08-18: the prior version would have hit
+    ...    keyword-not-found on Logout for such a suite, even though none currently does this).
     Click    xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]
     Wait For Elements State    css=[id="username"]    visible    timeout=15s
-    Capture Step    ${TEST NAME}_logout
+    IF    ${CAPTURE_SCREENSHOTS}
+        Take Screenshot    filename=${OUTPUT_DIR}/${TEST NAME}_logout
+    END
 
 Ensure Logged Out From EC Application
     [Documentation]    Test Teardown safety net (owner discovered this gap live, 2026-08-18): if a
