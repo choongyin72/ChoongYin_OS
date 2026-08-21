@@ -23,6 +23,12 @@ ${OBJECT_LIST_TABLE}    ${OV_MANAGE_OBJECT_TABLE}
 # objectdates field ID (Delete — End Date = Start Date). Hardcoded, matching Bank's convention
 # and cross-confirmed against the already-proven Playwright driver config (del_end, identical id).
 ${OBJECT_LIST_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+# Object List's own form-field label set (Class Name/Start Date deliberately excluded - Insert-only,
+# not present in updateAttributes). Defined ONCE here so both Verify Object List Record Exists (TC02,
+# against object_list_insert.properties) and Verify Object List Record Found (TC04, against
+# object_list_form_verify.properties) share the same list instead of each hardcoding it inline
+# (owner-requested 2026-08-22 consolidation of the T2 Verify Object Insert Exists/Found calls).
+@{OBJECT_LIST_FORM_LABELS}    Code    Name
 
 
 *** Keywords ***
@@ -78,29 +84,17 @@ Find Object List Record
     Find Object List    ${code}
     Capture Step    ${TEST NAME}_action
 
-Object List Form Should Match Properties
-    [Documentation]    Assert fields show the expected value live in the updateAttributes
-    ...    form. Caller must already have the row selected/form loaded (e.g. via Find
-    ...    Object List). Defaults to Code/Name - Class Name/Start Date are Insert-only
-    ...    fields, confirmed absent from updateAttributes (same pattern as Bank's Start
-    ...    Date exclusion). If @{labels} is given, only THOSE labels are checked.
-    [Arguments]    ${properties_path}=${OBJECT_LIST_FORM_VERIFY_PROPERTIES}    @{labels}
-    ${default_labels}=    Create List    Code    Name
-    ${use_labels}=    Set Variable If    ${labels}    ${labels}    ${default_labels}
-    Verify Object Form Fields From Properties    updateAttributes    ${properties_path}
-    ...    @{use_labels}
-
 Verify Object List Record Exists
     [Documentation]    Friendly-narrative wrapper around the TC02 verification, called with
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification (no DB check here, matching Bank's TC02 convention): row exists in
     ...    the grid, then the form shows what was just inserted (Code/Name only - Class
     ...    Name/Start Date are grid/insert-only, not present in updateAttributes).
+    ...    Delegates the full sequence (row-check, select, form-compare, screenshot) to the
+    ...    shared T2 Verify Object Insert Exists (owner-requested 2026-08-22 consolidation).
     [Arguments]    ${code}=${TEST_CODE}
-    Object List Row Should Exist    ${code}
-    Find Object List    ${code}
-    Object List Form Should Match Properties    ${OBJECT_LIST_INSERT_PROPERTIES}
-    Capture Step    ${TEST NAME}_verify
+    Verify Object Insert Exists    ${OBJECT_LIST_TABLE}    ${code}    Object List
+    ...    ${OBJECT_LIST_INSERT_PROPERTIES}    @{OBJECT_LIST_FORM_LABELS}
 
 Update Object List Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
@@ -115,20 +109,22 @@ Verify Object List Record Updated
     [Documentation]    Friendly-narrative wrapper around the TC03 verification, called with
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching Bank's TC03 convention: the form shows the updated Name.
+    ...    Delegates the full sequence (select, form-compare, screenshot) to the shared T2
+    ...    Verify Object Form Record (owner-requested 2026-08-22 consolidation).
     [Arguments]    ${code}=${TEST_CODE}
-    Find Object List    ${code}
-    Object List Form Should Match Properties    ${OBJECT_LIST_UPDATE_PROPERTIES}    Name
-    Capture Step    ${TEST NAME}_verify
+    Verify Object Form Record    ${OBJECT_LIST_TABLE}    ${code}    Object List
+    ...    ${OBJECT_LIST_UPDATE_PROPERTIES}    Name
 
 Verify Object List Record Found
     [Documentation]    Friendly-narrative wrapper around the TC04 verification, called with
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}): confirms BOTH the
     ...    grid AND the form record match the expected (post-update) data.
+    ...    Delegates the full sequence (grid-compare, form-compare, screenshot) to the shared
+    ...    T2 Verify Object Found (owner-requested 2026-08-22 consolidation). Caller must
+    ...    already have selected the row (TC04 does, via Find Object List Record before this).
     [Arguments]    ${code}=${TEST_CODE}
-    Verify Object Row Fields From Properties    ${OBJECT_LIST_TABLE}    ${code}
-    ...    ${OBJECT_LIST_GRID_VERIFY_PROPERTIES}
-    Object List Form Should Match Properties
-    Capture Step    ${TEST NAME}_verify
+    Verify Object Found    ${OBJECT_LIST_TABLE}    ${code}    ${OBJECT_LIST_GRID_VERIFY_PROPERTIES}
+    ...    ${OBJECT_LIST_FORM_VERIFY_PROPERTIES}    @{OBJECT_LIST_FORM_LABELS}
 
 Delete Object List
     [Documentation]    Select the object list, set End Date = Start Date (true delete), Save.

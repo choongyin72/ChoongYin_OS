@@ -29,6 +29,13 @@ ${BANK_TABLE}           ${OV_MANAGE_OBJECT_TABLE}
 # value before relying on it generally - left hardcoded here regardless, matching the
 # documented, already-proven precedent rather than a claim not yet checked.
 ${BANK_DEL_ENDDATE}     tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+# Bank's own form-field label set (Start Date/End Date deliberately excluded - they live only in
+# objectdates, not updateAttributes). Defined ONCE here so both Verify Bank Record Exists (TC02,
+# against bank_insert.properties) and Verify Bank Record Found (TC04, against
+# bank_form_verify.properties) share the same list instead of each hardcoding it inline
+# (owner-requested 2026-08-22 consolidation of the T2 Verify Object Insert Exists/Found calls).
+@{BANK_FORM_LABELS}    Code    Name    Description    Swift Code    Address Line 1
+...    Address Line 2    Address Line 3    Country
 
 
 *** Keywords ***
@@ -79,29 +86,21 @@ Insert Bank Record And Save
 Verify Bank Record Exists
     [Documentation]    Friendly-narrative wrapper around the TC02 verification, called with ZERO
     ...    arguments (owner-requested 2026-08-18): defaults ${code} to the suite's ${TEST_CODE}.
-    ...    PURE SCREEN verification (owner-requested 2026-08-18: no DB check at all here), reusing
-    ...    the SAME existing keyword TC04 already uses for its form check - just pointed at
-    ...    testdata/bank_insert.properties (the file used to insert) instead of its own default
-    ...    bank_form_verify.properties, since that represents the state AFTER TC03's update, not
-    ...    the just-inserted state:
-    ...    1. Bank Row Should Exist - the grid shows the row.
-    ...    2. Find Bank - selects the row, loading updateAttributes.
-    ...    3. Bank Form Should Match Properties - compares every field's LIVE SCREEN value (via
-    ...       Get OV Field Value By Label) to the properties file: Code, Name, Description, Swift
-    ...       Code, Address Line 1-3, Country. Country is screen-compared deliberately, not
-    ...       DB-compared - a live recon (2026-08-18) proved the DB stores an internal code (e.g.
-    ...       COUNTRY_CODE 'NL' for an existing Netherlands record), not the display text the
-    ...       properties file and the screen both show.
+    ...    PURE SCREEN verification (owner-requested 2026-08-18: no DB check at all here): row
+    ...    exists in the grid, then every field's LIVE SCREEN value (via Get OV Field Value By
+    ...    Label) is compared to testdata/bank_insert.properties (the file used to insert, not
+    ...    the post-update bank_form_verify.properties) - Code, Name, Description, Swift Code,
+    ...    Address Line 1-3, Country (${BANK_FORM_LABELS}). Country is screen-compared
+    ...    deliberately, not DB-compared - a live recon (2026-08-18) proved the DB stores an
+    ...    internal code (e.g. COUNTRY_CODE 'NL' for an existing Netherlands record), not the
+    ...    display text the properties file and the screen both show.
     ...    NOTE (owner-decided 2026-08-18): Start Date is NOT verified anywhere in this keyword -
-    ...    it only exists as a grid column, not a form field, and the grid-level check (Bank Row
-    ...    Should Match Properties) was deliberately dropped here.
-    ...    Also captures the TC02 evidence screenshot (Capture Step - evidence capture, not a
-    ...    business step, excluded from the friendly report same as elsewhere).
+    ...    it only exists as a grid column, not a form field.
+    ...    Delegates the full sequence (row-check, select, form-compare, screenshot) to the
+    ...    shared T2 Verify Object Insert Exists (owner-requested 2026-08-22 consolidation).
     [Arguments]    ${code}=${TEST_CODE}
-    Bank Row Should Exist    ${code}
-    Find Bank    ${code}
-    Bank Form Should Match Properties    ${BANK_INSERT_PROPERTIES}
-    Capture Step    ${TEST NAME}_verify
+    Verify Object Insert Exists    ${BANK_TABLE}    ${code}    Bank    ${BANK_INSERT_PROPERTIES}
+    ...    @{BANK_FORM_LABELS}
 
 Update Bank Record And Save
     [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around T2's Update
@@ -118,20 +117,16 @@ Update Bank Record And Save
 Verify Bank Record Updated
     [Documentation]    Friendly-narrative wrapper around the TC03 verification, called with ZERO
     ...    arguments (owner-requested 2026-08-18): defaults ${code} to the suite's ${TEST_CODE}.
-    ...    PURE SCREEN verification (owner-requested 2026-08-18: no DB check), matching TC02's
-    ...    pattern - reuses the SAME existing keyword (Bank Form Should Match Properties), pointed
-    ...    at testdata/bank_update.properties (the file used to update) with an explicit label
-    ...    override of just Name/Description, since that's the only fields that file has (unlike
-    ...    the default bank_form_verify.properties, which has the full field set):
-    ...    1. Find Bank - selects the row, loading updateAttributes.
-    ...    2. Bank Form Should Match Properties - compares Name/Description's LIVE SCREEN value
-    ...       (via Get OV Field Value By Label) to testdata/bank_update.properties.
-    ...    Also captures the TC03 evidence screenshot (moved in from the test case's own Capture
-    ...    Step line).
+    ...    PURE SCREEN verification (owner-requested 2026-08-18: no DB check): selects the row
+    ...    (loading updateAttributes), then compares Name/Description's LIVE SCREEN value (via
+    ...    Get OV Field Value By Label) to testdata/bank_update.properties - only those two
+    ...    labels, since that's the only fields that file has (unlike the default
+    ...    bank_form_verify.properties/${BANK_FORM_LABELS}, which has the full field set).
+    ...    Delegates the full sequence (select, form-compare, screenshot) to the shared T2
+    ...    Verify Object Form Record (owner-requested 2026-08-22 consolidation).
     [Arguments]    ${code}=${TEST_CODE}
-    Find Bank    ${code}
-    Bank Form Should Match Properties    ${BANK_UPDATE_PROPERTIES}    Name    Description
-    Capture Step    ${TEST NAME}_verify
+    Verify Object Form Record    ${BANK_TABLE}    ${code}    Bank    ${BANK_UPDATE_PROPERTIES}
+    ...    Name    Description
 
 Find Bank
     [Documentation]    Locate the bank row by ${code} and select it (loads updateAttributes),
@@ -149,49 +144,18 @@ Find Bank Record
     Find Bank    ${code}
     Capture Step    ${TEST NAME}_action
 
-Bank Row Should Match Properties
-    [Documentation]    Assert the grid row for ${code} shows Code/Name/Start Date matching
-    ...    ${properties_path} (testdata/bank_grid_verify.properties by default - its OWN dedicated
-    ...    file, owner-requested 2026-08-18, since the grid genuinely shows fewer columns than the
-    ...    form record). If @{labels} is given, ONLY those labels are checked against the grid -
-    ...    needed when ${properties_path} is a FULLER file (e.g. bank_insert.properties, which also
-    ...    has Description/Swift Code/etc. that are never shown in the grid and would always fail
-    ...    here); if omitted, every key in the file is checked (correct when the file is already
-    ...    grid-only, like bank_grid_verify.properties).
-    [Arguments]    ${code}    ${properties_path}=${BANK_GRID_VERIFY_PROPERTIES}    @{labels}
-    Verify Object Row Fields From Properties    ${BANK_TABLE}    ${code}    ${properties_path}
-    ...    @{labels}
-
-Bank Form Should Match Properties
-    [Documentation]    Assert fields shows the expected value live in the updateAttributes form -
-    ...    a round-trip UI check reading straight off the screen. Caller must already have
-    ...    selected the row (e.g. via Find Bank) before calling this.
-    ...    If @{labels} is given, ONLY those labels are checked (needed when ${properties_path} is
-    ...    a SMALLER file than the default - e.g. testdata/bank_update.properties only has
-    ...    Name/Description, so checking the full default label set against it would error looking
-    ...    up keys that file doesn't have). If omitted, defaults to Code/Name/Description/Swift
-    ...    Code/Address Line 1-3/Country (the full field set, correct for the default
-    ...    testdata/bank_form_verify.properties). "Start Date" is never included by default - the
-    ...    live field-inventory scan (2026-08-17) confirmed updateAttributes has no Start Date
-    ...    field (it lives only in objectdates); Bank Row Should Match Properties covers it via the
-    ...    grid instead, where applicable.
-    [Arguments]    ${properties_path}=${BANK_FORM_VERIFY_PROPERTIES}    @{labels}
-    ${default_labels}=    Create List    Code    Name    Description    Swift Code
-    ...    Address Line 1    Address Line 2    Address Line 3    Country
-    ${use_labels}=    Set Variable If    ${labels}    ${labels}    ${default_labels}
-    Verify Object Form Fields From Properties    updateAttributes    ${properties_path}
-    ...    @{use_labels}
-
 Verify Bank Record Found
     [Documentation]    Friendly-narrative wrapper around the TC04 verification, called with ZERO
     ...    arguments (defaults ${code} to the suite's ${TEST_CODE}, owner-requested 2026-08-18):
     ...    confirms BOTH the grid AND the full form record match the expected data - the SAME two
     ...    existing live-DOM round-trip keywords, just called under one name. Also captures the
     ...    TC04 evidence screenshot (moved in from the test case's own Capture Step line).
+    ...    Delegates the full sequence (grid-compare, form-compare, screenshot) to the shared
+    ...    T2 Verify Object Found (owner-requested 2026-08-22 consolidation). Caller must
+    ...    already have selected the row (TC04 does, via Find Bank Record before this).
     [Arguments]    ${code}=${TEST_CODE}
-    Bank Row Should Match Properties    ${code}
-    Bank Form Should Match Properties
-    Capture Step    ${TEST NAME}_verify
+    Verify Object Found    ${BANK_TABLE}    ${code}    ${BANK_GRID_VERIFY_PROPERTIES}
+    ...    ${BANK_FORM_VERIFY_PROPERTIES}    @{BANK_FORM_LABELS}
 
 Delete Bank
     [Documentation]    Select the bank, set End Date = Start Date (true delete), Save.

@@ -113,6 +113,46 @@ Verify Object Removed
     Row Should Not Exist    ${table_id}    ${code}
     Code Should Be Absent In View    ${db_view}    ${code}
 
+Verify Object Form Record
+    [Documentation]    Select ${code} (loads updateAttributes) and assert ${properties_path}'s
+    ...    fields match the live screen (only @{labels} if given, else every key in the file),
+    ...    then capture the verify evidence screenshot - the shared core of every screen's
+    ...    "Verify <Screen> Record Updated" keyword, and half of "Verify <Screen> Record Exists"
+    ...    (added 2026-08-22, consolidating the identical Bank/Object List pattern - owner
+    ...    query 2026-08-22: "we want all object ec screen share... code at one place"). The
+    ...    sequence (select, compare, capture) is layout-independent; which fields to check
+    ...    stays per-screen data (${properties_path}/@{labels}), never assumed here.
+    [Arguments]    ${table_id}    ${code}    ${screen_label}    ${properties_path}    @{labels}
+    Find Object By Code    ${table_id}    ${code}    ${screen_label}
+    Verify Object Form Fields From Properties    updateAttributes    ${properties_path}    @{labels}
+    Capture Step    ${TEST NAME}_verify
+
+Verify Object Insert Exists
+    [Documentation]    Assert ${code} shows in the grid, THEN assert the form record matches
+    ...    ${properties_path} - the shared core of every screen's "Verify <Screen> Record
+    ...    Exists" (TC02) keyword (added 2026-08-22, same consolidation as Verify Object Form
+    ...    Record above, which this delegates the select/compare/capture half to). PURE SCREEN
+    ...    verification - no DB check here (that is TC02's own separate DbVerify assertion).
+    [Arguments]    ${table_id}    ${code}    ${screen_label}    ${properties_path}    @{labels}
+    Row Should Exist    ${table_id}    ${code}
+    Verify Object Form Record    ${table_id}    ${code}    ${screen_label}    ${properties_path}
+    ...    @{labels}
+
+Verify Object Found
+    [Documentation]    Assert BOTH the grid row (${grid_properties_path}) AND the form record
+    ...    (${form_properties_path}) match - the shared core of every screen's "Verify <Screen>
+    ...    Record Found" (TC04) keyword (added 2026-08-22, same consolidation goal as Verify
+    ...    Object Insert Exists/Form Record above). Caller must already have selected the row
+    ...    when @{form_labels} is empty and the default form-verify file expects a prior Find -
+    ...    matching the existing per-screen convention (Bank/Object List TC04 both call their
+    ...    own Find <Screen> Record before this).
+    [Arguments]    ${table_id}    ${code}    ${grid_properties_path}    ${form_properties_path}
+    ...    @{form_labels}
+    Verify Object Row Fields From Properties    ${table_id}    ${code}    ${grid_properties_path}
+    Verify Object Form Fields From Properties    updateAttributes    ${form_properties_path}
+    ...    @{form_labels}
+    Capture Step    ${TEST NAME}_verify
+
 # --- Label-driven field resolution (NO hardcoded row/column ids) -------------------------------
 # A field's label span (ECCell) and its input sit in ADJACENT tableCells of the same tableRow. So a
 # field is located by its LABEL, not a hardcoded R:<n>:C:<n> id - robust to per-screen row shifts
