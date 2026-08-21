@@ -38,12 +38,10 @@ Login To EC Application
     ...    (page freshly loaded on the login form via the shared T1 Open EC Application) or a
     ...    re-login after Logout From EC Application (same login form, not a new page/tab).
     ...    Screen-specific wrapper (owner-requested 2026-08-18: bank_iud.robot's test cases call
-    ...    this with ZERO arguments) that calls the shared T1 Fill EC Login Form for the actual
-    ...    login mechanics - kept here only to supply Bank's own credential defaults, which a
-    ...    shared file should not hardcode. A future login-flow change (SSO/MFA/renamed field id)
-    ...    is a one-place edit to Fill EC Login Form, not a per-screen duplicate fix.
-    Fill EC Login Form    ${BANK_EC_USER}    ${BANK_EC_PASS}
-    Capture Step    ${TEST NAME}_login
+    ...    this with ZERO arguments) that supplies Bank's own credential defaults to the shared
+    ...    T1 Login To EC Screen (common.resource), which owns the actual login mechanics - kept
+    ...    here only because a shared file should not hardcode any screen's credentials.
+    Login To EC Screen    ${BANK_EC_USER}    ${BANK_EC_PASS}
 
 Open Bank Screen
     [Documentation]    Navigate to the Bank screen. Assumes the caller already logged in this
@@ -104,24 +102,6 @@ Verify Bank Record Exists
     Find Bank    ${code}
     Bank Form Should Match Properties    ${BANK_INSERT_PROPERTIES}
     Capture Step    ${TEST NAME}_verify
-
-Update Bank Name
-    [Documentation]    Select the bank, confirm it loaded, edit Name, Save. The Code field
-    ...    is resolved BY LABEL each call (not a hardcoded id) so a row-load check never
-    ...    silently reads the wrong field if the update form's layout ever shifts.
-    ...    NOT called by TC03 currently (TC03 uses "Update Bank Record And Save") - kept as a
-    ...    working, narrower option. Owner flagged 2026-08-18 that its NAME is questionable
-    ...    (a real OV_BANK update covers more than just Name) - restored 2026-08-18 after being
-    ...    wrongly deleted on an assumption; owner has not said to remove or rename it, so it
-    ...    stays exactly as it was until told otherwise.
-    [Arguments]    ${code}    ${new_name}
-    Select Object Row    ${BANK_TABLE}    ${code}
-    ${code_id}=    OV Field Id By Label    updateAttributes    Code
-    ${loaded}=    Get Property    css=[id="${code_id}"]    value
-    Should Be Equal    ${loaded}    ${code}    msg=Row select failed - code not loaded
-    Fill OV Field By Label    updateAttributes    Name    ${new_name}
-    Save
-    Apply Navigator
 
 Update Bank Record And Save
     [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around T2's Update

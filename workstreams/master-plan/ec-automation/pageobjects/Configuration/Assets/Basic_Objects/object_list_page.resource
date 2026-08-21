@@ -32,13 +32,11 @@ Login To EC Application
     ...    (owner, 2026-08-22): every EC screen gets its own dedicated credential pair - real
     ...    EC deployments gate different screens behind different role access, so a
     ...    screen-specific login identity is the default going forward (supersedes the
-    ...    earlier "shared default unless overridden" convention). Works whether this is the
-    ...    very first login (page freshly loaded on the login form via the shared T1 Open EC
-    ...    Application) or a re-login after Logout From EC Application (same login form, not
-    ...    a new page/tab). Zero-argument wrapper so object_list_iud.robot's test cases read
-    ...    as a plain business step.
-    Fill EC Login Form    ${OBJECT_LIST_EC_USER}    ${OBJECT_LIST_EC_PASS}
-    Capture Step    ${TEST NAME}_login
+    ...    earlier "shared default unless overridden" convention). Zero-argument wrapper so
+    ...    object_list_iud.robot's test cases read as a plain business step; supplies Object
+    ...    List's own credential defaults to the shared T1 Login To EC Screen (common.resource),
+    ...    which owns the actual login mechanics.
+    Login To EC Screen    ${OBJECT_LIST_EC_USER}    ${OBJECT_LIST_EC_PASS}
 
 Open Object List Screen
     [Documentation]    Navigate to the Object List screen. Assumes the caller already
