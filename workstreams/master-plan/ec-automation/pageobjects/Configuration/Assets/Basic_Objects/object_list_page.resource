@@ -42,8 +42,8 @@ Open Object List Screen
     [Documentation]    Navigate to the Object List screen. Assumes the caller already
     ...    logged in this test case (via Login To EC Application) - this keyword ONLY
     ...    navigates, matching Bank's per-TC Login/Open Screen/Action/Verify/Logout shape.
-    Navigate To Screen    ${OBJECT_LIST_SCREEN}
-    Capture Step    ${TEST NAME}_open_screen
+    ...    Delegates to the shared T1 Open EC Screen (common.resource) for the actual mechanics.
+    Open EC Screen    ${OBJECT_LIST_SCREEN}
 
 Object List Row Should Exist
     [Documentation]    Assert an object list with ${code} is present in the grid.

@@ -48,8 +48,8 @@ Open Bank Screen
     ...    test case (via Login To EC Application) - this keyword ONLY navigates, it no longer
     ...    bundles launch+login (owner-requested 2026-08-18, so every test case gets its own
     ...    explicit Login/Logout step instead of one shared Suite Setup/Teardown login).
-    Navigate To Screen    ${BANK_SCREEN}
-    Capture Step    ${TEST NAME}_open_screen
+    ...    Delegates to the shared T1 Open EC Screen (common.resource) for the actual mechanics.
+    Open EC Screen    ${BANK_SCREEN}
 
 Bank Row Should Exist
     [Documentation]    Assert a bank with ${code} is present in the list.

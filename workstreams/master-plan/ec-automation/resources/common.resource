@@ -28,6 +28,19 @@ Login To EC Screen
     Fill EC Login Form    ${user}    ${pass}
     Capture Step    ${TEST NAME}_login
 
+Open EC Screen
+    [Documentation]    Navigate to ${screen_name} and capture the open-screen evidence
+    ...    screenshot. Shared body for every screen's own zero-arg "Open <Screen> Screen"
+    ...    wrapper (bank_page.resource's Open Bank Screen, object_list_page.resource's Open
+    ...    Object List Screen, etc.) - each of those only supplies its own screen-name
+    ...    constant and delegates the actual navigation here, since Bank's and Object List's
+    ...    wrappers were found to have identical bodies (owner query 2026-08-21) differing
+    ...    only in which screen-name constant was passed. Assumes the caller already logged
+    ...    in this test case - this keyword ONLY navigates.
+    [Arguments]    ${screen_name}
+    Navigate To Screen    ${screen_name}
+    Capture Step    ${TEST NAME}_open_screen
+
 Launch EC And Open Screen
     [Documentation]    The standard Suite Setup gesture: launch the browser, login as
     ...    ${user} (defaults to the env-configured user), navigate to ${screen_name}.
