@@ -54,43 +54,10 @@ Object List Row Should Not Exist
     [Arguments]    ${code}
     Row Should Not Exist    ${OBJECT_LIST_TABLE}    ${code}
 
-Object List Should Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} really persisted in OV_OBJECT_LIST.
-    [Arguments]    ${code}
-    Code Should Be Present In View    OV_OBJECT_LIST    ${code}
-
-Object List Should Not Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} was truly deleted from OV_OBJECT_LIST.
-    [Arguments]    ${code}
-    Code Should Be Absent In View    OV_OBJECT_LIST    ${code}
-
-Object List Class Should Equal In DB
-    [Documentation]    DB ground-truth: assert ${code}'s GENERIC_CLASS_NAME column equals
-    ...    ${expected_code} in OV_OBJECT_LIST - the mandatory "Class Name" dropdown field,
-    ...    confirmed live (2026-08-21) to store a plain CODE (e.g. 'BANK'/'FIN_WBS'), not a
-    ...    display label - so this checks the DB directly against the same code value used
-    ...    to fill the field, no screen-vs-DB mismatch risk (unlike Bank's Country field).
-    [Arguments]    ${code}    ${expected_code}
-    Field Should Equal In View    OV_OBJECT_LIST    ${code}    GENERIC_CLASS_NAME    ${expected_code}
-
-Object List Row Should Show Name
-    [Documentation]    Assert the Object List row for ${code} displays ${name}.
-    [Arguments]    ${code}    ${name}
-    Object Row Should Show Name    ${OBJECT_LIST_TABLE}    ${code}    ${name}
-
-Insert Object List From Properties
-    [Documentation]    Insert a new object list by reading EVERY column=value entry from
-    ...    ${properties_path} (testdata/object_list_insert.properties) and filling each
-    ...    field by label, auto-detecting its kind (text/date/dropdown) live - mirrors
-    ...    Bank's Insert Bank From Properties. Returns the Code that was inserted.
-    [Arguments]    ${properties_path}=${OBJECT_LIST_INSERT_PROPERTIES}    ${pre_save_screenshot}=${EMPTY}
-    ${code}=    Insert Object From Properties    ${properties_path}    ${pre_save_screenshot}
-    RETURN    ${code}
-
 Insert Object List Record And Save
-    [Documentation]    Friendly-narrative wrapper around Insert Object List From Properties,
-    ...    so object_list_iud.robot's test case body reads as a plain business step with
-    ...    ZERO arguments. Also checks the inserted Code matches the suite's ${TEST_CODE}.
+    [Documentation]    Friendly-narrative wrapper around T2's Insert Object From Properties And
+    ...    Verify Code, so object_list_iud.robot's test case body reads as a plain business step
+    ...    with ZERO arguments. Also checks the inserted Code matches the suite's ${TEST_CODE}.
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank.
     [Arguments]    ${properties_path}=${OBJECT_LIST_INSERT_PROPERTIES}
     ${code}=    Insert Object From Properties And Verify Code    ${properties_path}    ${TEST_CODE}
@@ -134,18 +101,8 @@ Verify Object List Record Exists
     Object List Form Should Match Properties    ${OBJECT_LIST_INSERT_PROPERTIES}
     Capture Step    ${TEST NAME}_verify
 
-Update Object List From Properties
-    [Documentation]    Update the object list identified by ${code} by reading EVERY
-    ...    column=value entry from ${properties_path} (testdata/object_list_update.properties)
-    ...    and filling each field by label into updateAttributes. Mirrors Bank's Update
-    ...    Bank From Properties. Returns the applied {label: value} dict.
-    [Arguments]    ${code}    ${properties_path}=${OBJECT_LIST_UPDATE_PROPERTIES}    ${pre_save_screenshot}=${EMPTY}
-    ${data}=    Update Object From Properties    ${OBJECT_LIST_TABLE}    ${code}    ${properties_path}
-    ...    ${pre_save_screenshot}
-    RETURN    ${data}
-
 Update Object List Record And Save
-    [Documentation]    Friendly-narrative wrapper around Update Object List From Properties,
+    [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank.
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${OBJECT_LIST_UPDATE_PROPERTIES}

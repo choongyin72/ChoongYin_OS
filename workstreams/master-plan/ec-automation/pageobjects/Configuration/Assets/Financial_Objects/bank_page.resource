@@ -63,77 +63,6 @@ Bank Row Should Not Exist
     [Arguments]    ${code}
     Row Should Not Exist    ${BANK_TABLE}    ${code}
 
-Bank Should Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} really persisted in ov_bank.
-    [Arguments]    ${code}
-    Code Should Be Present In View    ov_bank    ${code}
-
-Bank Should Not Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} was truly deleted from ov_bank.
-    [Arguments]    ${code}
-    Code Should Be Absent In View    ov_bank    ${code}
-
-Bank Description Should Equal In DB
-    [Documentation]    DB ground-truth: assert ${code}'s DESCRIPTION column equals ${description}
-    ...    in ov_bank. Column name + value match the already-proven Python driver
-    ...    (py/bank_iud.py: DESC="AUTOTEST desc", DB-verified against ov_bank.DESCRIPTION).
-    [Arguments]    ${code}    ${description}
-    Field Should Equal In View    ov_bank    ${code}    DESCRIPTION    ${description}
-
-Bank Field Should Equal In DB
-    [Documentation]    DB ground-truth: assert ${code}'s ${column} equals ${expected} in ov_bank.
-    ...    Generic wrapper for verifying any ov_bank column - real column names confirmed live
-    ...    (2026-08-17): ADDRESS_1..ADDRESS_8, BANK_SWIFT_CODE, COUNTRY_CODE, DESCRIPTION,
-    ...    COMMENTS. "Address Line 1"/"Swift Code" are the FORM labels, not the column names.
-    [Arguments]    ${code}    ${column}    ${expected}
-    Field Should Equal In View    ov_bank    ${code}    ${column}    ${expected}
-
-Bank Fields Should Equal In DB
-    [Documentation]    DB ground-truth: assert MULTIPLE ov_bank columns in ONE call, instead of
-    ...    one "Bank Field Should Equal In DB" line per column. Pass columns as named arguments,
-    ...    e.g.: Bank Fields Should Equal In DB    ${TEST_CODE}    DESCRIPTION=${OBJ_DESC}
-    ...    ...    ADDRESS_1=${OBJ_ADDR1}    BANK_SWIFT_CODE=${OBJ_SWIFT}
-    [Arguments]    ${code}    &{columns}
-    FOR    ${column}    ${expected}    IN    &{columns}
-        Bank Field Should Equal In DB    ${code}    ${column}    ${expected}
-    END
-
-Bank Row Should Show Name
-    [Documentation]    Assert the Bank row for ${code} displays ${name}.
-    [Arguments]    ${code}    ${name}
-    ${row}=    Get Text    xpath=//tbody[@id='${BANK_TABLE}']//tr[.//span[normalize-space(text())='${code}']]
-    Should Contain    ${row}    ${name}    msg=Bank row ${code} does not show name ${name}
-
-Insert Bank Record
-    [Documentation]    Insert a new bank: New Object form -> Code/Name/Start Date/Description ->
-    ...    Save. Fields resolved BY LABEL (not a hardcoded R:n:C:n id) - robust to a form-layout
-    ...    shift, matching manage_object.resource's documented label-driven convention.
-    ...    Description is optional on this screen but included here to match the already-proven
-    ...    Python driver's own field coverage (py/bank_iud.py INSERT_FIELDS).
-    ...    SUPERSEDED for TC02 by "Insert Bank From Properties" (data-driven, owner-requested
-    ...    2026-08-17) - kept here as a working fallback, not deleted, in case that needs
-    ...    reverting quickly.
-    [Arguments]    ${code}    ${name}    ${start_date}    ${description}=${EMPTY}
-    Open New Object Form
-    Fill OV Field By Label    objectForm    Code    ${code}
-    Fill OV Field By Label    objectForm    Name    ${name}
-    Fill OV Date By Label    objectForm    Start Date    ${start_date}
-    IF    '${description}' != ''
-        Fill OV Field By Label    objectForm    Description    ${description}
-    END
-    Save
-    Apply Navigator
-
-Insert Bank From Properties
-    [Documentation]    Insert a new bank by reading EVERY column=value entry from
-    ...    ${BANK_INSERT_PROPERTIES} (testdata/bank_insert.properties) and filling each field by
-    ...    label, auto-detecting its kind (text/date/dropdown/popup) live - so the fields filled
-    ...    and their values live entirely in the properties file, not in this keyword or the
-    ...    suite. Returns the Code that was inserted (read back from the properties file).
-    [Arguments]    ${properties_path}=${BANK_INSERT_PROPERTIES}    ${pre_save_screenshot}=${EMPTY}
-    ${code}=    Insert Object From Properties    ${properties_path}    ${pre_save_screenshot}
-    RETURN    ${code}
-
 Insert Bank Record And Save
     [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Insert Bank
     ...    From Properties, purely so bank_iud.robot's test case body reads as a plain business
@@ -180,7 +109,7 @@ Update Bank Name
     [Documentation]    Select the bank, confirm it loaded, edit Name, Save. The Code field
     ...    is resolved BY LABEL each call (not a hardcoded id) so a row-load check never
     ...    silently reads the wrong field if the update form's layout ever shifts.
-    ...    NOT called by TC03 currently (TC03 uses "Update Bank From Properties") - kept as a
+    ...    NOT called by TC03 currently (TC03 uses "Update Bank Record And Save") - kept as a
     ...    working, narrower option. Owner flagged 2026-08-18 that its NAME is questionable
     ...    (a real OV_BANK update covers more than just Name) - restored 2026-08-18 after being
     ...    wrongly deleted on an assumption; owner has not said to remove or rename it, so it
@@ -194,26 +123,13 @@ Update Bank Name
     Save
     Apply Navigator
 
-Update Bank From Properties
-    [Documentation]    Update the bank identified by ${code} by reading EVERY column=value entry
-    ...    from ${properties_path} (testdata/bank_update.properties) and filling each field by
-    ...    label into updateAttributes, auto-detecting its kind - so the fields updated and their
-    ...    new values live entirely in the properties file, not in this keyword or the suite.
-    ...    Row-identity is verified (Code read back) before anything is written, same safeguard
-    ...    as Update Bank Name. Returns the applied {label: value} dict so the caller can DB-verify
-    ...    against exactly what was set, without duplicating the values as separate suite variables.
-    [Arguments]    ${code}    ${properties_path}=${BANK_UPDATE_PROPERTIES}    ${pre_save_screenshot}=${EMPTY}
-    ${data}=    Update Object From Properties    ${BANK_TABLE}    ${code}    ${properties_path}
-    ...    ${pre_save_screenshot}
-    RETURN    ${data}
-
 Update Bank Record And Save
-    [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Update Bank
-    ...    From Properties, called with ZERO arguments (defaults ${code} to the suite's
-    ...    ${TEST_CODE}) - underlying mechanics UNCHANGED. Returns the applied {label: value}
-    ...    dict, same as Update Bank From Properties. The TC03 evidence screenshot is captured
-    ...    BEFORE Save is clicked (owner-requested 2026-08-18 - passed through to Update Object
-    ...    From Properties, which fills every field first).
+    [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around T2's Update
+    ...    Object From Properties, called with ZERO arguments (defaults ${code} to the suite's
+    ...    ${TEST_CODE}). Returns the applied {label: value} dict so the caller can DB-verify
+    ...    against exactly what was set. The TC03 evidence screenshot is captured BEFORE Save is
+    ...    clicked (owner-requested 2026-08-18 - passed through to Update Object From Properties,
+    ...    which fills every field first).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${BANK_UPDATE_PROPERTIES}
     ${data}=    Update Object From Properties    ${BANK_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action
@@ -240,7 +156,8 @@ Verify Bank Record Updated
 Find Bank
     [Documentation]    Locate the bank row by ${code} and select it (loads updateAttributes),
     ...    verifying row-identity (Code read back) before returning - so a caller can then safely
-    ...    read/verify its form fields. Same row-identity safeguard as Update Bank From Properties.
+    ...    read/verify its form fields. Same row-identity safeguard as T2's Update Object From
+    ...    Properties.
     [Arguments]    ${code}
     Find Object By Code    ${BANK_TABLE}    ${code}    Bank
 
