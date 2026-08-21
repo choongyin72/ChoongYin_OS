@@ -215,7 +215,8 @@ Update Bank Record And Save
     ...    BEFORE Save is clicked (owner-requested 2026-08-18 - passed through to Update Object
     ...    From Properties, which fills every field first).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${BANK_UPDATE_PROPERTIES}
-    ${data}=    Update Bank From Properties    ${code}    ${properties_path}    ${TEST NAME}_action
+    ${data}=    Update Object From Properties    ${BANK_TABLE}    ${code}    ${properties_path}
+    ...    ${TEST NAME}_action
     RETURN    ${data}
 
 Verify Bank Record Updated

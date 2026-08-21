@@ -149,7 +149,8 @@ Update Object List Record And Save
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank.
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${OBJECT_LIST_UPDATE_PROPERTIES}
-    ${data}=    Update Object List From Properties    ${code}    ${properties_path}    ${TEST NAME}_action
+    ${data}=    Update Object From Properties    ${OBJECT_LIST_TABLE}    ${code}    ${properties_path}
+    ...    ${TEST NAME}_action
     RETURN    ${data}
 
 Verify Object List Record Updated
