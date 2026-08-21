@@ -51,16 +51,6 @@ Open Object List Screen
     ...    Delegates to the shared T1 Open EC Screen (common.resource) for the actual mechanics.
     Open EC Screen    ${OBJECT_LIST_SCREEN}
 
-Object List Row Should Exist
-    [Documentation]    Assert an object list with ${code} is present in the grid.
-    [Arguments]    ${code}
-    Row Should Exist    ${OBJECT_LIST_TABLE}    ${code}
-
-Object List Row Should Not Exist
-    [Documentation]    Assert an object list with ${code} is absent from the grid.
-    [Arguments]    ${code}
-    Row Should Not Exist    ${OBJECT_LIST_TABLE}    ${code}
-
 Insert Object List Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Insert Object From Properties And
     ...    Verify Code, so object_list_iud.robot's test case body reads as a plain business step
@@ -150,7 +140,7 @@ Verify Object List Record Removed
 
 Verify Object List Record Does Not Exist
     [Documentation]    Friendly-narrative wrapper around the TC01 clean-state check, called
-    ...    with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
+    ...    with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). Delegates to the
+    ...    shared T2 Verify Object Does Not Exist (owner-requested 2026-08-22 consolidation).
     [Arguments]    ${code}=${TEST_CODE}
-    Object List Row Should Not Exist    ${code}
-    Capture Step    ${TEST NAME}_verify
+    Verify Object Does Not Exist    ${OBJECT_LIST_TABLE}    ${code}

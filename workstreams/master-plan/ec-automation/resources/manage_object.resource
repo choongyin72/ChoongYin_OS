@@ -138,6 +138,15 @@ Verify Object Insert Exists
     Verify Object Form Record    ${table_id}    ${code}    ${screen_label}    ${properties_path}
     ...    @{labels}
 
+Verify Object Does Not Exist
+    [Documentation]    Assert ${code} is absent from the grid (${table_id}), then capture the
+    ...    verify evidence screenshot - the shared core of every screen's "Verify <Screen>
+    ...    Record Does Not Exist" (TC01 clean-state) keyword (added 2026-08-22, same
+    ...    consolidation goal as Verify Object Insert Exists/Form Record/Found above).
+    [Arguments]    ${table_id}    ${code}
+    Row Should Not Exist    ${table_id}    ${code}
+    Capture Step    ${TEST NAME}_verify
+
 Verify Object Found
     [Documentation]    Assert BOTH the grid row (${grid_properties_path}) AND the form record
     ...    (${form_properties_path}) match - the shared core of every screen's "Verify <Screen>

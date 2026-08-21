@@ -58,16 +58,6 @@ Open Bank Screen
     ...    Delegates to the shared T1 Open EC Screen (common.resource) for the actual mechanics.
     Open EC Screen    ${BANK_SCREEN}
 
-Bank Row Should Exist
-    [Documentation]    Assert a bank with ${code} is present in the list.
-    [Arguments]    ${code}
-    Row Should Exist    ${BANK_TABLE}    ${code}
-
-Bank Row Should Not Exist
-    [Documentation]    Assert a bank with ${code} is absent from the list.
-    [Arguments]    ${code}
-    Row Should Not Exist    ${BANK_TABLE}    ${code}
-
 Insert Bank Record And Save
     [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Insert Bank
     ...    From Properties, purely so bank_iud.robot's test case body reads as a plain business
@@ -187,8 +177,7 @@ Verify Bank Record Removed
 Verify Bank Record Does Not Exist
     [Documentation]    Friendly-narrative wrapper around the TC01 clean-state check, called with
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}, owner-requested
-    ...    2026-08-18) - underlying mechanics (Bank Row Should Not Exist) UNCHANGED. Also captures
-    ...    the TC01 evidence screenshot (moved in from the test case's own Capture Step line).
+    ...    2026-08-18). Delegates to the shared T2 Verify Object Does Not Exist (owner-requested
+    ...    2026-08-22 consolidation).
     [Arguments]    ${code}=${TEST_CODE}
-    Bank Row Should Not Exist    ${code}
-    Capture Step    ${TEST NAME}_verify
+    Verify Object Does Not Exist    ${BANK_TABLE}    ${code}
