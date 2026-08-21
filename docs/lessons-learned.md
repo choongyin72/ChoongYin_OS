@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v36** (R36 added 2026-08-02)
+> **Current rule version: v37** (R37 added 2026-08-22)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -44,6 +44,7 @@ _Worker sessions: read this before starting any automation work._
 | v34 | R34 | A "check the generated files for stale claims" guard (R32) is only as complete as its enumerated file list — a 4th generator-output layer (`investigation/recon.py`) carried the identical stale-claim defect and was found only by accident, one PR after the guard shipped; when adding such a guard, first enumerate ALL file types a generator produces for a screen, not just the ones already known to be affected | 2026-08-01 |
 | v35 | R35 | When multiple docs-only PRs each carry forward the SAME predecessor park-record rows (because each branched before an earlier sibling merged), the generic append-only "keep both sides" conflict resolution DUPLICATES rows — resolve by KEY (screen name, not exact line text or whole-hunk pick), and never assume the branch's own carried-forward copy is the most up-to-date one; check which side actually diverges from the 3-way merge base (`git checkout --conflict=diff3`) before choosing | 2026-08-02 |
 | v36 | MR5 | A reviewer verifying a batch classification audit (e.g. "N screens checked, only 1 misclassified") must spot-check the SPECIFIC conclusion on the actual class in question, not just approve of the audit's general methodology — PR #323's audit correctly resolved 3 label-collision false positives (Well/Test Device/Contract Capacity) but never actually checked `DIVISION_ORDER` itself (only `BEARER`, the first of 3 label-matching classes), and a reviewer who found the methodology sound approved the wrong conclusion anyway; caught only when PR #334 re-investigated Division Order specifically | 2026-08-02 |
+| v37 | R37 | A PR body's "Files touched" list must be GENERATED from the real staged diff (git diff --name-status), never recalled from memory - 3 slips in 4 PRs (#387 over-listed a file not in the diff; #406 and #410 under-listed changed files, #410 omitting 3 incl. shared common.resource); recommend safe_commit.py auto-emit the list | 2026-08-22 |
 
 ---
 
@@ -2104,3 +2105,21 @@ PR review of a new session.
 |-----|-------|----------|
 | Royalty Contract's `AUTOTEST_RC_001` + 10 `CNTR_PG_SETUP` rows remain live in the sandbox pending an owner decision on cleanup method/authorization — Issue #336 | Owner | 🔴 High (live residual test data) |
 | `check_bundle_hygiene.py`'s ASCII scan doesn't cover general docs (`ov-non-bank-targets.md` picked up 3 emoji chars in #331) — Issue #337 | Worker | 🟢 Low |
+
+---
+
+## 2026-08-22 - Review by Reviewer Session (interactive, PRs #398-#410)
+
+**R37 - Generate the PR body's "Files touched" list from the real diff, never from memory.**
+Third recurrence of the same bookkeeping slip in four PRs: #387 listed a file that was NOT in its
+diff (engine_canary.py, already merged in #381); #406 omitted browser.resource (a real, if trivial,
+shared-file change); #410 omitted THREE changed files - common.resource (shared T1, 2 new keywords),
+credentials.py (a standing owner decision recorded in its docstring), and rf-suite-styles.md (a
+convention change superseding a reviewer-agreed point). Every case was honest work with nothing
+hidden - the list was simply written from memory of the session instead of from the diff. Rule:
+before raising or updating any PR, run `git diff --name-status <fork-point>...HEAD` and copy the
+result into "Files touched" verbatim (annotate each line, but never add or drop lines). Better:
+mechanize it - `scripts/safe_commit.py` already knows the staged set and should emit the exact
+list to paste, the same rules-into-exit-codes fix applied to the hygiene and canary gates
+(Issue #385). A reviewer diffs the body against the real file list on every pass (R21); a
+generated list makes that check pass by construction.
