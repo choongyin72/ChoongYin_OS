@@ -118,21 +118,13 @@ Verify Bank Record Updated
     Verify Object Form Record    ${BANK_TABLE}    ${code}    Bank    ${BANK_UPDATE_PROPERTIES}
     ...    Name    Description
 
-Find Bank
-    [Documentation]    Locate the bank row by ${code} and select it (loads updateAttributes),
-    ...    verifying row-identity (Code read back) before returning - so a caller can then safely
-    ...    read/verify its form fields. Same row-identity safeguard as T2's Update Object From
-    ...    Properties.
-    [Arguments]    ${code}
-    Find Object By Code    ${BANK_TABLE}    ${code}    Bank
-
 Find Bank Record
-    [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Find Bank,
-    ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}) - underlying
-    ...    mechanics (select + row-identity check) UNCHANGED.
+    [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around the shared
+    ...    T2 Find Object Record, called with ZERO arguments (defaults ${code} to the suite's
+    ...    ${TEST_CODE}). Delegates the full select+capture sequence (owner-requested 2026-08-22
+    ...    consolidation).
     [Arguments]    ${code}=${TEST_CODE}
-    Find Bank    ${code}
-    Capture Step    ${TEST NAME}_action
+    Find Object Record    ${BANK_TABLE}    ${code}    Bank
 
 Verify Bank Record Found
     [Documentation]    Friendly-narrative wrapper around the TC04 verification, called with ZERO
@@ -147,22 +139,18 @@ Verify Bank Record Found
     Verify Object Found    ${BANK_TABLE}    ${code}    ${BANK_GRID_VERIFY_PROPERTIES}
     ...    ${BANK_FORM_VERIFY_PROPERTIES}    @{BANK_FORM_LABELS}
 
-Delete Bank
-    [Documentation]    Select the bank, set End Date = Start Date (true delete), Save.
-    ...    Captures the TC05 evidence screenshot right after the End Date is filled but
-    ...    BEFORE Save is clicked (owner-requested 2026-08-18) - showing the data as entered,
-    ...    not the after-save/reloaded-grid state.
-    [Arguments]    ${code}    ${date}
+Delete Bank Record And Save
+    [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around T2's Delete
+    ...    Object Via End Date, called with ZERO arguments (defaults ${code}/${date} to the
+    ...    suite's ${TEST_CODE}/${END_DATE}). Select the bank, set End Date = Start Date (true
+    ...    delete), Save. Captures the TC05 evidence screenshot right after the End Date is
+    ...    filled but BEFORE Save is clicked (owner-requested 2026-08-18) - showing the data as
+    ...    entered, not the after-save/reloaded-grid state. Calls T2 directly (no middle "Delete
+    ...    Bank" alias - removed 2026-08-22, it added no behavior beyond forwarding these same
+    ...    arguments, matching Insert/Update Record And Save's existing single-hop shape).
+    [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
     Delete Object Via End Date    ${BANK_TABLE}    ${BANK_DEL_ENDDATE}    ${code}    ${date}
     ...    ${TEST NAME}_action
-
-Delete Bank Record And Save
-    [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Delete Bank,
-    ...    called with ZERO arguments (defaults ${code}/${date} to the suite's
-    ...    ${TEST_CODE}/${END_DATE}) - underlying mechanics (End Date = Start Date true delete)
-    ...    UNCHANGED.
-    [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
-    Delete Bank    ${code}    ${date}
 
 Verify Bank Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with ZERO

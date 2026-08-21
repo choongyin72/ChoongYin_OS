@@ -61,18 +61,12 @@ Insert Object List Record And Save
     ...    ${TEST NAME}_action
     RETURN    ${code}
 
-Find Object List
-    [Documentation]    Locate the object list row by ${code} and select it (loads
-    ...    updateAttributes), verifying row-identity (Code read back) before returning.
-    [Arguments]    ${code}
-    Find Object By Code    ${OBJECT_LIST_TABLE}    ${code}    Object List
-
 Find Object List Record
-    [Documentation]    Friendly-narrative wrapper around Find Object List, called with ZERO
-    ...    arguments (defaults ${code} to the suite's ${TEST_CODE}).
+    [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
+    ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). Delegates
+    ...    the full select+capture sequence (owner-requested 2026-08-22 consolidation).
     [Arguments]    ${code}=${TEST_CODE}
-    Find Object List    ${code}
-    Capture Step    ${TEST NAME}_action
+    Find Object Record    ${OBJECT_LIST_TABLE}    ${code}    Object List
 
 Verify Object List Record Exists
     [Documentation]    Friendly-narrative wrapper around the TC02 verification, called with
@@ -116,19 +110,17 @@ Verify Object List Record Found
     Verify Object Found    ${OBJECT_LIST_TABLE}    ${code}    ${OBJECT_LIST_GRID_VERIFY_PROPERTIES}
     ...    ${OBJECT_LIST_FORM_VERIFY_PROPERTIES}    @{OBJECT_LIST_FORM_LABELS}
 
-Delete Object List
-    [Documentation]    Select the object list, set End Date = Start Date (true delete), Save.
-    ...    Captures the TC05 evidence screenshot right after End Date is filled but BEFORE
-    ...    Save is clicked, matching Bank's convention.
-    [Arguments]    ${code}    ${date}
-    Delete Object Via End Date    ${OBJECT_LIST_TABLE}    ${OBJECT_LIST_DEL_ENDDATE}    ${code}    ${date}
-    ...    ${TEST NAME}_action
-
 Delete Object List Record And Save
-    [Documentation]    Friendly-narrative wrapper around Delete Object List, called with ZERO
-    ...    arguments (defaults ${code}/${date} to the suite's ${TEST_CODE}/${END_DATE}).
+    [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date, called
+    ...    with ZERO arguments (defaults ${code}/${date} to the suite's ${TEST_CODE}/${END_DATE}).
+    ...    Select the object list, set End Date = Start Date (true delete), Save. Captures the
+    ...    TC05 evidence screenshot right after End Date is filled but BEFORE Save is clicked,
+    ...    matching Bank's convention. Calls T2 directly (no middle "Delete Object List" alias -
+    ...    removed 2026-08-22, it added no behavior beyond forwarding these same arguments,
+    ...    matching Insert/Update Record And Save's existing single-hop shape).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
-    Delete Object List    ${code}    ${date}
+    Delete Object Via End Date    ${OBJECT_LIST_TABLE}    ${OBJECT_LIST_DEL_ENDDATE}    ${code}
+    ...    ${date}    ${TEST NAME}_action
 
 Verify Object List Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with

@@ -104,6 +104,18 @@ Find Object By Code
     ${loaded}=    Get Property    css=[id="${code_id}"]    value
     Should Be Equal    ${loaded}    ${code}    msg=Find ${screen_label} failed - code not loaded
 
+Find Object Record
+    [Documentation]    Select ${code} (loads updateAttributes, via T2 Find Object By Code -
+    ...    verifies row-identity before returning) then capture the find-action evidence
+    ...    screenshot - the shared core of every screen's "Find <Screen> Record" (TC04
+    ...    select-step) keyword (added 2026-08-22, owner: "DONT want repeated codes in all
+    ...    screen page.resource files" - consolidating the identical Bank/Object List pattern:
+    ...    each screen previously hand-rolled its own single-purpose "Find <Screen>" keyword
+    ...    plus an identical select+capture wrapper around it).
+    [Arguments]    ${table_id}    ${code}    ${screen_label}=Object
+    Find Object By Code    ${table_id}    ${code}    ${screen_label}
+    Capture Step    ${TEST NAME}_action
+
 Verify Object Removed
     [Documentation]    Assert ${code} is absent from BOTH the grid (${table_id}) and the
     ...    database (${db_view}) - the shared core of every screen's "Verify <Screen> Record
