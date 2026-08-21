@@ -4,8 +4,16 @@ general environment config. Same env-var-with-safe-fallback pattern as environme
 throwaway local-sandbox value is ever committed, real secrets are always injected via OS
 environment variables (CI/CD).
 
-Override precedence (highest first):
-  1. BANK_EC_USER / BANK_EC_PASS OS environment variable (screen-specific override)
+STANDING DECISION (owner, 2026-08-22): every EC screen gets its OWN dedicated <SCREEN>_EC_USER/
+<SCREEN>_EC_PASS pair here - real EC deployments gate different screens behind different role
+access, so a screen-specific login identity is the correct default going forward, not an
+exception. This supersedes docs/rf-suite-styles.md point 6 (shared environment.py default,
+override only via an explicit Login argument) - that doc is being updated to match. Kept as ONE
+shared file (not one file per screen, which would sprawl to 100+ tiny files as more screens are
+built) - the per-screen distinction lives in the VARIABLE NAME, not the file.
+
+Override precedence (highest first), same shape for every screen's pair:
+  1. <SCREEN>_EC_USER / <SCREEN>_EC_PASS OS environment variable (screen-specific override)
   2. EC_USER / EC_PASS OS environment variable (shared fallback, same as environment.py)
   3. default below (local sandbox)
 
@@ -17,3 +25,6 @@ import os
 
 BANK_EC_USER = os.environ.get("BANK_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 BANK_EC_PASS = os.environ.get("BANK_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+OBJECT_LIST_EC_USER = os.environ.get("OBJECT_LIST_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+OBJECT_LIST_EC_PASS = os.environ.get("OBJECT_LIST_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

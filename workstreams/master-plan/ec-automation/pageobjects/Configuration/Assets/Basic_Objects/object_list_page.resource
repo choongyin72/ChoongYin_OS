@@ -9,6 +9,7 @@ Library             ../../../../libraries/DbVerify.py
 Library             ../../../../libraries/PropertiesReader.py
 Resource            ../../../../resources/common.resource
 Resource            ../../../../resources/manage_object.resource
+Variables           ../../../../resources/credentials.py
 
 
 *** Variables ***
@@ -26,15 +27,17 @@ ${OBJECT_LIST_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 *** Keywords ***
 Login To EC Application
-    [Documentation]    Authenticate on the current page using the SHARED environment.py
-    ...    EC_USER/EC_PASS defaults - no screen-specific credentials.py for this screen
-    ...    (per docs/rf-suite-styles.md point 6: cap per-screen credential files; Object
-    ...    List has no real reason to override the shared default, unlike Bank).
-    ...    Works whether this is the very first login (page freshly loaded on the login
-    ...    form via the shared T1 Open EC Application) or a re-login after Logout From
-    ...    EC Application (same login form, not a new page/tab). Zero-argument wrapper
-    ...    so object_list_iud.robot's test cases read as a plain business step.
-    Fill EC Login Form
+    [Documentation]    Authenticate as Object List's OWN credentials (${OBJECT_LIST_EC_USER}/
+    ...    ${OBJECT_LIST_EC_PASS} from credentials.py) on the current page. Standing decision
+    ...    (owner, 2026-08-22): every EC screen gets its own dedicated credential pair - real
+    ...    EC deployments gate different screens behind different role access, so a
+    ...    screen-specific login identity is the default going forward (supersedes the
+    ...    earlier "shared default unless overridden" convention). Works whether this is the
+    ...    very first login (page freshly loaded on the login form via the shared T1 Open EC
+    ...    Application) or a re-login after Logout From EC Application (same login form, not
+    ...    a new page/tab). Zero-argument wrapper so object_list_iud.robot's test cases read
+    ...    as a plain business step.
+    Fill EC Login Form    ${OBJECT_LIST_EC_USER}    ${OBJECT_LIST_EC_PASS}
     Capture Step    ${TEST NAME}_login
 
 Open Object List Screen
