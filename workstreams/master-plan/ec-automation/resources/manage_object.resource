@@ -73,9 +73,17 @@ Update Object Name
 Delete Object Via End Date
     [Documentation]    Select the object row, set End Date = Start Date (EC true
     ...    delete for date-effective objects), save + reload.
-    [Arguments]    ${table_id}    ${enddate_id}    ${code}    ${date}
+    ...    If ${pre_save_screenshot} is given, a screenshot is captured right after the End
+    ...    Date is filled but BEFORE Save is clicked (added 2026-08-22, consolidating the
+    ...    identical pattern previously hand-rolled in Bank's/Object List's own T3 "Delete
+    ...    <Screen>" keywords). Optional and backward-compatible - no screenshot at all if
+    ...    omitted, so every existing caller (100+ screens) is unaffected.
+    [Arguments]    ${table_id}    ${enddate_id}    ${code}    ${date}    ${pre_save_screenshot}=${EMPTY}
     Select Object Row    ${table_id}    ${code}
     Delete Object By Zero-Length Window    ${enddate_id}    ${date}
+    IF    '${pre_save_screenshot}' != ''
+        Capture Step    ${pre_save_screenshot}
+    END
     Save And Refresh List
 
 Object Row Should Show Name
@@ -83,6 +91,27 @@ Object Row Should Show Name
     [Arguments]    ${table_id}    ${code}    ${name}
     ${row}=    Get Text    xpath=//tbody[@id='${table_id}']//tr[.//span[normalize-space(text())='${code}']]
     Should Contain    ${row}    ${name}    msg=Row ${code} does not show name ${name}
+
+Find Object By Code
+    [Documentation]    Select the object row by ${code} (loads updateAttributes), verifying
+    ...    row-identity (Code read back) before returning - the shared core of every screen's
+    ...    "Find <Screen>" keyword (added 2026-08-22, consolidating the identical pattern
+    ...    previously hand-rolled per-screen in Bank/Object List T3). ${screen_label} is used
+    ...    only in the failure message, so a caller's error still names its own screen.
+    [Arguments]    ${table_id}    ${code}    ${screen_label}=Object
+    Select Object Row    ${table_id}    ${code}
+    ${code_id}=    OV Field Id By Label    updateAttributes    Code
+    ${loaded}=    Get Property    css=[id="${code_id}"]    value
+    Should Be Equal    ${loaded}    ${code}    msg=Find ${screen_label} failed - code not loaded
+
+Verify Object Removed
+    [Documentation]    Assert ${code} is absent from BOTH the grid (${table_id}) and the
+    ...    database (${db_view}) - the shared core of every screen's "Verify <Screen> Record
+    ...    Removed" keyword (added 2026-08-22). Caller adds its own Capture Step - screenshot
+    ...    naming stays screen-aware, not pulled in here.
+    [Arguments]    ${table_id}    ${db_view}    ${code}
+    Row Should Not Exist    ${table_id}    ${code}
+    Code Should Be Absent In View    ${db_view}    ${code}
 
 # --- Label-driven field resolution (NO hardcoded row/column ids) -------------------------------
 # A field's label span (ECCell) and its input sit in ADJACENT tableCells of the same tableRow. So a
@@ -264,6 +293,18 @@ Insert Object From Properties
     END
     Save And Refresh List
     RETURN    ${data}[Code]
+
+Insert Object From Properties And Verify Code
+    [Documentation]    Insert via ${properties_path} (same as Insert Object From Properties),
+    ...    then assert the resolved Code matches ${expected_code} - catching a properties-file
+    ...    /suite-variable drift immediately instead of silently inserting under the wrong
+    ...    code (added 2026-08-22, consolidating the identical pattern previously hand-rolled
+    ...    in Bank's/Object List's own "Insert <Screen> Record And Save" keywords).
+    [Arguments]    ${properties_path}    ${expected_code}    ${pre_save_screenshot}=${EMPTY}
+    ${code}=    Insert Object From Properties    ${properties_path}    ${pre_save_screenshot}
+    Should Be Equal    ${code}    ${expected_code}
+    ...    msg=${properties_path} Code does not match the expected ${expected_code}
+    RETURN    ${code}
 
 Update Object From Properties
     [Documentation]    Select the row for ${code}, verify it's really the intended row (read Code

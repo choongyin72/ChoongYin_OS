@@ -93,19 +93,15 @@ Insert Object List Record And Save
     ...    ZERO arguments. Also checks the inserted Code matches the suite's ${TEST_CODE}.
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank.
     [Arguments]    ${properties_path}=${OBJECT_LIST_INSERT_PROPERTIES}
-    ${code}=    Insert Object List From Properties    ${properties_path}    ${TEST NAME}_action
-    Should Be Equal    ${code}    ${TEST_CODE}
-    ...    msg=testdata/object_list_insert.properties Code does not match the suite's ${TEST_CODE}
+    ${code}=    Insert Object From Properties And Verify Code    ${properties_path}    ${TEST_CODE}
+    ...    ${TEST NAME}_action
     RETURN    ${code}
 
 Find Object List
     [Documentation]    Locate the object list row by ${code} and select it (loads
     ...    updateAttributes), verifying row-identity (Code read back) before returning.
     [Arguments]    ${code}
-    Select Object Row    ${OBJECT_LIST_TABLE}    ${code}
-    ${code_id}=    OV Field Id By Label    updateAttributes    Code
-    ${loaded}=    Get Property    css=[id="${code_id}"]    value
-    Should Be Equal    ${loaded}    ${code}    msg=Find Object List failed - code not loaded
+    Find Object By Code    ${OBJECT_LIST_TABLE}    ${code}    Object List
 
 Find Object List Record
     [Documentation]    Friendly-narrative wrapper around Find Object List, called with ZERO
@@ -180,11 +176,8 @@ Delete Object List
     ...    Captures the TC05 evidence screenshot right after End Date is filled but BEFORE
     ...    Save is clicked, matching Bank's convention.
     [Arguments]    ${code}    ${date}
-    Select Object Row    ${OBJECT_LIST_TABLE}    ${code}
-    Delete Object By Zero-Length Window    ${OBJECT_LIST_DEL_ENDDATE}    ${date}
-    Capture Step    ${TEST NAME}_action
-    Save
-    Apply Navigator
+    Delete Object Via End Date    ${OBJECT_LIST_TABLE}    ${OBJECT_LIST_DEL_ENDDATE}    ${code}    ${date}
+    ...    ${TEST NAME}_action
 
 Delete Object List Record And Save
     [Documentation]    Friendly-narrative wrapper around Delete Object List, called with ZERO
@@ -197,8 +190,7 @@ Verify Object List Record Removed
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}): confirms ${code}
     ...    is absent from BOTH the grid and the database.
     [Arguments]    ${code}=${TEST_CODE}
-    Object List Row Should Not Exist    ${code}
-    Object List Should Not Exist In DB    ${code}
+    Verify Object Removed    ${OBJECT_LIST_TABLE}    OV_OBJECT_LIST    ${code}
     Capture Step    ${TEST NAME}_verify
 
 Verify Object List Record Does Not Exist

@@ -145,9 +145,8 @@ Insert Bank Record And Save
     ...    screenshot is captured BEFORE Save is clicked (owner-requested 2026-08-18 - passed
     ...    through to Insert Object From Properties, which fills every field first).
     [Arguments]    ${properties_path}=${BANK_INSERT_PROPERTIES}
-    ${code}=    Insert Bank From Properties    ${properties_path}    ${TEST NAME}_action
-    Should Be Equal    ${code}    ${TEST_CODE}
-    ...    msg=testdata/bank_insert.properties Code does not match the suite's ${TEST_CODE}
+    ${code}=    Insert Object From Properties And Verify Code    ${properties_path}    ${TEST_CODE}
+    ...    ${TEST NAME}_action
     RETURN    ${code}
 
 Verify Bank Record Exists
@@ -242,10 +241,7 @@ Find Bank
     ...    verifying row-identity (Code read back) before returning - so a caller can then safely
     ...    read/verify its form fields. Same row-identity safeguard as Update Bank From Properties.
     [Arguments]    ${code}
-    Select Object Row    ${BANK_TABLE}    ${code}
-    ${code_id}=    OV Field Id By Label    updateAttributes    Code
-    ${loaded}=    Get Property    css=[id="${code_id}"]    value
-    Should Be Equal    ${loaded}    ${code}    msg=Find Bank failed - code not loaded
+    Find Object By Code    ${BANK_TABLE}    ${code}    Bank
 
 Find Bank Record
     [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Find Bank,
@@ -305,11 +301,8 @@ Delete Bank
     ...    BEFORE Save is clicked (owner-requested 2026-08-18) - showing the data as entered,
     ...    not the after-save/reloaded-grid state.
     [Arguments]    ${code}    ${date}
-    Select Object Row    ${BANK_TABLE}    ${code}
-    Delete Object By Zero-Length Window    ${BANK_DEL_ENDDATE}    ${date}
-    Capture Step    ${TEST NAME}_action
-    Save
-    Apply Navigator
+    Delete Object Via End Date    ${BANK_TABLE}    ${BANK_DEL_ENDDATE}    ${code}    ${date}
+    ...    ${TEST NAME}_action
 
 Delete Bank Record And Save
     [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around Delete Bank,
@@ -326,8 +319,7 @@ Verify Bank Record Removed
     ...    DB-ground-truth keywords, just called under one name. Also captures the TC05 evidence
     ...    screenshot (moved in from the test case's own Capture Step line).
     [Arguments]    ${code}=${TEST_CODE}
-    Bank Row Should Not Exist    ${code}
-    Bank Should Not Exist In DB    ${code}
+    Verify Object Removed    ${BANK_TABLE}    ov_bank    ${code}
     Capture Step    ${TEST NAME}_verify
 
 Verify Bank Record Does Not Exist
