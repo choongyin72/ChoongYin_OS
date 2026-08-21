@@ -2,58 +2,64 @@
 Documentation       EC IUD Test - State (Configuration > Assets > Basic Objects > State).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_STATE).
 ...                 Layered: this test -> state_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. A unique AUTOTEST_ST_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_STATE,
+...                 matching Bank/Object List's convention) rather than a generated unique
+...                 code - confirmed absent from OV_STATE before this was wired in
+...                 (2026-08-22). Every run must complete TC05 (delete) so the code is free
+...                 for the next run - EC never lets a DELETED code be reused, but this
+...                 fixed code only stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup, matching Bank/Object List's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Basic_Objects/state_page.resource
 
-Suite Setup         Set Up State Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    state
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_STATE
+${OBJ_NAME}         AUTOTEST State
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/state_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST State UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test state does not exist before inserting.
-    [Tags]    clean-state
-    State Row Should Not Exist    ${TEST_CODE}
-    Capture Step    state_tc01_clean
-
-TC02 Insert New State
-    [Documentation]    Insert a new state and confirm it appears in the list.
-    [Tags]    insert
-    Insert State Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    State Row Should Exist    ${TEST_CODE}
-    State Should Exist In DB    ${TEST_CODE}
-    Capture Step    state_tc02_inserted
-
-TC03 Update State Name
-    [Documentation]    Edit the state name and confirm the list reflects the change.
-    [Tags]    update
-    Update State Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    State Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    state_tc03_updated
-
-TC04 Delete State
-    [Documentation]    Delete via End Date = Start Date and confirm the state is gone.
-    [Tags]    delete    cleanup
-    Delete State    ${TEST_CODE}    ${END_DATE}
-    State Row Should Not Exist    ${TEST_CODE}
-    State Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    state_tc04_deleted
-
-
-*** Keywords ***
-Set Up State Suite
-    [Documentation]    Generate a unique test code/name, then open the State screen.
-    Prepare IUD Object Data    AUTOTEST_ST_    State
+    Login To EC Application
     Open State Screen
+    Verify State Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert State Data
+    Login To EC Application
+    Open State Screen
+    Insert State Record And Save
+    Verify State Record Exists
+    Logout From EC Application
+
+TC03 Update State Data
+    Login To EC Application
+    Open State Screen
+    Update State Record And Save
+    Verify State Record Updated
+    Logout From EC Application
+
+TC04 Find State Data
+    Login To EC Application
+    Open State Screen
+    Find State Record
+    Verify State Record Found
+    Logout From EC Application
+
+TC05 Delete State Data
+    Login To EC Application
+    Open State Screen
+    Delete State Record And Save
+    Verify State Record Removed
+    Logout From EC Application
