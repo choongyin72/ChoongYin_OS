@@ -73,9 +73,17 @@ Update Object Name
 Delete Object Via End Date
     [Documentation]    Select the object row, set End Date = Start Date (EC true
     ...    delete for date-effective objects), save + reload.
-    [Arguments]    ${table_id}    ${enddate_id}    ${code}    ${date}
+    ...    If ${pre_save_screenshot} is given, a screenshot is captured right after the End
+    ...    Date is filled but BEFORE Save is clicked (added 2026-08-22, consolidating the
+    ...    identical pattern previously hand-rolled in Bank's/Object List's own T3 "Delete
+    ...    <Screen>" keywords). Optional and backward-compatible - no screenshot at all if
+    ...    omitted, so every existing caller (100+ screens) is unaffected.
+    [Arguments]    ${table_id}    ${enddate_id}    ${code}    ${date}    ${pre_save_screenshot}=${EMPTY}
     Select Object Row    ${table_id}    ${code}
     Delete Object By Zero-Length Window    ${enddate_id}    ${date}
+    IF    '${pre_save_screenshot}' != ''
+        Capture Step    ${pre_save_screenshot}
+    END
     Save And Refresh List
 
 Object Row Should Show Name
@@ -83,6 +91,88 @@ Object Row Should Show Name
     [Arguments]    ${table_id}    ${code}    ${name}
     ${row}=    Get Text    xpath=//tbody[@id='${table_id}']//tr[.//span[normalize-space(text())='${code}']]
     Should Contain    ${row}    ${name}    msg=Row ${code} does not show name ${name}
+
+Find Object By Code
+    [Documentation]    Select the object row by ${code} (loads updateAttributes), verifying
+    ...    row-identity (Code read back) before returning - the shared core of every screen's
+    ...    "Find <Screen>" keyword (added 2026-08-22, consolidating the identical pattern
+    ...    previously hand-rolled per-screen in Bank/Object List T3). ${screen_label} is used
+    ...    only in the failure message, so a caller's error still names its own screen.
+    [Arguments]    ${table_id}    ${code}    ${screen_label}=Object
+    Select Object Row    ${table_id}    ${code}
+    ${code_id}=    OV Field Id By Label    updateAttributes    Code
+    ${loaded}=    Get Property    css=[id="${code_id}"]    value
+    Should Be Equal    ${loaded}    ${code}    msg=Find ${screen_label} failed - code not loaded
+
+Find Object Record
+    [Documentation]    Select ${code} (loads updateAttributes, via T2 Find Object By Code -
+    ...    verifies row-identity before returning) then capture the find-action evidence
+    ...    screenshot - the shared core of every screen's "Find <Screen> Record" (TC04
+    ...    select-step) keyword (added 2026-08-22, owner: "DONT want repeated codes in all
+    ...    screen page.resource files" - consolidating the identical Bank/Object List pattern:
+    ...    each screen previously hand-rolled its own single-purpose "Find <Screen>" keyword
+    ...    plus an identical select+capture wrapper around it).
+    [Arguments]    ${table_id}    ${code}    ${screen_label}=Object
+    Find Object By Code    ${table_id}    ${code}    ${screen_label}
+    Capture Step    ${TEST NAME}_action
+
+Verify Object Removed
+    [Documentation]    Assert ${code} is absent from BOTH the grid (${table_id}) and the
+    ...    database (${db_view}) - the shared core of every screen's "Verify <Screen> Record
+    ...    Removed" keyword (added 2026-08-22). Caller adds its own Capture Step - screenshot
+    ...    naming stays screen-aware, not pulled in here.
+    [Arguments]    ${table_id}    ${db_view}    ${code}
+    Row Should Not Exist    ${table_id}    ${code}
+    Code Should Be Absent In View    ${db_view}    ${code}
+
+Verify Object Form Record
+    [Documentation]    Select ${code} (loads updateAttributes) and assert ${properties_path}'s
+    ...    fields match the live screen (only @{labels} if given, else every key in the file),
+    ...    then capture the verify evidence screenshot - the shared core of every screen's
+    ...    "Verify <Screen> Record Updated" keyword, and half of "Verify <Screen> Record Exists"
+    ...    (added 2026-08-22, consolidating the identical Bank/Object List pattern - owner
+    ...    query 2026-08-22: "we want all object ec screen share... code at one place"). The
+    ...    sequence (select, compare, capture) is layout-independent; which fields to check
+    ...    stays per-screen data (${properties_path}/@{labels}), never assumed here.
+    [Arguments]    ${table_id}    ${code}    ${screen_label}    ${properties_path}    @{labels}
+    Find Object By Code    ${table_id}    ${code}    ${screen_label}
+    Verify Object Form Fields From Properties    updateAttributes    ${properties_path}    @{labels}
+    Capture Step    ${TEST NAME}_verify
+
+Verify Object Insert Exists
+    [Documentation]    Assert ${code} shows in the grid, THEN assert the form record matches
+    ...    ${properties_path} - the shared core of every screen's "Verify <Screen> Record
+    ...    Exists" (TC02) keyword (added 2026-08-22, same consolidation as Verify Object Form
+    ...    Record above, which this delegates the select/compare/capture half to). PURE SCREEN
+    ...    verification - no DB check here (that is TC02's own separate DbVerify assertion).
+    [Arguments]    ${table_id}    ${code}    ${screen_label}    ${properties_path}    @{labels}
+    Row Should Exist    ${table_id}    ${code}
+    Verify Object Form Record    ${table_id}    ${code}    ${screen_label}    ${properties_path}
+    ...    @{labels}
+
+Verify Object Does Not Exist
+    [Documentation]    Assert ${code} is absent from the grid (${table_id}), then capture the
+    ...    verify evidence screenshot - the shared core of every screen's "Verify <Screen>
+    ...    Record Does Not Exist" (TC01 clean-state) keyword (added 2026-08-22, same
+    ...    consolidation goal as Verify Object Insert Exists/Form Record/Found above).
+    [Arguments]    ${table_id}    ${code}
+    Row Should Not Exist    ${table_id}    ${code}
+    Capture Step    ${TEST NAME}_verify
+
+Verify Object Found
+    [Documentation]    Assert BOTH the grid row (${grid_properties_path}) AND the form record
+    ...    (${form_properties_path}) match - the shared core of every screen's "Verify <Screen>
+    ...    Record Found" (TC04) keyword (added 2026-08-22, same consolidation goal as Verify
+    ...    Object Insert Exists/Form Record above). Caller must already have selected the row
+    ...    when @{form_labels} is empty and the default form-verify file expects a prior Find -
+    ...    matching the existing per-screen convention (Bank/Object List TC04 both call their
+    ...    own Find <Screen> Record before this).
+    [Arguments]    ${table_id}    ${code}    ${grid_properties_path}    ${form_properties_path}
+    ...    @{form_labels}
+    Verify Object Row Fields From Properties    ${table_id}    ${code}    ${grid_properties_path}
+    Verify Object Form Fields From Properties    updateAttributes    ${form_properties_path}
+    ...    @{form_labels}
+    Capture Step    ${TEST NAME}_verify
 
 # --- Label-driven field resolution (NO hardcoded row/column ids) -------------------------------
 # A field's label span (ECCell) and its input sit in ADJACENT tableCells of the same tableRow. So a
@@ -264,6 +354,18 @@ Insert Object From Properties
     END
     Save And Refresh List
     RETURN    ${data}[Code]
+
+Insert Object From Properties And Verify Code
+    [Documentation]    Insert via ${properties_path} (same as Insert Object From Properties),
+    ...    then assert the resolved Code matches ${expected_code} - catching a properties-file
+    ...    /suite-variable drift immediately instead of silently inserting under the wrong
+    ...    code (added 2026-08-22, consolidating the identical pattern previously hand-rolled
+    ...    in Bank's/Object List's own "Insert <Screen> Record And Save" keywords).
+    [Arguments]    ${properties_path}    ${expected_code}    ${pre_save_screenshot}=${EMPTY}
+    ${code}=    Insert Object From Properties    ${properties_path}    ${pre_save_screenshot}
+    Should Be Equal    ${code}    ${expected_code}
+    ...    msg=${properties_path} Code does not match the expected ${expected_code}
+    RETURN    ${code}
 
 Update Object From Properties
     [Documentation]    Select the row for ${code}, verify it's really the intended row (read Code

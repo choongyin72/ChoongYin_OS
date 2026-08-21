@@ -91,6 +91,8 @@ screens from replicating the pattern.
 | Test case shape | 5-line-or-similar business narrative, zero arguments, mechanics in T2/T3 |
 | Test data format | `.yaml` Variables file (not `.properties`) |
 | Field verification oracle | Screen for display-mapped fields, DB for plain-value/existence checks |
-| Credentials | Shared `environment.py` `EC_USER`/`EC_PASS`; per-screen override only via an explicit Login argument, not a new credentials file |
+| Credentials | **Updated 2026-08-22 (supersedes the original row below):** every screen gets its OWN dedicated `<SCREEN>_EC_USER`/`<SCREEN>_EC_PASS` pair in the shared `resources/credentials.py` (one file, not one per screen - the per-screen distinction lives in the variable name). Real EC deployments gate different screens behind different role access, so a screen-specific login identity is the default, not an exception. Each pair falls back `<SCREEN>_EC_USER` env var -> shared `EC_USER` env var -> local-sandbox default, same shape as Bank's original pair. |
+
+~~Original 2026-08-18 row (superseded): Shared `environment.py` `EC_USER`/`EC_PASS`; per-screen override only via an explicit Login argument, not a new credentials file~~ - this undersold the real-world need for per-screen role separation; corrected once Object List's build surfaced the question directly.
 
 Issue #403 closed by this doc.
