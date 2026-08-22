@@ -64,3 +64,6 @@ EXCHANGE_RATE_SOURCE_EC_PASS = os.environ.get("EXCHANGE_RATE_SOURCE_EC_PASS", os
 
 ACCOUNT_EC_USER = os.environ.get("ACCOUNT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 ACCOUNT_EC_PASS = os.environ.get("ACCOUNT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+VAT_CODE_EC_USER = os.environ.get("VAT_CODE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+VAT_CODE_EC_PASS = os.environ.get("VAT_CODE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

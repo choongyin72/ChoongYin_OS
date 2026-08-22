@@ -1,58 +1,65 @@
 *** Settings ***
 Documentation       EC IUD Test - VAT Code (Configuration > Assets > Financial Objects > VAT Code).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_VAT_CODE).
-...                 NEVER touch existing data. A unique AUTOTEST_VAT_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in
+...                 OV_VAT_CODE). Layered: this test -> vat_code_page (T3) -> manage_object (T2)
+...                 + common (T1). NEVER touch existing data. Uses a FIXED test code
+...                 (AUTOTEST_VAT, matching Bank/Account's convention) rather than a generated
+...                 unique code - confirmed absent from OV_VAT_CODE before this was wired in
+...                 (2026-08-23). Every run must complete TC05 (delete) so the code is free for
+...                 the next run - EC never lets a DELETED code be reused, but this fixed code
+...                 only stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup, matching Bank/Account's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Financial_Objects/vat_code_page.resource
 
-Suite Setup         Set Up VAT Code Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    vat-code
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_VAT
+${OBJ_NAME}         AUTOTEST VAT Code
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/vat_code_update.properties - TC03/TC04 verify against it.
+${OBJ_NAME_UPD}     AUTOTEST VAT Code UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test vat code does not exist before inserting.
-    [Tags]    clean-state
-    VAT Code Row Should Not Exist    ${TEST_CODE}
-    Capture Step    vat_code_tc01_clean
-
-TC02 Insert New VAT Code
-    [Documentation]    Insert a new vat code and confirm it appears in the list.
-    [Tags]    insert
-    Insert VAT Code Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    VAT Code Row Should Exist    ${TEST_CODE}
-    VAT Code Should Exist In DB    ${TEST_CODE}
-    Capture Step    vat_code_tc02_inserted
-
-TC03 Update VAT Code Name
-    [Documentation]    Edit the vat code name and confirm the list reflects the change.
-    [Tags]    update
-    Update VAT Code Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    VAT Code Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    vat_code_tc03_updated
-
-TC04 Delete VAT Code
-    [Documentation]    Delete via End Date = Start Date and confirm the vat code is gone.
-    [Tags]    delete    cleanup
-    Delete VAT Code    ${TEST_CODE}    ${END_DATE}
-    VAT Code Row Should Not Exist    ${TEST_CODE}
-    VAT Code Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    vat_code_tc04_deleted
-
-
-*** Keywords ***
-Set Up VAT Code Suite
-    [Documentation]    Generate a unique test code/name, then open the VAT Code screen.
-    Prepare IUD Object Data    AUTOTEST_VAT_    VAT Code
+    Login To EC Application
     Open VAT Code Screen
+    Verify VAT Code Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert VAT Code Data
+    Login To EC Application
+    Open VAT Code Screen
+    Insert VAT Code Record And Save
+    Verify VAT Code Record Exists
+    Logout From EC Application
+
+TC03 Update VAT Code Data
+    Login To EC Application
+    Open VAT Code Screen
+    Update VAT Code Record And Save
+    Verify VAT Code Record Updated
+    Logout From EC Application
+
+TC04 Find VAT Code Data
+    Login To EC Application
+    Open VAT Code Screen
+    Find VAT Code Record
+    Verify VAT Code Record Found
+    Logout From EC Application
+
+TC05 Delete VAT Code Data
+    Login To EC Application
+    Open VAT Code Screen
+    Delete VAT Code Record And Save
+    Verify VAT Code Record Removed
+    Logout From EC Application
