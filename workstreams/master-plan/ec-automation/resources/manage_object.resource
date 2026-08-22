@@ -98,9 +98,13 @@ Find Object By Code
     ...    "Find <Screen>" keyword (added 2026-08-22, consolidating the identical pattern
     ...    previously hand-rolled per-screen in Bank/Object List T3). ${screen_label} is used
     ...    only in the failure message, so a caller's error still names its own screen.
-    [Arguments]    ${table_id}    ${code}    ${screen_label}=Object
+    ...    ${code_label} defaults to "Code" (Bank/Object List's actual label) - added
+    ...    2026-08-22 after State's live build proved this is NOT a universal Bank-family
+    ...    convention: State's own Code field is labelled "State Code" (screen-prefixed).
+    ...    Optional/backward-compatible - every existing caller keeps working unchanged.
+    [Arguments]    ${table_id}    ${code}    ${screen_label}=Object    ${code_label}=Code
     Select Object Row    ${table_id}    ${code}
-    ${code_id}=    OV Field Id By Label    updateAttributes    Code
+    ${code_id}=    OV Field Id By Label    updateAttributes    ${code_label}
     ${loaded}=    Get Property    css=[id="${code_id}"]    value
     Should Be Equal    ${loaded}    ${code}    msg=Find ${screen_label} failed - code not loaded
 
@@ -111,9 +115,10 @@ Find Object Record
     ...    select-step) keyword (added 2026-08-22, owner: "DONT want repeated codes in all
     ...    screen page.resource files" - consolidating the identical Bank/Object List pattern:
     ...    each screen previously hand-rolled its own single-purpose "Find <Screen>" keyword
-    ...    plus an identical select+capture wrapper around it).
-    [Arguments]    ${table_id}    ${code}    ${screen_label}=Object
-    Find Object By Code    ${table_id}    ${code}    ${screen_label}
+    ...    plus an identical select+capture wrapper around it). ${code_label} defaults to
+    ...    "Code" - pass a screen's own label (e.g. "State Code") if it differs.
+    [Arguments]    ${table_id}    ${code}    ${screen_label}=Object    ${code_label}=Code
+    Find Object By Code    ${table_id}    ${code}    ${screen_label}    ${code_label}
     Capture Step    ${TEST NAME}_action
 
 Verify Object Removed
@@ -134,8 +139,12 @@ Verify Object Form Record
     ...    query 2026-08-22: "we want all object ec screen share... code at one place"). The
     ...    sequence (select, compare, capture) is layout-independent; which fields to check
     ...    stays per-screen data (${properties_path}/@{labels}), never assumed here.
+    ...    ${code_label} (keyword-only, after @{labels}) defaults to "Code" - pass a screen's
+    ...    own label (e.g. "State Code") if it differs (added 2026-08-22, optional/
+    ...    backward-compatible, after State's live build proved this isn't a universal label).
     [Arguments]    ${table_id}    ${code}    ${screen_label}    ${properties_path}    @{labels}
-    Find Object By Code    ${table_id}    ${code}    ${screen_label}
+    ...    ${code_label}=Code
+    Find Object By Code    ${table_id}    ${code}    ${screen_label}    ${code_label}
     Verify Object Form Fields From Properties    updateAttributes    ${properties_path}    @{labels}
     Capture Step    ${TEST NAME}_verify
 
@@ -145,10 +154,13 @@ Verify Object Insert Exists
     ...    Exists" (TC02) keyword (added 2026-08-22, same consolidation as Verify Object Form
     ...    Record above, which this delegates the select/compare/capture half to). PURE SCREEN
     ...    verification - no DB check here (that is TC02's own separate DbVerify assertion).
+    ...    ${code_label} (keyword-only, after @{labels}) defaults to "Code" - threaded through
+    ...    to Verify Object Form Record (added 2026-08-22, optional/backward-compatible).
     [Arguments]    ${table_id}    ${code}    ${screen_label}    ${properties_path}    @{labels}
+    ...    ${code_label}=Code
     Row Should Exist    ${table_id}    ${code}
     Verify Object Form Record    ${table_id}    ${code}    ${screen_label}    ${properties_path}
-    ...    @{labels}
+    ...    @{labels}    code_label=${code_label}
 
 Verify Object Does Not Exist
     [Documentation]    Assert ${code} is absent from the grid (${table_id}), then capture the
@@ -338,12 +350,15 @@ Insert Object From Properties
     [Documentation]    Open the New Object form and fill EVERY field named in ${properties_path}
     ...    (a column=value file read via PropertiesReader.Read Properties), auto-detecting each
     ...    field's kind by label. Then Save + reload the list. Returns the resolved Code value
-    ...    (read from the properties file's own "Code" entry) so the caller can assert on it.
+    ...    (read from the properties file's own ${code_label} entry, defaults to "Code") so
+    ...    the caller can assert on it. ${code_label} added 2026-08-22 - State's properties
+    ...    file uses "State Code" as the key, not the generic "Code" Bank/Object List use;
+    ...    optional/backward-compatible, every existing caller keeps working unchanged.
     ...    If ${pre_save_screenshot} is given, a screenshot is captured right after every field
     ...    is filled but BEFORE Save is clicked (owner-requested 2026-08-18: evidence of what was
     ...    entered, not the after-save/reloaded-grid state). Optional and backward-compatible -
     ...    no screenshot at all if omitted.
-    [Arguments]    ${properties_path}    ${pre_save_screenshot}=${EMPTY}
+    [Arguments]    ${properties_path}    ${pre_save_screenshot}=${EMPTY}    ${code_label}=Code
     ${data}=    Read Properties    ${properties_path}
     Open New Object Form
     FOR    ${label}    IN    @{data.keys()}
@@ -353,7 +368,7 @@ Insert Object From Properties
         Capture Step    ${pre_save_screenshot}
     END
     Save And Refresh List
-    RETURN    ${data}[Code]
+    RETURN    ${data}[${code_label}]
 
 Insert Object From Properties And Verify Code
     [Documentation]    Insert via ${properties_path} (same as Insert Object From Properties),
@@ -361,8 +376,12 @@ Insert Object From Properties And Verify Code
     ...    /suite-variable drift immediately instead of silently inserting under the wrong
     ...    code (added 2026-08-22, consolidating the identical pattern previously hand-rolled
     ...    in Bank's/Object List's own "Insert <Screen> Record And Save" keywords).
+    ...    ${code_label} defaults to "Code" - pass a screen's own label (e.g. "State Code")
+    ...    if it differs (added 2026-08-22, optional/backward-compatible).
     [Arguments]    ${properties_path}    ${expected_code}    ${pre_save_screenshot}=${EMPTY}
+    ...    ${code_label}=Code
     ${code}=    Insert Object From Properties    ${properties_path}    ${pre_save_screenshot}
+    ...    ${code_label}
     Should Be Equal    ${code}    ${expected_code}
     ...    msg=${properties_path} Code does not match the expected ${expected_code}
     RETURN    ${code}
@@ -378,10 +397,13 @@ Update Object From Properties
     ...    If ${pre_save_screenshot} is given, a screenshot is captured right after every field
     ...    is filled but BEFORE Save is clicked (owner-requested 2026-08-18: evidence of what was
     ...    entered, not the after-save/reloaded-grid state). Optional and backward-compatible -
-    ...    no screenshot at all if omitted.
+    ...    no screenshot at all if omitted. ${code_label} defaults to "Code" - pass a screen's
+    ...    own label (e.g. "State Code") if it differs (added 2026-08-22, optional/
+    ...    backward-compatible, after State's live build proved this isn't a universal label).
     [Arguments]    ${table_id}    ${code}    ${properties_path}    ${pre_save_screenshot}=${EMPTY}
+    ...    ${code_label}=Code
     Select Object Row    ${table_id}    ${code}
-    ${code_id}=    OV Field Id By Label    updateAttributes    Code
+    ${code_id}=    OV Field Id By Label    updateAttributes    ${code_label}
     ${loaded}=    Get Property    css=[id="${code_id}"]    value
     Should Be Equal    ${loaded}    ${code}    msg=Row select failed - code not loaded
     ${data}=    Read Properties    ${properties_path}
