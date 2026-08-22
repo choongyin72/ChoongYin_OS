@@ -35,6 +35,12 @@ session start. It evolves only via PR (append-only edits — see §Shared-file d
    the PR states the self-clean result.
 5. **Engage comments with rigor** — verify each finding against code/DB, then fix or push back with
    technical reasoning (no performative agreement, no blind implementation).
+6. **A push to an open PR re-generates the body's file list** (Issue #424, added after PR #423 merged at
+   5 commits/16 files with a body still describing commit 1) — `scripts/safe_commit.py --push` now prints
+   a fresh "## Scope / Files touched" block after every push, flags any file new since the branch's
+   previous push, and warns if an already-open PR's body doesn't mention a touched file. The body
+   describes the FINAL diff, not the first commit — paste the regenerated block into the PR description
+   whenever the printed warning says the file list grew or the PR body is missing files.
 
 ## Reviewer asks (to make findings actionable)
 1. **Tag each comment `MUST-FIX` vs `NICE-TO-HAVE`** so the worker knows what gates the merge.
