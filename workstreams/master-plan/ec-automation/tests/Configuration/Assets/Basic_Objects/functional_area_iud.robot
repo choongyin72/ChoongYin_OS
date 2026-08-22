@@ -1,59 +1,66 @@
 *** Settings ***
-Documentation       EC IUD Test - Functional Area (Configuration > Assets > Basic Objects > Functional Area).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_FUNCTIONAL_AREA).
-...                 Layered: this test -> functional_area_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. A unique AUTOTEST_FA_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+Documentation       EC IUD Test - Functional Area (Configuration > Assets > Basic Objects >
+...                 Functional Area). Manage-Object (OV) screen. DELETE = End Date = Start
+...                 Date (true delete in OV_FUNCTIONAL_AREA). Layered: this test ->
+...                 functional_area_page (T3) -> manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_FA, matching
+...                 Bank/Object List/State/Region's convention) rather than a generated
+...                 unique code - confirmed absent from OV_FUNCTIONAL_AREA before this was
+...                 wired in (2026-08-22). Every run must complete TC05 (delete) so the code
+...                 is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching Bank/Object List/State/Region's convention
+...                 (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Basic_Objects/functional_area_page.resource
 
-Suite Setup         Set Up Functional Area Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    functional-area
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_FA
+${OBJ_NAME}         AUTOTEST Functional Area
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/functional_area_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Functional Area UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test functional area does not exist before inserting.
-    [Tags]    clean-state
-    Functional Area Row Should Not Exist    ${TEST_CODE}
-    Capture Step    functional_area_tc01_clean
-
-TC02 Insert New Functional Area
-    [Documentation]    Insert a new functional area and confirm it appears in the list.
-    [Tags]    insert
-    Insert Functional Area Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Functional Area Row Should Exist    ${TEST_CODE}
-    Functional Area Should Exist In DB    ${TEST_CODE}
-    Capture Step    functional_area_tc02_inserted
-
-TC03 Update Functional Area Name
-    [Documentation]    Edit the functional area name and confirm the list reflects the change.
-    [Tags]    update
-    Update Functional Area Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Functional Area Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    functional_area_tc03_updated
-
-TC04 Delete Functional Area
-    [Documentation]    Delete via End Date = Start Date and confirm the functional area is gone.
-    [Tags]    delete    cleanup
-    Delete Functional Area    ${TEST_CODE}    ${END_DATE}
-    Functional Area Row Should Not Exist    ${TEST_CODE}
-    Functional Area Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    functional_area_tc04_deleted
-
-
-*** Keywords ***
-Set Up Functional Area Suite
-    [Documentation]    Generate a unique test code/name, then open the Functional Area screen.
-    Prepare IUD Object Data    AUTOTEST_FA_    Functional Area
+    Login To EC Application
     Open Functional Area Screen
+    Verify Functional Area Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Functional Area Data
+    Login To EC Application
+    Open Functional Area Screen
+    Insert Functional Area Record And Save
+    Verify Functional Area Record Exists
+    Logout From EC Application
+
+TC03 Update Functional Area Data
+    Login To EC Application
+    Open Functional Area Screen
+    Update Functional Area Record And Save
+    Verify Functional Area Record Updated
+    Logout From EC Application
+
+TC04 Find Functional Area Data
+    Login To EC Application
+    Open Functional Area Screen
+    Find Functional Area Record
+    Verify Functional Area Record Found
+    Logout From EC Application
+
+TC05 Delete Functional Area Data
+    Login To EC Application
+    Open Functional Area Screen
+    Delete Functional Area Record And Save
+    Verify Functional Area Record Removed
+    Logout From EC Application

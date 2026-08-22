@@ -2,58 +2,62 @@
 Documentation       EC IUD Test - Region (Configuration > Assets > Basic Objects > Region).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_REGION).
 ...                 Layered: this test -> region_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. A unique AUTOTEST_REG_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_REGION,
+...                 matching Bank/Object List/State's convention) rather than a generated unique
+...                 code - confirmed absent from OV_REGION before this was wired in (2026-08-22).
+...                 Every run must complete TC05 (delete) so the code is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup, matching Bank/Object List/State's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Basic_Objects/region_page.resource
 
-Suite Setup         Set Up Region Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    region
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_REGION
+${OBJ_NAME}         AUTOTEST Region
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/region_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Region UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test region does not exist before inserting.
-    [Tags]    clean-state
-    Region Row Should Not Exist    ${TEST_CODE}
-    Capture Step    region_tc01_clean
-
-TC02 Insert New Region
-    [Documentation]    Insert a new region and confirm it appears in the list.
-    [Tags]    insert
-    Insert Region Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Region Row Should Exist    ${TEST_CODE}
-    Region Should Exist In DB    ${TEST_CODE}
-    Capture Step    region_tc02_inserted
-
-TC03 Update Region Name
-    [Documentation]    Edit the region name and confirm the list reflects the change.
-    [Tags]    update
-    Update Region Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Region Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    region_tc03_updated
-
-TC04 Delete Region
-    [Documentation]    Delete via End Date = Start Date and confirm the region is gone.
-    [Tags]    delete    cleanup
-    Delete Region    ${TEST_CODE}    ${END_DATE}
-    Region Row Should Not Exist    ${TEST_CODE}
-    Region Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    region_tc04_deleted
-
-
-*** Keywords ***
-Set Up Region Suite
-    [Documentation]    Generate a unique test code/name, then open the Region screen.
-    Prepare IUD Object Data    AUTOTEST_REG_    Region
+    Login To EC Application
     Open Region Screen
+    Verify Region Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Region Data
+    Login To EC Application
+    Open Region Screen
+    Insert Region Record And Save
+    Verify Region Record Exists
+    Logout From EC Application
+
+TC03 Update Region Data
+    Login To EC Application
+    Open Region Screen
+    Update Region Record And Save
+    Verify Region Record Updated
+    Logout From EC Application
+
+TC04 Find Region Data
+    Login To EC Application
+    Open Region Screen
+    Find Region Record
+    Verify Region Record Found
+    Logout From EC Application
+
+TC05 Delete Region Data
+    Login To EC Application
+    Open Region Screen
+    Delete Region Record And Save
+    Verify Region Record Removed
+    Logout From EC Application
