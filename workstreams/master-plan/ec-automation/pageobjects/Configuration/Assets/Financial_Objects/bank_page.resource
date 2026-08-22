@@ -39,6 +39,22 @@ ${BANK_DEL_ENDDATE}     tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
+Find Bank Row By Filter
+    [Documentation]    Explicitly filter the Bank grid's Code column to ${code} via the shared
+    ...    T2 Find Object Row By Filter (resources/manage_object.resource) - matches Account's
+    ...    own explicit filter usage (owner, 2026-08-22: "others (Bank, State, List_Object)
+    ...    should follow Account... utilise same filter feature"), rather than relying only on
+    ...    Select Object Row's implicit 3s-timeout fallback. Bank's grid is small/single-page
+    ...    today, so this narrows to exactly 1 row immediately either way - explicit here for
+    ...    consistency with Account and to keep this screen future-proof if its grid ever grows.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${BANK_TABLE}    ${code}
+
+Clear Bank Row Filter
+    [Documentation]    Clear the Code column filter (see Find Bank Row By Filter) via the shared
+    ...    T2 Clear Object Row Filter, restoring the grid's normal unfiltered view.
+    Clear Object Row Filter    ${BANK_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as Bank's OWN credentials (${BANK_EC_USER}/${BANK_EC_PASS}
     ...    from credentials.py) on the current page - works whether this is the very first login
@@ -88,9 +104,12 @@ Verify Bank Record Exists
     ...    it only exists as a grid column, not a form field.
     ...    Delegates the full sequence (row-check, select, form-compare, screenshot) to the
     ...    shared T2 Verify Object Insert Exists (owner-requested 2026-08-22 consolidation).
+    ...    Filters via Find Bank Row By Filter first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Bank Row By Filter    ${code}
     Verify Object Insert Exists    ${BANK_TABLE}    ${code}    Bank    ${BANK_INSERT_PROPERTIES}
     ...    @{BANK_FORM_LABELS}
+    Clear Bank Row Filter
 
 Update Bank Record And Save
     [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around T2's Update
@@ -99,9 +118,12 @@ Update Bank Record And Save
     ...    against exactly what was set. The TC03 evidence screenshot is captured BEFORE Save is
     ...    clicked (owner-requested 2026-08-18 - passed through to Update Object From Properties,
     ...    which fills every field first).
+    ...    Filters via Find Bank Row By Filter first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${BANK_UPDATE_PROPERTIES}
+    Find Bank Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${BANK_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action
+    Clear Bank Row Filter
     RETURN    ${data}
 
 Verify Bank Record Updated
@@ -113,17 +135,25 @@ Verify Bank Record Updated
     ...    labels, since that's the only fields that file has (unlike the default
     ...    bank_form_verify.properties/${BANK_FORM_LABELS}, which has the full field set).
     ...    Delegates the full sequence (select, form-compare, screenshot) to the shared T2
-    ...    Verify Object Form Record (owner-requested 2026-08-22 consolidation).
+    ...    Verify Object Form Record (owner-requested 2026-08-22 consolidation). Filters via
+    ...    Find Bank Row By Filter first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Bank Row By Filter    ${code}
     Verify Object Form Record    ${BANK_TABLE}    ${code}    Bank    ${BANK_UPDATE_PROPERTIES}
     ...    Name    Description
+    Clear Bank Row Filter
 
 Find Bank Record
     [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around the shared
     ...    T2 Find Object Record, called with ZERO arguments (defaults ${code} to the suite's
     ...    ${TEST_CODE}). Delegates the full select+capture sequence (owner-requested 2026-08-22
-    ...    consolidation).
+    ...    consolidation). Calls Find Bank Row By Filter first (2026-08-22 standardisation).
+    ...    Deliberately does NOT clear the filter afterward - Verify Bank Record Found (called
+    ...    right after, same TC) needs the grid still filtered to ${code} for its own grid-check,
+    ...    since it doesn't re-select the row itself; it clears the filter once both checks are
+    ...    done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find Bank Row By Filter    ${code}
     Find Object Record    ${BANK_TABLE}    ${code}    Bank
 
 Verify Bank Record Found
@@ -134,10 +164,13 @@ Verify Bank Record Found
     ...    TC04 evidence screenshot (moved in from the test case's own Capture Step line).
     ...    Delegates the full sequence (grid-compare, form-compare, screenshot) to the shared
     ...    T2 Verify Object Found (owner-requested 2026-08-22 consolidation). Caller must
-    ...    already have selected the row (TC04 does, via Find Bank Record before this).
+    ...    already have selected the row (TC04 does, via Find Bank Record before this) AND left
+    ...    the Code filter active from that same call - clears the filter itself once both
+    ...    checks are done (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${BANK_TABLE}    ${code}    ${BANK_GRID_VERIFY_PROPERTIES}
     ...    ${BANK_FORM_VERIFY_PROPERTIES}    @{BANK_FORM_LABELS}
+    Clear Bank Row Filter
 
 Delete Bank Record And Save
     [Documentation]    Friendly-narrative wrapper (owner-requested 2026-08-18) around T2's Delete
@@ -148,9 +181,12 @@ Delete Bank Record And Save
     ...    entered, not the after-save/reloaded-grid state. Calls T2 directly (no middle "Delete
     ...    Bank" alias - removed 2026-08-22, it added no behavior beyond forwarding these same
     ...    arguments, matching Insert/Update Record And Save's existing single-hop shape).
+    ...    Filters via Find Bank Row By Filter first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find Bank Row By Filter    ${code}
     Delete Object Via End Date    ${BANK_TABLE}    ${BANK_DEL_ENDDATE}    ${code}    ${date}
     ...    ${TEST NAME}_action
+    Clear Bank Row Filter
 
 Verify Bank Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with ZERO
