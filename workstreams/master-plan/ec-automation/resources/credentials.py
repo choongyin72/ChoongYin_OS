@@ -40,3 +40,6 @@ FUNCTIONAL_AREA_EC_PASS = os.environ.get("FUNCTIONAL_AREA_EC_PASS", os.environ.g
 
 BUSINESS_UNIT_EC_USER = os.environ.get("BUSINESS_UNIT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 BUSINESS_UNIT_EC_PASS = os.environ.get("BUSINESS_UNIT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PRODUCTION_UNIT_EC_USER = os.environ.get("PRODUCTION_UNIT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PRODUCTION_UNIT_EC_PASS = os.environ.get("PRODUCTION_UNIT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
