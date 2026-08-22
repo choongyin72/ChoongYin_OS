@@ -8,18 +8,21 @@ Documentation       T3 (screen) — Account page object.
 ...                 Revenue Order/WBS) - replaces the older hardcoded-field-id pattern with the
 ...                 label-driven, properties-file-driven, T2-consolidated pattern.
 ...                 Grid is 110+ rows/6 pages (OV_FIN_ACCOUNT) - located via the Code column
-...                 filter (resources/grid_menu.resource's Filter/Clear Grid Text Column Filter,
-...                 already proven live on Business Function), not page-walking. Owner-directed
+...                 filter (grid_menu.resource's Filter/Clear Grid Text Column Filter, already
+...                 proven live on Business Function), not page-walking. Owner-directed
 ...                 2026-08-22 after a page-walking fix already worked live: EC's grid filter
 ...                 re-queries the FULL dataset server-side in one call, confirmed live via
 ...                 tmp/recon_account_filter.robot - simpler and faster than looping pages.
+...                 The filter mechanics were later PROMOTED into the shared T2
+...                 resources/manage_object.resource (Find/Clear Object Row By Filter,
+...                 2026-08-22) so any OV screen can reuse them - this T3's own Find/Clear
+...                 Account Row By Filter are now thin wrappers around those.
 
 Library             Browser
 Library             ../../../../libraries/DbVerify.py
 Library             ../../../../libraries/PropertiesReader.py
 Resource            ../../../../resources/common.resource
 Resource            ../../../../resources/manage_object.resource
-Resource            ../../../../resources/grid_menu.resource
 Variables           ../../../../resources/credentials.py
 
 
@@ -47,34 +50,29 @@ ${ACCOUNT_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 *** Keywords ***
 Find Account Row By Filter
-    [Documentation]    Filter the Account grid's Code column (0, 0-based left-to-right) to
-    ...    ${code}, so the row is found regardless of which of the 110+ rows/6 pages it would
-    ...    otherwise land on (T3-local fix, added after a live TC03 failure 2026-08-22:
-    ...    OV_FIN_ACCOUNT has 110+ real rows on a 20-rows-per-page grid, and a code starting
-    ...    with a letter, e.g. "AUTOTEST_ACCOUNT", sorts alphabetically AFTER every existing
-    ...    numeric-string GL Code, landing on the LAST page - T2's Select Object Row / T1's Row
-    ...    Should Exist only look at the CURRENTLY RENDERED page). SUPERSEDES an earlier
-    ...    page-walking fix (Go To Account Row Page/Account Row Absent Across All Pages, which
-    ...    looped through pages via T1 Current Page Has Next/Go To Next Page) - the owner
-    ...    pointed out EC's grid has a built-in column-filter feature (hamburger menu -> "Turn
-    ...    filtering on" -> type into the column header's filter box) that searches the FULL
-    ...    dataset directly instead of walking pages; confirmed live 2026-08-22
-    ...    (tmp/recon_account_filter.robot) that filtering surfaces a row NOT on page 1's
-    ...    default view. Uses the already-proven, already-shared T2 resources/grid_menu.resource
-    ...    (live-verified on Business Function) rather than reinventing filtering - no
-    ...    shared-file (manage_object.resource/common.resource) change needed, this wrapper
-    ...    stays local to Account's own T3, only supplying the grid's ${form} id ("nav:form")
-    ...    and the Code column index (0).
+    [Documentation]    Filter the Account grid's Code column to ${code}, so the row is found
+    ...    regardless of which of the 110+ rows/6 pages it would otherwise land on. Thin
+    ...    zero-boilerplate wrapper around the shared T2 Find Object Row By Filter
+    ...    (resources/manage_object.resource) - promoted there 2026-08-22 (owner: "the Find
+    ...    Account Row By Filter, Clear Account Row Filter SF keywords step should move to
+    ...    manage_object.resource so that all object similar to Account can utilise same filter
+    ...    feature") from what was originally a T3-local fix here (added after a live TC03
+    ...    failure 2026-08-22: OV_FIN_ACCOUNT has 110+ real rows on a 20-rows-per-page grid, and
+    ...    a code starting with a letter, e.g. "AUTOTEST_ACCOUNT", sorts alphabetically AFTER
+    ...    every existing numeric-string GL Code, landing on the LAST page). Kept as Account's
+    ...    own named keyword (not called directly at each of the 7 use sites) so this T3's own
+    ...    call sites/docs didn't need touching when the logic moved up to T2.
     [Arguments]    ${code}
-    Filter Grid Text Column By Value    nav:form    0    ${code}
+    Find Object Row By Filter    ${ACCOUNT_TABLE}    ${code}
 
 Clear Account Row Filter
     [Documentation]    Clear the Code column filter (see Find Account Row By Filter), restoring
-    ...    the grid's normal unfiltered view. Called after every keyword that filters, so the
-    ...    grid (and the sandbox user's server-side filter personalisation - grid_menu.resource
-    ...    notes this is per-user, DB CTRL_PERSONALISATION) is left clean for the next step or
-    ...    the next test run, not just this one.
-    Clear Grid Text Column Filter    nav:form    0
+    ...    the grid's normal unfiltered view. Thin wrapper around the shared T2 Clear Object Row
+    ...    Filter (promoted 2026-08-22 alongside Find Account Row By Filter - see that keyword's
+    ...    docs). Called after every keyword that filters, so the grid (and the sandbox user's
+    ...    server-side filter personalisation - grid_menu.resource notes this is per-user, DB
+    ...    CTRL_PERSONALISATION) is left clean for the next step or the next test run.
+    Clear Object Row Filter    ${ACCOUNT_TABLE}
 
 Login To EC Application
     [Documentation]    Authenticate as Account's OWN credentials (${ACCOUNT_EC_USER}/

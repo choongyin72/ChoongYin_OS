@@ -78,6 +78,29 @@ Select Object Row Via Filter
     Sleep    1.2s
     Clear Grid Text Column Filter    ${form}    0
 
+Find Object Row By Filter
+    [Documentation]    Explicitly filter ${table_id}'s Code column (0, leftmost) to ${code} via
+    ...    resources/grid_menu.resource, so the row is found regardless of which page it would
+    ...    otherwise land on. Promoted 2026-08-22 from Account's own T3-local "Find Account Row
+    ...    By Filter" (added on PR #422) into this shared T2, so any OV screen's T3 can call the
+    ...    SAME named keyword directly (not just rely on Select Object Row's implicit 3s-timeout
+    ...    fallback) - owner: "the Find Account Row By Filter, Clear Account Row Filter SF
+    ...    keywords step should move to manage_object.resource so that all object similar to
+    ...    Account can utilise same filter feature". ${form} is derived automatically by
+    ...    stripping ':T_data' from ${table_id} - no screen needs to pass or declare it.
+    ...    Caller must call Clear Object Row Filter afterward to leave the grid unfiltered.
+    [Arguments]    ${table_id}    ${code}
+    VAR    ${form}=    ${table_id.rsplit(':T_data', 1)[0]}
+    Filter Grid Text Column By Value    ${form}    0    ${code}
+
+Clear Object Row Filter
+    [Documentation]    Clear the Code column filter set by Find Object Row By Filter, restoring
+    ...    ${table_id}'s normal unfiltered view. Promoted 2026-08-22 alongside Find Object Row
+    ...    By Filter (same rationale - see that keyword's docs).
+    [Arguments]    ${table_id}
+    VAR    ${form}=    ${table_id.rsplit(':T_data', 1)[0]}
+    Clear Grid Text Column Filter    ${form}    0
+
 Delete Object By Zero-Length Window
     [Documentation]    Set End Date = Start Date -> zero-length window -> EC true delete.
     [Arguments]    ${enddate_id}    ${date}
