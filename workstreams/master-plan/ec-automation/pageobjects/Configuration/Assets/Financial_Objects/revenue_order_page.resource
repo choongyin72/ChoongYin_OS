@@ -41,6 +41,20 @@ ${REVENUE_ORDER_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_inp
 
 
 *** Keywords ***
+Find Revenue Order Row By Filter
+    [Documentation]    Explicitly filter the Revenue Order grid's Code column to ${code} via the
+    ...    shared T2 Find Object Row By Filter (resources/manage_object.resource) - matches
+    ...    Account/Bank/State/Object List's explicit filter usage (owner, 2026-08-22: "same to
+    ...    other ec screens"), rather than relying only on Select Object Row's implicit
+    ...    3s-timeout fallback.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${REVENUE_ORDER_TABLE}    ${code}
+
+Clear Revenue Order Row Filter
+    [Documentation]    Clear the Code column filter (see Find Revenue Order Row By Filter) via
+    ...    the shared T2 Clear Object Row Filter, restoring the grid's normal unfiltered view.
+    Clear Object Row Filter    ${REVENUE_ORDER_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as Revenue Order's OWN credentials
     ...    (${REVENUE_ORDER_EC_USER}/${REVENUE_ORDER_EC_PASS} from credentials.py) on the
@@ -78,17 +92,25 @@ Verify Revenue Order Record Exists
     ...    Start Date is grid/insert-only, not present in updateAttributes). Delegates the
     ...    full sequence (row-check, select, form-compare, screenshot) to the shared T2
     ...    Verify Object Insert Exists.
+    ...    Filters via Find Revenue Order Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Revenue Order Row By Filter    ${code}
     Verify Object Insert Exists    ${REVENUE_ORDER_TABLE}    ${code}    Revenue Order
     ...    ${REVENUE_ORDER_INSERT_PROPERTIES}    @{REVENUE_ORDER_FORM_LABELS}
+    Clear Revenue Order Row Filter
 
 Update Revenue Order Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank/State.
+    ...    Filters via Find Revenue Order Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${REVENUE_ORDER_UPDATE_PROPERTIES}
+    Find Revenue Order Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${REVENUE_ORDER_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action
+    Clear Revenue Order Row Filter
     RETURN    ${data}
 
 Verify Revenue Order Record Updated
@@ -96,16 +118,24 @@ Verify Revenue Order Record Updated
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching Bank/State's TC03 convention: the form shows the updated
     ...    Name. Delegates the full sequence (select, form-compare, screenshot) to the
-    ...    shared T2 Verify Object Form Record.
+    ...    shared T2 Verify Object Form Record. Filters via Find Revenue Order Row By Filter
+    ...    first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Revenue Order Row By Filter    ${code}
     Verify Object Form Record    ${REVENUE_ORDER_TABLE}    ${code}    Revenue Order
     ...    ${REVENUE_ORDER_UPDATE_PROPERTIES}    Name
+    Clear Revenue Order Row Filter
 
 Find Revenue Order Record
     [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
-    ...    Delegates the full select+capture sequence.
+    ...    Delegates the full select+capture sequence. Calls Find Revenue Order Row By Filter
+    ...    first (2026-08-22 standardisation). Deliberately does NOT clear the filter
+    ...    afterward - Verify Revenue Order Record Found (called right after, same TC) needs
+    ...    the grid still filtered to ${code} for its own grid-check, since it doesn't
+    ...    re-select the row itself; it clears the filter once both checks are done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find Revenue Order Row By Filter    ${code}
     Find Object Record    ${REVENUE_ORDER_TABLE}    ${code}    Revenue Order
 
 Verify Revenue Order Record Found
@@ -114,10 +144,13 @@ Verify Revenue Order Record Found
     ...    grid AND the form record match the expected (post-update) data. Delegates the
     ...    full sequence (grid-compare, form-compare, screenshot) to the shared T2 Verify
     ...    Object Found. Caller must already have selected the row (TC04 does, via Find
-    ...    Revenue Order Record before this).
+    ...    Revenue Order Record before this) AND left the Code filter active from that same
+    ...    call - clears the filter itself once both checks are done (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${REVENUE_ORDER_TABLE}    ${code}    ${REVENUE_ORDER_GRID_VERIFY_PROPERTIES}
     ...    ${REVENUE_ORDER_FORM_VERIFY_PROPERTIES}    @{REVENUE_ORDER_FORM_LABELS}
+    Clear Revenue Order Row Filter
 
 Delete Revenue Order Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date,
@@ -125,9 +158,13 @@ Delete Revenue Order Record And Save
     ...    ${TEST_CODE}/${END_DATE}). Select the revenue order, set End Date = Start Date
     ...    (true delete), Save. Captures the TC05 evidence screenshot right after the End
     ...    Date is filled but BEFORE Save is clicked, matching Bank/State's convention.
+    ...    Filters via Find Revenue Order Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find Revenue Order Row By Filter    ${code}
     Delete Object Via End Date    ${REVENUE_ORDER_TABLE}    ${REVENUE_ORDER_DEL_ENDDATE}    ${code}    ${date}
     ...    ${TEST NAME}_action
+    Clear Revenue Order Row Filter
 
 Verify Revenue Order Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with

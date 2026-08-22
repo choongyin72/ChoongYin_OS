@@ -43,6 +43,20 @@ ${COST_CENTRE_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
+Find Cost Centre Row By Filter
+    [Documentation]    Explicitly filter the Cost Centre grid's Code column to ${code} via the
+    ...    shared T2 Find Object Row By Filter (resources/manage_object.resource) - matches
+    ...    Account/Bank/State/Object List's explicit filter usage (owner, 2026-08-22: "same to
+    ...    other ec screens"), rather than relying only on Select Object Row's implicit
+    ...    3s-timeout fallback.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${COST_CENTRE_TABLE}    ${code}
+
+Clear Cost Centre Row Filter
+    [Documentation]    Clear the Code column filter (see Find Cost Centre Row By Filter) via
+    ...    the shared T2 Clear Object Row Filter, restoring the grid's normal unfiltered view.
+    Clear Object Row Filter    ${COST_CENTRE_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as Cost Centre's OWN credentials (${COST_CENTRE_EC_USER}/
     ...    ${COST_CENTRE_EC_PASS} from credentials.py) on the current page. Standing decision
@@ -77,17 +91,25 @@ Verify Cost Centre Record Exists
     ...    Date is grid/insert-only, not present in updateAttributes). Delegates the full
     ...    sequence (row-check, select, form-compare, screenshot) to the shared T2 Verify
     ...    Object Insert Exists.
+    ...    Filters via Find Cost Centre Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Cost Centre Row By Filter    ${code}
     Verify Object Insert Exists    ${COST_CENTRE_TABLE}    ${code}    Cost Centre    ${COST_CENTRE_INSERT_PROPERTIES}
     ...    @{COST_CENTRE_FORM_LABELS}
+    Clear Cost Centre Row Filter
 
 Update Cost Centre Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank/State.
+    ...    Filters via Find Cost Centre Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${COST_CENTRE_UPDATE_PROPERTIES}
+    Find Cost Centre Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${COST_CENTRE_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action
+    Clear Cost Centre Row Filter
     RETURN    ${data}
 
 Verify Cost Centre Record Updated
@@ -95,16 +117,24 @@ Verify Cost Centre Record Updated
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching Bank/State's TC03 convention: the form shows the updated
     ...    Name. Delegates the full sequence (select, form-compare, screenshot) to the
-    ...    shared T2 Verify Object Form Record.
+    ...    shared T2 Verify Object Form Record. Filters via Find Cost Centre Row By Filter
+    ...    first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Cost Centre Row By Filter    ${code}
     Verify Object Form Record    ${COST_CENTRE_TABLE}    ${code}    Cost Centre    ${COST_CENTRE_UPDATE_PROPERTIES}
     ...    Name
+    Clear Cost Centre Row Filter
 
 Find Cost Centre Record
     [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
-    ...    Delegates the full select+capture sequence.
+    ...    Delegates the full select+capture sequence. Calls Find Cost Centre Row By Filter
+    ...    first (2026-08-22 standardisation). Deliberately does NOT clear the filter
+    ...    afterward - Verify Cost Centre Record Found (called right after, same TC) needs
+    ...    the grid still filtered to ${code} for its own grid-check, since it doesn't
+    ...    re-select the row itself; it clears the filter once both checks are done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find Cost Centre Row By Filter    ${code}
     Find Object Record    ${COST_CENTRE_TABLE}    ${code}    Cost Centre
 
 Verify Cost Centre Record Found
@@ -113,10 +143,13 @@ Verify Cost Centre Record Found
     ...    grid AND the form record match the expected (post-update) data. Delegates the
     ...    full sequence (grid-compare, form-compare, screenshot) to the shared T2 Verify
     ...    Object Found. Caller must already have selected the row (TC04 does, via Find
-    ...    Cost Centre Record before this).
+    ...    Cost Centre Record before this) AND left the Code filter active from that same
+    ...    call - clears the filter itself once both checks are done (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${COST_CENTRE_TABLE}    ${code}    ${COST_CENTRE_GRID_VERIFY_PROPERTIES}
     ...    ${COST_CENTRE_FORM_VERIFY_PROPERTIES}    @{COST_CENTRE_FORM_LABELS}
+    Clear Cost Centre Row Filter
 
 Delete Cost Centre Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date,
@@ -124,9 +157,13 @@ Delete Cost Centre Record And Save
     ...    ${TEST_CODE}/${END_DATE}). Select the cost centre, set End Date = Start Date
     ...    (true delete), Save. Captures the TC05 evidence screenshot right after the End
     ...    Date is filled but BEFORE Save is clicked, matching Bank/State's convention.
+    ...    Filters via Find Cost Centre Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find Cost Centre Row By Filter    ${code}
     Delete Object Via End Date    ${COST_CENTRE_TABLE}    ${COST_CENTRE_DEL_ENDDATE}    ${code}    ${date}
     ...    ${TEST NAME}_action
+    Clear Cost Centre Row Filter
 
 Verify Cost Centre Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with
