@@ -1,58 +1,66 @@
 *** Settings ***
 Documentation       EC IUD Test - WBS (Configuration > Assets > Financial Objects > WBS).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_FIN_WBS).
-...                 NEVER touch existing data. A unique AUTOTEST_WBS_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+...                 Custom-URL OV (no navigator/GO — reload via toolbar Refresh). DELETE =
+...                 End Date = Start Date (true delete in OV_FIN_WBS).
+...                 Layered: this test -> wbs_page (T3) -> manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_WBS,
+...                 matching Bank/State's convention) rather than a generated unique code -
+...                 confirmed absent from OV_FIN_WBS before this was wired in (2026-08-22).
+...                 Every run must complete TC05 (delete) so the code is free for the next
+...                 run - EC never lets a DELETED code be reused, but this fixed code only
+...                 stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching Bank/State's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Financial_Objects/wbs_page.resource
 
-Suite Setup         Set Up WBS Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    wbs
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_WBS
+${OBJ_NAME}         AUTOTEST WBS
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/wbs_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST WBS UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test wbs does not exist before inserting.
-    [Tags]    clean-state
-    WBS Row Should Not Exist    ${TEST_CODE}
-    Capture Step    wbs_tc01_clean
-
-TC02 Insert New WBS
-    [Documentation]    Insert a new wbs and confirm it appears in the list.
-    [Tags]    insert
-    Insert WBS Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    WBS Row Should Exist    ${TEST_CODE}
-    WBS Should Exist In DB    ${TEST_CODE}
-    Capture Step    wbs_tc02_inserted
-
-TC03 Update WBS Name
-    [Documentation]    Edit the wbs name and confirm the list reflects the change.
-    [Tags]    update
-    Update WBS Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    WBS Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    wbs_tc03_updated
-
-TC04 Delete WBS
-    [Documentation]    Delete via End Date = Start Date and confirm the wbs is gone.
-    [Tags]    delete    cleanup
-    Delete WBS    ${TEST_CODE}    ${END_DATE}
-    WBS Row Should Not Exist    ${TEST_CODE}
-    WBS Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    wbs_tc04_deleted
-
-
-*** Keywords ***
-Set Up WBS Suite
-    [Documentation]    Generate a unique test code/name, then open the WBS screen.
-    Prepare IUD Object Data    AUTOTEST_WBS_    WBS
+    Login To EC Application
     Open WBS Screen
+    Verify WBS Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert WBS Data
+    Login To EC Application
+    Open WBS Screen
+    Insert WBS Record And Save
+    Verify WBS Record Exists
+    Logout From EC Application
+
+TC03 Update WBS Data
+    Login To EC Application
+    Open WBS Screen
+    Update WBS Record And Save
+    Verify WBS Record Updated
+    Logout From EC Application
+
+TC04 Find WBS Data
+    Login To EC Application
+    Open WBS Screen
+    Find WBS Record
+    Verify WBS Record Found
+    Logout From EC Application
+
+TC05 Delete WBS Data
+    Login To EC Application
+    Open WBS Screen
+    Delete WBS Record And Save
+    Verify WBS Record Removed
+    Logout From EC Application
