@@ -40,6 +40,21 @@ ${PRODUCTION_UNIT_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_i
 
 
 *** Keywords ***
+Find Production Unit Row By Filter
+    [Documentation]    Explicitly filter the Production Unit grid's Code column to ${code} via
+    ...    the shared T2 Find Object Row By Filter (resources/manage_object.resource) - matches
+    ...    Account/Bank/State/Object List's explicit filter usage (owner, 2026-08-22: "same to
+    ...    other ec screens"), rather than relying only on Select Object Row's implicit
+    ...    3s-timeout fallback.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${PRODUCTION_UNIT_TABLE}    ${code}
+
+Clear Production Unit Row Filter
+    [Documentation]    Clear the Code column filter (see Find Production Unit Row By Filter)
+    ...    via the shared T2 Clear Object Row Filter, restoring the grid's normal unfiltered
+    ...    view.
+    Clear Object Row Filter    ${PRODUCTION_UNIT_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as Production Unit's OWN credentials
     ...    (${PRODUCTION_UNIT_EC_USER}/${PRODUCTION_UNIT_EC_PASS} from credentials.py) on the
@@ -78,19 +93,26 @@ Verify Production Unit Record Exists
     ...    (Production Unit Code/Production Unit Name only - Start Date is grid/insert-only,
     ...    not present in updateAttributes). Delegates the full sequence (row-check, select,
     ...    form-compare, screenshot) to the shared T2 Verify Object Insert Exists.
+    ...    Filters via Find Production Unit Row By Filter first, clears after (2026-08-23
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Production Unit Row By Filter    ${code}
     Verify Object Insert Exists    ${PRODUCTION_UNIT_TABLE}    ${code}    Production Unit
     ...    ${PRODUCTION_UNIT_INSERT_PROPERTIES}    @{PRODUCTION_UNIT_FORM_LABELS}
     ...    code_label=Production Unit Code
+    Clear Production Unit Row Filter
 
 Update Production Unit Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching the other
-    ...    rebuilt screens.
+    ...    rebuilt screens. Filters via Find Production Unit Row By Filter first, clears
+    ...    after (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${PRODUCTION_UNIT_UPDATE_PROPERTIES}
+    Find Production Unit Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${PRODUCTION_UNIT_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action    code_label=Production Unit Code
+    Clear Production Unit Row Filter
     RETURN    ${data}
 
 Verify Production Unit Record Updated
@@ -98,17 +120,25 @@ Verify Production Unit Record Updated
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching the other rebuilt screens' TC03 convention: the form shows
     ...    the updated Name. Delegates the full sequence (select, form-compare, screenshot)
-    ...    to the shared T2 Verify Object Form Record.
+    ...    to the shared T2 Verify Object Form Record. Filters via Find Production Unit Row
+    ...    By Filter first, clears after (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Production Unit Row By Filter    ${code}
     Verify Object Form Record    ${PRODUCTION_UNIT_TABLE}    ${code}    Production Unit
     ...    ${PRODUCTION_UNIT_UPDATE_PROPERTIES}    Production Unit Name
     ...    code_label=Production Unit Code
+    Clear Production Unit Row Filter
 
 Find Production Unit Record
     [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
-    ...    Delegates the full select+capture sequence.
+    ...    Delegates the full select+capture sequence. Calls Find Production Unit Row By
+    ...    Filter first (2026-08-23 standardisation). Deliberately does NOT clear the filter
+    ...    afterward - Verify Production Unit Record Found (called right after, same TC)
+    ...    needs the grid still filtered to ${code} for its own grid-check, since it doesn't
+    ...    re-select the row itself; it clears the filter once both checks are done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find Production Unit Row By Filter    ${code}
     Find Object Record    ${PRODUCTION_UNIT_TABLE}    ${code}    Production Unit
     ...    code_label=Production Unit Code
 
@@ -118,10 +148,13 @@ Verify Production Unit Record Found
     ...    grid AND the form record match the expected (post-update) data. Delegates the
     ...    full sequence (grid-compare, form-compare, screenshot) to the shared T2 Verify
     ...    Object Found. Caller must already have selected the row (TC04 does, via Find
-    ...    Production Unit Record before this).
+    ...    Production Unit Record before this) AND left the Code filter active from that
+    ...    same call - clears the filter itself once both checks are done (2026-08-23
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${PRODUCTION_UNIT_TABLE}    ${code}    ${PRODUCTION_UNIT_GRID_VERIFY_PROPERTIES}
     ...    ${PRODUCTION_UNIT_FORM_VERIFY_PROPERTIES}    @{PRODUCTION_UNIT_FORM_LABELS}
+    Clear Production Unit Row Filter
 
 Delete Production Unit Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date,
@@ -129,10 +162,13 @@ Delete Production Unit Record And Save
     ...    ${TEST_CODE}/${END_DATE}). Select the production unit, set End Date = Start Date
     ...    (true delete), Save. Captures the TC05 evidence screenshot right after the End
     ...    Date is filled but BEFORE Save is clicked, matching the other rebuilt screens'
-    ...    convention.
+    ...    convention. Filters via Find Production Unit Row By Filter first, clears after
+    ...    (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find Production Unit Row By Filter    ${code}
     Delete Object Via End Date    ${PRODUCTION_UNIT_TABLE}    ${PRODUCTION_UNIT_DEL_ENDDATE}    ${code}
     ...    ${date}    ${TEST NAME}_action
+    Clear Production Unit Row Filter
 
 Verify Production Unit Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with

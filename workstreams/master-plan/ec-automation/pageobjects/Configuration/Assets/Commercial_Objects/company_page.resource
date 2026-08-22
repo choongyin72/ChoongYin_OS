@@ -40,6 +40,23 @@ ${COMPANY_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
+Find Company Row By Filter
+    [Documentation]    Explicitly filter the Company grid's Code column to ${code} via the
+    ...    shared T2 Find Object Row By Filter (resources/manage_object.resource) - matches
+    ...    Account/Bank/State/Object List's explicit filter usage (owner, 2026-08-22: "same to
+    ...    other ec screens"). Company's own scorecard entry already flags a large PAGINATED
+    ...    grid (8 pages, hundreds of rows) with a prior non-reproducible TC05 flake on the
+    ...    first live build - this screen is the strongest real candidate (not just a
+    ...    consistency change) for actually needing the filter fallback, not merely relying
+    ...    on Select Object Row's implicit 3s-timeout fallback.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${COMPANY_TABLE}    ${code}
+
+Clear Company Row Filter
+    [Documentation]    Clear the Code column filter (see Find Company Row By Filter) via the
+    ...    shared T2 Clear Object Row Filter, restoring the grid's normal unfiltered view.
+    Clear Object Row Filter    ${COMPANY_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as Company's OWN credentials (${COMPANY_EC_USER}/
     ...    ${COMPANY_EC_PASS} from credentials.py) on the current page. Standing decision
@@ -75,18 +92,25 @@ Verify Company Record Exists
     ...    (Company Code/Company Name only - Start Date is grid/insert-only, not present in
     ...    updateAttributes). Delegates the full sequence (row-check, select, form-compare,
     ...    screenshot) to the shared T2 Verify Object Insert Exists.
+    ...    Filters via Find Company Row By Filter first, clears after (2026-08-23
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Company Row By Filter    ${code}
     Verify Object Insert Exists    ${COMPANY_TABLE}    ${code}    Company
     ...    ${COMPANY_INSERT_PROPERTIES}    @{COMPANY_FORM_LABELS}    code_label=Company Code
+    Clear Company Row Filter
 
 Update Company Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching the other
-    ...    rebuilt screens.
+    ...    rebuilt screens. Filters via Find Company Row By Filter first, clears after
+    ...    (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${COMPANY_UPDATE_PROPERTIES}
+    Find Company Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${COMPANY_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action    code_label=Company Code
+    Clear Company Row Filter
     RETURN    ${data}
 
 Verify Company Record Updated
@@ -94,16 +118,26 @@ Verify Company Record Updated
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching the other rebuilt screens' TC03 convention: the form shows
     ...    the updated Name. Delegates the full sequence (select, form-compare, screenshot)
-    ...    to the shared T2 Verify Object Form Record.
+    ...    to the shared T2 Verify Object Form Record. Filters via Find Company Row By
+    ...    Filter first, clears after (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Company Row By Filter    ${code}
     Verify Object Form Record    ${COMPANY_TABLE}    ${code}    Company
     ...    ${COMPANY_UPDATE_PROPERTIES}    Company Name    code_label=Company Code
+    Clear Company Row Filter
 
 Find Company Record
     [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
-    ...    Delegates the full select+capture sequence.
+    ...    Delegates the full select+capture sequence. Calls Find Company Row By Filter first
+    ...    (2026-08-23 standardisation) - Company's 8-page grid is the strongest real
+    ...    candidate in this group for actually needing this, not just consistency.
+    ...    Deliberately does NOT clear the filter afterward - Verify Company Record Found
+    ...    (called right after, same TC) needs the grid still filtered to ${code} for its own
+    ...    grid-check, since it doesn't re-select the row itself; it clears the filter once
+    ...    both checks are done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find Company Row By Filter    ${code}
     Find Object Record    ${COMPANY_TABLE}    ${code}    Company    code_label=Company Code
 
 Verify Company Record Found
@@ -112,10 +146,12 @@ Verify Company Record Found
     ...    grid AND the form record match the expected (post-update) data. Delegates the
     ...    full sequence (grid-compare, form-compare, screenshot) to the shared T2 Verify
     ...    Object Found. Caller must already have selected the row (TC04 does, via Find
-    ...    Company Record before this).
+    ...    Company Record before this) AND left the Code filter active from that same call -
+    ...    clears the filter itself once both checks are done (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${COMPANY_TABLE}    ${code}    ${COMPANY_GRID_VERIFY_PROPERTIES}
     ...    ${COMPANY_FORM_VERIFY_PROPERTIES}    @{COMPANY_FORM_LABELS}
+    Clear Company Row Filter
 
 Delete Company Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date,
@@ -123,9 +159,16 @@ Delete Company Record And Save
     ...    ${TEST_CODE}/${END_DATE}). Select the company, set End Date = Start Date (true
     ...    delete), Save. Captures the TC05 evidence screenshot right after the End Date is
     ...    filled but BEFORE Save is clicked, matching the other rebuilt screens' convention.
+    ...    Filters via Find Company Row By Filter first, clears after (2026-08-23
+    ...    standardisation) - this screen's own prior non-reproducible TC05 grid-refresh
+    ...    timing flake (see scorecard) is exactly the class of symptom filtering by the
+    ...    real target row (instead of trusting whichever page/rows happen to be rendered)
+    ...    should make more robust.
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find Company Row By Filter    ${code}
     Delete Object Via End Date    ${COMPANY_TABLE}    ${COMPANY_DEL_ENDDATE}    ${code}    ${date}
     ...    ${TEST NAME}_action
+    Clear Company Row Filter
 
 Verify Company Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with

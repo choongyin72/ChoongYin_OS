@@ -36,6 +36,21 @@ ${EXCHANGE_RATE_SOURCE_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3
 
 
 *** Keywords ***
+Find Exchange Rate Source Row By Filter
+    [Documentation]    Explicitly filter the Exchange Rate Source grid's Code column to ${code}
+    ...    via the shared T2 Find Object Row By Filter (resources/manage_object.resource) -
+    ...    matches Account/Bank/State/Object List's explicit filter usage (owner, 2026-08-22:
+    ...    "same to other ec screens"), rather than relying only on Select Object Row's
+    ...    implicit 3s-timeout fallback.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${EXCHANGE_RATE_SOURCE_TABLE}    ${code}
+
+Clear Exchange Rate Source Row Filter
+    [Documentation]    Clear the Code column filter (see Find Exchange Rate Source Row By
+    ...    Filter) via the shared T2 Clear Object Row Filter, restoring the grid's normal
+    ...    unfiltered view.
+    Clear Object Row Filter    ${EXCHANGE_RATE_SOURCE_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as Exchange Rate Source's OWN credentials
     ...    (${EXCHANGE_RATE_SOURCE_EC_USER}/${EXCHANGE_RATE_SOURCE_EC_PASS} from
@@ -72,17 +87,25 @@ Verify Exchange Rate Source Record Exists
     ...    Date is grid/insert-only, not present in updateAttributes). Delegates the full
     ...    sequence (row-check, select, form-compare, screenshot) to the shared T2 Verify
     ...    Object Insert Exists.
+    ...    Filters via Find Exchange Rate Source Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Exchange Rate Source Row By Filter    ${code}
     Verify Object Insert Exists    ${EXCHANGE_RATE_SOURCE_TABLE}    ${code}    Exchange Rate Source
     ...    ${EXCHANGE_RATE_SOURCE_INSERT_PROPERTIES}    @{EXCHANGE_RATE_SOURCE_FORM_LABELS}    code_label=Code
+    Clear Exchange Rate Source Row Filter
 
 Update Exchange Rate Source Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank/State.
+    ...    Filters via Find Exchange Rate Source Row By Filter first, clears after
+    ...    (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${EXCHANGE_RATE_SOURCE_UPDATE_PROPERTIES}
+    Find Exchange Rate Source Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${EXCHANGE_RATE_SOURCE_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action    code_label=Code
+    Clear Exchange Rate Source Row Filter
     RETURN    ${data}
 
 Verify Exchange Rate Source Record Updated
@@ -90,16 +113,24 @@ Verify Exchange Rate Source Record Updated
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching Bank/State's TC03 convention: the form shows the updated
     ...    Name. Delegates the full sequence (select, form-compare, screenshot) to the shared
-    ...    T2 Verify Object Form Record.
+    ...    T2 Verify Object Form Record. Filters via Find Exchange Rate Source Row By Filter
+    ...    first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Exchange Rate Source Row By Filter    ${code}
     Verify Object Form Record    ${EXCHANGE_RATE_SOURCE_TABLE}    ${code}    Exchange Rate Source
     ...    ${EXCHANGE_RATE_SOURCE_UPDATE_PROPERTIES}    Name    code_label=Code
+    Clear Exchange Rate Source Row Filter
 
 Find Exchange Rate Source Record
     [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
-    ...    Delegates the full select+capture sequence.
+    ...    Delegates the full select+capture sequence. Calls Find Exchange Rate Source Row By
+    ...    Filter first (2026-08-22 standardisation). Deliberately does NOT clear the filter
+    ...    afterward - Verify Exchange Rate Source Record Found (called right after, same TC)
+    ...    needs the grid still filtered to ${code} for its own grid-check, since it doesn't
+    ...    re-select the row itself; it clears the filter once both checks are done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find Exchange Rate Source Row By Filter    ${code}
     Find Object Record    ${EXCHANGE_RATE_SOURCE_TABLE}    ${code}    Exchange Rate Source    code_label=Code
 
 Verify Exchange Rate Source Record Found
@@ -108,10 +139,13 @@ Verify Exchange Rate Source Record Found
     ...    grid AND the form record match the expected (post-update) data. Delegates the full
     ...    sequence (grid-compare, form-compare, screenshot) to the shared T2 Verify Object
     ...    Found. Caller must already have selected the row (TC04 does, via Find Exchange
-    ...    Rate Source Record before this).
+    ...    Rate Source Record before this) AND left the Code filter active from that same
+    ...    call - clears the filter itself once both checks are done (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${EXCHANGE_RATE_SOURCE_TABLE}    ${code}    ${EXCHANGE_RATE_SOURCE_GRID_VERIFY}
     ...    ${EXCHANGE_RATE_SOURCE_FORM_VERIFY}    @{EXCHANGE_RATE_SOURCE_FORM_LABELS}
+    Clear Exchange Rate Source Row Filter
 
 Delete Exchange Rate Source Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date,
@@ -119,9 +153,13 @@ Delete Exchange Rate Source Record And Save
     ...    ${TEST_CODE}/${END_DATE}). Select the exchange rate source, set End Date = Start
     ...    Date (true delete), Save. Captures the TC05 evidence screenshot right after the End
     ...    Date is filled but BEFORE Save is clicked, matching Bank/State's convention.
+    ...    Filters via Find Exchange Rate Source Row By Filter first, clears after
+    ...    (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find Exchange Rate Source Row By Filter    ${code}
     Delete Object Via End Date    ${EXCHANGE_RATE_SOURCE_TABLE}    ${EXCHANGE_RATE_SOURCE_DEL_ENDDATE}
     ...    ${code}    ${date}    ${TEST NAME}_action
+    Clear Exchange Rate Source Row Filter
 
 Verify Exchange Rate Source Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with

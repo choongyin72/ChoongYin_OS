@@ -44,6 +44,20 @@ ${WBS_DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
+Find WBS Row By Filter
+    [Documentation]    Explicitly filter the WBS grid's Code column to ${code} via the shared
+    ...    T2 Find Object Row By Filter (resources/manage_object.resource) - matches
+    ...    Account/Bank/State/Object List's explicit filter usage (owner, 2026-08-22: "same to
+    ...    other ec screens"), rather than relying only on Select Object Row's implicit
+    ...    3s-timeout fallback.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${WBS_TABLE}    ${code}
+
+Clear WBS Row Filter
+    [Documentation]    Clear the Code column filter (see Find WBS Row By Filter) via the
+    ...    shared T2 Clear Object Row Filter, restoring the grid's normal unfiltered view.
+    Clear Object Row Filter    ${WBS_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as WBS's OWN credentials (${WBS_EC_USER}/
     ...    ${WBS_EC_PASS} from credentials.py) on the current page. Standing decision
@@ -78,17 +92,25 @@ Verify WBS Record Exists
     ...    Start Date is grid/insert-only, not present in updateAttributes). Delegates the
     ...    full sequence (row-check, select, form-compare, screenshot) to the shared T2
     ...    Verify Object Insert Exists.
+    ...    Filters via Find WBS Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find WBS Row By Filter    ${code}
     Verify Object Insert Exists    ${WBS_TABLE}    ${code}    WBS    ${WBS_INSERT_PROPERTIES}
     ...    @{WBS_FORM_LABELS}
+    Clear WBS Row Filter
 
 Update WBS Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank/State.
+    ...    Filters via Find WBS Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${WBS_UPDATE_PROPERTIES}
+    Find WBS Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${WBS_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action
+    Clear WBS Row Filter
     RETURN    ${data}
 
 Verify WBS Record Updated
@@ -96,16 +118,24 @@ Verify WBS Record Updated
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching Bank/State's TC03 convention: the form shows the updated
     ...    Name. Delegates the full sequence (select, form-compare, screenshot) to the
-    ...    shared T2 Verify Object Form Record.
+    ...    shared T2 Verify Object Form Record. Filters via Find WBS Row By Filter first,
+    ...    clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find WBS Row By Filter    ${code}
     Verify Object Form Record    ${WBS_TABLE}    ${code}    WBS    ${WBS_UPDATE_PROPERTIES}
     ...    Name
+    Clear WBS Row Filter
 
 Find WBS Record
     [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
-    ...    Delegates the full select+capture sequence.
+    ...    Delegates the full select+capture sequence. Calls Find WBS Row By Filter first
+    ...    (2026-08-22 standardisation). Deliberately does NOT clear the filter afterward -
+    ...    Verify WBS Record Found (called right after, same TC) needs the grid still
+    ...    filtered to ${code} for its own grid-check, since it doesn't re-select the row
+    ...    itself; it clears the filter once both checks are done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find WBS Row By Filter    ${code}
     Find Object Record    ${WBS_TABLE}    ${code}    WBS
 
 Verify WBS Record Found
@@ -114,20 +144,25 @@ Verify WBS Record Found
     ...    grid AND the form record match the expected (post-update) data. Delegates the
     ...    full sequence (grid-compare, form-compare, screenshot) to the shared T2 Verify
     ...    Object Found. Caller must already have selected the row (TC04 does, via Find
-    ...    WBS Record before this).
+    ...    WBS Record before this) AND left the Code filter active from that same call -
+    ...    clears the filter itself once both checks are done (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${WBS_TABLE}    ${code}    ${WBS_GRID_VERIFY_PROPERTIES}
     ...    ${WBS_FORM_VERIFY_PROPERTIES}    @{WBS_FORM_LABELS}
+    Clear WBS Row Filter
 
 Delete WBS Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date,
     ...    called with ZERO arguments (defaults ${code}/${date} to the suite's
     ...    ${TEST_CODE}/${END_DATE}). Select the wbs, set End Date = Start Date (true
     ...    delete), Save. Captures the TC05 evidence screenshot right after the End Date is
-    ...    filled but BEFORE Save is clicked, matching Bank/State's convention.
+    ...    filled but BEFORE Save is clicked, matching Bank/State's convention. Filters via
+    ...    Find WBS Row By Filter first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find WBS Row By Filter    ${code}
     Delete Object Via End Date    ${WBS_TABLE}    ${WBS_DEL_ENDDATE}    ${code}    ${date}
     ...    ${TEST NAME}_action
+    Clear WBS Row Filter
 
 Verify WBS Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with

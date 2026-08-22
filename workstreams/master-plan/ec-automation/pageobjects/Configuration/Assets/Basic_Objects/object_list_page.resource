@@ -32,6 +32,20 @@ ${OBJECT_LIST_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
+Find Object List Row By Filter
+    [Documentation]    Explicitly filter the Object List grid's Code column to ${code} via the
+    ...    shared T2 Find Object Row By Filter (resources/manage_object.resource) - matches
+    ...    Account's own explicit filter usage (owner, 2026-08-22: "others (Bank, State,
+    ...    List_Object) should follow Account... utilise same filter feature"), rather than
+    ...    relying only on Select Object Row's implicit 3s-timeout fallback.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${OBJECT_LIST_TABLE}    ${code}
+
+Clear Object List Row Filter
+    [Documentation]    Clear the Code column filter (see Find Object List Row By Filter) via
+    ...    the shared T2 Clear Object Row Filter, restoring the grid's normal unfiltered view.
+    Clear Object Row Filter    ${OBJECT_LIST_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as Object List's OWN credentials (${OBJECT_LIST_EC_USER}/
     ...    ${OBJECT_LIST_EC_PASS} from credentials.py) on the current page. Standing decision
@@ -64,8 +78,13 @@ Insert Object List Record And Save
 Find Object List Record
     [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). Delegates
-    ...    the full select+capture sequence (owner-requested 2026-08-22 consolidation).
+    ...    the full select+capture sequence (owner-requested 2026-08-22 consolidation). Calls
+    ...    Find Object List Row By Filter first (2026-08-22 standardisation). Deliberately does
+    ...    NOT clear the filter afterward - Verify Object List Record Found (called right after,
+    ...    same TC) needs the grid still filtered to ${code} for its own grid-check, since it
+    ...    doesn't re-select the row itself; it clears the filter once both checks are done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find Object List Row By Filter    ${code}
     Find Object Record    ${OBJECT_LIST_TABLE}    ${code}    Object List
 
 Verify Object List Record Exists
@@ -76,17 +95,25 @@ Verify Object List Record Exists
     ...    Name/Start Date are grid/insert-only, not present in updateAttributes).
     ...    Delegates the full sequence (row-check, select, form-compare, screenshot) to the
     ...    shared T2 Verify Object Insert Exists (owner-requested 2026-08-22 consolidation).
+    ...    Filters via Find Object List Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Object List Row By Filter    ${code}
     Verify Object Insert Exists    ${OBJECT_LIST_TABLE}    ${code}    Object List
     ...    ${OBJECT_LIST_INSERT_PROPERTIES}    @{OBJECT_LIST_FORM_LABELS}
+    Clear Object List Row Filter
 
 Update Object List Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank.
+    ...    Filters via Find Object List Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${OBJECT_LIST_UPDATE_PROPERTIES}
+    Find Object List Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${OBJECT_LIST_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action
+    Clear Object List Row Filter
     RETURN    ${data}
 
 Verify Object List Record Updated
@@ -94,10 +121,13 @@ Verify Object List Record Updated
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching Bank's TC03 convention: the form shows the updated Name.
     ...    Delegates the full sequence (select, form-compare, screenshot) to the shared T2
-    ...    Verify Object Form Record (owner-requested 2026-08-22 consolidation).
+    ...    Verify Object Form Record (owner-requested 2026-08-22 consolidation). Filters via
+    ...    Find Object List Row By Filter first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Object List Row By Filter    ${code}
     Verify Object Form Record    ${OBJECT_LIST_TABLE}    ${code}    Object List
     ...    ${OBJECT_LIST_UPDATE_PROPERTIES}    Name
+    Clear Object List Row Filter
 
 Verify Object List Record Found
     [Documentation]    Friendly-narrative wrapper around the TC04 verification, called with
@@ -105,10 +135,13 @@ Verify Object List Record Found
     ...    grid AND the form record match the expected (post-update) data.
     ...    Delegates the full sequence (grid-compare, form-compare, screenshot) to the shared
     ...    T2 Verify Object Found (owner-requested 2026-08-22 consolidation). Caller must
-    ...    already have selected the row (TC04 does, via Find Object List Record before this).
+    ...    already have selected the row (TC04 does, via Find Object List Record before this)
+    ...    AND left the Code filter active from that same call - clears the filter itself once
+    ...    both checks are done (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${OBJECT_LIST_TABLE}    ${code}    ${OBJECT_LIST_GRID_VERIFY_PROPERTIES}
     ...    ${OBJECT_LIST_FORM_VERIFY_PROPERTIES}    @{OBJECT_LIST_FORM_LABELS}
+    Clear Object List Row Filter
 
 Delete Object List Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date, called
@@ -117,10 +150,13 @@ Delete Object List Record And Save
     ...    TC05 evidence screenshot right after End Date is filled but BEFORE Save is clicked,
     ...    matching Bank's convention. Calls T2 directly (no middle "Delete Object List" alias -
     ...    removed 2026-08-22, it added no behavior beyond forwarding these same arguments,
-    ...    matching Insert/Update Record And Save's existing single-hop shape).
+    ...    matching Insert/Update Record And Save's existing single-hop shape). Filters via Find
+    ...    Object List Row By Filter first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find Object List Row By Filter    ${code}
     Delete Object Via End Date    ${OBJECT_LIST_TABLE}    ${OBJECT_LIST_DEL_ENDDATE}    ${code}
     ...    ${date}    ${TEST NAME}_action
+    Clear Object List Row Filter
 
 Verify Object List Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with

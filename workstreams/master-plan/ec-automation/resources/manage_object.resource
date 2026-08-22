@@ -9,6 +9,7 @@ Documentation       T2 (pattern) — Manage-Object (OV) screen mechanics, shared
 Library             Browser
 Resource            common.resource
 Resource            popup.resource
+Resource            grid_menu.resource
 
 
 *** Variables ***
@@ -30,11 +31,75 @@ Open New Object Form
     Sleep    1.2s
 
 Select Object Row
-    [Documentation]    Select an object row by its code (text lives in a span child).
+    [Documentation]    Select an object row by its code (text lives in a span child). Tries a
+    ...    direct click first - the exact prior behavior, unchanged - which is the fast path
+    ...    for every already-shipped OV screen (all have small/single-page grids where the row
+    ...    is always on the current page, so this never triggers the fallback below). If the
+    ...    row isn't visible within 3s (the class of failure Account hit 2026-08-22:
+    ...    OV_FIN_ACCOUNT has 110+ rows on a 20-row/page grid, and AUTOTEST_ACCOUNT sorted
+    ...    alphabetically past every numeric code, landing off page 1), automatically retries by
+    ...    filtering the grid's Code column (0, leftmost) to ${code} via the shared
+    ...    resources/grid_menu.resource (already proven live on Business Function and Account) -
+    ...    this searches the FULL server-side dataset in one call, so no screen has to know or
+    ...    declare its own grid size ahead of time (standardised 2026-08-22, superseding
+    ...    Account's own one-off T3-local page-walking/filter keywords). Falls back to a bare
+    ...    "not found" failure if this grid doesn't expose the hamburger filter toggle at all
+    ...    (an older/non-filtering grid) - no worse than the pre-existing behavior for such a
+    ...    grid. Clears the filter again right after a successful filtered select, so the grid
+    ...    is left unfiltered for any caller that assumes a clean view afterward.
     [Arguments]    ${table_id}    ${code}
-    Click    xpath=//tbody[@id='${table_id}']//span[normalize-space(text())='${code}']
+    VAR    ${xpath}=    xpath=//tbody[@id='${table_id}']//span[normalize-space(text())='${code}']
+    TRY
+        Wait For Elements State    ${xpath}    visible    timeout=3s
+    EXCEPT
+        Select Object Row Via Filter    ${table_id}    ${code}    ${xpath}
+        RETURN
+    END
+    Click    ${xpath}
     Wait For Load State    networkidle    timeout=15s
     Sleep    1.2s
+
+Select Object Row Via Filter
+    [Documentation]    Fallback half of Select Object Row: filter the grid's Code column (0,
+    ...    leftmost) to ${code} via resources/grid_menu.resource, then click the now-visible
+    ...    row and clear the filter again. Fails loud if this grid has no hamburger filter
+    ...    toggle at all (an older/non-filtering grid - no worse than the pre-existing
+    ...    behavior for such a grid).
+    [Arguments]    ${table_id}    ${code}    ${xpath}
+    VAR    ${form}=    ${table_id.rsplit(':T_data', 1)[0]}
+    ${supported}=    Get Element Count    css=[id="${form}:T:tfo"]
+    IF    ${supported} == 0
+        Fail    msg=Row ${code} not found in ${table_id} (grid has no column-filter fallback)
+    END
+    Filter Grid Text Column By Value    ${form}    0    ${code}
+    Wait For Elements State    ${xpath}    visible    timeout=10s
+    Click    ${xpath}
+    Wait For Load State    networkidle    timeout=15s
+    Sleep    1.2s
+    Clear Grid Text Column Filter    ${form}    0
+
+Find Object Row By Filter
+    [Documentation]    Explicitly filter ${table_id}'s Code column (0, leftmost) to ${code} via
+    ...    resources/grid_menu.resource, so the row is found regardless of which page it would
+    ...    otherwise land on. Promoted 2026-08-22 from Account's own T3-local "Find Account Row
+    ...    By Filter" (added on PR #422) into this shared T2, so any OV screen's T3 can call the
+    ...    SAME named keyword directly (not just rely on Select Object Row's implicit 3s-timeout
+    ...    fallback) - owner: "the Find Account Row By Filter, Clear Account Row Filter SF
+    ...    keywords step should move to manage_object.resource so that all object similar to
+    ...    Account can utilise same filter feature". ${form} is derived automatically by
+    ...    stripping ':T_data' from ${table_id} - no screen needs to pass or declare it.
+    ...    Caller must call Clear Object Row Filter afterward to leave the grid unfiltered.
+    [Arguments]    ${table_id}    ${code}
+    VAR    ${form}=    ${table_id.rsplit(':T_data', 1)[0]}
+    Filter Grid Text Column By Value    ${form}    0    ${code}
+
+Clear Object Row Filter
+    [Documentation]    Clear the Code column filter set by Find Object Row By Filter, restoring
+    ...    ${table_id}'s normal unfiltered view. Promoted 2026-08-22 alongside Find Object Row
+    ...    By Filter (same rationale - see that keyword's docs).
+    [Arguments]    ${table_id}
+    VAR    ${form}=    ${table_id.rsplit(':T_data', 1)[0]}
+    Clear Grid Text Column Filter    ${form}    0
 
 Delete Object By Zero-Length Window
     [Documentation]    Set End Date = Start Date -> zero-length window -> EC true delete.
@@ -86,6 +151,52 @@ Delete Object Via End Date
     END
     Save And Refresh List
 
+OV Row Should Exist
+    [Documentation]    Assert a row with ${code} exists in ${table_id}. Checks the CURRENT
+    ...    page first (T1 Row Exists, unchanged fast path - zero behavior/timing change for
+    ...    every already-shipped OV screen, whose grids all fit on one page today). Only if
+    ...    not found there AND this grid exposes the EC hamburger column-filter
+    ...    (resources/grid_menu.resource) does it retry via a Code-column (0) filter, which
+    ...    searches the FULL server-side dataset - the same standardised fallback as Select
+    ...    Object Row (2026-08-22), generalised from Account's one-off fix so no future
+    ...    large-grid screen needs its own bespoke pagination workaround. Restores the grid
+    ...    to its unfiltered state before returning either way.
+    [Arguments]    ${table_id}    ${code}
+    ${exists}=    Row Exists    ${table_id}    ${code}
+    IF    not ${exists}
+        VAR    ${form}=    ${table_id.rsplit(':T_data', 1)[0]}
+        ${supported}=    Get Element Count    css=[id="${form}:T:tfo"]
+        IF    ${supported} > 0
+            Filter Grid Text Column By Value    ${form}    0    ${code}
+            ${n}=    Grid Data Row Count    ${form}
+            ${exists}=    Evaluate    ${n} > 0
+            Clear Grid Text Column Filter    ${form}    0
+        END
+    END
+    Should Be True    ${exists}    msg=Expected row ${code} to exist in ${table_id}
+
+OV Row Should Not Exist
+    [Documentation]    Assert a row with ${code} is absent from ${table_id} - across the WHOLE
+    ...    dataset when this grid supports filtering, not just the current page (2026-08-22
+    ...    standardisation, generalised from Account's one-off page-walk fix). Unlike OV Row
+    ...    Should Exist, this does NOT try the current page first: a current-page-only absence
+    ...    check is unsound on ANY grid, not just a large one - a stale leftover row could sit
+    ...    on a later page while page 1 looks clean regardless of grid size. Falls back to the
+    ...    original raw current-page-only check only when this grid has no filter toggle at all
+    ...    (an older/non-filtering grid keeps its exact prior behavior - nothing to filter,
+    ...    nothing lost).
+    [Arguments]    ${table_id}    ${code}
+    VAR    ${form}=    ${table_id.rsplit(':T_data', 1)[0]}
+    ${supported}=    Get Element Count    css=[id="${form}:T:tfo"]
+    IF    ${supported} > 0
+        Filter Grid Text Column By Value    ${form}    0    ${code}
+        ${n}=    Grid Data Row Count    ${form}
+        Clear Grid Text Column Filter    ${form}    0
+        Should Be Equal    ${n}    ${0}    msg=Row ${code} should NOT exist in ${table_id}
+    ELSE
+        Row Should Not Exist    ${table_id}    ${code}
+    END
+
 Object Row Should Show Name
     [Documentation]    Assert the grid row holding ${code} displays ${name}.
     [Arguments]    ${table_id}    ${code}    ${name}
@@ -127,7 +238,7 @@ Verify Object Removed
     ...    Removed" keyword (added 2026-08-22). Caller adds its own Capture Step - screenshot
     ...    naming stays screen-aware, not pulled in here.
     [Arguments]    ${table_id}    ${db_view}    ${code}
-    Row Should Not Exist    ${table_id}    ${code}
+    OV Row Should Not Exist    ${table_id}    ${code}
     Code Should Be Absent In View    ${db_view}    ${code}
 
 Verify Object Form Record
@@ -158,7 +269,7 @@ Verify Object Insert Exists
     ...    to Verify Object Form Record (added 2026-08-22, optional/backward-compatible).
     [Arguments]    ${table_id}    ${code}    ${screen_label}    ${properties_path}    @{labels}
     ...    ${code_label}=Code
-    Row Should Exist    ${table_id}    ${code}
+    OV Row Should Exist    ${table_id}    ${code}
     Verify Object Form Record    ${table_id}    ${code}    ${screen_label}    ${properties_path}
     ...    @{labels}    code_label=${code_label}
 
@@ -168,7 +279,7 @@ Verify Object Does Not Exist
     ...    Record Does Not Exist" (TC01 clean-state) keyword (added 2026-08-22, same
     ...    consolidation goal as Verify Object Insert Exists/Form Record/Found above).
     [Arguments]    ${table_id}    ${code}
-    Row Should Not Exist    ${table_id}    ${code}
+    OV Row Should Not Exist    ${table_id}    ${code}
     Capture Step    ${TEST NAME}_verify
 
 Verify Object Found

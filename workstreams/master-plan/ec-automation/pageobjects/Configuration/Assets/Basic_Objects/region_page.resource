@@ -35,6 +35,20 @@ ${REGION_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
+Find Region Row By Filter
+    [Documentation]    Explicitly filter the Region grid's Code column to ${code} via the
+    ...    shared T2 Find Object Row By Filter (resources/manage_object.resource) - matches
+    ...    Account/Bank/State/Object List's explicit filter usage (owner, 2026-08-22: "same to
+    ...    other ec screens"), rather than relying only on Select Object Row's implicit
+    ...    3s-timeout fallback.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${REGION_TABLE}    ${code}
+
+Clear Region Row Filter
+    [Documentation]    Clear the Code column filter (see Find Region Row By Filter) via the
+    ...    shared T2 Clear Object Row Filter, restoring the grid's normal unfiltered view.
+    Clear Object Row Filter    ${REGION_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as Region's OWN credentials (${REGION_EC_USER}/
     ...    ${REGION_EC_PASS} from credentials.py) on the current page. Standing decision
@@ -70,18 +84,25 @@ Verify Region Record Exists
     ...    (Region Code/Region Name only - Start Date is grid/insert-only, not present in
     ...    updateAttributes). Delegates the full sequence (row-check, select, form-compare,
     ...    screenshot) to the shared T2 Verify Object Insert Exists.
+    ...    Filters via Find Region Row By Filter first, clears after (2026-08-23
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Region Row By Filter    ${code}
     Verify Object Insert Exists    ${REGION_TABLE}    ${code}    Region    ${REGION_INSERT_PROPERTIES}
     ...    @{REGION_FORM_LABELS}    code_label=Region Code
+    Clear Region Row Filter
 
 Update Region Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank/
-    ...    Object List/State.
+    ...    Object List/State. Filters via Find Region Row By Filter first, clears after
+    ...    (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${REGION_UPDATE_PROPERTIES}
+    Find Region Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${REGION_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action    code_label=Region Code
+    Clear Region Row Filter
     RETURN    ${data}
 
 Verify Region Record Updated
@@ -89,16 +110,24 @@ Verify Region Record Updated
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching Bank/Object List/State's TC03 convention: the form shows
     ...    the updated Name. Delegates the full sequence (select, form-compare, screenshot)
-    ...    to the shared T2 Verify Object Form Record.
+    ...    to the shared T2 Verify Object Form Record. Filters via Find Region Row By Filter
+    ...    first, clears after (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Region Row By Filter    ${code}
     Verify Object Form Record    ${REGION_TABLE}    ${code}    Region    ${REGION_UPDATE_PROPERTIES}
     ...    Region Name    code_label=Region Code
+    Clear Region Row Filter
 
 Find Region Record
     [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
-    ...    Delegates the full select+capture sequence.
+    ...    Delegates the full select+capture sequence. Calls Find Region Row By Filter first
+    ...    (2026-08-23 standardisation). Deliberately does NOT clear the filter afterward -
+    ...    Verify Region Record Found (called right after, same TC) needs the grid still
+    ...    filtered to ${code} for its own grid-check, since it doesn't re-select the row
+    ...    itself; it clears the filter once both checks are done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find Region Row By Filter    ${code}
     Find Object Record    ${REGION_TABLE}    ${code}    Region    code_label=Region Code
 
 Verify Region Record Found
@@ -107,10 +136,12 @@ Verify Region Record Found
     ...    grid AND the form record match the expected (post-update) data. Delegates the
     ...    full sequence (grid-compare, form-compare, screenshot) to the shared T2 Verify
     ...    Object Found. Caller must already have selected the row (TC04 does, via Find
-    ...    Region Record before this).
+    ...    Region Record before this) AND left the Code filter active from that same call -
+    ...    clears the filter itself once both checks are done (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${REGION_TABLE}    ${code}    ${REGION_GRID_VERIFY_PROPERTIES}
     ...    ${REGION_FORM_VERIFY_PROPERTIES}    @{REGION_FORM_LABELS}
+    Clear Region Row Filter
 
 Delete Region Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date,
@@ -118,9 +149,13 @@ Delete Region Record And Save
     ...    ${TEST_CODE}/${END_DATE}). Select the region, set End Date = Start Date (true
     ...    delete), Save. Captures the TC05 evidence screenshot right after the End Date is
     ...    filled but BEFORE Save is clicked, matching Bank/Object List/State's convention.
+    ...    Filters via Find Region Row By Filter first, clears after (2026-08-23
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find Region Row By Filter    ${code}
     Delete Object Via End Date    ${REGION_TABLE}    ${REGION_DEL_ENDDATE}    ${code}    ${date}
     ...    ${TEST NAME}_action
+    Clear Region Row Filter
 
 Verify Region Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with

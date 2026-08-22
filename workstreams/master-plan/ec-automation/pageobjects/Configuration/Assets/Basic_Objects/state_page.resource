@@ -37,6 +37,20 @@ ${STATE_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 
 *** Keywords ***
+Find State Row By Filter
+    [Documentation]    Explicitly filter the State grid's Code column to ${code} via the shared
+    ...    T2 Find Object Row By Filter (resources/manage_object.resource) - matches Account's
+    ...    own explicit filter usage (owner, 2026-08-22: "others (Bank, State, List_Object)
+    ...    should follow Account... utilise same filter feature"), rather than relying only on
+    ...    Select Object Row's implicit 3s-timeout fallback.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${STATE_TABLE}    ${code}
+
+Clear State Row Filter
+    [Documentation]    Clear the Code column filter (see Find State Row By Filter) via the
+    ...    shared T2 Clear Object Row Filter, restoring the grid's normal unfiltered view.
+    Clear Object Row Filter    ${STATE_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as State's OWN credentials (${STATE_EC_USER}/
     ...    ${STATE_EC_PASS} from credentials.py) on the current page. Standing decision
@@ -71,17 +85,24 @@ Verify State Record Exists
     ...    Code/State Name only - Start Date is grid/insert-only, not present in updateAttributes).
     ...    Delegates the full sequence (row-check, select, form-compare, screenshot) to the
     ...    shared T2 Verify Object Insert Exists.
+    ...    Filters via Find State Row By Filter first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find State Row By Filter    ${code}
     Verify Object Insert Exists    ${STATE_TABLE}    ${code}    State    ${STATE_INSERT_PROPERTIES}
     ...    @{STATE_FORM_LABELS}    code_label=State Code
+    Clear State Row Filter
 
 Update State Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
-    ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank/Object List.
+    ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank/Object
+    ...    List. Filters via Find State Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${STATE_UPDATE_PROPERTIES}
+    Find State Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${STATE_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action    code_label=State Code
+    Clear State Row Filter
     RETURN    ${data}
 
 Verify State Record Updated
@@ -89,16 +110,24 @@ Verify State Record Updated
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching Bank/Object List's TC03 convention: the form shows the
     ...    updated Name. Delegates the full sequence (select, form-compare, screenshot) to
-    ...    the shared T2 Verify Object Form Record.
+    ...    the shared T2 Verify Object Form Record. Filters via Find State Row By Filter
+    ...    first, clears after (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find State Row By Filter    ${code}
     Verify Object Form Record    ${STATE_TABLE}    ${code}    State    ${STATE_UPDATE_PROPERTIES}
     ...    State Name    code_label=State Code
+    Clear State Row Filter
 
 Find State Record
     [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
-    ...    Delegates the full select+capture sequence.
+    ...    Delegates the full select+capture sequence. Calls Find State Row By Filter first
+    ...    (2026-08-22 standardisation). Deliberately does NOT clear the filter afterward -
+    ...    Verify State Record Found (called right after, same TC) needs the grid still
+    ...    filtered to ${code} for its own grid-check, since it doesn't re-select the row
+    ...    itself; it clears the filter once both checks are done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find State Row By Filter    ${code}
     Find Object Record    ${STATE_TABLE}    ${code}    State    code_label=State Code
 
 Verify State Record Found
@@ -107,10 +136,12 @@ Verify State Record Found
     ...    grid AND the form record match the expected (post-update) data. Delegates the
     ...    full sequence (grid-compare, form-compare, screenshot) to the shared T2 Verify
     ...    Object Found. Caller must already have selected the row (TC04 does, via Find
-    ...    State Record before this).
+    ...    State Record before this) AND left the Code filter active from that same call -
+    ...    clears the filter itself once both checks are done (2026-08-22 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${STATE_TABLE}    ${code}    ${STATE_GRID_VERIFY_PROPERTIES}
     ...    ${STATE_FORM_VERIFY_PROPERTIES}    @{STATE_FORM_LABELS}
+    Clear State Row Filter
 
 Delete State Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date,
@@ -118,9 +149,13 @@ Delete State Record And Save
     ...    ${TEST_CODE}/${END_DATE}). Select the state, set End Date = Start Date (true
     ...    delete), Save. Captures the TC05 evidence screenshot right after the End Date is
     ...    filled but BEFORE Save is clicked, matching Bank/Object List's convention.
+    ...    Filters via Find State Row By Filter first, clears after (2026-08-22
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find State Row By Filter    ${code}
     Delete Object Via End Date    ${STATE_TABLE}    ${STATE_DEL_ENDDATE}    ${code}    ${date}
     ...    ${TEST NAME}_action
+    Clear State Row Filter
 
 Verify State Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with
