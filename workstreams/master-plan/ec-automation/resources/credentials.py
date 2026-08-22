@@ -31,3 +31,6 @@ OBJECT_LIST_EC_PASS = os.environ.get("OBJECT_LIST_EC_PASS", os.environ.get("EC_P
 
 STATE_EC_USER = os.environ.get("STATE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 STATE_EC_PASS = os.environ.get("STATE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+REVENUE_ORDER_EC_USER = os.environ.get("REVENUE_ORDER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+REVENUE_ORDER_EC_PASS = os.environ.get("REVENUE_ORDER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
