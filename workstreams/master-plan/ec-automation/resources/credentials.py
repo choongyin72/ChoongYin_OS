@@ -55,3 +55,6 @@ REVENUE_ORDER_EC_PASS = os.environ.get("REVENUE_ORDER_EC_PASS", os.environ.get("
 
 WBS_EC_USER = os.environ.get("WBS_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 WBS_EC_PASS = os.environ.get("WBS_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PAYMENT_SCHEME_EC_USER = os.environ.get("PAYMENT_SCHEME_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PAYMENT_SCHEME_EC_PASS = os.environ.get("PAYMENT_SCHEME_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
