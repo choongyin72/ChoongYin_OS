@@ -74,6 +74,7 @@ _Last updated: 2026-08-16_
 | ECIS Excel Upload | End-to-end | ✅ Complete | Own interface + schedule, ran live |
 | ECIS Excel Upload | Re-runnable SQL + skills + evidence | ✅ Merged (2026-06-22, PR #93) | `workstreams/ecis-excel-upload/`: idempotent create/delete SQL (update-insert, no MERGE), live DB-verified demo (`AVG_BH_PRESS` NULL→210.5/215/220.3 @ 2003-01-10, self-cleaned), page-broken evidence doc, + `ec-sql-script-builder` & `ecis-excel-upload-builder` skills. KNOWN OPEN: automated `upload→RUN NOW` timing flakiness (root cause unconfirmed) |
 | Assets | Recon | ✅ Scanned | Registry complete |
+| Financial Objects | Cost Centre (OV, custom-URL) — Bank-pattern conversion | ✅ Rebuilt live 5/5 (2026-08-22) | Batch-1 pilot conversion (with Revenue Order + WBS, in parallel worker sessions) from the older hardcoded-field-id/generated-code pattern to Bank/State's label-driven, properties-file-driven, T2-consolidated pattern; `OV_FIN_COST_CENTER`; grid `nav:form:T_data`, no GO (confirmed live), reload via T2 `Save And Refresh List`'s toolbar-Refresh fallback; labels confirmed live as generic "Code"/"Name" (not screen-prefixed); fixed test code `AUTOTEST_COST_CENTRE`; no shared-file edits; DB-verified + self-cleaning (fresh-connection re-read = 0 residual) |
 
 ---
 
