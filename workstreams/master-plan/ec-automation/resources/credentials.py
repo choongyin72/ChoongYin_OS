@@ -61,3 +61,6 @@ PAYMENT_SCHEME_EC_PASS = os.environ.get("PAYMENT_SCHEME_EC_PASS", os.environ.get
 
 EXCHANGE_RATE_SOURCE_EC_USER = os.environ.get("EXCHANGE_RATE_SOURCE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 EXCHANGE_RATE_SOURCE_EC_PASS = os.environ.get("EXCHANGE_RATE_SOURCE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+ACCOUNT_EC_USER = os.environ.get("ACCOUNT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+ACCOUNT_EC_PASS = os.environ.get("ACCOUNT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
