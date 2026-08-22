@@ -55,8 +55,9 @@ wrap there would be pure redundant duplication with no behavior change.
 | Business Unit | ✅ DONE (2026-08-23) | Small grid. Live 5/5, filter confirmed fired. |
 | Production Unit | ✅ DONE (2026-08-23) | Small grid. Live 5/5, filter confirmed fired. |
 | Company | ✅ DONE (2026-08-23) | Large PAGINATED grid (8 pages, hundreds of rows) with a prior non-reproducible TC05 flake on its first-ever live build - the strongest real candidate in this whole set for actually needing the filter, not just consistency. Live 5/5 clean on this run (no flake), filter confirmed fired. |
+| VAT Code | ✅ DONE (2026-08-23, PR #431) | Manage-object OV, small/single-page grid (15 rows). Wired in from the start (batch-2, not a follow-up). Live 5/5, filter keyword confirmed fired 7x via output.xml grep. |
 
-**14 of 14 done.** Every screen already rebuilt to the Bank-pattern T2-consolidated
+**15 of 15 done.** Every screen already rebuilt to the Bank-pattern T2-consolidated
 shape now has the explicit filter wiring. Any FUTURE screen rebuilt to this pattern
 should get the same treatment as part of its own build (see "How to update this
 doc" below) - there is no more backlog from this batch.
