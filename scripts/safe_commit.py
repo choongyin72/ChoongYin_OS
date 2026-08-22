@@ -30,10 +30,23 @@ WHAT IT ENFORCES (each as an exit code, not a reminder):
     a change to the shared engine cannot be committed without a fresh, real regression proof, not a
     remembered "I ran it earlier".
 
+ 6. SCOPE/FILES-TOUCHED REGENERATED ON EVERY PUSH, MECHANIZED (Issue #424). A PR body's "Scope / Files
+    touched" list is written by hand once, at PR-creation time, and prose does not survive a branch that
+    keeps growing - PR #423 started as 1 commit/1 file and merged at 5 commits/16 files with a body that
+    still described commit 1. With --push, after a successful push this script prints the CURRENT
+    full-branch file list (diffed against `merge-base origin/master HEAD`) as a ready-to-paste "## Scope /
+    Files touched" block, loudly flags any file NEW since the previous push to this branch (comparing
+    against the branch's previous origin ref, captured before this push), and - if an open PR already
+    exists for this branch (via `gh pr view`) - diffs the emitted list against the PR body's own file
+    list and warns (never aborts) on any mismatch. This is a print-only reporting gate, not a commit
+    blocker: the fix isn't code correctness, it's making sure the human reading the PR isn't fed a stale
+    summary of what actually shipped.
+
 Prints the staged set BEFORE committing - the check that catches a mistake must precede the irreversible
 step, not follow it (I caught the add -u accident with `git show --stat` afterwards).
 """
 import argparse
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -71,6 +84,83 @@ def expand(paths):
         else:
             out.add(Path(p).as_posix())
     return out
+
+
+def diff_name_status(base, head):
+    """Lines of `git diff --name-status base...head`, empty list if the ref pair is bad."""
+    r = git("diff", "--name-status", "%s...%s" % (base, head), check=False)
+    return [l for l in (r.stdout or "").splitlines() if l.strip()]
+
+
+def paths_from_name_status(lines):
+    """Extract the touched file path from each name-status line (renames/copies: use the NEW path)."""
+    paths = set()
+    for l in lines:
+        parts = l.split("\t")
+        if len(parts) >= 2:
+            paths.add(parts[-1])
+    return paths
+
+
+def emit_scope_report(branch, old_remote_sha):
+    """Issue #424: after a successful push, print the CURRENT full-branch Scope/Files-touched block
+    (a PR body written once at creation goes stale as the branch grows - PR #423 merged at 5 commits/
+    16 files with a body still describing commit 1), flag any file NEW since the previous push to this
+    branch, and - if an open PR already exists for this branch - warn (never abort) on any file the PR
+    body doesn't mention. ${old_remote_sha} must be captured BEFORE this push runs (empty string if this
+    branch has no prior remote ref, i.e. this is its first push)."""
+    merge_base_new = git("merge-base", "origin/master", "HEAD", check=False).stdout.strip()
+    if not merge_base_new:
+        print(a("\n[Issue #424] skipped scope report - HEAD has no merge-base with origin/master"))
+        return
+    new_lines = diff_name_status(merge_base_new, "HEAD")
+    new_paths = paths_from_name_status(new_lines)
+
+    print(a("\n## Scope / Files touched (regenerated for %s - Issue #424, paste into the PR body)" % branch))
+    if new_lines:
+        for l in sorted(new_lines):
+            print(a("   %s" % l))
+    else:
+        print(a("   (no diff vs origin/master?)"))
+
+    if old_remote_sha:
+        merge_base_old = git("merge-base", "origin/master", old_remote_sha, check=False).stdout.strip()
+        old_paths = paths_from_name_status(diff_name_status(merge_base_old, old_remote_sha)) \
+            if merge_base_old else set()
+        grown = sorted(new_paths - old_paths)
+        if grown:
+            print(a("\n[!!] FILE LIST GREW SINCE THE LAST PUSH TO %s - the PR body is now STALE unless "
+                     "you refresh its Scope/Files-touched section:" % branch))
+            for g in grown:
+                print(a("   + %s" % g))
+    else:
+        print(a("   (first push of this branch - nothing to compare growth against)"))
+
+    # Optional stronger form: cross-check against an ALREADY-OPEN PR's own body. Best-effort - a missing
+    # PR, unauthenticated gh, or a network hiccup is silently skipped, never a reason to fail the push.
+    try:
+        pr = subprocess.run(["gh", "pr", "view", branch, "--json", "number,url,body"],
+                            cwd=str(ROOT), capture_output=True, text=True)
+    except OSError:
+        # gh binary not installed on this machine at all - same best-effort contract as an
+        # unauthenticated gh or missing PR: skip silently, never fail the push (reviewer
+        # hand-fix at merge of PR #425: subprocess.run raises FileNotFoundError for a missing
+        # executable, which the returncode!=0 check below never sees).
+        return
+    if pr.returncode == 0 and (pr.stdout or "").strip():
+        try:
+            data = json.loads(pr.stdout)
+        except ValueError:
+            data = None
+        if data:
+            body = data.get("body") or ""
+            missing_from_body = sorted(p for p in new_paths if p not in body)
+            if missing_from_body:
+                print(a("\n[!!] open PR #%s (%s) body does not mention %d touched file(s) - update the "
+                         "PR description's Scope/Files-touched section:"
+                         % (data.get("number"), data.get("url"), len(missing_from_body))))
+                for m in missing_from_body:
+                    print(a("   ? %s" % m))
 
 
 def main():
@@ -171,8 +261,18 @@ def main():
     print(a("committed: %s" % git("log", "--oneline", "-1").stdout.strip()))
 
     if args.push:
+        # capture the branch's PRE-push remote state before it moves, so emit_scope_report can tell
+        # whether the file list grew (Issue #424) - a failed fetch just means no prior remote ref yet.
+        git("fetch", "origin", args.push, check=False)
+        _old_ref = git("rev-parse", "origin/%s" % args.push, check=False)
+        # `git rev-parse` on a ref that doesn't exist yet ECHOES THE ARGUMENT ITSELF to stdout (not
+        # empty) while the real error goes to stderr with returncode!=0 - trusting stdout truthiness
+        # alone made a genuinely-first-ever push look like it had a prior remote ref (found live while
+        # exercising this fix, Issue #424's own verification step catching a real bug).
+        old_remote_sha = _old_ref.stdout.strip() if _old_ref.returncode == 0 else ""
         git("push", "origin", args.push)
         print(a("pushed %s" % args.push))
+        emit_scope_report(args.push, old_remote_sha)
     return 0
 
 
