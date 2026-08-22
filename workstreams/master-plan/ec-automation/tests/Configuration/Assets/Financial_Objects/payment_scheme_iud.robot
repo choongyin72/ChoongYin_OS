@@ -1,58 +1,66 @@
 *** Settings ***
-Documentation       EC IUD Test - Payment Scheme (Configuration > Assets > Financial Objects > Payment Scheme).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_PAYMENT_SCHEME).
-...                 NEVER touch existing data. A unique AUTOTEST_PSCH_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+Documentation       EC IUD Test - Payment Scheme (Configuration > Assets > Financial Objects >
+...                 Payment Scheme). Manage-Object (OV) screen. DELETE = End Date = Start Date
+...                 (true delete in OV_PAYMENT_SCHEME). Layered: this test ->
+...                 payment_scheme_page (T3) -> manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_PAYMENT_SCHEME,
+...                 matching Bank/State's convention) rather than a generated unique code -
+...                 confirmed absent from OV_PAYMENT_SCHEME before this was wired in
+...                 (2026-08-22). Every run must complete TC05 (delete) so the code is free for
+...                 the next run - EC never lets a DELETED code be reused, but this fixed code
+...                 only stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup, matching Bank/State's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Financial_Objects/payment_scheme_page.resource
 
-Suite Setup         Set Up Payment Scheme Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    payment-scheme
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_PAYMENT_SCHEME
+${OBJ_NAME}         AUTOTEST Payment Scheme
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/payment_scheme_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Payment Scheme UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test payment scheme does not exist before inserting.
-    [Tags]    clean-state
-    Payment Scheme Row Should Not Exist    ${TEST_CODE}
-    Capture Step    payment_scheme_tc01_clean
-
-TC02 Insert New Payment Scheme
-    [Documentation]    Insert a new payment scheme and confirm it appears in the list.
-    [Tags]    insert
-    Insert Payment Scheme Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Payment Scheme Row Should Exist    ${TEST_CODE}
-    Payment Scheme Should Exist In DB    ${TEST_CODE}
-    Capture Step    payment_scheme_tc02_inserted
-
-TC03 Update Payment Scheme Name
-    [Documentation]    Edit the payment scheme name and confirm the list reflects the change.
-    [Tags]    update
-    Update Payment Scheme Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Payment Scheme Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    payment_scheme_tc03_updated
-
-TC04 Delete Payment Scheme
-    [Documentation]    Delete via End Date = Start Date and confirm the payment scheme is gone.
-    [Tags]    delete    cleanup
-    Delete Payment Scheme    ${TEST_CODE}    ${END_DATE}
-    Payment Scheme Row Should Not Exist    ${TEST_CODE}
-    Payment Scheme Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    payment_scheme_tc04_deleted
-
-
-*** Keywords ***
-Set Up Payment Scheme Suite
-    [Documentation]    Generate a unique test code/name, then open the Payment Scheme screen.
-    Prepare IUD Object Data    AUTOTEST_PSCH_    Payment Scheme
+    Login To EC Application
     Open Payment Scheme Screen
+    Verify Payment Scheme Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Payment Scheme Data
+    Login To EC Application
+    Open Payment Scheme Screen
+    Insert Payment Scheme Record And Save
+    Verify Payment Scheme Record Exists
+    Logout From EC Application
+
+TC03 Update Payment Scheme Data
+    Login To EC Application
+    Open Payment Scheme Screen
+    Update Payment Scheme Record And Save
+    Verify Payment Scheme Record Updated
+    Logout From EC Application
+
+TC04 Find Payment Scheme Data
+    Login To EC Application
+    Open Payment Scheme Screen
+    Find Payment Scheme Record
+    Verify Payment Scheme Record Found
+    Logout From EC Application
+
+TC05 Delete Payment Scheme Data
+    Login To EC Application
+    Open Payment Scheme Screen
+    Delete Payment Scheme Record And Save
+    Verify Payment Scheme Record Removed
+    Logout From EC Application
