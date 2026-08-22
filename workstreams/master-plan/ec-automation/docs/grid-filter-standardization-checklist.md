@@ -50,14 +50,16 @@ wrap there would be pure redundant duplication with no behavior change.
 | WBS | ✅ DONE (2026-08-23) | Custom-URL OV, small grid. Live 5/5, filter confirmed fired. |
 | Payment Scheme | ✅ DONE (2026-08-23) | Manage-object OV. Live 5/5, filter confirmed fired. |
 | Exchange Rate Source | ✅ DONE (2026-08-23) | Manage-object OV. Live 5/5, filter confirmed fired. |
-| Region | ⬜ NOT YET DONE | Rebuilt to Bank pattern (PR #412), eligible for this wiring - not yet actioned. |
-| Functional Area | ⬜ NOT YET DONE | Rebuilt to Bank pattern (PR #413), eligible - not yet actioned. |
-| Business Unit | ⬜ NOT YET DONE | Rebuilt to Bank pattern (PR #414), eligible - not yet actioned. |
-| Production Unit | ⬜ NOT YET DONE | Rebuilt to Bank pattern (PR #415), eligible - not yet actioned. |
-| Company | ⬜ NOT YET DONE | Rebuilt to Bank pattern (PR #416); its own scorecard entry already flags a large PAGINATED grid (8 pages) with a prior non-reproducible TC05 flake - a strong candidate to prioritize, since it's the one screen in this remaining group most likely to actually need the filter (not just get it for consistency). |
+| Region | ✅ DONE (2026-08-23) | Small grid. Live 5/5, filter confirmed fired (output.xml). |
+| Functional Area | ✅ DONE (2026-08-23) | Small grid. Live 5/5, filter confirmed fired. |
+| Business Unit | ✅ DONE (2026-08-23) | Small grid. Live 5/5, filter confirmed fired. |
+| Production Unit | ✅ DONE (2026-08-23) | Small grid. Live 5/5, filter confirmed fired. |
+| Company | ✅ DONE (2026-08-23) | Large PAGINATED grid (8 pages, hundreds of rows) with a prior non-reproducible TC05 flake on its first-ever live build - the strongest real candidate in this whole set for actually needing the filter, not just consistency. Live 5/5 clean on this run (no flake), filter confirmed fired. |
 
-**9 of 14 done.** Remaining 5 (Region, Functional Area, Business Unit, Production
-Unit, Company) are the next candidates if this standardization continues.
+**14 of 14 done.** Every screen already rebuilt to the Bank-pattern T2-consolidated
+shape now has the explicit filter wiring. Any FUTURE screen rebuilt to this pattern
+should get the same treatment as part of its own build (see "How to update this
+doc" below) - there is no more backlog from this batch.
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 

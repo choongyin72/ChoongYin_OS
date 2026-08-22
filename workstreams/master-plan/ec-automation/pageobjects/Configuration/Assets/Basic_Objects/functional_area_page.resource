@@ -40,6 +40,21 @@ ${FUNCTIONAL_AREA_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_i
 
 
 *** Keywords ***
+Find Functional Area Row By Filter
+    [Documentation]    Explicitly filter the Functional Area grid's Code column to ${code} via
+    ...    the shared T2 Find Object Row By Filter (resources/manage_object.resource) - matches
+    ...    Account/Bank/State/Object List's explicit filter usage (owner, 2026-08-22: "same to
+    ...    other ec screens"), rather than relying only on Select Object Row's implicit
+    ...    3s-timeout fallback.
+    [Arguments]    ${code}
+    Find Object Row By Filter    ${FUNCTIONAL_AREA_TABLE}    ${code}
+
+Clear Functional Area Row Filter
+    [Documentation]    Clear the Code column filter (see Find Functional Area Row By Filter)
+    ...    via the shared T2 Clear Object Row Filter, restoring the grid's normal unfiltered
+    ...    view.
+    Clear Object Row Filter    ${FUNCTIONAL_AREA_TABLE}
+
 Login To EC Application
     [Documentation]    Authenticate as Functional Area's OWN credentials
     ...    (${FUNCTIONAL_AREA_EC_USER}/${FUNCTIONAL_AREA_EC_PASS} from credentials.py) on the
@@ -77,19 +92,26 @@ Verify Functional Area Record Exists
     ...    (Area Code/Area Name only - Start date is grid/insert-only, not present in
     ...    updateAttributes). Delegates the full sequence (row-check, select, form-compare,
     ...    screenshot) to the shared T2 Verify Object Insert Exists.
+    ...    Filters via Find Functional Area Row By Filter first, clears after (2026-08-23
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Functional Area Row By Filter    ${code}
     Verify Object Insert Exists    ${FUNCTIONAL_AREA_TABLE}    ${code}    Functional Area
     ...    ${FUNCTIONAL_AREA_INSERT_PROPERTIES}    @{FUNCTIONAL_AREA_FORM_LABELS}
     ...    code_label=Area Code
+    Clear Functional Area Row Filter
 
 Update Functional Area Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
     ...    Pre-save evidence screenshot captured before Save is clicked, matching Bank/
-    ...    Object List/State/Region.
+    ...    Object List/State/Region. Filters via Find Functional Area Row By Filter first,
+    ...    clears after (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${FUNCTIONAL_AREA_UPDATE_PROPERTIES}
+    Find Functional Area Row By Filter    ${code}
     ${data}=    Update Object From Properties    ${FUNCTIONAL_AREA_TABLE}    ${code}    ${properties_path}
     ...    ${TEST NAME}_action    code_label=Area Code
+    Clear Functional Area Row Filter
     RETURN    ${data}
 
 Verify Functional Area Record Updated
@@ -97,16 +119,24 @@ Verify Functional Area Record Updated
     ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
     ...    verification, matching Bank/Object List/State/Region's TC03 convention: the form
     ...    shows the updated Name. Delegates the full sequence (select, form-compare,
-    ...    screenshot) to the shared T2 Verify Object Form Record.
+    ...    screenshot) to the shared T2 Verify Object Form Record. Filters via Find
+    ...    Functional Area Row By Filter first, clears after (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}
+    Find Functional Area Row By Filter    ${code}
     Verify Object Form Record    ${FUNCTIONAL_AREA_TABLE}    ${code}    Functional Area
     ...    ${FUNCTIONAL_AREA_UPDATE_PROPERTIES}    Area Name    code_label=Area Code
+    Clear Functional Area Row Filter
 
 Find Functional Area Record
     [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
     ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}).
-    ...    Delegates the full select+capture sequence.
+    ...    Delegates the full select+capture sequence. Calls Find Functional Area Row By
+    ...    Filter first (2026-08-23 standardisation). Deliberately does NOT clear the filter
+    ...    afterward - Verify Functional Area Record Found (called right after, same TC)
+    ...    needs the grid still filtered to ${code} for its own grid-check, since it doesn't
+    ...    re-select the row itself; it clears the filter once both checks are done.
     [Arguments]    ${code}=${TEST_CODE}
+    Find Functional Area Row By Filter    ${code}
     Find Object Record    ${FUNCTIONAL_AREA_TABLE}    ${code}    Functional Area
     ...    code_label=Area Code
 
@@ -116,10 +146,13 @@ Verify Functional Area Record Found
     ...    grid AND the form record match the expected (post-update) data. Delegates the
     ...    full sequence (grid-compare, form-compare, screenshot) to the shared T2 Verify
     ...    Object Found. Caller must already have selected the row (TC04 does, via Find
-    ...    Functional Area Record before this).
+    ...    Functional Area Record before this) AND left the Code filter active from that
+    ...    same call - clears the filter itself once both checks are done (2026-08-23
+    ...    standardisation).
     [Arguments]    ${code}=${TEST_CODE}
     Verify Object Found    ${FUNCTIONAL_AREA_TABLE}    ${code}    ${FUNCTIONAL_AREA_GRID_VERIFY_PROPERTIES}
     ...    ${FUNCTIONAL_AREA_FORM_VERIFY_PROPERTIES}    @{FUNCTIONAL_AREA_FORM_LABELS}
+    Clear Functional Area Row Filter
 
 Delete Functional Area Record And Save
     [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date,
@@ -127,10 +160,13 @@ Delete Functional Area Record And Save
     ...    ${TEST_CODE}/${END_DATE}). Select the functional area, set End Date = Start Date
     ...    (true delete), Save. Captures the TC05 evidence screenshot right after the End
     ...    Date is filled but BEFORE Save is clicked, matching Bank/Object List/State/Region's
-    ...    convention.
+    ...    convention. Filters via Find Functional Area Row By Filter first, clears after
+    ...    (2026-08-23 standardisation).
     [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find Functional Area Row By Filter    ${code}
     Delete Object Via End Date    ${FUNCTIONAL_AREA_TABLE}    ${FUNCTIONAL_AREA_DEL_ENDDATE}    ${code}
     ...    ${date}    ${TEST NAME}_action
+    Clear Functional Area Row Filter
 
 Verify Functional Area Record Removed
     [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with
