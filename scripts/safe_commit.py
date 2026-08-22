@@ -257,7 +257,12 @@ def main():
         # capture the branch's PRE-push remote state before it moves, so emit_scope_report can tell
         # whether the file list grew (Issue #424) - a failed fetch just means no prior remote ref yet.
         git("fetch", "origin", args.push, check=False)
-        old_remote_sha = git("rev-parse", "origin/%s" % args.push, check=False).stdout.strip()
+        _old_ref = git("rev-parse", "origin/%s" % args.push, check=False)
+        # `git rev-parse` on a ref that doesn't exist yet ECHOES THE ARGUMENT ITSELF to stdout (not
+        # empty) while the real error goes to stderr with returncode!=0 - trusting stdout truthiness
+        # alone made a genuinely-first-ever push look like it had a prior remote ref (found live while
+        # exercising this fix, Issue #424's own verification step catching a real bug).
+        old_remote_sha = _old_ref.stdout.strip() if _old_ref.returncode == 0 else ""
         git("push", "origin", args.push)
         print(a("pushed %s" % args.push))
         emit_scope_report(args.push, old_remote_sha)
