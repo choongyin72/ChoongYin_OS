@@ -37,3 +37,6 @@ REGION_EC_PASS = os.environ.get("REGION_EC_PASS", os.environ.get("EC_PASS", "sys
 
 FUNCTIONAL_AREA_EC_USER = os.environ.get("FUNCTIONAL_AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 FUNCTIONAL_AREA_EC_PASS = os.environ.get("FUNCTIONAL_AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+BUSINESS_UNIT_EC_USER = os.environ.get("BUSINESS_UNIT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+BUSINESS_UNIT_EC_PASS = os.environ.get("BUSINESS_UNIT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
