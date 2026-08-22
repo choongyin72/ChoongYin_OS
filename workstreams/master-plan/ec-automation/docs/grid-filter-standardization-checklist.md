@@ -55,11 +55,14 @@ wrap there would be pure redundant duplication with no behavior change.
 | Business Unit | ✅ DONE (2026-08-23) | Small grid. Live 5/5, filter confirmed fired. |
 | Production Unit | ✅ DONE (2026-08-23) | Small grid. Live 5/5, filter confirmed fired. |
 | Company | ✅ DONE (2026-08-23) | Large PAGINATED grid (8 pages, hundreds of rows) with a prior non-reproducible TC05 flake on its first-ever live build - the strongest real candidate in this whole set for actually needing the filter, not just consistency. Live 5/5 clean on this run (no flake), filter confirmed fired. |
+| County | ✅ DONE (2026-08-23) | Manage-object OV, small grid (batch-2 conversion, parallel worker clone). Live 5/5, filter confirmed fired (5 hits for `Find County Row By Filter` in output.xml). |
 
-**14 of 14 done.** Every screen already rebuilt to the Bank-pattern T2-consolidated
-shape now has the explicit filter wiring. Any FUTURE screen rebuilt to this pattern
-should get the same treatment as part of its own build (see "How to update this
-doc" below) - there is no more backlog from this batch.
+**14 of 14 done** (totals line left as-is per batch-2 ground rules - 4 sibling
+screens in this same batch are adding their own rows in parallel; reconcile the
+count once at the end instead of every PR editing this same line). Every screen
+already rebuilt to the Bank-pattern T2-consolidated shape now has the explicit
+filter wiring. Any FUTURE screen rebuilt to this pattern should get the same
+treatment as part of its own build (see "How to update this doc" below).
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 

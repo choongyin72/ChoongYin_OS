@@ -1,59 +1,93 @@
 *** Settings ***
 Documentation       EC IUD Test - County (Configuration > Assets > Basic Objects > County).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_COUNTY).
-...                 Layered: this test -> county_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. A unique AUTOTEST_CNTY_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in
+...                 ov_county). Layered: this test -> county_page (T3) -> manage_object (T2) +
+...                 common (T1). NEVER touch existing data. Uses a FIXED test code
+...                 (AUTOTEST_COUNTY, matching the AUTOTEST_ACCOUNT/BANK_CHINA convention) rather
+...                 than a generated unique code - confirmed absent from OV_COUNTY before this was
+...                 wired in (fresh oracledb query, 2026-08-23: 0 rows for CODE LIKE 'AUTOTEST%').
+...                 Every run must complete TC05 (delete) so the code is free for the next run - EC
+...                 never lets a DELETED code be reused, but this fixed code only stays reusable if
+...                 each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup (matches bank_iud.robot's convention) - TC03/TC04/TC05 still depend
+...                 on TC02's inserted record existing.
+...                 Converted 2026-08-23 from the old hardcoded-field-id pattern to the
+...                 label-driven, properties-file-driven, T2-consolidated Bank pattern (batch-2
+...                 conversion, see tmp/batch2_shared_findings.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Basic_Objects/county_page.resource
 
-Suite Setup         Set Up County Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    county
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_COUNTY
+${OBJ_NAME}         AUTOTEST County
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# These 2 values must stay in sync with testdata/county_insert.properties - TC02 DB-verifies them
+# against what that file actually set, not an independent assumption.
+${OBJ_DESC}         AUTOTEST desc
+# These 2 values must stay in sync with testdata/county_update.properties - TC03 DB-verifies them
+# against what that file actually set, not an independent assumption.
+${OBJ_NAME_UPD}     AUTOTEST County UPDATED
+${OBJ_DESC_UPD}     AUTOTEST desc UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test county does not exist before inserting.
-    [Tags]    clean-state
-    County Row Should Not Exist    ${TEST_CODE}
-    Capture Step    county_tc01_clean
+    Login To EC Application
+    Open County Screen
+    Verify County Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New County
-    [Documentation]    Insert a new county and confirm it appears in the list.
-    [Tags]    insert
-    Insert County Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    County Row Should Exist    ${TEST_CODE}
-    County Should Exist In DB    ${TEST_CODE}
-    Capture Step    county_tc02_inserted
+TC02 Insert County Data
+    Login To EC Application
+    Open County Screen
+    Insert County Record And Save
+    Verify County Record Exists
+    County Should Exist In DB
+    Logout From EC Application
 
-TC03 Update County Name
-    [Documentation]    Edit the county name and confirm the list reflects the change.
-    [Tags]    update
-    Update County Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    County Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    county_tc03_updated
+TC03 Update County Data
+    Login To EC Application
+    Open County Screen
+    Update County Record And Save
+    Verify County Record Updated
+    County Should Be Updated In DB
+    Logout From EC Application
 
-TC04 Delete County
-    [Documentation]    Delete via End Date = Start Date and confirm the county is gone.
-    [Tags]    delete    cleanup
-    Delete County    ${TEST_CODE}    ${END_DATE}
-    County Row Should Not Exist    ${TEST_CODE}
-    County Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    county_tc04_deleted
+TC04 Find County Data
+    Login To EC Application
+    Open County Screen
+    Find County Record
+    Verify County Record Found
+    Logout From EC Application
+
+TC05 Delete County Data
+    Login To EC Application
+    Open County Screen
+    Delete County Record And Save
+    Verify County Record Removed
+    Logout From EC Application
 
 
 *** Keywords ***
-Set Up County Suite
-    [Documentation]    Generate a unique test code/name, then open the County screen.
-    Prepare IUD Object Data    AUTOTEST_CNTY_    County
-    Open County Screen
+County Should Exist In DB
+    [Documentation]    DB ground-truth (TC02): assert ${TEST_CODE} really persisted in OV_COUNTY
+    ...    with the expected NAME - a fresh oracledb read, not just the UI-level check already done
+    ...    by Verify County Record Exists.
+    Code Should Be Present In View    ov_county    ${TEST_CODE}
+    Field Should Equal In View    ov_county    ${TEST_CODE}    NAME    ${OBJ_NAME}
+
+County Should Be Updated In DB
+    [Documentation]    DB ground-truth (TC03): assert the UPDATED NAME/DESCRIPTION actually
+    ...    persisted in OV_COUNTY - a fresh oracledb read, not just the UI-level check already done
+    ...    by Verify County Record Updated.
+    Field Should Equal In View    ov_county    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
+    Field Should Equal In View    ov_county    ${TEST_CODE}    DESCRIPTION    ${OBJ_DESC_UPD}
