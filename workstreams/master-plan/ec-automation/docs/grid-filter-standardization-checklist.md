@@ -55,8 +55,9 @@ wrap there would be pure redundant duplication with no behavior change.
 | Business Unit | ✅ DONE (2026-08-23) | Small grid. Live 5/5, filter confirmed fired. |
 | Production Unit | ✅ DONE (2026-08-23) | Small grid. Live 5/5, filter confirmed fired. |
 | Company | ✅ DONE (2026-08-23) | Large PAGINATED grid (8 pages, hundreds of rows) with a prior non-reproducible TC05 flake on its first-ever live build - the strongest real candidate in this whole set for actually needing the filter, not just consistency. Live 5/5 clean on this run (no flake), filter confirmed fired. |
+| Currency | ✅ DONE (2026-08-23) | Manage-object OV, small grid. Batch-2 5-screen Bank-pattern conversion (Country/County/Regulatory Permits/Currency/VAT Code). Live 5/5, filter confirmed fired (5 hits in output.xml for `Find Currency Row By Filter`). Also confirmed live: the registry-flagged mandatory "Active" checkbox (`MandatoryCellStyleWhite` class) is NOT actually save-blocking - a checkbox has no "empty" state, so it's omitted from the insert properties (see currency_insert.properties). |
 
-**14 of 14 done.** Every screen already rebuilt to the Bank-pattern T2-consolidated
+**15 of 15 done.** Every screen already rebuilt to the Bank-pattern T2-consolidated
 shape now has the explicit filter wiring. Any FUTURE screen rebuilt to this pattern
 should get the same treatment as part of its own build (see "How to update this
 doc" below) - there is no more backlog from this batch.
