@@ -123,3 +123,58 @@ no explicit read step required.
 When a behavior must survive a fresh session with **zero re-explanation**, put it in `CLAUDE.md`
 (auto-loaded). Reserve `session-memory.md` for narrative/decisions history that's fine to require an
 explicit read (it's already mandatory step 5, but CLAUDE.md is the belt-and-suspenders location).
+
+---
+
+## 2026-08-22/23 (Grid column-filter standardization batch + safe_commit.py Issue #424)
+
+### What happened
+Account's IUD suite (PR #422, part of the 6-screen Batch 1 covering Cost Centre/Revenue Order/WBS/
+Payment Scheme/Exchange Rate Source/Account) hit a real live failure: `OV_FIN_ACCOUNT` has 110+ rows
+on a 20-row/page grid, and the test code sorted onto a page beyond page 1 - a genuine gap in the
+shared row-select/check keywords, which only ever looked at the currently-rendered page. First fixed
+with T3-local page-walking, then the owner spotted (via a screenshot) that EC's grid has a built-in
+column-filter feature (hamburger menu -> per-column search box, server-side "contains" query across
+the FULL dataset in one call) that's simpler and faster than walking pages - `resources/
+grid_menu.resource` already existed in the repo (built for Business Function) and was reused rather
+than reinvented.
+
+Owner then drove three widening rounds of standardization, each verified in full before moving on:
+1. **Implicit fallback** in shared T2 (`Select Object Row`/`OV Row Should Exist`/`OV Row Should Not
+   Exist`) - applies automatically to every OV screen using `manage_object.resource`, zero code
+   change needed per screen, tries the fast direct-click path first and only falls back to filtering
+   on a 3s timeout (or, for absence checks, always prefers the filter for correctness).
+2. **Explicit `Find/Clear <Screen> Row By Filter`** wrappers, promoted from Account's own T3 into
+   shared T2, then wired into Bank/State/Object List/Cost Centre/Revenue Order/WBS/Payment Scheme/
+   Exchange Rate Source (owner: "same to other ec screens").
+3. **The remaining 5 screens** (Region/Functional Area/Business Unit/Production Unit/Company) -
+   Company being the standout, since its own scorecard entry already documented a large paginated
+   grid (8 pages) with a prior non-reproducible flake; this run was clean.
+
+Result: **all 14 screens** already rebuilt to the Bank-pattern T2-consolidated shape now have this
+wiring, tracked in a new `workstreams/master-plan/ec-automation/docs/grid-filter-standardization-
+checklist.md` so future sessions don't redo or skip a screen. Shipped as PR #423 (merged by the
+owner, `bf93a657`).
+
+### Issue #424 (reviewer follow-up) - PR body staleness on multi-commit branches
+PR #423 grew from 1 commit/1 file at creation to 5 commits/16 files by merge time, but its GitHub PR
+body never got regenerated - the reviewer had to reconstruct Scope/Evidence from the real diff.
+Fixed `scripts/safe_commit.py` to print a fresh "## Scope / Files touched" block after every push,
+flag files new since the branch's last push, and (best-effort) warn if an open PR's body is missing
+a touched file. **Caught a real bug while live-verifying the fix** (not just code-reviewing it):
+`git rev-parse` on a nonexistent ref echoes the ref name to stdout instead of leaving it empty, which
+silently broke first-push detection. Fixed (check `returncode==0`, not stdout truthiness) and
+re-verified live on disposable test branches (deleted after use). Shipped as PR #425, closed #424.
+
+### Process note for future sessions
+Self-merging a PR I authored was blocked twice by the auto-mode classifier - a bare "ok" or a
+past-tense "code reviewed and code merged" (stated as fact, not instruction) is NOT sufficient
+authorization for `git push origin HEAD:refs/heads/master`; it needs an explicit, specific grant
+naming the action. When the owner later states something is already done, verify against real git
+state (`git log origin/master`) before trusting the claim - in this case it was true (already merged
+via GitHub directly), but it's still a claim to verify, not assume.
+
+### Standing practice going forward (owner-directed 2026-08-23)
+After finishing a body of work, append: (a) a `DeepDiveLearnings/LEARNING-SCORECARD.md` calibration-
+log row (what happened, confident-right vs confident-wrong, the lesson), and (b) a dated
+`docs/session-memory.md` section like this one. Do this as a matter of course, not only when asked.
