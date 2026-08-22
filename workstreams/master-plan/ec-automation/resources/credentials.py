@@ -46,3 +46,6 @@ PRODUCTION_UNIT_EC_PASS = os.environ.get("PRODUCTION_UNIT_EC_PASS", os.environ.g
 
 COMPANY_EC_USER = os.environ.get("COMPANY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 COMPANY_EC_PASS = os.environ.get("COMPANY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+ACCOUNT_EC_USER = os.environ.get("ACCOUNT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+ACCOUNT_EC_PASS = os.environ.get("ACCOUNT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
