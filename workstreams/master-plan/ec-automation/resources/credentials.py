@@ -32,5 +32,20 @@ OBJECT_LIST_EC_PASS = os.environ.get("OBJECT_LIST_EC_PASS", os.environ.get("EC_P
 STATE_EC_USER = os.environ.get("STATE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 STATE_EC_PASS = os.environ.get("STATE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 
+REGION_EC_USER = os.environ.get("REGION_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+REGION_EC_PASS = os.environ.get("REGION_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+FUNCTIONAL_AREA_EC_USER = os.environ.get("FUNCTIONAL_AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+FUNCTIONAL_AREA_EC_PASS = os.environ.get("FUNCTIONAL_AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+BUSINESS_UNIT_EC_USER = os.environ.get("BUSINESS_UNIT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+BUSINESS_UNIT_EC_PASS = os.environ.get("BUSINESS_UNIT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PRODUCTION_UNIT_EC_USER = os.environ.get("PRODUCTION_UNIT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PRODUCTION_UNIT_EC_PASS = os.environ.get("PRODUCTION_UNIT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+COMPANY_EC_USER = os.environ.get("COMPANY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+COMPANY_EC_PASS = os.environ.get("COMPANY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
 REVENUE_ORDER_EC_USER = os.environ.get("REVENUE_ORDER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 REVENUE_ORDER_EC_PASS = os.environ.get("REVENUE_ORDER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

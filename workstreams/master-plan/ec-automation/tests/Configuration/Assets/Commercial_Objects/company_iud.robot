@@ -1,59 +1,66 @@
 *** Settings ***
-Documentation       EC IUD Test - Company (Configuration > Assets > Commercial Objects > Company).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_COMPANY).
-...                 NEVER touch existing data. A unique AUTOTEST_COMP_<timestamp> code is generated
-...                 per run. Section Start Date 2003-01-01: reference dropdowns are
-...                 effective-date-filtered (object start date acts as a version).
+Documentation       EC IUD Test - Company (Configuration > Assets > Commercial Objects >
+...                 Company). Manage-Object (OV) screen. DELETE = End Date = Start Date
+...                 (true delete in OV_COMPANY). Layered: this test -> company_page (T3) ->
+...                 manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_COMPANY,
+...                 matching the other rebuilt screens' convention) rather than a generated
+...                 unique code - confirmed absent from OV_COMPANY before this was wired in
+...                 (2026-08-22). Every run must complete TC05 (delete) so the code is free
+...                 for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching the other rebuilt screens' convention
+...                 (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Commercial_Objects/company_page.resource
 
-Suite Setup         Set Up Company Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    company
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
+${TEST_CODE}        AUTOTEST_COMPANY
+${OBJ_NAME}         AUTOTEST Company
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/company_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Company UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test company does not exist before inserting.
-    [Tags]    clean-state
-    Company Row Should Not Exist    ${TEST_CODE}
-    Capture Step    company_tc01_clean
-
-TC02 Insert New Company
-    [Documentation]    Insert a new company and confirm it appears in the list.
-    [Tags]    insert
-    Insert Company Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Company Row Should Exist    ${TEST_CODE}
-    Company Should Exist In DB    ${TEST_CODE}
-    Capture Step    company_tc02_inserted
-
-TC03 Update Company Name
-    [Documentation]    Edit the company name and confirm the list reflects the change.
-    [Tags]    update
-    Update Company Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Company Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    company_tc03_updated
-
-TC04 Delete Company
-    [Documentation]    Delete via End Date = Start Date and confirm the company is gone.
-    [Tags]    delete    cleanup
-    Delete Company    ${TEST_CODE}    ${END_DATE}
-    Company Row Should Not Exist    ${TEST_CODE}
-    Company Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    company_tc04_deleted
-
-
-*** Keywords ***
-Set Up Company Suite
-    [Documentation]    Generate a unique test code/name, then open the Company screen.
-    Prepare IUD Object Data    AUTOTEST_COMP_    Company
+    Login To EC Application
     Open Company Screen
+    Verify Company Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Company Data
+    Login To EC Application
+    Open Company Screen
+    Insert Company Record And Save
+    Verify Company Record Exists
+    Logout From EC Application
+
+TC03 Update Company Data
+    Login To EC Application
+    Open Company Screen
+    Update Company Record And Save
+    Verify Company Record Updated
+    Logout From EC Application
+
+TC04 Find Company Data
+    Login To EC Application
+    Open Company Screen
+    Find Company Record
+    Verify Company Record Found
+    Logout From EC Application
+
+TC05 Delete Company Data
+    Login To EC Application
+    Open Company Screen
+    Delete Company Record And Save
+    Verify Company Record Removed
+    Logout From EC Application

@@ -1,59 +1,66 @@
 *** Settings ***
-Documentation       EC IUD Test - Production Unit (Configuration > Assets > Basic Objects > Production Unit).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_PRODUCTIONUNIT).
-...                 Layered: this test -> production_unit_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. A unique AUTOTEST_PU_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+Documentation       EC IUD Test - Production Unit (Configuration > Assets > Basic Objects >
+...                 Production Unit). Manage-Object (OV) screen. DELETE = End Date = Start
+...                 Date (true delete in OV_PRODUCTIONUNIT). Layered: this test ->
+...                 production_unit_page (T3) -> manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_PU, matching
+...                 the other rebuilt screens' convention) rather than a generated unique
+...                 code - confirmed absent from OV_PRODUCTIONUNIT before this was wired in
+...                 (2026-08-22). Every run must complete TC05 (delete) so the code is free
+...                 for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching the other rebuilt screens' convention
+...                 (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Basic_Objects/production_unit_page.resource
 
-Suite Setup         Set Up Production Unit Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    production-unit
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_PU
+${OBJ_NAME}         AUTOTEST Production Unit
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/production_unit_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Production Unit UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test production unit does not exist before inserting.
-    [Tags]    clean-state
-    Production Unit Row Should Not Exist    ${TEST_CODE}
-    Capture Step    production_unit_tc01_clean
-
-TC02 Insert New Production Unit
-    [Documentation]    Insert a new production unit and confirm it appears in the list.
-    [Tags]    insert
-    Insert Production Unit Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Production Unit Row Should Exist    ${TEST_CODE}
-    Production Unit Should Exist In DB    ${TEST_CODE}
-    Capture Step    production_unit_tc02_inserted
-
-TC03 Update Production Unit Name
-    [Documentation]    Edit the production unit name and confirm the list reflects the change.
-    [Tags]    update
-    Update Production Unit Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Production Unit Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    production_unit_tc03_updated
-
-TC04 Delete Production Unit
-    [Documentation]    Delete via End Date = Start Date and confirm the production unit is gone.
-    [Tags]    delete    cleanup
-    Delete Production Unit    ${TEST_CODE}    ${END_DATE}
-    Production Unit Row Should Not Exist    ${TEST_CODE}
-    Production Unit Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    production_unit_tc04_deleted
-
-
-*** Keywords ***
-Set Up Production Unit Suite
-    [Documentation]    Generate a unique test code/name, then open the Production Unit screen.
-    Prepare IUD Object Data    AUTOTEST_PU_    Production Unit
+    Login To EC Application
     Open Production Unit Screen
+    Verify Production Unit Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Production Unit Data
+    Login To EC Application
+    Open Production Unit Screen
+    Insert Production Unit Record And Save
+    Verify Production Unit Record Exists
+    Logout From EC Application
+
+TC03 Update Production Unit Data
+    Login To EC Application
+    Open Production Unit Screen
+    Update Production Unit Record And Save
+    Verify Production Unit Record Updated
+    Logout From EC Application
+
+TC04 Find Production Unit Data
+    Login To EC Application
+    Open Production Unit Screen
+    Find Production Unit Record
+    Verify Production Unit Record Found
+    Logout From EC Application
+
+TC05 Delete Production Unit Data
+    Login To EC Application
+    Open Production Unit Screen
+    Delete Production Unit Record And Save
+    Verify Production Unit Record Removed
+    Logout From EC Application
