@@ -102,3 +102,26 @@ variant to avoid RF work is exactly the shortcut this checklist exists to preven
 the owner has approved it for that specific screen, as was done for Financial Item Definition/Template.
 
 This variant does not replace or loosen items A-E for any screen NOT explicitly approved for it.
+
+---
+
+## G. Owner-approved variant: lean RF-only build for brand-new Bank-shaped screens (2026-08-23)
+
+_Owner decision 2026-08-23 (recorded by the reviewer at the merge of PR #481): a BRAND-NEW EC screen
+whose layout matches Bank (plain manage-object OV / custom-URL OV, no mandatory navigator cascade)
+MAY be delivered as the lean RF-only shape defined in
+`.claude/skills/ec-bank-pattern-new-screen/SKILL.md` - RF page object + 5-TC suite + 4 properties
+files + registry/scorecard rows, verified by the 5-step gate (robocop parity, full-tree dryrun,
+live 5/5, fresh-connection DB self-clean, filter-fired grep)._
+
+**What this variant waives for such screens:** the SOW, Playwright bundle + investigation/,
+JOURNAL, evidence screenshots, KB MD map, and the `verify_screen.py` gate (items 1, 3, 4, 5, and
+the KB items of the 21-item list). It does NOT waive: live 5/5 with real cited output, DB
+ground-truth + self-clean via a fresh connection, hygiene (R16/R20), registry/scorecard rows,
+the 6-field PR body, or never-self-merge.
+
+**When it does NOT apply:** a screen that is not Bank-shaped (needs the full 21-item treatment via
+`ec-object-iud-builder`), a screen with ANY existing automation (that is `ec-bank-pattern-converter`
+territory - upgrade, don't duplicate), or any case where the owner asks for the full deliverable.
+This section exists so a reviewer does not MUST-FIX a lean-built new screen against items this
+variant waives; sections A-F are otherwise unchanged.
