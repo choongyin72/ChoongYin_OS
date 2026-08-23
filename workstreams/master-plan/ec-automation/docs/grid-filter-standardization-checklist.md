@@ -154,6 +154,7 @@ only its own ROW here — no per-PR section header._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Storage Flow (Configuration > Assets > Tank_and_Storage_Objects, CO.2091) | ✅ Wired (2026-08-23, Batch 10) | `Find/Clear Storage Flow Row By Filter` added to `storage_flow_page.resource`, wired into Update/Find/Verify-Found/Delete (T2 `Find Object Row By Filter`/`Clear Object Row Filter`, resources/manage_object.resource - unchanged). Confirmed fired 15x via output.xml grep on the live 5/5 run. |
 
 ## How to update this doc
 
