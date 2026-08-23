@@ -58,13 +58,14 @@ wrap there would be pure redundant duplication with no behavior change.
 | Country | ✅ DONE (2026-08-23) | Small grid (20 rows). Batch-2 rebuild, filter wiring included from the start (not deferred as a follow-up). Live 5/5, filter confirmed fired exactly 5 times via output.xml grep (Update/Find/Verify-Insert-Exists/Verify-Found/Delete). |
 | County | ✅ DONE (2026-08-23) | Manage-object OV, small grid (batch-2 conversion, parallel worker clone). Live 5/5, filter confirmed fired (5 hits for `Find County Row By Filter` in output.xml). |
 | Currency | ✅ DONE (2026-08-23) | Manage-object OV, small grid. Batch-2 5-screen Bank-pattern conversion (Country/County/Regulatory Permits/Currency/VAT Code). Live 5/5, filter confirmed fired (5 hits in output.xml for `Find Currency Row By Filter`). Also confirmed live: the registry-flagged mandatory "Active" checkbox (`MandatoryCellStyleWhite` class) is NOT actually save-blocking - a checkbox has no "empty" state, so it's omitted from the insert properties (see currency_insert.properties). |
+| VAT Code | ✅ DONE (2026-08-23, PR #431) | Manage-object OV, small/single-page grid (15 rows). Wired in from the start (batch-2, not a follow-up). Live 5/5, filter keyword confirmed fired 7x via output.xml grep. |
 
-**17 of 17 done** (reconciled at merge time - Batch-2's 5 screens were built in
-parallel isolated clones; VAT Code/Regulatory Permits still to merge, count will
-keep rising as each lands). Every screen already rebuilt to the Bank-pattern
-T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen rebuilt
-to this pattern should get the same treatment as part of its own build (see "How
-to update this doc" below).
+**18 of 18 done** (reconciled at merge time - Batch-2's 5 screens were built in
+parallel isolated clones; Regulatory Permits still to merge, count will rise once
+more). Every screen already rebuilt to the Bank-pattern T2-consolidated shape now
+has the explicit filter wiring. Any FUTURE screen rebuilt to this pattern should
+get the same treatment as part of its own build (see "How to update this doc"
+below).
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
