@@ -65,12 +65,12 @@ label) found:
 | Unit Agreement | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | #446 |
 | Calendar Collection | Date Objects | ⬜ NOT YET DONE | - |
 | Calendar | Date Objects | ⬜ NOT YET DONE | - |
-| Account Mapping | Financial Objects | ✅ DONE (2026-08-23, Batch 6, FINAL) | TBD (PR being raised) |
+| Account Mapping | Financial Objects | ✅ DONE (2026-08-23, Batch 6, FINAL) | #450 |
 
 **21 of 23 done.** Batch 3, 4, and 5 complete (Sales Order #444, Product Group
 #445, Unit Agreement #446, Royalty Owner #447, Royalty Depositor #448); Batch 6
-Account Mapping DONE (PR number to be filled in once raised). 2 remain —
-Calendar Collection, Calendar (Batch 6, worked by sibling agents in parallel).
+Account Mapping DONE (#450). 2 remain — Calendar Collection, Calendar (Batch 6,
+worked by sibling agents in parallel).
 
 Note: once a screen from this table is converted, it should ALSO be added to
 `docs/grid-filter-standardization-checklist.md`'s "done" table in the same PR (per the
