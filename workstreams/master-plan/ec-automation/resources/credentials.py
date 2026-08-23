@@ -138,3 +138,5 @@ BERTH_EC_USER = os.environ.get("BERTH_EC_USER", os.environ.get("EC_USER", "sysad
 BERTH_EC_PASS = os.environ.get("BERTH_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 CALCULATION_GROUP_CONTEXT_EC_USER = os.environ.get("CALCULATION_GROUP_CONTEXT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CALCULATION_GROUP_CONTEXT_EC_PASS = os.environ.get("CALCULATION_GROUP_CONTEXT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+CALC_CONTEXT_EC_USER = os.environ.get("CALC_CONTEXT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CALC_CONTEXT_EC_PASS = os.environ.get("CALC_CONTEXT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
