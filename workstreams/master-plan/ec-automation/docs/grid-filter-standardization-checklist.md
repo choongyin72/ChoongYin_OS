@@ -60,12 +60,14 @@ wrap there would be pure redundant duplication with no behavior change.
 | Currency | ✅ DONE (2026-08-23) | Manage-object OV, small grid. Batch-2 5-screen Bank-pattern conversion (Country/County/Regulatory Permits/Currency/VAT Code). Live 5/5, filter confirmed fired (5 hits in output.xml for `Find Currency Row By Filter`). Also confirmed live: the registry-flagged mandatory "Active" checkbox (`MandatoryCellStyleWhite` class) is NOT actually save-blocking - a checkbox has no "empty" state, so it's omitted from the insert properties (see currency_insert.properties). |
 | VAT Code | ✅ DONE (2026-08-23, PR #431) | Manage-object OV, small/single-page grid (15 rows). Wired in from the start (batch-2, not a follow-up). Live 5/5, filter keyword confirmed fired 7x via output.xml grep. |
 | Regulatory Permits | ✅ DONE (2026-08-23, batch-2) | Custom-URL OV (grid `nav:form:T_data`, WITH a GO button unlike Account/Cost Centre - confirmed live, a shape not seen elsewhere). Small grid, currently 0 rows on this sandbox. Live 5/5, filter confirmed fired (7 hits in output.xml). |
+| Customer | ✅ DONE (2026-08-23, batch-3) | Manage-object OV, small grid (Commercial Objects). Batch-3 5-screen Bank-pattern conversion (Customer/Field Group/Licence/MMS Lease/Operator Lease, parallel isolated clones). Wired in from the start. Live 5/5, filter keyword confirmed fired 5x via output.xml grep. |
 
-**19 of 19 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
-Regulatory Permits) landed. Every screen already rebuilt to the Bank-pattern
-T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen
-rebuilt to this pattern should get the same treatment as part of its own build
-(see "How to update this doc" below) - there is no more backlog from this batch.
+**20 of 20 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
+Regulatory Permits) and Customer (batch-3, 1st of 5 landed so far) are in.
+Every screen already rebuilt to the Bank-pattern T2-consolidated shape now has
+the explicit filter wiring. Any FUTURE screen rebuilt to this pattern should
+get the same treatment as part of its own build (see "How to update this doc"
+below).
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 

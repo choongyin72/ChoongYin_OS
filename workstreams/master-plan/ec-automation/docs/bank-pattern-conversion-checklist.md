@@ -48,7 +48,7 @@ label) found:
 | Regulatory Permits | Basic Objects | ✅ DONE (2026-08-23, Batch 2) | #432 |
 | Currency | Financial Objects | ✅ DONE (2026-08-23, Batch 2) | #430 |
 | VAT Code | Financial Objects | ✅ DONE (2026-08-23, Batch 2) | #431 |
-| Customer | Commercial Objects | ⬜ NOT YET DONE | - |
+| Customer | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | TBD |
 | Field Group | Commercial Objects | ⬜ NOT YET DONE | - |
 | Licence | Commercial Objects | ⬜ NOT YET DONE | - |
 | MMS Lease | Commercial Objects | ⬜ NOT YET DONE | - |
