@@ -57,7 +57,7 @@ label) found:
 | Vendor | Commercial Objects | ⬜ NOT YET DONE | - |
 | Cost Object Mapping | Financial Objects | ⬜ NOT YET DONE | - |
 | DOA Credit Limit | Financial Objects | ⬜ NOT YET DONE | - |
-| Product Description | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | PR pending |
+| Product Description | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | #441 |
 | Sales Order | Financial Objects | ⬜ NOT YET DONE | - |
 | Product Group | Royalty Objects | ⬜ NOT YET DONE | - |
 | Royalty Depositor | Royalty Objects | ⬜ NOT YET DONE | - |
