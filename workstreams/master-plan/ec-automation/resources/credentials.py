@@ -172,3 +172,5 @@ STORAGE_FLOW_EC_USER = os.environ.get("STORAGE_FLOW_EC_USER", os.environ.get("EC
 STORAGE_FLOW_EC_PASS = os.environ.get("STORAGE_FLOW_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 STREAM_ITEM_CATEGORY_EC_USER = os.environ.get("STREAM_ITEM_CATEGORY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 STREAM_ITEM_CATEGORY_EC_PASS = os.environ.get("STREAM_ITEM_CATEGORY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+DATA_EXTRACT_SET_EC_USER = os.environ.get("DATA_EXTRACT_SET_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+DATA_EXTRACT_SET_EC_PASS = os.environ.get("DATA_EXTRACT_SET_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

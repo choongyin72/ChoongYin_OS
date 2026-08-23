@@ -1,59 +1,67 @@
 *** Settings ***
-Documentation       EC IUD Test - Data Extract Set (Configuration > Assets > Data_Mapping_Objects > Data Extract Set, SP.0049).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_SUMMARY_SET).
-...                 Layered: this test -> data_extract_set_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_DXT_<timestamp> code per run.
+Documentation       EC IUD Test - Data Extract Set (Configuration > Assets > Data_Mapping_Objects >
+...                 Data Extract Set, SP.0049). Manage-Object (OV) screen. DELETE = End Date =
+...                 Start Date (true delete in OV_SUMMARY_SET).
+...                 Layered: this test -> data_extract_set_page (T3) -> manage_object (T2) +
+...                 common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_DXT, matching
+...                 Bank/Berth's convention) rather than a generated unique code - confirmed
+...                 absent from OV_SUMMARY_SET before this was wired in (2026-08-23).
+...                 Every run must complete TC05 (delete) so the code is free for the next
+...                 run - EC never lets a DELETED code be reused, but this fixed code only
+...                 stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching Bank/Berth's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Data_Mapping_Objects/data_extract_set_page.resource
 
-Suite Setup         Set Up Data Extract Set Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    data_extract_set
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_DXT
+${OBJ_NAME}         AUTOTEST Data Extract Set
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/data_extract_set_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Data Extract Set UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test data_extract_set does not exist before inserting.
-    [Tags]    clean-state
-    Data Extract Set Row Should Not Exist    ${TEST_CODE}
-    Capture Step    data_extract_set_tc01_clean
-
-TC02 Insert New Data Extract Set
-    [Documentation]    Insert a new data_extract_set; confirm in list + DB (OV_SUMMARY_SET).
-    [Tags]    insert
-    Insert Data Extract Set Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Data Extract Set Row Should Exist    ${TEST_CODE}
-    Data Extract Set Should Exist In DB    ${TEST_CODE}
-    Capture Step    data_extract_set_tc02_inserted
-
-TC03 Update Data Extract Set
-    [Documentation]    Edit Name; confirm in list + DB ground truth.
-    [Tags]    update
-    Update Data Extract Set Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Data Extract Set Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Should Equal In View    OV_SUMMARY_SET    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Capture Step    data_extract_set_tc03_updated
-
-TC04 Delete Data Extract Set
-    [Documentation]    Delete via End Date = Start Date; confirm gone from list + DB.
-    [Tags]    delete    cleanup
-    Delete Data Extract Set    ${TEST_CODE}    ${END_DATE}
-    Data Extract Set Row Should Not Exist    ${TEST_CODE}
-    Data Extract Set Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    data_extract_set_tc04_deleted
-
-
-*** Keywords ***
-Set Up Data Extract Set Suite
-    [Documentation]    Generate a unique test code/name, then open the Data Extract Set screen.
-    Prepare IUD Object Data    AUTOTEST_DXT_    Data Extract Set
+    Login To EC Application
     Open Data Extract Set Screen
+    Verify Data Extract Set Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Data Extract Set Data
+    Login To EC Application
+    Open Data Extract Set Screen
+    Insert Data Extract Set Record And Save
+    Verify Data Extract Set Record Exists
+    Logout From EC Application
+
+TC03 Update Data Extract Set Data
+    Login To EC Application
+    Open Data Extract Set Screen
+    Update Data Extract Set Record And Save
+    Verify Data Extract Set Record Updated
+    Logout From EC Application
+
+TC04 Find Data Extract Set Data
+    Login To EC Application
+    Open Data Extract Set Screen
+    Find Data Extract Set Record
+    Verify Data Extract Set Record Found
+    Logout From EC Application
+
+TC05 Delete Data Extract Set Data
+    Login To EC Application
+    Open Data Extract Set Screen
+    Delete Data Extract Set Record And Save
+    Verify Data Extract Set Record Removed
+    Logout From EC Application

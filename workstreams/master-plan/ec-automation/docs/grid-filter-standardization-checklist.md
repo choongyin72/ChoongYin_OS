@@ -157,6 +157,7 @@ only its own ROW here — no per-PR section header._
 | Split Item Other (Configuration > Assets > Revenue_Split_Keys, CD.0017) | ✅ DONE (2026-08-23) | `Find/Clear Split Item Other Row By Filter` wired into Update/Find/Verify-Found/Delete, matching `bank_page.resource`/`berth_page.resource` exactly. Filter keyword confirmed fired 30x via output.xml grep (live 5/5 run). |
 | Storage Flow (Configuration > Assets > Tank_and_Storage_Objects, CO.2091) | ✅ Wired (2026-08-23, Batch 10) | `Find/Clear Storage Flow Row By Filter` added to `storage_flow_page.resource`, wired into Update/Find/Verify-Found/Delete (T2 `Find Object Row By Filter`/`Clear Object Row Filter`, resources/manage_object.resource - unchanged). Confirmed fired 15x via output.xml grep on the live 5/5 run. |
 | Stream Item Category | ✅ DONE (2026-08-23) | `Find Stream Item Category Row By Filter`/`Clear Stream Item Category Row Filter` added, wired into Update/Find/Verify-Found/Delete (NOT Verify-Removed/Does-Not-Exist), matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired live via output.xml grep (filter 24x, clear 20x). |
+| Data Extract Set | ✅ DONE (2026-08-23) | `Find/Clear Data Extract Set Row By Filter` (delegating to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `data_extract_set_page.resource`, matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired 13x via output.xml grep on the live 5/5 run. |
 
 ## How to update this doc
 
