@@ -50,7 +50,7 @@ label) found:
 | VAT Code | Financial Objects | ✅ DONE (2026-08-23, Batch 2) | #431 |
 | Customer | Commercial Objects | ⬜ NOT YET DONE | - |
 | Field Group | Commercial Objects | ⬜ NOT YET DONE | - |
-| Licence | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | PR TBD |
+| Licence | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #438 |
 | MMS Lease | Commercial Objects | ⬜ NOT YET DONE | - |
 | Operator Lease | Commercial Objects | ⬜ NOT YET DONE | - |
 | State Lease | Commercial Objects | ⬜ NOT YET DONE | - |
