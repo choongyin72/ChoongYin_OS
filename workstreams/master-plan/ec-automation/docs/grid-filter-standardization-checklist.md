@@ -95,7 +95,21 @@ T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen
 rebuilt to this pattern should get the same treatment as part of its own
 build (see "How to update this doc" below).
 
-## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
+## Batch 7 (2026-08-23) — new round, additions beyond the closed 37/37 pool
+
+The 37/37 pool above (original 23-screen Bank-pattern conversion program, Batches 2-6)
+is CLOSED — not reopened here. This is a separate, later round (owner-directed:
+sort by screen LAYOUT similarity to Bank, regardless of prior automation history),
+5 screens (Berth/Blend/Calculation Context/Calculation Group Context/Canal),
+tracked in `tmp/batch7_shared_findings.md`. Each screen already had SOME existing
+automation from an earlier approach (label-driven but missing properties-file-driven
+insert + explicit grid-filter wiring) - this batch brings them the rest of the way.
+
+| Screen | Explicit filter wired? | Notes |
+|---|---|---|
+| Berth | ✅ DONE (2026-08-23, Batch 7) | Manage-object OV, single-page grid (11 rows, Transport Objects). Screen-prefixed labels ("Berth Code"/"Berth Name") confirmed via ec-ui-knowledge/screens/berth.md + proven py/berth_iud.py (Code/Name/Start Date mandatory only, all dropdowns optional). Fixed test code `AUTOTEST_BERTH`. Wired in via this batch (prior page object already had label-driven fields but no properties-file-driven insert/update or explicit filter). Live 5/5, filter keyword confirmed fired 15x via output.xml grep for `Find Berth Row By Filter`. Dryrun 753/753. No shared T1/T2 edits. DB self-clean confirmed via fresh oracledb connection. |
+
+
 
 The ~80 other OV/OV-GM screens listed in `docs/ec_screen_registry.md` have not been
 rebuilt to the label-driven, T2-consolidated pattern yet (they predate this

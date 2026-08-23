@@ -113,6 +113,20 @@ Bank-pattern would be a consistency change, not a functional uplift, and is lowe
 priority. If ever prioritized, treat as a separate initiative, not an extension of this
 checklist.
 
+## Batch 7 (2026-08-23) — new round beyond the closed 23-screen pool above
+
+The "Batch tracking" table above (original 23 nav-free Tier-0 candidates, Batches 2-6) is
+CLOSED — not reopened here. This is a separate, later round: 5 screens (Berth, Blend,
+Calculation Context, Calculation Group Context, Canal) that already had SOME existing
+label-driven automation from an earlier approach (missing the properties-file-driven
+insert/update and explicit grid-filter wiring a fully-done screen has). Owner direction:
+sort by screen LAYOUT similarity to Bank, regardless of prior automation history. Tracked
+in `tmp/batch7_shared_findings.md`.
+
+| Screen | Status | Notes |
+|---|---|---|
+| Berth | ✅ DONE (2026-08-23, Batch 7) | Manage-object OV (Bank family), single-page grid (11 rows). Screen-prefixed labels "Berth Code"/"Berth Name" confirmed via ec-ui-knowledge/screens/berth.md + proven py/berth_iud.py (only Code/Name/Start Date mandatory, dropdowns optional). Rebuilt berth_page.resource/berth_iud.robot to mirror bank_page.resource/state_page.resource exactly: properties-file-driven insert ("Insert Object From Properties And Verify Code"), update, form/grid verify, explicit `Find/Clear Berth Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_BERTH` (confirmed free live). Live 5/5, dryrun 753/753, filter fired 15x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. |
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to
