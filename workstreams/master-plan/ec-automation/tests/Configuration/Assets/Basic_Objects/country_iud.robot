@@ -2,58 +2,64 @@
 Documentation       EC IUD Test - Country (Configuration > Assets > Basic Objects > Country).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_COUNTRY).
 ...                 Layered: this test -> country_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. A unique AUTOTEST_CTRY_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_COUNTRY,
+...                 matching Bank/State/Object List's convention) rather than a generated
+...                 unique code - confirmed absent from OV_COUNTRY before this was wired in
+...                 (2026-08-23). Every run must complete TC05 (delete) so the code is free
+...                 for the next run - EC never lets a DELETED code be reused, but this
+...                 fixed code only stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup, matching Bank/State/Object List's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Basic_Objects/country_page.resource
 
-Suite Setup         Set Up Country Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    country
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_COUNTRY
+${OBJ_NAME}         AUTOTEST Country
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/country_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Country UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test country does not exist before inserting.
-    [Tags]    clean-state
-    Country Row Should Not Exist    ${TEST_CODE}
-    Capture Step    country_tc01_clean
-
-TC02 Insert New Country
-    [Documentation]    Insert a new country and confirm it appears in the list.
-    [Tags]    insert
-    Insert Country Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Country Row Should Exist    ${TEST_CODE}
-    Country Should Exist In DB    ${TEST_CODE}
-    Capture Step    country_tc02_inserted
-
-TC03 Update Country Name
-    [Documentation]    Edit the country name and confirm the list reflects the change.
-    [Tags]    update
-    Update Country Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Country Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    country_tc03_updated
-
-TC04 Delete Country
-    [Documentation]    Delete via End Date = Start Date and confirm the country is gone.
-    [Tags]    delete    cleanup
-    Delete Country    ${TEST_CODE}    ${END_DATE}
-    Country Row Should Not Exist    ${TEST_CODE}
-    Country Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    country_tc04_deleted
-
-
-*** Keywords ***
-Set Up Country Suite
-    [Documentation]    Generate a unique test code/name, then open the Country screen.
-    Prepare IUD Object Data    AUTOTEST_CTRY_    Country
+    Login To EC Application
     Open Country Screen
+    Verify Country Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Country Data
+    Login To EC Application
+    Open Country Screen
+    Insert Country Record And Save
+    Verify Country Record Exists
+    Logout From EC Application
+
+TC03 Update Country Data
+    Login To EC Application
+    Open Country Screen
+    Update Country Record And Save
+    Verify Country Record Updated
+    Logout From EC Application
+
+TC04 Find Country Data
+    Login To EC Application
+    Open Country Screen
+    Find Country Record
+    Verify Country Record Found
+    Logout From EC Application
+
+TC05 Delete Country Data
+    Login To EC Application
+    Open Country Screen
+    Delete Country Record And Save
+    Verify Country Record Removed
+    Logout From EC Application
