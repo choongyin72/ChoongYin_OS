@@ -51,7 +51,7 @@ label) found:
 | Customer | Commercial Objects | ⬜ NOT YET DONE | - |
 | Field Group | Commercial Objects | ⬜ NOT YET DONE | - |
 | Licence | Commercial Objects | ⬜ NOT YET DONE | - |
-| MMS Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | PR TBD |
+| MMS Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #437 |
 | Operator Lease | Commercial Objects | ⬜ NOT YET DONE | - |
 | State Lease | Commercial Objects | ⬜ NOT YET DONE | - |
 | Vendor | Commercial Objects | ⬜ NOT YET DONE | - |
