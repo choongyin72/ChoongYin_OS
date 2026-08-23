@@ -56,7 +56,7 @@ label) found:
 | State Lease | Commercial Objects | ⬜ NOT YET DONE | - |
 | Vendor | Commercial Objects | ⬜ NOT YET DONE | - |
 | Cost Object Mapping | Financial Objects | ⬜ NOT YET DONE | - |
-| DOA Credit Limit | Financial Objects | ⬜ NOT YET DONE | - |
+| DOA Credit Limit | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | feature/doa-credit-limit-bank-pattern |
 | Product Description | Financial Objects | ⬜ NOT YET DONE | - |
 | Sales Order | Financial Objects | ⬜ NOT YET DONE | - |
 | Product Group | Royalty Objects | ⬜ NOT YET DONE | - |
