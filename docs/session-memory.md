@@ -178,3 +178,52 @@ via GitHub directly), but it's still a claim to verify, not assume.
 After finishing a body of work, append: (a) a `DeepDiveLearnings/LEARNING-SCORECARD.md` calibration-
 log row (what happened, confident-right vs confident-wrong, the lesson), and (b) a dated
 `docs/session-memory.md` section like this one. Do this as a matter of course, not only when asked.
+
+## 2026-08-23 (later) - Bank-pattern conversion Batches 2-6: full 23-screen candidate pool COMPLETE
+
+Following "ok. proceed until no more items for next batch" (explicit standing authorization), ran
+5 more batches of 5-screen parallel-subagent conversions after Batch 1, until the entire 23-screen
+nav-free candidate pool (from the `docs/bank-pattern-conversion-checklist.md` survey) was exhausted:
+
+- Batch 2: Country #428, County #429, Currency #430, VAT Code #431, Regulatory Permits #432
+- Batch 3: Customer #435, Field Group #434, Licence #438, MMS Lease #437, Operator Lease #436
+- Batch 4: State Lease #440, Vendor #439, Cost Object Mapping #442, DOA Credit Limit #443, Product Description #441
+- Batch 5: Sales Order #444, Product Group #445, Royalty Depositor #448, Royalty Owner #447, Unit Agreement #446
+- Batch 6 (final): Calendar Collection #449, Account Mapping #450, Calendar #451
+
+All 23 PRs independently re-verified via `mcp__github__pull_request_read` before being counted done
+(never trusted a subagent's own summary alone), merged into master via the established worktree
+process (one worktree per batch, `git merge --no-ff --no-commit` per PR in sequence, resolving
+expected append-only conflicts in credentials.py/ec_screen_registry.md/automation-scorecard.md/both
+checklist docs by keeping both sides), then full-tree dryrun + live regression + fresh-connection DB
+self-clean before each push. `docs/bank-pattern-conversion-checklist.md` and `docs/grid-filter-
+standardization-checklist.md` are both now closed out (23/23 and 37/37 respectively).
+
+**Real gotchas found across the batches (not bugs, EC's own behavior):**
+- VAT Code (Batch 2): `__FIRST__` fails TC02's round-trip verify for a mandatory dropdown — must use
+  the literal resolved option text instead, since the verify step compares the live screen back
+  against the SAME properties file the insert used.
+- Cost Object Mapping (Batch 4): a mandatory reference dropdown can be a CASCADE that only populates
+  once an earlier field (Start Date, another dropdown) is already set — shows a "Dependent field 'X'
+  is empty" banner, not a broken dropdown.
+- DOA Credit Limit (Batch 4): Currency is statically `{mandatory:false}` but EC enforces it
+  server-side when DOA Type="Amount Based" — a genuine conditional-mandatory business rule, found by
+  actually clicking Save and reading the real rejection banner, then reproduced live and demoed via
+  screenshot on request. Owner confirmed: "its screen own business rules not a bug/defect."
+  Also on this screen: Role Name dropdown re-renders showing its Description ("Report Administrator")
+  instead of the raw code used to select it, after any form reload — excluded from the live-DOM
+  round-trip check, covered by DB ground-truth instead (same pattern recurred on Account Mapping's
+  Line Item Type field in Batch 6).
+- Royalty Depositor (Batch 5): hit a transient EC account lockout + a cross-session "unsaved changes"
+  dialog from another parallel Batch-5 agent sharing the same sysadmin login on the shared sandbox —
+  correctly diagnosed as cross-session interference, not its own code defect, and retried once
+  (not blind trial-and-error).
+- Cost Object Mapping / Sales Order / Account Mapping: all three were flagged upfront as possible
+  scope mismatches purely from their "Mapping"/"Order" naming (suggesting a linking-grid or
+  document-header shape), but live recon on each confirmed a genuine Code/Name manage-object OV in
+  every case — the naming worry never materialized, but was correctly verified rather than assumed
+  away.
+
+Persistent memory updated: new `project_bank_pattern_conversion_batches_2026_08.md` (full batch/PR
+history + reusable process), cross-linked from `project_grid_filter_standardization_2026_08.md` and
+`MEMORY.md`.
