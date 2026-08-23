@@ -78,13 +78,19 @@ wrap there would be pure redundant duplication with no behavior change.
 | Calendar Collection | ✅ DONE (2026-08-23, batch-6) | Custom-URL OV (grid `nav:form:T_data`, NO GO button - confirmed live, matching Account/Cost Centre's shape). Batch-6 (FINAL batch) conversion from the older hardcoded-field-id pattern. Generic Code/Name labels (not screen-prefixed) confirmed live via a New Object form field-label scan (8 ECCell labels; no weekday-indicator checkboxes on this EC build, contrary to the pre-existing page object's stale docstring). Wired in from the start. Live 5/5, filter keyword confirmed fired exactly 5 times via output.xml grep for `Find Calendar Collection Row By Filter`. |
 | Account Mapping | ✅ DONE (2026-08-23, batch-6, FINAL) | Manage-object OV, 75-row custom grid (Financial Objects) with 13 grid columns (Code, Name, Product, Line Item Type, Financial Code, Company Category, Company, Status, Debit / Credit, Debit PK, Credit PK, Account Category, Financial Account) and NO Start Date column - grid-verify only checks Code/Name. Confirmed NOT a scope mismatch despite the "Mapping" name (genuine Code/Name manage-object OV, same outcome as Cost Object Mapping in Batch 4). Reused the screen's own already-proven reference combination (`JOU_ENT_ALL_ALL_ALL_ACCRUAL_CREDIT`, confirmed still free live) across EIGHT mandatory reference dropdowns + one cascade-dependency field. Wired in from the start. Live 5/5 after one retry (Line Item Type re-renders as short code `ALL` after reload - excluded from the live-DOM round-trip form check, same DOA Credit Limit Role Name gotcha), filter keyword confirmed fired 5x via output.xml grep for `Find Account Mapping Row By Filter`. |
 
-**36 of 36 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
+| Calendar | ✅ DONE (2026-08-23, batch-6, final batch) | Custom-URL OV (grid `nav:form:T_data`, NO navigator/GO button - confirmed live, matching Account/Cost Centre's shape). Screen-prefixed labels confirmed live ("Calendar Code"/"Calendar Name"). Only Code/Name/Start Date mandatory - 7 weekday-indicator checkboxes + Description/Comments left optional/out of scope, matching the prior driver's own field scope (no expansion). Wired in from the start. Live 5/5, filter keyword confirmed fired exactly 5 times via output.xml grep for `Find Calendar Row By Filter`. DB self-clean confirmed 0 residual rows via a fresh oracledb connection. |
+
+**37 of 37 done. ALL 23 BANK-PATTERN SCREENS NOW HAVE EXPLICIT GRID-FILTER
+WIRING.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
 Regulatory Permits), all 5 batch-3 screens (Field Group, Customer, Operator
 Lease, MMS Lease, Licence), all 5 batch-4 screens (Vendor, State Lease,
 Product Description, Cost Object Mapping, DOA Credit Limit), all 5
 batch-5 screens (Sales Order, Product Group, Unit Agreement, Royalty Owner,
-Royalty Depositor), and Calendar Collection + Account Mapping (batch-6, 2 of
-3 landed so far) are in. Every screen already rebuilt to the Bank-pattern
+Royalty Depositor), and all 3 batch-6 screens (Calendar Collection, Account
+Mapping, Calendar) are in — plus the original 14 pre-existing Bank-pattern
+screens (Bank, State, Object List, Account, Cost Centre, Revenue Order, WBS,
+Payment Scheme, Exchange Rate Source, Region, Functional Area, Business Unit,
+Production Unit, Company). Every screen rebuilt to the Bank-pattern
 T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen
 rebuilt to this pattern should get the same treatment as part of its own
 build (see "How to update this doc" below).

@@ -64,13 +64,22 @@ label) found:
 | Royalty Owner | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | #447 |
 | Unit Agreement | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | #446 |
 | Calendar Collection | Date Objects | ✅ DONE (2026-08-23, Batch 6) | #449 |
-| Calendar | Date Objects | ⬜ NOT YET DONE | - |
+| Calendar | Date Objects | ✅ DONE (2026-08-23, Batch 6) | #451 |
 | Account Mapping | Financial Objects | ✅ DONE (2026-08-23, Batch 6, FINAL) | #450 |
 
-**21 of 23 done.** Batch 3, 4, and 5 complete (Sales Order #444, Product Group
-#445, Unit Agreement #446, Royalty Owner #447, Royalty Depositor #448). Batch 6
-Calendar Collection DONE (#449), Account Mapping DONE (#450). 1 remains —
-Calendar (Batch 6, final screen of the entire 23-screen pool).
+**23 of 23 done. ALL SCREENS IN THE ORIGINAL CANDIDATE POOL CONVERTED.** Batch 2
+(Country #428, County #429, Regulatory Permits #432, Currency #430, VAT Code
+#431), Batch 3 (Customer #435, Field Group #434, Licence #438, MMS Lease #437,
+Operator Lease #436), Batch 4 (State Lease #440, Vendor #439, Cost Object
+Mapping #442, DOA Credit Limit #443, Product Description #441), Batch 5 (Sales
+Order #444, Product Group #445, Royalty Depositor #448, Royalty Owner #447,
+Unit Agreement #446), and Batch 6 (Calendar Collection #449, Calendar #451,
+Account Mapping #450) — all 23 nav-free Tier-0 screens are now on the
+label-driven, properties-file-driven, T2-consolidated Bank pattern, with
+explicit grid-filter wiring included. This checklist's "Batch tracking" table
+is now complete; any future Bank-pattern conversion work (Tier 1/OV-GM
+screens, or newly-registered screens) should get its own new tracking table
+rather than reusing this one.
 
 Note: once a screen from this table is converted, it should ALSO be added to
 `docs/grid-filter-standardization-checklist.md`'s "done" table in the same PR (per the
