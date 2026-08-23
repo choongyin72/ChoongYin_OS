@@ -115,3 +115,6 @@ SALES_ORDER_EC_PASS = os.environ.get("SALES_ORDER_EC_PASS", os.environ.get("EC_P
 
 PRODUCT_GROUP_EC_USER = os.environ.get("PRODUCT_GROUP_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PRODUCT_GROUP_EC_PASS = os.environ.get("PRODUCT_GROUP_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+UNIT_AGREEMENT_EC_USER = os.environ.get("UNIT_AGREEMENT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+UNIT_AGREEMENT_EC_PASS = os.environ.get("UNIT_AGREEMENT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
