@@ -176,3 +176,5 @@ DATA_EXTRACT_SET_EC_USER = os.environ.get("DATA_EXTRACT_SET_EC_USER", os.environ
 DATA_EXTRACT_SET_EC_PASS = os.environ.get("DATA_EXTRACT_SET_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 TRAILER_EC_USER = os.environ.get("TRAILER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 TRAILER_EC_PASS = os.environ.get("TRAILER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+CARRIER_EC_USER = os.environ.get("CARRIER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CARRIER_EC_PASS = os.environ.get("CARRIER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

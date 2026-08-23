@@ -170,6 +170,7 @@ committing to a full conversion (see `tmp/batch11_shared_findings.md`)._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Carrier (Configuration > Assets > Cargo_Objects) | ✅ DONE (2026-08-23) | `Find/Clear Carrier Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `carrier_page.resource`, matching `bank_page.resource`/`berth_page.resource`/`port_page.resource` exactly. Confirmed fired 14x via output.xml grep on the live 5/5 run. |
 
 ## How to update this doc
 
