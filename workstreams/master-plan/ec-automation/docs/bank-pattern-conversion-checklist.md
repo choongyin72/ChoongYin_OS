@@ -51,7 +51,7 @@ label) found:
 | Customer | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #435 |
 | Field Group | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #434 |
 | Licence | Commercial Objects | ⬜ NOT YET DONE | - |
-| MMS Lease | Commercial Objects | ⬜ NOT YET DONE | - |
+| MMS Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #437 |
 | Operator Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #436 |
 | State Lease | Commercial Objects | ⬜ NOT YET DONE | - |
 | Vendor | Commercial Objects | ⬜ NOT YET DONE | - |
@@ -67,7 +67,7 @@ label) found:
 | Calendar | Date Objects | ⬜ NOT YET DONE | - |
 | Account Mapping | Financial Objects | ⬜ NOT YET DONE | - |
 
-**8 of 23 done.** 15 remain — natural pool for Batch 4 onward, 5 screens per batch
+**9 of 23 done.** 14 remain — natural pool for Batch 4 onward, 5 screens per batch
 matching the established cadence.
 
 Note: once a screen from this table is converted, it should ALSO be added to

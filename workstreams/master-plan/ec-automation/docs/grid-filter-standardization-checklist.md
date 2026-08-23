@@ -63,13 +63,14 @@ wrap there would be pure redundant duplication with no behavior change.
 | Field Group | ✅ DONE (2026-08-23, batch-3) | Manage-object OV, small grid (plain navigator, no mandatory nav scope - confirmed live). Batch-3 5-screen Bank-pattern conversion (Customer/Field Group/Licence/MMS Lease/Operator Lease), parallel worker clone. Live 5/5, filter wiring included from the start, confirmed fired (5 hits for `Find Field Group Row By Filter` in output.xml). |
 | Customer | ✅ DONE (2026-08-23, batch-3) | Manage-object OV, small grid (Commercial Objects). Batch-3 5-screen Bank-pattern conversion (Customer/Field Group/Licence/MMS Lease/Operator Lease, parallel isolated clones). Wired in from the start. Live 5/5, filter keyword confirmed fired 5x via output.xml grep. |
 | Operator Lease | ✅ DONE (2026-08-23, batch-3) | Manage-object OV, empty grid (0 rows on this sandbox). Batch-3 5-screen Bank-pattern conversion (Customer/Field Group/Licence/MMS Lease/Operator Lease). Wired in from the start. Live 5/5, filter confirmed fired (5 hits in output.xml for `Find Operator Lease Row By Filter`). |
+| MMS Lease | ✅ DONE (2026-08-23, batch-3) | Manage-object OV, small/empty grid (0 rows before this suite's own TC02). Batch-3 5-screen Bank-pattern conversion (Customer/Field Group/Licence/MMS Lease/Operator Lease). Wired in from the start. Live 5/5, filter confirmed fired (5 hits each for `Find MMS Lease Row By Filter`/`Clear MMS Lease Row Filter` in output.xml). |
 
-**22 of 22 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
-Regulatory Permits) and Field Group + Customer + Operator Lease (batch-3, 3 of
-5 landed so far) are in. Every screen already rebuilt to the Bank-pattern
-T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen
-rebuilt to this pattern should get the same treatment as part of its own
-build (see "How to update this doc" below).
+**23 of 23 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
+Regulatory Permits) and Field Group + Customer + Operator Lease + MMS Lease
+(batch-3, 4 of 5 landed so far) are in. Every screen already rebuilt to the
+Bank-pattern T2-consolidated shape now has the explicit filter wiring. Any
+FUTURE screen rebuilt to this pattern should get the same treatment as part
+of its own build (see "How to update this doc" below).
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 

@@ -1,59 +1,65 @@
 *** Settings ***
 Documentation       EC IUD Test - MMS Lease (Configuration > Assets > Commercial Objects > MMS Lease).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_MMS_LEASE).
-...                 NEVER touch existing data. A unique AUTOTEST_MMSL_<timestamp> code is generated
-...                 per run. Section Start Date 2003-01-01: reference dropdowns are
-...                 effective-date-filtered (object start date acts as a version).
+...                 Layered: this test -> mms_lease_page (T3) -> manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_MMS_LEASE,
+...                 matching Bank/State/Country/Object List's convention) rather than a generated
+...                 unique code - confirmed absent from OV_MMS_LEASE before this was wired in
+...                 (2026-08-23). Every run must complete TC05 (delete) so the code is free
+...                 for the next run - EC never lets a DELETED code be reused, but this
+...                 fixed code only stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup, matching Bank/State/Country/Object List's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Commercial_Objects/mms_lease_page.resource
 
-Suite Setup         Set Up MMS Lease Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    mms-lease
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
+${TEST_CODE}        AUTOTEST_MMS_LEASE
+${OBJ_NAME}         AUTOTEST MMS Lease
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/mms_lease_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST MMS Lease UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test mms lease does not exist before inserting.
-    [Tags]    clean-state
-    MMS Lease Row Should Not Exist    ${TEST_CODE}
-    Capture Step    mms_lease_tc01_clean
-
-TC02 Insert New MMS Lease
-    [Documentation]    Insert a new mms lease and confirm it appears in the list.
-    [Tags]    insert
-    Insert MMS Lease Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    MMS Lease Row Should Exist    ${TEST_CODE}
-    MMS Lease Should Exist In DB    ${TEST_CODE}
-    Capture Step    mms_lease_tc02_inserted
-
-TC03 Update MMS Lease Name
-    [Documentation]    Edit the mms lease name and confirm the list reflects the change.
-    [Tags]    update
-    Update MMS Lease Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    MMS Lease Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    mms_lease_tc03_updated
-
-TC04 Delete MMS Lease
-    [Documentation]    Delete via End Date = Start Date and confirm the mms lease is gone.
-    [Tags]    delete    cleanup
-    Delete MMS Lease    ${TEST_CODE}    ${END_DATE}
-    MMS Lease Row Should Not Exist    ${TEST_CODE}
-    MMS Lease Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    mms_lease_tc04_deleted
-
-
-*** Keywords ***
-Set Up MMS Lease Suite
-    [Documentation]    Generate a unique test code/name, then open the MMS Lease screen.
-    Prepare IUD Object Data    AUTOTEST_MMSL_    MMS Lease
+    Login To EC Application
     Open MMS Lease Screen
+    Verify MMS Lease Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert MMS Lease Data
+    Login To EC Application
+    Open MMS Lease Screen
+    Insert MMS Lease Record And Save
+    Verify MMS Lease Record Exists
+    Logout From EC Application
+
+TC03 Update MMS Lease Data
+    Login To EC Application
+    Open MMS Lease Screen
+    Update MMS Lease Record And Save
+    Verify MMS Lease Record Updated
+    Logout From EC Application
+
+TC04 Find MMS Lease Data
+    Login To EC Application
+    Open MMS Lease Screen
+    Find MMS Lease Record
+    Verify MMS Lease Record Found
+    Logout From EC Application
+
+TC05 Delete MMS Lease Data
+    Login To EC Application
+    Open MMS Lease Screen
+    Delete MMS Lease Record And Save
+    Verify MMS Lease Record Removed
+    Logout From EC Application
