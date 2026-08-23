@@ -1,60 +1,73 @@
 *** Settings ***
-Documentation       EC IUD Test - Calendar (Configuration > Assets > Date Objects > Calendar, CD.0024).
-...                 Manage-Object (OV, date-effective) screen. Plain Bank-family OV (no mandatory extras).
-...                 DELETE = End Date = Start Date (true delete in ov_calendar).
-...                 Layered: this test -> calendar_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_CAL_<timestamp> code per run.
+Documentation       EC IUD Test - Calendar (Configuration > Assets > Date Objects > Calendar,
+...                 CD.0024). Manage-Object (OV, date-effective), CUSTOM-URL variant (no
+...                 navigator/GO). DELETE = End Date = Start Date (true delete in OV_CALENDAR).
+...                 Layered: this test -> calendar_page (T3) -> manage_object (T2) + common
+...                 (T1). NEVER touch existing data. Uses a FIXED test code
+...                 (AUTOTEST_CALENDAR, matching Bank/Royalty Owner's convention) rather than
+...                 a generated unique code - confirmed absent from OV_CALENDAR before this
+...                 was wired in (2026-08-23). Every run must complete TC05 (delete) so the
+...                 code is free for the next run - EC never lets a DELETED code be reused,
+...                 but this fixed code only stays reusable if each run actually cleans up
+...                 after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching Bank/Royalty Owner's convention
+...                 (docs/rf-suite-styles.md).
+...                 OUT OF SCOPE: the "Member Calendars"/"Calendar Usage" child grid (per
+...                 docs/ec_screen_registry.md's existing entry) - this suite only covers the
+...                 plain Code/Name/Start Date IUD flow.
+...                 Rebuilt 2026-08-23 (Batch 6 Bank-pattern conversion, final batch) from the
+...                 older hardcoded-field-id pattern.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Date_Objects/calendar_page.resource
 
-Suite Setup         Set Up Calendar Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    calendar    date-objects
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_CALENDAR
+${OBJ_NAME}         AUTOTEST Calendar
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/calendar_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Calendar UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Calendar Row Should Not Exist    ${TEST_CODE}
-    Calendar Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    cal_tc01_clean
-
-TC02 Insert New Calendar
-    [Documentation]    Insert a new Calendar (Code/Name/Start Date) and confirm it appears in the list and DB.
-    [Tags]    insert
-    Insert Calendar Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Calendar Row Should Exist    ${TEST_CODE}
-    Calendar Should Exist In DB    ${TEST_CODE}
-    Capture Step    cal_tc02_inserted
-
-TC03 Update Calendar Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Calendar Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Calendar Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    cal_tc03_updated
-
-TC04 Delete Calendar
-    [Documentation]    Delete via End Date = Start Date and confirm the object is gone from list and DB.
-    [Tags]    delete    cleanup
-    Delete Calendar    ${TEST_CODE}    ${END_DATE}
-    Calendar Row Should Not Exist    ${TEST_CODE}
-    Calendar Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    cal_tc04_deleted
-
-
-*** Keywords ***
-Set Up Calendar Suite
-    [Documentation]    Generate a unique test code/name, then open the Calendar screen.
-    Prepare IUD Object Data    AUTOTEST_CAL_    Calendar
+    Login To EC Application
     Open Calendar Screen
+    Verify Calendar Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Calendar Data
+    Login To EC Application
+    Open Calendar Screen
+    Insert Calendar Record And Save
+    Verify Calendar Record Exists
+    Logout From EC Application
+
+TC03 Update Calendar Data
+    Login To EC Application
+    Open Calendar Screen
+    Update Calendar Record And Save
+    Verify Calendar Record Updated
+    Logout From EC Application
+
+TC04 Find Calendar Data
+    Login To EC Application
+    Open Calendar Screen
+    Find Calendar Record
+    Verify Calendar Record Found
+    Logout From EC Application
+
+TC05 Delete Calendar Data
+    Login To EC Application
+    Open Calendar Screen
+    Delete Calendar Record And Save
+    Verify Calendar Record Removed
+    Logout From EC Application

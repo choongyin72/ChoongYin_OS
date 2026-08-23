@@ -64,12 +64,13 @@ label) found:
 | Royalty Owner | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | #447 |
 | Unit Agreement | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | #446 |
 | Calendar Collection | Date Objects | ⬜ NOT YET DONE | - |
-| Calendar | Date Objects | ⬜ NOT YET DONE | - |
+| Calendar | Date Objects | ✅ DONE (2026-08-23, Batch 6) | #449 (pending) |
 | Account Mapping | Financial Objects | ⬜ NOT YET DONE | - |
 
-**20 of 23 done.** Batch 3, 4, and 5 complete (Sales Order #444, Product Group
-#445, Unit Agreement #446, Royalty Owner #447, Royalty Depositor #448). 3
-remain — Calendar Collection, Calendar, Account Mapping (Batch 6, final batch).
+**21 of 23 done.** Batch 3, 4, and 5 complete (Sales Order #444, Product Group
+#445, Unit Agreement #446, Royalty Owner #447, Royalty Depositor #448). Batch 6
+(final batch) in progress — Calendar done (this PR); Calendar Collection and
+Account Mapping being converted in parallel by sibling agents.
 
 Note: once a screen from this table is converted, it should ALSO be added to
 `docs/grid-filter-standardization-checklist.md`'s "done" table in the same PR (per the
