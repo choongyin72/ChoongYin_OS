@@ -144,3 +144,5 @@ BLEND_EC_USER = os.environ.get("BLEND_EC_USER", os.environ.get("EC_USER", "sysad
 BLEND_EC_PASS = os.environ.get("BLEND_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 CANAL_EC_USER = os.environ.get("CANAL_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CANAL_EC_PASS = os.environ.get("CANAL_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+METER_RUN_EC_USER = os.environ.get("METER_RUN_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+METER_RUN_EC_PASS = os.environ.get("METER_RUN_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

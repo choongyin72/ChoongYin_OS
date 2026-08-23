@@ -139,6 +139,20 @@ tracking-table row, to avoid reopening the closed table's shape):
 |---|---|
 | Calculation Group Context (Configuration > Assets > Calculation_Objects, CO.0245) | ✅ DONE (2026-08-23) — brought to full Bank-pattern shape: `Insert/Update Object From Properties`, `Verify Object Insert Exists/Form Record/Found/Removed/Does Not Exist`, explicit `Find/Clear Calculation Group Context Row By Filter`, dedicated `CALCULATION_GROUP_CONTEXT_EC_USER/PASS`, fixed test code `AUTOTEST_CGC_BANK`. Live 5/5 RF, robocop parity with `bank_iud.robot`'s baseline, dryrun 753/753, DB self-clean (fresh connection) 0 residual, filter fired 23x per output.xml. See `docs/ec_screen_registry.md` and `docs/grid-filter-standardization-checklist.md` for full detail. |
 
+## Batch 8 (2026-08-23) — new round beyond the closed Batch 7 pool above
+
+Batch 7 above is CLOSED — not reopened here. This is a further round: 5 screens
+(Chemical transport tank/Deferment Group/Inventory Area/Meter Run/Orifice Plate)
+that already had SOME existing label-driven automation from an earlier approach
+(missing the properties-file-driven insert/update and explicit grid-filter wiring
+a fully-done screen has). Owner direction unchanged from Batch 7: sort by screen
+LAYOUT similarity to Bank, regardless of prior automation history. Tracked in
+`tmp/batch8_shared_findings.md`.
+
+| Screen | Status | Notes |
+|---|---|---|
+| Meter Run (Configuration > Assets > Stream_Objects, CO.0091) | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Bank family), single-page grid (20 rows). Screen-prefixed labels "Meter Run Code"/"Meter Run Name" confirmed via the proven py/meter_run_iud.py + the prior live-tested page object (only that driver, not a fresh guess). Rebuilt meter_run_page.resource/meter_run_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Meter Run Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_METER_RUN` (confirmed free live via a fresh oracledb query). Mandatory set is WIDER than Bank/Berth - besides Code/Name/Start Date, Type of Taps/Pipe Material/Location of Taps dropdowns and Pipe Diameter/Diameter Meas Temp/All Calibration Factor are also mandatory (per the existing driver, unchanged from before this batch). Live 5/5, dryrun 758/758, filter fired 15x (output.xml grep), DB self-clean confirmed 0 residual via a fresh oracledb connection. No shared T1/T2 file changes. |
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to
