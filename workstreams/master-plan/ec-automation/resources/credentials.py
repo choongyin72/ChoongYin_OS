@@ -79,3 +79,6 @@ VAT_CODE_EC_PASS = os.environ.get("VAT_CODE_EC_PASS", os.environ.get("EC_PASS", 
 
 REGULATORY_PERMITS_EC_USER = os.environ.get("REGULATORY_PERMITS_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 REGULATORY_PERMITS_EC_PASS = os.environ.get("REGULATORY_PERMITS_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+OPERATOR_LEASE_EC_USER = os.environ.get("OPERATOR_LEASE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+OPERATOR_LEASE_EC_PASS = os.environ.get("OPERATOR_LEASE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

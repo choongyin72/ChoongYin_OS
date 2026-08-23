@@ -1,59 +1,66 @@
 *** Settings ***
-Documentation       EC IUD Test - Operator Lease (Configuration > Assets > Commercial Objects > Operator Lease).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_OPERATOR_LEASE).
-...                 NEVER touch existing data. A unique AUTOTEST_OPL_<timestamp> code is generated
-...                 per run. Section Start Date 2003-01-01: reference dropdowns are
-...                 effective-date-filtered (object start date acts as a version).
+Documentation       EC IUD Test - Operator Lease (Configuration > Assets > Commercial Objects >
+...                 Operator Lease). Manage-Object (OV) screen. DELETE = End Date = Start Date
+...                 (true delete in OV_OPERATOR_LEASE). Layered: this test -> operator_lease_page
+...                 (T3) -> manage_object (T2) + common (T1). NEVER touch existing data. Uses a
+...                 FIXED test code (AUTOTEST_OPERATOR_LEASE, matching Bank/State/Country/Object
+...                 List's convention) rather than a generated unique code - confirmed absent
+...                 from OV_OPERATOR_LEASE before this was wired in (2026-08-23). Every run must
+...                 complete TC05 (delete) so the code is free for the next run - EC never lets a
+...                 DELETED code be reused, but this fixed code only stays reusable if each run
+...                 actually cleans up after itself. EACH test case does its own real
+...                 Login/Logout on ONE browser opened once in Suite Setup, matching
+...                 Bank/State/Country/Object List's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Commercial_Objects/operator_lease_page.resource
 
-Suite Setup         Set Up Operator Lease Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
-Test Tags           iud    operator-lease
+Test Tags           iud    operator_lease
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
+${TEST_CODE}        AUTOTEST_OPERATOR_LEASE
+${OBJ_NAME}         AUTOTEST Operator Lease
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/operator_lease_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Operator Lease UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test operator lease does not exist before inserting.
-    [Tags]    clean-state
-    Operator Lease Row Should Not Exist    ${TEST_CODE}
-    Capture Step    operator_lease_tc01_clean
-
-TC02 Insert New Operator Lease
-    [Documentation]    Insert a new operator lease and confirm it appears in the list.
-    [Tags]    insert
-    Insert Operator Lease Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Operator Lease Row Should Exist    ${TEST_CODE}
-    Operator Lease Should Exist In DB    ${TEST_CODE}
-    Capture Step    operator_lease_tc02_inserted
-
-TC03 Update Operator Lease Name
-    [Documentation]    Edit the operator lease name and confirm the list reflects the change.
-    [Tags]    update
-    Update Operator Lease Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Operator Lease Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    operator_lease_tc03_updated
-
-TC04 Delete Operator Lease
-    [Documentation]    Delete via End Date = Start Date and confirm the operator lease is gone.
-    [Tags]    delete    cleanup
-    Delete Operator Lease    ${TEST_CODE}    ${END_DATE}
-    Operator Lease Row Should Not Exist    ${TEST_CODE}
-    Operator Lease Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    operator_lease_tc04_deleted
-
-
-*** Keywords ***
-Set Up Operator Lease Suite
-    [Documentation]    Generate a unique test code/name, then open the Operator Lease screen.
-    Prepare IUD Object Data    AUTOTEST_OPL_    Operator Lease
+    Login To EC Application
     Open Operator Lease Screen
+    Verify Operator Lease Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Operator Lease Data
+    Login To EC Application
+    Open Operator Lease Screen
+    Insert Operator Lease Record And Save
+    Verify Operator Lease Record Exists
+    Logout From EC Application
+
+TC03 Update Operator Lease Data
+    Login To EC Application
+    Open Operator Lease Screen
+    Update Operator Lease Record And Save
+    Verify Operator Lease Record Updated
+    Logout From EC Application
+
+TC04 Find Operator Lease Data
+    Login To EC Application
+    Open Operator Lease Screen
+    Find Operator Lease Record
+    Verify Operator Lease Record Found
+    Logout From EC Application
+
+TC05 Delete Operator Lease Data
+    Login To EC Application
+    Open Operator Lease Screen
+    Delete Operator Lease Record And Save
+    Verify Operator Lease Record Removed
+    Logout From EC Application

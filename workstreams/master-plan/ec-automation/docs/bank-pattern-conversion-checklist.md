@@ -52,7 +52,7 @@ label) found:
 | Field Group | Commercial Objects | ⬜ NOT YET DONE | - |
 | Licence | Commercial Objects | ⬜ NOT YET DONE | - |
 | MMS Lease | Commercial Objects | ⬜ NOT YET DONE | - |
-| Operator Lease | Commercial Objects | ⬜ NOT YET DONE | - |
+| Operator Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | PR TBD (feature/operator-lease-bank-pattern) |
 | State Lease | Commercial Objects | ⬜ NOT YET DONE | - |
 | Vendor | Commercial Objects | ⬜ NOT YET DONE | - |
 | Cost Object Mapping | Financial Objects | ⬜ NOT YET DONE | - |
