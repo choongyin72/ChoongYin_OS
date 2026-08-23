@@ -1,58 +1,65 @@
 *** Settings ***
-Documentation       EC IUD Test - Cost Object Mapping (Configuration > Assets > Financial Objects > Cost Object Mapping).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_FIN_COST_OBJECT).
-...                 NEVER touch existing data. A unique AUTOTEST_COM_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+Documentation       EC IUD Test - Cost Object Mapping (Configuration > Assets > Financial
+...                 Objects > Cost Object Mapping). Manage-Object (OV) screen. DELETE = End
+...                 Date = Start Date (true delete in OV_FIN_COST_OBJECT).
+...                 Layered: this test -> cost_object_mapping_page (T3) -> manage_object (T2) +
+...                 common (T1). NEVER touch existing data. Uses a FIXED test code
+...                 (AUTOTEST_CMAP) rather than a generated unique code - confirmed absent from
+...                 OV_FIN_COST_OBJECT before this was wired in. Every run must complete TC05
+...                 (delete) so the code is free for the next run - EC never lets a DELETED code
+...                 be reused, but this fixed code only stays reusable if each run actually
+...                 cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - not 5 separate browser launches. Converted from the old
+...                 hardcoded-field-id pattern to the label-driven, properties-file-driven "Bank
+...                 pattern" (Batch 4, 2026-08-23).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Financial_Objects/cost_object_mapping_page.resource
 
-Suite Setup         Set Up Cost Object Mapping Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    cost-object-mapping
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
+${TEST_CODE}        AUTOTEST_CMAP
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test cost object mapping does not exist before inserting.
-    [Tags]    clean-state
-    Cost Object Mapping Row Should Not Exist    ${TEST_CODE}
-    Capture Step    cost_object_mapping_tc01_clean
-
-TC02 Insert New Cost Object Mapping
-    [Documentation]    Insert a new cost object mapping and confirm it appears in the list.
-    [Tags]    insert
-    Insert Cost Object Mapping Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Cost Object Mapping Row Should Exist    ${TEST_CODE}
-    Cost Object Mapping Should Exist In DB    ${TEST_CODE}
-    Capture Step    cost_object_mapping_tc02_inserted
-
-TC03 Update Cost Object Mapping Name
-    [Documentation]    Edit the cost object mapping name and confirm the list reflects the change.
-    [Tags]    update
-    Update Cost Object Mapping Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Cost Object Mapping Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    cost_object_mapping_tc03_updated
-
-TC04 Delete Cost Object Mapping
-    [Documentation]    Delete via End Date = Start Date and confirm the cost object mapping is gone.
-    [Tags]    delete    cleanup
-    Delete Cost Object Mapping    ${TEST_CODE}    ${END_DATE}
-    Cost Object Mapping Row Should Not Exist    ${TEST_CODE}
-    Cost Object Mapping Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    cost_object_mapping_tc04_deleted
-
-
-*** Keywords ***
-Set Up Cost Object Mapping Suite
-    [Documentation]    Generate a unique test code/name, then open the Cost Object Mapping screen.
-    Prepare IUD Object Data    AUTOTEST_COM_    Cost Object Mapping
+    Login To EC Application
     Open Cost Object Mapping Screen
+    Verify Cost Object Mapping Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Cost Object Mapping Data
+    Login To EC Application
+    Open Cost Object Mapping Screen
+    Insert Cost Object Mapping Record And Save
+    Verify Cost Object Mapping Record Exists
+    Logout From EC Application
+
+TC03 Update Cost Object Mapping Data
+    Login To EC Application
+    Open Cost Object Mapping Screen
+    Update Cost Object Mapping Record And Save
+    Verify Cost Object Mapping Record Updated
+    Logout From EC Application
+
+TC04 Find Cost Object Mapping Data
+    Login To EC Application
+    Open Cost Object Mapping Screen
+    Find Cost Object Mapping Record
+    Verify Cost Object Mapping Record Found
+    Logout From EC Application
+
+TC05 Delete Cost Object Mapping Data
+    Login To EC Application
+    Open Cost Object Mapping Screen
+    Delete Cost Object Mapping Record And Save
+    Verify Cost Object Mapping Record Removed
+    Logout From EC Application

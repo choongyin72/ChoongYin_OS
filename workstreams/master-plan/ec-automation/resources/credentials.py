@@ -103,3 +103,6 @@ STATE_LEASE_EC_PASS = os.environ.get("STATE_LEASE_EC_PASS", os.environ.get("EC_P
 
 PRODUCT_DESCRIPTION_EC_USER = os.environ.get("PRODUCT_DESCRIPTION_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PRODUCT_DESCRIPTION_EC_PASS = os.environ.get("PRODUCT_DESCRIPTION_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+COST_OBJECT_MAPPING_EC_USER = os.environ.get("COST_OBJECT_MAPPING_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+COST_OBJECT_MAPPING_EC_PASS = os.environ.get("COST_OBJECT_MAPPING_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
