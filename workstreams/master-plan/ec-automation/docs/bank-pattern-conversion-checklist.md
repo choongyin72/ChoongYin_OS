@@ -60,16 +60,16 @@ label) found:
 | Product Description | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | #441 |
 | Sales Order | Financial Objects | ⬜ NOT YET DONE | - |
 | Product Group | Royalty Objects | ⬜ NOT YET DONE | - |
-| Royalty Depositor | Royalty Objects | ⬜ NOT YET DONE | - |
+| Royalty Depositor | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | #448 |
 | Royalty Owner | Royalty Objects | ⬜ NOT YET DONE | - |
 | Unit Agreement | Royalty Objects | ⬜ NOT YET DONE | - |
 | Calendar Collection | Date Objects | ⬜ NOT YET DONE | - |
 | Calendar | Date Objects | ⬜ NOT YET DONE | - |
 | Account Mapping | Financial Objects | ⬜ NOT YET DONE | - |
 
-**15 of 23 done.** Batch 3 complete. Batch 4 complete (State Lease #440, Vendor
+**16 of 23 done.** Batch 3 complete. Batch 4 complete (State Lease #440, Vendor
 #439, Product Description #441, Cost Object Mapping #442, DOA Credit Limit #443).
-8 remain — natural pool for Batch 5 onward.
+Batch 5 in progress (Royalty Depositor #448 done so far). 7 remain.
 
 Note: once a screen from this table is converted, it should ALSO be added to
 `docs/grid-filter-standardization-checklist.md`'s "done" table in the same PR (per the
