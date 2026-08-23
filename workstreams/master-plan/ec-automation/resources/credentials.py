@@ -112,3 +112,6 @@ DOA_CREDIT_LIMIT_EC_PASS = os.environ.get("DOA_CREDIT_LIMIT_EC_PASS", os.environ
 
 SALES_ORDER_EC_USER = os.environ.get("SALES_ORDER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 SALES_ORDER_EC_PASS = os.environ.get("SALES_ORDER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PRODUCT_GROUP_EC_USER = os.environ.get("PRODUCT_GROUP_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PRODUCT_GROUP_EC_PASS = os.environ.get("PRODUCT_GROUP_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
