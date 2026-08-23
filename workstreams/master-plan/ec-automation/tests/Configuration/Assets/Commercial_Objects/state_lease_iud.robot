@@ -1,59 +1,63 @@
 *** Settings ***
 Documentation       EC IUD Test - State Lease (Configuration > Assets > Commercial Objects > State Lease).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_STATE_LEASE).
-...                 NEVER touch existing data. A unique AUTOTEST_STL_<timestamp> code is generated
-...                 per run. Section Start Date 2003-01-01: reference dropdowns are
-...                 effective-date-filtered (object start date acts as a version).
+...                 Layered: this test -> state_lease_page (T3) -> manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_STL) rather than a
+...                 generated unique code - confirmed absent from OV_STATE_LEASE before this was wired in.
+...                 Every run must complete TC05 (delete) so the code is free for the next run - EC
+...                 never lets a DELETED code be reused, but this fixed code only stays reusable if
+...                 each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in Suite
+...                 Setup - not 5 separate browser launches. Converted from the old hardcoded-field-id
+...                 pattern to the label-driven, properties-file-driven "Bank pattern" (Batch 4,
+...                 2026-08-23).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Commercial_Objects/state_lease_page.resource
 
-Suite Setup         Set Up State Lease Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    state-lease
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
+${TEST_CODE}        AUTOTEST_STL
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test state lease does not exist before inserting.
-    [Tags]    clean-state
-    State Lease Row Should Not Exist    ${TEST_CODE}
-    Capture Step    state_lease_tc01_clean
-
-TC02 Insert New State Lease
-    [Documentation]    Insert a new state lease and confirm it appears in the list.
-    [Tags]    insert
-    Insert State Lease Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    State Lease Row Should Exist    ${TEST_CODE}
-    State Lease Should Exist In DB    ${TEST_CODE}
-    Capture Step    state_lease_tc02_inserted
-
-TC03 Update State Lease Name
-    [Documentation]    Edit the state lease name and confirm the list reflects the change.
-    [Tags]    update
-    Update State Lease Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    State Lease Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    state_lease_tc03_updated
-
-TC04 Delete State Lease
-    [Documentation]    Delete via End Date = Start Date and confirm the state lease is gone.
-    [Tags]    delete    cleanup
-    Delete State Lease    ${TEST_CODE}    ${END_DATE}
-    State Lease Row Should Not Exist    ${TEST_CODE}
-    State Lease Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    state_lease_tc04_deleted
-
-
-*** Keywords ***
-Set Up State Lease Suite
-    [Documentation]    Generate a unique test code/name, then open the State Lease screen.
-    Prepare IUD Object Data    AUTOTEST_STL_    State Lease
+    Login To EC Application
     Open State Lease Screen
+    Verify State Lease Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert State Lease Data
+    Login To EC Application
+    Open State Lease Screen
+    Insert State Lease Record And Save
+    Verify State Lease Record Exists
+    Logout From EC Application
+
+TC03 Update State Lease Data
+    Login To EC Application
+    Open State Lease Screen
+    Update State Lease Record And Save
+    Verify State Lease Record Updated
+    Logout From EC Application
+
+TC04 Find State Lease Data
+    Login To EC Application
+    Open State Lease Screen
+    Find State Lease Record
+    Verify State Lease Record Found
+    Logout From EC Application
+
+TC05 Delete State Lease Data
+    Login To EC Application
+    Open State Lease Screen
+    Delete State Lease Record And Save
+    Verify State Lease Record Removed
+    Logout From EC Application

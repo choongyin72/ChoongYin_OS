@@ -53,7 +53,7 @@ label) found:
 | Licence | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #438 |
 | MMS Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #437 |
 | Operator Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #436 |
-| State Lease | Commercial Objects | ⬜ NOT YET DONE | - |
+| State Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 4) | see PR (feature/state-lease-bank-pattern) |
 | Vendor | Commercial Objects | ⬜ NOT YET DONE | - |
 | Cost Object Mapping | Financial Objects | ⬜ NOT YET DONE | - |
 | DOA Credit Limit | Financial Objects | ⬜ NOT YET DONE | - |
