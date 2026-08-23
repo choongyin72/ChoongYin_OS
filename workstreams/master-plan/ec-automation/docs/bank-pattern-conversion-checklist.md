@@ -158,6 +158,7 @@ only its own ROW here — no per-PR section header._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Split Item Other (Configuration > Assets > Revenue_Split_Keys, CD.0017) | ✅ DONE (2026-08-23, Batch 10) | Manage-object OV (Bank family), single-page grid. Labels: "Split Item Code" (screen-prefixed) but GENERIC "Name" (not screen-prefixed) - confirmed via direct grep and the already-proven Playwright driver `py/split_item_other_iud.py` (only Split Item Code/Name/Start Date mandatory, no optional dropdowns). Rebuilt `split_item_other_page.resource`/`split_item_other_iud.robot` to mirror `bank_page.resource`/`berth_page.resource` exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Split Item Other Row By Filter` wired into Update/Find/Verify-Found/Delete, dedicated `SPLIT_ITEM_OTHER_EC_USER/PASS`, fixed test code `AUTOTEST_SIO` (confirmed free live via a fresh oracledb query, before and after the live run). Live 5/5, robocop parity with the berth_iud.robot exemplar (same 9 baseline DOC02/VAR02 issues, no regression), dryrun 767/767, filter fired 30x (output.xml grep), DB self-clean confirmed 0 residual via a fresh oracledb connection. No shared T1/T2 file changes. This MODIFIES the screen's existing `docs/ec_screen_registry.md` / `docs/automation-scorecard.md` rows (from the 2026-07-26 generator-scaffolded build) — not a new row. |
 
 ## How to update this doc
 

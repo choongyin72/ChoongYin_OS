@@ -154,6 +154,7 @@ only its own ROW here — no per-PR section header._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Split Item Other (Configuration > Assets > Revenue_Split_Keys, CD.0017) | ✅ DONE (2026-08-23) | `Find/Clear Split Item Other Row By Filter` wired into Update/Find/Verify-Found/Delete, matching `bank_page.resource`/`berth_page.resource` exactly. Filter keyword confirmed fired 30x via output.xml grep (live 5/5 run). |
 
 ## How to update this doc
 
