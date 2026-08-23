@@ -153,3 +153,5 @@ METER_RUN_EC_USER = os.environ.get("METER_RUN_EC_USER", os.environ.get("EC_USER"
 METER_RUN_EC_PASS = os.environ.get("METER_RUN_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 ORIFICE_PLATE_EC_USER = os.environ.get("ORIFICE_PLATE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 ORIFICE_PLATE_EC_PASS = os.environ.get("ORIFICE_PLATE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+REPORT_AREA_EC_USER = os.environ.get("REPORT_AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+REPORT_AREA_EC_PASS = os.environ.get("REPORT_AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
