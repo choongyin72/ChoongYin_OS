@@ -148,3 +148,16 @@ here), move it to the "Excluded" table instead of force-fitting it — this happ
 zero screens in Batch 2, but is a real possibility for any future batch. Append-only in
 spirit for the "Excluded"/"Unclear" tables; the "Batch tracking" table's rows should only
 ever flip status, not be deleted.
+
+## Batch 8 (2026-08-23) — further round beyond the closed 23-screen pool and Batch 7
+
+Both the original "Batch tracking" table (Batches 2-6) and Batch 7's section above
+are CLOSED — not reopened here. This is a further round: 5 screens (Chemical
+Transport Tank/Deferment Group/Inventory Area/Meter Run/Orifice Plate) that already
+had SOME existing label-driven automation from an earlier approach (missing the
+properties-file-driven insert/update and explicit grid-filter wiring a fully-done
+screen has). Tracked in `tmp/batch8_shared_findings.md`.
+
+| Screen | Status | Notes |
+|---|---|---|
+| Chemical Transport Tank | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV, single-page grid (Chemical Objects). Screen-prefixed labels "Transport Tank Code"/"Transport Tank Name" confirmed via the already-proven Playwright driver py/chemical_transport_tank_iud.py (only Code/Name/Start Date mandatory, dropdowns optional). Rebuilt chemical_transport_tank_page.resource/chemical_transport_tank_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Chemical Transport Tank Row By Filter`. Fixed test code `AUTOTEST_CTT` (confirmed free live via fresh oracledb connection). Live 5/5, dryrun 758/758, filter fired 7x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. |

@@ -159,3 +159,15 @@ added (following the exact pattern in `bank_page.resource`/`account_page.resourc
 Update/Find/Verify-Found/Delete, NOT into Removed/Does-Not-Exist), flip it to
 "✅ DONE (date)" with a one-line note. Append-only in spirit — don't delete rows for
 screens that get superseded/retired, just note it.
+
+## Batch 8 additions (beyond the closed 37/37 pool and Batch 7, 2026-08-23)
+
+The 37/37 pool and Batch 7 above are both closed and not reopened. Batch 8 is a
+further round of 5 screens (Chemical Transport Tank/Deferment Group/Inventory
+Area/Meter Run/Orifice Plate), same owner direction (sort by LAYOUT similarity to
+Bank regardless of prior automation history), tracked in
+`tmp/batch8_shared_findings.md`. Screens land here as they're completed.
+
+| Screen | Explicit filter wired? | Notes |
+|---|---|---|
+| Chemical Transport Tank | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (`OV_CHEM_TRANS_TANK`, Chemical Objects). Already partially on the label-driven pattern (`Fill OV Field By Label`) from an earlier build (2026-07-26) - this round added the missing properties-file-driven Insert/Update (`testdata/chemical_transport_tank_*.properties`) and explicit `Find/Clear Chemical Transport Tank Row By Filter` grid-filter wiring (wired into Update/Find/Verify-Found/Delete, matching Bank/Berth). Field labels are screen-prefixed ("Transport Tank Code"/"Transport Tank Name") - confirmed via the already-proven Playwright driver `py/chemical_transport_tank_iud.py`, not re-scanned live. Only Transport Tank Code/Transport Tank Name/Start Date mandatory. Fixed test code `AUTOTEST_CTT` (confirmed free via a fresh oracledb connection before the build). Live 5/5, dryrun 758/758, DB self-clean 0 residual (fresh oracledb connection), filter keyword confirmed fired 7x (`Find Chemical Transport Tank Row By Filter` via output.xml grep). No shared T1/T2 (`manage_object.resource`/`common.resource`) changes needed - reused every consolidated T2 keyword as-is. |

@@ -1,59 +1,67 @@
 *** Settings ***
-Documentation       EC IUD Test - Chemical Transport Tank (Configuration > Assets > Chemical_Objects > Chemical Transport Tank, CO.0257).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_CHEM_TRANS_TANK).
-...                 Layered: this test -> chemical_transport_tank_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_CTT_<timestamp> code per run.
+Documentation       EC IUD Test - Chemical Transport Tank (Configuration > Assets > Chemical_Objects
+...                 > Chemical Transport Tank, CO.0257). Manage-Object (OV) screen. DELETE = End
+...                 Date = Start Date (true delete in OV_CHEM_TRANS_TANK).
+...                 Layered: this test -> chemical_transport_tank_page (T3) -> manage_object (T2)
+...                 + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_CTT, confirmed
+...                 absent from OV_CHEM_TRANS_TANK before this was wired in, 2026-08-23), matching
+...                 Bank/Berth's convention, rather than a generated unique code. Every run must
+...                 complete TC05 (delete) so the code is free for the next run - EC never lets a
+...                 DELETED code be reused, but this fixed code only stays reusable if each run
+...                 actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup, matching Bank/Berth's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Chemical_Objects/chemical_transport_tank_page.resource
 
-Suite Setup         Set Up Chemical Transport Tank Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    chemical_transport_tank
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_CTT
+${OBJ_NAME}         AUTOTEST Chemical Transport Tank
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/chemical_transport_tank_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Chemical Transport Tank UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test chemical_transport_tank does not exist before inserting.
-    [Tags]    clean-state
-    Chemical Transport Tank Row Should Not Exist    ${TEST_CODE}
-    Capture Step    chemical_transport_tank_tc01_clean
-
-TC02 Insert New Chemical Transport Tank
-    [Documentation]    Insert a new chemical_transport_tank; confirm in list + DB (OV_CHEM_TRANS_TANK).
-    [Tags]    insert
-    Insert Chemical Transport Tank Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Chemical Transport Tank Row Should Exist    ${TEST_CODE}
-    Chemical Transport Tank Should Exist In DB    ${TEST_CODE}
-    Capture Step    chemical_transport_tank_tc02_inserted
-
-TC03 Update Chemical Transport Tank
-    [Documentation]    Edit Name; confirm in list + DB ground truth.
-    [Tags]    update
-    Update Chemical Transport Tank Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Chemical Transport Tank Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Should Equal In View    OV_CHEM_TRANS_TANK    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Capture Step    chemical_transport_tank_tc03_updated
-
-TC04 Delete Chemical Transport Tank
-    [Documentation]    Delete via End Date = Start Date; confirm gone from list + DB.
-    [Tags]    delete    cleanup
-    Delete Chemical Transport Tank    ${TEST_CODE}    ${END_DATE}
-    Chemical Transport Tank Row Should Not Exist    ${TEST_CODE}
-    Chemical Transport Tank Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    chemical_transport_tank_tc04_deleted
-
-
-*** Keywords ***
-Set Up Chemical Transport Tank Suite
-    [Documentation]    Generate a unique test code/name, then open the Chemical Transport Tank screen.
-    Prepare IUD Object Data    AUTOTEST_CTT_    Chemical Transport Tank
+    Login To EC Application
     Open Chemical Transport Tank Screen
+    Verify Chemical Transport Tank Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Chemical Transport Tank Data
+    Login To EC Application
+    Open Chemical Transport Tank Screen
+    Insert Chemical Transport Tank Record And Save
+    Verify Chemical Transport Tank Record Exists
+    Logout From EC Application
+
+TC03 Update Chemical Transport Tank Data
+    Login To EC Application
+    Open Chemical Transport Tank Screen
+    Update Chemical Transport Tank Record And Save
+    Verify Chemical Transport Tank Record Updated
+    Logout From EC Application
+
+TC04 Find Chemical Transport Tank Data
+    Login To EC Application
+    Open Chemical Transport Tank Screen
+    Find Chemical Transport Tank Record
+    Verify Chemical Transport Tank Record Found
+    Logout From EC Application
+
+TC05 Delete Chemical Transport Tank Data
+    Login To EC Application
+    Open Chemical Transport Tank Screen
+    Delete Chemical Transport Tank Record And Save
+    Verify Chemical Transport Tank Record Removed
+    Logout From EC Application
