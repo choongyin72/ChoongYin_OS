@@ -140,3 +140,5 @@ CALCULATION_GROUP_CONTEXT_EC_USER = os.environ.get("CALCULATION_GROUP_CONTEXT_EC
 CALCULATION_GROUP_CONTEXT_EC_PASS = os.environ.get("CALCULATION_GROUP_CONTEXT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 CALC_CONTEXT_EC_USER = os.environ.get("CALC_CONTEXT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CALC_CONTEXT_EC_PASS = os.environ.get("CALC_CONTEXT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+BLEND_EC_USER = os.environ.get("BLEND_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+BLEND_EC_PASS = os.environ.get("BLEND_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

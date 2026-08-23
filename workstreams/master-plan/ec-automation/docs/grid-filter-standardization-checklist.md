@@ -127,6 +127,15 @@ append-only, same as the closed table above.
 | Screen | Status | Notes |
 |---|---|---|
 | Calculation Context | ✅ DONE (2026-08-23, batch-7) | Manage-object OV (`OV_CALC_CONTEXT`), already partially on the label-driven pattern (`Fill OV Field By Label`) from an earlier build - this round added the missing properties-file-driven Insert/Update (`testdata/calculation_context_*.properties`) and explicit `Find/Clear Calculation Context Row By Filter` grid-filter wiring (wired into Update/Find/Verify-Found/Delete, matching Bank/Account). Live-recon confirmed Bank-pattern shape: objectForm = Calc Context Code/Name/Start Date (mandatory)/End Date/Description/Comments; updateAttributes = Calc Context Code (read-only)/Name/Description/Comments (no Start/End Date there, matching Bank); no mandatory navigator dropdown beyond the universal GO bar. Fixed test code `AUTOTEST_CALCCTX` (confirmed free live). Live 5/5, robocop clean, dryrun 753/753, DB self-clean 0 residual (fresh oracledb connection), filter keyword confirmed fired (12x `Find Calculation Context Row By Filter` / 8x `Filter Grid Text Column By Value` via output.xml grep). No shared T1/T2 (`manage_object.resource`/`common.resource`) changes needed - reused every consolidated T2 keyword as-is. |
+## Batch 7 additions (beyond the closed 37/37 pool, 2026-08-23)
+
+The 37/37 pool above is closed and not reopened. Batch 7 is a NEW round, sorted by
+LAYOUT similarity to Bank rather than prior automation history (owner direction).
+Screens land here as they're completed, appended, not merged into the closed table.
+
+| Screen | Explicit filter wired? | Notes |
+|---|---|---|
+| Blend | ✅ DONE (2026-08-23, batch-7) | Manage-object OV (Hydrocarbon Objects), small grid (3 rows). Had a PARTIAL prior label-driven build (`Fill OV Field By Label`, 2026-07-26) missing properties-file-driven insert/update and explicit grid-filter wiring - upgraded to the full Bank pattern. Screen-prefixed labels confirmed live ("Blend Code"/"Blend Name", like State's own precedent) - NOT the generic "Code"/"Name" Bank/Customer use, so `code_label=Blend Code` is threaded through Insert/Update/Find. Only Blend Code/Blend Name/Start Date mandatory (MandatoryCellStyle confirmed via a fresh per-row class dump); Master System Code/Name, Sort Order, End Date left optional/out of scope. Description is optional but exercised (never populated on any real production Blend row - 0 non-null DESCRIPTION rows confirmed live). Wired in from the start. Live 5/5, filter keyword confirmed fired 50 hits total (Find+Clear across TC02-05) via output.xml grep. DB self-clean confirmed 0 residual `AUTOTEST_BLEND` rows via a fresh oracledb connection. |
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
