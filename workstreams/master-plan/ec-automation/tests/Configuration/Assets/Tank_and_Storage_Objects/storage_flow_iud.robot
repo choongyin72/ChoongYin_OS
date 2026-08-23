@@ -2,58 +2,64 @@
 Documentation       EC IUD Test - Storage Flow (Configuration > Assets > Tank_and_Storage_Objects > Storage Flow, CO.2091).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_STORAGE_FLOW).
 ...                 Layered: this test -> storage_flow_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_SF_<timestamp> code per run.
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_STFLOW,
+...                 matching Bank/Berth's convention) rather than a generated unique code -
+...                 confirmed absent from OV_STORAGE_FLOW before this was wired in (2026-08-23).
+...                 Every run must complete TC05 (delete) so the code is free for the next
+...                 run - EC never lets a DELETED code be reused, but this fixed code only
+...                 stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching Bank/Berth's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Tank_and_Storage_Objects/storage_flow_page.resource
 
-Suite Setup         Set Up Storage Flow Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    storage_flow
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_STFLOW
+${OBJ_NAME}         AUTOTEST Storage Flow
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/storage_flow_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Storage Flow UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test storage_flow does not exist before inserting.
-    [Tags]    clean-state
-    Storage Flow Row Should Not Exist    ${TEST_CODE}
-    Capture Step    storage_flow_tc01_clean
-
-TC02 Insert New Storage Flow
-    [Documentation]    Insert a new storage_flow; confirm in list + DB (OV_STORAGE_FLOW).
-    [Tags]    insert
-    Insert Storage Flow Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Storage Flow Row Should Exist    ${TEST_CODE}
-    Storage Flow Should Exist In DB    ${TEST_CODE}
-    Capture Step    storage_flow_tc02_inserted
-
-TC03 Update Storage Flow
-    [Documentation]    Edit Name; confirm in list + DB ground truth.
-    [Tags]    update
-    Update Storage Flow Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Storage Flow Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Should Equal In View    OV_STORAGE_FLOW    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Capture Step    storage_flow_tc03_updated
-
-TC04 Delete Storage Flow
-    [Documentation]    Delete via End Date = Start Date; confirm gone from list + DB.
-    [Tags]    delete    cleanup
-    Delete Storage Flow    ${TEST_CODE}    ${END_DATE}
-    Storage Flow Row Should Not Exist    ${TEST_CODE}
-    Storage Flow Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    storage_flow_tc04_deleted
-
-
-*** Keywords ***
-Set Up Storage Flow Suite
-    [Documentation]    Generate a unique test code/name, then open the Storage Flow screen.
-    Prepare IUD Object Data    AUTOTEST_SF_    Storage Flow
+    Login To EC Application
     Open Storage Flow Screen
+    Verify Storage Flow Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Storage Flow Data
+    Login To EC Application
+    Open Storage Flow Screen
+    Insert Storage Flow Record And Save
+    Verify Storage Flow Record Exists
+    Logout From EC Application
+
+TC03 Update Storage Flow Data
+    Login To EC Application
+    Open Storage Flow Screen
+    Update Storage Flow Record And Save
+    Verify Storage Flow Record Updated
+    Logout From EC Application
+
+TC04 Find Storage Flow Data
+    Login To EC Application
+    Open Storage Flow Screen
+    Find Storage Flow Record
+    Verify Storage Flow Record Found
+    Logout From EC Application
+
+TC05 Delete Storage Flow Data
+    Login To EC Application
+    Open Storage Flow Screen
+    Delete Storage Flow Record And Save
+    Verify Storage Flow Record Removed
+    Logout From EC Application

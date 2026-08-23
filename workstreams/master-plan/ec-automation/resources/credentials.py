@@ -168,3 +168,5 @@ PROCESS_TRAIN_EC_PASS = os.environ.get("PROCESS_TRAIN_EC_PASS", os.environ.get("
 
 SPLIT_ITEM_OTHER_EC_USER = os.environ.get("SPLIT_ITEM_OTHER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 SPLIT_ITEM_OTHER_EC_PASS = os.environ.get("SPLIT_ITEM_OTHER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+STORAGE_FLOW_EC_USER = os.environ.get("STORAGE_FLOW_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+STORAGE_FLOW_EC_PASS = os.environ.get("STORAGE_FLOW_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
