@@ -126,6 +126,18 @@ in `tmp/batch7_shared_findings.md`.
 | Screen | Status | Notes |
 |---|---|---|
 | Berth | ✅ DONE (2026-08-23, Batch 7) | Manage-object OV (Bank family), single-page grid (11 rows). Screen-prefixed labels "Berth Code"/"Berth Name" confirmed via ec-ui-knowledge/screens/berth.md + proven py/berth_iud.py (only Code/Name/Start Date mandatory, dropdowns optional). Rebuilt berth_page.resource/berth_iud.robot to mirror bank_page.resource/state_page.resource exactly: properties-file-driven insert ("Insert Object From Properties And Verify Code"), update, form/grid verify, explicit `Find/Clear Berth Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_BERTH` (confirmed free live). Live 5/5, dryrun 753/753, filter fired 15x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. |
+## Batch 7 — expanded round (2026-08-23, beyond the closed 23-screen Tier-0 pool above)
+
+The original 23-screen pool above is CLOSED and not reopened. The owner directed a further
+round sorted by LAYOUT similarity to Bank regardless of prior automation history. This
+round's screens already had SOME label-driven automation (`Fill OV Field By Label` from T2)
+but were missing the properties-file-driven insert/update/verify and explicit grid-filter
+wiring that a fully-done screen has. Tracked here as a new, separate section (not a batch
+tracking-table row, to avoid reopening the closed table's shape):
+
+| Screen | Status |
+|---|---|
+| Calculation Group Context (Configuration > Assets > Calculation_Objects, CO.0245) | ✅ DONE (2026-08-23) — brought to full Bank-pattern shape: `Insert/Update Object From Properties`, `Verify Object Insert Exists/Form Record/Found/Removed/Does Not Exist`, explicit `Find/Clear Calculation Group Context Row By Filter`, dedicated `CALCULATION_GROUP_CONTEXT_EC_USER/PASS`, fixed test code `AUTOTEST_CGC_BANK`. Live 5/5 RF, robocop parity with `bank_iud.robot`'s baseline, dryrun 753/753, DB self-clean (fresh connection) 0 residual, filter fired 23x per output.xml. See `docs/ec_screen_registry.md` and `docs/grid-filter-standardization-checklist.md` for full detail. |
 
 ## How to update this doc
 

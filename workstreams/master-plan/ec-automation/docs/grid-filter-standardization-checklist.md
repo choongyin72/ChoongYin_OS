@@ -109,7 +109,16 @@ insert + explicit grid-filter wiring) - this batch brings them the rest of the w
 |---|---|---|
 | Berth | ✅ DONE (2026-08-23, Batch 7) | Manage-object OV, single-page grid (11 rows, Transport Objects). Screen-prefixed labels ("Berth Code"/"Berth Name") confirmed via ec-ui-knowledge/screens/berth.md + proven py/berth_iud.py (Code/Name/Start Date mandatory only, all dropdowns optional). Fixed test code `AUTOTEST_BERTH`. Wired in via this batch (prior page object already had label-driven fields but no properties-file-driven insert/update or explicit filter). Live 5/5, filter keyword confirmed fired 15x via output.xml grep for `Find Berth Row By Filter`. Dryrun 753/753. No shared T1/T2 edits. DB self-clean confirmed via fresh oracledb connection. |
 
+**Batch 7 addition (2026-08-23, NEW round beyond the closed 37/37 pool above):**
+Calculation Group Context (Configuration > Assets > Calculation_Objects) got the
+same explicit `Find/Clear Calculation Group Context Row By Filter` wrapper
+delegating to the shared T2 `Find/Clear Object Row By Filter` — wired into
+Update/Find/Verify-Found/Delete, not Verify-Removed/Does-Not-Exist. Small/
+single-page grid today. Live 5/5, filter confirmed fired via output.xml grep
+(23 hits). See `docs/ec_screen_registry.md`'s Calculation Group Context row for
+full detail — the closed 37-screen table above is not reopened for this entry.
 
+## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
 The ~80 other OV/OV-GM screens listed in `docs/ec_screen_registry.md` have not been
 rebuilt to the label-driven, T2-consolidated pattern yet (they predate this
