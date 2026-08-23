@@ -146,6 +146,8 @@ header, no post-merge consolidation pass needed._
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
 
+| Port (Configuration > Assets > Transport_Objects, CO.2003) | ✅ DONE (2026-08-23, Batch 9) | Manage-object OV (Bank family), **paginated grid (2 pages)**. Screen-prefixed labels "Port Code"/"Port Name" confirmed via the pre-existing page object + proven `py/port_iud.py` (only Port Code/Port Name/Start Date mandatory - Country/Canal/Time Zone/Carrier dropdowns all optional). Rebuilt `port_page.resource`/`port_iud.robot` to mirror `bank_page.resource`/`berth_page.resource` exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Port Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_PORT` (confirmed free live via fresh oracledb connection, before and after the live RF run). **Paginated-grid confirmation**: the shared T2 filter/row-locate keywords walked all pages correctly live - no engine change needed. Live 5/5, dryrun 762/762, filter fired 15x (output.xml grep), DB self-clean confirmed 0 residual via a fresh oracledb connection. No shared T1/T2 file changes. |
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to

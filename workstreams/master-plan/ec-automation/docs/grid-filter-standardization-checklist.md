@@ -130,6 +130,8 @@ header, no post-merge consolidation pass needed._
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
 
+| Port | ✅ DONE (2026-08-23, Batch 9) | Manage-object OV, **paginated grid (2 pages)** (Transport Objects, CO.2003). Screen-prefixed labels ("Port Code"/"Port Name") confirmed via the pre-existing page object + proven `py/port_iud.py`. Only Port Code/Port Name/Start Date mandatory - Country/Canal/Time Zone/Carrier dropdowns all optional and skipped. Wired in via this batch (prior page object already had label-driven fields but no properties-file-driven insert/update or explicit filter). Live 5/5, filter keyword confirmed fired 15x via output.xml grep for `Find Port Row By Filter`. Dryrun 762/762. Confirmed the shared T2 filter/row-locate keywords still walk both pager pages correctly - no engine change needed. No shared T1/T2 edits. DB self-clean confirmed 0 residual `AUTOTEST_PORT` rows via a fresh oracledb connection. |
+
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
 The ~80 other OV/OV-GM screens listed in `docs/ec_screen_registry.md` have not been
