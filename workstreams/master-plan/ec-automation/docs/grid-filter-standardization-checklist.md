@@ -59,13 +59,13 @@ wrap there would be pure redundant duplication with no behavior change.
 | County | ✅ DONE (2026-08-23) | Manage-object OV, small grid (batch-2 conversion, parallel worker clone). Live 5/5, filter confirmed fired (5 hits for `Find County Row By Filter` in output.xml). |
 | Currency | ✅ DONE (2026-08-23) | Manage-object OV, small grid. Batch-2 5-screen Bank-pattern conversion (Country/County/Regulatory Permits/Currency/VAT Code). Live 5/5, filter confirmed fired (5 hits in output.xml for `Find Currency Row By Filter`). Also confirmed live: the registry-flagged mandatory "Active" checkbox (`MandatoryCellStyleWhite` class) is NOT actually save-blocking - a checkbox has no "empty" state, so it's omitted from the insert properties (see currency_insert.properties). |
 | VAT Code | ✅ DONE (2026-08-23, PR #431) | Manage-object OV, small/single-page grid (15 rows). Wired in from the start (batch-2, not a follow-up). Live 5/5, filter keyword confirmed fired 7x via output.xml grep. |
+| Regulatory Permits | ✅ DONE (2026-08-23, batch-2) | Custom-URL OV (grid `nav:form:T_data`, WITH a GO button unlike Account/Cost Centre - confirmed live, a shape not seen elsewhere). Small grid, currently 0 rows on this sandbox. Live 5/5, filter confirmed fired (7 hits in output.xml). |
 
-**18 of 18 done** (reconciled at merge time - Batch-2's 5 screens were built in
-parallel isolated clones; Regulatory Permits still to merge, count will rise once
-more). Every screen already rebuilt to the Bank-pattern T2-consolidated shape now
-has the explicit filter wiring. Any FUTURE screen rebuilt to this pattern should
-get the same treatment as part of its own build (see "How to update this doc"
-below).
+**19 of 19 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
+Regulatory Permits) landed. Every screen already rebuilt to the Bank-pattern
+T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen
+rebuilt to this pattern should get the same treatment as part of its own build
+(see "How to update this doc" below) - there is no more backlog from this batch.
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 

@@ -1,61 +1,68 @@
 *** Settings ***
-Documentation       EC IUD Test - Regulatory Permits (Configuration > Assets > Basic Objects > Regulatory Permits).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_REGULATORY_PERMITS).
-...                 Layered: this test -> regulatory_permits_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. A unique AUTOTEST_RP_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+Documentation       EC IUD Test - Regulatory Permits (Configuration > Assets > Basic Objects >
+...                 Regulatory Permits). Custom-URL OV screen (confirmed live 2026-08-23: grid
+...                 nav:form:T_data, WITH a GO button unlike Account/Cost Centre - Save And
+...                 Refresh List auto-detects either shape). DELETE = End Date = Start Date (true
+...                 delete in OV_REGULATORY_PERMITS). Layered: this test -> regulatory_permits_page
+...                 (T3) -> manage_object (T2) + common (T1). NEVER touch existing data. Uses a
+...                 FIXED test code (AUTOTEST_REGULATORY_PERMITS, matching Bank/Account's
+...                 convention) rather than a generated unique code - confirmed absent from
+...                 OV_REGULATORY_PERMITS before this was wired in (2026-08-23; the view itself
+...                 was 0 rows on this sandbox). Every run must complete TC05 (delete) so the code
+...                 is free for the next run - EC never lets a DELETED code be reused, but this
+...                 fixed code only stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup, matching Bank/Account's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Basic_Objects/regulatory_permits_page.resource
 
-Suite Setup         Set Up Regulatory Permits Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    regulatory-permits
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
-# issuing agency for the throwaway test permit - user-approved 2026-06-11
-${PERMIT_AGENCY}    Texas RRC
+${TEST_CODE}        AUTOTEST_REGULATORY_PERMITS
+${OBJ_NAME}         AUTOTEST Regulatory Permits
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/regulatory_permits_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Regulatory Permits UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test regulatory permits does not exist before inserting.
-    [Tags]    clean-state
-    Regulatory Permits Row Should Not Exist    ${TEST_CODE}
-    Capture Step    regulatory_permits_tc01_clean
-
-TC02 Insert New Regulatory Permits
-    [Documentation]    Insert a new regulatory permits and confirm it appears in the list.
-    [Tags]    insert
-    Insert Regulatory Permits Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}    ${PERMIT_AGENCY}
-    Regulatory Permits Row Should Exist    ${TEST_CODE}
-    Regulatory Permits Should Exist In DB    ${TEST_CODE}
-    Capture Step    regulatory_permits_tc02_inserted
-
-TC03 Update Regulatory Permits Name
-    [Documentation]    Edit the regulatory permits name and confirm the list reflects the change.
-    [Tags]    update
-    Update Regulatory Permits Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Regulatory Permits Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    regulatory_permits_tc03_updated
-
-TC04 Delete Regulatory Permits
-    [Documentation]    Delete via End Date = Start Date and confirm the regulatory permits is gone.
-    [Tags]    delete    cleanup
-    Delete Regulatory Permits    ${TEST_CODE}    ${END_DATE}
-    Regulatory Permits Row Should Not Exist    ${TEST_CODE}
-    Regulatory Permits Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    regulatory_permits_tc04_deleted
-
-
-*** Keywords ***
-Set Up Regulatory Permits Suite
-    [Documentation]    Generate a unique test code/name, then open the Regulatory Permits screen.
-    Prepare IUD Object Data    AUTOTEST_RP_    Regulatory Permits
+    Login To EC Application
     Open Regulatory Permits Screen
+    Verify Regulatory Permits Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Regulatory Permits Data
+    Login To EC Application
+    Open Regulatory Permits Screen
+    Insert Regulatory Permits Record And Save
+    Verify Regulatory Permits Record Exists
+    Logout From EC Application
+
+TC03 Update Regulatory Permits Data
+    Login To EC Application
+    Open Regulatory Permits Screen
+    Update Regulatory Permits Record And Save
+    Verify Regulatory Permits Record Updated
+    Logout From EC Application
+
+TC04 Find Regulatory Permits Data
+    Login To EC Application
+    Open Regulatory Permits Screen
+    Find Regulatory Permits Record
+    Verify Regulatory Permits Record Found
+    Logout From EC Application
+
+TC05 Delete Regulatory Permits Data
+    Login To EC Application
+    Open Regulatory Permits Screen
+    Delete Regulatory Permits Record And Save
+    Verify Regulatory Permits Record Removed
+    Logout From EC Application
