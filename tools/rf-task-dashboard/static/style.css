@@ -1,0 +1,334 @@
+/*
+  Design tokens — "mission control for autonomous EC-screen workers"
+  Subject: a solo engineer supervising a fleet of Claude Code workers converting
+  EC screens to the Bank RF pattern, with an automated reviewer gating merges.
+  Signature: column headers read like indicator gauges (dot + monospace count);
+  task cards are terminal-style tickets with a left status-bar, not flat chips.
+*/
+:root {
+  --bg: #0b1220;
+  --panel: #121a2b;
+  --panel-raised: #182238;
+  --border: #24314a;
+  --text: #e4e9f2;
+  --muted: #7c8aa6;
+  --cyan: #4fd1c5;
+  --amber: #f2b94d;
+  --green: #6ee7a8;
+  --red: #f2685a;
+  --violet: #b39ddb;
+
+  --font-display: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  min-height: 100vh;
+}
+
+/* ---------- Topbar ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 28px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--panel) 0%, var(--bg) 100%);
+}
+
+.topbar__title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbar__blip {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(79, 209, 197, 0.15);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(0.85); }
+}
+
+.topbar h1 {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.06em;
+  margin: 0;
+  font-weight: 600;
+}
+
+.topbar__sub {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.topbar__meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---------- Readout strip (status gauges) ---------- */
+.readout {
+  display: flex;
+  gap: 10px;
+  padding: 16px 28px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+
+.readout__chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+.readout__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.readout__count {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.readout__label {
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ---------- Board (Kanban columns) ---------- */
+.board {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(220px, 1fr));
+  gap: 14px;
+  padding: 20px 28px 40px;
+  align-items: start;
+}
+
+@media (max-width: 1400px) {
+  .board { grid-template-columns: repeat(3, minmax(220px, 1fr)); }
+}
+@media (max-width: 800px) {
+  .board { grid-template-columns: 1fr; }
+}
+
+.column {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.column__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.column__header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.column__count {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.column__body {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 60px;
+}
+
+.column__empty {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 10px;
+  text-align: center;
+  font-style: italic;
+}
+
+/* ---------- Task cards ---------- */
+.card {
+  background: var(--panel-raised);
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-radius: 4px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.card:hover {
+  transform: translateX(2px);
+  border-color: var(--cyan);
+}
+
+.card__name {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.card__pattern {
+  font-family: var(--font-display);
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: rgba(124, 138, 166, 0.15);
+}
+
+.card__pr {
+  color: var(--cyan);
+  text-decoration: none;
+  font-family: var(--font-display);
+}
+.card__pr:hover { text-decoration: underline; }
+
+/* status accent colors, applied via data-status on the card */
+.card[data-status="unclaimed"]     { border-left-color: var(--muted); }
+.card[data-status="in_progress"]   { border-left-color: var(--cyan); }
+.card[data-status="pr_raised"]     { border-left-color: var(--amber); }
+.card[data-status="changes_requested"] { border-left-color: var(--violet); }
+.card[data-status="merged"]        { border-left-color: var(--green); }
+.card[data-status="blocked"]       { border-left-color: var(--red); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-family: var(--font-body);
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  background: var(--panel-raised);
+  color: var(--text);
+}
+.btn:hover { border-color: var(--cyan); }
+.btn--primary {
+  background: var(--cyan);
+  color: #06231f;
+  border-color: var(--cyan);
+  font-weight: 600;
+}
+.btn--ghost { background: transparent; }
+
+/* ---------- Dialogs ---------- */
+dialog {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 22px;
+  width: 360px;
+  font-family: var(--font-body);
+}
+dialog::backdrop { background: rgba(5, 9, 17, 0.7); }
+
+dialog h2 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  margin: 0 0 16px;
+  letter-spacing: 0.03em;
+}
+
+dialog label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+dialog input, dialog select {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+
+.dialog__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* ---------- Task detail ---------- */
+#task-detail-content h2 {
+  margin-top: 0;
+}
+.detail__row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.detail__row span:first-child { color: var(--muted); }
+
+.history {
+  margin-top: 14px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+.history__item {
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+.history__item b { color: var(--text); }

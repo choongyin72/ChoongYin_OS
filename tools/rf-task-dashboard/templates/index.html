@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RF Task Board — EC Bank-Pattern Conversion</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__title">
+      <span class="topbar__blip" aria-hidden="true"></span>
+      <h1>RF TASK BOARD <span class="topbar__sub">/ EC Bank-Pattern Conversion</span></h1>
+    </div>
+    <div class="topbar__meta">
+      <span id="last-refreshed">connecting…</span>
+      <button id="add-task-btn" class="btn btn--ghost">+ Add screen</button>
+    </div>
+  </header>
+
+  <section class="readout" id="readout">
+    <!-- populated by dashboard.js: one readout chip per status -->
+  </section>
+
+  <main class="board" id="board">
+    <!-- populated by dashboard.js: one column per status -->
+  </main>
+
+  <dialog id="add-task-dialog">
+    <form id="add-task-form">
+      <h2>Add screen to queue</h2>
+      <label>
+        Screen name
+        <input type="text" id="new-screen-name" placeholder="e.g. Balance" required />
+      </label>
+      <label>
+        Pattern
+        <select id="new-screen-pattern">
+          <option value="UNKNOWN">Unknown — needs recon</option>
+          <option value="PARTIAL">Partial label-driven</option>
+          <option value="OLD">Old hardcoded</option>
+          <option value="FULL">Already full Bank pattern</option>
+        </select>
+      </label>
+      <div class="dialog__actions">
+        <button type="button" id="cancel-add-task" class="btn btn--ghost">Cancel</button>
+        <button type="submit" class="btn btn--primary">Add</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="task-detail-dialog">
+    <div id="task-detail-content"></div>
+    <div class="dialog__actions">
+      <button type="button" id="close-detail" class="btn btn--ghost">Close</button>
+    </div>
+  </dialog>
+
+  <script src="/static/dashboard.js"></script>
+</body>
+</html>
