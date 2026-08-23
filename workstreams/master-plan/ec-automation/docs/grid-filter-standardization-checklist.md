@@ -95,6 +95,17 @@ T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen
 rebuilt to this pattern should get the same treatment as part of its own
 build (see "How to update this doc" below).
 
+## Batch 7 additions (NEW round, beyond the closed 37/37 pool above)
+
+The 37/37 pool above is closed and not reopened. Batch 7 is a separate, later round
+(owner-directed: sort by screen LAYOUT similarity to Bank, regardless of prior
+automation history) adding MORE screens on top of that closed pool. Tracked here,
+append-only, same as the closed table above.
+
+| Screen | Status | Notes |
+|---|---|---|
+| Calculation Context | ✅ DONE (2026-08-23, batch-7) | Manage-object OV (`OV_CALC_CONTEXT`), already partially on the label-driven pattern (`Fill OV Field By Label`) from an earlier build - this round added the missing properties-file-driven Insert/Update (`testdata/calculation_context_*.properties`) and explicit `Find/Clear Calculation Context Row By Filter` grid-filter wiring (wired into Update/Find/Verify-Found/Delete, matching Bank/Account). Live-recon confirmed Bank-pattern shape: objectForm = Calc Context Code/Name/Start Date (mandatory)/End Date/Description/Comments; updateAttributes = Calc Context Code (read-only)/Name/Description/Comments (no Start/End Date there, matching Bank); no mandatory navigator dropdown beyond the universal GO bar. Fixed test code `AUTOTEST_CALCCTX` (confirmed free live). Live 5/5, robocop clean, dryrun 753/753, DB self-clean 0 residual (fresh oracledb connection), filter keyword confirmed fired (12x `Find Calculation Context Row By Filter` / 8x `Filter Grid Text Column By Value` via output.xml grep). No shared T1/T2 (`manage_object.resource`/`common.resource`) changes needed - reused every consolidated T2 keyword as-is. |
+
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
 The ~80 other OV/OV-GM screens listed in `docs/ec_screen_registry.md` have not been
