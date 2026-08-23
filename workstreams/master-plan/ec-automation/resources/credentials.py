@@ -133,3 +133,6 @@ ACCOUNT_MAPPING_EC_PASS = os.environ.get("ACCOUNT_MAPPING_EC_PASS", os.environ.g
 
 CALENDAR_EC_USER = os.environ.get("CALENDAR_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CALENDAR_EC_PASS = os.environ.get("CALENDAR_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+BLEND_EC_USER = os.environ.get("BLEND_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+BLEND_EC_PASS = os.environ.get("BLEND_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

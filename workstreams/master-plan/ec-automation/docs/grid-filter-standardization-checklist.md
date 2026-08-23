@@ -95,6 +95,16 @@ T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen
 rebuilt to this pattern should get the same treatment as part of its own
 build (see "How to update this doc" below).
 
+## Batch 7 additions (beyond the closed 37/37 pool, 2026-08-23)
+
+The 37/37 pool above is closed and not reopened. Batch 7 is a NEW round, sorted by
+LAYOUT similarity to Bank rather than prior automation history (owner direction).
+Screens land here as they're completed, appended, not merged into the closed table.
+
+| Screen | Explicit filter wired? | Notes |
+|---|---|---|
+| Blend | ✅ DONE (2026-08-23, batch-7) | Manage-object OV (Hydrocarbon Objects), small grid (3 rows). Had a PARTIAL prior label-driven build (`Fill OV Field By Label`, 2026-07-26) missing properties-file-driven insert/update and explicit grid-filter wiring - upgraded to the full Bank pattern. Screen-prefixed labels confirmed live ("Blend Code"/"Blend Name", like State's own precedent) - NOT the generic "Code"/"Name" Bank/Customer use, so `code_label=Blend Code` is threaded through Insert/Update/Find. Only Blend Code/Blend Name/Start Date mandatory (MandatoryCellStyle confirmed via a fresh per-row class dump); Master System Code/Name, Sort Order, End Date left optional/out of scope. Description is optional but exercised (never populated on any real production Blend row - 0 non-null DESCRIPTION rows confirmed live). Wired in from the start. Live 5/5, filter keyword confirmed fired 50 hits total (Find+Clear across TC02-05) via output.xml grep. DB self-clean confirmed 0 residual `AUTOTEST_BLEND` rows via a fresh oracledb connection. |
+
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
 The ~80 other OV/OV-GM screens listed in `docs/ec_screen_registry.md` have not been

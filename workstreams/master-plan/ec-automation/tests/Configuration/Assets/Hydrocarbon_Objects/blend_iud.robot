@@ -1,59 +1,63 @@
 *** Settings ***
-Documentation       EC IUD Test - Blend (Configuration > Assets > Hydrocarbon_Objects > Blend, CO.0219).
+Documentation       EC IUD Test - Blend (Configuration > Assets > Hydrocarbon Objects > Blend, CO.0219).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_BLEND).
 ...                 Layered: this test -> blend_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_BLEND_<timestamp> code per run.
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_BLEND) rather than a
+...                 generated unique code - confirmed absent from OV_BLEND before this was wired in.
+...                 Every run must complete TC05 (delete) so the code is free for the next run - EC
+...                 never lets a DELETED code be reused, but this fixed code only stays reusable if
+...                 each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in Suite
+...                 Setup - not 5 separate browser launches. Converted from the partial label-driven
+...                 pattern to the full properties-file-driven, grid-filter-wired "Bank pattern"
+...                 (Batch 7, 2026-08-23).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Hydrocarbon_Objects/blend_page.resource
 
-Suite Setup         Set Up Blend Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    blend
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_BLEND
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test blend does not exist before inserting.
-    [Tags]    clean-state
-    Blend Row Should Not Exist    ${TEST_CODE}
-    Capture Step    blend_tc01_clean
-
-TC02 Insert New Blend
-    [Documentation]    Insert a new blend; confirm in list + DB (OV_BLEND).
-    [Tags]    insert
-    Insert Blend Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Blend Row Should Exist    ${TEST_CODE}
-    Blend Should Exist In DB    ${TEST_CODE}
-    Capture Step    blend_tc02_inserted
-
-TC03 Update Blend
-    [Documentation]    Edit Name; confirm in list + DB ground truth.
-    [Tags]    update
-    Update Blend Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Blend Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Should Equal In View    OV_BLEND    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Capture Step    blend_tc03_updated
-
-TC04 Delete Blend
-    [Documentation]    Delete via End Date = Start Date; confirm gone from list + DB.
-    [Tags]    delete    cleanup
-    Delete Blend    ${TEST_CODE}    ${END_DATE}
-    Blend Row Should Not Exist    ${TEST_CODE}
-    Blend Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    blend_tc04_deleted
-
-
-*** Keywords ***
-Set Up Blend Suite
-    [Documentation]    Generate a unique test code/name, then open the Blend screen.
-    Prepare IUD Object Data    AUTOTEST_BLEND_    Blend
+    Login To EC Application
     Open Blend Screen
+    Verify Blend Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Blend Data
+    Login To EC Application
+    Open Blend Screen
+    Insert Blend Record And Save
+    Verify Blend Record Exists
+    Logout From EC Application
+
+TC03 Update Blend Data
+    Login To EC Application
+    Open Blend Screen
+    Update Blend Record And Save
+    Verify Blend Record Updated
+    Logout From EC Application
+
+TC04 Find Blend Data
+    Login To EC Application
+    Open Blend Screen
+    Find Blend Record
+    Verify Blend Record Found
+    Logout From EC Application
+
+TC05 Delete Blend Data
+    Login To EC Application
+    Open Blend Screen
+    Delete Blend Record And Save
+    Verify Blend Record Removed
+    Logout From EC Application
