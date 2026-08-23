@@ -50,7 +50,7 @@ label) found:
 | VAT Code | Financial Objects | ✅ DONE (2026-08-23, Batch 2) | #431 |
 | Customer | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #435 |
 | Field Group | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #434 |
-| Licence | Commercial Objects | ⬜ NOT YET DONE | - |
+| Licence | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #438 |
 | MMS Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #437 |
 | Operator Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #436 |
 | State Lease | Commercial Objects | ⬜ NOT YET DONE | - |
@@ -67,8 +67,9 @@ label) found:
 | Calendar | Date Objects | ⬜ NOT YET DONE | - |
 | Account Mapping | Financial Objects | ⬜ NOT YET DONE | - |
 
-**9 of 23 done.** 14 remain — natural pool for Batch 4 onward, 5 screens per batch
-matching the established cadence.
+**10 of 23 done.** Batch 3 complete (Customer #435, Field Group #434, Licence #438,
+MMS Lease #437, Operator Lease #436). 13 remain — natural pool for Batch 4 onward,
+5 screens per batch matching the established cadence.
 
 Note: once a screen from this table is converted, it should ALSO be added to
 `docs/grid-filter-standardization-checklist.md`'s "done" table in the same PR (per the
