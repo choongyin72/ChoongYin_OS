@@ -49,7 +49,7 @@ label) found:
 | Currency | Financial Objects | ✅ DONE (2026-08-23, Batch 2) | #430 |
 | VAT Code | Financial Objects | ✅ DONE (2026-08-23, Batch 2) | #431 |
 | Customer | Commercial Objects | ⬜ NOT YET DONE | - |
-| Field Group | Commercial Objects | ⬜ NOT YET DONE | - |
+| Field Group | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #434 |
 | Licence | Commercial Objects | ⬜ NOT YET DONE | - |
 | MMS Lease | Commercial Objects | ⬜ NOT YET DONE | - |
 | Operator Lease | Commercial Objects | ⬜ NOT YET DONE | - |

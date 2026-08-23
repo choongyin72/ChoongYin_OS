@@ -1,59 +1,67 @@
 *** Settings ***
-Documentation       EC IUD Test - Field Group (Configuration > Assets > Commercial Objects > Field Group).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_FIELD_GROUP).
-...                 NEVER touch existing data. A unique AUTOTEST_FG_<timestamp> code is generated
-...                 per run. Section Start Date 2003-01-01: reference dropdowns are
-...                 effective-date-filtered (object start date acts as a version).
+Documentation       EC IUD Test - Field Group (Configuration > Assets > Commercial Objects >
+...                 Field Group). Manage-Object (OV) screen. DELETE = End Date = Start Date
+...                 (true delete in OV_FIELD_GROUP). Layered: this test -> field_group_page (T3)
+...                 -> manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_FIELD_GROUP,
+...                 matching Bank/State/Country/Object List's convention) rather than a generated
+...                 unique code - confirmed absent from OV_FIELD_GROUP before this was wired in
+...                 (2026-08-23). Every run must complete TC05 (delete) so the code is free for
+...                 the next run - EC never lets a DELETED code be reused, but this fixed code
+...                 only stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup, matching Bank/State/Country/Object List's convention
+...                 (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Commercial_Objects/field_group_page.resource
 
-Suite Setup         Set Up Field Group Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    field-group
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
+${TEST_CODE}        AUTOTEST_FIELD_GROUP
+${OBJ_NAME}         AUTOMATION TEST FIELD GROUP
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/field_group_update.properties - TC03 DB-verifies against it.
+${OBJ_NAME_UPD}     AUTOMATION TEST FIELD GROUP UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test field group does not exist before inserting.
-    [Tags]    clean-state
-    Field Group Row Should Not Exist    ${TEST_CODE}
-    Capture Step    field_group_tc01_clean
-
-TC02 Insert New Field Group
-    [Documentation]    Insert a new field group and confirm it appears in the list.
-    [Tags]    insert
-    Insert Field Group Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Field Group Row Should Exist    ${TEST_CODE}
-    Field Group Should Exist In DB    ${TEST_CODE}
-    Capture Step    field_group_tc02_inserted
-
-TC03 Update Field Group Name
-    [Documentation]    Edit the field group name and confirm the list reflects the change.
-    [Tags]    update
-    Update Field Group Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Group Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    field_group_tc03_updated
-
-TC04 Delete Field Group
-    [Documentation]    Delete via End Date = Start Date and confirm the field group is gone.
-    [Tags]    delete    cleanup
-    Delete Field Group    ${TEST_CODE}    ${END_DATE}
-    Field Group Row Should Not Exist    ${TEST_CODE}
-    Field Group Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    field_group_tc04_deleted
-
-
-*** Keywords ***
-Set Up Field Group Suite
-    [Documentation]    Generate a unique test code/name, then open the Field Group screen.
-    Prepare IUD Object Data    AUTOTEST_FG_    Field Group
+    Login To EC Application
     Open Field Group Screen
+    Verify Field Group Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Field Group Data
+    Login To EC Application
+    Open Field Group Screen
+    Insert Field Group Record And Save
+    Verify Field Group Record Exists
+    Logout From EC Application
+
+TC03 Update Field Group Data
+    Login To EC Application
+    Open Field Group Screen
+    Update Field Group Record And Save
+    Verify Field Group Record Updated
+    Logout From EC Application
+
+TC04 Find Field Group Data
+    Login To EC Application
+    Open Field Group Screen
+    Find Field Group Record
+    Verify Field Group Record Found
+    Logout From EC Application
+
+TC05 Delete Field Group Data
+    Login To EC Application
+    Open Field Group Screen
+    Delete Field Group Record And Save
+    Verify Field Group Record Removed
+    Logout From EC Application
