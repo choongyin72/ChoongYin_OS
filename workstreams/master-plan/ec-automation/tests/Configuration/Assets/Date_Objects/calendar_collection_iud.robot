@@ -1,60 +1,67 @@
 *** Settings ***
-Documentation       EC IUD Test - Calendar Collection (Configuration > Assets > Date Objects > Calendar Collection, CD.0105).
-...                 Manage-Object (OV, date-effective) screen. Plain Bank-family OV (no mandatory extras).
-...                 DELETE = End Date = Start Date (true delete in ov_calendar_collection).
-...                 Layered: this test -> calendar_collection_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_CC_<timestamp> code per run.
+Documentation       EC IUD Test - Calendar Collection (Configuration > Assets > Date Objects >
+...                 Calendar Collection, CD.0105). Custom-URL OV (date-effective) screen. DELETE
+...                 = End Date = Start Date (true delete in OV_CALENDAR_COLLECTION).
+...                 Layered: this test -> calendar_collection_page (T3) -> manage_object (T2) +
+...                 common (T1). NEVER touch existing data. Uses a FIXED test code
+...                 (AUTOTEST_CALENDAR_COLLECTION, matching Bank/Country/State's convention)
+...                 rather than a generated unique code - confirmed absent from
+...                 OV_CALENDAR_COLLECTION before this was wired in (2026-08-23). Every run must
+...                 complete TC05 (delete) so the code is free for the next run - EC never lets
+...                 a DELETED code be reused, but this fixed code only stays reusable if each run
+...                 actually cleans up after itself. EACH test case does its own real
+...                 Login/Logout on ONE browser opened once in Suite Setup, matching
+...                 Bank/Country/State's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Date_Objects/calendar_collection_page.resource
 
-Suite Setup         Set Up Calendar Collection Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    calendar-collection    date-objects
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_CALENDAR_COLLECTION
+${OBJ_NAME}         AUTOTEST Calendar Collection
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/calendar_collection_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Calendar Collection UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Calendar Collection Row Should Not Exist    ${TEST_CODE}
-    Calendar Collection Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    cc_tc01_clean
-
-TC02 Insert New Calendar Collection
-    [Documentation]    Insert a new Calendar Collection (Code/Name/Start Date) and confirm it appears in the list and DB.
-    [Tags]    insert
-    Insert Calendar Collection Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Calendar Collection Row Should Exist    ${TEST_CODE}
-    Calendar Collection Should Exist In DB    ${TEST_CODE}
-    Capture Step    cc_tc02_inserted
-
-TC03 Update Calendar Collection Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Calendar Collection Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Calendar Collection Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    cc_tc03_updated
-
-TC04 Delete Calendar Collection
-    [Documentation]    Delete via End Date = Start Date and confirm the object is gone from list and DB.
-    [Tags]    delete    cleanup
-    Delete Calendar Collection    ${TEST_CODE}    ${END_DATE}
-    Calendar Collection Row Should Not Exist    ${TEST_CODE}
-    Calendar Collection Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    cc_tc04_deleted
-
-
-*** Keywords ***
-Set Up Calendar Collection Suite
-    [Documentation]    Generate a unique test code/name, then open the Calendar Collection screen.
-    Prepare IUD Object Data    AUTOTEST_CC_    Calendar Collection
+    Login To EC Application
     Open Calendar Collection Screen
+    Verify Calendar Collection Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Calendar Collection Data
+    Login To EC Application
+    Open Calendar Collection Screen
+    Insert Calendar Collection Record And Save
+    Verify Calendar Collection Record Exists
+    Logout From EC Application
+
+TC03 Update Calendar Collection Data
+    Login To EC Application
+    Open Calendar Collection Screen
+    Update Calendar Collection Record And Save
+    Verify Calendar Collection Record Updated
+    Logout From EC Application
+
+TC04 Find Calendar Collection Data
+    Login To EC Application
+    Open Calendar Collection Screen
+    Find Calendar Collection Record
+    Verify Calendar Collection Record Found
+    Logout From EC Application
+
+TC05 Delete Calendar Collection Data
+    Login To EC Application
+    Open Calendar Collection Screen
+    Delete Calendar Collection Record And Save
+    Verify Calendar Collection Record Removed
+    Logout From EC Application
