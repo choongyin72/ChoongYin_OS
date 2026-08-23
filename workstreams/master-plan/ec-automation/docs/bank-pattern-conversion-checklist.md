@@ -113,65 +113,29 @@ Bank-pattern would be a consistency change, not a functional uplift, and is lowe
 priority. If ever prioritized, treat as a separate initiative, not an extension of this
 checklist.
 
-## Batch 7 (2026-08-23) — new round beyond the closed 23-screen pool above
+## Batch 7 additions (2026-08-23) — consolidated
 
-The "Batch tracking" table above (original 23 nav-free Tier-0 candidates, Batches 2-6) is
-CLOSED — not reopened here. This is a separate, later round: 5 screens (Berth, Blend,
-Calculation Context, Calculation Group Context, Canal) that already had SOME existing
-label-driven automation from an earlier approach (missing the properties-file-driven
-insert/update and explicit grid-filter wiring a fully-done screen has). Owner direction:
-sort by screen LAYOUT similarity to Bank, regardless of prior automation history. Tracked
-in `tmp/batch7_shared_findings.md`.
+_Section consolidated by the reviewer at the Batch 8 merge: the parallel per-screen
+PRs each appended their own "Batch 7" section header; rows below are the union, each
+screen exactly once, content unchanged._
 
-| Screen | Status | Notes |
+| Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
 | Berth | ✅ DONE (2026-08-23, Batch 7) | Manage-object OV (Bank family), single-page grid (11 rows). Screen-prefixed labels "Berth Code"/"Berth Name" confirmed via ec-ui-knowledge/screens/berth.md + proven py/berth_iud.py (only Code/Name/Start Date mandatory, dropdowns optional). Rebuilt berth_page.resource/berth_iud.robot to mirror bank_page.resource/state_page.resource exactly: properties-file-driven insert ("Insert Object From Properties And Verify Code"), update, form/grid verify, explicit `Find/Clear Berth Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_BERTH` (confirmed free live). Live 5/5, dryrun 753/753, filter fired 15x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. |
-## Batch 7 — expanded round (2026-08-23, beyond the closed 23-screen Tier-0 pool above)
-
-The original 23-screen pool above is CLOSED and not reopened. The owner directed a further
-round sorted by LAYOUT similarity to Bank regardless of prior automation history. This
-round's screens already had SOME label-driven automation (`Fill OV Field By Label` from T2)
-but were missing the properties-file-driven insert/update/verify and explicit grid-filter
-wiring that a fully-done screen has. Tracked here as a new, separate section (not a batch
-tracking-table row, to avoid reopening the closed table's shape):
-
-| Screen | Status |
-|---|---|
 | Calculation Group Context (Configuration > Assets > Calculation_Objects, CO.0245) | ✅ DONE (2026-08-23) — brought to full Bank-pattern shape: `Insert/Update Object From Properties`, `Verify Object Insert Exists/Form Record/Found/Removed/Does Not Exist`, explicit `Find/Clear Calculation Group Context Row By Filter`, dedicated `CALCULATION_GROUP_CONTEXT_EC_USER/PASS`, fixed test code `AUTOTEST_CGC_BANK`. Live 5/5 RF, robocop parity with `bank_iud.robot`'s baseline, dryrun 753/753, DB self-clean (fresh connection) 0 residual, filter fired 23x per output.xml. See `docs/ec_screen_registry.md` and `docs/grid-filter-standardization-checklist.md` for full detail. |
 
-## Batch 8 (2026-08-23) — new round beyond the closed 23-screen pool + Batch 7 above
+## Batch 8 additions (2026-08-23) — consolidated
 
-The "Batch tracking" table above and Batch 7 are CLOSED — not reopened here. This is a
-further, later round: 5 screens (Chemical transport tank, Deferment Group, Inventory Area,
-Meter Run, Orifice Plate) that already had SOME existing label-driven automation from an
-earlier approach (missing the properties-file-driven insert/update and explicit grid-filter
-wiring a fully-done screen has). Owner direction unchanged: sort by screen LAYOUT similarity
-to Bank, regardless of prior automation history. Tracked in `tmp/batch8_shared_findings.md`.
+_Section consolidated by the reviewer at the Batch 8 merge: the parallel per-screen
+PRs each appended their own "Batch 8" section header; rows below are the union, each
+screen exactly once, content unchanged._
 
-| Screen | Status | Notes |
+| Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
 | Inventory Area | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Inventory Objects, CD.0115), single-page grid. Screen-prefixed labels "Inventory Area Code"/"Inventory Area Name" confirmed via the pre-existing page object + proven py/inventory_area_iud.py (only Code/Name/Start Date mandatory, no other fields), re-confirmed via a fresh live Playwright run 2026-08-23. Rebuilt inventory_area_page.resource/inventory_area_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert ("Insert Object From Properties And Verify Code"), update, form/grid verify, explicit `Find/Clear Inventory Area Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_INVA` (confirmed free live via fresh oracledb connection, before and after the live RF run). Live 5/5, dryrun 758/758, filter fired 11x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. |
-## Batch 8 (2026-08-23) — new round beyond the closed Batch 7 pool above
-
-Batch 7 above is CLOSED — not reopened here. This is a further round: 5 screens
-(Chemical transport tank/Deferment Group/Inventory Area/Meter Run/Orifice Plate)
-that already had SOME existing label-driven automation from an earlier approach
-(missing the properties-file-driven insert/update and explicit grid-filter wiring
-a fully-done screen has). Owner direction unchanged from Batch 7: sort by screen
-LAYOUT similarity to Bank, regardless of prior automation history. Tracked in
-`tmp/batch8_shared_findings.md`.
-
 | Meter Run (Configuration > Assets > Stream_Objects, CO.0091) | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Bank family), single-page grid (20 rows). Screen-prefixed labels "Meter Run Code"/"Meter Run Name" confirmed via the proven py/meter_run_iud.py + the prior live-tested page object (only that driver, not a fresh guess). Rebuilt meter_run_page.resource/meter_run_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Meter Run Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_METER_RUN` (confirmed free live via a fresh oracledb query). Mandatory set is WIDER than Bank/Berth - besides Code/Name/Start Date, Type of Taps/Pipe Material/Location of Taps dropdowns and Pipe Diameter/Diameter Meas Temp/All Calibration Factor are also mandatory (per the existing driver, unchanged from before this batch). Live 5/5, dryrun 758/758, filter fired 15x (output.xml grep), DB self-clean confirmed 0 residual via a fresh oracledb connection. No shared T1/T2 file changes. |
-
-The Batch 7 round above is CLOSED and not reopened. This is a separate, later round: 5
-screens (Chemical Transport Tank/Deferment Group/Inventory Area/Meter Run/Orifice
-Plate) that already had SOME existing label-driven automation from an earlier approach
-(missing the properties-file-driven insert/update and explicit grid-filter wiring a
-fully-done screen has). Tracked in `tmp/batch8_shared_findings.md`.
-
-| Screen | Status |
-|---|---|
 | Orifice Plate (Configuration > Assets > Stream_Objects, CO.0089) | ✅ DONE (2026-08-23, Batch 8) — brought to full Bank-pattern shape: rebuilt `orifice_plate_page.resource`/`orifice_plate_iud.robot` to mirror `bank_page.resource`/`berth_page.resource` exactly — properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Orifice Plate Row By Filter` wired into Update/Find/Verify-Found/Delete, dedicated `ORIFICE_PLATE_EC_USER/PASS`, fixed test code `AUTOTEST_ORIFICE_PLATE` (confirmed free live), added TC04 Find (prior suite only had TC01-04 Verify/Insert/Update/Delete, no Find). Mandatory fields beyond Code/Name/Start Date: Material (dropdown), Diameter [mm], Measurement Temp [°R] — all confirmed mandatory via ec-ui-knowledge/screens/orifice_plate.md + proven py/orifice_plate_iud.py, included in the insert properties file. Live 5/5, dryrun 758/758, filter fired 13x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. This MODIFIES the screen's existing `docs/ec_screen_registry.md` / `docs/automation-scorecard.md` rows (from the 2026-07-26 generator-scaffolded build) — not a new row. |
+| Chemical Transport Tank | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV, single-page grid (Chemical Objects). Screen-prefixed labels "Transport Tank Code"/"Transport Tank Name" confirmed via the already-proven Playwright driver py/chemical_transport_tank_iud.py (only Code/Name/Start Date mandatory, dropdowns optional). Rebuilt chemical_transport_tank_page.resource/chemical_transport_tank_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Chemical Transport Tank Row By Filter`. Fixed test code `AUTOTEST_CTT` (confirmed free live via fresh oracledb connection). Live 5/5, dryrun 758/758, filter fired 7x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. |
 
 ## How to update this doc
 
@@ -183,15 +147,3 @@ zero screens in Batch 2, but is a real possibility for any future batch. Append-
 spirit for the "Excluded"/"Unclear" tables; the "Batch tracking" table's rows should only
 ever flip status, not be deleted.
 
-## Batch 8 (2026-08-23) — further round beyond the closed 23-screen pool and Batch 7
-
-Both the original "Batch tracking" table (Batches 2-6) and Batch 7's section above
-are CLOSED — not reopened here. This is a further round: 5 screens (Chemical
-Transport Tank/Deferment Group/Inventory Area/Meter Run/Orifice Plate) that already
-had SOME existing label-driven automation from an earlier approach (missing the
-properties-file-driven insert/update and explicit grid-filter wiring a fully-done
-screen has). Tracked in `tmp/batch8_shared_findings.md`.
-
-| Screen | Status | Notes |
-|---|---|---|
-| Chemical Transport Tank | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV, single-page grid (Chemical Objects). Screen-prefixed labels "Transport Tank Code"/"Transport Tank Name" confirmed via the already-proven Playwright driver py/chemical_transport_tank_iud.py (only Code/Name/Start Date mandatory, dropdowns optional). Rebuilt chemical_transport_tank_page.resource/chemical_transport_tank_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Chemical Transport Tank Row By Filter`. Fixed test code `AUTOTEST_CTT` (confirmed free live via fresh oracledb connection). Live 5/5, dryrun 758/758, filter fired 7x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. |

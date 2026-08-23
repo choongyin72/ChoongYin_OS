@@ -96,83 +96,30 @@ T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen
 rebuilt to this pattern should get the same treatment as part of its own
 build (see "How to update this doc" below).
 
-## Batch 7 (2026-08-23) — new round, additions beyond the closed 37/37 pool
+## Batch 7 additions (2026-08-23) — consolidated
 
-The 37/37 pool above (original 23-screen Bank-pattern conversion program, Batches 2-6)
-is CLOSED — not reopened here. This is a separate, later round (owner-directed:
-sort by screen LAYOUT similarity to Bank, regardless of prior automation history),
-5 screens (Berth/Blend/Calculation Context/Calculation Group Context/Canal),
-tracked in `tmp/batch7_shared_findings.md`. Each screen already had SOME existing
-automation from an earlier approach (label-driven but missing properties-file-driven
-insert + explicit grid-filter wiring) - this batch brings them the rest of the way.
+_Section consolidated by the reviewer at the Batch 8 merge: the parallel per-screen
+PRs each appended their own "Batch 7" section header; rows below are the union, each
+screen exactly once, content unchanged._
 
-| Screen | Explicit filter wired? | Notes |
+| Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
 | Berth | ✅ DONE (2026-08-23, Batch 7) | Manage-object OV, single-page grid (11 rows, Transport Objects). Screen-prefixed labels ("Berth Code"/"Berth Name") confirmed via ec-ui-knowledge/screens/berth.md + proven py/berth_iud.py (Code/Name/Start Date mandatory only, all dropdowns optional). Fixed test code `AUTOTEST_BERTH`. Wired in via this batch (prior page object already had label-driven fields but no properties-file-driven insert/update or explicit filter). Live 5/5, filter keyword confirmed fired 15x via output.xml grep for `Find Berth Row By Filter`. Dryrun 753/753. No shared T1/T2 edits. DB self-clean confirmed via fresh oracledb connection. |
-
-**Batch 7 addition (2026-08-23, NEW round beyond the closed 37/37 pool above):**
-Calculation Group Context (Configuration > Assets > Calculation_Objects) got the
-same explicit `Find/Clear Calculation Group Context Row By Filter` wrapper
-delegating to the shared T2 `Find/Clear Object Row By Filter` — wired into
-Update/Find/Verify-Found/Delete, not Verify-Removed/Does-Not-Exist. Small/
-single-page grid today. Live 5/5, filter confirmed fired via output.xml grep
-(23 hits). See `docs/ec_screen_registry.md`'s Calculation Group Context row for
-full detail — the closed 37-screen table above is not reopened for this entry.
-## Batch 7 additions (NEW round, beyond the closed 37/37 pool above)
-
-The 37/37 pool above is closed and not reopened. Batch 7 is a separate, later round
-(owner-directed: sort by screen LAYOUT similarity to Bank, regardless of prior
-automation history) adding MORE screens on top of that closed pool. Tracked here,
-append-only, same as the closed table above.
-
-## Batch 8 (2026-08-23) — new round beyond the closed Batch 7 pool above
-
-Separate, later round (5 screens: Chemical Transport Tank/Deferment Group/Inventory
-Area/Meter Run/Orifice Plate), tracked in `tmp/batch8_shared_findings.md`. Same
-upgrade shape as Batch 7: each screen already had SOME label-driven automation
-(`Fill OV Field By Label` via T2) but was missing the properties-file-driven
-insert/update and explicit grid-filter wiring a fully-done screen has.
-
-| Screen | Explicit filter wired? | Notes |
-|---|---|---|
-| Orifice Plate | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV, single-page grid (Stream Objects). Screen-prefixed labels ("Orifice Code"/"Orifice Name") confirmed via ec-ui-knowledge/screens/orifice_plate.md + proven py/orifice_plate_iud.py. Mandatory beyond Code/Name/Start Date: Material (dropdown), Diameter [mm], Measurement Temp [°R] (all confirmed mandatory, not optional-skippable). Fixed test code `AUTOTEST_ORIFICE_PLATE` (confirmed free live). Wired in via this batch (prior page object already had label-driven fields but no properties-file-driven insert/update or explicit filter, and only had TC01-04, no TC04 Find). Live 5/5, filter keyword confirmed fired 13x via output.xml grep for `Find Orifice Plate Row By Filter`. Dryrun 758/758. No shared T1/T2 edits. DB self-clean confirmed via fresh oracledb connection. |
-
-| Screen | Status | Notes |
-|---|---|---|
-| Calculation Context | ✅ DONE (2026-08-23, batch-7) | Manage-object OV (`OV_CALC_CONTEXT`), already partially on the label-driven pattern (`Fill OV Field By Label`) from an earlier build - this round added the missing properties-file-driven Insert/Update (`testdata/calculation_context_*.properties`) and explicit `Find/Clear Calculation Context Row By Filter` grid-filter wiring (wired into Update/Find/Verify-Found/Delete, matching Bank/Account). Live-recon confirmed Bank-pattern shape: objectForm = Calc Context Code/Name/Start Date (mandatory)/End Date/Description/Comments; updateAttributes = Calc Context Code (read-only)/Name/Description/Comments (no Start/End Date there, matching Bank); no mandatory navigator dropdown beyond the universal GO bar. Fixed test code `AUTOTEST_CALCCTX` (confirmed free live). Live 5/5, robocop clean, dryrun 753/753, DB self-clean 0 residual (fresh oracledb connection), filter keyword confirmed fired (12x `Find Calculation Context Row By Filter` / 8x `Filter Grid Text Column By Value` via output.xml grep). No shared T1/T2 (`manage_object.resource`/`common.resource`) changes needed - reused every consolidated T2 keyword as-is. |
-## Batch 7 additions (beyond the closed 37/37 pool, 2026-08-23)
-
-The 37/37 pool above is closed and not reopened. Batch 7 is a NEW round, sorted by
-LAYOUT similarity to Bank rather than prior automation history (owner direction).
-Screens land here as they're completed, appended, not merged into the closed table.
-
-| Screen | Explicit filter wired? | Notes |
-|---|---|---|
 | Blend | ✅ DONE (2026-08-23, batch-7) | Manage-object OV (Hydrocarbon Objects), small grid (3 rows). Had a PARTIAL prior label-driven build (`Fill OV Field By Label`, 2026-07-26) missing properties-file-driven insert/update and explicit grid-filter wiring - upgraded to the full Bank pattern. Screen-prefixed labels confirmed live ("Blend Code"/"Blend Name", like State's own precedent) - NOT the generic "Code"/"Name" Bank/Customer use, so `code_label=Blend Code` is threaded through Insert/Update/Find. Only Blend Code/Blend Name/Start Date mandatory (MandatoryCellStyle confirmed via a fresh per-row class dump); Master System Code/Name, Sort Order, End Date left optional/out of scope. Description is optional but exercised (never populated on any real production Blend row - 0 non-null DESCRIPTION rows confirmed live). Wired in from the start. Live 5/5, filter keyword confirmed fired 50 hits total (Find+Clear across TC02-05) via output.xml grep. DB self-clean confirmed 0 residual `AUTOTEST_BLEND` rows via a fresh oracledb connection. |
 
-## Batch 8 additions (beyond the closed 37/37 pool + Batch 7, 2026-08-23)
+## Batch 8 additions (2026-08-23) — consolidated
 
-The 37/37 pool and Batch 7 above are closed and not reopened. Batch 8 is a further
-round, same owner direction (sort by LAYOUT similarity to Bank, regardless of prior
-automation history), covering 5 more screens (Chemical transport tank/Deferment
-Group/Inventory Area/Meter Run/Orifice Plate), tracked in
-`tmp/batch8_shared_findings.md`. Screens land here as they're completed, appended,
-not merged into the closed tables above.
+_Section consolidated by the reviewer at the Batch 8 merge: the parallel per-screen
+PRs each appended their own "Batch 8" section header; rows below are the union, each
+screen exactly once, content unchanged._
 
-| Screen | Explicit filter wired? | Notes |
+| Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Orifice Plate | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV, single-page grid (Stream Objects). Screen-prefixed labels ("Orifice Code"/"Orifice Name") confirmed via ec-ui-knowledge/screens/orifice_plate.md + proven py/orifice_plate_iud.py. Mandatory beyond Code/Name/Start Date: Material (dropdown), Diameter [mm], Measurement Temp [°R] (all confirmed mandatory, not optional-skippable). Fixed test code `AUTOTEST_ORIFICE_PLATE` (confirmed free live). Wired in via this batch (prior page object already had label-driven fields but no properties-file-driven insert/update or explicit filter, and only had TC01-04, no TC04 Find). Live 5/5, filter keyword confirmed fired 13x via output.xml grep for `Find Orifice Plate Row By Filter`. Dryrun 758/758. No shared T1/T2 edits. DB self-clean confirmed via fresh oracledb connection. |
+| Calculation Context | ✅ DONE (2026-08-23, batch-7) | Manage-object OV (`OV_CALC_CONTEXT`), already partially on the label-driven pattern (`Fill OV Field By Label`) from an earlier build - this round added the missing properties-file-driven Insert/Update (`testdata/calculation_context_*.properties`) and explicit `Find/Clear Calculation Context Row By Filter` grid-filter wiring (wired into Update/Find/Verify-Found/Delete, matching Bank/Account). Live-recon confirmed Bank-pattern shape: objectForm = Calc Context Code/Name/Start Date (mandatory)/End Date/Description/Comments; updateAttributes = Calc Context Code (read-only)/Name/Description/Comments (no Start/End Date there, matching Bank); no mandatory navigator dropdown beyond the universal GO bar. Fixed test code `AUTOTEST_CALCCTX` (confirmed free live). Live 5/5, robocop clean, dryrun 753/753, DB self-clean 0 residual (fresh oracledb connection), filter keyword confirmed fired (12x `Find Calculation Context Row By Filter` / 8x `Filter Grid Text Column By Value` via output.xml grep). No shared T1/T2 (`manage_object.resource`/`common.resource`) changes needed - reused every consolidated T2 keyword as-is. |
 | Inventory Area | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Inventory Objects, CD.0115). Had a PARTIAL prior label-driven build (`Fill OV Field By Label`, 2026-07-26) missing properties-file-driven insert/update and explicit grid-filter wiring - upgraded to the full Bank/Berth pattern. Screen-prefixed labels confirmed live ("Inventory Area Code"/"Inventory Area Name") via the pre-existing page object + proven `py/inventory_area_iud.py`, re-confirmed via a fresh live Playwright run 2026-08-23. Only Inventory Area Code/Inventory Area Name/Start Date mandatory - no other fields on this screen's insert form. Fixed test code `AUTOTEST_INVA` (confirmed free live via fresh oracledb connection, both before and after the live RF run). Live 5/5, filter keyword confirmed fired 11x (`Find Inventory Area Row By Filter`) via output.xml grep. Dryrun 758/758. No shared T1/T2 (`manage_object.resource`/`common.resource`) edits - reused every consolidated T2 keyword as-is. DB self-clean confirmed 0 residual `AUTOTEST_INVA`/`AUTOTEST%` rows via a fresh oracledb connection. |
-## Batch 8 (2026-08-23) — new round beyond the closed Batch 7 pool
-
-Batch 7 above is CLOSED — not reopened here. This is a further round (owner-directed:
-sort by screen LAYOUT similarity to Bank, regardless of prior automation history),
-5 screens (Chemical transport tank/Deferment Group/Inventory Area/Meter Run/Orifice
-Plate), tracked in `tmp/batch8_shared_findings.md`. Each screen already had SOME
-existing automation from an earlier approach (label-driven `Fill OV Field By Label`
-from T2, but missing properties-file-driven insert + explicit grid-filter wiring) -
-this batch brings them the rest of the way, same pattern as Batch 7.
-
 | Meter Run | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Stream Objects, CO.0091). Screen-prefixed labels ("Meter Run Code"/"Meter Run Name") confirmed via the proven py/meter_run_iud.py + the prior live-tested page object. Mandatory: Meter Run Code/Meter Run Name/Start Date + Type of Taps/Pipe Material/Location of Taps dropdowns + Pipe Diameter (temp uncorrected) [mm]/Diameter Meas Temp [°R]/All Calibration Factor (all confirmed mandatory live via the existing driver - Save is rejected without them, unlike Bank/Berth's Code/Name/Start-Date-only set). Fixed test code `AUTOTEST_METER_RUN` (confirmed free live). Wired in via this batch (prior page object already had label-driven fields but no properties-file-driven insert/update or explicit filter). Live 5/5, filter keyword confirmed fired 15x via output.xml grep for `Find Meter Run Row By Filter`. Dryrun 758/758. No shared T1/T2 edits. DB self-clean confirmed 0 residual `AUTOTEST_METER_RUN` rows via a fresh oracledb connection. Delete End Date field id `tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input` confirmed live via read-only recon on an existing row (never saved). |
+| Chemical Transport Tank | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (`OV_CHEM_TRANS_TANK`, Chemical Objects). Already partially on the label-driven pattern (`Fill OV Field By Label`) from an earlier build (2026-07-26) - this round added the missing properties-file-driven Insert/Update (`testdata/chemical_transport_tank_*.properties`) and explicit `Find/Clear Chemical Transport Tank Row By Filter` grid-filter wiring (wired into Update/Find/Verify-Found/Delete, matching Bank/Berth). Field labels are screen-prefixed ("Transport Tank Code"/"Transport Tank Name") - confirmed via the already-proven Playwright driver `py/chemical_transport_tank_iud.py`, not re-scanned live. Only Transport Tank Code/Transport Tank Name/Start Date mandatory. Fixed test code `AUTOTEST_CTT` (confirmed free via a fresh oracledb connection before the build). Live 5/5, dryrun 758/758, DB self-clean 0 residual (fresh oracledb connection), filter keyword confirmed fired 7x (`Find Chemical Transport Tank Row By Filter` via output.xml grep). No shared T1/T2 (`manage_object.resource`/`common.resource`) changes needed - reused every consolidated T2 keyword as-is. |
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
@@ -196,14 +143,3 @@ Update/Find/Verify-Found/Delete, NOT into Removed/Does-Not-Exist), flip it to
 "✅ DONE (date)" with a one-line note. Append-only in spirit — don't delete rows for
 screens that get superseded/retired, just note it.
 
-## Batch 8 additions (beyond the closed 37/37 pool and Batch 7, 2026-08-23)
-
-The 37/37 pool and Batch 7 above are both closed and not reopened. Batch 8 is a
-further round of 5 screens (Chemical Transport Tank/Deferment Group/Inventory
-Area/Meter Run/Orifice Plate), same owner direction (sort by LAYOUT similarity to
-Bank regardless of prior automation history), tracked in
-`tmp/batch8_shared_findings.md`. Screens land here as they're completed.
-
-| Screen | Explicit filter wired? | Notes |
-|---|---|---|
-| Chemical Transport Tank | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (`OV_CHEM_TRANS_TANK`, Chemical Objects). Already partially on the label-driven pattern (`Fill OV Field By Label`) from an earlier build (2026-07-26) - this round added the missing properties-file-driven Insert/Update (`testdata/chemical_transport_tank_*.properties`) and explicit `Find/Clear Chemical Transport Tank Row By Filter` grid-filter wiring (wired into Update/Find/Verify-Found/Delete, matching Bank/Berth). Field labels are screen-prefixed ("Transport Tank Code"/"Transport Tank Name") - confirmed via the already-proven Playwright driver `py/chemical_transport_tank_iud.py`, not re-scanned live. Only Transport Tank Code/Transport Tank Name/Start Date mandatory. Fixed test code `AUTOTEST_CTT` (confirmed free via a fresh oracledb connection before the build). Live 5/5, dryrun 758/758, DB self-clean 0 residual (fresh oracledb connection), filter keyword confirmed fired 7x (`Find Chemical Transport Tank Row By Filter` via output.xml grep). No shared T1/T2 (`manage_object.resource`/`common.resource`) changes needed - reused every consolidated T2 keyword as-is. |
