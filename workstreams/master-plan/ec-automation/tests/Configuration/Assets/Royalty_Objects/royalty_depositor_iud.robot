@@ -1,59 +1,76 @@
 *** Settings ***
-Documentation       EC IUD Test - Royalty Depositor (Configuration > Assets > Royalty Objects > Royalty Depositor).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in ov_royalty_depositor).
-...                 Layered: this test -> royalty_depositor_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. A unique AUTOTEST_RD_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+Documentation       EC IUD Test - Royalty Depositor (Configuration > Assets > Royalty Objects >
+...                 Royalty Depositor). Manage-Object (OV) screen. DELETE = End Date = Start Date
+...                 (true delete in ov_royalty_depositor). Layered: this test -> royalty_depositor_page
+...                 (T3) -> manage_object (T2) + common (T1). Bank-pattern conversion (Batch 5,
+...                 2026-08-23): property-file-driven + label-driven + T2-consolidated, replacing
+...                 the older hardcoded-field-id driver. NEVER touch existing data. Uses a FIXED
+...                 test code (AUTOTEST_ROYALTY_DEP, matching Bank/Account's own convention)
+...                 confirmed absent from ov_royalty_depositor before this was wired in (live
+...                 fresh-connection query, 2026-08-23). Every run must complete TC05 (delete) so
+...                 the code is free for the next run - EC never lets a DELETED code be reused,
+...                 but this fixed code only stays reusable if each run actually cleans up after
+...                 itself. EACH test case does its own real Login/Logout on ONE browser opened
+...                 once in Suite Setup - matches Bank's convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Royalty_Objects/royalty_depositor_page.resource
 
-Suite Setup         Set Up Royalty Depositor Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    royalty_depositor
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}        ${EMPTY}
-${OBJ_NAME_UPD}    ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_ROYALTY_DEP
+${OBJ_NAME}         Automation Test Royalty Depositor
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/royalty_depositor_update.properties - TC03 verifies against
+# what that file actually set, not an independent assumption.
+${OBJ_NAME_UPD}     Automation Test Royalty Depositor UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test royalty depositor does not exist before inserting.
-    [Tags]    clean-state
-    Royalty Depositor Row Should Not Exist    ${TEST_CODE}
-    Capture Step    royalty_depositor_tc01_clean
+    Login To EC Application
+    Open Royalty Depositor Screen
+    Verify Royalty Depositor Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Royalty Depositor
-    [Documentation]    Insert a new royalty depositor and confirm it appears in the list.
-    [Tags]    insert
-    Insert Royalty Depositor Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Royalty Depositor Row Should Exist    ${TEST_CODE}
+TC02 Insert Royalty Depositor Data
+    Login To EC Application
+    Open Royalty Depositor Screen
+    Insert Royalty Depositor Record And Save
+    Verify Royalty Depositor Record Exists
     Royalty Depositor Should Exist In DB    ${TEST_CODE}
-    Capture Step    royalty_depositor_tc02_inserted
+    Logout From EC Application
 
-TC03 Update Royalty Depositor Name
-    [Documentation]    Edit the royalty depositor name and confirm the list reflects the change.
-    [Tags]    update
-    Update Royalty Depositor Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Royalty Depositor Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    royalty_depositor_tc03_updated
+TC03 Update Royalty Depositor Data
+    Login To EC Application
+    Open Royalty Depositor Screen
+    Update Royalty Depositor Record And Save
+    Verify Royalty Depositor Record Updated
+    Logout From EC Application
 
-TC04 Delete Royalty Depositor
-    [Documentation]    Delete via End Date = Start Date and confirm the royalty depositor is gone.
-    [Tags]    delete    cleanup
-    Delete Royalty Depositor    ${TEST_CODE}    ${END_DATE}
-    Royalty Depositor Row Should Not Exist    ${TEST_CODE}
-    Royalty Depositor Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    royalty_depositor_tc04_deleted
+TC04 Find Royalty Depositor Data
+    Login To EC Application
+    Open Royalty Depositor Screen
+    Find Royalty Depositor Record
+    Verify Royalty Depositor Record Found
+    Logout From EC Application
+
+TC05 Delete Royalty Depositor Data
+    Login To EC Application
+    Open Royalty Depositor Screen
+    Delete Royalty Depositor Record And Save
+    Verify Royalty Depositor Record Removed
+    Logout From EC Application
 
 
 *** Keywords ***
-Set Up Royalty Depositor Suite
-    [Documentation]    Generate a unique test code/name, then open the Royalty Depositor screen.
-    Prepare IUD Object Data    AUTOTEST_RD_    Royalty Depositor
-    Open Royalty Depositor Screen
+Royalty Depositor Should Exist In DB
+    [Documentation]    DB ground-truth: assert ${code} really persisted in ov_royalty_depositor.
+    [Arguments]    ${code}
+    Code Should Be Present In View    ov_royalty_depositor    ${code}

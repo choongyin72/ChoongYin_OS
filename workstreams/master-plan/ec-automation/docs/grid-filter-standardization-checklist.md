@@ -74,16 +74,17 @@ wrap there would be pure redundant duplication with no behavior change.
 | Product Group | ✅ DONE (2026-08-23, batch-5) | Manage-object OV, 19-row grid (Royalty Objects), screen-prefixed labels ("Product Group Code"/"Product Group Name") like State — NOT the generic "Code"/"Name" Bank/Object List use. Only Start Date is CSS-mandatory beyond Code/Name; Sort Order/Product Group Type (dropdown)/Comments are optional and left out of the IUD flow (fill-only-needed-fields convention). Batch-5 5-screen Bank-pattern conversion (Sales Order/Product Group/Royalty Depositor/Royalty Owner/Unit Agreement, parallel isolated clones). Wired in from the start. Live 5/5, filter keyword confirmed fired exactly 5 times via output.xml grep. |
 | Unit Agreement | ✅ DONE (2026-08-23, batch-5) | Manage-object OV, small grid (4 rows, Royalty Objects). Batch-5 conversion from the older hardcoded-field-id generator build to the Bank pattern; screen-prefixed Code label ("Unit Agreement Code") + an optional Comments field + an objectForm-level End Date field (left unset at insert). Wired in from the start. Live 5/5, filter keyword confirmed fired 5x via output.xml grep. |
 | Royalty Owner | ✅ DONE (2026-08-23, batch-5) | Manage-object OV, small grid (Royalty Objects), screen-prefixed Code/Name labels ("Royalty Owner Code"/"Royalty Owner Name"). Batch-5 Bank-pattern conversion (Sales Order/Product Group/Royalty Depositor/Royalty Owner/Unit Agreement, parallel isolated clones, see `tmp/batch5_shared_findings.md`). Wired in from the start. Live 5/5, filter keyword confirmed fired exactly 5 times via output.xml grep. |
+| Royalty Depositor | ✅ DONE (2026-08-23, batch-5) | Manage-object OV, small grid (2 rows). Batch-5 conversion (Sales Order/Product Group/Royalty Depositor/Royalty Owner/Unit Agreement, parallel isolated clones). Screen-prefixed labels confirmed live ("Royalty Depositor Code"/"Royalty Depositor Name"), matching State's precedent. Only Code/Name/Start Date mandatory - kept the same minimal field scope as the already-proven prior driver (no scope expansion). Wired in from the start. Live 5/5 after one retry (first live run hit a transient shared-sandbox account lockout + cross-session "unsaved changes" artifact from a concurrent Batch-5 agent sharing the same sysadmin login - not a defect in this screen's automation; confirmed clear on retry after a leftover test row was cleaned up), filter keyword confirmed fired 5x via output.xml grep for `Find Royalty Depositor Row By Filter`. |
 
-**33 of 33 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
+**34 of 34 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
 Regulatory Permits), all 5 batch-3 screens (Field Group, Customer, Operator
 Lease, MMS Lease, Licence), all 5 batch-4 screens (Vendor, State Lease,
-Product Description, Cost Object Mapping, DOA Credit Limit), and Sales Order
-+ Product Group + Unit Agreement + Royalty Owner (batch-5, 4 of 5 landed so
-far) are in. Every screen already rebuilt to the Bank-pattern T2-consolidated
-shape now has the explicit filter wiring. Any FUTURE screen rebuilt to this
-pattern should get the same treatment as part of its own build (see "How to
-update this doc" below).
+Product Description, Cost Object Mapping, DOA Credit Limit), and all 5
+batch-5 screens (Sales Order, Product Group, Unit Agreement, Royalty Owner,
+Royalty Depositor) are in. Every screen already rebuilt to the Bank-pattern
+T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen
+rebuilt to this pattern should get the same treatment as part of its own
+build (see "How to update this doc" below).
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
