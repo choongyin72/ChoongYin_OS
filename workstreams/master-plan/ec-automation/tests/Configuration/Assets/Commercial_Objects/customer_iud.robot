@@ -1,59 +1,63 @@
 *** Settings ***
 Documentation       EC IUD Test - Customer (Configuration > Assets > Commercial Objects > Customer).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_CUSTOMER).
-...                 NEVER touch existing data. A unique AUTOTEST_CUST_<timestamp> code is generated
-...                 per run. Section Start Date 2003-01-01: reference dropdowns are
-...                 effective-date-filtered (object start date acts as a version).
+...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in ov_customer).
+...                 Layered: this test -> customer_page (T3) -> manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_CUST) rather than a
+...                 generated unique code - confirmed absent from OV_CUSTOMER before this was wired in.
+...                 Every run must complete TC05 (delete) so the code is free for the next run - EC
+...                 never lets a DELETED code be reused, but this fixed code only stays reusable if
+...                 each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in Suite
+...                 Setup - not 5 separate browser launches. Converted from the old hardcoded-field-id
+...                 pattern to the label-driven, properties-file-driven "Bank pattern" (Batch 3,
+...                 2026-08-23).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Commercial_Objects/customer_page.resource
 
-Suite Setup         Set Up Customer Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    customer
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
+${TEST_CODE}        AUTOTEST_CUST
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test customer does not exist before inserting.
-    [Tags]    clean-state
-    Customer Row Should Not Exist    ${TEST_CODE}
-    Capture Step    customer_tc01_clean
-
-TC02 Insert New Customer
-    [Documentation]    Insert a new customer and confirm it appears in the list.
-    [Tags]    insert
-    Insert Customer Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Customer Row Should Exist    ${TEST_CODE}
-    Customer Should Exist In DB    ${TEST_CODE}
-    Capture Step    customer_tc02_inserted
-
-TC03 Update Customer Name
-    [Documentation]    Edit the customer name and confirm the list reflects the change.
-    [Tags]    update
-    Update Customer Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Customer Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    customer_tc03_updated
-
-TC04 Delete Customer
-    [Documentation]    Delete via End Date = Start Date and confirm the customer is gone.
-    [Tags]    delete    cleanup
-    Delete Customer    ${TEST_CODE}    ${END_DATE}
-    Customer Row Should Not Exist    ${TEST_CODE}
-    Customer Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    customer_tc04_deleted
-
-
-*** Keywords ***
-Set Up Customer Suite
-    [Documentation]    Generate a unique test code/name, then open the Customer screen.
-    Prepare IUD Object Data    AUTOTEST_CUST_    Customer
+    Login To EC Application
     Open Customer Screen
+    Verify Customer Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Customer Data
+    Login To EC Application
+    Open Customer Screen
+    Insert Customer Record And Save
+    Verify Customer Record Exists
+    Logout From EC Application
+
+TC03 Update Customer Data
+    Login To EC Application
+    Open Customer Screen
+    Update Customer Record And Save
+    Verify Customer Record Updated
+    Logout From EC Application
+
+TC04 Find Customer Data
+    Login To EC Application
+    Open Customer Screen
+    Find Customer Record
+    Verify Customer Record Found
+    Logout From EC Application
+
+TC05 Delete Customer Data
+    Login To EC Application
+    Open Customer Screen
+    Delete Customer Record And Save
+    Verify Customer Record Removed
+    Logout From EC Application

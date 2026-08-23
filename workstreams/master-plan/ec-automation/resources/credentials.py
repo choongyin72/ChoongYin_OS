@@ -82,3 +82,6 @@ REGULATORY_PERMITS_EC_PASS = os.environ.get("REGULATORY_PERMITS_EC_PASS", os.env
 
 FIELD_GROUP_EC_USER = os.environ.get("FIELD_GROUP_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 FIELD_GROUP_EC_PASS = os.environ.get("FIELD_GROUP_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+CUSTOMER_EC_USER = os.environ.get("CUSTOMER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CUSTOMER_EC_PASS = os.environ.get("CUSTOMER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
