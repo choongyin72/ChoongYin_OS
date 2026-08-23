@@ -155,3 +155,5 @@ ORIFICE_PLATE_EC_USER = os.environ.get("ORIFICE_PLATE_EC_USER", os.environ.get("
 ORIFICE_PLATE_EC_PASS = os.environ.get("ORIFICE_PLATE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 PORT_EC_USER = os.environ.get("PORT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PORT_EC_PASS = os.environ.get("PORT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+RESERVOIR_BLOCK_EC_USER = os.environ.get("RESERVOIR_BLOCK_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+RESERVOIR_BLOCK_EC_PASS = os.environ.get("RESERVOIR_BLOCK_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
