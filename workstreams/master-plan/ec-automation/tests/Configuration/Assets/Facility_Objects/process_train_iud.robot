@@ -1,59 +1,65 @@
 *** Settings ***
-Documentation       EC IUD Test - Process Train (Configuration > Assets > Facility_Objects > Process Train, CO.0120).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_PROCESS_TRAIN).
-...                 Layered: this test -> process_train_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_PT_<timestamp> code per run.
+Documentation       EC IUD Test - Process Train (Configuration > Assets > Facility_Objects >
+...                 Process Train, CO.0120). Manage-Object (OV) screen. DELETE = End Date =
+...                 Start Date (true delete in OV_PROCESS_TRAIN).
+...                 Layered: this test -> process_train_page (T3) -> manage_object (T2) +
+...                 common (T1). NEVER touch existing data. Uses a FIXED test code
+...                 (AUTOTEST_PT, matching Bank/Berth's convention) rather than a generated
+...                 unique code - confirmed absent from OV_PROCESS_TRAIN before this was wired
+...                 in (2026-08-23). Every run must complete TC05 (delete) so the code is free
+...                 for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching Bank/Berth's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Facility_Objects/process_train_page.resource
 
-Suite Setup         Set Up Process Train Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    process_train
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_PT
+${OBJ_NAME}         AUTOTEST Process Train
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/process_train_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Process Train UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test process_train does not exist before inserting.
-    [Tags]    clean-state
-    Process Train Row Should Not Exist    ${TEST_CODE}
-    Capture Step    process_train_tc01_clean
-
-TC02 Insert New Process Train
-    [Documentation]    Insert a new process_train; confirm in list + DB (OV_PROCESS_TRAIN).
-    [Tags]    insert
-    Insert Process Train Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Process Train Row Should Exist    ${TEST_CODE}
-    Process Train Should Exist In DB    ${TEST_CODE}
-    Capture Step    process_train_tc02_inserted
-
-TC03 Update Process Train
-    [Documentation]    Edit Name; confirm in list + DB ground truth.
-    [Tags]    update
-    Update Process Train Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Process Train Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Should Equal In View    OV_PROCESS_TRAIN    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Capture Step    process_train_tc03_updated
-
-TC04 Delete Process Train
-    [Documentation]    Delete via End Date = Start Date; confirm gone from list + DB.
-    [Tags]    delete    cleanup
-    Delete Process Train    ${TEST_CODE}    ${END_DATE}
-    Process Train Row Should Not Exist    ${TEST_CODE}
-    Process Train Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    process_train_tc04_deleted
-
-
-*** Keywords ***
-Set Up Process Train Suite
-    [Documentation]    Generate a unique test code/name, then open the Process Train screen.
-    Prepare IUD Object Data    AUTOTEST_PT_    Process Train
+    Login To EC Application
     Open Process Train Screen
+    Verify Process Train Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Process Train Data
+    Login To EC Application
+    Open Process Train Screen
+    Insert Process Train Record And Save
+    Verify Process Train Record Exists
+    Logout From EC Application
+
+TC03 Update Process Train Data
+    Login To EC Application
+    Open Process Train Screen
+    Update Process Train Record And Save
+    Verify Process Train Record Updated
+    Logout From EC Application
+
+TC04 Find Process Train Data
+    Login To EC Application
+    Open Process Train Screen
+    Find Process Train Record
+    Verify Process Train Record Found
+    Logout From EC Application
+
+TC05 Delete Process Train Data
+    Login To EC Application
+    Open Process Train Screen
+    Delete Process Train Record And Save
+    Verify Process Train Record Removed
+    Logout From EC Application

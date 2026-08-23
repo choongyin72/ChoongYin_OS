@@ -153,6 +153,7 @@ METER_RUN_EC_USER = os.environ.get("METER_RUN_EC_USER", os.environ.get("EC_USER"
 METER_RUN_EC_PASS = os.environ.get("METER_RUN_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 ORIFICE_PLATE_EC_USER = os.environ.get("ORIFICE_PLATE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 ORIFICE_PLATE_EC_PASS = os.environ.get("ORIFICE_PLATE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
 PORT_EC_USER = os.environ.get("PORT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PORT_EC_PASS = os.environ.get("PORT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 RESERVOIR_BLOCK_EC_USER = os.environ.get("RESERVOIR_BLOCK_EC_USER", os.environ.get("EC_USER", "sysadmin"))
@@ -161,3 +162,6 @@ RESERVOIR_FORMATION_EC_USER = os.environ.get("RESERVOIR_FORMATION_EC_USER", os.e
 RESERVOIR_FORMATION_EC_PASS = os.environ.get("RESERVOIR_FORMATION_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 REPORT_AREA_EC_USER = os.environ.get("REPORT_AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 REPORT_AREA_EC_PASS = os.environ.get("REPORT_AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PROCESS_TRAIN_EC_USER = os.environ.get("PROCESS_TRAIN_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PROCESS_TRAIN_EC_PASS = os.environ.get("PROCESS_TRAIN_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
