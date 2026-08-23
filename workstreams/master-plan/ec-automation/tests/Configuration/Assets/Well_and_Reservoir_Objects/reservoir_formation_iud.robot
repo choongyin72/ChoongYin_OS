@@ -2,58 +2,65 @@
 Documentation       EC IUD Test - Reservoir Formation (Configuration > Assets > Well_and_Reservoir_Objects > Reservoir Formation, CO.0135).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_RESV_FORMATION).
 ...                 Layered: this test -> reservoir_formation_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_RESVF_<timestamp> code per run.
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_RESVF,
+...                 matching Bank/Berth's convention) rather than a generated unique code -
+...                 confirmed absent from OV_RESV_FORMATION before this was wired in
+...                 (2026-08-23, fresh oracledb connection). Every run must complete TC05
+...                 (delete) so the code is free for the next run - EC never lets a DELETED
+...                 code be reused, but this fixed code only stays reusable if each run
+...                 actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching Bank/Berth's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Well_and_Reservoir_Objects/reservoir_formation_page.resource
 
-Suite Setup         Set Up Reservoir Formation Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    reservoir_formation
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_RESVF
+${OBJ_NAME}         AUTOTEST Reservoir Formation
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/reservoir_formation_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Reservoir Formation UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test reservoir_formation does not exist before inserting.
-    [Tags]    clean-state
-    Reservoir Formation Row Should Not Exist    ${TEST_CODE}
-    Capture Step    reservoir_formation_tc01_clean
-
-TC02 Insert New Reservoir Formation
-    [Documentation]    Insert a new reservoir_formation; confirm in list + DB (OV_RESV_FORMATION).
-    [Tags]    insert
-    Insert Reservoir Formation Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Reservoir Formation Row Should Exist    ${TEST_CODE}
-    Reservoir Formation Should Exist In DB    ${TEST_CODE}
-    Capture Step    reservoir_formation_tc02_inserted
-
-TC03 Update Reservoir Formation
-    [Documentation]    Edit Name; confirm in list + DB ground truth.
-    [Tags]    update
-    Update Reservoir Formation Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Reservoir Formation Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Should Equal In View    OV_RESV_FORMATION    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Capture Step    reservoir_formation_tc03_updated
-
-TC04 Delete Reservoir Formation
-    [Documentation]    Delete via End Date = Start Date; confirm gone from list + DB.
-    [Tags]    delete    cleanup
-    Delete Reservoir Formation    ${TEST_CODE}    ${END_DATE}
-    Reservoir Formation Row Should Not Exist    ${TEST_CODE}
-    Reservoir Formation Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    reservoir_formation_tc04_deleted
-
-
-*** Keywords ***
-Set Up Reservoir Formation Suite
-    [Documentation]    Generate a unique test code/name, then open the Reservoir Formation screen.
-    Prepare IUD Object Data    AUTOTEST_RESVF_    Reservoir Formation
+    Login To EC Application
     Open Reservoir Formation Screen
+    Verify Reservoir Formation Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Reservoir Formation Data
+    Login To EC Application
+    Open Reservoir Formation Screen
+    Insert Reservoir Formation Record And Save
+    Verify Reservoir Formation Record Exists
+    Logout From EC Application
+
+TC03 Update Reservoir Formation Data
+    Login To EC Application
+    Open Reservoir Formation Screen
+    Update Reservoir Formation Record And Save
+    Verify Reservoir Formation Record Updated
+    Logout From EC Application
+
+TC04 Find Reservoir Formation Data
+    Login To EC Application
+    Open Reservoir Formation Screen
+    Find Reservoir Formation Record
+    Verify Reservoir Formation Record Found
+    Logout From EC Application
+
+TC05 Delete Reservoir Formation Data
+    Login To EC Application
+    Open Reservoir Formation Screen
+    Delete Reservoir Formation Record And Save
+    Verify Reservoir Formation Record Removed
+    Logout From EC Application
