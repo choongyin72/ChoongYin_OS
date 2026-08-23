@@ -118,3 +118,6 @@ PRODUCT_GROUP_EC_PASS = os.environ.get("PRODUCT_GROUP_EC_PASS", os.environ.get("
 
 UNIT_AGREEMENT_EC_USER = os.environ.get("UNIT_AGREEMENT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 UNIT_AGREEMENT_EC_PASS = os.environ.get("UNIT_AGREEMENT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+ROYALTY_OWNER_EC_USER = os.environ.get("ROYALTY_OWNER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+ROYALTY_OWNER_EC_PASS = os.environ.get("ROYALTY_OWNER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
