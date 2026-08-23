@@ -100,3 +100,6 @@ VENDOR_EC_PASS = os.environ.get("VENDOR_EC_PASS", os.environ.get("EC_PASS", "sys
 
 STATE_LEASE_EC_USER = os.environ.get("STATE_LEASE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 STATE_LEASE_EC_PASS = os.environ.get("STATE_LEASE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PRODUCT_DESCRIPTION_EC_USER = os.environ.get("PRODUCT_DESCRIPTION_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PRODUCT_DESCRIPTION_EC_PASS = os.environ.get("PRODUCT_DESCRIPTION_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
