@@ -69,12 +69,13 @@ wrap there would be pure redundant duplication with no behavior change.
 | State Lease | ✅ DONE (2026-08-23, batch-4) | Manage-object OV, empty grid (0 rows on this sandbox). Batch-4 5-screen Bank-pattern conversion (State Lease/Vendor/Cost Object Mapping/DOA Credit Limit/Product Description, parallel isolated clones). Wired in from the start. Live 5/5, filter confirmed fired (5 hits in output.xml for `Find State Lease Row By Filter`). |
 | Product Description | ✅ DONE (2026-08-23, batch-4) | Manage-object OV, 20-row grid (Financial Objects), screen-prefixed Code label ("Product Node Item Code") + 3 mandatory reference dropdowns (Product/Node/Financial Code). Batch-4 5-screen Bank-pattern conversion (State Lease/Vendor/Cost Object Mapping/DOA Credit Limit/Product Description, parallel isolated clones, see `tmp/batch4_shared_findings.md`). Wired in from the start. Live 5/5, filter keyword confirmed fired exactly 5 times via output.xml grep. |
 | Cost Object Mapping | ✅ DONE (2026-08-23, batch-4) | Manage-object OV, small grid (90 rows, Financial Objects). Batch-4 5-screen Bank-pattern conversion (State Lease/Vendor/Cost Object Mapping/DOA Credit Limit/Product Description, parallel isolated clones). Confirmed NOT a scope mismatch despite the "Mapping" name - genuine Code/Name manage-object OV with 4 mandatory reference dropdowns (one is a Start-Date/Object-Type cascade). Wired in from the start. Live 5/5, filter keyword confirmed fired 5x via output.xml grep. |
+| DOA Credit Limit | ✅ DONE (2026-08-23, batch-4) | Manage-object OV, small grid (3 rows). Batch-4 5-screen Bank-pattern conversion (State Lease/Vendor/Cost Object Mapping/DOA Credit Limit/Product Description, parallel isolated clones). Wired in from the start. Live 5/5 (after fixing a real conditional-mandatory Currency business rule and excluding Role Name from the live-DOM round-trip - see docs/ec_screen_registry.md), filter keyword confirmed fired 7x via output.xml grep. |
 
-**28 of 28 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
+**29 of 29 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
 Regulatory Permits), all 5 batch-3 screens (Field Group, Customer, Operator
-Lease, MMS Lease, Licence), and Vendor + State Lease + Product Description +
-Cost Object Mapping (batch-4, 4 of 5 landed so far) are in. Every screen
-already rebuilt to the Bank-pattern T2-consolidated shape now has the
+Lease, MMS Lease, Licence), and all 5 batch-4 screens (Vendor, State Lease,
+Product Description, Cost Object Mapping, DOA Credit Limit) are in. Every
+screen already rebuilt to the Bank-pattern T2-consolidated shape now has the
 explicit filter wiring. Any FUTURE screen rebuilt to this pattern should get
 the same treatment as part of its own build (see "How to update this doc"
 below).
