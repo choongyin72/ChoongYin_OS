@@ -55,7 +55,7 @@ label) found:
 | Operator Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #436 |
 | State Lease | Commercial Objects | ⬜ NOT YET DONE | - |
 | Vendor | Commercial Objects | ⬜ NOT YET DONE | - |
-| Cost Object Mapping | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | PR TBD |
+| Cost Object Mapping | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | #442 |
 | DOA Credit Limit | Financial Objects | ⬜ NOT YET DONE | - |
 | Product Description | Financial Objects | ⬜ NOT YET DONE | - |
 | Sales Order | Financial Objects | ⬜ NOT YET DONE | - |
