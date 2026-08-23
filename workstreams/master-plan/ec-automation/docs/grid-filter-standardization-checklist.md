@@ -147,6 +147,14 @@ the old pattern without rebuilding it first** — check this doc's "eligible" ta
 above before starting, and check `docs/ec_screen_registry.md` for the screen's
 current pattern if it's not listed here at all.
 
+## Batch 10 additions (pending) — Split Item Other, Storage Flow, Stream Item Category, Data Extract Set, Trailer
+
+_Section header pre-created on master before fan-out. Each screen's PR appends
+only its own ROW here — no per-PR section header._
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible
