@@ -54,7 +54,7 @@ label) found:
 | MMS Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #437 |
 | Operator Lease | Commercial Objects | ✅ DONE (2026-08-23, Batch 3) | #436 |
 | State Lease | Commercial Objects | ⬜ NOT YET DONE | - |
-| Vendor | Commercial Objects | ⬜ NOT YET DONE | - |
+| Vendor | Commercial Objects | ✅ DONE (2026-08-23, Batch 4) | TBD |
 | Cost Object Mapping | Financial Objects | ⬜ NOT YET DONE | - |
 | DOA Credit Limit | Financial Objects | ⬜ NOT YET DONE | - |
 | Product Description | Financial Objects | ⬜ NOT YET DONE | - |

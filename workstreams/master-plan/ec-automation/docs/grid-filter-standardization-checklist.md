@@ -65,13 +65,14 @@ wrap there would be pure redundant duplication with no behavior change.
 | Operator Lease | ✅ DONE (2026-08-23, batch-3) | Manage-object OV, empty grid (0 rows on this sandbox). Batch-3 5-screen Bank-pattern conversion (Customer/Field Group/Licence/MMS Lease/Operator Lease). Wired in from the start. Live 5/5, filter confirmed fired (5 hits in output.xml for `Find Operator Lease Row By Filter`). |
 | MMS Lease | ✅ DONE (2026-08-23, batch-3) | Manage-object OV, small/empty grid (0 rows before this suite's own TC02). Batch-3 5-screen Bank-pattern conversion (Customer/Field Group/Licence/MMS Lease/Operator Lease). Wired in from the start. Live 5/5, filter confirmed fired (5 hits each for `Find MMS Lease Row By Filter`/`Clear MMS Lease Row Filter` in output.xml). |
 | Licence | ✅ DONE (2026-08-23, batch-3) | Manage-object OV, small grid (12 rows). Batch-3 5-screen Bank-pattern conversion (Customer/Field Group/Licence/MMS Lease/Operator Lease, parallel isolated clones). Wired in from the start. Live 5/5, filter keyword confirmed fired exactly 5 times via output.xml grep. |
+| Vendor | ✅ DONE (2026-08-23, batch-4) | Manage-object OV, small grid (20 rows, Commercial Objects). Batch-4 conversion (State Lease/Vendor/Cost Object Mapping/DOA Credit Limit/Product Description, parallel isolated clones). Wired in from the start. Live 5/5, filter keyword confirmed fired 5x via output.xml grep. |
 
-**24 of 24 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
-Regulatory Permits) and all 5 batch-3 screens (Field Group, Customer, Operator
-Lease, MMS Lease, Licence) are in. Every screen already rebuilt to the
-Bank-pattern T2-consolidated shape now has the explicit filter wiring. Any
-FUTURE screen rebuilt to this pattern should get the same treatment as part
-of its own build (see "How to update this doc" below).
+**25 of 25 done.** All 5 batch-2 screens (Country, County, Currency, VAT Code,
+Regulatory Permits), all 5 batch-3 screens (Field Group, Customer, Operator
+Lease, MMS Lease, Licence), and Vendor (batch-4) are in. Every screen already
+rebuilt to the Bank-pattern T2-consolidated shape now has the explicit filter
+wiring. Any FUTURE screen rebuilt to this pattern should get the same
+treatment as part of its own build (see "How to update this doc" below).
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
