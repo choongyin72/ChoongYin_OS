@@ -144,3 +144,6 @@ BLEND_EC_USER = os.environ.get("BLEND_EC_USER", os.environ.get("EC_USER", "sysad
 BLEND_EC_PASS = os.environ.get("BLEND_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 CANAL_EC_USER = os.environ.get("CANAL_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CANAL_EC_PASS = os.environ.get("CANAL_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+INVENTORY_AREA_EC_USER = os.environ.get("INVENTORY_AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+INVENTORY_AREA_EC_PASS = os.environ.get("INVENTORY_AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
