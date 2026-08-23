@@ -1,60 +1,68 @@
 *** Settings ***
 Documentation       EC IUD Test - Carrier (Configuration > Assets > Cargo Objects > Carrier).
-...                 Manage-Object (OV) screen, Bank-family grid (not gated). Insert requires the
-...                 mandatory "Unit" reference dropdown (first option used). DELETE = End Date =
-...                 Start Date (ov_carrier). NEVER touch existing data: a unique
-...                 AUTOTEST_CARR_<timestamp> code per run (EC keeps deleted codes, so never reused);
-...                 the referenced Unit is READ-ONLY seed data.
+...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_CARRIER).
+...                 Layered: this test -> carrier_page (T3) -> manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_CARRIER,
+...                 matching Bank/Berth/Port's convention) rather than a generated unique code -
+...                 confirmed absent from OV_CARRIER before this was wired in (2026-08-23).
+...                 Every run must complete TC05 (delete) so the code is free for the next
+...                 run - EC never lets a DELETED code be reused, but this fixed code only
+...                 stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching Bank/Berth/Port's convention (docs/rf-suite-styles.md).
+...                 Carrier's navigator is only an optional date + GO (NOT gated) - confirmed via
+...                 the prior SOW recon + proven Playwright driver, re-confirmed before this
+...                 Batch 11 conversion.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Cargo_Objects/carrier_page.resource
 
-Suite Setup         Set Up Carrier Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    carrier
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
+${TEST_CODE}        AUTOTEST_CARRIER
+${OBJ_NAME}         AUTOTEST Carrier
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/carrier_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Carrier UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test carrier does not exist before inserting.
-    [Tags]    clean-state
-    Carrier Row Should Not Exist    ${TEST_CODE}
-    Capture Step    carrier_tc01_clean
-
-TC02 Insert New Carrier
-    [Documentation]    Insert a new carrier and confirm it appears in the list and persisted in the DB.
-    [Tags]    insert
-    Insert Carrier Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Carrier Row Should Exist    ${TEST_CODE}
-    Carrier Should Exist In DB    ${TEST_CODE}
-    Capture Step    carrier_tc02_inserted
-
-TC03 Update Carrier Name
-    [Documentation]    Edit the carrier name and confirm the list reflects the change.
-    [Tags]    update
-    Update Carrier Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Carrier Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    carrier_tc03_updated
-
-TC04 Delete Carrier
-    [Documentation]    Delete via End Date = Start Date and confirm the carrier is gone (UI + DB).
-    [Tags]    delete    cleanup
-    Delete Carrier    ${TEST_CODE}    ${END_DATE}
-    Carrier Row Should Not Exist    ${TEST_CODE}
-    Carrier Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    carrier_tc04_deleted
-
-
-*** Keywords ***
-Set Up Carrier Suite
-    [Documentation]    Generate a unique test code/name, then open the Carrier screen.
-    Prepare IUD Object Data    AUTOTEST_CARR_    Carrier
+    Login To EC Application
     Open Carrier Screen
+    Verify Carrier Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Carrier Data
+    Login To EC Application
+    Open Carrier Screen
+    Insert Carrier Record And Save
+    Verify Carrier Record Exists
+    Logout From EC Application
+
+TC03 Update Carrier Data
+    Login To EC Application
+    Open Carrier Screen
+    Update Carrier Record And Save
+    Verify Carrier Record Updated
+    Logout From EC Application
+
+TC04 Find Carrier Data
+    Login To EC Application
+    Open Carrier Screen
+    Find Carrier Record
+    Verify Carrier Record Found
+    Logout From EC Application
+
+TC05 Delete Carrier Data
+    Login To EC Application
+    Open Carrier Screen
+    Delete Carrier Record And Save
+    Verify Carrier Record Removed
+    Logout From EC Application
