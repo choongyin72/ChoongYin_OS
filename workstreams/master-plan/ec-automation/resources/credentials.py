@@ -157,3 +157,5 @@ PORT_EC_USER = os.environ.get("PORT_EC_USER", os.environ.get("EC_USER", "sysadmi
 PORT_EC_PASS = os.environ.get("PORT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 RESERVOIR_BLOCK_EC_USER = os.environ.get("RESERVOIR_BLOCK_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 RESERVOIR_BLOCK_EC_PASS = os.environ.get("RESERVOIR_BLOCK_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+RESERVOIR_FORMATION_EC_USER = os.environ.get("RESERVOIR_FORMATION_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+RESERVOIR_FORMATION_EC_PASS = os.environ.get("RESERVOIR_FORMATION_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
