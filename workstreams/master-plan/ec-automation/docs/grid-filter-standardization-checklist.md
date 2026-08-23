@@ -170,6 +170,7 @@ committing to a full conversion (see `tmp/batch11_shared_findings.md`)._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Bank Account (Configuration > Assets > Financial_Objects) | ✅ DONE (2026-08-23, Batch 11) | `Find/Clear Bank Account Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `bank_account_page.resource`, matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired 15x / cleared 15x via output.xml grep on the live 5/5 run. |
 
 ## How to update this doc
 

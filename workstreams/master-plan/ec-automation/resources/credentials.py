@@ -176,3 +176,6 @@ DATA_EXTRACT_SET_EC_USER = os.environ.get("DATA_EXTRACT_SET_EC_USER", os.environ
 DATA_EXTRACT_SET_EC_PASS = os.environ.get("DATA_EXTRACT_SET_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 TRAILER_EC_USER = os.environ.get("TRAILER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 TRAILER_EC_PASS = os.environ.get("TRAILER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+BANK_ACCOUNT_EC_USER = os.environ.get("BANK_ACCOUNT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+BANK_ACCOUNT_EC_PASS = os.environ.get("BANK_ACCOUNT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
