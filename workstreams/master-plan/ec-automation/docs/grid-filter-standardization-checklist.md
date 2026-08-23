@@ -95,6 +95,15 @@ T2-consolidated shape now has the explicit filter wiring. Any FUTURE screen
 rebuilt to this pattern should get the same treatment as part of its own
 build (see "How to update this doc" below).
 
+**Batch 7 addition (2026-08-23, NEW round beyond the closed 37/37 pool above):**
+Calculation Group Context (Configuration > Assets > Calculation_Objects) got the
+same explicit `Find/Clear Calculation Group Context Row By Filter` wrapper
+delegating to the shared T2 `Find/Clear Object Row By Filter` — wired into
+Update/Find/Verify-Found/Delete, not Verify-Removed/Does-Not-Exist. Small/
+single-page grid today. Live 5/5, filter confirmed fired via output.xml grep
+(23 hits). See `docs/ec_screen_registry.md`'s Calculation Group Context row for
+full detail — the closed 37-screen table above is not reopened for this entry.
+
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
 The ~80 other OV/OV-GM screens listed in `docs/ec_screen_registry.md` have not been
