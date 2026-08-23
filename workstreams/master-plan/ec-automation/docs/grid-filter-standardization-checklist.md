@@ -160,6 +160,17 @@ only its own ROW here — no per-PR section header._
 | Data Extract Set | ✅ DONE (2026-08-23) | `Find/Clear Data Extract Set Row By Filter` (delegating to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `data_extract_set_page.resource`, matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired 13x via output.xml grep on the live 5/5 run. |
 | Trailer | ✅ Wired (2026-08-23, Batch 10) | `Find/Clear Trailer Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete, matching Bank/Berth. Filter keyword confirmed fired 23x via output.xml grep on the live 5/5 run. |
 
+## Batch 11 additions (pending) — Bank Account, Carrier
+
+_Section header pre-created on master before fan-out. Each screen's PR appends
+only its own ROW here — no per-PR section header. Note: both screens are on the
+OLD hardcoded (`Fill New Object Form`) pattern, a bigger lift than Batch 7-10's
+label-driven upgrades; Carrier's nav-free status also needs live recon before
+committing to a full conversion (see `tmp/batch11_shared_findings.md`)._
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible
