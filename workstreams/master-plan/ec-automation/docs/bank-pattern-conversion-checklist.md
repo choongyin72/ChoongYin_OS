@@ -59,7 +59,7 @@ label) found:
 | DOA Credit Limit | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | #443 |
 | Product Description | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | #441 |
 | Sales Order | Financial Objects | ⬜ NOT YET DONE | - |
-| Product Group | Royalty Objects | ⬜ NOT YET DONE | - |
+| Product Group | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | #445 |
 | Royalty Depositor | Royalty Objects | ⬜ NOT YET DONE | - |
 | Royalty Owner | Royalty Objects | ⬜ NOT YET DONE | - |
 | Unit Agreement | Royalty Objects | ⬜ NOT YET DONE | - |
