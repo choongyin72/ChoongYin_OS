@@ -58,7 +58,7 @@ label) found:
 | Cost Object Mapping | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | #442 |
 | DOA Credit Limit | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | #443 |
 | Product Description | Financial Objects | ✅ DONE (2026-08-23, Batch 4) | #441 |
-| Sales Order | Financial Objects | ⬜ NOT YET DONE | - |
+| Sales Order | Financial Objects | ✅ DONE (2026-08-23, Batch 5) | #444 |
 | Product Group | Royalty Objects | ⬜ NOT YET DONE | - |
 | Royalty Depositor | Royalty Objects | ⬜ NOT YET DONE | - |
 | Royalty Owner | Royalty Objects | ⬜ NOT YET DONE | - |
