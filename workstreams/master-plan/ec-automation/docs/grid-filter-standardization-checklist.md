@@ -154,6 +154,7 @@ only its own ROW here — no per-PR section header._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Trailer | ✅ Wired (2026-08-23, Batch 10) | `Find/Clear Trailer Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete, matching Bank/Berth. Filter keyword confirmed fired 23x via output.xml grep on the live 5/5 run. |
 
 ## How to update this doc
 
