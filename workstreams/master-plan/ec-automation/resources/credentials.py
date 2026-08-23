@@ -147,3 +147,5 @@ CANAL_EC_PASS = os.environ.get("CANAL_EC_PASS", os.environ.get("EC_PASS", "sysad
 
 INVENTORY_AREA_EC_USER = os.environ.get("INVENTORY_AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 INVENTORY_AREA_EC_PASS = os.environ.get("INVENTORY_AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+CHEMICAL_TRANSPORT_TANK_EC_USER = os.environ.get("CHEMICAL_TRANSPORT_TANK_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CHEMICAL_TRANSPORT_TANK_EC_PASS = os.environ.get("CHEMICAL_TRANSPORT_TANK_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
