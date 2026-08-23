@@ -125,6 +125,18 @@ The 37/37 pool above is closed and not reopened. Batch 7 is a separate, later ro
 automation history) adding MORE screens on top of that closed pool. Tracked here,
 append-only, same as the closed table above.
 
+## Batch 8 (2026-08-23) — new round beyond the closed Batch 7 pool above
+
+Separate, later round (5 screens: Chemical Transport Tank/Deferment Group/Inventory
+Area/Meter Run/Orifice Plate), tracked in `tmp/batch8_shared_findings.md`. Same
+upgrade shape as Batch 7: each screen already had SOME label-driven automation
+(`Fill OV Field By Label` via T2) but was missing the properties-file-driven
+insert/update and explicit grid-filter wiring a fully-done screen has.
+
+| Screen | Explicit filter wired? | Notes |
+|---|---|---|
+| Orifice Plate | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV, single-page grid (Stream Objects). Screen-prefixed labels ("Orifice Code"/"Orifice Name") confirmed via ec-ui-knowledge/screens/orifice_plate.md + proven py/orifice_plate_iud.py. Mandatory beyond Code/Name/Start Date: Material (dropdown), Diameter [mm], Measurement Temp [°R] (all confirmed mandatory, not optional-skippable). Fixed test code `AUTOTEST_ORIFICE_PLATE` (confirmed free live). Wired in via this batch (prior page object already had label-driven fields but no properties-file-driven insert/update or explicit filter, and only had TC01-04, no TC04 Find). Live 5/5, filter keyword confirmed fired 13x via output.xml grep for `Find Orifice Plate Row By Filter`. Dryrun 758/758. No shared T1/T2 edits. DB self-clean confirmed via fresh oracledb connection. |
+
 | Screen | Status | Notes |
 |---|---|---|
 | Calculation Context | ✅ DONE (2026-08-23, batch-7) | Manage-object OV (`OV_CALC_CONTEXT`), already partially on the label-driven pattern (`Fill OV Field By Label`) from an earlier build - this round added the missing properties-file-driven Insert/Update (`testdata/calculation_context_*.properties`) and explicit `Find/Clear Calculation Context Row By Filter` grid-filter wiring (wired into Update/Find/Verify-Found/Delete, matching Bank/Account). Live-recon confirmed Bank-pattern shape: objectForm = Calc Context Code/Name/Start Date (mandatory)/End Date/Description/Comments; updateAttributes = Calc Context Code (read-only)/Name/Description/Comments (no Start/End Date there, matching Bank); no mandatory navigator dropdown beyond the universal GO bar. Fixed test code `AUTOTEST_CALCCTX` (confirmed free live). Live 5/5, robocop clean, dryrun 753/753, DB self-clean 0 residual (fresh oracledb connection), filter keyword confirmed fired (12x `Find Calculation Context Row By Filter` / 8x `Filter Grid Text Column By Value` via output.xml grep). No shared T1/T2 (`manage_object.resource`/`common.resource`) changes needed - reused every consolidated T2 keyword as-is. |

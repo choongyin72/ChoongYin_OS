@@ -2,58 +2,64 @@
 Documentation       EC IUD Test - Orifice Plate (Configuration > Assets > Stream_Objects > Orifice Plate, CO.0089).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_ORIFICE_PLATE).
 ...                 Layered: this test -> orifice_plate_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_OP_<timestamp> code per run.
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_ORIFICE_PLATE,
+...                 matching Bank/Berth's convention) rather than a generated unique code -
+...                 confirmed absent from OV_ORIFICE_PLATE before this was wired in (2026-08-23).
+...                 Every run must complete TC05 (delete) so the code is free for the next
+...                 run - EC never lets a DELETED code be reused, but this fixed code only
+...                 stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching Bank/Berth's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Stream_Objects/orifice_plate_page.resource
 
-Suite Setup         Set Up Orifice Plate Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    orifice_plate
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_ORIFICE_PLATE
+${OBJ_NAME}         AUTOTEST Orifice Plate
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/orifice_plate_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Orifice Plate UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test orifice_plate does not exist before inserting.
-    [Tags]    clean-state
-    Orifice Plate Row Should Not Exist    ${TEST_CODE}
-    Capture Step    orifice_plate_tc01_clean
-
-TC02 Insert New Orifice Plate
-    [Documentation]    Insert a new orifice_plate; confirm in list + DB (OV_ORIFICE_PLATE).
-    [Tags]    insert
-    Insert Orifice Plate Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Orifice Plate Row Should Exist    ${TEST_CODE}
-    Orifice Plate Should Exist In DB    ${TEST_CODE}
-    Capture Step    orifice_plate_tc02_inserted
-
-TC03 Update Orifice Plate
-    [Documentation]    Edit Name; confirm in list + DB ground truth.
-    [Tags]    update
-    Update Orifice Plate Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Orifice Plate Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Should Equal In View    OV_ORIFICE_PLATE    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Capture Step    orifice_plate_tc03_updated
-
-TC04 Delete Orifice Plate
-    [Documentation]    Delete via End Date = Start Date; confirm gone from list + DB.
-    [Tags]    delete    cleanup
-    Delete Orifice Plate    ${TEST_CODE}    ${END_DATE}
-    Orifice Plate Row Should Not Exist    ${TEST_CODE}
-    Orifice Plate Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    orifice_plate_tc04_deleted
-
-
-*** Keywords ***
-Set Up Orifice Plate Suite
-    [Documentation]    Generate a unique test code/name, then open the Orifice Plate screen.
-    Prepare IUD Object Data    AUTOTEST_OP_    Orifice Plate
+    Login To EC Application
     Open Orifice Plate Screen
+    Verify Orifice Plate Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Orifice Plate Data
+    Login To EC Application
+    Open Orifice Plate Screen
+    Insert Orifice Plate Record And Save
+    Verify Orifice Plate Record Exists
+    Logout From EC Application
+
+TC03 Update Orifice Plate Data
+    Login To EC Application
+    Open Orifice Plate Screen
+    Update Orifice Plate Record And Save
+    Verify Orifice Plate Record Updated
+    Logout From EC Application
+
+TC04 Find Orifice Plate Data
+    Login To EC Application
+    Open Orifice Plate Screen
+    Find Orifice Plate Record
+    Verify Orifice Plate Record Found
+    Logout From EC Application
+
+TC05 Delete Orifice Plate Data
+    Login To EC Application
+    Open Orifice Plate Screen
+    Delete Orifice Plate Record And Save
+    Verify Orifice Plate Record Removed
+    Logout From EC Application

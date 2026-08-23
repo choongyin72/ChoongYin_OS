@@ -163,6 +163,16 @@ LAYOUT similarity to Bank, regardless of prior automation history. Tracked in
 
 | Meter Run (Configuration > Assets > Stream_Objects, CO.0091) | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Bank family), single-page grid (20 rows). Screen-prefixed labels "Meter Run Code"/"Meter Run Name" confirmed via the proven py/meter_run_iud.py + the prior live-tested page object (only that driver, not a fresh guess). Rebuilt meter_run_page.resource/meter_run_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Meter Run Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_METER_RUN` (confirmed free live via a fresh oracledb query). Mandatory set is WIDER than Bank/Berth - besides Code/Name/Start Date, Type of Taps/Pipe Material/Location of Taps dropdowns and Pipe Diameter/Diameter Meas Temp/All Calibration Factor are also mandatory (per the existing driver, unchanged from before this batch). Live 5/5, dryrun 758/758, filter fired 15x (output.xml grep), DB self-clean confirmed 0 residual via a fresh oracledb connection. No shared T1/T2 file changes. |
 
+The Batch 7 round above is CLOSED and not reopened. This is a separate, later round: 5
+screens (Chemical Transport Tank/Deferment Group/Inventory Area/Meter Run/Orifice
+Plate) that already had SOME existing label-driven automation from an earlier approach
+(missing the properties-file-driven insert/update and explicit grid-filter wiring a
+fully-done screen has). Tracked in `tmp/batch8_shared_findings.md`.
+
+| Screen | Status |
+|---|---|
+| Orifice Plate (Configuration > Assets > Stream_Objects, CO.0089) | ✅ DONE (2026-08-23, Batch 8) — brought to full Bank-pattern shape: rebuilt `orifice_plate_page.resource`/`orifice_plate_iud.robot` to mirror `bank_page.resource`/`berth_page.resource` exactly — properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Orifice Plate Row By Filter` wired into Update/Find/Verify-Found/Delete, dedicated `ORIFICE_PLATE_EC_USER/PASS`, fixed test code `AUTOTEST_ORIFICE_PLATE` (confirmed free live), added TC04 Find (prior suite only had TC01-04 Verify/Insert/Update/Delete, no Find). Mandatory fields beyond Code/Name/Start Date: Material (dropdown), Diameter [mm], Measurement Temp [°R] — all confirmed mandatory via ec-ui-knowledge/screens/orifice_plate.md + proven py/orifice_plate_iud.py, included in the insert properties file. Live 5/5, dryrun 758/758, filter fired 13x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. This MODIFIES the screen's existing `docs/ec_screen_registry.md` / `docs/automation-scorecard.md` rows (from the 2026-07-26 generator-scaffolded build) — not a new row. |
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to

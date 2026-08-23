@@ -151,3 +151,5 @@ CHEMICAL_TRANSPORT_TANK_EC_USER = os.environ.get("CHEMICAL_TRANSPORT_TANK_EC_USE
 CHEMICAL_TRANSPORT_TANK_EC_PASS = os.environ.get("CHEMICAL_TRANSPORT_TANK_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 METER_RUN_EC_USER = os.environ.get("METER_RUN_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 METER_RUN_EC_PASS = os.environ.get("METER_RUN_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+ORIFICE_PLATE_EC_USER = os.environ.get("ORIFICE_PLATE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+ORIFICE_PLATE_EC_PASS = os.environ.get("ORIFICE_PLATE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
