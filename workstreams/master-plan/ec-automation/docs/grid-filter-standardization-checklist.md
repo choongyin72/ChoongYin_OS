@@ -150,6 +150,17 @@ not merged into the closed tables above.
 | Screen | Explicit filter wired? | Notes |
 |---|---|---|
 | Inventory Area | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Inventory Objects, CD.0115). Had a PARTIAL prior label-driven build (`Fill OV Field By Label`, 2026-07-26) missing properties-file-driven insert/update and explicit grid-filter wiring - upgraded to the full Bank/Berth pattern. Screen-prefixed labels confirmed live ("Inventory Area Code"/"Inventory Area Name") via the pre-existing page object + proven `py/inventory_area_iud.py`, re-confirmed via a fresh live Playwright run 2026-08-23. Only Inventory Area Code/Inventory Area Name/Start Date mandatory - no other fields on this screen's insert form. Fixed test code `AUTOTEST_INVA` (confirmed free live via fresh oracledb connection, both before and after the live RF run). Live 5/5, filter keyword confirmed fired 11x (`Find Inventory Area Row By Filter`) via output.xml grep. Dryrun 758/758. No shared T1/T2 (`manage_object.resource`/`common.resource`) edits - reused every consolidated T2 keyword as-is. DB self-clean confirmed 0 residual `AUTOTEST_INVA`/`AUTOTEST%` rows via a fresh oracledb connection. |
+## Batch 8 (2026-08-23) — new round beyond the closed Batch 7 pool
+
+Batch 7 above is CLOSED — not reopened here. This is a further round (owner-directed:
+sort by screen LAYOUT similarity to Bank, regardless of prior automation history),
+5 screens (Chemical transport tank/Deferment Group/Inventory Area/Meter Run/Orifice
+Plate), tracked in `tmp/batch8_shared_findings.md`. Each screen already had SOME
+existing automation from an earlier approach (label-driven `Fill OV Field By Label`
+from T2, but missing properties-file-driven insert + explicit grid-filter wiring) -
+this batch brings them the rest of the way, same pattern as Batch 7.
+
+| Meter Run | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Stream Objects, CO.0091). Screen-prefixed labels ("Meter Run Code"/"Meter Run Name") confirmed via the proven py/meter_run_iud.py + the prior live-tested page object. Mandatory: Meter Run Code/Meter Run Name/Start Date + Type of Taps/Pipe Material/Location of Taps dropdowns + Pipe Diameter (temp uncorrected) [mm]/Diameter Meas Temp [°R]/All Calibration Factor (all confirmed mandatory live via the existing driver - Save is rejected without them, unlike Bank/Berth's Code/Name/Start-Date-only set). Fixed test code `AUTOTEST_METER_RUN` (confirmed free live). Wired in via this batch (prior page object already had label-driven fields but no properties-file-driven insert/update or explicit filter). Live 5/5, filter keyword confirmed fired 15x via output.xml grep for `Find Meter Run Row By Filter`. Dryrun 758/758. No shared T1/T2 edits. DB self-clean confirmed 0 residual `AUTOTEST_METER_RUN` rows via a fresh oracledb connection. Delete End Date field id `tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input` confirmed live via read-only recon on an existing row (never saved). |
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 

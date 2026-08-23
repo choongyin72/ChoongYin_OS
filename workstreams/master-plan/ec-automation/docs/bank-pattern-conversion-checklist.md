@@ -151,6 +151,17 @@ to Bank, regardless of prior automation history. Tracked in `tmp/batch8_shared_f
 | Screen | Status | Notes |
 |---|---|---|
 | Inventory Area | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Inventory Objects, CD.0115), single-page grid. Screen-prefixed labels "Inventory Area Code"/"Inventory Area Name" confirmed via the pre-existing page object + proven py/inventory_area_iud.py (only Code/Name/Start Date mandatory, no other fields), re-confirmed via a fresh live Playwright run 2026-08-23. Rebuilt inventory_area_page.resource/inventory_area_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert ("Insert Object From Properties And Verify Code"), update, form/grid verify, explicit `Find/Clear Inventory Area Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_INVA` (confirmed free live via fresh oracledb connection, before and after the live RF run). Live 5/5, dryrun 758/758, filter fired 11x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. |
+## Batch 8 (2026-08-23) — new round beyond the closed Batch 7 pool above
+
+Batch 7 above is CLOSED — not reopened here. This is a further round: 5 screens
+(Chemical transport tank/Deferment Group/Inventory Area/Meter Run/Orifice Plate)
+that already had SOME existing label-driven automation from an earlier approach
+(missing the properties-file-driven insert/update and explicit grid-filter wiring
+a fully-done screen has). Owner direction unchanged from Batch 7: sort by screen
+LAYOUT similarity to Bank, regardless of prior automation history. Tracked in
+`tmp/batch8_shared_findings.md`.
+
+| Meter Run (Configuration > Assets > Stream_Objects, CO.0091) | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Bank family), single-page grid (20 rows). Screen-prefixed labels "Meter Run Code"/"Meter Run Name" confirmed via the proven py/meter_run_iud.py + the prior live-tested page object (only that driver, not a fresh guess). Rebuilt meter_run_page.resource/meter_run_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Meter Run Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_METER_RUN` (confirmed free live via a fresh oracledb query). Mandatory set is WIDER than Bank/Berth - besides Code/Name/Start Date, Type of Taps/Pipe Material/Location of Taps dropdowns and Pipe Diameter/Diameter Meas Temp/All Calibration Factor are also mandatory (per the existing driver, unchanged from before this batch). Live 5/5, dryrun 758/758, filter fired 15x (output.xml grep), DB self-clean confirmed 0 residual via a fresh oracledb connection. No shared T1/T2 file changes. |
 
 ## How to update this doc
 
