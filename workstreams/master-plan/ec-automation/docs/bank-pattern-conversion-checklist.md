@@ -137,6 +137,15 @@ screen exactly once, content unchanged._
 | Orifice Plate (Configuration > Assets > Stream_Objects, CO.0089) | ✅ DONE (2026-08-23, Batch 8) — brought to full Bank-pattern shape: rebuilt `orifice_plate_page.resource`/`orifice_plate_iud.robot` to mirror `bank_page.resource`/`berth_page.resource` exactly — properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Orifice Plate Row By Filter` wired into Update/Find/Verify-Found/Delete, dedicated `ORIFICE_PLATE_EC_USER/PASS`, fixed test code `AUTOTEST_ORIFICE_PLATE` (confirmed free live), added TC04 Find (prior suite only had TC01-04 Verify/Insert/Update/Delete, no Find). Mandatory fields beyond Code/Name/Start Date: Material (dropdown), Diameter [mm], Measurement Temp [°R] — all confirmed mandatory via ec-ui-knowledge/screens/orifice_plate.md + proven py/orifice_plate_iud.py, included in the insert properties file. Live 5/5, dryrun 758/758, filter fired 13x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. This MODIFIES the screen's existing `docs/ec_screen_registry.md` / `docs/automation-scorecard.md` rows (from the 2026-07-26 generator-scaffolded build) — not a new row. |
 | Chemical Transport Tank | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV, single-page grid (Chemical Objects). Screen-prefixed labels "Transport Tank Code"/"Transport Tank Name" confirmed via the already-proven Playwright driver py/chemical_transport_tank_iud.py (only Code/Name/Start Date mandatory, dropdowns optional). Rebuilt chemical_transport_tank_page.resource/chemical_transport_tank_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Chemical Transport Tank Row By Filter`. Fixed test code `AUTOTEST_CTT` (confirmed free live via fresh oracledb connection). Live 5/5, dryrun 758/758, filter fired 7x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. |
 
+## Batch 9 additions (pending) — Port, Process Train, Report Area, Reservoir Block, Reservoir Formation
+
+_Section header pre-created on master before fan-out (reviewer's Batch-8 NICE-TO-HAVE
+suggestion), so each screen's PR appends only its own ROW here — no per-PR section
+header, no post-merge consolidation pass needed._
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to
