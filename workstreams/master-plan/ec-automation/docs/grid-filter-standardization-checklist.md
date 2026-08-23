@@ -154,6 +154,7 @@ only its own ROW here — no per-PR section header._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Data Extract Set | ✅ DONE (2026-08-23) | `Find/Clear Data Extract Set Row By Filter` (delegating to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `data_extract_set_page.resource`, matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired 13x via output.xml grep on the live 5/5 run. |
 
 ## How to update this doc
 

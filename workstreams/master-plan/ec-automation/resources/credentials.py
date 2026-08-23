@@ -165,3 +165,6 @@ REPORT_AREA_EC_PASS = os.environ.get("REPORT_AREA_EC_PASS", os.environ.get("EC_P
 
 PROCESS_TRAIN_EC_USER = os.environ.get("PROCESS_TRAIN_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PROCESS_TRAIN_EC_PASS = os.environ.get("PROCESS_TRAIN_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+DATA_EXTRACT_SET_EC_USER = os.environ.get("DATA_EXTRACT_SET_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+DATA_EXTRACT_SET_EC_PASS = os.environ.get("DATA_EXTRACT_SET_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
