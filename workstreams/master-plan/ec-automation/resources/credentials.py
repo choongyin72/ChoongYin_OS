@@ -97,3 +97,6 @@ LICENCE_EC_PASS = os.environ.get("LICENCE_EC_PASS", os.environ.get("EC_PASS", "s
 
 VENDOR_EC_USER = os.environ.get("VENDOR_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 VENDOR_EC_PASS = os.environ.get("VENDOR_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+STATE_LEASE_EC_USER = os.environ.get("STATE_LEASE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+STATE_LEASE_EC_PASS = os.environ.get("STATE_LEASE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
