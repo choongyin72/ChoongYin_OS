@@ -154,6 +154,7 @@ only its own ROW here — no per-PR section header._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Stream Item Category | ✅ DONE (2026-08-23) | `Find Stream Item Category Row By Filter`/`Clear Stream Item Category Row Filter` added, wired into Update/Find/Verify-Found/Delete (NOT Verify-Removed/Does-Not-Exist), matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired live via output.xml grep (filter 24x, clear 20x). |
 
 ## How to update this doc
 
