@@ -63,7 +63,7 @@ label) found:
 | Royalty Depositor | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | #448 |
 | Royalty Owner | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | #447 |
 | Unit Agreement | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | #446 |
-| Calendar Collection | Date Objects | ✅ DONE (2026-08-23, Batch 6) | #TBD |
+| Calendar Collection | Date Objects | ✅ DONE (2026-08-23, Batch 6) | #449 |
 | Calendar | Date Objects | ⬜ NOT YET DONE | - |
 | Account Mapping | Financial Objects | ⬜ NOT YET DONE | - |
 
