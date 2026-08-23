@@ -67,3 +67,6 @@ ACCOUNT_EC_PASS = os.environ.get("ACCOUNT_EC_PASS", os.environ.get("EC_PASS", "s
 
 COUNTRY_EC_USER = os.environ.get("COUNTRY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 COUNTRY_EC_PASS = os.environ.get("COUNTRY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+COUNTY_EC_USER = os.environ.get("COUNTY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+COUNTY_EC_PASS = os.environ.get("COUNTY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
