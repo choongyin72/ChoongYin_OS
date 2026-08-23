@@ -24,7 +24,20 @@ session start. It evolves only via PR (append-only edits — see §Shared-file d
 - **Stacking:** stacked/parallel PRs are allowed (don't idle waiting for a merge). If a PR builds on
   another, put **`depends on #N — merge after`** in the title/body; the merger must respect that order.
 - **PR title prefix:** `feat:` / `fix:` / `recon:` / `chore:` / `review:`.
-- **The worker never merges and never commits to `master` directly.**
+- **The worker never merges and never commits to `master` directly.** This is the STANDING rule —
+  the default for all work, always, unless the owner grants an explicit, batch-scoped exception for
+  a specific, named workflow (see next line).
+- **Batch-scoped exception (owner-decided 2026-08-23):** during the Bank-pattern conversion project
+  (Batches 2-6, PRs #428-451), the owner explicitly authorized the worker to self-merge each batch's
+  PRs directly to `master` ("proceed until no more items for next batch"), with these conditions:
+  every subagent's own PR claim independently re-verified via the GitHub API (never trusted at face
+  value), a full-tree dryrun + live regression + fresh-connection DB self-clean run after merging
+  each batch's PRs together, before pushing. **This was a one-time grant for that specific workflow,
+  not a permanent policy change** — the standing rule above still applies to all other work. Any
+  future batch-conversion (or similarly-shaped) workflow needs its own fresh, explicit authorization
+  from the owner before the worker may self-merge again; it does not carry over automatically just
+  because a similar pattern was granted before. See `docs/session-memory.md`'s 2026-08-23 entry and
+  PR #452's reviewer comment for the full context that prompted this note.
 
 ## Worker guarantees (every PR)
 1. **Standard PR body** (see template below) — same shape every time, so review is fast to parse.
