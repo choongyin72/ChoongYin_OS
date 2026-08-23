@@ -85,3 +85,6 @@ FIELD_GROUP_EC_PASS = os.environ.get("FIELD_GROUP_EC_PASS", os.environ.get("EC_P
 
 CUSTOMER_EC_USER = os.environ.get("CUSTOMER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CUSTOMER_EC_PASS = os.environ.get("CUSTOMER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+OPERATOR_LEASE_EC_USER = os.environ.get("OPERATOR_LEASE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+OPERATOR_LEASE_EC_PASS = os.environ.get("OPERATOR_LEASE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
