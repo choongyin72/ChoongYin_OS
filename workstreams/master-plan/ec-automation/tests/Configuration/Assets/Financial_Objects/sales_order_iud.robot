@@ -1,58 +1,64 @@
 *** Settings ***
-Documentation       EC IUD Test - Sales Order (Configuration > Assets > Financial Objects > Sales Order).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_PRODUCT_SALES_ORDER).
-...                 NEVER touch existing data. A unique AUTOTEST_SO_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+Documentation       EC IUD Test - Sales Order (Configuration > Assets > Financial Objects >
+...                 Sales Order). Manage-Object (OV) screen. DELETE = End Date = Start Date
+...                 (true delete in OV_PRODUCT_SALES_ORDER).
+...                 Layered: this test -> sales_order_page (T3) -> manage_object (T2) + common
+...                 (T1). NEVER touch existing data. Uses a FIXED test code (AUTOTEST_SO) rather
+...                 than a generated unique code - confirmed absent from OV_PRODUCT_SALES_ORDER
+...                 before this was wired in. Every run must complete TC05 (delete) so the code
+...                 is free for the next run - EC never lets a DELETED code be reused, but this
+...                 fixed code only stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - not 5 separate browser launches. Converted from the older
+...                 hardcoded-field-id pattern to the label-driven, properties-file-driven "Bank
+...                 pattern" (Batch 5, 2026-08-23).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Financial_Objects/sales_order_page.resource
 
-Suite Setup         Set Up Sales Order Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    sales-order
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_SO
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test sales order does not exist before inserting.
-    [Tags]    clean-state
-    Sales Order Row Should Not Exist    ${TEST_CODE}
-    Capture Step    sales_order_tc01_clean
-
-TC02 Insert New Sales Order
-    [Documentation]    Insert a new sales order and confirm it appears in the list.
-    [Tags]    insert
-    Insert Sales Order Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Sales Order Row Should Exist    ${TEST_CODE}
-    Sales Order Should Exist In DB    ${TEST_CODE}
-    Capture Step    sales_order_tc02_inserted
-
-TC03 Update Sales Order Name
-    [Documentation]    Edit the sales order name and confirm the list reflects the change.
-    [Tags]    update
-    Update Sales Order Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Sales Order Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    sales_order_tc03_updated
-
-TC04 Delete Sales Order
-    [Documentation]    Delete via End Date = Start Date and confirm the sales order is gone.
-    [Tags]    delete    cleanup
-    Delete Sales Order    ${TEST_CODE}    ${END_DATE}
-    Sales Order Row Should Not Exist    ${TEST_CODE}
-    Sales Order Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    sales_order_tc04_deleted
-
-
-*** Keywords ***
-Set Up Sales Order Suite
-    [Documentation]    Generate a unique test code/name, then open the Sales Order screen.
-    Prepare IUD Object Data    AUTOTEST_SO_    Sales Order
+    Login To EC Application
     Open Sales Order Screen
+    Verify Sales Order Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Sales Order Data
+    Login To EC Application
+    Open Sales Order Screen
+    Insert Sales Order Record And Save
+    Verify Sales Order Record Exists
+    Logout From EC Application
+
+TC03 Update Sales Order Data
+    Login To EC Application
+    Open Sales Order Screen
+    Update Sales Order Record And Save
+    Verify Sales Order Record Updated
+    Logout From EC Application
+
+TC04 Find Sales Order Data
+    Login To EC Application
+    Open Sales Order Screen
+    Find Sales Order Record
+    Verify Sales Order Record Found
+    Logout From EC Application
+
+TC05 Delete Sales Order Data
+    Login To EC Application
+    Open Sales Order Screen
+    Delete Sales Order Record And Save
+    Verify Sales Order Record Removed
+    Logout From EC Application
