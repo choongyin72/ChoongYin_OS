@@ -109,3 +109,6 @@ COST_OBJECT_MAPPING_EC_PASS = os.environ.get("COST_OBJECT_MAPPING_EC_PASS", os.e
 
 DOA_CREDIT_LIMIT_EC_USER = os.environ.get("DOA_CREDIT_LIMIT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 DOA_CREDIT_LIMIT_EC_PASS = os.environ.get("DOA_CREDIT_LIMIT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+ROYALTY_OWNER_EC_USER = os.environ.get("ROYALTY_OWNER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+ROYALTY_OWNER_EC_PASS = os.environ.get("ROYALTY_OWNER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

@@ -61,7 +61,7 @@ label) found:
 | Sales Order | Financial Objects | ⬜ NOT YET DONE | - |
 | Product Group | Royalty Objects | ⬜ NOT YET DONE | - |
 | Royalty Depositor | Royalty Objects | ⬜ NOT YET DONE | - |
-| Royalty Owner | Royalty Objects | ⬜ NOT YET DONE | - |
+| Royalty Owner | Royalty Objects | ✅ DONE (2026-08-23, Batch 5) | PR-pending |
 | Unit Agreement | Royalty Objects | ⬜ NOT YET DONE | - |
 | Calendar Collection | Date Objects | ⬜ NOT YET DONE | - |
 | Calendar | Date Objects | ⬜ NOT YET DONE | - |
