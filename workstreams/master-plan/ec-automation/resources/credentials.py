@@ -178,3 +178,6 @@ TRAILER_EC_USER = os.environ.get("TRAILER_EC_USER", os.environ.get("EC_USER", "s
 TRAILER_EC_PASS = os.environ.get("TRAILER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 CARRIER_EC_USER = os.environ.get("CARRIER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CARRIER_EC_PASS = os.environ.get("CARRIER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+BANK_ACCOUNT_EC_USER = os.environ.get("BANK_ACCOUNT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+BANK_ACCOUNT_EC_PASS = os.environ.get("BANK_ACCOUNT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

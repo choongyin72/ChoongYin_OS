@@ -1,58 +1,64 @@
 *** Settings ***
-Documentation       EC IUD Test - Bank Account (Configuration > Assets > Financial Objects > Bank Account).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_BANK_ACCOUNT).
-...                 NEVER touch existing data. A unique AUTOTEST_BACC_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+Documentation       EC IUD Test - Bank Account (Configuration > Assets > Financial Objects >
+...                 Bank Account). Manage-Object (OV) screen. DELETE = End Date = Start Date
+...                 (true delete in OV_BANK_ACCOUNT). Layered: this test -> bank_account_page
+...                 (T3) -> manage_object (T2) + common (T1).
+...                 Rebuilt 2026-08-23 (Batch 11) from the OLDER hardcoded-field-id/generated-
+...                 timestamp-code/single-Suite-Setup-login pattern to Bank/Berth's label-driven,
+...                 properties-file-driven, T2-consolidated, per-TC-login pattern (see
+...                 `tmp/batch11_shared_findings.md`). Uses a FIXED test code (AUTOTEST_BACC,
+...                 confirmed absent from OV_BANK_ACCOUNT via a fresh oracledb query before this
+...                 build) rather than a generated unique code - every run must complete TC05
+...                 (delete) so the code is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - matching Bank's/Berth's process-flow report convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Financial_Objects/bank_account_page.resource
 
-Suite Setup         Set Up Bank Account Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown        Ensure Logged Out From EC Application
 
 Test Tags           iud    bank-account
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
+${TEST_CODE}        AUTOTEST_BACC
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test bank account does not exist before inserting.
-    [Tags]    clean-state
-    Bank Account Row Should Not Exist    ${TEST_CODE}
-    Capture Step    bank_account_tc01_clean
-
-TC02 Insert New Bank Account
-    [Documentation]    Insert a new bank account and confirm it appears in the list.
-    [Tags]    insert
-    Insert Bank Account Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Bank Account Row Should Exist    ${TEST_CODE}
-    Bank Account Should Exist In DB    ${TEST_CODE}
-    Capture Step    bank_account_tc02_inserted
-
-TC03 Update Bank Account Name
-    [Documentation]    Edit the bank account name and confirm the list reflects the change.
-    [Tags]    update
-    Update Bank Account Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Bank Account Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    bank_account_tc03_updated
-
-TC04 Delete Bank Account
-    [Documentation]    Delete via End Date = Start Date and confirm the bank account is gone.
-    [Tags]    delete    cleanup
-    Delete Bank Account    ${TEST_CODE}    ${END_DATE}
-    Bank Account Row Should Not Exist    ${TEST_CODE}
-    Bank Account Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    bank_account_tc04_deleted
-
-
-*** Keywords ***
-Set Up Bank Account Suite
-    [Documentation]    Generate a unique test code/name, then open the Bank Account screen.
-    Prepare IUD Object Data    AUTOTEST_BACC_    Bank Account
+    Login To EC Application
     Open Bank Account Screen
+    Verify Bank Account Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Bank Account Data
+    Login To EC Application
+    Open Bank Account Screen
+    Insert Bank Account Record And Save
+    Verify Bank Account Record Exists
+    Logout From EC Application
+
+TC03 Update Bank Account Data
+    Login To EC Application
+    Open Bank Account Screen
+    Update Bank Account Record And Save
+    Verify Bank Account Record Updated
+    Logout From EC Application
+
+TC04 Find Bank Account Data
+    Login To EC Application
+    Open Bank Account Screen
+    Find Bank Account Record
+    Verify Bank Account Record Found
+    Logout From EC Application
+
+TC05 Delete Bank Account Data
+    Login To EC Application
+    Open Bank Account Screen
+    Delete Bank Account Record And Save
+    Verify Bank Account Record Removed
+    Logout From EC Application
