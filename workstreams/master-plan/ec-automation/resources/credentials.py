@@ -170,3 +170,5 @@ SPLIT_ITEM_OTHER_EC_USER = os.environ.get("SPLIT_ITEM_OTHER_EC_USER", os.environ
 SPLIT_ITEM_OTHER_EC_PASS = os.environ.get("SPLIT_ITEM_OTHER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 STORAGE_FLOW_EC_USER = os.environ.get("STORAGE_FLOW_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 STORAGE_FLOW_EC_PASS = os.environ.get("STORAGE_FLOW_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+STREAM_ITEM_CATEGORY_EC_USER = os.environ.get("STREAM_ITEM_CATEGORY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+STREAM_ITEM_CATEGORY_EC_PASS = os.environ.get("STREAM_ITEM_CATEGORY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
