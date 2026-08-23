@@ -138,6 +138,19 @@ Screens land here as they're completed, appended, not merged into the closed tab
 |---|---|---|
 | Blend | ✅ DONE (2026-08-23, batch-7) | Manage-object OV (Hydrocarbon Objects), small grid (3 rows). Had a PARTIAL prior label-driven build (`Fill OV Field By Label`, 2026-07-26) missing properties-file-driven insert/update and explicit grid-filter wiring - upgraded to the full Bank pattern. Screen-prefixed labels confirmed live ("Blend Code"/"Blend Name", like State's own precedent) - NOT the generic "Code"/"Name" Bank/Customer use, so `code_label=Blend Code` is threaded through Insert/Update/Find. Only Blend Code/Blend Name/Start Date mandatory (MandatoryCellStyle confirmed via a fresh per-row class dump); Master System Code/Name, Sort Order, End Date left optional/out of scope. Description is optional but exercised (never populated on any real production Blend row - 0 non-null DESCRIPTION rows confirmed live). Wired in from the start. Live 5/5, filter keyword confirmed fired 50 hits total (Find+Clear across TC02-05) via output.xml grep. DB self-clean confirmed 0 residual `AUTOTEST_BLEND` rows via a fresh oracledb connection. |
 
+## Batch 8 additions (beyond the closed 37/37 pool + Batch 7, 2026-08-23)
+
+The 37/37 pool and Batch 7 above are closed and not reopened. Batch 8 is a further
+round, same owner direction (sort by LAYOUT similarity to Bank, regardless of prior
+automation history), covering 5 more screens (Chemical transport tank/Deferment
+Group/Inventory Area/Meter Run/Orifice Plate), tracked in
+`tmp/batch8_shared_findings.md`. Screens land here as they're completed, appended,
+not merged into the closed tables above.
+
+| Screen | Explicit filter wired? | Notes |
+|---|---|---|
+| Inventory Area | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Inventory Objects, CD.0115). Had a PARTIAL prior label-driven build (`Fill OV Field By Label`, 2026-07-26) missing properties-file-driven insert/update and explicit grid-filter wiring - upgraded to the full Bank/Berth pattern. Screen-prefixed labels confirmed live ("Inventory Area Code"/"Inventory Area Name") via the pre-existing page object + proven `py/inventory_area_iud.py`, re-confirmed via a fresh live Playwright run 2026-08-23. Only Inventory Area Code/Inventory Area Name/Start Date mandatory - no other fields on this screen's insert form. Fixed test code `AUTOTEST_INVA` (confirmed free live via fresh oracledb connection, both before and after the live RF run). Live 5/5, filter keyword confirmed fired 11x (`Find Inventory Area Row By Filter`) via output.xml grep. Dryrun 758/758. No shared T1/T2 (`manage_object.resource`/`common.resource`) edits - reused every consolidated T2 keyword as-is. DB self-clean confirmed 0 residual `AUTOTEST_INVA`/`AUTOTEST%` rows via a fresh oracledb connection. |
+
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 
 The ~80 other OV/OV-GM screens listed in `docs/ec_screen_registry.md` have not been

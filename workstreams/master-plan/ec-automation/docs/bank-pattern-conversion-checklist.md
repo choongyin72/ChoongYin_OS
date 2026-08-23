@@ -139,6 +139,19 @@ tracking-table row, to avoid reopening the closed table's shape):
 |---|---|
 | Calculation Group Context (Configuration > Assets > Calculation_Objects, CO.0245) | ✅ DONE (2026-08-23) — brought to full Bank-pattern shape: `Insert/Update Object From Properties`, `Verify Object Insert Exists/Form Record/Found/Removed/Does Not Exist`, explicit `Find/Clear Calculation Group Context Row By Filter`, dedicated `CALCULATION_GROUP_CONTEXT_EC_USER/PASS`, fixed test code `AUTOTEST_CGC_BANK`. Live 5/5 RF, robocop parity with `bank_iud.robot`'s baseline, dryrun 753/753, DB self-clean (fresh connection) 0 residual, filter fired 23x per output.xml. See `docs/ec_screen_registry.md` and `docs/grid-filter-standardization-checklist.md` for full detail. |
 
+## Batch 8 (2026-08-23) — new round beyond the closed 23-screen pool + Batch 7 above
+
+The "Batch tracking" table above and Batch 7 are CLOSED — not reopened here. This is a
+further, later round: 5 screens (Chemical transport tank, Deferment Group, Inventory Area,
+Meter Run, Orifice Plate) that already had SOME existing label-driven automation from an
+earlier approach (missing the properties-file-driven insert/update and explicit grid-filter
+wiring a fully-done screen has). Owner direction unchanged: sort by screen LAYOUT similarity
+to Bank, regardless of prior automation history. Tracked in `tmp/batch8_shared_findings.md`.
+
+| Screen | Status | Notes |
+|---|---|---|
+| Inventory Area | ✅ DONE (2026-08-23, Batch 8) | Manage-object OV (Inventory Objects, CD.0115), single-page grid. Screen-prefixed labels "Inventory Area Code"/"Inventory Area Name" confirmed via the pre-existing page object + proven py/inventory_area_iud.py (only Code/Name/Start Date mandatory, no other fields), re-confirmed via a fresh live Playwright run 2026-08-23. Rebuilt inventory_area_page.resource/inventory_area_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert ("Insert Object From Properties And Verify Code"), update, form/grid verify, explicit `Find/Clear Inventory Area Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_INVA` (confirmed free live via fresh oracledb connection, before and after the live RF run). Live 5/5, dryrun 758/758, filter fired 11x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. |
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to
