@@ -127,3 +127,6 @@ ROYALTY_DEPOSITOR_EC_PASS = os.environ.get("ROYALTY_DEPOSITOR_EC_PASS", os.envir
 
 CALENDAR_COLLECTION_EC_USER = os.environ.get("CALENDAR_COLLECTION_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CALENDAR_COLLECTION_EC_PASS = os.environ.get("CALENDAR_COLLECTION_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+ACCOUNT_MAPPING_EC_USER = os.environ.get("ACCOUNT_MAPPING_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+ACCOUNT_MAPPING_EC_PASS = os.environ.get("ACCOUNT_MAPPING_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
