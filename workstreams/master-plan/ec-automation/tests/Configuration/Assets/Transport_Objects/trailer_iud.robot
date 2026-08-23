@@ -1,58 +1,65 @@
 *** Settings ***
 Documentation       EC IUD Test - Trailer (Configuration > Assets > Transport_Objects).
-...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
-...                 DELETE = End Date = Start Date (true delete in OV_TRAILER). NEVER touch existing data;
-...                 a unique AUTOTEST_TR_<timestamp> code is generated per run.
+...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_TRAILER).
+...                 Layered: this test -> trailer_page (T3) -> manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_TRAILER,
+...                 matching Bank/Berth's convention) rather than a generated unique code -
+...                 confirmed absent from OV_TRAILER before this was wired in (2026-08-23).
+...                 Every run must complete TC05 (delete) so the code is free for the next
+...                 run - EC never lets a DELETED code be reused, but this fixed code only
+...                 stays reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup, matching Bank/Berth's convention (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Transport_Objects/trailer_page.resource
 
-Suite Setup         Set Up Trailer Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    trailer
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_TRAILER
+${OBJ_NAME}         AUTOTEST Trailer
 ${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/trailer_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Trailer UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Trailer Row Should Not Exist    ${TEST_CODE}
-    Capture Step    trailer_tc01_clean
-
-TC02 Insert New Trailer
-    [Documentation]    Insert under the navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Trailer Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Trailer Row Should Exist    ${TEST_CODE}
-    Trailer Should Exist In DB    ${TEST_CODE}
-    Capture Step    trailer_tc02_inserted
-
-TC03 Update Trailer Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Trailer Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Trailer Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    trailer_tc03_updated
-
-TC04 Delete Trailer
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Trailer    ${TEST_CODE}    ${END_DATE}
-    Trailer Row Should Not Exist    ${TEST_CODE}
-    Trailer Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    trailer_tc04_deleted
-
-
-*** Keywords ***
-Set Up Trailer Suite
-    [Documentation]    Generate a unique test code/name, open the screen, GO (date-only navigator).
-    Prepare IUD Object Data    AUTOTEST_TR_    Trailer
+    Login To EC Application
     Open Trailer Screen
+    Verify Trailer Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Trailer Data
+    Login To EC Application
+    Open Trailer Screen
+    Insert Trailer Record And Save
+    Verify Trailer Record Exists
+    Logout From EC Application
+
+TC03 Update Trailer Data
+    Login To EC Application
+    Open Trailer Screen
+    Update Trailer Record And Save
+    Verify Trailer Record Updated
+    Logout From EC Application
+
+TC04 Find Trailer Data
+    Login To EC Application
+    Open Trailer Screen
+    Find Trailer Record
+    Verify Trailer Record Found
+    Logout From EC Application
+
+TC05 Delete Trailer Data
+    Login To EC Application
+    Open Trailer Screen
+    Delete Trailer Record And Save
+    Verify Trailer Record Removed
+    Logout From EC Application
