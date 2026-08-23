@@ -141,6 +141,16 @@ if PR #464 merges first, the reviewer/merge step should dedupe to a single heade
 Batch-8 lesson (keep one header, keep every row, verify by-key row set is unchanged)._
 
 | Reservoir Formation | ✅ DONE (2026-08-23, Batch 9) | Manage-object OV (`OV_RESV_FORMATION`, Well_and_Reservoir_Objects, CO.0135). Already partially on the label-driven pattern (`Fill OV Field By Label`) from an earlier build (2026-07-26) - this round added the missing properties-file-driven Insert/Update (`testdata/reservoir_formation_*.properties`) and explicit `Find/Clear Reservoir Formation Row By Filter` grid-filter wiring (wired into Update/Find/Verify-Found/Delete, matching Bank/Berth). Field labels are screen-prefixed ("Reservoir Formation Code"/"Reservoir Formation Name") - confirmed via ec-ui-knowledge/screens/reservoir_formation.md + the already-proven Playwright driver `py/reservoir_formation_iud.py`. Only Reservoir Formation Code/Reservoir Formation Name/Start Date mandatory. Fixed test code `AUTOTEST_RESVF` (confirmed free via a fresh oracledb connection before AND after the live run). Live 5/5, dryrun 762/762, DB self-clean 0 residual (fresh oracledb connection), filter keyword confirmed fired 7x (`Find Reservoir Formation Row By Filter` via output.xml grep). No shared T1/T2 (`manage_object.resource`/`common.resource`) changes needed - reused every consolidated T2 keyword as-is. |
+## Batch 9 additions (2026-08-23)
+
+_The tmp/batch9_shared_findings.md coordination doc referenced a pre-created "Batch 9
+additions (pending)" header from PR #464, but a fresh `git fetch origin master` at build
+time showed master's latest commit was still the Batch 8 consolidation (`15679381`) - PR
+#464 had not actually landed. Following the real Batch 7/8 precedent (each parallel PR
+added its own per-batch header, later consolidated by the reviewer), this agent adds its
+own Batch 9 header rather than blocking on a header that doesn't exist yet._
+
+| Report Area | ✅ DONE (2026-08-23, Batch 9) | Manage-object OV (Reporting > Report Area, RP.0017, top-level Reporting menu). Had a PARTIAL prior label-driven build (`Fill OV Field By Label`) missing properties-file-driven insert/update and explicit grid-filter wiring - upgraded to the full Bank/Berth pattern. Screen-prefixed labels confirmed via the pre-existing page object + proven `py/report_area_iud.py` ("Report Area Code"/"Report Area Name"). Date label is **"Start date"** (lowercase "date") - confirmed live via a 30s locator-timeout reproduction with "Start Date" (capital D), then fixed. Only Report Area Code/Report Area Name/Start date mandatory - simplest OV, no Description/dropdowns. Fixed test code `AUTOTEST_RPTA` (confirmed free via fresh oracledb connection, before and after the live run). Live 5/5, filter keyword confirmed fired 28x (`Find Object Row By Filter`) via output.xml grep. Dryrun 762/762. No shared T1/T2 (`manage_object.resource`/`common.resource`) edits - reused every consolidated T2 keyword as-is. DB self-clean confirmed 0 residual `AUTOTEST_RPTA`/`AUTOTEST%` rows via a fresh oracledb connection. |
 
 ## Screens NOT yet eligible (still on the older pre-Bank-pattern shape)
 

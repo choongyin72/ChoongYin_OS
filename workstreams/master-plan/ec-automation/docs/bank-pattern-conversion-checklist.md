@@ -157,6 +157,16 @@ if PR #464 merges first, the reviewer/merge step should dedupe to a single heade
 Batch-8 lesson (keep one header, keep every row, verify by-key row set is unchanged)._
 
 | Reservoir Formation | ✅ DONE (2026-08-23, Batch 9) — brought to full Bank-pattern shape: rebuilt `reservoir_formation_page.resource`/`reservoir_formation_iud.robot` to mirror `bank_page.resource`/`berth_page.resource` exactly — properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Reservoir Formation Row By Filter` wired into Update/Find/Verify-Found/Delete, dedicated `RESERVOIR_FORMATION_EC_USER/PASS`, fixed test code `AUTOTEST_RESVF` (confirmed free live via fresh oracledb connection, before and after). Mandatory fields: Reservoir Formation Code/Reservoir Formation Name/Start Date only (no other mandatory fields, confirmed via ec-ui-knowledge/screens/reservoir_formation.md + proven py/reservoir_formation_iud.py). Live 5/5, dryrun 762/762, filter fired 7x (output.xml grep), DB self-clean confirmed via fresh oracledb connection. No shared T1/T2 file changes. This MODIFIES the screen's existing `docs/ec_screen_registry.md` / `docs/automation-scorecard.md` rows (from the 2026-07-26 generator-scaffolded build) — not a new row. |
+## Batch 9 additions (2026-08-23)
+
+_The tmp/batch9_shared_findings.md coordination doc referenced a pre-created "Batch 9
+additions (pending)" header from PR #464, but a fresh `git fetch origin master` at build
+time showed master's latest commit was still the Batch 8 consolidation (`15679381`) - PR
+#464 had not actually landed. Following the real Batch 7/8 precedent (each parallel PR
+added its own per-batch header, later consolidated by the reviewer), this agent adds its
+own Batch 9 header rather than blocking on a header that doesn't exist yet._
+
+| Report Area | ✅ DONE (2026-08-23, Batch 9) | Manage-object OV (Reporting > Report Area, RP.0017, top-level Reporting menu not Assets), simplest OV (no Description, no dropdowns). Screen-prefixed labels "Report Area Code"/"Report Area Name" confirmed via the pre-existing page object + proven py/report_area_iud.py. Date label is **"Start date"** (lowercase "date") - confirmed live: "Start Date" (capital D) fails the exact-match label lookup with a 30s timeout. Rebuilt report_area_page.resource/report_area_iud.robot to mirror bank_page.resource/berth_page.resource exactly: properties-file-driven insert (`Insert Object From Properties And Verify Code`), update, form/grid verify, explicit `Find/Clear Report Area Row By Filter` wired into Update/Find/Verify-Found/Delete. Fixed test code `AUTOTEST_RPTA` (confirmed free via fresh oracledb connection before and after the live run). Live 5/5, dryrun 762/762, filter fired 28x (output.xml grep), DB self-clean confirmed 0 residual `AUTOTEST_RPTA` rows via fresh oracledb connection. No shared T1/T2 file changes. |
 
 ## How to update this doc
 
