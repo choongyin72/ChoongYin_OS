@@ -200,3 +200,6 @@ TARGET_MAPPING_CONFIGURATION_EC_PASS = os.environ.get(
 
 DISPOSITION_TYPE_EC_USER = os.environ.get("DISPOSITION_TYPE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 DISPOSITION_TYPE_EC_PASS = os.environ.get("DISPOSITION_TYPE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PAYMENT_TERM_EC_USER = os.environ.get("PAYMENT_TERM_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PAYMENT_TERM_EC_PASS = os.environ.get("PAYMENT_TERM_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
