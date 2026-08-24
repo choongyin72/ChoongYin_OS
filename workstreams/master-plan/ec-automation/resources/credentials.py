@@ -189,3 +189,5 @@ PRODUCT_EC_USER = os.environ.get("PRODUCT_EC_USER", os.environ.get("EC_USER", "s
 PRODUCT_EC_PASS = os.environ.get("PRODUCT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 CHEMICAL_PRODUCT_EC_USER = os.environ.get("CHEMICAL_PRODUCT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CHEMICAL_PRODUCT_EC_PASS = os.environ.get("CHEMICAL_PRODUCT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+REPORT_CONTEXT_EC_USER = os.environ.get("REPORT_CONTEXT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+REPORT_CONTEXT_EC_PASS = os.environ.get("REPORT_CONTEXT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
