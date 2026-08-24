@@ -183,3 +183,35 @@ TV-not-OV rather than genuinely blocked for their stated reason.
   `scan_ec_screen.py` DOM-open scan showing `CLASS_TYPE=DATA`, which is authoritative over a DB label-match
   heuristic alone).
 - No other screen in the 55-row backlog needs reclassification.
+
+### Contract Area Setup (CO.2038) - Bank-pattern sweep evaluation, NOT eligible (2026-08-25)
+**Identity resolved live, distinct from "Contract Area" (a different screen/class already used elsewhere as
+a navigator scope, e.g. Royalty Contract/Division Order's C2 group).** `SCREEN="contract area setup" py
+tmp/scripts/resolve_ec_screen.py` (label lookup against `class_property_cnfg`, DB read-only, local sandbox)
+resolves ONE unambiguous class: `CLASS_NAME=CONTRACT_AREA_SETUP` (`CLASS_TYPE=OBJECT`,
+`TIME_SCOPE_CODE=VERSIONED`, base table `CONTRACT_AREA_SETUP`, view `OV_CONTRACT_AREA_SETUP` - exists).
+Re-running the same tool with `SCREEN="contract area"` resolves a DIFFERENT class entirely
+(`CLASS_NAME=CONTRACT_AREA`, base `CONTRACT_AREA`, view `OV_CONTRACT_AREA`) - confirms these are two
+genuinely separate screens/classes, not a label variant of the same one.
+
+**Bank-pattern eligibility: NO - structural, not a gap to fix.** The same resolver's own family-hint
+classifier places `contract area setup` in family **`OV_CUSTOM_URL`** (clone exemplar: Account
+`account_page.resource`), explicitly BECAUSE "no navigator GO button; grid `nav:form:T_data` (or
+`manageObject:form:T_data`); Save And Refresh List falls back to toolbar Refresh" - not family `OV` (clone
+Bank), which requires "grid id `manage_object_nav_nav:form:T_data`" (manage-object controller + GO). This
+matches the screen's own already-verified metadata in `ec-ui-knowledge/screens/contract_area_setup.md` and
+this doc's own row above (section A): "CUSTOM-URL OV - NO navigator, NO GO button", grid `nav:form:T_data`.
+Cross-checked against every screen already converted to the Bank pattern this project
+(`grep -l "manage_object_nav\|Insert/Update Object From Properties" pageobjects/**/*.resource`, 73 files) -
+**zero** are custom-URL-flavour screens; every custom-URL OV built so far (Stream Item CD.0008, Document
+Sequence CD.0109, Task Process CO.0191, Action Trigger CO.0193, Conversion Group CO.1049, Calculation
+Library CO.1060, Production Day Table CO.1033, Contract Area Setup itself) uses the older label-driven
+T3/driver shape instead, consistent with this class of screen never having had the Bank T2 keywords
+(`Insert/Update Object From Properties`, `Find/Clear <Screen> Row By Filter`) apply to it.
+
+**Already-done status unaffected.** This screen already has full automation, shipped and verified
+2026-07-30 (`verify_screen.py` OVERALL PASS: robocop 0, hygiene 0, dryrun 4/4, live RF 4/4, Playwright 7/7),
+registry + scorecard rows already present. No rebuild performed this session - the Bank-pattern sweep
+evaluation confirms this screen correctly sits OUTSIDE the sweep's scope (custom-URL flavour, no navigator/
+GO, different grid id/controller than Bank's `manage_object_nav`), not that it needs conversion. No code
+change beyond this note; no PR content beyond documentation.
