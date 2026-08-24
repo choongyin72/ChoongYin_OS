@@ -199,6 +199,12 @@ PR appends only its own ROW here — no per-PR section header._
 |---|---|---|
 | EC Code Object | ✅ DONE (2026-08-24) | `Find/Clear EC Code Object Row By Filter` (delegating to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `ec_code_object_page.resource` (PR #494), matching Bank/Berth. Confirmed fired 15x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge._ |
 
+## Report Group addition (2026-08-24)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Report Group (Configuration > Assets > Facility_Objects, CO.0158) | ✅ DONE (2026-08-24) | `Find/Clear Report Group Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `report_group_page.resource`, matching `bank_page.resource`/`disposition_type_page.resource` exactly. Confirmed fired 15x via output.xml grep on the live 5/5 run. Upgraded from a PARTIAL label-driven build with no filter wiring - see `docs/bank-pattern-conversion-checklist.md` for the full conversion detail. |
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible
