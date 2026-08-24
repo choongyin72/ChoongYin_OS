@@ -15,6 +15,10 @@ Documentation       EC IUD Test - County (Configuration > Assets > Basic Objects
 ...                 Converted 2026-08-23 from the old hardcoded-field-id pattern to the
 ...                 label-driven, properties-file-driven, T2-consolidated Bank pattern (batch-2
 ...                 conversion, see tmp/batch2_shared_findings.md).
+...                 PURE SCREEN verification (matches bank_iud.robot's owner-requested
+...                 2026-08-18 convention: no DB check here) - removed the extra inline
+...                 DB-read keywords this suite originally had, to match Bank exactly
+...                 (2026-08-24 alignment fix).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Basic_Objects/county_page.resource
 
@@ -51,7 +55,6 @@ TC02 Insert County Data
     Open County Screen
     Insert County Record And Save
     Verify County Record Exists
-    County Should Exist In DB
     Logout From EC Application
 
 TC03 Update County Data
@@ -59,7 +62,6 @@ TC03 Update County Data
     Open County Screen
     Update County Record And Save
     Verify County Record Updated
-    County Should Be Updated In DB
     Logout From EC Application
 
 TC04 Find County Data
@@ -75,19 +77,3 @@ TC05 Delete County Data
     Delete County Record And Save
     Verify County Record Removed
     Logout From EC Application
-
-
-*** Keywords ***
-County Should Exist In DB
-    [Documentation]    DB ground-truth (TC02): assert ${TEST_CODE} really persisted in OV_COUNTY
-    ...    with the expected NAME - a fresh oracledb read, not just the UI-level check already done
-    ...    by Verify County Record Exists.
-    Code Should Be Present In View    ov_county    ${TEST_CODE}
-    Field Should Equal In View    ov_county    ${TEST_CODE}    NAME    ${OBJ_NAME}
-
-County Should Be Updated In DB
-    [Documentation]    DB ground-truth (TC03): assert the UPDATED NAME/DESCRIPTION actually
-    ...    persisted in OV_COUNTY - a fresh oracledb read, not just the UI-level check already done
-    ...    by Verify County Record Updated.
-    Field Should Equal In View    ov_county    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Field Should Equal In View    ov_county    ${TEST_CODE}    DESCRIPTION    ${OBJ_DESC_UPD}
