@@ -90,7 +90,6 @@ follow-up pass).
 
 | Screen | Reason |
 |---|---|
-| Choke | Mandatory single date + GO before grid loads (Choke Model, its former table-mate, was reclassified and converted 2026-08-24 - see "Choke Model reclassification + conversion" section below; Choke itself remains unverified, no own evidence gathered) |
 
 | Field, Contract Area, Delivery Point, Delivery Stream, Nomination Point, Pipeline Segment, Transport Zone | Mandatory Business Unit/Area dropdown + GO |
 | Sub Area | Cascading PU→Area + GO |
