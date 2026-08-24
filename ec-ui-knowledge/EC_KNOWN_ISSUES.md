@@ -201,7 +201,7 @@ It's the gateway, not the adapter — both repros build the identical request; o
 
 ### OV_CHEM_PRODUCT (Chemical Product, CO.0072) — End=Start delete blocked by a child-FK dependency
 
-**Status:** Confirmed root cause (verified against the DB). Screen PARKED for IUD automation (insert/update fine; delete needs child-aware handling).
+**Status:** Confirmed root cause (verified against the DB). **UNPARKED 2026-08-24** (Phase 3 Bank-pattern build) — the RF suite now applies the fix below itself via a new screen-scoped `libraries/ChemicalProductCleanup.py` (removes the `CHEM_USAGE_REPORT_CONF` child row via DB immediately before the normal UI End=Start Save), so the screen has full working IUD automation (insert/update/find/delete, live 5/5, DB self-clean confirmed 0 residual rows in both `CHEM_PRODUCT` and `CHEM_USAGE_REPORT_CONF`). The underlying EC defect itself is UNCHANGED — the UI's own End=Start Save still silently no-ops if this pre-step is skipped; this is a test-automation-side workaround, not an EC product fix. See `workstreams/master-plan/ec-automation/pageobjects/Configuration/Assets/Chemical_Objects/chemical_product_page.resource` and `docs/ec_screen_registry.md`.
 **Environment(s) seen:** Local sandbox `localhost:1521/ORCL` (ECKERNEL_EC), EC 14.2.4. 2026-07-26.
 
 **Symptom:**
