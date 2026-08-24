@@ -2,58 +2,80 @@
 Documentation       EC IUD Test - Document Template (Configuration > Assets > Revenue_Document_Objects > Document Template, CD.0013).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_DOC_TEMPLATE).
 ...                 Layered: this test -> document_template_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_DT_<timestamp> code per run.
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_DOCUMENT_TEMPLATE,
+...                 matching this round's fixed-code convention) - confirmed absent from
+...                 OV_DOC_TEMPLATE before this was wired in. Every run must complete TC05 (delete)
+...                 so the code is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - not 5 separate browser launches (matches Bank's own convention).
+...                 Bank-pattern conversion (2026-08-24): properties-file-driven insert/update/
+...                 verify + explicit grid-filter wiring, upgraded from the prior label-driven-only
+...                 shape (see docs/ec_screen_registry.md / docs/automation-scorecard.md - this
+...                 MODIFIES that existing row, not a new build).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Revenue_Document_Objects/document_template_page.resource
 
-Suite Setup         Set Up Document Template Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown        Ensure Logged Out From EC Application
 
 Test Tags           iud    document_template
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_DOCUMENT_TEMPLATE
+${OBJ_NAME}         AUTOTEST Document Template
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+${OBJ_NAME_UPD}     AUTOTEST Document Template UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test document_template does not exist before inserting.
-    [Tags]    clean-state
-    Document Template Row Should Not Exist    ${TEST_CODE}
-    Capture Step    document_template_tc01_clean
+    Login To EC Application
+    Open Document Template Screen
+    Verify Document Template Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Document Template
-    [Documentation]    Insert a new document_template; confirm in list + DB (OV_DOC_TEMPLATE).
-    [Tags]    insert
-    Insert Document Template Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Document Template Row Should Exist    ${TEST_CODE}
+TC02 Insert Document Template Data
+    Login To EC Application
+    Open Document Template Screen
+    Insert Document Template Record And Save
+    Verify Document Template Record Exists
     Document Template Should Exist In DB    ${TEST_CODE}
-    Capture Step    document_template_tc02_inserted
+    Logout From EC Application
 
-TC03 Update Document Template
-    [Documentation]    Edit Name; confirm in list + DB ground truth.
-    [Tags]    update
-    Update Document Template Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Document Template Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
+TC03 Update Document Template Data
+    Login To EC Application
+    Open Document Template Screen
+    Update Document Template Record And Save
+    Verify Document Template Record Updated
     Field Should Equal In View    OV_DOC_TEMPLATE    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Capture Step    document_template_tc03_updated
+    Logout From EC Application
 
-TC04 Delete Document Template
-    [Documentation]    Delete via End Date = Start Date; confirm gone from list + DB.
-    [Tags]    delete    cleanup
-    Delete Document Template    ${TEST_CODE}    ${END_DATE}
-    Document Template Row Should Not Exist    ${TEST_CODE}
+TC04 Find Document Template Data
+    Login To EC Application
+    Open Document Template Screen
+    Find Document Template Record
+    Verify Document Template Record Found
+    Logout From EC Application
+
+TC05 Delete Document Template Data
+    Login To EC Application
+    Open Document Template Screen
+    Delete Document Template Record And Save
+    Verify Document Template Record Removed
     Document Template Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    document_template_tc04_deleted
+    Logout From EC Application
 
 
 *** Keywords ***
-Set Up Document Template Suite
-    [Documentation]    Generate a unique test code/name, then open the Document Template screen.
-    Prepare IUD Object Data    AUTOTEST_DT_    Document Template
-    Open Document Template Screen
+Document Template Should Exist In DB
+    [Documentation]    DB ground-truth: assert ${code} really persisted in OV_DOC_TEMPLATE.
+    [Arguments]    ${code}
+    Code Should Be Present In View    OV_DOC_TEMPLATE    ${code}
+
+Document Template Should Not Exist In DB
+    [Documentation]    DB ground-truth: assert ${code} was truly deleted from OV_DOC_TEMPLATE.
+    [Arguments]    ${code}
+    Code Should Be Absent In View    OV_DOC_TEMPLATE    ${code}
