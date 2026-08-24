@@ -34,12 +34,11 @@ R0 Master System Code · R1 Master System Name · R2 Disposition Code (read-only
 Row R0: Start Date C:1, **End Date `…R:0:C:3:da_input`** = Start Date → leaves `OV_DISPOSITION_TYPE`. Toolbar Delete unused (EC Object).
 
 ## Automation (code in ec-automation)
-- **Playwright:** driver `ec-automation/py/disposition_type_iud.py` (thin, on `py/ec_object_iud.py` + `DbVerify.py`). Run: `EC_HEADED=1 py -X utf8 workstreams/master-plan/ec-automation/py/disposition_type_iud.py` → 7/7 PASS.
-- **RF:** T3 `pageobjects/Configuration/Assets/Hydrocarbon_Objects/disposition_type_page.resource` + suite
-  `tests/Configuration/Assets/Hydrocarbon_Objects/disposition_type_iud.robot` (reuse T2 `manage_object` + `DbVerify.py`).
-  Live **4/4 PASS** — update DB-verified via `Field Should Equal In View` (NAME + DESCRIPTION).
+- **Playwright:** driver `ec-automation/py/disposition_type_iud.py` (thin, on `py/ec_object_iud.py` + `DbVerify.py`). Run: `EC_HEADED=1 py -X utf8 workstreams/master-plan/ec-automation/py/disposition_type_iud.py` → 7/7 PASS. Left UNTOUCHED by the 2026-08-24 RF Bank-pattern conversion below.
+- **RF (converted to the full Bank-pattern shape, 2026-08-24):** T3 `pageobjects/Configuration/Assets/Hydrocarbon_Objects/disposition_type_page.resource` + suite
+  `tests/Configuration/Assets/Hydrocarbon_Objects/disposition_type_iud.robot` — mirrors `bank_page.resource`/`berth_page.resource` exactly: properties-file-driven insert/update/verify (`testdata/disposition_type_{insert,update,form_verify,grid_verify}.properties`), explicit `Find/Clear Disposition Type Row By Filter` grid-filter wiring, fixed test code `AUTOTEST_DISPOSITION_TYPE` (confirmed free live), per-TC Login/Logout, 5 TCs (added TC04 Find - the prior build only had 4). PURE SCREEN verification (no inline DB-verify calls in the test file/T3 anymore - the prior build's `Field Should Equal In View`/`Disposition Type Should Exist/Not Exist In DB` calls were removed to match Bank's documented convention). Live **5/5 PASS**, full-tree dryrun 793/793, DB self-clean confirmed 0 residual via a fresh oracledb connection, filter keyword confirmed fired 15x (output.xml grep). No shared T1/T2 (`manage_object.resource`/`common.resource`) changes.
 
 ## Quirks / difference vs Bank
 - Mandatory fields at **R2/R3** (R0/R1 are optional Master System Code/Name) — do NOT assume Bank's R0/R1.
-- **Grid needs GO to load** (Bank auto-loads) — the driver clicks GO after open.
+- **Grid needs GO to load** (Bank auto-loads) — the driver clicks GO after open. **Correction (2026-08-24): the navigator has NO mandatory date field** - it's a bare GO button only (`css=[id="button:form:B"]`), confirmed live via the Bank-pattern conversion. A prior classification in `docs/bank-pattern-conversion-checklist.md`'s "Excluded" table wrongly grouped this screen with Document Date Term/Payment Term/Choke/Choke Model as "mandatory single date + GO" - corrected in that doc too.
 - Labels are "Disposition Code/Name" (engine resolves by label, so this is handled).
