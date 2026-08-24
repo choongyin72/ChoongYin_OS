@@ -213,3 +213,5 @@ EC_CODE_OBJECT_EC_PASS = os.environ.get("EC_CODE_OBJECT_EC_PASS", os.environ.get
 
 REPORT_GROUP_EC_USER = os.environ.get("REPORT_GROUP_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 REPORT_GROUP_EC_PASS = os.environ.get("REPORT_GROUP_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+STREAM_ALL_EC_USER = os.environ.get("STREAM_ALL_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+STREAM_ALL_EC_PASS = os.environ.get("STREAM_ALL_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

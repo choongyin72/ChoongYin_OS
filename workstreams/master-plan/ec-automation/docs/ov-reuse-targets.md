@@ -58,6 +58,15 @@ swap `SCREEN`/`GRID_DATA_ID`/`VIEW`/field_maps) + `libraries/DbVerify.py`. Tick 
 - [x] Data Extract Set — `SP.0049` — `OV_SUMMARY_SET` (done 2026-07-26)
 
 ## Covered — already have an RF suite (36)
+**Correction (2026-08-24):** Stream-All `CD.0007` was already listed below, but that claim was
+STALE/WRONG - an exhaustive repo search (page objects, tests, screens, py drivers) found ZERO
+prior automation for class `STREAM`/view `OV_STREAM` anywhere before today. It is now genuinely
+covered: built from scratch via `ec-bank-pattern-new-screen`, live 5/5, DB self-clean confirmed -
+see `docs/ec_screen_registry.md`'s Stream - All row for the full build record. Do not confuse
+with the different, already-existing sibling screens Chemical Stream (`CHEM_STREAM`), Delivery
+Stream, or Manage Stream (`CO.0251`, a different BF_CODE with a real 3-level mandatory
+Business Unit/Area/Facility cascade nav, excluded from this Bank-layout set).
+
 Stream-All `CD.0007` · Product Description `CD.0012` · Customer `CD.0019` · Vendor `CD.0020` ·
 Bank `CD.0021` · Bank Account `CD.0022` · Payment Term `CD.0023` · VAT Code `CD.0029` ·
 Sales Order `CD.0033` · Cost Object Mapping `CD.0089` · Field Group `CD.0091` · Document Date Term `CD.0107` ·
