@@ -1,59 +1,75 @@
 *** Settings ***
 Documentation       EC IUD Test - EC Code Object (Configuration > Codes > EC Code Object, CD.0135).
-...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_EC_CODE_OBJECT).
-...                 Layered: this test -> ec_code_object_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_ECO_<timestamp> code per run.
+...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in
+...                 OV_EC_CODE_OBJECT). Layered: this test -> ec_code_object_page (T3) ->
+...                 manage_object (T2) + common (T1).
+...                 NEVER touch existing data. Uses a FIXED test code (AUTOTEST_EC_CODE_OBJECT,
+...                 matching Bank's own fixed-code convention) rather than a generated unique code -
+...                 confirmed absent from OV_EC_CODE_OBJECT before this was wired in (fresh DB query,
+...                 2026-08-24). Every run must complete TC05 (delete) so the code is free for the
+...                 next run - EC never lets a DELETED code be reused, but this fixed code only stays
+...                 reusable if each run actually cleans up after itself.
+...                 EACH test case does its own real Login/Logout (matches Bank's convention) on ONE
+...                 browser opened once in Suite Setup - not 5 separate browser launches. This is a
+...                 conscious tradeoff: 5 real logins instead of 1 costs real runtime, and TC03/TC04/
+...                 TC05 still depend on TC02's inserted record existing (the per-TC login/logout
+...                 makes each TC LOOK self-contained, it does not remove that data dependency) -
+...                 accepted deliberately for a client-readable process-flow report.
+...                 Converted to the full Bank-pattern shape (2026-08-24): see ec_code_object_page
+...                 .resource's Documentation for what changed vs the prior PARTIAL label-driven build
+...                 (4 TCs / no Find / inline DB-verify calls in this test file).
 
 Resource            ../../../pageobjects/Configuration/Codes/ec_code_object_page.resource
 
-Suite Setup         Set Up EC Code Object Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    ec_code_object
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_EC_CODE_OBJECT
+${OBJ_NAME}         AUTOTEST EC Code Object
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# These values must stay in sync with testdata/ec_code_object_update.properties - Verify EC Code
+# Object Record Updated (TC03) screen-verifies them against what that file actually set, not an
+# independent assumption.
+${OBJ_NAME_UPD}     AUTOTEST EC Code Object UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test ec_code_object does not exist before inserting.
-    [Tags]    clean-state
-    EC Code Object Row Should Not Exist    ${TEST_CODE}
-    Capture Step    ec_code_object_tc01_clean
-
-TC02 Insert New EC Code Object
-    [Documentation]    Insert a new ec_code_object; confirm in list + DB (OV_EC_CODE_OBJECT).
-    [Tags]    insert
-    Insert EC Code Object Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    EC Code Object Row Should Exist    ${TEST_CODE}
-    EC Code Object Should Exist In DB    ${TEST_CODE}
-    Capture Step    ec_code_object_tc02_inserted
-
-TC03 Update EC Code Object
-    [Documentation]    Edit Name; confirm in list + DB ground truth.
-    [Tags]    update
-    Update EC Code Object Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    EC Code Object Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Should Equal In View    OV_EC_CODE_OBJECT    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Capture Step    ec_code_object_tc03_updated
-
-TC04 Delete EC Code Object
-    [Documentation]    Delete via End Date = Start Date; confirm gone from list + DB.
-    [Tags]    delete    cleanup
-    Delete EC Code Object    ${TEST_CODE}    ${END_DATE}
-    EC Code Object Row Should Not Exist    ${TEST_CODE}
-    EC Code Object Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    ec_code_object_tc04_deleted
-
-
-*** Keywords ***
-Set Up EC Code Object Suite
-    [Documentation]    Generate a unique test code/name, then open the EC Code Object screen.
-    Prepare IUD Object Data    AUTOTEST_ECO_    EC Code Object
+    Login To EC Application
     Open EC Code Object Screen
+    Verify EC Code Object Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert EC Code Object Data
+    Login To EC Application
+    Open EC Code Object Screen
+    Insert EC Code Object Record And Save
+    Verify EC Code Object Record Exists
+    Logout From EC Application
+
+TC03 Update EC Code Object Data
+    Login To EC Application
+    Open EC Code Object Screen
+    Update EC Code Object Record And Save
+    Verify EC Code Object Record Updated
+    Logout From EC Application
+
+TC04 Find EC Code Object Data
+    Login To EC Application
+    Open EC Code Object Screen
+    Find EC Code Object Record
+    Verify EC Code Object Record Found
+    Logout From EC Application
+
+TC05 Delete EC Code Object Data
+    Login To EC Application
+    Open EC Code Object Screen
+    Delete EC Code Object Record And Save
+    Verify EC Code Object Record Removed
+    Logout From EC Application

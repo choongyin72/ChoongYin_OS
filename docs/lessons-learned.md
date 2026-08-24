@@ -2,7 +2,7 @@
 _Reviewed by Claude Code (reviewer session) and appended over time._
 _Worker sessions: read this before starting any automation work._
 
-> **Current rule version: v37** (R37 added 2026-08-22)
+> **Current rule version: v38** (R38 added 2026-08-24)
 > If the version you last read is lower than this, **re-read from the changelog below** before starting work — do not scan the whole file hoping to spot the diff.
 
 ### Rules Changelog
@@ -2123,3 +2123,20 @@ mechanize it - `scripts/safe_commit.py` already knows the staged set and should 
 list to paste, the same rules-into-exit-codes fix applied to the hygiene and canary gates
 (Issue #385). A reviewer diffs the body against the real file list on every pass (R21); a
 generated list makes that check pass by construction.
+
+## R38 (2026-08-24): A conversion/rebuild PR updates the FULL doc set - registry + scorecard + both checklists - in the same diff
+
+Added by the reviewer after the same omission class twice in one day: PR #493 (Document Date
+Term) modified the registry row but left `docs/automation-scorecard.md` stale (its two sibling
+PRs updated theirs), and PR #494 (EC Code Object) left the scorecard AND both tracking
+checklists (`bank-pattern-conversion-checklist.md`, `grid-filter-standardization-checklist.md`)
+untouched. In both cases the reviewer reconstructed the missing rows at merge from the PR's own
+registry edit and body evidence - possible, but it means hand-authored rows the Worker never
+reviewed, and a doc set that silently drifts if a reviewer misses one.
+
+The rule: any PR that rebuilds/converts a screen's RF suite touches ALL FOUR tracking docs in
+the same diff - `docs/ec_screen_registry.md` (MODIFY by key if a row exists, else add),
+`docs/automation-scorecard.md` (same), and one row in EACH of the two checklists (under the
+batch's pre-created header when part of a batch, else in a small dated section). A screen
+whose row exists in one doc but not another is the signal you're about to violate this - check
+all four BEFORE raising the PR, the same way R21 checks the body against the final diff.
