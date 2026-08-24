@@ -174,6 +174,16 @@ committing to a full conversion (see `tmp/batch11_shared_findings.md`)._
 | Carrier (Configuration > Assets > Cargo_Objects) | ✅ DONE (2026-08-23) | `Find/Clear Carrier Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `carrier_page.resource`, matching `bank_page.resource`/`berth_page.resource`/`port_page.resource` exactly. Confirmed fired 14x via output.xml grep on the live 5/5 run. |
 | Bank Account (Configuration > Assets > Financial_Objects) | ✅ DONE (2026-08-23, Batch 11) | `Find/Clear Bank Account Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `bank_account_page.resource`, matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired 15x / cleared 15x via output.xml grep on the live 5/5 run. |
 
+## Phase 3 additions (pending) — Chemical Product, Product, Document Template
+
+_Section header pre-created on master before fan-out. Phase 3 = first batch out
+of the Phase 2 recon (19 reconciled unknown screens); these 3 are the only ones
+confirmed genuinely Bank-shaped with no navigator-column entry. Each screen's
+PR appends only its own ROW here — no per-PR section header._
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible
