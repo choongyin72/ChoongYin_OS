@@ -194,6 +194,10 @@ header._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Product (Configuration > Assets > Hydrocarbon_Objects, CO.0007) | ✅ DONE (2026-08-24) | Brand-new build, zero prior automation - `ec-bank-pattern-new-screen`. Confirmed NOT the same class as already-automated siblings Product Description (CD.0012)/Product Group (RC.0053) - genuinely `PRODUCT_MAINTAIN`. DB metadata (`resolve_ec_screen.py`): CLASS_TYPE=OBJECT, TIME_SCOPE_CODE=VERSIONED, base `PRODUCT`, view `OV_PRODUCT`. Live scan (`scan_ec_screen.py`) confirmed plain manage-object shape: navigator = single OPTIONAL date field + GO, grid `manage_object_nav_nav:form:T_data` - no navigator-registry entry, eligible per the stricter zero-nav-entry bar. Only Product Code/Product Name/Start Date mandatory; Hydrocarbon Component/Product Group/Product Type/ERP Code are optional dropdowns, left unset. Field label SCREEN-PREFIXED "Product Code"/"Product Name" (not generic "Code"/"Name"), passed as `code_label` throughout. Product Type/ERP Code present on Insert's `objectForm` but absent from `updateAttributes` (confirmed live). Built `product_page.resource`/`product_iud.robot` mirroring `bank_page.resource` exactly: properties-file-driven insert/update/verify, explicit `Find/Clear Product Row By Filter` wired into Update/Find/Verify-Found/Delete, dedicated `PRODUCT_EC_USER/PASS`, fixed test code `AUTOTEST_PRODUCT` (confirmed free via a fresh oracledb query against `PRODUCT.OBJECT_CODE`, before and after the live run). Live 5/5 first attempt, dryrun 779/779, robocop 12 issues (7 VAR02 + 5 DOC02) - parity with Bank's own 13-issue baseline, no regression. Filter fired 15x (output.xml grep). DB self-clean confirmed 0 residual rows across `PRODUCT`/`PRODUCT_VERSION`/`OV_PRODUCT` via a fresh oracledb connection. No shared T1/T2 file changes. This ADDS new rows to `docs/ec_screen_registry.md` and `docs/automation-scorecard.md` (genuinely new screen, no prior entry in either doc). |
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
 
 ## How to update this doc
 

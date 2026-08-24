@@ -183,6 +183,7 @@ PR appends only its own ROW here — no per-PR section header._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
+| Product (Configuration > Assets > Hydrocarbon_Objects, CO.0007) | ✅ DONE (2026-08-24) | `Find/Clear Product Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `product_page.resource`, matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired 15x via output.xml grep on the live 5/5 run (brand-new build, zero prior automation). |
 
 ## How to update this doc
 
