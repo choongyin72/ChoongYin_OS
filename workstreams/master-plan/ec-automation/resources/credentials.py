@@ -205,3 +205,5 @@ DISPOSITION_TYPE_EC_PASS = os.environ.get("DISPOSITION_TYPE_EC_PASS", os.environ
 
 PAYMENT_TERM_EC_USER = os.environ.get("PAYMENT_TERM_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PAYMENT_TERM_EC_PASS = os.environ.get("PAYMENT_TERM_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+DOCUMENT_DATE_TERM_EC_USER = os.environ.get("DOCUMENT_DATE_TERM_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+DOCUMENT_DATE_TERM_EC_PASS = os.environ.get("DOCUMENT_DATE_TERM_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
