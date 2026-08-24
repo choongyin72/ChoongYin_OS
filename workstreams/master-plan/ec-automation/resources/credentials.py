@@ -185,3 +185,5 @@ DEFERMENT_GROUP_EC_PASS = os.environ.get("DEFERMENT_GROUP_EC_PASS", os.environ.g
 
 DOCUMENT_TEMPLATE_EC_USER = os.environ.get("DOCUMENT_TEMPLATE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 DOCUMENT_TEMPLATE_EC_PASS = os.environ.get("DOCUMENT_TEMPLATE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+PRODUCT_EC_USER = os.environ.get("PRODUCT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PRODUCT_EC_PASS = os.environ.get("PRODUCT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
