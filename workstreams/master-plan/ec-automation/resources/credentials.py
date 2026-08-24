@@ -182,3 +182,5 @@ BANK_ACCOUNT_EC_USER = os.environ.get("BANK_ACCOUNT_EC_USER", os.environ.get("EC
 BANK_ACCOUNT_EC_PASS = os.environ.get("BANK_ACCOUNT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 DEFERMENT_GROUP_EC_USER = os.environ.get("DEFERMENT_GROUP_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 DEFERMENT_GROUP_EC_PASS = os.environ.get("DEFERMENT_GROUP_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+CHEMICAL_PRODUCT_EC_USER = os.environ.get("CHEMICAL_PRODUCT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CHEMICAL_PRODUCT_EC_PASS = os.environ.get("CHEMICAL_PRODUCT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
