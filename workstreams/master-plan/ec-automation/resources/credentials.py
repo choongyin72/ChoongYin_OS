@@ -197,3 +197,6 @@ TARGET_MAPPING_CONFIGURATION_EC_USER = os.environ.get(
 TARGET_MAPPING_CONFIGURATION_EC_PASS = os.environ.get(
     "TARGET_MAPPING_CONFIGURATION_EC_PASS", os.environ.get("EC_PASS", "sysadmin")
 )
+
+DISPOSITION_TYPE_EC_USER = os.environ.get("DISPOSITION_TYPE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+DISPOSITION_TYPE_EC_PASS = os.environ.get("DISPOSITION_TYPE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

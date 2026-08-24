@@ -187,6 +187,12 @@ PR appends only its own ROW here — no per-PR section header._
 | Product (Configuration > Assets > Hydrocarbon_Objects, CO.0007) | ✅ DONE (2026-08-24) | `Find/Clear Product Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `product_page.resource`, matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired 15x via output.xml grep on the live 5/5 run (brand-new build, zero prior automation). |
 | Chemical Product (Configuration > Assets > Chemical Objects, CO.0072) | ✅ DONE (2026-08-24) | `Find/Clear Chemical Product Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `chemical_product_page.resource`, matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired 26x via output.xml grep on the live 5/5 run. |
 
+## Disposition Type addition (2026-08-24)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Disposition Type (Configuration > Assets > Hydrocarbon_Objects, CO.0208) | ✅ DONE (2026-08-24) | `Find/Clear Disposition Type Row By Filter` (delegates to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `disposition_type_page.resource`, matching `bank_page.resource`/`berth_page.resource` exactly. Confirmed fired 15x via output.xml grep on the live 5/5 run. Upgraded from an OLD hardcoded-field-id build with no filter wiring at all - see `docs/bank-pattern-conversion-checklist.md` for the full conversion detail. |
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible
