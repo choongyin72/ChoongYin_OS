@@ -210,3 +210,6 @@ DOCUMENT_DATE_TERM_EC_PASS = os.environ.get("DOCUMENT_DATE_TERM_EC_PASS", os.env
 
 EC_CODE_OBJECT_EC_USER = os.environ.get("EC_CODE_OBJECT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 EC_CODE_OBJECT_EC_PASS = os.environ.get("EC_CODE_OBJECT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+STREAM_ALL_EC_USER = os.environ.get("STREAM_ALL_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+STREAM_ALL_EC_PASS = os.environ.get("STREAM_ALL_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
