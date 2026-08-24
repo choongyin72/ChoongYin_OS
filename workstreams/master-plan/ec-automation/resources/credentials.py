@@ -217,3 +217,5 @@ STREAM_ALL_EC_USER = os.environ.get("STREAM_ALL_EC_USER", os.environ.get("EC_USE
 STREAM_ALL_EC_PASS = os.environ.get("STREAM_ALL_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 CHOKE_MODEL_EC_USER = os.environ.get("CHOKE_MODEL_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CHOKE_MODEL_EC_PASS = os.environ.get("CHOKE_MODEL_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+CHOKE_EC_USER = os.environ.get("CHOKE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CHOKE_EC_PASS = os.environ.get("CHOKE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
