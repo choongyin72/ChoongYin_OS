@@ -1,63 +1,67 @@
 *** Settings ***
-Documentation       EC IUD Test - Document Received Term (Configuration > Assets > Date Objects > Document Received Term, CD.0108).
-...                 Manage-Object (OV, date-effective) screen. DELETE = End Date = Start Date (true delete in ov_doc_received_term).
-...                 Layered: this test -> document_received_term_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. A unique AUTOTEST_DRT_<timestamp> code is generated
-...                 per run (EC keeps deleted codes in the base table, so codes are never reused).
+Documentation       EC IUD Test - Document Received Term (Configuration > Assets > Date Objects >
+...                 Document Received Term, CD.0108). Manage-Object (OV, date-effective) screen.
+...                 DELETE = End Date = Start Date (true delete in OV_DOC_RECEIVED_TERM).
+...                 Layered: this test -> document_received_term_page (T3) -> manage_object (T2)
+...                 + common (T1). NEVER touch existing data. Uses a FIXED test code
+...                 (AUTOTEST_DRT, matching Bank/Berth/Port's convention) rather than a
+...                 generated unique code - confirmed absent from OV_DOC_RECEIVED_TERM before
+...                 this was wired in (2026-08-24). Every run must complete TC05 (delete) so the
+...                 code is free for the next run - EC never lets a DELETED code be reused, but
+...                 this fixed code only stays reusable if each run actually cleans up after
+...                 itself. EACH test case does its own real Login/Logout on ONE browser opened
+...                 once in Suite Setup, matching Bank/Berth/Port's convention
+...                 (docs/rf-suite-styles.md).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Date_Objects/document_received_term_page.resource
 
-Suite Setup         Set Up Document Received Term Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
-Test Tags           iud    document-date-term    date-objects
+Test Tags           iud    document-received-term    date-objects
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
-# Screen-specific mandatory extras on the New-Object form
-${DRT_METHOD}       Manual entry
-${DRT_OFFSET}       0
+${TEST_CODE}        AUTOTEST_DRT
+${OBJ_NAME}         AUTOTEST Document Received Term
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/document_received_term_update.properties - TC03 verifies against it.
+${OBJ_NAME_UPD}     AUTOTEST Document Received Term UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Document Received Term Row Should Not Exist    ${TEST_CODE}
-    Document Received Term Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    drt_tc01_clean
-
-TC02 Insert New Document Received Term
-    [Documentation]    Insert a new Document Received Term (Code/Name/Start Date + METHOD + OFFSET) and confirm it appears in the list and DB.
-    [Tags]    insert
-    Insert Document Received Term Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}    ${DRT_METHOD}    ${DRT_OFFSET}
-    Document Received Term Row Should Exist    ${TEST_CODE}
-    Document Received Term Should Exist In DB    ${TEST_CODE}
-    Capture Step    drt_tc02_inserted
-
-TC03 Update Document Received Term Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Document Received Term Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Document Received Term Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    drt_tc03_updated
-
-TC04 Delete Document Received Term
-    [Documentation]    Delete via End Date = Start Date and confirm the object is gone from list and DB.
-    [Tags]    delete    cleanup
-    Delete Document Received Term    ${TEST_CODE}    ${END_DATE}
-    Document Received Term Row Should Not Exist    ${TEST_CODE}
-    Document Received Term Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    drt_tc04_deleted
-
-
-*** Keywords ***
-Set Up Document Received Term Suite
-    [Documentation]    Generate a unique test code/name, then open the Document Received Term screen.
-    Prepare IUD Object Data    AUTOTEST_DRT_    Doc Received Term
+    Login To EC Application
     Open Document Received Term Screen
+    Verify Document Received Term Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert Document Received Term Data
+    Login To EC Application
+    Open Document Received Term Screen
+    Insert Document Received Term Record And Save
+    Verify Document Received Term Record Exists
+    Logout From EC Application
+
+TC03 Update Document Received Term Data
+    Login To EC Application
+    Open Document Received Term Screen
+    Update Document Received Term Record And Save
+    Verify Document Received Term Record Updated
+    Logout From EC Application
+
+TC04 Find Document Received Term Data
+    Login To EC Application
+    Open Document Received Term Screen
+    Find Document Received Term Record
+    Verify Document Received Term Record Found
+    Logout From EC Application
+
+TC05 Delete Document Received Term Data
+    Login To EC Application
+    Open Document Received Term Screen
+    Delete Document Received Term Record And Save
+    Verify Document Received Term Record Removed
+    Logout From EC Application

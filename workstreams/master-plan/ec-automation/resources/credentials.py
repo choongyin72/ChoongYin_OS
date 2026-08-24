@@ -191,6 +191,8 @@ CHEMICAL_PRODUCT_EC_USER = os.environ.get("CHEMICAL_PRODUCT_EC_USER", os.environ
 CHEMICAL_PRODUCT_EC_PASS = os.environ.get("CHEMICAL_PRODUCT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 REPORT_CONTEXT_EC_USER = os.environ.get("REPORT_CONTEXT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 REPORT_CONTEXT_EC_PASS = os.environ.get("REPORT_CONTEXT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+DOCUMENT_RECEIVED_TERM_EC_USER = os.environ.get("DOCUMENT_RECEIVED_TERM_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+DOCUMENT_RECEIVED_TERM_EC_PASS = os.environ.get("DOCUMENT_RECEIVED_TERM_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 TARGET_MAPPING_CONFIGURATION_EC_USER = os.environ.get(
     "TARGET_MAPPING_CONFIGURATION_EC_USER", os.environ.get("EC_USER", "sysadmin")
 )
@@ -200,6 +202,11 @@ TARGET_MAPPING_CONFIGURATION_EC_PASS = os.environ.get(
 
 DISPOSITION_TYPE_EC_USER = os.environ.get("DISPOSITION_TYPE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 DISPOSITION_TYPE_EC_PASS = os.environ.get("DISPOSITION_TYPE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PAYMENT_TERM_EC_USER = os.environ.get("PAYMENT_TERM_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PAYMENT_TERM_EC_PASS = os.environ.get("PAYMENT_TERM_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+DOCUMENT_DATE_TERM_EC_USER = os.environ.get("DOCUMENT_DATE_TERM_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+DOCUMENT_DATE_TERM_EC_PASS = os.environ.get("DOCUMENT_DATE_TERM_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 
 EC_CODE_OBJECT_EC_USER = os.environ.get("EC_CODE_OBJECT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 EC_CODE_OBJECT_EC_PASS = os.environ.get("EC_CODE_OBJECT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
