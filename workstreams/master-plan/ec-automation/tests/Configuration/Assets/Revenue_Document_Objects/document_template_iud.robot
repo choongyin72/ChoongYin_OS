@@ -12,6 +12,10 @@ Documentation       EC IUD Test - Document Template (Configuration > Assets > Re
 ...                 verify + explicit grid-filter wiring, upgraded from the prior label-driven-only
 ...                 shape (see docs/ec_screen_registry.md / docs/automation-scorecard.md - this
 ...                 MODIFIES that existing row, not a new build).
+...                 PURE SCREEN verification (matches bank_iud.robot's owner-requested
+...                 2026-08-18 convention: no DB check here) - removed the extra inline
+...                 DB-read keywords this suite originally had, to match Bank exactly
+...                 (2026-08-25 alignment fix).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Revenue_Document_Objects/document_template_page.resource
 
@@ -42,7 +46,6 @@ TC02 Insert Document Template Data
     Open Document Template Screen
     Insert Document Template Record And Save
     Verify Document Template Record Exists
-    Document Template Should Exist In DB    ${TEST_CODE}
     Logout From EC Application
 
 TC03 Update Document Template Data
@@ -50,7 +53,6 @@ TC03 Update Document Template Data
     Open Document Template Screen
     Update Document Template Record And Save
     Verify Document Template Record Updated
-    Field Should Equal In View    OV_DOC_TEMPLATE    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
     Logout From EC Application
 
 TC04 Find Document Template Data
@@ -65,17 +67,4 @@ TC05 Delete Document Template Data
     Open Document Template Screen
     Delete Document Template Record And Save
     Verify Document Template Record Removed
-    Document Template Should Not Exist In DB    ${TEST_CODE}
     Logout From EC Application
-
-
-*** Keywords ***
-Document Template Should Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} really persisted in OV_DOC_TEMPLATE.
-    [Arguments]    ${code}
-    Code Should Be Present In View    OV_DOC_TEMPLATE    ${code}
-
-Document Template Should Not Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} was truly deleted from OV_DOC_TEMPLATE.
-    [Arguments]    ${code}
-    Code Should Be Absent In View    OV_DOC_TEMPLATE    ${code}
