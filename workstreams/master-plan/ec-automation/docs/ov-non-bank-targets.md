@@ -229,3 +229,30 @@ NEITHER real keyword name, so it silently found nothing to contradict the claim.
 the sweep: a custom-URL OV with existing working automation = SKIP (nothing to gain, like this screen); a
 custom-URL OV needing NEW automation = ELIGIBLE, use the Report Context shape (Open keyword without Apply
 Navigator, screen's own grid id).
+
+### Well Mode (CO.0256) - FALSE POSITIVE correction (2026-08-24)
+**NOT the same screen as Well (CO.0049) above, and NOT eligible for the Bank-pattern skills - EXCLUDED.**
+The full-product deep-dive's "already known" filtering matched Well Mode (CO.0256) against this doc's own
+CO.0049 `Well`/`OV_WELL` row via a plain substring match on the view name `OV_WELL` - both the deep-dive
+note `DeepDiveLearnings/ec-screens/notes/CO.0256.md` and this row list `OV_WELL` as Well Mode's DB binding
+(metadata-resolved purely from its URL path token `object_mode/OBJECT_TYPE/WELL` -> class `WELL`), but that
+metadata resolution is misleading for this screen: **Well Mode's own data does not live in `OV_WELL` at
+all.** Live recon (2026-08-24) confirmed its real storage is `OBJECT_MODE`, a generic EAV
+(entity-attribute-value) table shared across object types (`MODE_TYPE='WELL'` + `MODE_CODE`/`ATTRIBUTE`/
+`VALUE` rows) - this is TABLE-shaped data, not a proper date-effective `CLASS_TYPE=OBJECT` record like
+Bank/Well/Stream-All. Insert is done via a "New Mode" gesture (not `objectForm`/New Object), Update targets
+a `modeDetail:form` container (not `updateAttributes`), and Delete is a plain toolbar Delete + Save (not the
+End Date = Start Date date-effective close Bank-family screens use). None of the standard `manage_object.
+resource` (T2) OV helpers apply. **Correctly excluded from this round's plain Bank-pattern skills** - would
+need a bespoke EAV-table driver, not a conversion. Self-cleaned during investigation (`OBJECT_MODE` rows for
+`AUTOTEST_WELL_MODE` = 0, DB-verified fresh connection). No bundle shipped; no PR raised.
+
+### Carrier (CO.0098) - single-BF_CODE, dual menu placement (2026-08-25)
+Live sandbox menu search for "Carrier" returns TWO exact-label treeview hits with different breadcrumbs -
+`Configuration > Assets > Cargo Objects > Carrier` and `Configuration > Assets > Transport Objects > Carrier`
+- which could look like two separate screens (and does in the flat `docs/EC/ec_full_tree_inventory.json`
+export, which carries no folder-header rows to disambiguate). **Confirmed to be the SAME screen, menu-linked
+into two folders** - both hits load the identical URL (`manage_object_nav/CLASS_NAME/CARRIER?tran`), same
+`screenLabel`, near-identical form HTML; `BUSINESS_FUNCTION` DB table has exactly one row with `NAME =
+'Carrier'` (`BF_CODE = CO.0098`). Already fully Bank-pattern converted (registry row, Batch 11 2026-08-23) -
+no second screen exists to build. Do not re-investigate this as a build gap in a future session.
