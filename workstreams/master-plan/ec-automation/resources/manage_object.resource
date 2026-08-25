@@ -547,3 +547,49 @@ Apply OV-GM Navigator First Available
     END
     Apply Navigator
     RETURN    ${top}
+
+Apply Navigator From Properties
+    [Documentation]    Fill an OV-GM navigator with EXPLICIT values driven by a properties file
+    ...    (column=value, read via PropertiesReader.Read Properties - the SAME mechanism Insert/
+    ...    Update Object From Properties already use for form fields), then click GO once. Added
+    ...    2026-08-26 to generalise Area's bespoke inline "Select EC Dropdown Option
+    ...    ${AREA_NAV_PU} ${AREA_NAV_PU_VALUE} / Apply Navigator" into a shared, reusable T2
+    ...    keyword any OV-GM screen's navigator can call.
+    ...
+    ...    FORMAT: each line in ${properties_path} is `<free-form label>=<value>`, filled IN FILE
+    ...    ORDER against nav:form:G:0:R:${row}:C:1, then C:2, then C:3 ... (one value per column,
+    ...    left to right). ${row} defaults to 1 - every OV-GM screen surveyed for this task (Area:
+    ...    single dropdown at C:1; Well: 3-level P1 cascade at C:1/C:2/C:3 - see well_page.resource
+    ...    "Apply Well Navigator"; Test Separator/Chemical Tank: first-available cascades via the
+    ...    sibling "Apply OV-GM Navigator First Available" above) puts its whole cascade on ROW 1.
+    ...    The properties file's KEYS (e.g. "Op Production Unit") are free-form documentation only
+    ...    for whoever edits the file - they are NOT resolved by a DOM label lookup. Nav dropdowns
+    ...    are addressed by raw id/column position (same convention as "Apply OV-GM Navigator
+    ...    First Available" and every hand-written screen surveyed), because no by-label mechanism
+    ...    for the NAVIGATOR specifically has been proven in this repo - OV Field Id By Label's
+    ...    ECCell-adjacent-cell scan (below) is only proven for objectForm/updateAttributes/
+    ...    objectdates FORM fields, not the nav area.
+    ...
+    ...    Twin of "Apply OV-GM Navigator First Available": same row/column addressing, but fills
+    ...    the EXPLICIT value the properties file names for each column instead of "pick whatever
+    ...    option is first available". Use THIS keyword when a screen's navigator needs a
+    ...    SPECIFIC value (like Area's "Production Unit" or Well's P1 scope); use the FIRST
+    ...    AVAILABLE variant when any valid option will do.
+    ...
+    ...    KNOWN LIMITATION: only covers the uniform single-row, C:1..C:N cascade shape confirmed
+    ...    live on every OV-GM screen checked for this task (Area, Well, Test Separator, Chemical
+    ...    Tank). A screen whose navigator instead uses PER-FIELD groups (a distinct id per level,
+    ...    e.g. separate "G:1"/"G:2"/"G:3" navigator groups rather than one row's increasing
+    ...    column index) would need its own resolution - not solved here, and no such screen was
+    ...    found in this repo while writing this keyword. Note this as a gap, don't guess a fix,
+    ...    if a future screen turns out to need it.
+    [Arguments]    ${properties_path}    ${row}=1
+    ${data}=    Read Properties    ${properties_path}
+    ${col}=    Set Variable    ${1}
+    FOR    ${label}    IN    @{data.keys()}
+        ${dd}=    Set Variable    nav:form:G:0:R:${row}:C:${col}:dd
+        Select EC Dropdown Option    ${dd}    ${data}[${label}]
+        Sleep    0.7s
+        ${col}=    Evaluate    ${col} + 1
+    END
+    Apply Navigator

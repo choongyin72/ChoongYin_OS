@@ -231,7 +231,7 @@ PR appends only its own ROW here — no per-PR section header._
 
 | Screen | Explicit filter wired? / Status | Notes |
 |---|---|---|
-| Area | DONE (2026-08-25, owner-directed OV-GM exception) | `Find/Clear Area Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete in `area_page.resource` (PR #521), after the mandatory Production Unit navigator + GO populates the grid. Confirmed fired 29x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Area | DONE (2026-08-25, owner-directed OV-GM exception) | `Find/Clear Area Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete in `area_page.resource` (PR #521), after the mandatory Production Unit navigator + GO populates the grid. Confirmed fired 29x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ **2026-08-26 (PR #523):** navigator fill now delegates to the shared T2 `Apply Navigator From Properties` (`resources/manage_object.resource`, additive-only shared-file change with R12 canaries: well 4/4 + test_separator 4/4 live, dryrun 846/846), driven by `testdata/area_navigator.properties` - same id/value as the previous inline fill. |
 
 ## How to update this doc
 
