@@ -1,17 +1,21 @@
 *** Settings ***
 Documentation       EC IUD Test - Royalty Depositor (Configuration > Assets > Royalty Objects >
 ...                 Royalty Depositor). Manage-Object (OV) screen. DELETE = End Date = Start Date
-...                 (true delete in ov_royalty_depositor). Layered: this test -> royalty_depositor_page
+...                 (true delete in OV_ROYALTY_DEPOSITOR). Layered: this test -> royalty_depositor_page
 ...                 (T3) -> manage_object (T2) + common (T1). Bank-pattern conversion (Batch 5,
 ...                 2026-08-23): property-file-driven + label-driven + T2-consolidated, replacing
 ...                 the older hardcoded-field-id driver. NEVER touch existing data. Uses a FIXED
 ...                 test code (AUTOTEST_ROYALTY_DEP, matching Bank/Account's own convention)
-...                 confirmed absent from ov_royalty_depositor before this was wired in (live
+...                 confirmed absent from OV_ROYALTY_DEPOSITOR before this was wired in (live
 ...                 fresh-connection query, 2026-08-23). Every run must complete TC05 (delete) so
 ...                 the code is free for the next run - EC never lets a DELETED code be reused,
 ...                 but this fixed code only stays reusable if each run actually cleans up after
 ...                 itself. EACH test case does its own real Login/Logout on ONE browser opened
 ...                 once in Suite Setup - matches Bank's convention.
+...                 PURE SCREEN verification (matches bank_iud.robot's owner-requested
+...                 2026-08-18 convention: no DB check here) - removed the extra inline
+...                 DB-read keywords this suite originally had, to match Bank exactly
+...                 (2026-08-25 alignment fix).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Royalty_Objects/royalty_depositor_page.resource
 
@@ -44,7 +48,6 @@ TC02 Insert Royalty Depositor Data
     Open Royalty Depositor Screen
     Insert Royalty Depositor Record And Save
     Verify Royalty Depositor Record Exists
-    Royalty Depositor Should Exist In DB    ${TEST_CODE}
     Logout From EC Application
 
 TC03 Update Royalty Depositor Data
@@ -67,10 +70,3 @@ TC05 Delete Royalty Depositor Data
     Delete Royalty Depositor Record And Save
     Verify Royalty Depositor Record Removed
     Logout From EC Application
-
-
-*** Keywords ***
-Royalty Depositor Should Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} really persisted in ov_royalty_depositor.
-    [Arguments]    ${code}
-    Code Should Be Present In View    ov_royalty_depositor    ${code}
