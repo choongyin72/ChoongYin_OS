@@ -221,3 +221,5 @@ CHOKE_EC_USER = os.environ.get("CHOKE_EC_USER", os.environ.get("EC_USER", "sysad
 CHOKE_EC_PASS = os.environ.get("CHOKE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 PRODUCT_PRICE_OBJECT_EC_USER = os.environ.get("PRODUCT_PRICE_OBJECT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PRODUCT_PRICE_OBJECT_EC_PASS = os.environ.get("PRODUCT_PRICE_OBJECT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+FIELD_SPLIT_KEY_EC_USER = os.environ.get("FIELD_SPLIT_KEY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+FIELD_SPLIT_KEY_EC_PASS = os.environ.get("FIELD_SPLIT_KEY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
