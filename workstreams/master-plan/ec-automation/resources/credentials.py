@@ -238,3 +238,5 @@ FIELD_SPLIT_KEY_EC_USER = os.environ.get("FIELD_SPLIT_KEY_EC_USER", os.environ.g
 FIELD_SPLIT_KEY_EC_PASS = os.environ.get("FIELD_SPLIT_KEY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 OTHER_SPLIT_KEY_EC_USER = os.environ.get("OTHER_SPLIT_KEY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 OTHER_SPLIT_KEY_EC_PASS = os.environ.get("OTHER_SPLIT_KEY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+STREAM_ITEM_SPLIT_KEY_EC_USER = os.environ.get("STREAM_ITEM_SPLIT_KEY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+STREAM_ITEM_SPLIT_KEY_EC_PASS = os.environ.get("STREAM_ITEM_SPLIT_KEY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
