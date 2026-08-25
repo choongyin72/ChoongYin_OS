@@ -240,3 +240,6 @@ OTHER_SPLIT_KEY_EC_USER = os.environ.get("OTHER_SPLIT_KEY_EC_USER", os.environ.g
 OTHER_SPLIT_KEY_EC_PASS = os.environ.get("OTHER_SPLIT_KEY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 STREAM_ITEM_SPLIT_KEY_EC_USER = os.environ.get("STREAM_ITEM_SPLIT_KEY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 STREAM_ITEM_SPLIT_KEY_EC_PASS = os.environ.get("STREAM_ITEM_SPLIT_KEY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+HCB_SYSTEM_EC_USER = os.environ.get("HCB_SYSTEM_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+HCB_SYSTEM_EC_PASS = os.environ.get("HCB_SYSTEM_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
