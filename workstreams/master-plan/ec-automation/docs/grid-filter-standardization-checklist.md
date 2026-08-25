@@ -218,6 +218,15 @@ PR appends only its own ROW here — no per-PR section header._
 |---|---|---|
 | Document Sequence | DONE (2026-08-25) | `Find/Clear Document Sequence Row By Filter` (delegating to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `document_sequence_page.resource` (PR #506). Confirmed fired 15x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
 
+## Revenue Lists + Data Extract Setup conversions (2026-08-25)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Input List | DONE (2026-08-25) | `Find/Clear Input List Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete in `input_list_page.resource` (PR #515). Confirmed fired 15x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| UOP Key | DONE (2026-08-25) | `Find/Clear UOP Key Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete in `uop_key_page.resource` (PR #516). Confirmed fired 15x/14x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| HCB System | DONE (2026-08-25) | `Find/Clear HCB System Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete in `hcb_system_page.resource` (PR #517). Confirmed fired 30x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Data Extract Setup | DONE (2026-08-25) | `Find/Clear Data Extract Setup Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete in `data_extract_setup_page.resource` (PR #518). Confirmed fired 13x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible
