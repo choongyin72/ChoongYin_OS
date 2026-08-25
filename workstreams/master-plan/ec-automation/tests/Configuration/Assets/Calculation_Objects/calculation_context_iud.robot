@@ -12,6 +12,10 @@ Documentation       EC IUD Test - Calculation Context (Configuration > Assets > 
 ...                 actually cleans up after itself.
 ...                 EACH test case does its own real Login/Logout on ONE browser opened once in
 ...                 Suite Setup - not 5 separate browser launches (matches Bank's convention).
+...                 PURE SCREEN verification (matches bank_iud.robot's owner-requested
+...                 2026-08-18 convention: no DB check here) - removed the extra inline
+...                 DB-read keywords this suite originally had, to match Bank exactly
+...                 (2026-08-25 alignment fix).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Calculation_Objects/calculation_context_page.resource
 
@@ -28,11 +32,11 @@ ${OBJ_NAME}         Automation Test Calculation Context
 ${START_DATE}       2000-01-01
 ${END_DATE}         ${START_DATE}
 # These 2 values must stay in sync with testdata/calculation_context_insert.properties - TC02
-# DB-verifies them against what that file actually set, not an independent assumption.
+# verifies them on screen against what that file actually set, not an independent assumption.
 ${OBJ_DESC}         Automation test calc context description
 ${OBJ_COMMENTS}     Automation test calc context comments
 # These 3 values must stay in sync with testdata/calculation_context_update.properties - TC03
-# DB-verifies them against what that file actually set, not an independent assumption.
+# verifies them on screen against what that file actually set, not an independent assumption.
 ${OBJ_NAME_UPD}      Automation Test Calculation Context UPDATED
 ${OBJ_DESC_UPD}      Automation test calc context description UPDATED
 ${OBJ_COMMENTS_UPD}  Automation test calc context comments UPDATED
@@ -50,9 +54,6 @@ TC02 Insert Calculation Context Data
     Open Calculation Context Screen
     Insert Calculation Context Record And Save
     Verify Calculation Context Record Exists
-    Calculation Context Should Exist In DB    ${TEST_CODE}
-    Field Should Equal In View    OV_CALC_CONTEXT    ${TEST_CODE}    DESCRIPTION    ${OBJ_DESC}
-    Field Should Equal In View    OV_CALC_CONTEXT    ${TEST_CODE}    COMMENTS    ${OBJ_COMMENTS}
     Logout From EC Application
 
 TC03 Update Calculation Context Data
@@ -60,9 +61,6 @@ TC03 Update Calculation Context Data
     Open Calculation Context Screen
     Update Calculation Context Record And Save
     Verify Calculation Context Record Updated
-    Field Should Equal In View    OV_CALC_CONTEXT    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Field Should Equal In View    OV_CALC_CONTEXT    ${TEST_CODE}    DESCRIPTION    ${OBJ_DESC_UPD}
-    Field Should Equal In View    OV_CALC_CONTEXT    ${TEST_CODE}    COMMENTS    ${OBJ_COMMENTS_UPD}
     Logout From EC Application
 
 TC04 Find Calculation Context Data
@@ -78,10 +76,3 @@ TC05 Delete Calculation Context Data
     Delete Calculation Context Record And Save
     Verify Calculation Context Record Removed
     Logout From EC Application
-
-
-*** Keywords ***
-Calculation Context Should Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} really persisted in OV_CALC_CONTEXT.
-    [Arguments]    ${code}
-    Code Should Be Present In View    OV_CALC_CONTEXT    ${code}
