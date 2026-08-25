@@ -243,3 +243,5 @@ STREAM_ITEM_SPLIT_KEY_EC_PASS = os.environ.get("STREAM_ITEM_SPLIT_KEY_EC_PASS", 
 
 INPUT_LIST_EC_USER = os.environ.get("INPUT_LIST_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 INPUT_LIST_EC_PASS = os.environ.get("INPUT_LIST_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+UOP_KEY_EC_USER = os.environ.get("UOP_KEY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+UOP_KEY_EC_PASS = os.environ.get("UOP_KEY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
