@@ -227,6 +227,12 @@ PR appends only its own ROW here — no per-PR section header._
 | HCB System | DONE (2026-08-25) | `Find/Clear HCB System Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete in `hcb_system_page.resource` (PR #517). Confirmed fired 30x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
 | Data Extract Setup | DONE (2026-08-25) | `Find/Clear Data Extract Setup Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete in `data_extract_setup_page.resource` (PR #518). Confirmed fired 13x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
 
+## Area - owner-directed OV-GM exception (2026-08-25)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Area | DONE (2026-08-25, owner-directed OV-GM exception) | `Find/Clear Area Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete in `area_page.resource` (PR #521), after the mandatory Production Unit navigator + GO populates the grid. Confirmed fired 29x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible

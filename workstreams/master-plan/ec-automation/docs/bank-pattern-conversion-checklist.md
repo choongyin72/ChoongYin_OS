@@ -264,6 +264,12 @@ header._
 |---|---|---|
 | HCB System (Configuration > Assets > Revenue_Lists, CD.0097) | DONE (2026-08-25) | Converted from label-driven-only to full Bank pattern (PR #517): properties-file-driven insert/update/verify, explicit filter wiring, fixed `AUTOTEST_HCB` (was timestamped), per-TC Login/Logout, inline DB-verify removed in the same pass. Live recon corrected the stale KB claim - `HCB Category` IS mandatory (MandatoryCellStyle scan), reflected in insert properties + `ec-ui-knowledge/screens/hcb_system.md`. Live 5/5, dryrun 842/842, self-clean 0 residual in `OV_BALANCE` via fresh connection. No shared T1/T2 changes. _Row added by the reviewer at merge - PR omitted both checklists (R38)._ |
 
+## Area structural conversion - owner-directed OV-GM exception (2026-08-25)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Area (Configuration > Assets > Basic_Objects, OV-GM) | STRUCTURE ONLY (2026-08-25, owner-directed one-off) | **NOT an eligibility reclassification - Area is and remains OV-GM** (mandatory Production Unit navigator + GO), and the OV-GM exclusion for the rest of that family is unchanged. Per the owner's exact 5-TC skeleton, PR #521 converted the RF suite's STRUCTURE to the Bank shape (5 TCs incl. TC04 Find, per-TC Login/Logout, fixed `AUTOTEST_AREA`, properties-file-driven insert/update, explicit filter wiring, pure-screen verification) while keeping the real PU+GO gesture in every TC (`Open Area Screen With Navigator Values Populated`). Live 5/5, dryrun 846/846, self-clean 0 residual in `OV_AREA` via fresh connection. _Row added by the reviewer at merge to satisfy the R38 four-doc gate; the PR itself deliberately left this doc untouched per the owner directive, and this row records the exception without touching the OV-GM exclusion tables._ |
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to
