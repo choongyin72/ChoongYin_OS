@@ -225,3 +225,10 @@ DOCUMENT_SEQUENCE_EC_USER = os.environ.get("DOCUMENT_SEQUENCE_EC_USER", os.envir
 DOCUMENT_SEQUENCE_EC_PASS = os.environ.get("DOCUMENT_SEQUENCE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 PRODUCT_SPLIT_KEY_EC_USER = os.environ.get("PRODUCT_SPLIT_KEY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PRODUCT_SPLIT_KEY_EC_PASS = os.environ.get("PRODUCT_SPLIT_KEY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+STREAM_ITEM_CATEGORY_SPLIT_KEY_EC_USER = os.environ.get(
+    "STREAM_ITEM_CATEGORY_SPLIT_KEY_EC_USER", os.environ.get("EC_USER", "sysadmin")
+)
+STREAM_ITEM_CATEGORY_SPLIT_KEY_EC_PASS = os.environ.get(
+    "STREAM_ITEM_CATEGORY_SPLIT_KEY_EC_PASS", os.environ.get("EC_PASS", "sysadmin")
+)
