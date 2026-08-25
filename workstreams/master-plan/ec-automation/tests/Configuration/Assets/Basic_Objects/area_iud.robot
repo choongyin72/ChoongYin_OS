@@ -1,64 +1,66 @@
 *** Settings ***
 Documentation       EC IUD Test - Area (Configuration > Assets > Basic Objects > Area).
-...                 Manage-Object (OV, groupmodel) screen: grid is filtered by the navigator
-...                 Production Unit. DELETE = End Date = Start Date (true delete in OV_AREA).
-...                 NEVER touch existing data. A unique AUTOTEST_AREA_<timestamp> code is
-...                 generated per run. Navigator/Op PU value user-approved 2026-06-11.
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory Production Unit navigator + GO. DELETE = End Date = Start Date
+...                 (true delete in OV_AREA). NEVER touch existing data.
+...                 Layered: this test -> area_page (T3) -> manage_object (T2) + common (T1).
+...                 Converted to the Bank-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (owner-directed exception, 2026-08-25) - Area remains OV-GM and still needs
+...                 its genuine Production Unit navigator gesture; this is a structural
+...                 conversion, not a reclassification of Area as plain Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_AREA, owner-requested) rather than a
+...                 generated unique code - confirmed absent from OV_AREA (2026-08-25) before
+...                 this was wired in. Every run must complete TC05 (delete) so the code is
+...                 free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup - matches Bank/Berth's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Basic_Objects/area_page.resource
 
-Suite Setup         Set Up Area Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    area
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-# 2003+: the Op Production Unit dropdown only offers PUs effective at the form's
-# start date, and 'Production Unit' (user-approved context) starts 2002-01-01
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
-# navigator context + Op Production Unit of the test area - user-approved 2026-06-11
-${NAV_PU}           Production Unit
+${TEST_CODE}        AUTOTEST_AREA
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test area does not exist before inserting.
-    [Tags]    clean-state
-    Area Row Should Not Exist    ${TEST_CODE}
-    Capture Step    area_tc01_clean
+    Login To EC Application
+    Open Area Screen With Navigator Values Populated
+    Verify Area Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Area
-    [Documentation]    Insert a new area under ${NAV_PU} and confirm it appears in the list.
-    [Tags]    insert
-    Insert Area Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}    ${NAV_PU}
-    Area Row Should Exist    ${TEST_CODE}
-    Area Should Exist In DB    ${TEST_CODE}
-    Capture Step    area_tc02_inserted
+TC02 Insert Area Data
+    Login To EC Application
+    Open Area Screen With Navigator Values Populated
+    Insert Area Record And Save
+    Verify Area Record Exists
+    Logout From EC Application
 
-TC03 Update Area Name
-    [Documentation]    Edit the area name and confirm the list reflects the change.
-    [Tags]    update
-    Update Area Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Area Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    area_tc03_updated
+TC03 Update Area Data
+    Login To EC Application
+    Open Area Screen With Navigator Values Populated
+    Update Area Record And Save
+    Verify Area Record Updated
+    Logout From EC Application
 
-TC04 Delete Area
-    [Documentation]    Delete via End Date = Start Date and confirm the area is gone.
-    [Tags]    delete    cleanup
-    Delete Area    ${TEST_CODE}    ${END_DATE}
-    Area Row Should Not Exist    ${TEST_CODE}
-    Area Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    area_tc04_deleted
+TC04 Find Area Data
+    Login To EC Application
+    Open Area Screen With Navigator Values Populated
+    Find Area Record
+    Verify Area Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Area Suite
-    [Documentation]    Generate a unique test code/name, then open the Area screen
-    ...    with the approved Production Unit navigator context.
-    Prepare IUD Object Data    AUTOTEST_AREA_    Area
-    Open Area Screen    ${NAV_PU}
+TC05 Delete Area Data
+    Login To EC Application
+    Open Area Screen With Navigator Values Populated
+    Delete Area Record And Save
+    Verify Area Record Removed
+    Logout From EC Application

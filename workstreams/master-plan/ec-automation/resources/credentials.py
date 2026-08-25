@@ -249,3 +249,6 @@ UOP_KEY_EC_USER = os.environ.get("UOP_KEY_EC_USER", os.environ.get("EC_USER", "s
 UOP_KEY_EC_PASS = os.environ.get("UOP_KEY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 HCB_SYSTEM_EC_USER = os.environ.get("HCB_SYSTEM_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 HCB_SYSTEM_EC_PASS = os.environ.get("HCB_SYSTEM_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+AREA_EC_USER = os.environ.get("AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+AREA_EC_PASS = os.environ.get("AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
