@@ -120,6 +120,101 @@ def checklist_contradictions(bundle_dir):
     return out
 
 
+R38_DOCS = {
+    "registry": EC / "docs" / "ec_screen_registry.md",
+    "scorecard": ROOT / "docs" / "automation-scorecard.md",
+    "bank_checklist": EC / "docs" / "bank-pattern-conversion-checklist.md",
+    "grid_checklist": EC / "docs" / "grid-filter-standardization-checklist.md",
+}
+_R38_MARKERS = ("Insert Object From Properties", "Find Object Row By Filter")
+
+
+def _git_lines(args):
+    import subprocess
+    try:
+        r = subprocess.run(["git"] + args, cwd=ROOT, capture_output=True, text=True, check=True)
+    except Exception:
+        return None
+    return [l for l in r.stdout.splitlines() if l.strip()]
+
+
+def _screen_name_from_page_object(path):
+    """other_split_key_page.resource -> 'Other Split Key' (strip trailing _page suffix only)."""
+    stem = Path(path).stem
+    if stem.endswith("_page"):
+        stem = stem[: -len("_page")]
+    return stem.replace("_", " ").strip().title()
+
+
+def _checklist_has_row_for(doc_path, screen_name):
+    """Row-prefix match (not substring): a heading/table-row line, after stripping leading
+    markdown markers (#, |, whitespace), must START WITH the screen name. Guards against the
+    #519 false-positive where a screen name appears merely mentioned inside a different row."""
+    if not doc_path.exists():
+        return True  # can't fail on a file we can't read; other checks will flag a missing path
+    pattern = re.compile(r"^[#\s|]*" + re.escape(screen_name), re.I)
+    for line in doc_path.read_text(encoding="utf-8", errors="replace").splitlines():
+        stripped = line.lstrip("#| ").strip()
+        if stripped.lower().startswith(screen_name.lower()):
+            return True
+        if pattern.match(line):
+            return True
+    return False
+
+
+def r38_four_doc_set_violations():
+    """R38 (lessons-learned v38, Issue #519): a PR/commit that touches a page object which
+    already uses (or newly gains) `Insert Object From Properties` / `Find Object Row By Filter`
+    must, in the SAME diff, also touch registry + scorecard + BOTH checklists (existing-screen
+    conversions), or just registry + scorecard (brand-new builds - detected via git 'A' status).
+    Diff scope = uncommitted working tree + staged + everything committed since the merge-base
+    with origin/master, unioned, so this catches the change whether run pre-commit or pre-push."""
+    base_lines = _git_lines(["merge-base", "origin/master", "HEAD"])
+    if not base_lines:
+        return []  # no git / no origin/master reachable (e.g. isolated clone) - skip, don't false-fail
+    base = base_lines[0]
+    name_status = (_git_lines(["diff", "--name-status", base]) or []) + \
+                   (_git_lines(["diff", "--name-status", "--cached"]) or []) + \
+                   (_git_lines(["diff", "--name-status"]) or [])
+    changed = {}  # relpath -> status (A/M/...), last-seen wins (working > staged > committed is fine either way)
+    for line in name_status:
+        parts = line.split("\t")
+        if len(parts) >= 2:
+            changed[parts[-1]] = parts[0][0]
+
+    changed_paths = set(changed)
+    violations = []
+    for rel, status in changed.items():
+        if not rel.endswith("_page.resource") or "/pageobjects/" not in rel.replace("\\", "/"):
+            continue
+        full = ROOT / rel
+        if not full.exists():
+            continue  # deleted
+        text = full.read_text(encoding="utf-8", errors="replace")
+        if not any(marker in text for marker in _R38_MARKERS):
+            continue  # not a Bank-pattern page object
+
+        screen_name = _screen_name_from_page_object(full)
+        is_new_build = status == "A"
+
+        required = ["registry", "scorecard"] if is_new_build else list(R38_DOCS)
+        missing_docs = []
+        for key in required:
+            doc_full = R38_DOCS[key]
+            doc_rel = str(doc_full.relative_to(ROOT)).replace("\\", "/")
+            touched = any(p.replace("\\", "/") == doc_rel for p in changed_paths)
+            if key in ("registry", "scorecard"):
+                if not touched:
+                    missing_docs.append(doc_rel)
+            else:
+                # checklists: must be touched AND contain a row for this screen (row-prefix match)
+                if not touched or not _checklist_has_row_for(doc_full, screen_name):
+                    missing_docs.append(doc_rel)
+        if missing_docs:
+            violations.append((rel, screen_name, is_new_build, missing_docs))
+    return violations
+
+
 def doc_row_family_mismatches():
     """Item 2 gate: every screen in docs/screen_families.json must have registry + scorecard rows whose
     wording matches its family. Catches the #265/#278/#283 class (OV-GM phrasing on a plain-OV screen)
@@ -183,6 +278,10 @@ def main():
     # doc-row family/vocabulary mismatches (item 2)
     rowfails = doc_row_family_mismatches()
 
+    # R38 four-doc-set gate (Issue #519) - a Bank-pattern page-object diff must carry its
+    # registry/scorecard/checklist rows in the SAME diff, not left for the reviewer to hand-fix.
+    r38_fails = r38_four_doc_set_violations()
+
     print(f"[hygiene] scanned {len(bundles)} bundle(s) + {len(recon)} recon script(s)")
     if contradictions:
         print(f"\n[hygiene] FAIL - {len(contradictions)} CHECKLIST/VERIFY-REPORT contradiction(s) "
@@ -211,7 +310,14 @@ def main():
               f"does not match their declared family (#265/#278/#283 class):")
         for scr, msg in rowfails:
             print(f"   {scr}: {msg}")
-    if fails or nonascii or contradictions or rowfails:
+    if r38_fails:
+        print(f"\n[hygiene] FAIL - {len(r38_fails)} page object(s) missing required doc row(s) in the "
+              f"same diff (R38 / Issue #519 - registry+scorecard always, +both checklists for an "
+              f"existing-screen conversion):")
+        for rel, screen_name, is_new, missing in r38_fails:
+            kind = "new build" if is_new else "conversion"
+            print(f"   {rel} ({screen_name}, {kind}) - missing/no-row-for-screen: {', '.join(missing)}")
+    if fails or nonascii or contradictions or rowfails or r38_fails:
         print("\n[hygiene] RESULT: FAIL")
         return 1
     print("\n[hygiene] RESULT: PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions, doc rows match declared families")
