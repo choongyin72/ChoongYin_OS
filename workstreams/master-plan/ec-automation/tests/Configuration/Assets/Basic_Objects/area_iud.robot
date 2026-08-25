@@ -58,7 +58,8 @@ TC04 Delete Area
 
 *** Keywords ***
 Set Up Area Suite
-    [Documentation]    Generate a unique test code/name, then open the Area screen
-    ...    with the approved Production Unit navigator context.
+    [Documentation]    Generate a unique test code/name, then open the Area screen - the
+    ...    Production Unit navigator context is now filled from testdata/area_navigator.properties
+    ...    (via the shared T2 Apply Navigator From Properties), not passed as an argument here.
     Prepare IUD Object Data    AUTOTEST_AREA_    Area
-    Open Area Screen    ${NAV_PU}
+    Open Area Screen

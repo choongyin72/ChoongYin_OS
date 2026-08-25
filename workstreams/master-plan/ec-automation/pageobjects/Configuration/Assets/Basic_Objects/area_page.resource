@@ -7,6 +7,7 @@ Documentation       T3 (screen) — Area page object.
 
 Library             Browser
 Library             ../../../../libraries/DbVerify.py
+Library             ../../../../libraries/PropertiesReader.py
 Resource            ../../../../resources/common.resource
 Resource            ../../../../resources/manage_object.resource
 
@@ -14,8 +15,12 @@ Resource            ../../../../resources/manage_object.resource
 *** Variables ***
 ${AREA_SCREEN}          Area
 ${AREA_TABLE}           manageObject:form:T_data
-# navigator (groupmodel): Production Unit dropdown — MANDATORY before the grid loads
+# navigator (groupmodel): Production Unit dropdown — MANDATORY before the grid loads.
+# 2026-08-26: the fill itself now goes through the shared T2 "Apply Navigator From Properties"
+# (resources/manage_object.resource), driven by testdata/area_navigator.properties. ${AREA_NAV_PU}
+# is kept only as documentation of the DOM id that properties-driven fill resolves to (row 1, C:1).
 ${AREA_NAV_PU}          nav:form:G:0:R:1:C:1:dd
+${AREA_NAVIGATOR_PROPERTIES}    ${CURDIR}/../../../../testdata/area_navigator.properties
 # objectForm field IDs (Insert — new object)
 ${AREA_INS_CODE}        tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
 ${AREA_INS_NAME}        tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
@@ -30,12 +35,15 @@ ${AREA_DEL_ENDDATE}     tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 *** Keywords ***
 Open Area Screen
-    [Documentation]    Suite Setup: launch, login, navigate, select the Production Unit
-    ...    navigator context and apply it (grid is empty until then).
-    [Arguments]    ${production_unit}    ${user}=${EC_USER}    ${pass}=${EC_PASS}
+    [Documentation]    Suite Setup: launch, login, navigate, then fill + submit the mandatory
+    ...    Production Unit navigator context (grid is empty until then). Navigator fill delegates
+    ...    to the shared T2 "Apply Navigator From Properties" (resources/manage_object.resource,
+    ...    added 2026-08-26), driven by testdata/area_navigator.properties, instead of inlining
+    ...    "Select EC Dropdown Option + Apply Navigator" here - so any other OV-GM screen with a
+    ...    navigator can reuse the same shared keyword with its own properties file.
+    [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
     Launch EC And Open Screen    ${AREA_SCREEN}    ${user}    ${pass}
-    Select EC Dropdown Option    ${AREA_NAV_PU}    ${production_unit}
-    Apply Navigator
+    Apply Navigator From Properties    ${AREA_NAVIGATOR_PROPERTIES}
 
 Area Row Should Exist
     [Documentation]    Assert an area with ${code} is present in the list.
