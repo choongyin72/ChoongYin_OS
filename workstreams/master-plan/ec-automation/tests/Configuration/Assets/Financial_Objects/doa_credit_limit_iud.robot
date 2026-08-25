@@ -11,6 +11,10 @@ Documentation       EC IUD Test - DOA Credit Limit (Configuration > Assets > Fin
 ...                 fixed code only stays reusable if each run actually cleans up after itself.
 ...                 EACH test case does its own real Login/Logout on ONE browser opened once in
 ...                 Suite Setup, matching Bank/VAT Code's convention (docs/rf-suite-styles.md).
+...                 PURE SCREEN verification (matches bank_iud.robot's owner-requested
+...                 2026-08-18 convention: no DB check here) - removed the extra inline
+...                 DB-read keywords this suite originally had, to match Bank exactly
+...                 (2026-08-25 alignment fix).
 
 Resource            ../../../../pageobjects/Configuration/Assets/Financial_Objects/doa_credit_limit_page.resource
 
@@ -39,7 +43,6 @@ TC02 Insert DOA Credit Limit Data
     Open DOA Credit Limit Screen
     Insert DOA Credit Limit Record And Save
     Verify DOA Credit Limit Record Exists
-    DOA Credit Limit Should Exist In DB    ${TEST_CODE}
     Logout From EC Application
 
 TC03 Update DOA Credit Limit Data
@@ -61,17 +64,4 @@ TC05 Delete DOA Credit Limit Data
     Open DOA Credit Limit Screen
     Delete DOA Credit Limit Record And Save
     Verify DOA Credit Limit Record Removed
-    DOA Credit Limit Should Not Exist In DB    ${TEST_CODE}
     Logout From EC Application
-
-
-*** Keywords ***
-DOA Credit Limit Should Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} really persisted in OV_DOA_CREDIT_LIMIT.
-    [Arguments]    ${code}
-    Code Should Be Present In View    OV_DOA_CREDIT_LIMIT    ${code}
-
-DOA Credit Limit Should Not Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} was truly deleted from OV_DOA_CREDIT_LIMIT.
-    [Arguments]    ${code}
-    Code Should Be Absent In View    OV_DOA_CREDIT_LIMIT    ${code}
