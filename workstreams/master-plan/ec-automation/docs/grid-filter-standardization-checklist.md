@@ -212,6 +212,12 @@ PR appends only its own ROW here — no per-PR section header._
 | Choke Model | DONE (2026-08-24) | `Find/Clear Choke Model Row By Filter` (delegating to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `choke_model_page.resource` (PR #497), matching Bank/Berth. Confirmed fired 15x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge - PR omitted this checklist (R38)._ |
 | Choke | DONE (2026-08-24) | `Find/Clear Choke Row By Filter` (delegating to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `choke_page.resource` (PR #498), matching Bank/Berth. Confirmed fired 15x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge - PR omitted this checklist (R38)._ |
 
+## Document Sequence conversion (2026-08-25)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Document Sequence | DONE (2026-08-25) | `Find/Clear Document Sequence Row By Filter` (delegating to shared T2 `Find/Clear Object Row By Filter`) wired into Update/Find/Verify-Found/Delete in `document_sequence_page.resource` (PR #506). Confirmed fired 15x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible

@@ -256,3 +256,39 @@ into two folders** - both hits load the identical URL (`manage_object_nav/CLASS_
 `screenLabel`, near-identical form HTML; `BUSINESS_FUNCTION` DB table has exactly one row with `NAME =
 'Carrier'` (`BF_CODE = CO.0098`). Already fully Bank-pattern converted (registry row, Batch 11 2026-08-23) -
 no second screen exists to build. Do not re-investigate this as a build gap in a future session.
+
+### Document Sequence (CD.0109) - Bank-pattern conversion, verification-purity fix (2026-08-25)
+Re-checked against the row above (marked `[x] #236 (custom-URL OV)`) - the classification (custom-URL OV,
+grid `nav:form:T_data`, no navigator/GO, toolbar Refresh) re-confirmed accurate live (existing driver
+`py/document_sequence_iud.py` re-run headless this session: PASS 5/5 steps, DB self-clean 0 residual).
+
+However, reading the FULL `.robot` file content (not just re-running it) found the same class of deviation
+already caught on DOA Credit Limit this session: THREE inline DB-verify keyword calls sitting directly in
+the test cases (`Document Sequence Should Exist In DB`, `Field Should Equal In View OV_DOC_SEQUENCE ...`,
+`Document Sequence Should Not Exist In DB`), violating the owner's 2026-08-18 pure-screen-verification
+convention. Also found: not properties-file-driven (raw `Fill OV Field By Label` calls), no explicit
+`Find/Clear Document Sequence Row By Filter` grid-filter wiring, a timestamped/generated test code
+(`AUTOTEST_DS_<timestamp>`) instead of a fixed one, single Suite-level Login/Logout instead of per-TC, and
+only 4 TCs (missing an explicit TC04 Find).
+
+Per the reviewer's 2026-08-25 correction on Contract Area Setup (same doc, above): the T2 Bank-pattern
+keywords (`Insert/Update Object From Properties`, `Find/Clear <Screen> Row By Filter`) take the grid id as
+an argument and do not depend on the manage-object controller - they apply to custom-URL OV screens too, as
+proven live on Report Context (RP.0007, PR #487). Converted Document Sequence to the same shape as Report
+Context: 4 new `testdata/document_sequence_{insert,update,form_verify,grid_verify}.properties` files, a
+`DOCUMENT_SEQUENCE_EC_USER`/`_EC_PASS` credential pair (additive-only in `resources/credentials.py`), full
+T3 rewrite (`document_sequence_page.resource`) and T3 test-suite rewrite (`document_sequence_iud.robot`) -
+fixed test code `AUTOTEST_DOCUMENT_SEQUENCE` (confirmed absent from `OV_DOC_SEQUENCE` before use, fresh
+connection), per-TC Login/Logout, explicit grid-filter wiring, zero inline DB-verify calls in the .robot
+file, 5 TCs (added TC04 Find). Starting Point (a mandatory extra text field, DB column `STARTING_POINT`)
+kept in the insert properties file (still filled on Insert, matching the screen's own prior driver) but
+excluded from the form-verify label list - it was never previously round-trip-verified in `updateAttributes`,
+same precedent as Bank/Report Context excluding their own Insert-only fields from that list.
+
+No shared T1/T2 file changes. Verified: robocop parity (9 issues, identical count/category to Report
+Context's own 9 - not a regression), full-tree dryrun 811/811, live RF 5/5 (`results/_live_ds/`), filter
+keyword fired 15x (`grep -c "Find Object Row By Filter" output.xml`), DB self-clean 0 residual `AUTOTEST%`
+rows in `OV_DOC_SEQUENCE` via a fresh `oracledb` connection after the live run. Playwright driver
+(`py/document_sequence_iud.py`) left unchanged - already properties-free/label-driven and still passes;
+no defect found in it. Registry (`docs/ec_screen_registry.md`) and scorecard
+(`docs/automation-scorecard.md`) rows updated in place (modifying the existing row, not adding a new one).
