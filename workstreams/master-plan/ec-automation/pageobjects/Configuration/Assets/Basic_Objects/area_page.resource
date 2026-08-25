@@ -25,8 +25,13 @@ ${AREA_TABLE}           manageObject:form:T_data
 # navigator (groupmodel): Production Unit dropdown — MANDATORY before the grid loads.
 # Value confirmed live (2026-08-25): the "Production Unit" option is itself the PU's display
 # name in this sandbox (matches the pre-existing suite's user-approved 2026-06-11 context).
+# 2026-08-26: the fill itself now goes through the shared T2 "Apply Navigator From Properties"
+# (resources/manage_object.resource), driven by testdata/area_navigator.properties. ${AREA_NAV_PU}
+# and ${AREA_NAV_PU_VALUE} are kept only as documentation of the DOM id (row 1, C:1) and the
+# required value - the properties-driven fill resolves to the same id/value, not a different one.
 ${AREA_NAV_PU}          nav:form:G:0:R:1:C:1:dd
 ${AREA_NAV_PU_VALUE}    Production Unit
+${AREA_NAVIGATOR_PROPERTIES}    ${CURDIR}/../../../../testdata/area_navigator.properties
 ${AREA_INSERT_PROPERTIES}    ${CURDIR}/../../../../testdata/area_insert.properties
 ${AREA_UPDATE_PROPERTIES}    ${CURDIR}/../../../../testdata/area_update.properties
 ${AREA_FORM_VERIFY_PROPERTIES}    ${CURDIR}/../../../../testdata/area_form_verify.properties
@@ -73,10 +78,13 @@ Open Area Screen With Navigator Values Populated
     ...    Login To EC Application) - matches every other Bank-pattern-converted screen's "Open
     ...    <Screen> Screen" convention, extended here with the genuine OV-GM navigator gesture
     ...    that already existed in this screen's own prior "Open Area Screen" keyword (just
-    ...    wrapped/renamed into this shape, not reinvented).
+    ...    wrapped/renamed into this shape, not reinvented). Navigator fill delegates to the
+    ...    shared T2 "Apply Navigator From Properties" (resources/manage_object.resource, added
+    ...    2026-08-26), driven by testdata/area_navigator.properties, instead of inlining
+    ...    "Select EC Dropdown Option + Apply Navigator" here - so any other OV-GM screen with a
+    ...    navigator can reuse the same shared keyword with its own properties file.
     Open EC Screen    ${AREA_SCREEN}
-    Select EC Dropdown Option    ${AREA_NAV_PU}    ${AREA_NAV_PU_VALUE}
-    Apply Navigator
+    Apply Navigator From Properties    ${AREA_NAVIGATOR_PROPERTIES}
 
 Insert Area Record And Save
     [Documentation]    Friendly-narrative wrapper around Insert Area From Properties, called with
