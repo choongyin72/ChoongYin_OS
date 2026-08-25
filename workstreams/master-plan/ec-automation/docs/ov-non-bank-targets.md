@@ -292,3 +292,58 @@ rows in `OV_DOC_SEQUENCE` via a fresh `oracledb` connection after the live run. 
 (`py/document_sequence_iud.py`) left unchanged - already properties-free/label-driven and still passes;
 no defect found in it. Registry (`docs/ec_screen_registry.md`) and scorecard
 (`docs/automation-scorecard.md`) rows updated in place (modifying the existing row, not adding a new one).
+### The 6 "* Split Key" screens - blanket `split_key`-URL exclusion was UNVERIFIED, corrected (2026-08-25)
+A prior filtering pass excluded any screen whose URL contains `split_key` from Bank-pattern consideration,
+on the assumption "split-key percentage-share screens (different UI shape)" - **that exclusion was never
+live-verified on any specific screen; it was a blanket guess from the URL substring alone.** Investigated
+fresh (deep-dive notes + live DB query + live browser recon, no build) on all 6 base "Split Key" screens:
+Product Split Key (CD.0036), Company Split Key (CD.0044), Field Split Key (CD.0095), Stream Item Category
+Split Key (CD.0042), Other Split Key (CD.0046), Stream Item Split Key (CD.0156).
+
+**Finding: all 6 are Bank-shaped and should be treated as ELIGIBLE, not excluded.** All 6 share ONE
+underlying class (`SPLIT_KEY`, `OBJECT`/`VERSIONED`, base table `SPLIT_KEY`, view `OV_SPLIT_KEY`) and ONE
+generic controller URL `manage_object_split_key/CLASS_NAME/SPLIT_KEY/SPLIT_TYPE/<TYPE>` - the 6 BF_CODEs are
+the SAME parametrized OV template with a different `SPLIT_TYPE` path segment (`PRODUCT`/`COMPANY`/`FIELD`/
+`STREAM_ITEM_CATEGORY`/`SPLIT_ITEM_OTHER`/`STREAM_ITEM_SPLIT`), confirmed via `class_property_cnfg`
+(`SPLIT_KEY`'s only LABEL is generic "Split Key" - the per-screen titles come from the URL parameter, not a
+per-class label) and live `page.url` capture after GO (`.../manage_object_split_key/CLASS_NAME/SPLIT_KEY/
+SPLIT_TYPE/PRODUCT`). Live recon (headless, read-only, no insert/update/delete) opened all 6 via the
+treeview search and confirmed **pixel-identical layout to Bank (CD.0021)**: single `Date`+`GO` navigator (no
+mandatory dropdowns), a grid with an explicit column-filter row (`Split Key Code`/`Split Key Name`/`Start
+Date`/`End Date`), a "NEW VERSION" tab with `Start Date`/`End Date` + object fields (`Split Key Code`,
+`Split Key Name`, `Description`, `Comments`, `Value Method`, `Shares add to 100%`, `Rounding Rule`, `Number
+of Rounding Decimals`, `Number Display Format`), and the same "Daytime" mirror sub-grid Bank itself has
+(this is a standard Bank-pattern element, not something unique to Split Key). Stream Item Category Split Key
+(CD.0042) showed the same shape live (Value Method/Rounding fields present), matching the other 5 exactly -
+all 6 are structurally identical to each other, not just to Bank. Toolbar Save/New/Delete all present and
+enabled on every screen. This is a plain master-data OV screen, NOT a percentage-allocation grid or a
+parent-object-selection screen - the actual percentage-share data lives in the SEPARATE, already-distinct
+"* Split Key Shares" screens (CD.0037/CD.0045/CD.0096/CD.0047/CD.0157, classes `PRODUCT`/`COMPANY`/`FIELD`/
+`SPLIT_ITEM_OTHER`/`STREAM_ITEM_SPLIT`) - those Shares screens were NOT investigated this round and their
+own eligibility remains unassessed; do not assume this note covers them.
+
+**Reviewer note at merge (2026-08-25):** the six builds this note green-lit (PRs #508-#513, merged the same
+day) each re-recon'd their own screen, and their navigator findings DIVERGE from the shared description
+above: Product/Company/Other/Stream-Item-Category builds report NO navigator at all (grid renders
+immediately on open), while Field/Stream-Item builds report a GO button (`navButton:form:B`) present. All
+six passed live 5/5 with their own shape, so treat EACH SCREEN'S OWN page object as the operative truth for
+its gestures, not this note's shared "single Date+GO" description. The eligibility conclusion (all 6
+Bank-shaped, ELIGIBLE) is unaffected either way.
+
+
+**No existing automation found for any of the 6.** The only "Split Key"-family automation in the repo
+(`py/split_item_other_iud.py` + `pageobjects/.../split_item_other_page.resource` +
+`tests/.../split_item_other_iud.robot`, already full Bank-pattern, built Batch 10 2026-08-23) targets a
+DIFFERENT screen - **Split Item Other (CD.0017)**, a standalone menu entry on class `SPLIT_ITEM_OTHER` via
+the plain `manage_object_nav` controller (not `manage_object_split_key`), which happens to share the same
+underlying class as "Other Split Key Shares" (CD.0047) but is NOT one of the 6 screens in this note and NOT
+"Other Split Key" (CD.0046, one of the 6 - class `SPLIT_KEY`). Do not confuse the two when picking this up
+for a build.
+
+Verdict: all 6 CONVERT/BUILD candidates, same shape as the plain Bank-pattern new-screen build (5 mandatory
+fields shared across all 6: `Split Key Code`, `Split Key Name`, `Start Date` on Insert; `Split Key Name` on
+Update - `Description`/`Comments`/`Value Method`/`Shares add to 100%`/`Rounding Rule`/`Number of Rounding
+Decimals`/`Number Display Format` all appeared populated/optional on existing rows, not confirmed mandatory
+this round). All 6 write to the SAME table (`SPLIT_KEY`) - each build must use its own distinct fixed test
+code (no cross-screen collision) same as any other shared-table screen. No build/convert/PR performed this
+round - investigation only, per instruction; a build can be dispatched from this note.
