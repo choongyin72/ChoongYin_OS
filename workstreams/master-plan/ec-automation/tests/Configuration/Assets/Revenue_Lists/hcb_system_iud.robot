@@ -1,59 +1,70 @@
 *** Settings ***
-Documentation       EC IUD Test - HCB System (Configuration > Assets > Revenue_Lists > HCB System, CD.0097).
+Documentation       EC IUD Test - HCB System (Configuration > Assets > Revenue Lists > HCB System, CD.0097).
 ...                 Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_BALANCE).
 ...                 Layered: this test -> hcb_system_page (T3) -> manage_object (T2) + common (T1).
-...                 NEVER touch existing data. Unique AUTOTEST_HCB_<timestamp> code per run.
+...                 Bank-pattern conversion (2026-08-25): replaces the older driver that used a
+...                 generated timestamp code and called the raw DbVerify keywords (Field Should Equal In
+...                 View / *Should Exist In DB) directly here - a deviation from Bank's owner-requested
+...                 2026-08-18 PURE-SCREEN-verification convention (same deviation class fixed on
+...                 Calculation Context/Document Template/Royalty Depositor/Stream Item Category, GitHub
+...                 Issue #504). NEVER touch existing data. Uses a FIXED test code (AUTOTEST_HCB,
+...                 matching Bank/Royalty Depositor's own convention) confirmed absent from OV_BALANCE
+...                 before this was wired in (live fresh-connection query, 2026-08-25). Every run must
+...                 complete TC05 (delete) so the code is free for the next run - EC never lets a
+...                 DELETED code be reused, but this fixed code only stays reusable if each run actually
+...                 cleans up after itself. EACH test case does its own real Login/Logout on ONE browser
+...                 opened once in Suite Setup - matches Bank's convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Revenue_Lists/hcb_system_page.resource
 
-Suite Setup         Set Up HCB System Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    hcb_system
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE}
-${END_DATE}         ${TEST_START_DATE}
+${TEST_CODE}        AUTOTEST_HCB
+${OBJ_NAME}         Automation Test HCB System
+${START_DATE}       2000-01-01
+${END_DATE}         ${START_DATE}
+# Must stay in sync with testdata/hcb_system_update.properties - TC03 verifies against what that
+# file actually set, not an independent assumption.
+${OBJ_NAME_UPD}     Automation Test HCB System UPDATED
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test hcb_system does not exist before inserting.
-    [Tags]    clean-state
-    HCB System Row Should Not Exist    ${TEST_CODE}
-    Capture Step    hcb_system_tc01_clean
-
-TC02 Insert New HCB System
-    [Documentation]    Insert a new hcb_system; confirm in list + DB (OV_BALANCE).
-    [Tags]    insert
-    Insert HCB System Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    HCB System Row Should Exist    ${TEST_CODE}
-    HCB System Should Exist In DB    ${TEST_CODE}
-    Capture Step    hcb_system_tc02_inserted
-
-TC03 Update HCB System
-    [Documentation]    Edit Name; confirm in list + DB ground truth.
-    [Tags]    update
-    Update HCB System Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    HCB System Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Should Equal In View    OV_BALANCE    ${TEST_CODE}    NAME    ${OBJ_NAME_UPD}
-    Capture Step    hcb_system_tc03_updated
-
-TC04 Delete HCB System
-    [Documentation]    Delete via End Date = Start Date; confirm gone from list + DB.
-    [Tags]    delete    cleanup
-    Delete HCB System    ${TEST_CODE}    ${END_DATE}
-    HCB System Row Should Not Exist    ${TEST_CODE}
-    HCB System Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    hcb_system_tc04_deleted
-
-
-*** Keywords ***
-Set Up HCB System Suite
-    [Documentation]    Generate a unique test code/name, then open the HCB System screen.
-    Prepare IUD Object Data    AUTOTEST_HCB_    HCB System
+    Login To EC Application
     Open HCB System Screen
+    Verify HCB System Record Does Not Exist
+    Logout From EC Application
+
+TC02 Insert HCB System Data
+    Login To EC Application
+    Open HCB System Screen
+    Insert HCB System Record And Save
+    Verify HCB System Record Exists
+    Logout From EC Application
+
+TC03 Update HCB System Data
+    Login To EC Application
+    Open HCB System Screen
+    Update HCB System Record And Save
+    Verify HCB System Record Updated
+    Logout From EC Application
+
+TC04 Find HCB System Data
+    Login To EC Application
+    Open HCB System Screen
+    Find HCB System Record
+    Verify HCB System Record Found
+    Logout From EC Application
+
+TC05 Delete HCB System Data
+    Login To EC Application
+    Open HCB System Screen
+    Delete HCB System Record And Save
+    Verify HCB System Record Removed
+    Logout From EC Application
