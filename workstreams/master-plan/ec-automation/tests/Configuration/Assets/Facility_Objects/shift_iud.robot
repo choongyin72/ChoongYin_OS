@@ -1,59 +1,71 @@
 *** Settings ***
 Documentation       EC IUD Test - Shift (Configuration > Assets > Facility_Objects).
-...                 OV-GM with a mandatory free-text Start Time (HH:MI) extra (value format from
-...                 the existing P1 S001 row). Navigator = SPECIFIC P1 values; Op Production Unit
-...                 = nav PU. DELETE = End Date = Start Date (true delete in OV_SHIFT). NEVER touch
-...                 existing data; unique AUTOTEST_SH_<timestamp> code per run. Start Date 2020-01-01.
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory 3-level Production Unit -> Area -> Facility Class 1 navigator
+...                 cascade (SPECIFIC P1 values) + GO. Insert form ALSO requires a mandatory
+...                 free-text Start Time (HH:MI), kept exactly as the prior driver proved it -
+...                 this conversion is about the navigator/TC-structure only. DELETE = End
+...                 Date = Start Date (true delete in OV_SHIFT). NEVER touch existing data.
+...                 Layered: this test -> shift_page (T3) -> manage_object (T2) + common (T1).
+...                 Converted to the Area-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (owner standing rule 2026-08-26: any EC screen with a navigator matching
+...                 Area's layout MUST follow Area's FULL pattern) - Shift remains OV-GM and
+...                 still needs its genuine 3-level P1 navigator cascade + GO; this is a
+...                 structural conversion, not a reclassification of the screen as plain
+...                 Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_SHIFT) rather than a generated/timestamped
+...                 code - confirmed absent from OV_SHIFT (2026-08-26, fresh oracledb connection)
+...                 before this was wired in. Every run must complete TC05 (delete) so the code
+...                 is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - matches Area/Facility Class 1/Bank/Berth's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Facility_Objects/shift_page.resource
 
-Suite Setup         Set Up Shift Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    shift
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_SHIFT
 ${START_DATE}       2020-01-01
-${END_DATE}         2020-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Shift Row Should Not Exist    ${TEST_CODE}
-    Capture Step    shift_tc01_clean
+    Login To EC Application
+    Open Shift Screen With Navigator Values Populated
+    Verify Shift Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Shift
-    [Documentation]    Insert under the P1 navigator scope (incl. mandatory Start Time) and confirm it lists.
-    [Tags]    insert
-    Insert Shift Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Shift Row Should Exist    ${TEST_CODE}
-    Shift Should Exist In DB    ${TEST_CODE}
-    Capture Step    shift_tc02_inserted
+TC02 Insert Shift Data
+    Login To EC Application
+    Open Shift Screen With Navigator Values Populated
+    Insert Shift Record And Save
+    Verify Shift Record Exists
+    Logout From EC Application
 
-TC03 Update Shift Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Shift Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Shift Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    shift_tc03_updated
+TC03 Update Shift Data
+    Login To EC Application
+    Open Shift Screen With Navigator Values Populated
+    Update Shift Record And Save
+    Verify Shift Record Updated
+    Logout From EC Application
 
-TC04 Delete Shift
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Shift    ${TEST_CODE}    ${END_DATE}
-    Shift Row Should Not Exist    ${TEST_CODE}
-    Shift Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    shift_tc04_deleted
+TC04 Find Shift Data
+    Login To EC Application
+    Open Shift Screen With Navigator Values Populated
+    Find Shift Record
+    Verify Shift Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Shift Suite
-    [Documentation]    Generate a unique test code/name, open the screen, apply the P1 nav scope.
-    Prepare IUD Object Data    AUTOTEST_SH_    Shift
-    Open Shift Screen
+TC05 Delete Shift Data
+    Login To EC Application
+    Open Shift Screen With Navigator Values Populated
+    Delete Shift Record And Save
+    Verify Shift Record Removed
+    Logout From EC Application
