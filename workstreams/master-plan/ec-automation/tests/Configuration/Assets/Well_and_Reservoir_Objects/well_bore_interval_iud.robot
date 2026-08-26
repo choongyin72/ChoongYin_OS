@@ -1,61 +1,75 @@
 *** Settings ***
 Documentation       EC IUD Test - Well Bore Interval (Configuration > Assets > Well_and_Reservoir_Objects).
-...                 OV-GM, per-field nav groups with SPECIFIC values (G:4 = a REAL well, P1 W008 OP;
-...                 G:5 skipped - zero options under every scope tried). Mandatory 'Well' POPUP with
-...                 list grid Objects:form:T_data (screen-local picker; picks the nav-scope well, not
-...                 the popup's first row which is a graph object). DELETE = End Date = Start Date
-...                 (true delete in OV_WELL_BORE_INTERVAL). NEVER touch existing data; unique
-...                 AUTOTEST_WBI_<timestamp> code per run. Start Date 2020-01-01.
+...                 OV-GM, PER-FIELD navigator groups (G:1 Production Unit / G:2 Area / G:3
+...                 Facility Class 1 / G:4 'Well & Well Hookup' = a REAL well P1 W008 OP / G:6 =
+...                 the WELL BORE P1 W008 WB001; G:5 skipped - present but zero usable options
+...                 under this scope) + GO, filled via this screen's own BESPOKE T3
+...                 "Apply Well Bore Interval Navigator" keyword (the shared T2 "Apply Navigator
+...                 From Properties" only covers a single-row/increasing-column cascade, which
+...                 this per-field-groups shape is not). Mandatory 'Well Bore' POPUP with list
+...                 grid Objects:form:T_data (screen-local picker; reuses the navigator's own G:6
+...                 value - FIELD-REUSE RULE). DELETE = End Date = Start Date (true delete in
+...                 OV_WELL_BORE_INTERVAL).
+...                 Layered: this test -> well_bore_interval_page (T3) -> manage_object (T2) +
+...                 common (T1).
+...                 Converted to the Area-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (2026-08-27) on top of the 2026-07-31 base build (verify_screen PASS, RF 4/4 +
+...                 Playwright 8/8) - Well Bore Interval remains OV-GM and still needs its
+...                 genuine per-field navigator + mandatory popup gesture; this is a structural
+...                 conversion, not a reclassification.
+...                 Uses a FIXED test code (AUTOTEST_WBI) rather than a generated unique code -
+...                 confirmed absent from OV_WELL_BORE_INTERVAL (2026-08-27, fresh oracledb
+...                 query) before this was wired in. Every run must complete TC05 (delete) so the
+...                 code is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - matches Area/Well/Well Hookup's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Well_and_Reservoir_Objects/well_bore_interval_page.resource
 
-Suite Setup         Set Up Well Bore Interval Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown        Ensure Logged Out From EC Application
 
 Test Tags           iud    well-bore-interval
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_WBI
 ${START_DATE}       2020-01-01
-${END_DATE}         2020-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Well Bore Interval Row Should Not Exist    ${TEST_CODE}
-    Capture Step    well_bore_interval_tc01_clean
+    Login To EC Application
+    Open Well Bore Interval Screen With Navigator Values Populated
+    Verify Well Bore Interval Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Well Bore Interval
-    [Documentation]    Insert under the P1 well scope (incl. the mandatory Well popup) and confirm it lists.
-    [Tags]    insert
-    Insert Well Bore Interval Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Well Bore Interval Row Should Exist    ${TEST_CODE}
-    Well Bore Interval Should Exist In DB    ${TEST_CODE}
-    Capture Step    well_bore_interval_tc02_inserted
+TC02 Insert Well Bore Interval Data
+    Login To EC Application
+    Open Well Bore Interval Screen With Navigator Values Populated
+    Insert Well Bore Interval Record And Save
+    Verify Well Bore Interval Record Exists
+    Logout From EC Application
 
-TC03 Update Well Bore Interval Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Well Bore Interval Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Well Bore Interval Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    well_bore_interval_tc03_updated
+TC03 Update Well Bore Interval Data
+    Login To EC Application
+    Open Well Bore Interval Screen With Navigator Values Populated
+    Update Well Bore Interval Record And Save
+    Verify Well Bore Interval Record Updated
+    Logout From EC Application
 
-TC04 Delete Well Bore Interval
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Well Bore Interval    ${TEST_CODE}    ${END_DATE}
-    Well Bore Interval Row Should Not Exist    ${TEST_CODE}
-    Well Bore Interval Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    well_bore_interval_tc04_deleted
+TC04 Find Well Bore Interval Data
+    Login To EC Application
+    Open Well Bore Interval Screen With Navigator Values Populated
+    Find Well Bore Interval Record
+    Verify Well Bore Interval Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Well Bore Interval Suite
-    [Documentation]    Generate a unique test code/name, open the screen, apply the P1 nav scope.
-    Prepare IUD Object Data    AUTOTEST_WBI_    Well Bore Interval
-    Open Well Bore Interval Screen
+TC05 Delete Well Bore Interval Data
+    Login To EC Application
+    Open Well Bore Interval Screen With Navigator Values Populated
+    Delete Well Bore Interval Record And Save
+    Verify Well Bore Interval Record Removed
+    Logout From EC Application
