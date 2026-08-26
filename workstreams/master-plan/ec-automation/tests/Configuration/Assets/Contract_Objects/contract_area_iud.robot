@@ -1,63 +1,67 @@
 *** Settings ***
 Documentation       EC IUD Test - Contract Area (Configuration > Assets > Contract Objects > Contract Area).
-...                 OV-GM behaviour: navigator Business Unit + GO gates the grid; insert
-...                 references "Business Unit Name" = ECP Norway so the row is visible
-...                 under the ECP Norway filter. DELETE = End Date = Start Date (ov_contract_area).
-...                 NEVER touch existing data: unique AUTOTEST_CA_<timestamp> code per run;
-...                 the referenced Business Unit is READ-ONLY seed data.
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory Business Unit navigator + GO. DELETE = End Date = Start Date
+...                 (true delete in OV_CONTRACT_AREA). NEVER touch existing data.
+...                 Layered: this test -> contract_area_page (T3) -> manage_object (T2) + common (T1).
+...                 Converted to the Area-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (2026-08-26, mirroring area_iud.robot exactly) - Contract Area remains OV-GM
+...                 and still needs its genuine Business Unit navigator gesture; this is a
+...                 structural conversion, not a reclassification of Contract Area as plain
+...                 Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_CONTRACT_AREA) rather than a generated unique
+...                 code - confirmed absent from OV_CONTRACT_AREA (2026-08-26) before this was
+...                 wired in. Every run must complete TC05 (delete) so the code is free for the
+...                 next run.
+...                 EACH test case does its own real Login/Logout - matches Area/Bank/Berth's own
+...                 convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Contract_Objects/contract_area_page.resource
 
-Suite Setup         Set Up Contract Area Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    contract_area
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
-${NAV_BU}           ECP Norway
-${PARENT_VALUE}     ECP Norway
+${TEST_CODE}        AUTOTEST_CONTRACT_AREA
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test contract area does not exist before inserting.
-    [Tags]    clean-state
-    Contract Area Row Should Not Exist    ${TEST_CODE}
-    Capture Step    contract_area_tc01_clean
+    Login To EC Application
+    Open Contract Area Screen With Navigator Values Populated
+    Verify Contract Area Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Contract Area
-    [Documentation]    Insert a new contract area and confirm it appears in the BU-filtered list.
-    [Tags]    insert
-    Insert Contract Area Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}    ${PARENT_VALUE}
-    Contract Area Row Should Exist    ${TEST_CODE}
-    Contract Area Should Exist In DB    ${TEST_CODE}
-    Capture Step    contract_area_tc02_inserted
+TC02 Insert Contract Area Data
+    Login To EC Application
+    Open Contract Area Screen With Navigator Values Populated
+    Insert Contract Area Record And Save
+    Verify Contract Area Record Exists
+    Logout From EC Application
 
-TC03 Update Contract Area Name
-    [Documentation]    Edit the contract area name and confirm the list reflects the change.
-    [Tags]    update
-    Update Contract Area Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Contract Area Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    contract_area_tc03_updated
+TC03 Update Contract Area Data
+    Login To EC Application
+    Open Contract Area Screen With Navigator Values Populated
+    Update Contract Area Record And Save
+    Verify Contract Area Record Updated
+    Logout From EC Application
 
-TC04 Delete Contract Area
-    [Documentation]    Delete via End Date = Start Date and confirm the contract area is gone.
-    [Tags]    delete    cleanup
-    Delete Contract Area    ${TEST_CODE}    ${END_DATE}
-    Contract Area Row Should Not Exist    ${TEST_CODE}
-    Contract Area Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    contract_area_tc04_deleted
+TC04 Find Contract Area Data
+    Login To EC Application
+    Open Contract Area Screen With Navigator Values Populated
+    Find Contract Area Record
+    Verify Contract Area Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Contract Area Suite
-    [Documentation]    Generate a unique test code/name, then open the Contract Area screen
-    ...    with the ${NAV_BU} navigator context.
-    Prepare IUD Object Data    AUTOTEST_CA_    Contract Area
-    Open Contract Area Screen    ${NAV_BU}
+TC05 Delete Contract Area Data
+    Login To EC Application
+    Open Contract Area Screen With Navigator Values Populated
+    Delete Contract Area Record And Save
+    Verify Contract Area Record Removed
+    Logout From EC Application
