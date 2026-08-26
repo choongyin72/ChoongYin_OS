@@ -1,82 +1,200 @@
 *** Settings ***
 Documentation       T3 (screen) - Property page object.
-...                 Screen: Configuration > Assets > Data_Mapping_Objects > Property.
-...                 OV-GM (manage-object, groupmodel): the grid loads ONLY after the navigator cascade
-...                 + GO. Cascade values are PROVEN explicit values (scripts/find_populated_scope.py),
-...                 not first-available. Fields resolved BY LABEL (no hardcoded rows).
+...                 Screen: Configuration > Assets > Data_Mapping_Objects > Property (SP.0059).
+...                 OV-GM (manage-object, groupmodel) screen: the grid loads ONLY after the
+...                 navigator's single mandatory Business Unit dropdown is set + GO. Confirmed
+...                 LIVE 2026-08-26 (tmp/recon_property_nav.py, read-only recon, no Save/Insert/
+...                 Delete) that the navigator has 2 DOM groups - G:0 ("Date") and G:1
+...                 ("Business Unit") - but this does NOT disqualify it from the Area pattern:
+...                 G:0's Date field already carries a non-empty default on load
+...                 (MandatoryCellStyleWhite = already-filled style), so G:1's Business Unit
+...                 dropdown is the ONLY genuinely mandatory+empty field - exactly the same
+...                 single-group-needs-fill shape already proven to fit on Tract. Business
+...                 Unit's dropdown sits at G:1, C:0 (not the usual G:0, C:1), so the shared T2
+...                 "Apply Navigator From Properties" is called with ${group}=1 ${start_col}=0
+...                 (both optional args added to that keyword this session, additive-only,
+...                 default behavior for every other caller unchanged).
+...                 Converted to the Area-pattern full STRUCTURE (2026-08-26): 5 TCs, per-TC
+...                 login/logout, fixed test code, properties-file-driven insert/update/verify,
+...                 explicit grid-filter wiring, zero inline DB-verify calls in the .robot file.
+...                 Real labels confirmed live via the prior hand-written driver
+...                 (py/property_iud.py): objectForm/updateAttributes use "Property Code"/
+...                 "Property Name"/"Business Unit Name" - every T2 call below passes
+...                 code_label=Property Code accordingly.
 
 Library             Browser
 Library             ../../../../libraries/DbVerify.py
+Library             ../../../../libraries/PropertiesReader.py
 Resource            ../../../../resources/common.resource
 Resource            ../../../../resources/manage_object.resource
+Variables           ../../../../resources/credentials.py
 
 
 *** Variables ***
-${SCR}              Property
-${TBL}              manageObject:form:T_data
-${DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
-${GM_PU}            ${EMPTY}
-${NAV_DD}            nav:form:G:1:R:1:C:0:dd
+${PROPERTY_SCREEN}          Property
+${PROPERTY_TABLE}           manageObject:form:T_data
+# navigator (groupmodel): single Business Unit dropdown at G:1/C:0 - MANDATORY before the grid
+# loads. G:0's Date field already has a non-empty default, so this is the ONLY field to fill.
+# Value confirmed LIVE this session (2026-08-26, tmp/recon_property_nav.py): "Royalty Canada"
+# is present among 16 live Business Unit options, matching the prior hand-written driver.
+# The fill itself goes through the shared T2 "Apply Navigator From Properties"
+# (resources/manage_object.resource, ${group}=1 ${start_col}=0), driven by
+# testdata/property_navigator.properties. ${PROPERTY_NAV_BU}/${PROPERTY_NAV_BU_VALUE} are kept
+# only as documentation of the DOM id and required value - the properties-driven fill resolves
+# to the same id/value, not a different one.
+${PROPERTY_NAV_BU}          nav:form:G:1:R:1:C:0:dd
+${PROPERTY_NAV_BU_VALUE}    Royalty Canada
+${PROPERTY_NAVIGATOR_PROPERTIES}    ${CURDIR}/../../../../testdata/property_navigator.properties
+${PROPERTY_INSERT_PROPERTIES}    ${CURDIR}/../../../../testdata/property_insert.properties
+${PROPERTY_UPDATE_PROPERTIES}    ${CURDIR}/../../../../testdata/property_update.properties
+${PROPERTY_FORM_VERIFY_PROPERTIES}    ${CURDIR}/../../../../testdata/property_form_verify.properties
+${PROPERTY_GRID_VERIFY_PROPERTIES}    ${CURDIR}/../../../../testdata/property_grid_verify.properties
+# objectdates field ID (Delete - End Date = Start Date). Hardcoded deliberately, NOT
+# label-driven - same documented rationale as every other converted OV-GM screen's del-enddate
+# id: this row packs Start Date (C:1) and End Date (C:3) together with the End Date label at
+# C:2, a shape the one-field-per-row label scan cannot safely resolve. Value confirmed live via
+# the prior hand-written driver's own DOM (same framework-invariant layout as every other
+# OV-GM screen).
+${PROPERTY_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
+# Property's own form-field label set (Start Date/End Date deliberately excluded - they live
+# only in objectdates, not updateAttributes/objectForm's fill-once trio; Business Unit Name
+# deliberately excluded from round-trip comparison - it's filled via a resolved reference value
+# which can re-render different display text after reload, same caveat as every other converted
+# screen's dropdown fields).
+@{PROPERTY_FORM_LABELS}    Property Code    Property Name
 
 
 *** Keywords ***
-Open Property Screen
-    [Documentation]    Suite Setup: launch, login, navigate, fill the navigator cascade with PROVEN
-    ...    explicit values (not first-available) + GO, RETURN the top-parent PU.
-    [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
-    Launch EC And Open Screen    ${SCR}    ${user}    ${pass}
-    Select EC Dropdown Option    ${NAV_DD}    Royalty Canada
-    Apply Navigator
-    VAR    ${pu}    Royalty Canada
-    RETURN    ${pu}
-
-Property Row Should Exist
-    [Documentation]    Assert ${code} is present (await lazy OV-GM redraw first).
+Find Property Row By Filter
+    [Documentation]    Explicitly filter the Property grid's Code column to ${code} via the
+    ...    shared T2 Find Object Row By Filter (resources/manage_object.resource), matching
+    ...    every other Area-pattern-converted screen's explicit filter usage.
     [Arguments]    ${code}
-    Wait For Elements State
-    ...    xpath=//tbody[@id='${TBL}']//span[normalize-space(text())='${code}']
-    ...    visible    timeout=20s
-    Row Should Exist    ${TBL}    ${code}
+    Find Object Row By Filter    ${PROPERTY_TABLE}    ${code}
 
-Property Row Should Not Exist
-    [Documentation]    Assert ${code} is absent from the list.
-    [Arguments]    ${code}
-    Row Should Not Exist    ${TBL}    ${code}
+Clear Property Row Filter
+    [Documentation]    Clear the Code column filter (see Find Property Row By Filter) via the
+    ...    shared T2 Clear Object Row Filter, restoring the grid's normal unfiltered view.
+    Clear Object Row Filter    ${PROPERTY_TABLE}
 
-Property Should Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} persisted in OV_PROPERTY.
-    [Arguments]    ${code}
-    Code Should Be Present In View    OV_PROPERTY    ${code}
+Login To EC Application
+    [Documentation]    Authenticate as Property's OWN credentials (${PROPERTY_EC_USER}/
+    ...    ${PROPERTY_EC_PASS} from credentials.py) on the current page - works whether this
+    ...    is the very first login (page freshly loaded on the login form via the shared T1
+    ...    Open EC Application) or a re-login after Logout From EC Application.
+    Login To EC Screen    ${PROPERTY_EC_USER}    ${PROPERTY_EC_PASS}
 
-Property Should Not Exist In DB
-    [Documentation]    DB ground-truth: assert ${code} deleted from OV_PROPERTY.
-    [Arguments]    ${code}
-    Code Should Be Absent In View    OV_PROPERTY    ${code}
+Open Property Screen With Navigator Values Populated
+    [Documentation]    Navigate to the Property screen, THEN fill + submit the mandatory
+    ...    Business Unit navigator (dropdown + GO) - the grid stays empty until this happens,
+    ...    so this single keyword bundles both steps for the test case (one line per TC).
+    ...    Assumes the caller already logged in this test case (via Login To EC Application).
+    ...    Navigator fill delegates to the shared T2 "Apply Navigator From Properties"
+    ...    (resources/manage_object.resource, ${group}=1 ${start_col}=0 - Property's Business
+    ...    Unit dropdown lives in its own G:1 group at C:0, not the usual G:0/C:1), driven by
+    ...    testdata/property_navigator.properties.
+    Open EC Screen    ${PROPERTY_SCREEN}
+    Apply Navigator From Properties    ${PROPERTY_NAVIGATOR_PROPERTIES}    group=1    start_col=0
 
-Property Row Should Show Name
-    [Documentation]    Assert the row for ${code} displays ${name}.
-    [Arguments]    ${code}    ${name}
-    Object Row Should Show Name    ${TBL}    ${code}    ${name}
+Insert Property Record And Save
+    [Documentation]    Friendly-narrative wrapper around Insert Object From Properties And
+    ...    Verify Code, called with ZERO arguments so property_iud.robot's test case body reads
+    ...    as a plain business step. ${PROPERTY_INSERT_PROPERTIES}'s Business Unit Name value
+    ...    MUST equal ${PROPERTY_NAV_BU_VALUE} or the new row is not visible under this
+    ...    navigator scope (OV-GM constraint).
+    [Arguments]    ${properties_path}=${PROPERTY_INSERT_PROPERTIES}
+    ${code}=    Insert Object From Properties And Verify Code    ${properties_path}    ${TEST_CODE}
+    ...    ${TEST NAME}_action    code_label=Property Code
+    RETURN    ${code}
 
-Insert Property Record
-    [Documentation]    Insert (all fields BY LABEL) + Save.
-    [Arguments]    ${code}    ${name}    ${start_date}
-    Open New Object Form
-    Fill OV Field By Label       objectForm    Property Code    ${code}
-    Fill OV Field By Label       objectForm    Property Name    ${name}
-    Fill OV Date By Label        objectForm    Start Date    ${start_date}
-    Fill OV Dropdown By Label    objectForm    Business Unit Name    Royalty Canada
-    Save And Refresh List
+Verify Property Record Exists
+    [Documentation]    Friendly-narrative wrapper around the TC02 verification, called with
+    ...    ZERO arguments: defaults ${code} to the suite's ${TEST_CODE}. PURE SCREEN
+    ...    verification (no DB check here - that's TC02's own separate DbVerify assertion): row
+    ...    exists in the grid, then Property Code/Property Name's LIVE SCREEN value is compared
+    ...    to testdata/property_insert.properties. Filters via Find Property Row By Filter
+    ...    first, clears after.
+    [Arguments]    ${code}=${TEST_CODE}
+    Find Property Row By Filter    ${code}
+    Verify Object Insert Exists    ${PROPERTY_TABLE}    ${code}    Property
+    ...    ${PROPERTY_INSERT_PROPERTIES}    @{PROPERTY_FORM_LABELS}
+    ...    code_label=Property Code
+    Clear Property Row Filter
 
-Update Property Name
-    [Documentation]    Select the row, edit Name (by label), save + reload.
-    [Arguments]    ${code}    ${new_name}
-    Select Object Row    ${TBL}    ${code}
-    Fill OV Field By Label    updateAttributes    Property Name    ${new_name}
-    Save And Refresh List
+Update Property Record And Save
+    [Documentation]    Friendly-narrative wrapper around T2's Update Object From Properties,
+    ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). Only
+    ...    Property Name is listed in testdata/property_update.properties - Property Code is
+    ...    read-only in updateAttributes. Filters via Find Property Row By Filter first, clears
+    ...    after.
+    [Arguments]    ${code}=${TEST_CODE}    ${properties_path}=${PROPERTY_UPDATE_PROPERTIES}
+    Find Property Row By Filter    ${code}
+    ${data}=    Update Object From Properties    ${PROPERTY_TABLE}    ${code}    ${properties_path}
+    ...    ${TEST NAME}_action    code_label=Property Code
+    Clear Property Row Filter
+    RETURN    ${data}
 
-Delete Property
-    [Documentation]    Delete via End Date = Start Date (EC true delete), save + reload.
-    [Arguments]    ${code}    ${date}
-    Delete Object Via End Date    ${TBL}    ${DEL_ENDDATE}    ${code}    ${date}
-    Apply Navigator
+Verify Property Record Updated
+    [Documentation]    Friendly-narrative wrapper around the TC03 verification, called with
+    ...    ZERO arguments: defaults ${code} to the suite's ${TEST_CODE}. PURE SCREEN
+    ...    verification: selects the row, compares Property Name's LIVE SCREEN value to
+    ...    testdata/property_update.properties. Filters via Find Property Row By Filter first,
+    ...    clears after.
+    [Arguments]    ${code}=${TEST_CODE}
+    Find Property Row By Filter    ${code}
+    Verify Object Form Record    ${PROPERTY_TABLE}    ${code}    Property
+    ...    ${PROPERTY_UPDATE_PROPERTIES}    Property Name    code_label=Property Code
+    Clear Property Row Filter
+
+Find Property Record
+    [Documentation]    Friendly-narrative wrapper around the shared T2 Find Object Record,
+    ...    called with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). Calls
+    ...    Find Property Row By Filter first. Deliberately does NOT clear the filter afterward
+    ...    - Verify Property Record Found (called right after, same TC) needs the grid still
+    ...    filtered to ${code} for its own grid-check; it clears the filter once both checks are
+    ...    done.
+    [Arguments]    ${code}=${TEST_CODE}
+    Find Property Row By Filter    ${code}
+    Find Object Record    ${PROPERTY_TABLE}    ${code}    Property    code_label=Property Code
+
+Verify Property Record Found
+    [Documentation]    Friendly-narrative wrapper around the TC04 verification, called with
+    ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}): confirms BOTH the
+    ...    grid AND the full form record match the expected data. Caller must already have
+    ...    selected the row (TC04 does, via Find Property Record before this) AND left the
+    ...    Code filter active - clears the filter itself once both checks are done.
+    [Arguments]    ${code}=${TEST_CODE}
+    Verify Object Found    ${PROPERTY_TABLE}    ${code}    ${PROPERTY_GRID_VERIFY_PROPERTIES}
+    ...    ${PROPERTY_FORM_VERIFY_PROPERTIES}    @{PROPERTY_FORM_LABELS}
+    Clear Property Row Filter
+
+Delete Property Record And Save
+    [Documentation]    Friendly-narrative wrapper around T2's Delete Object Via End Date,
+    ...    called with ZERO arguments (defaults ${code}/${date} to the suite's ${TEST_CODE}/
+    ...    ${END_DATE}). Select the object, set End Date = Start Date (EC true delete for
+    ...    OV_PROPERTY), Save. Versioned groupmodel grids redraw lazily after a delete - Save
+    ...    And Refresh List (inside T2) already re-applies the navigator, so the assertion
+    ...    reads a fresh list. Filters via Find Property Row By Filter first, clears after.
+    [Arguments]    ${code}=${TEST_CODE}    ${date}=${END_DATE}
+    Find Property Row By Filter    ${code}
+    Delete Object Via End Date    ${PROPERTY_TABLE}    ${PROPERTY_DEL_ENDDATE}    ${code}    ${date}
+    ...    ${TEST NAME}_action
+    Clear Property Row Filter
+
+Verify Property Record Removed
+    [Documentation]    Friendly-narrative wrapper around the TC05 verification, called with
+    ...    ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}): confirms ${code} is
+    ...    absent from BOTH the grid and the database (OV_PROPERTY) - the DB check lives here,
+    ...    in the shared T2 Verify Object Removed, NOT as a separate screen-local wrapper
+    ...    keyword.
+    [Arguments]    ${code}=${TEST_CODE}
+    Verify Object Removed    ${PROPERTY_TABLE}    OV_PROPERTY    ${code}
+    Capture Step    ${TEST NAME}_verify
+
+Verify Property Record Does Not Exist
+    [Documentation]    Friendly-narrative wrapper around the TC01 clean-state check, called
+    ...    with ZERO arguments (defaults ${code} to the suite's ${TEST_CODE}). PURE SCREEN
+    ...    verification (grid-only check) - delegates to the shared T2 Verify Object Does Not
+    ...    Exist.
+    [Arguments]    ${code}=${TEST_CODE}
+    Verify Object Does Not Exist    ${PROPERTY_TABLE}    ${code}
