@@ -252,3 +252,6 @@ HCB_SYSTEM_EC_PASS = os.environ.get("HCB_SYSTEM_EC_PASS", os.environ.get("EC_PAS
 
 AREA_EC_USER = os.environ.get("AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 AREA_EC_PASS = os.environ.get("AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+FACILITY_CLASS_1_EC_USER = os.environ.get("FACILITY_CLASS_1_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+FACILITY_CLASS_1_EC_PASS = os.environ.get("FACILITY_CLASS_1_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
