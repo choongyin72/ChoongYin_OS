@@ -1,61 +1,69 @@
 *** Settings ***
-Documentation       EC IUD Test - Contract Inventory (Configuration > Assets > Contract_Objects).
-...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade (PROVEN
-...                 explicit values, not first-available).
-...                 DELETE = End Date = Start Date (true delete in OV_CONTRACT_INVENTORY). NEVER touch existing data;
-...                 a unique AUTOTEST_CI_<timestamp> code is generated per run.
+Documentation       EC IUD Test - Contract Inventory (Configuration > Assets > Contract_Objects,
+...                 CO.2054). OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 navigator (Business Unit -> Contract Area, same-row increasing column) + GO.
+...                 DELETE = End Date = Start Date (true delete in OV_CONTRACT_INVENTORY). NEVER
+...                 touch existing data.
+...                 Layered: this test -> contract_inventory_page (T3) -> manage_object (T2) +
+...                 common (T1).
+...                 Converted to the Area-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (owner standing rule 2026-08-26: any EC screen with a navigator matching
+...                 Area's layout MUST follow Area's FULL pattern) - Contract Inventory remains
+...                 OV-GM and still needs its genuine navigator + GO; this is a structural
+...                 conversion, not a reclassification of the screen as plain Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_CONTRACT_INVENTORY) rather than a generated/
+...                 timestamped code - confirmed absent from OV_CONTRACT_INVENTORY (2026-08-26,
+...                 fresh oracledb connection) before this was wired in. Every run must complete
+...                 TC05 (delete) so the code is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - matches Area/Facility Class 1's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Contract_Objects/contract_inventory_page.resource
 
-Suite Setup         Set Up Contract Inventory Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    contract_inventory
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_CONTRACT_INVENTORY
 ${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Contract Inventory Row Should Not Exist    ${TEST_CODE}
-    Capture Step    contract_inventory_tc01_clean
+    Login To EC Application
+    Open Contract Inventory Screen With Navigator Values Populated
+    Verify Contract Inventory Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Contract Inventory
-    [Documentation]    Insert under the navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Contract Inventory Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Contract Inventory Row Should Exist    ${TEST_CODE}
-    Contract Inventory Should Exist In DB    ${TEST_CODE}
-    Capture Step    contract_inventory_tc02_inserted
+TC02 Insert Contract Inventory Data
+    Login To EC Application
+    Open Contract Inventory Screen With Navigator Values Populated
+    Insert Contract Inventory Record And Save
+    Verify Contract Inventory Record Exists
+    Logout From EC Application
 
-TC03 Update Contract Inventory Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Contract Inventory Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Contract Inventory Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    contract_inventory_tc03_updated
+TC03 Update Contract Inventory Data
+    Login To EC Application
+    Open Contract Inventory Screen With Navigator Values Populated
+    Update Contract Inventory Record And Save
+    Verify Contract Inventory Record Updated
+    Logout From EC Application
 
-TC04 Delete Contract Inventory
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Contract Inventory    ${TEST_CODE}    ${END_DATE}
-    Contract Inventory Row Should Not Exist    ${TEST_CODE}
-    Contract Inventory Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    contract_inventory_tc04_deleted
+TC04 Find Contract Inventory Data
+    Login To EC Application
+    Open Contract Inventory Screen With Navigator Values Populated
+    Find Contract Inventory Record
+    Verify Contract Inventory Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Contract Inventory Suite
-    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade
-    ...    with PROVEN explicit values (not first-available).
-    Prepare IUD Object Data    AUTOTEST_CI_    Contract Inventory
-    ${pu}=    Open Contract Inventory Screen
-    VAR    ${GM_PU}    ${pu}    scope=SUITE
+TC05 Delete Contract Inventory Data
+    Login To EC Application
+    Open Contract Inventory Screen With Navigator Values Populated
+    Delete Contract Inventory Record And Save
+    Verify Contract Inventory Record Removed
+    Logout From EC Application

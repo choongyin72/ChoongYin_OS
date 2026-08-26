@@ -311,3 +311,15 @@ TANK_EC_PASS = os.environ.get("TANK_EC_PASS", os.environ.get("EC_PASS", "sysadmi
 
 METER_EC_USER = os.environ.get("METER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 METER_EC_PASS = os.environ.get("METER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+CONTRACT_INVENTORY_EC_USER = os.environ.get("CONTRACT_INVENTORY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CONTRACT_INVENTORY_EC_PASS = os.environ.get("CONTRACT_INVENTORY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PILOT_EC_USER = os.environ.get("PILOT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PILOT_EC_PASS = os.environ.get("PILOT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PIPELINE_SEGMENT_EC_USER = os.environ.get("PIPELINE_SEGMENT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PIPELINE_SEGMENT_EC_PASS = os.environ.get("PIPELINE_SEGMENT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PROPERTY_EC_USER = os.environ.get("PROPERTY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PROPERTY_EC_PASS = os.environ.get("PROPERTY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
