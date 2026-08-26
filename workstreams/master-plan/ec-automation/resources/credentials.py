@@ -274,3 +274,5 @@ STORAGE_EC_USER = os.environ.get("STORAGE_EC_USER", os.environ.get("EC_USER", "s
 STORAGE_EC_PASS = os.environ.get("STORAGE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 SUB_AREA_EC_USER = os.environ.get("SUB_AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 SUB_AREA_EC_PASS = os.environ.get("SUB_AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+WELL_HOOKUP_EC_USER = os.environ.get("WELL_HOOKUP_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+WELL_HOOKUP_EC_PASS = os.environ.get("WELL_HOOKUP_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
