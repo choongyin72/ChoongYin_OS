@@ -579,15 +579,36 @@ Apply Navigator From Properties
     ...    KNOWN LIMITATION: only covers the uniform single-row, C:1..C:N cascade shape confirmed
     ...    live on every OV-GM screen checked for this task (Area, Well, Test Separator, Chemical
     ...    Tank). A screen whose navigator instead uses PER-FIELD groups (a distinct id per level,
-    ...    e.g. separate "G:1"/"G:2"/"G:3" navigator groups rather than one row's increasing
-    ...    column index) would need its own resolution - not solved here, and no such screen was
-    ...    found in this repo while writing this keyword. Note this as a gap, don't guess a fix,
-    ...    if a future screen turns out to need it.
-    [Arguments]    ${properties_path}    ${row}=1
+    ...    e.g. separate "G:1"/"G:2"/"G:3" navigator groups each expecting its OWN cascade filled
+    ...    in the SAME call) would need its own resolution - not solved here, and no such screen
+    ...    was found in this repo while writing this keyword. Note this as a gap, don't guess a
+    ...    fix, if a future screen turns out to need it.
+    ...
+    ...    ${group} (added 2026-08-26 for Tract): optional, defaults to 0, preserving every
+    ...    existing caller's behaviour exactly (Area/Well Hookup/Contract/Meter/etc. all target
+    ...    "nav:form:G:0:..." unchanged). Some screens address their genuinely-mandatory cascade
+    ...    at a DIFFERENT single group index than 0 (Tract's Unit Agreement dropdown lives at
+    ...    "nav:form:G:1:...", confirmed by live DOM recon this session - G:0 on Tract is a
+    ...    Date field that already carries a non-empty default on load and needs no fill). This is
+    ...    NOT the "PER-FIELD groups" limitation above - that describes a screen needing MULTIPLE
+    ...    groups filled in one call; Tract only ever needs exactly ONE group filled, so passing a
+    ...    single ${group} value keeps the keyword's file-order/positional-column design intact.
+    ...    Never hardcode a field-name-to-column/group mapping here or in a caller - the group
+    ...    index must come from live recon of the target screen's own DOM, same as ${row}/${col}.
+    ...
+    ...    ${start_col} (added 2026-08-26 for Tract): optional, defaults to 1, preserving every
+    ...    existing caller's behaviour exactly (every screen surveyed so far addresses its first
+    ...    nav column as C:1). Live DOM recon on Tract found its Unit Agreement dropdown (within
+    ...    G:1) addressed at C:0, not C:1 - a different column start than the C:1..C:N convention
+    ...    documented above. ${start_col} lets a caller shift the whole file-order/column-count
+    ...    sequence to start wherever THAT screen's own DOM actually begins, confirmed by recon
+    ...    (never assumed from another screen's convention) - the fill logic itself stays purely
+    ...    positional (file order -> increasing column index from ${start_col}).
+    [Arguments]    ${properties_path}    ${row}=1    ${group}=0    ${start_col}=1
     ${data}=    Read Properties    ${properties_path}
-    ${col}=    Set Variable    ${1}
+    ${col}=    Set Variable    ${start_col}
     FOR    ${label}    IN    @{data.keys()}
-        ${dd}=    Set Variable    nav:form:G:0:R:${row}:C:${col}:dd
+        ${dd}=    Set Variable    nav:form:G:${group}:R:${row}:C:${col}:dd
         Select EC Dropdown Option    ${dd}    ${data}[${label}]
         Sleep    0.7s
         ${col}=    Evaluate    ${col} + 1
