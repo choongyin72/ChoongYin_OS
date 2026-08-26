@@ -1,59 +1,67 @@
 *** Settings ***
 Documentation       EC IUD Test - Field (Configuration > Assets > Commercial Objects > Field).
-...                 Manage-Object (OV-GM groupmodel) screen. DELETE = End Date = Start Date (true delete in OV_FIELD).
-...                 NEVER touch existing data. A unique AUTOTEST_FLD_<timestamp> code is generated
-...                 per run. Section Start Date 2003-01-01: reference dropdowns are
-...                 effective-date-filtered (object start date acts as a version).
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory Area navigator + GO. DELETE = End Date = Start Date (true delete
+...                 in OV_FIELD). NEVER touch existing data.
+...                 Layered: this test -> field_page (T3) -> manage_object (T2) + common (T1).
+...                 Converted to the Bank-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (owner standing rule 2026-08-26: any EC screen with a navigator matching
+...                 Area's layout must follow Area's FULL pattern) - Field remains OV-GM and
+...                 still needs its genuine Area navigator gesture; this is a structural
+...                 conversion, not a reclassification of Field as plain Bank-shaped. Follow-up
+...                 to PR #525, which only converted the navigator-fill piece.
+...                 Uses a FIXED test code (AUTOTEST_FIELD, confirmed absent from OV_FIELD
+...                 2026-08-26) rather than a generated unique code. Every run must complete
+...                 TC05 (delete) so the code is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup - matches Bank/Berth/Area's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Commercial_Objects/field_page.resource
 
-Suite Setup         Set Up Field Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    field
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
+${TEST_CODE}        AUTOTEST_FIELD
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test field does not exist before inserting.
-    [Tags]    clean-state
-    Field Row Should Not Exist    ${TEST_CODE}
-    Capture Step    field_tc01_clean
+    Login To EC Application
+    Open Field Screen With Navigator Values Populated
+    Verify Field Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Field
-    [Documentation]    Insert a new field and confirm it appears in the list.
-    [Tags]    insert
-    Insert Field Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Field Row Should Exist    ${TEST_CODE}
-    Field Should Exist In DB    ${TEST_CODE}
-    Capture Step    field_tc02_inserted
+TC02 Insert Field Data
+    Login To EC Application
+    Open Field Screen With Navigator Values Populated
+    Insert Field Record And Save
+    Verify Field Record Exists
+    Logout From EC Application
 
-TC03 Update Field Name
-    [Documentation]    Edit the field name and confirm the list reflects the change.
-    [Tags]    update
-    Update Field Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Field Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    field_tc03_updated
+TC03 Update Field Data
+    Login To EC Application
+    Open Field Screen With Navigator Values Populated
+    Update Field Record And Save
+    Verify Field Record Updated
+    Logout From EC Application
 
-TC04 Delete Field
-    [Documentation]    Delete via End Date = Start Date and confirm the field is gone.
-    [Tags]    delete    cleanup
-    Delete Field    ${TEST_CODE}    ${END_DATE}
-    Field Row Should Not Exist    ${TEST_CODE}
-    Field Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    field_tc04_deleted
+TC04 Find Field Data
+    Login To EC Application
+    Open Field Screen With Navigator Values Populated
+    Find Field Record
+    Verify Field Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Field Suite
-    [Documentation]    Generate a unique test code/name, then open the Field screen.
-    Prepare IUD Object Data    AUTOTEST_FLD_    Field
-    Open Field Screen
+TC05 Delete Field Data
+    Login To EC Application
+    Open Field Screen With Navigator Values Populated
+    Delete Field Record And Save
+    Verify Field Record Removed
+    Logout From EC Application
