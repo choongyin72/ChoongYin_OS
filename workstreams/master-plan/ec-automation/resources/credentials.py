@@ -325,3 +325,5 @@ PIPELINE_SEGMENT_EC_PASS = os.environ.get("PIPELINE_SEGMENT_EC_PASS", os.environ
 
 PROPERTY_EC_USER = os.environ.get("PROPERTY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PROPERTY_EC_PASS = os.environ.get("PROPERTY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+TRANSPORT_ZONE_EC_USER = os.environ.get("TRANSPORT_ZONE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+TRANSPORT_ZONE_EC_PASS = os.environ.get("TRANSPORT_ZONE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
