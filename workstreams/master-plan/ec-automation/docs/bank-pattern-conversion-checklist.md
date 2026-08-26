@@ -308,6 +308,12 @@ header._
 |---|---|---|
 | Meter (Configuration > Assets > Dispatching_Objects, OV-GM + POPUP) | STRUCTURE (2026-08-26, Area role-model rule) | Full Area-parity conversion (PR #554) of the original golden-exemplar build: 5 TCs incl. TC04 Find, per-TC Login/Logout, fixed `AUTOTEST_METER`, properties-file-driven insert/update/verify, genuine Business Unit navigator via shared `Apply Navigator From Properties`, Delivery Point POPUP mechanism preserved as-is (generic T1 `Pick From EC Object Popup` - orthogonal to the navigator, the earlier "does not fit Area" note corrected on live evidence). Zero inline DB-verify. Live 5/5, dryrun 874/874, robocop parity with Area, probe + fixed-code self-clean 0 residual via fresh connections. _Row added by the reviewer at merge (R38)._ |
 
+## Pipeline Segment Area-parity conversion (2026-08-26)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Pipeline Segment (Configuration > Assets > Dispatching_Objects, OV-GM) | STRUCTURE (2026-08-26, Area role-model rule) | Full Area-parity conversion of the original 4/4 build: 5 TCs incl. TC04 Find, per-TC Login/Logout, fixed `AUTOTEST_PIPELINE_SEGMENT` (confirmed free in `OV_PIPELINE_SEGMENT` via fresh oracledb connection), properties-file-driven insert/update/verify, genuine single-dropdown Business Unit navigator kept via shared `Apply Navigator From Properties` (re-confirmed live: single mandatory dropdown at `nav:form:G:0:R:1:C:1:dd`, same shape as Area's own Production Unit). Zero inline DB-verify. Live 5/5, dryrun 878/878, robocop parity with Area (7 issues, same VAR02+DOC02 kind/count), filter fired 15x via output.xml grep, DB self-clean 0 residual `AUTOTEST%` rows via a fresh independent connection. |
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to
