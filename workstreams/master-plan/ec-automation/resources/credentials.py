@@ -264,3 +264,6 @@ OPERATOR_ROUTE_EC_PASS = os.environ.get("OPERATOR_ROUTE_EC_PASS", os.environ.get
 
 PRICE_RATE_EC_USER = os.environ.get("PRICE_RATE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PRICE_RATE_EC_PASS = os.environ.get("PRICE_RATE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+CONTRACT_CAPACITY_EC_USER = os.environ.get("CONTRACT_CAPACITY_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CONTRACT_CAPACITY_EC_PASS = os.environ.get("CONTRACT_CAPACITY_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

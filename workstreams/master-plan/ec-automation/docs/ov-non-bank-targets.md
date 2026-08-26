@@ -68,7 +68,7 @@ Two OV flavours: **manage-object** (grid `manage_object_nav_nav:form:T_data` + G
 | BF | Screen | OV_ view | Folder | Status |
 |---|---|---|---|---|
 | CO.2016 | Contract | OV_CONTRACT | Assets > Contract Objects | [x] OV-GM, live 4/4, BU=TS5 BU (single-page scope, avoided pager bug) |
-| CO.2044 | Contract Capacity | OV_CONTRACT_CAPACITY | Assets > Contract Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-08-01) |
+| CO.2044 | Contract Capacity | OV_CONTRACT_CAPACITY | Assets > Contract Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-08-01); converted to Area's full pattern 2026-08-26, RF live 5/5 |
 | CO.2054 | Contract Inventory | OV_CONTRACT_INVENTORY | Assets > Contract Objects | [x] OV-GM gated-nav, live 8/8 (shipped 2026-08-02) |
 | RC.0058 | Division Order | OV_DIVISION_ORDER | Royalty > Royalty USA | [x] OV-GM, live 4/4 - shipped 2026-08-02 - was previously misclassified as TV - see Parked table |
 | RC.0059 | Royalty Contract | OV_ROYALTY_CONTRACT | Royalty > Royalty Canada | [x] OV-GM gated-nav, live 3/3 RF + 7/7 Playwright - shipped 2026-08-15, **Insert+Update only** (Delete permanently out of scope, EC-genuine child-record defect, closes Issue #336) - see Parked table |
