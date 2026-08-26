@@ -1,59 +1,70 @@
 *** Settings ***
-Documentation       EC IUD Test - Price Object (Configuration > Assets > Sales_Objects).
-...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
-...                 DELETE = End Date = Start Date (true delete in OV_PRICE_OBJECT). NEVER touch existing data;
-...                 a unique AUTOTEST_PO_<timestamp> code is generated per run.
+Documentation       EC IUD Test - Price Object (Configuration > Assets > Sales_Objects, CO.3016).
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory single Business Unit navigator + GO. DELETE = End Date = Start
+...                 Date (true delete in OV_PRICE_OBJECT). NEVER touch existing data.
+...                 Layered: this test -> price_object_page (T3) -> manage_object (T2) +
+...                 common (T1).
+...                 Converted to the Area-pattern full STRUCTURE (2026-08-26) - Price Object
+...                 remains OV-GM and still needs its genuine Business Unit navigator gesture;
+...                 this is a structural conversion, not a reclassification as plain
+...                 Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_PRICE_OBJECT) rather than a generated
+...                 unique code - confirmed absent from OV_PRICE_OBJECT (2026-08-26) before
+...                 this was wired in. Every run must complete TC05 (delete) so the code is
+...                 free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup - matches Area/Bank/Berth's own convention.
+...
+...                 NOT the same screen as "Product Price Object" (CD.0011, PR #502) - that
+...                 is a distinct custom-URL screen with no navigator, untouched by this file.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Sales_Objects/price_object_page.resource
 
-Suite Setup         Set Up Price Object Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    price_object
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_PRICE_OBJECT
 ${START_DATE}       2020-01-01
-${END_DATE}         2000-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Price Object Row Should Not Exist    ${TEST_CODE}
-    Capture Step    price_object_tc01_clean
+    Login To EC Application
+    Open Price Object Screen With Navigator Values Populated
+    Verify Price Object Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Price Object
-    [Documentation]    Insert under the navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Price Object Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Price Object Row Should Exist    ${TEST_CODE}
-    Price Object Should Exist In DB    ${TEST_CODE}
-    Capture Step    price_object_tc02_inserted
+TC02 Insert Price Object Data
+    Login To EC Application
+    Open Price Object Screen With Navigator Values Populated
+    Insert Price Object Record And Save
+    Verify Price Object Record Exists
+    Logout From EC Application
 
-TC03 Update Price Object Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Price Object Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Price Object Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    price_object_tc03_updated
+TC03 Update Price Object Data
+    Login To EC Application
+    Open Price Object Screen With Navigator Values Populated
+    Update Price Object Record And Save
+    Verify Price Object Record Updated
+    Logout From EC Application
 
-TC04 Delete Price Object
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Price Object    ${TEST_CODE}    ${END_DATE}
-    Price Object Row Should Not Exist    ${TEST_CODE}
-    Price Object Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    price_object_tc04_deleted
+TC04 Find Price Object Data
+    Login To EC Application
+    Open Price Object Screen With Navigator Values Populated
+    Find Price Object Record
+    Verify Price Object Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Price Object Suite
-    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade.
-    Prepare IUD Object Data    AUTOTEST_PO_    Price Object
-    ${pu}=    Open Price Object Screen
-    VAR    ${GM_PU}    ${pu}    scope=SUITE
+TC05 Delete Price Object Data
+    Login To EC Application
+    Open Price Object Screen With Navigator Values Populated
+    Delete Price Object Record And Save
+    Verify Price Object Record Removed
+    Logout From EC Application
