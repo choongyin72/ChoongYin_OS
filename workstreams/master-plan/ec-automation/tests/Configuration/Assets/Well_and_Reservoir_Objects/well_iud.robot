@@ -1,60 +1,67 @@
 *** Settings ***
 Documentation       EC IUD Test - Well (Configuration > Assets > Well_and_Reservoir_Objects).
-...                 OV-GM: 3-level cascade with SPECIFIC P1 values + GO (2nd-row Well filter dds
-...                 left empty - owner screenshot ground truth; first-available AS1 left a deeper
-...                 level empty = original park). Insert extra: Well Type (first-available).
-...                 DELETE = End Date = Start Date (true delete in OV_WELL). NEVER touch existing
-...                 data; unique AUTOTEST_WE_<timestamp> code per run. Start Date 2020-01-01.
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory 3-level P1 navigator cascade (Production Unit -> Area -> Facility 1)
+...                 + GO. DELETE = End Date = Start Date (true delete in OV_WELL). NEVER touch
+...                 existing data.
+...                 Layered: this test -> well_page (T3) -> manage_object (T2) + common (T1).
+...                 Converted to the Area-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (2026-08-26) - Well remains OV-GM and still needs its genuine 3-level P1
+...                 navigator gesture; this is a structural conversion, not a reclassification of
+...                 Well as plain Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_WELL) rather than a generated unique code -
+...                 confirmed absent from OV_WELL (2026-08-26, fresh oracledb query) before this
+...                 was wired in. Every run must complete TC05 (delete) so the code is free for
+...                 the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup - matches Area/Bank/Berth's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Well_and_Reservoir_Objects/well_page.resource
 
-Suite Setup         Set Up Well Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown        Ensure Logged Out From EC Application
 
 Test Tags           iud    well
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_WELL
 ${START_DATE}       2020-01-01
-${END_DATE}         2020-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Well Row Should Not Exist    ${TEST_CODE}
-    Capture Step    well_tc01_clean
+    Login To EC Application
+    Open Well Screen With Navigator Values Populated
+    Verify Well Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Well
-    [Documentation]    Insert under the P1 navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Well Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Well Row Should Exist    ${TEST_CODE}
-    Well Should Exist In DB    ${TEST_CODE}
-    Capture Step    well_tc02_inserted
+TC02 Insert Well Data
+    Login To EC Application
+    Open Well Screen With Navigator Values Populated
+    Insert Well Record And Save
+    Verify Well Record Exists
+    Logout From EC Application
 
-TC03 Update Well Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Well Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Well Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    well_tc03_updated
+TC03 Update Well Data
+    Login To EC Application
+    Open Well Screen With Navigator Values Populated
+    Update Well Record And Save
+    Verify Well Record Updated
+    Logout From EC Application
 
-TC04 Delete Well
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Well    ${TEST_CODE}    ${END_DATE}
-    Well Row Should Not Exist    ${TEST_CODE}
-    Well Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    well_tc04_deleted
+TC04 Find Well Data
+    Login To EC Application
+    Open Well Screen With Navigator Values Populated
+    Find Well Record
+    Verify Well Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Well Suite
-    [Documentation]    Generate a unique test code/name, open the screen, apply the P1 nav scope.
-    Prepare IUD Object Data    AUTOTEST_WE_    Well
-    Open Well Screen
+TC05 Delete Well Data
+    Login To EC Application
+    Open Well Screen With Navigator Values Populated
+    Delete Well Record And Save
+    Verify Well Record Removed
+    Logout From EC Application
