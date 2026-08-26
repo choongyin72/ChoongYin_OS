@@ -252,3 +252,6 @@ HCB_SYSTEM_EC_PASS = os.environ.get("HCB_SYSTEM_EC_PASS", os.environ.get("EC_PAS
 
 AREA_EC_USER = os.environ.get("AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 AREA_EC_PASS = os.environ.get("AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+EXTERNAL_LOCATION_EC_USER = os.environ.get("EXTERNAL_LOCATION_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+EXTERNAL_LOCATION_EC_PASS = os.environ.get("EXTERNAL_LOCATION_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
