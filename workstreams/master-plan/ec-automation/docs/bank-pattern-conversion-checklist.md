@@ -308,6 +308,12 @@ header._
 |---|---|---|
 | Meter (Configuration > Assets > Dispatching_Objects, OV-GM + POPUP) | STRUCTURE (2026-08-26, Area role-model rule) | Full Area-parity conversion (PR #554) of the original golden-exemplar build: 5 TCs incl. TC04 Find, per-TC Login/Logout, fixed `AUTOTEST_METER`, properties-file-driven insert/update/verify, genuine Business Unit navigator via shared `Apply Navigator From Properties`, Delivery Point POPUP mechanism preserved as-is (generic T1 `Pick From EC Object Popup` - orthogonal to the navigator, the earlier "does not fit Area" note corrected on live evidence). Zero inline DB-verify. Live 5/5, dryrun 874/874, robocop parity with Area, probe + fixed-code self-clean 0 residual via fresh connections. _Row added by the reviewer at merge (R38)._ |
 
+## Transport Zone Area-parity conversion (2026-08-26)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Transport Zone (Configuration > Assets > Dispatching_Objects, OV-GM) | STRUCTURE (2026-08-26, Area role-model rule) | Full Area-parity conversion of the older 4-TC/suite-login/generated-code/inline-DB-verify build: 5 TCs incl. TC04 Find, per-TC Login/Logout, fixed `AUTOTEST_TRANSPORT_ZONE` (confirmed free via a fresh oracledb connection), properties-file-driven insert/update/verify, genuine Business Unit navigator (nav:form:G:0, C:1) via shared `Apply Navigator From Properties` - live recon confirmed C:0 (Date) is already defaulted, C:2 is an optional non-mandatory 2nd dropdown, only C:1 is genuinely mandatory+empty (single-dropdown/same-row-cascade shape matching Area). Zero inline DB-verify. Live 5/5, dryrun 875/875, robocop parity with Area (10 issues: 7 on changed screen files = exact parity + 3 pre-existing unrelated credentials.py findings), DB self-clean 0 residual via a fresh independent oracledb connection. |
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to
