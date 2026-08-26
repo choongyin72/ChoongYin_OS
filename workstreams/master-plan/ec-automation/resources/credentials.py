@@ -272,3 +272,5 @@ PRICE_OBJECT_EC_USER = os.environ.get("PRICE_OBJECT_EC_USER", os.environ.get("EC
 PRICE_OBJECT_EC_PASS = os.environ.get("PRICE_OBJECT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 STORAGE_EC_USER = os.environ.get("STORAGE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 STORAGE_EC_PASS = os.environ.get("STORAGE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+SUB_AREA_EC_USER = os.environ.get("SUB_AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+SUB_AREA_EC_PASS = os.environ.get("SUB_AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))

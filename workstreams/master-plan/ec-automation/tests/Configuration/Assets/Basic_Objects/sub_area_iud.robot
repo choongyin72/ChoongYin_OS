@@ -1,65 +1,69 @@
 *** Settings ***
 Documentation       EC IUD Test - Sub Area (Configuration > Assets > Basic Objects > Sub Area).
-...                 Manage-Object (OV, groupmodel) screen with cascading navigator
-...                 (Production Unit -> Area). DELETE = End Date = Start Date (true delete
-...                 in OV_SUB_AREA). NEVER touch existing data. Navigator values
-...                 user-approved 2026-06-11.
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory Production Unit -> Area 2-level navigator cascade + GO. DELETE =
+...                 End Date = Start Date (true delete in OV_SUB_AREA). NEVER touch existing
+...                 data.
+...                 Layered: this test -> sub_area_page (T3) -> manage_object (T2) + common (T1).
+...                 Converted to the Area-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (owner standing rule 2026-08-26: any EC screen with a navigator matching
+...                 Area's layout MUST follow Area's FULL pattern) - Sub Area remains OV-GM and
+...                 still needs its genuine 2-level Production Unit -> Area navigator cascade +
+...                 GO; this is a structural conversion, not a reclassification of the screen as
+...                 plain Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_SUB_AREA) rather than a generated/timestamped
+...                 code - confirmed absent from OV_SUB_AREA (2026-08-26, fresh oracledb
+...                 connection) before this was wired in. Every run must complete TC05 (delete) so
+...                 the code is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - matches Area/Facility Class 1's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Basic_Objects/sub_area_page.resource
 
-Suite Setup         Set Up Sub Area Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    sub-area
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-# 2003+: the Op PU / Op Area dropdowns only offer objects effective at the form's
-# start date, and 'Production Unit' / 'Offshore area' start 2002-01-01
-${START_DATE}       ${TEST_START_DATE_REFDD}
-${END_DATE}         ${TEST_START_DATE_REFDD}
-# cascading navigator context + Op fields of the test sub area - user-approved 2026-06-11
-${NAV_PU}           Production Unit
-${NAV_AREA}         Offshore area
+${TEST_CODE}        AUTOTEST_SUB_AREA
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test sub area does not exist before inserting.
-    [Tags]    clean-state
-    Sub Area Row Should Not Exist    ${TEST_CODE}
-    Capture Step    sub_area_tc01_clean
+    Login To EC Application
+    Open Sub Area Screen With Navigator Values Populated
+    Verify Sub Area Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Sub Area
-    [Documentation]    Insert a new sub area under ${NAV_PU} / ${NAV_AREA} and confirm it appears.
-    [Tags]    insert
-    Insert Sub Area Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}    ${NAV_PU}    ${NAV_AREA}
-    Sub Area Row Should Exist    ${TEST_CODE}
-    Sub Area Should Exist In DB    ${TEST_CODE}
-    Capture Step    sub_area_tc02_inserted
+TC02 Insert Sub Area Data
+    Login To EC Application
+    Open Sub Area Screen With Navigator Values Populated
+    Insert Sub Area Record And Save
+    Verify Sub Area Record Exists
+    Logout From EC Application
 
-TC03 Update Sub Area Name
-    [Documentation]    Edit the sub area name and confirm the list reflects the change.
-    [Tags]    update
-    Update Sub Area Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Sub Area Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    sub_area_tc03_updated
+TC03 Update Sub Area Data
+    Login To EC Application
+    Open Sub Area Screen With Navigator Values Populated
+    Update Sub Area Record And Save
+    Verify Sub Area Record Updated
+    Logout From EC Application
 
-TC04 Delete Sub Area
-    [Documentation]    Delete via End Date = Start Date and confirm the sub area is gone.
-    [Tags]    delete    cleanup
-    Delete Sub Area    ${TEST_CODE}    ${END_DATE}
-    Sub Area Row Should Not Exist    ${TEST_CODE}
-    Sub Area Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    sub_area_tc04_deleted
+TC04 Find Sub Area Data
+    Login To EC Application
+    Open Sub Area Screen With Navigator Values Populated
+    Find Sub Area Record
+    Verify Sub Area Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Sub Area Suite
-    [Documentation]    Generate a unique test code/name, then open the Sub Area screen
-    ...    with the approved cascading navigator context.
-    Prepare IUD Object Data    AUTOTEST_SUBAREA_    Sub Area
-    Open Sub Area Screen    ${NAV_PU}    ${NAV_AREA}
+TC05 Delete Sub Area Data
+    Login To EC Application
+    Open Sub Area Screen With Navigator Values Populated
+    Delete Sub Area Record And Save
+    Verify Sub Area Record Removed
+    Logout From EC Application
