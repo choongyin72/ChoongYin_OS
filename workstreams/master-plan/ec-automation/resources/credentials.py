@@ -305,3 +305,6 @@ PRODUCTION_SEPARATOR_EC_PASS = os.environ.get("PRODUCTION_SEPARATOR_EC_PASS", os
 
 SERVICE_EC_USER = os.environ.get("SERVICE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 SERVICE_EC_PASS = os.environ.get("SERVICE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+TANK_EC_USER = os.environ.get("TANK_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+TANK_EC_PASS = os.environ.get("TANK_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
