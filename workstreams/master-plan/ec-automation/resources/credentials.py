@@ -270,3 +270,5 @@ CONTRACT_CAPACITY_EC_PASS = os.environ.get("CONTRACT_CAPACITY_EC_PASS", os.envir
 
 PRICE_OBJECT_EC_USER = os.environ.get("PRICE_OBJECT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 PRICE_OBJECT_EC_PASS = os.environ.get("PRICE_OBJECT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+STORAGE_EC_USER = os.environ.get("STORAGE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+STORAGE_EC_PASS = os.environ.get("STORAGE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
