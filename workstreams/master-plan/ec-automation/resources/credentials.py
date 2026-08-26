@@ -296,3 +296,5 @@ CONTRACT_EC_USER = os.environ.get("CONTRACT_EC_USER", os.environ.get("EC_USER", 
 CONTRACT_EC_PASS = os.environ.get("CONTRACT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 SHIFT_EC_USER = os.environ.get("SHIFT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 SHIFT_EC_PASS = os.environ.get("SHIFT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+CHEMICAL_TANK_EC_USER = os.environ.get("CHEMICAL_TANK_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CHEMICAL_TANK_EC_PASS = os.environ.get("CHEMICAL_TANK_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
