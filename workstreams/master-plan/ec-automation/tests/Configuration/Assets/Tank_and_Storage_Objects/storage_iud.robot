@@ -1,59 +1,69 @@
 *** Settings ***
 Documentation       EC IUD Test - Storage (Configuration > Assets > Tank_and_Storage_Objects).
-...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
-...                 DELETE = End Date = Start Date (true delete in OV_STORAGE). NEVER touch existing data;
-...                 a unique AUTOTEST_STG_<timestamp> code is generated per run.
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory Production Unit -> Area -> Facility Class 1 3-level navigator
+...                 cascade + GO. DELETE = End Date = Start Date (true delete in OV_STORAGE).
+...                 NEVER touch existing data.
+...                 Layered: this test -> storage_page (T3) -> manage_object (T2) + common (T1).
+...                 Converted to the Bank-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (owner standing rule 2026-08-26: any EC screen with a navigator matching
+...                 Area's layout MUST follow Area's FULL pattern) - Storage remains OV-GM and
+...                 still needs its genuine 3-level Production Unit -> Area -> Facility Class 1
+...                 navigator cascade + GO; this is a structural conversion, not a
+...                 reclassification of the screen as plain Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_STG) rather than a generated/timestamped
+...                 code - confirmed absent from OV_STORAGE (2026-08-26, fresh oracledb
+...                 connection) before this was wired in. Every run must complete TC05 (delete) so
+...                 the code is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - matches Area/Facility Class 1/Bank/Berth's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Tank_and_Storage_Objects/storage_page.resource
 
-Suite Setup         Set Up Storage Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    storage
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_STG
 ${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Storage Row Should Not Exist    ${TEST_CODE}
-    Capture Step    storage_tc01_clean
+    Login To EC Application
+    Open Storage Screen With Navigator Values Populated
+    Verify Storage Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Storage
-    [Documentation]    Insert under the navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Storage Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Storage Row Should Exist    ${TEST_CODE}
-    Storage Should Exist In DB    ${TEST_CODE}
-    Capture Step    storage_tc02_inserted
+TC02 Insert Storage Data
+    Login To EC Application
+    Open Storage Screen With Navigator Values Populated
+    Insert Storage Record And Save
+    Verify Storage Record Exists
+    Logout From EC Application
 
-TC03 Update Storage Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Storage Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Storage Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    storage_tc03_updated
+TC03 Update Storage Data
+    Login To EC Application
+    Open Storage Screen With Navigator Values Populated
+    Update Storage Record And Save
+    Verify Storage Record Updated
+    Logout From EC Application
 
-TC04 Delete Storage
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Storage    ${TEST_CODE}    ${END_DATE}
-    Storage Row Should Not Exist    ${TEST_CODE}
-    Storage Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    storage_tc04_deleted
+TC04 Find Storage Data
+    Login To EC Application
+    Open Storage Screen With Navigator Values Populated
+    Find Storage Record
+    Verify Storage Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Storage Suite
-    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade.
-    Prepare IUD Object Data    AUTOTEST_STG_    Storage
-    ${pu}=    Open Storage Screen
-    VAR    ${GM_PU}    ${pu}    scope=SUITE
+TC05 Delete Storage Data
+    Login To EC Application
+    Open Storage Screen With Navigator Values Populated
+    Delete Storage Record And Save
+    Verify Storage Record Removed
+    Logout From EC Application
