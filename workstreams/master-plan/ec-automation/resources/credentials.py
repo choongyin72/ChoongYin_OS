@@ -276,3 +276,6 @@ SUB_AREA_EC_USER = os.environ.get("SUB_AREA_EC_USER", os.environ.get("EC_USER", 
 SUB_AREA_EC_PASS = os.environ.get("SUB_AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 WELL_HOOKUP_EC_USER = os.environ.get("WELL_HOOKUP_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 WELL_HOOKUP_EC_PASS = os.environ.get("WELL_HOOKUP_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+WELL_EC_USER = os.environ.get("WELL_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+WELL_EC_PASS = os.environ.get("WELL_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
