@@ -1,59 +1,70 @@
 *** Settings ***
 Documentation       EC IUD Test - Production Separator (Configuration > Assets > Facility_Objects).
-...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
-...                 DELETE = End Date = Start Date (true delete in OV_PRODSEPARATOR). NEVER touch existing data;
-...                 a unique AUTOTEST_PSEP_<timestamp> code is generated per run.
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory Production Unit -> Area -> Facility Class 1 3-level navigator
+...                 cascade + GO. DELETE = End Date = Start Date (true delete in
+...                 OV_PRODSEPARATOR). NEVER touch existing data.
+...                 Layered: this test -> production_separator_page (T3) -> manage_object (T2) +
+...                 common (T1).
+...                 Converted to the Bank-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (owner standing rule 2026-08-26: any EC screen with a navigator matching
+...                 Area's layout MUST follow Area's FULL pattern) - Production Separator remains
+...                 OV-GM and still needs its genuine 3-level Production Unit -> Area -> Facility
+...                 Class 1 navigator cascade + GO; this is a structural conversion, not a
+...                 reclassification of the screen as plain Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_PSEP) rather than a generated/timestamped
+...                 code - confirmed absent from OV_PRODSEPARATOR (2026-08-26, fresh oracledb
+...                 connection) before this was wired in. Every run must complete TC05 (delete) so
+...                 the code is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - matches Area/Facility Class 1/Bank/Berth's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Facility_Objects/production_separator_page.resource
 
-Suite Setup         Set Up Production Separator Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    production_separator
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_PSEP
 ${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Production Separator Row Should Not Exist    ${TEST_CODE}
-    Capture Step    production_separator_tc01_clean
+    Login To EC Application
+    Open Production Separator Screen With Navigator Values Populated
+    Verify Production Separator Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Production Separator
-    [Documentation]    Insert under the navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Production Separator Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Production Separator Row Should Exist    ${TEST_CODE}
-    Production Separator Should Exist In DB    ${TEST_CODE}
-    Capture Step    production_separator_tc02_inserted
+TC02 Insert Production Separator Data
+    Login To EC Application
+    Open Production Separator Screen With Navigator Values Populated
+    Insert Production Separator Record And Save
+    Verify Production Separator Record Exists
+    Logout From EC Application
 
-TC03 Update Production Separator Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Production Separator Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Production Separator Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    production_separator_tc03_updated
+TC03 Update Production Separator Data
+    Login To EC Application
+    Open Production Separator Screen With Navigator Values Populated
+    Update Production Separator Record And Save
+    Verify Production Separator Record Updated
+    Logout From EC Application
 
-TC04 Delete Production Separator
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Production Separator    ${TEST_CODE}    ${END_DATE}
-    Production Separator Row Should Not Exist    ${TEST_CODE}
-    Production Separator Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    production_separator_tc04_deleted
+TC04 Find Production Separator Data
+    Login To EC Application
+    Open Production Separator Screen With Navigator Values Populated
+    Find Production Separator Record
+    Verify Production Separator Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Production Separator Suite
-    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade.
-    Prepare IUD Object Data    AUTOTEST_PSEP_    Production Separator
-    ${pu}=    Open Production Separator Screen
-    VAR    ${GM_PU}    ${pu}    scope=SUITE
+TC05 Delete Production Separator Data
+    Login To EC Application
+    Open Production Separator Screen With Navigator Values Populated
+    Delete Production Separator Record And Save
+    Verify Production Separator Record Removed
+    Logout From EC Application

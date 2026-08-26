@@ -300,3 +300,5 @@ CHEMICAL_TANK_EC_USER = os.environ.get("CHEMICAL_TANK_EC_USER", os.environ.get("
 CHEMICAL_TANK_EC_PASS = os.environ.get("CHEMICAL_TANK_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 CHEMICAL_INJECTION_POINT_EC_USER = os.environ.get("CHEMICAL_INJECTION_POINT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CHEMICAL_INJECTION_POINT_EC_PASS = os.environ.get("CHEMICAL_INJECTION_POINT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+PRODUCTION_SEPARATOR_EC_USER = os.environ.get("PRODUCTION_SEPARATOR_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PRODUCTION_SEPARATOR_EC_PASS = os.environ.get("PRODUCTION_SEPARATOR_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
