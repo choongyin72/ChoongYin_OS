@@ -331,6 +331,8 @@ header._
 
 | Transport Zone (Configuration > Assets > Dispatching_Objects, OV-GM) | STRUCTURE (2026-08-26, Area role-model rule) | Full Area-parity conversion of the older 4-TC/suite-login/generated-code/inline-DB-verify build: 5 TCs incl. TC04 Find, per-TC Login/Logout, fixed `AUTOTEST_TRANSPORT_ZONE` (confirmed free via a fresh oracledb connection), properties-file-driven insert/update/verify, genuine Business Unit navigator (nav:form:G:0, C:1) via shared `Apply Navigator From Properties` - live recon confirmed C:0 (Date) is already defaulted, C:2 is an optional non-mandatory 2nd dropdown, only C:1 is genuinely mandatory+empty (single-dropdown/same-row-cascade shape matching Area). Zero inline DB-verify. Live 5/5, dryrun 875/875, robocop parity with Area (10 issues: 7 on changed screen files = exact parity + 3 pre-existing unrelated credentials.py findings), DB self-clean 0 residual via a fresh independent oracledb connection. |
 
+
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to
