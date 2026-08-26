@@ -279,3 +279,5 @@ WELL_HOOKUP_EC_PASS = os.environ.get("WELL_HOOKUP_EC_PASS", os.environ.get("EC_P
 
 WELL_EC_USER = os.environ.get("WELL_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 WELL_EC_PASS = os.environ.get("WELL_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+COLLECTION_POINT_EC_USER = os.environ.get("COLLECTION_POINT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+COLLECTION_POINT_EC_PASS = os.environ.get("COLLECTION_POINT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
