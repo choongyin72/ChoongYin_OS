@@ -241,6 +241,30 @@ PR appends only its own ROW here — no per-PR section header._
 | Field | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Field Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete (#529), after the navigator populates the grid. Confirmed fired 29x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
 | Facility Class 1 | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Facility Class 1 Row By Filter` (delegating to shared T2) wired into Update/Find/Verify-Found/Delete (#530), after the navigator populates the grid. Confirmed fired 26x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
 
+## OV-GM Area-parity batch (2026-08-26)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Operator Route | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Operator Route Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#533); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Price Rate | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Price Rate Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#534); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Contract Capacity | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Contract Capacity Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#535); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Price Object | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Price Object Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#536); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Storage | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Storage Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#537); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Sub Area | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Sub Area Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#538); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Well Hookup | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Well Hookup Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#539); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Well | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Well Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#540); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Collection Point | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Collection Point Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#541); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Contract Area | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Contract Area Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#542); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Well Hole | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Well Hole Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#543); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Chemical Stream Hookup | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Chemical Stream Hookup Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#544); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Chemical Stream | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Chemical Stream Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#545); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Contract | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Contract Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#546); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Shift | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Shift Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#547); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Chemical Tank | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Chemical Tank Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#549); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Chemical Injection Point | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Chemical Injection Point Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#550); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Production Separator | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Production Separator Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#551); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+| Service | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Service Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#552); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible
