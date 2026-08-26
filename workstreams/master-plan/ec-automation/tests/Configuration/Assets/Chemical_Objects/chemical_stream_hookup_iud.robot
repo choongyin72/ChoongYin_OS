@@ -1,59 +1,68 @@
 *** Settings ***
-Documentation       EC IUD Test - Chemical Stream Hookup (Configuration > Assets > Chemical_Objects).
-...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
-...                 DELETE = End Date = Start Date (true delete in OV_CHEM_STRM_HOOKUP). NEVER touch existing data;
-...                 a unique AUTOTEST_CSH_<timestamp> code is generated per run.
+Documentation       EC IUD Test - Chemical Stream Hookup (Configuration > Assets > Chemical_Objects,
+...                 CO.0260). OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory 3-level cascade navigator (Production Unit -> Area -> Facility Class 1)
+...                 + GO. DELETE = End Date = Start Date (true delete in OV_CHEM_STRM_HOOKUP). NEVER
+...                 touch existing data.
+...                 Layered: this test -> chemical_stream_hookup_page (T3) -> manage_object (T2) +
+...                 common (T1). Converted to the Area-pattern 5-TC/per-TC-login/pure-screen-verify
+...                 STRUCTURE (2026-08-26) - Chemical Stream Hookup remains OV-GM and still needs its
+...                 genuine 3-level cascade navigator gesture; this is a structural conversion, not a
+...                 reclassification as plain Bank-shaped. Also KEEPS the mandatory_field_gate
+...                 pre-flight check the pre-conversion automation already had (owner instruction).
+...                 Uses a FIXED test code (AUTOTEST_CSH, owner-pattern per Area) rather than a
+...                 generated unique code - confirmed absent from OV_CHEM_STRM_HOOKUP (2026-08-26)
+...                 before this was wired in. Every run must complete TC05 (delete) so the code is
+...                 free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - matches Area/Bank/Berth's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Chemical_Objects/chemical_stream_hookup_page.resource
 
-Suite Setup         Set Up Chemical Stream Hookup Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    chemical_stream_hookup
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_CSH
 ${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Chemical Stream Hookup Row Should Not Exist    ${TEST_CODE}
-    Capture Step    chemical_stream_hookup_tc01_clean
+    Login To EC Application
+    Open Chemical Stream Hookup Screen With Navigator Values Populated
+    Verify Chemical Stream Hookup Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Chemical Stream Hookup
-    [Documentation]    Insert under the navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Chemical Stream Hookup Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Chemical Stream Hookup Row Should Exist    ${TEST_CODE}
-    Chemical Stream Hookup Should Exist In DB    ${TEST_CODE}
-    Capture Step    chemical_stream_hookup_tc02_inserted
+TC02 Insert Chemical Stream Hookup Data
+    Login To EC Application
+    Open Chemical Stream Hookup Screen With Navigator Values Populated
+    Insert Chemical Stream Hookup Record And Save
+    Verify Chemical Stream Hookup Record Exists
+    Logout From EC Application
 
-TC03 Update Chemical Stream Hookup Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Chemical Stream Hookup Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Chemical Stream Hookup Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    chemical_stream_hookup_tc03_updated
+TC03 Update Chemical Stream Hookup Data
+    Login To EC Application
+    Open Chemical Stream Hookup Screen With Navigator Values Populated
+    Update Chemical Stream Hookup Record And Save
+    Verify Chemical Stream Hookup Record Updated
+    Logout From EC Application
 
-TC04 Delete Chemical Stream Hookup
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Chemical Stream Hookup    ${TEST_CODE}    ${END_DATE}
-    Chemical Stream Hookup Row Should Not Exist    ${TEST_CODE}
-    Chemical Stream Hookup Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    chemical_stream_hookup_tc04_deleted
+TC04 Find Chemical Stream Hookup Data
+    Login To EC Application
+    Open Chemical Stream Hookup Screen With Navigator Values Populated
+    Find Chemical Stream Hookup Record
+    Verify Chemical Stream Hookup Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Chemical Stream Hookup Suite
-    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade.
-    Prepare IUD Object Data    AUTOTEST_CSH_    Chemical Stream Hookup
-    ${pu}=    Open Chemical Stream Hookup Screen
-    VAR    ${GM_PU}    ${pu}    scope=SUITE
+TC05 Delete Chemical Stream Hookup Data
+    Login To EC Application
+    Open Chemical Stream Hookup Screen With Navigator Values Populated
+    Delete Chemical Stream Hookup Record And Save
+    Verify Chemical Stream Hookup Record Removed
+    Logout From EC Application
