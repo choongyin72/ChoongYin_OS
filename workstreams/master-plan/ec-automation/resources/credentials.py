@@ -289,3 +289,6 @@ WELL_HOLE_EC_USER = os.environ.get("WELL_HOLE_EC_USER", os.environ.get("EC_USER"
 WELL_HOLE_EC_PASS = os.environ.get("WELL_HOLE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 CHEMICAL_STREAM_HOOKUP_EC_USER = os.environ.get("CHEMICAL_STREAM_HOOKUP_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CHEMICAL_STREAM_HOOKUP_EC_PASS = os.environ.get("CHEMICAL_STREAM_HOOKUP_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+CHEMICAL_STREAM_EC_USER = os.environ.get("CHEMICAL_STREAM_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CHEMICAL_STREAM_EC_PASS = os.environ.get("CHEMICAL_STREAM_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
