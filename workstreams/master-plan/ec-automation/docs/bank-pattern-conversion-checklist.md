@@ -308,6 +308,12 @@ header._
 |---|---|---|
 | Meter (Configuration > Assets > Dispatching_Objects, OV-GM + POPUP) | STRUCTURE (2026-08-26, Area role-model rule) | Full Area-parity conversion (PR #554) of the original golden-exemplar build: 5 TCs incl. TC04 Find, per-TC Login/Logout, fixed `AUTOTEST_METER`, properties-file-driven insert/update/verify, genuine Business Unit navigator via shared `Apply Navigator From Properties`, Delivery Point POPUP mechanism preserved as-is (generic T1 `Pick From EC Object Popup` - orthogonal to the navigator, the earlier "does not fit Area" note corrected on live evidence). Zero inline DB-verify. Live 5/5, dryrun 874/874, robocop parity with Area, probe + fixed-code self-clean 0 residual via fresh connections. _Row added by the reviewer at merge (R38)._ |
 
+## Pilot Area-parity conversion (2026-08-26)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Pilot (Configuration > Assets > Transport_Objects, CO.2079, OV-GM) | STRUCTURE (2026-08-26, Area role-model rule) | Full Area-parity conversion (feature/pilot-area-pattern, PR pending) of the existing 2026-07-31 build: 5 TCs incl. TC04 Find, per-TC Login/Logout, fixed `AUTOTEST_PILOT` (confirmed free in OV_PILOT via a fresh oracledb connection), properties-file-driven insert/update/verify, genuine 3-level Production Unit -> Area -> Facility Class 1 navigator cascade confirmed live as ONE group (`nav:form:G:0`, same-row C:1/C:2/C:3, all MandatoryCellStyle - not a per-field-groups non-fit) via shared `Apply Navigator From Properties`. Op Production Unit on the insert form kept as `__FIRST__` (independent value domain from the navigator's Production Unit, per the pre-existing driver's own comment) - a documented exception to the generic field-reuse rule for this pair. Zero inline DB-verify calls. Live 5/5, full-tree dryrun 875/875 (isolated worktree), robocop parity with Area (7 issues, same kind/count), fresh-connection self-clean 0 residual `AUTOTEST_PILOT` rows, filter keyword fired 15x per output.xml. |
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to
