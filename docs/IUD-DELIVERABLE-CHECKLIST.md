@@ -125,3 +125,12 @@ the 6-field PR body, or never-self-merge.
 territory - upgrade, don't duplicate), or any case where the owner asks for the full deliverable.
 This section exists so a reviewer does not MUST-FIX a lean-built new screen against items this
 variant waives; sections A-F are otherwise unchanged.
+
+**Addendum (2026-08-26, recorded by the reviewer at the merge of PR #532):** this variant extends to
+brand-new screens whose layout matches AREA (OV-GM navigator screens), under the owner's 2026-08-26
+standing rule that Area is the role model for navigator screens (the same status Bank holds for
+non-navigator screens - see `workstreams/master-plan/ec-automation/docs/
+navigator-screens-not-matching-area.md`). The lean deliverable for such screens is defined by
+`.claude/skills/ec-area-pattern-new-screen/SKILL.md` (adds the `<screen>_navigator.properties` file +
+shared `Apply Navigator From Properties` fill to the Bank-shape deliverable above). Everything this
+section does NOT waive remains unwaived, identically.
