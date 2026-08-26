@@ -278,6 +278,13 @@ PR appends only its own ROW here — no per-PR section header._
 | Tract | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Tract Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (PR #555); confirmed fired 15x via output.xml grep on the live 5/5 run. |
 ## Property Area-parity conversion (2026-08-26)
 
+## Pipeline Segment Area-parity conversion (2026-08-26)
+
+| Pipeline Segment | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Pipeline Segment Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete; confirmed fired 15x via output.xml grep on the live 5/5 run. |
+
+## Contract Inventory Area-parity conversion (2026-08-26)
+
+| Contract Inventory | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Contract Inventory Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete; confirmed fired 26x via output.xml grep on the live 5/5 run. |
 | Property | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Property Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete; confirmed fired 15x via output.xml grep on the live 5/5 run. |
 
 ## How to update this doc
