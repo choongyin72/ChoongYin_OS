@@ -6,6 +6,7 @@ Documentation       T3 (screen) — Field page object.
 
 Library             Browser
 Library             ../../../../libraries/DbVerify.py
+Library             ../../../../libraries/PropertiesReader.py
 Resource            ../../../../resources/common.resource
 Resource            ../../../../resources/manage_object.resource
 
@@ -13,8 +14,12 @@ Resource            ../../../../resources/manage_object.resource
 *** Variables ***
 ${FIELD_SCREEN}         Field
 ${FIELD_TABLE}          manageObject:form:T_data
-# groupmodel navigator dropdown — MANDATORY before the grid loads
+# groupmodel navigator dropdown — MANDATORY before the grid loads. Kept as documentation of the
+# DOM id (row 1, C:1) and required value; the actual fill now goes through the shared T2 "Apply
+# Navigator From Properties" (resources/manage_object.resource, added 2026-08-26), driven by
+# testdata/field_navigator.properties - same pattern as area_page.resource.
 ${FIELD_NAV0}           nav:form:G:0:R:1:C:1:dd
+${FIELD_NAVIGATOR_PROPERTIES}    ${CURDIR}/../../../../testdata/field_navigator.properties
 # objectForm field IDs (Insert — new object); rows derived from recon LABELS
 ${FIELD_INS_CODE}       tab:tabPanel:objectForm:form:G:0:R:0:C:1:in
 ${FIELD_INS_NAME}       tab:tabPanel:objectForm:form:G:0:R:1:C:1:in
@@ -30,11 +35,15 @@ ${FIELD_DEL_ENDDATE}    tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 
 *** Keywords ***
 Open Field Screen
-    [Documentation]    Suite Setup: launch, login, navigate to the Field screen and set the groupmodel navigator context.
+    [Documentation]    Suite Setup: launch, login, navigate to the Field screen and set the
+    ...    groupmodel navigator context. Navigator fill delegates to the shared T2 "Apply
+    ...    Navigator From Properties" (resources/manage_object.resource, added 2026-08-26),
+    ...    driven by testdata/field_navigator.properties, instead of inlining "Select EC
+    ...    Dropdown Option + Apply Navigator" here - same conversion already done for Area's
+    ...    "Open Area Screen With Navigator Values Populated".
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
     Launch EC And Open Screen    ${FIELD_SCREEN}    ${user}    ${pass}
-    Select EC Dropdown Option    ${FIELD_NAV0}    Offshore area
-    Apply Navigator
+    Apply Navigator From Properties    ${FIELD_NAVIGATOR_PROPERTIES}
 
 Field Row Should Exist
     [Documentation]    Assert a field with ${code} is present in the list.
