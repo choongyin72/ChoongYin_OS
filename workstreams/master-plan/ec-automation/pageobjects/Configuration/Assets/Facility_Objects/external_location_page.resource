@@ -7,6 +7,7 @@ Documentation       T3 (screen) - External Location page object.
 
 Library             Browser
 Library             ../../../../libraries/DbVerify.py
+Library             ../../../../libraries/PropertiesReader.py
 Resource            ../../../../resources/common.resource
 Resource            ../../../../resources/manage_object.resource
 
@@ -16,16 +17,23 @@ ${SCR}              External Location
 ${TBL}              manageObject:form:T_data
 ${DEL_ENDDATE}      tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input
 ${GM_PU}            ${EMPTY}
-${NAV_DD}            nav:form:G:0:R:1:C:1:dd
+# 2026-08-26: navigator fill now goes through the shared T2 "Apply Navigator From Properties"
+# (resources/manage_object.resource, added for Area 2026-08-26), driven by an INTENTIONALLY EMPTY
+# testdata/external_location_navigator.properties - see that file for why. This is an edge-case
+# test of the shared keyword (zero properties lines -> zero fills -> GO alone), not a behaviour
+# change: External Location's navigator fields remain optional filters only, no mandatory scope.
+${EL_NAVIGATOR_PROPERTIES}    ${CURDIR}/../../../../testdata/external_location_navigator.properties
 
 
 *** Keywords ***
 Open External Location Screen
     [Documentation]    Suite Setup: launch, login, navigate, GO alone (no mandatory nav scope on
-    ...    this screen); RETURN the top-parent PU, which is legitimately ${EMPTY} here.
+    ...    this screen); RETURN the top-parent PU, which is legitimately ${EMPTY} here. Navigator
+    ...    fill delegates to the shared T2 "Apply Navigator From Properties" with an empty
+    ...    properties file (see ${EL_NAVIGATOR_PROPERTIES}) - degrades to a bare GO, same as before.
     [Arguments]    ${user}=${EC_USER}    ${pass}=${EC_PASS}
     Launch EC And Open Screen    ${SCR}    ${user}    ${pass}
-    Apply Navigator
+    Apply Navigator From Properties    ${EL_NAVIGATOR_PROPERTIES}
     VAR    ${pu}    ${EMPTY}    # optional filters only - no scope value to capture
     RETURN    ${pu}
 
