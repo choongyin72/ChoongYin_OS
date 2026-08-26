@@ -576,18 +576,25 @@ Apply Navigator From Properties
     ...    SPECIFIC value (like Area's "Production Unit" or Well's P1 scope); use the FIRST
     ...    AVAILABLE variant when any valid option will do.
     ...
-    ...    KNOWN LIMITATION: only covers the uniform single-row, C:1..C:N cascade shape confirmed
-    ...    live on every OV-GM screen checked for this task (Area, Well, Test Separator, Chemical
-    ...    Tank). A screen whose navigator instead uses PER-FIELD groups (a distinct id per level,
-    ...    e.g. separate "G:1"/"G:2"/"G:3" navigator groups rather than one row's increasing
-    ...    column index) would need its own resolution - not solved here, and no such screen was
-    ...    found in this repo while writing this keyword. Note this as a gap, don't guess a fix,
-    ...    if a future screen turns out to need it.
-    [Arguments]    ${properties_path}    ${row}=1
+    ...    KNOWN LIMITATION: only covers the uniform single-row, increasing-column cascade shape
+    ...    confirmed live on every OV-GM screen checked for this task (Area, Well, Test Separator,
+    ...    Chemical Tank: G:0, columns C:1..C:N). Property (2026-08-26) is the first screen found
+    ...    whose single mandatory dropdown lives in its OWN navigator group (G:1, a "Business
+    ...    Unit" fieldset separate from G:0's "Date" fieldset) starting at C:0, not C:1 - confirmed
+    ...    live via Workplaces/property-area-pattern/recon_property_nav.py (G:0's Date field
+    ...    already carries a non-empty default on load; G:1's Business Unit dropdown is the ONLY
+    ...    genuinely mandatory+empty field). Added ${group}=0/${start_col}=1 (both optional,
+    ...    default preserves EVERY existing caller's behavior unchanged - Area/Well/Test
+    ...    Separator/Chemical Tank/Price Object/Meter all omit them) so a screen like Property can
+    ...    pass ${group}=1 ${start_col}=0 instead of needing its own bespoke keyword. A screen
+    ...    with MULTIPLE independent groups all genuinely mandatory+empty simultaneously (true
+    ...    PER-FIELD-groups shape) still does NOT fit this keyword - that remains an unsolved gap,
+    ...    don't guess a fix for it.
+    [Arguments]    ${properties_path}    ${row}=1    ${group}=0    ${start_col}=1
     ${data}=    Read Properties    ${properties_path}
-    ${col}=    Set Variable    ${1}
+    ${col}=    Set Variable    ${start_col}
     FOR    ${label}    IN    @{data.keys()}
-        ${dd}=    Set Variable    nav:form:G:0:R:${row}:C:${col}:dd
+        ${dd}=    Set Variable    nav:form:G:${group}:R:${row}:C:${col}:dd
         Select EC Dropdown Option    ${dd}    ${data}[${label}]
         Sleep    0.7s
         ${col}=    Evaluate    ${col} + 1
