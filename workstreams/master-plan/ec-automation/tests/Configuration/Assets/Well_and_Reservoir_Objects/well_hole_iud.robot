@@ -1,59 +1,67 @@
 *** Settings ***
-Documentation       EC IUD Test - Well Hole (Configuration > Assets > Well_and_Reservoir_Objects).
-...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
-...                 DELETE = End Date = Start Date (true delete in OV_WELL_HOLE). NEVER touch existing data;
-...                 a unique AUTOTEST_WHL_<timestamp> code is generated per run.
+Documentation       EC IUD Test - Well Hole (Configuration > Assets > Well_and_Reservoir_Objects > Well Hole, CO.0051).
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory 3-level navigator cascade (Op Production Unit -> Op Area ->
+...                 Op Facility Class 1) + GO. DELETE = End Date = Start Date (true delete in
+...                 OV_WELL_HOLE). NEVER touch existing data.
+...                 Layered: this test -> well_hole_page (T3) -> manage_object (T2) + common (T1).
+...                 Converted to Area's full pattern (2026-08-26): 5-TC/per-TC-login/
+...                 pure-screen-verify STRUCTURE, replacing the OLD 4-TC/"Apply OV-GM Navigator
+...                 First Available"/single-suite-login/generated-timestamp-code shape - Well
+...                 Hole remains OV-GM and still needs its genuine 3-level navigator gesture;
+...                 this is a structural conversion, not a reclassification.
+...                 Uses a FIXED test code (AUTOTEST_WELL_HOLE) rather than a generated unique
+...                 code - confirmed absent from OV_WELL_HOLE (2026-08-26) before this was wired
+...                 in. Every run must complete TC05 (delete) so the code is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - matches Area/Bank/Berth's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Well_and_Reservoir_Objects/well_hole_page.resource
 
-Suite Setup         Set Up Well Hole Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    well_hole
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
-${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${TEST_CODE}        AUTOTEST_WELL_HOLE
+${START_DATE}       2003-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Well Hole Row Should Not Exist    ${TEST_CODE}
-    Capture Step    well_hole_tc01_clean
+    Login To EC Application
+    Open Well Hole Screen With Navigator Values Populated
+    Verify Well Hole Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Well Hole
-    [Documentation]    Insert under the navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Well Hole Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Well Hole Row Should Exist    ${TEST_CODE}
-    Well Hole Should Exist In DB    ${TEST_CODE}
-    Capture Step    well_hole_tc02_inserted
+TC02 Insert Well Hole Data
+    Login To EC Application
+    Open Well Hole Screen With Navigator Values Populated
+    Insert Well Hole Record And Save
+    Verify Well Hole Record Exists
+    Logout From EC Application
 
-TC03 Update Well Hole Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Well Hole Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Well Hole Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    well_hole_tc03_updated
+TC03 Update Well Hole Data
+    Login To EC Application
+    Open Well Hole Screen With Navigator Values Populated
+    Update Well Hole Record And Save
+    Verify Well Hole Record Updated
+    Logout From EC Application
 
-TC04 Delete Well Hole
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Well Hole    ${TEST_CODE}    ${END_DATE}
-    Well Hole Row Should Not Exist    ${TEST_CODE}
-    Well Hole Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    well_hole_tc04_deleted
+TC04 Find Well Hole Data
+    Login To EC Application
+    Open Well Hole Screen With Navigator Values Populated
+    Find Well Hole Record
+    Verify Well Hole Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Well Hole Suite
-    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade.
-    Prepare IUD Object Data    AUTOTEST_WHL_    Well Hole
-    ${pu}=    Open Well Hole Screen
-    VAR    ${GM_PU}    ${pu}    scope=SUITE
+TC05 Delete Well Hole Data
+    Login To EC Application
+    Open Well Hole Screen With Navigator Values Populated
+    Delete Well Hole Record And Save
+    Verify Well Hole Record Removed
+    Logout From EC Application

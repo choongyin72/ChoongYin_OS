@@ -284,3 +284,6 @@ COLLECTION_POINT_EC_PASS = os.environ.get("COLLECTION_POINT_EC_PASS", os.environ
 
 CONTRACT_AREA_EC_USER = os.environ.get("CONTRACT_AREA_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CONTRACT_AREA_EC_PASS = os.environ.get("CONTRACT_AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+WELL_HOLE_EC_USER = os.environ.get("WELL_HOLE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+WELL_HOLE_EC_PASS = os.environ.get("WELL_HOLE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
