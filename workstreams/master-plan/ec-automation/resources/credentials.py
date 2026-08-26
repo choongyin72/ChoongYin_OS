@@ -259,3 +259,6 @@ FIELD_EC_USER = os.environ.get("FIELD_EC_USER", os.environ.get("EC_USER", "sysad
 FIELD_EC_PASS = os.environ.get("FIELD_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 FACILITY_CLASS_1_EC_USER = os.environ.get("FACILITY_CLASS_1_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 FACILITY_CLASS_1_EC_PASS = os.environ.get("FACILITY_CLASS_1_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+SERVICE_EC_USER = os.environ.get("SERVICE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+SERVICE_EC_PASS = os.environ.get("SERVICE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
