@@ -257,3 +257,5 @@ EXTERNAL_LOCATION_EC_USER = os.environ.get("EXTERNAL_LOCATION_EC_USER", os.envir
 EXTERNAL_LOCATION_EC_PASS = os.environ.get("EXTERNAL_LOCATION_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 FIELD_EC_USER = os.environ.get("FIELD_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 FIELD_EC_PASS = os.environ.get("FIELD_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+FACILITY_CLASS_1_EC_USER = os.environ.get("FACILITY_CLASS_1_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+FACILITY_CLASS_1_EC_PASS = os.environ.get("FACILITY_CLASS_1_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
