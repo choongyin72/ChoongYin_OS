@@ -20,6 +20,16 @@ discipline as `ov-non-bank-targets.md`'s dated-note convention. Do not force a s
 Area's pattern without fresh re-verification; a screen might also be later found to fit after all
 (re-verify, don't just trust an old entry) — same caution this project applies everywhere else.
 
+**Correction log (2026-08-26):** a Tract row was added here 2026-08-26 reasoning its navigator's
+two separate `G:0`/`G:1` fieldsets don't fit Area's single-group cascade shape. Owner correction +
+fresh re-recon the same day found `G:0` (Date) already carries a non-empty default on load and
+needs no fill at all, so Tract's REAL requirement is exactly ONE mandatory dropdown (`G:1`'s Unit
+Agreement) - the same single-mandatory-dropdown shape Area's own navigator has, just at a
+different group/column index. The row was removed and Tract was converted to the Area pattern
+(see `docs/bank-pattern-conversion-checklist.md`'s "Tract Area-parity conversion" section and
+`docs/ec_screen_registry.md`'s Tract row). Kept here as a transparent record per this doc's own
+"re-verify, don't just trust an old entry" convention, applied to this doc's own entry.
+
 ## Screens
 
 | Screen | BF_CODE | Real navigator shape | Why it doesn't match Area | Found |
