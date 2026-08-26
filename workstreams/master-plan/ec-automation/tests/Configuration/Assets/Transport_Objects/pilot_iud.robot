@@ -1,59 +1,67 @@
 *** Settings ***
-Documentation       EC IUD Test - Pilot (Configuration > Assets > Transport_Objects).
-...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade.
-...                 DELETE = End Date = Start Date (true delete in OV_PILOT). NEVER touch existing data;
-...                 a unique AUTOTEST_PL_<timestamp> code is generated per run.
+Documentation       EC IUD Test - Pilot (Configuration > Assets > Transport_Objects, CO.2079).
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory 3-level same-row navigator cascade (Production Unit -> Area ->
+...                 Facility Class 1) + GO. DELETE = End Date = Start Date (true delete in
+...                 OV_PILOT). NEVER touch existing data.
+...                 Layered: this test -> pilot_page (T3) -> manage_object (T2) + common (T1).
+...                 Converted to the Area-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (2026-08-26) - Pilot remains OV-GM and still needs its genuine 3-level
+...                 navigator gesture; this is a structural conversion, not a reclassification of
+...                 Pilot as plain Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_PILOT) rather than a generated unique code -
+...                 confirmed absent from OV_PILOT (2026-08-26, fresh oracledb query) before this
+...                 was wired in. Every run must complete TC05 (delete) so the code is free for
+...                 the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup - matches Area/Well/Bank's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Transport_Objects/pilot_page.resource
 
-Suite Setup         Set Up Pilot Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown        Ensure Logged Out From EC Application
 
 Test Tags           iud    pilot
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_PILOT
 ${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Pilot Row Should Not Exist    ${TEST_CODE}
-    Capture Step    pilot_tc01_clean
+    Login To EC Application
+    Open Pilot Screen With Navigator Values Populated
+    Verify Pilot Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Pilot
-    [Documentation]    Insert under the navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Pilot Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Pilot Row Should Exist    ${TEST_CODE}
-    Pilot Should Exist In DB    ${TEST_CODE}
-    Capture Step    pilot_tc02_inserted
+TC02 Insert Pilot Data
+    Login To EC Application
+    Open Pilot Screen With Navigator Values Populated
+    Insert Pilot Record And Save
+    Verify Pilot Record Exists
+    Logout From EC Application
 
-TC03 Update Pilot Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Pilot Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Pilot Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    pilot_tc03_updated
+TC03 Update Pilot Data
+    Login To EC Application
+    Open Pilot Screen With Navigator Values Populated
+    Update Pilot Record And Save
+    Verify Pilot Record Updated
+    Logout From EC Application
 
-TC04 Delete Pilot
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Pilot    ${TEST_CODE}    ${END_DATE}
-    Pilot Row Should Not Exist    ${TEST_CODE}
-    Pilot Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    pilot_tc04_deleted
+TC04 Find Pilot Data
+    Login To EC Application
+    Open Pilot Screen With Navigator Values Populated
+    Find Pilot Record
+    Verify Pilot Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Pilot Suite
-    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade.
-    Prepare IUD Object Data    AUTOTEST_PL_    Pilot
-    ${pu}=    Open Pilot Screen
-    VAR    ${GM_PU}    ${pu}    scope=SUITE
+TC05 Delete Pilot Data
+    Login To EC Application
+    Open Pilot Screen With Navigator Values Populated
+    Delete Pilot Record And Save
+    Verify Pilot Record Removed
+    Logout From EC Application

@@ -311,3 +311,6 @@ TANK_EC_PASS = os.environ.get("TANK_EC_PASS", os.environ.get("EC_PASS", "sysadmi
 
 METER_EC_USER = os.environ.get("METER_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 METER_EC_PASS = os.environ.get("METER_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+
+PILOT_EC_USER = os.environ.get("PILOT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+PILOT_EC_PASS = os.environ.get("PILOT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
