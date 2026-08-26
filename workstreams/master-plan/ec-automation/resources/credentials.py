@@ -255,3 +255,5 @@ AREA_EC_PASS = os.environ.get("AREA_EC_PASS", os.environ.get("EC_PASS", "sysadmi
 
 EXTERNAL_LOCATION_EC_USER = os.environ.get("EXTERNAL_LOCATION_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 EXTERNAL_LOCATION_EC_PASS = os.environ.get("EXTERNAL_LOCATION_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+FIELD_EC_USER = os.environ.get("FIELD_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+FIELD_EC_PASS = os.environ.get("FIELD_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
