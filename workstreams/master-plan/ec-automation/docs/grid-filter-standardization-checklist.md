@@ -291,6 +291,9 @@ PR appends only its own ROW here — no per-PR section header._
 | Transport Zone | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Transport Zone Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete; confirmed fired 15x via output.xml grep on the live 5/5 run. |
 
 
+## Pilot Area-parity conversion (2026-08-26)
+
+| Pilot | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Pilot Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (feature/pilot-area-pattern, PR #560); confirmed fired 15x via output.xml grep on the live 5/5 run. |
 
 ## How to update this doc
 
