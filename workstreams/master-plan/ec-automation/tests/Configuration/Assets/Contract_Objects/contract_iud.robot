@@ -1,61 +1,66 @@
 *** Settings ***
 Documentation       EC IUD Test - Contract (Configuration > Assets > Contract_Objects).
-...                 OV-GM (manage-object, groupmodel): grid filtered by the navigator cascade (PROVEN
-...                 explicit values, not first-available).
-...                 DELETE = End Date = Start Date (true delete in OV_CONTRACT). NEVER touch existing data;
-...                 a unique AUTOTEST_CT_<timestamp> code is generated per run.
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by the
+...                 mandatory Business Unit navigator + GO. DELETE = End Date = Start Date
+...                 (true delete in OV_CONTRACT). NEVER touch existing data.
+...                 Layered: this test -> contract_page (T3) -> manage_object (T2) + common (T1).
+...                 Converted to the Area-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (2026-08-26) - Contract remains OV-GM and still needs its genuine Business
+...                 Unit navigator gesture; this is a structural conversion, not a
+...                 reclassification of Contract as plain Bank-shaped.
+...                 Uses a FIXED test code (AUTOTEST_CONTRACT) rather than a generated unique
+...                 code - confirmed absent from OV_CONTRACT (2026-08-26) before this was wired
+...                 in. Every run must complete TC05 (delete) so the code is free for the next
+...                 run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once
+...                 in Suite Setup - matches Area/Bank/Berth's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Contract_Objects/contract_page.resource
 
-Suite Setup         Set Up Contract Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
 Test Tags           iud    contract
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_CONTRACT
 ${START_DATE}       2000-01-01
-${END_DATE}         2000-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Contract Row Should Not Exist    ${TEST_CODE}
-    Capture Step    contract_tc01_clean
+    Login To EC Application
+    Open Contract Screen With Navigator Values Populated
+    Verify Contract Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Contract
-    [Documentation]    Insert under the navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Contract Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Contract Row Should Exist    ${TEST_CODE}
-    Contract Should Exist In DB    ${TEST_CODE}
-    Capture Step    contract_tc02_inserted
+TC02 Insert Contract Data
+    Login To EC Application
+    Open Contract Screen With Navigator Values Populated
+    Insert Contract Record And Save
+    Verify Contract Record Exists
+    Logout From EC Application
 
-TC03 Update Contract Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Contract Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Contract Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    contract_tc03_updated
+TC03 Update Contract Data
+    Login To EC Application
+    Open Contract Screen With Navigator Values Populated
+    Update Contract Record And Save
+    Verify Contract Record Updated
+    Logout From EC Application
 
-TC04 Delete Contract
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Contract    ${TEST_CODE}    ${END_DATE}
-    Contract Row Should Not Exist    ${TEST_CODE}
-    Contract Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    contract_tc04_deleted
+TC04 Find Contract Data
+    Login To EC Application
+    Open Contract Screen With Navigator Values Populated
+    Find Contract Record
+    Verify Contract Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Contract Suite
-    [Documentation]    Generate a unique test code/name, open the screen, fill the navigator cascade
-    ...    with PROVEN explicit values (not first-available).
-    Prepare IUD Object Data    AUTOTEST_CT_    Contract
-    ${pu}=    Open Contract Screen
-    VAR    ${GM_PU}    ${pu}    scope=SUITE
+TC05 Delete Contract Data
+    Login To EC Application
+    Open Contract Screen With Navigator Values Populated
+    Delete Contract Record And Save
+    Verify Contract Record Removed
+    Logout From EC Application

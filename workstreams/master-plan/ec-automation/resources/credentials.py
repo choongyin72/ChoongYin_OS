@@ -292,3 +292,5 @@ CHEMICAL_STREAM_HOOKUP_EC_PASS = os.environ.get("CHEMICAL_STREAM_HOOKUP_EC_PASS"
 
 CHEMICAL_STREAM_EC_USER = os.environ.get("CHEMICAL_STREAM_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 CHEMICAL_STREAM_EC_PASS = os.environ.get("CHEMICAL_STREAM_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
+CONTRACT_EC_USER = os.environ.get("CONTRACT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+CONTRACT_EC_PASS = os.environ.get("CONTRACT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
