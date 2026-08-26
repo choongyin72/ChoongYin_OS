@@ -302,6 +302,12 @@ header._
 | Production Separator (OV-GM) | STRUCTURE (2026-08-26, Area role-model rule) | Full Area-parity conversion (#551): 5 TCs incl. TC04 Find, per-TC Login/Logout, fixed AUTOTEST code, properties-file-driven insert/update/verify, genuine navigator kept via shared `Apply Navigator From Properties`, zero inline DB-verify. Live 5/5 + fresh-connection self-clean + full-tree dryrun + robocop parity with Area per the PR body. NOT a plain-Bank reclassification - OV-GM stands. _Row added by the reviewer at merge (R38)._ |
 | Service (OV-GM) | STRUCTURE (2026-08-26, Area role-model rule) | Full Area-parity conversion (#552): 5 TCs incl. TC04 Find, per-TC Login/Logout, fixed AUTOTEST code, properties-file-driven insert/update/verify, genuine navigator kept via shared `Apply Navigator From Properties`, zero inline DB-verify. Live 5/5 + fresh-connection self-clean + full-tree dryrun + robocop parity with Area per the PR body. NOT a plain-Bank reclassification - OV-GM stands. _Row added by the reviewer at merge (R38)._ |
 
+## Meter Area-parity conversion (2026-08-26)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Meter (Configuration > Assets > Dispatching_Objects, OV-GM + POPUP) | STRUCTURE (2026-08-26, Area role-model rule) | Full Area-parity conversion (PR #554) of the original golden-exemplar build: 5 TCs incl. TC04 Find, per-TC Login/Logout, fixed `AUTOTEST_METER`, properties-file-driven insert/update/verify, genuine Business Unit navigator via shared `Apply Navigator From Properties`, Delivery Point POPUP mechanism preserved as-is (generic T1 `Pick From EC Object Popup` - orthogonal to the navigator, the earlier "does not fit Area" note corrected on live evidence). Zero inline DB-verify. Live 5/5, dryrun 874/874, robocop parity with Area, probe + fixed-code self-clean 0 residual via fresh connections. _Row added by the reviewer at merge (R38)._ |
+
 ## How to update this doc
 
 When a new batch of screens from the "Batch tracking" table gets converted, flip each to

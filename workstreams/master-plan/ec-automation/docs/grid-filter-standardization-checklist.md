@@ -265,6 +265,12 @@ PR appends only its own ROW here — no per-PR section header._
 | Production Separator | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Production Separator Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#551); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
 | Service | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Service Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (#552); confirmed fired via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
 
+## Meter Area-parity conversion (2026-08-26)
+
+| Screen | Explicit filter wired? / Status | Notes |
+|---|---|---|
+| Meter | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Meter Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (PR #554); confirmed fired 15x via output.xml grep on the live 5/5 run. _Row added by the reviewer at merge (R38)._ |
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible
