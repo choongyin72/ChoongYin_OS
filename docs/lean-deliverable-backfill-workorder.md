@@ -116,7 +116,7 @@ completion note already covers ground truth)
 
 | Batch | Status | PRs | Notes |
 |---|---|---|---|
-| 1 | Not started | — | — |
+| 1 | Complete (awaiting merge) | #566 Area, #567 Sub Area, #568 External Location, #569 Field, #570 Well Hookup, #571 Operator Route, #572 Facility Class 1 | 7/7 backfilled 2026-08-27. All independently re-verified no automation files touched. Notable: Field's PR #529 shows CLOSED not MERGED on GitHub despite content being live (flagged, not resolved); several screens had pre-existing bundles predating the lean rule that needed refreshing, not fresh creation. |
 | 2 | Not started | — | — |
 | 3 | Not started | — | — |
 | 4 | Not started | — | — |
