@@ -120,14 +120,14 @@ completion note already covers ground truth)
 | 2 | Complete | #574 Price Object, #575 Contract Area, #576 Production Separator, #577 Chemical Injection Point, #578 Chemical Stream, #579 Well, #580 Chemical Stream Hookup | 7/7 backfilled + merged 2026-08-27 (push 522a46d..3139679). Zero automation files touched; provenance + sourced ticks verified per PR. _Row finalized by the reviewer at the Batch 3 merge (was "In progress - #575 Contract Area", written before the batch landed)._ |
 | 3 | Complete | #581 Pipeline Segment, #582 Contract, #583 Meter, #584 Price Rate, #585 Tank, #586 Collection Point, #587 Service | 7/7 backfilled + merged 2026-08-27 (push 3139679..c401951). Zero automation files touched; provenance + sourced ticks verified per PR. _Row finalized by the reviewer at merge (was "In progress - Collection Point", written before the batch landed)._ |
 | 4 | Complete | #588 Chemical Tank, #589 Shift, #590 Contract Capacity, #591 Storage, #592 Tract, #593 Well Hole, #594 Contract Inventory | 7/7 backfilled + merged 2026-08-27. Zero automation files touched; provenance + sourced ticks verified per PR. _Row finalized by the reviewer at merge (no batch PR owned the log row this round)._ |
-| 5 | Not started | — | — |
-| 6 | Not started | — | — |
-| 7 | Not started | — | — |
-| 8 | Not started | — | — |
-| 9 | Not started | — | — |
-| 10 | Not started | — | — |
-| 11 | Not started | — | — |
-| 12 | Not started | — | — |
+| 5 | PRs raised, awaiting reviewer merge | #595 Property, #596 Transport Zone, #597 Well Bore Interval, #598 Pilot, #599 Well Bore, #600 Lifting Account | 6/6 backfilled and pushed 2026-08-27/28. Verified via `gh pr list` (2026-08-28): all 6 are OPEN, none merged yet — do not treat as "Complete" until the reviewer merges. |
+| 6 | PRs raised, awaiting reviewer merge | #601 Payment Scheme, #602 Field Group, #603 Customer, #604 Country, #605 MMS Lease, #606 Licence, #607 Operator Lease | 7/7 backfilled and pushed. Verified OPEN (not merged) via `gh pr list` 2026-08-28. |
+| 7 | PRs raised, awaiting reviewer merge | #608 State Lease, #609 Vendor, #610 Product Description, #611 Cost Object Mapping, #612 DOA Credit Limit, #613 Sales Order, #614 Product Group | 7/7 backfilled and pushed. Verified OPEN (not merged) via `gh pr list` 2026-08-28. |
+| 8 | PRs raised, awaiting reviewer merge | #615 Royalty Owner, #616 Calendar Collection, #617 Royalty Depositor, #618 Unit Agreement, #619 Calendar, #620 Berth, #621 Account Mapping | 7/7 backfilled and pushed. Verified OPEN (not merged) via `gh pr list` 2026-08-28. |
+| 9 | PRs raised, awaiting reviewer merge | #622 Blend, #623 Calculation-Group-Context, #624 Canal, #625 Calculation-Context, #626 Inventory-Area, #627 Meter-Run, #628 Chemical-Transport-Tank | 7/7 backfilled and pushed. Verified OPEN (not merged) via `gh pr list` 2026-08-28. |
+| 10 | PRs raised, awaiting reviewer merge | #629 Orifice-Plate, #630 Reservoir-Formation, #631 Reservoir-Block, #632 Port, #633 Split Item Other, #634 Process Train, #635 Report-Area | 7/7 backfilled and pushed. Verified OPEN (not merged) via `gh pr list` 2026-08-28. |
+| 11 | PRs raised, awaiting reviewer merge | #636 Storage Flow, #637 Stream Item Category, #638 Data Extract Set, #639 Trailer, #640 Carrier, #641 Bank Account, #642 Deferment Group | 7/7 backfilled and pushed. Verified OPEN (not merged) via `gh pr list` 2026-08-28. |
+| 12 | PRs raised, awaiting reviewer merge (final batch — all 6 screens backfilled) | #643 Chemical Product, #644 Report Context, #645 Document Template, #646 Product, #647 Target Mapping Configuration, #648 County | 6/6 backfilled and pushed 2026-08-27/28. County (#648) confirmed via live re-run: full-tree dryrun 883/883, live 5/5, DB self-clean 0 residual `AUTOTEST%` in `OV_COUNTY` — automation itself (PR #429 Bank-pattern conversion, PR #489 pure-screen-verify alignment) untouched. Verified via `gh pr list` (2026-08-28): all 6 are OPEN, none merged yet. **All 82 screens across all 12 batches now have a backfill PR raised** (Batches 1-4 = 28 screens MERGED via #566-594; Batches 5-12 = 54 screens PRs OPEN awaiting reviewer merge via #595-648). Merging remains the reviewer's action per this doc's own gate — do not self-merge.|
 
 **Do not dispatch a batch until the previous batch's PRs are independently verified** (PR-read
 tool check, not subagent self-report alone) — same discipline as every other batch playbook in
