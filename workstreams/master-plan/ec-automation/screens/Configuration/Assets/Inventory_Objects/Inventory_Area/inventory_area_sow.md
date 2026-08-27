@@ -15,12 +15,30 @@
   - **Delete (objectdates):** `End Date` = Start Date.
 
 ## Test data
-- `AUTOTEST_INVA_<timestamp>` unique per run; Start/End = `${TEST_START_DATE}` (2000-01-01). Never touch real rows.
+- Fixed code `AUTOTEST_INVA` (Bank/Berth convention as of the Batch 8 rebuild, not the original
+  per-run generated code) - confirmed absent from `OV_INVENTORY_AREA` before being wired in
+  (2026-08-23). Start/End = `2000-01-01`. Update name -> `AUTOTEST Inventory Area UPDATED`. Never
+  touch real rows.
 
 ## Dev story
-Recon-first (DB `CLASS_TYPE=OBJECT` ⇒ OV; live form) -> plain Bank-layout OV, no mandatory dropdowns.
-Built label-driven on the shared engine + T2 (zero engine changes). Playwright driver 7/7; RF T3+suite
-label-driven -> live 4/4. All gates run + auto-ticked by `verify_screen.py` (OVERALL PASS).
+Original build (2026-07-26): recon-first (DB `CLASS_TYPE=OBJECT` => OV; live form) -> plain
+Bank-layout OV, no mandatory dropdowns. Built label-driven on the shared engine + T2 (zero engine
+changes). Playwright driver 7/7; RF T3+suite label-driven -> live 4/4.
+
+**Rebuilt 2026-08-23 (Batch 8, PR #460)** from that partial label-driven build to the FULL
+Bank/Berth-pattern shape: `inventory_area_page.resource` and `inventory_area_iud.robot` were rebuilt
+to mirror `berth_page.resource`/`berth_iud.robot` exactly - properties-file-driven insert/update/verify
+(`testdata/inventory_area_{insert,update,form_verify,grid_verify}.properties`), explicit grid-filter
+wiring (`Find Inventory Area Row By Filter`/`Clear Inventory Area Row Filter` -> shared T2's
+`Find Object Row By Filter`, per the owner's 2026-08-22 "others should follow Account" standing
+instruction), dedicated per-screen credentials (`INVENTORY_AREA_EC_USER`/`INVENTORY_AREA_EC_PASS` in
+`resources/credentials.py`), and expanded the suite from 4 to 5 TCs (added TC01 Verify Clean State)
+with per-TC login/logout, matching Bank/Berth's convention. No changes to shared T1/T2 files
+(`manage_object.resource`/`common.resource`) - every consolidated keyword reused as-is.
 
 ## Lessons / known risks
-- Optional dropdowns skipped (none mandatory). Delete uses engine `wait_for_row_absent` (async redraw).
+- Optional dropdowns skipped (none mandatory). Delete relies on async grid redraw after delete+GO;
+  RF's Browser auto-wait tolerates it (no screen-specific tuning needed).
+- Batch 7's lesson carried into this build: `ec_screen_registry.md`/`automation-scorecard.md` rows
+  must be a clean REPLACEMENT of the old row, not left alongside stale text (both confirmed MODIFIED,
+  not duplicated, in PR #460).
