@@ -87,7 +87,10 @@ every run. Source: `testdata/chemical_stream_hookup_navigator.properties` (comme
 | Work journal | `JOURNAL.md` |
 | KB selector map | `../../../../../../ec-ui-knowledge/screens/chemical_stream_hookup.md` |
 
-This backfill (2026-08-27) does not rebuild, modify, or re-verify the RF automation, the
-Playwright driver, or `mandatory_field_gate.resource` — it documents PR #544's already-merged,
-already-verified conversion and updates this SOW / `README.md` / `JOURNAL.md` / `CHECKLIST.md` /
-the KB map accordingly, per `docs/lean-deliverable-backfill-workorder.md`.
+This backfill (2026-08-27) does not rebuild or modify the RF automation, the Playwright driver, or
+`mandatory_field_gate.resource` — it documents PR #544's already-merged conversion, updates this
+SOW / `README.md` / `JOURNAL.md` / `CHECKLIST.md` / the KB map accordingly, and additionally
+captured one fresh confirmation run of the existing, unmodified suite for evidence purposes
+(dryrun 5/5, live headless 5/5, robocop parity, DB self-clean, hygiene — see
+`evidence/2026-08-27-area-pattern-backfill/` and `JOURNAL.md`), per the evidence-capture allowance
+in `docs/lean-deliverable-backfill-workorder.md` item 4.
