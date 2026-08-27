@@ -126,7 +126,7 @@ completion note already covers ground truth)
 | 8 | Not started | — | — |
 | 9 | Not started | — | — |
 | 10 | Not started | — | — |
-| 11 | Not started | — | — |
+| 11 | In progress — Bank Account | (PR pending) Bank Account | 1/7 backfilled 2026-08-28 (dispatched out of sequence, ahead of Batches 5-10, per explicit owner/dispatch instruction naming this specific screen). Bundle predated the lean rule (SOW/README/JOURNAL/evidence/playwright/investigation existed from the 2026-06-11 build, JOURNAL already backfilled once 2026-07-25) — UPDATED with the 2026-08-23 PR #478 Bank-pattern conversion narrative + added CHECKLIST.md/VERIFY-REPORT.md (neither existed) + refreshed KB map + fresh live-run evidence (5/5, first attempt, no flake). Zero automation files touched. Remaining 6 screens of Batch 11 (Storage Flow, Stream Item Category, Data Extract Set, Trailer, Carrier, Deferment Group) not yet started. |
 | 12 | Not started | — | — |
 
 **Do not dispatch a batch until the previous batch's PRs are independently verified** (PR-read
