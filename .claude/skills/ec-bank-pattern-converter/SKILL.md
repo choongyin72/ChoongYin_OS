@@ -168,10 +168,31 @@ Never report "done" without having actually run all five and citing the real num
 8. **Clean up** the batch's `Workplaces/<slug>/` clones once merged, then move to the next
    batch (repeat steps 3-7).
 
+## Bundle deliverables (owner decision 2026-08-27 — restored from `ec-object-iud-builder`)
+
+Section H of `docs/IUD-DELIVERABLE-CHECKLIST.md` retired the 2026-08-23 lean waiver: every
+Bank-pattern conversion now also produces, under `screens/<menu path>/<Screen>/`:
+- **`<screen>_sow.md`** — classification, grid/cell shape, test data, dev story.
+- **`README.md`** — bundle overview + exact run commands.
+- **`JOURNAL.md`** — per-branch work journal (built / done-wrong / done-well / improve /
+  blockers→resolution / decisions / evidence).
+- **`evidence/`** — step screenshots + a results record from the real live run.
+- **`CHECKLIST.md`** — a copy of `docs/IUD-DELIVERABLE-CHECKLIST.md` (Steps 0, A minus 4/5, B, C, D,
+  E), ticked with evidence.
+- **KB selector map** `ec-ui-knowledge/screens/<screen>.md`.
+
+**Still NOT required** (superseded by the Universal Screen Engine, per the same owner decision):
+a hand-written Playwright driver (item 4) or its `investigation/` recon scripts (item 5) — a
+throwaway scratch script in `Workplaces/<screen>/` (gitignored) is fine for ad-hoc recon and does
+not need to become a permanent deliverable.
+
+Raising a PR without these bundle artifacts is no longer "done" for this skill — the RF-suite
+verification gates below are necessary but not sufficient.
+
 ## What "done" looks like for a screen
 
 Properties-file-driven insert/update/verify + explicit `Find/Clear <Screen> Row By Filter`
 grid-filter wiring, matching `bank_page.resource`/`berth_page.resource` exactly. Live 5/5,
 dryrun 100% on the full tree, DB self-clean confirmed via a fresh connection, filter keyword
-confirmed fired, no shared T1/T2 file changes, registry/scorecard/checklist docs updated, PR
-raised (not self-merged).
+confirmed fired, no shared T1/T2 file changes, registry/scorecard/checklist docs updated, the
+bundle deliverables above produced, PR raised (not self-merged).

@@ -134,3 +134,49 @@ navigator-screens-not-matching-area.md`). The lean deliverable for such screens 
 `.claude/skills/ec-area-pattern-new-screen/SKILL.md` (adds the `<screen>_navigator.properties` file +
 shared `Apply Navigator From Properties` fill to the Bank-shape deliverable above). Everything this
 section does NOT waive remains unwaived, identically.
+
+---
+
+## H. Owner decision 2026-08-27: Section G's waiver is RETIRED — restore SOW/JOURNAL/evidence/KB
+   for Bank- and Area-pattern work; Playwright bundle stays waived (superseded by the engine)
+
+_Owner instruction 2026-08-27: "all item in ec-object-iud-builder should fully move to
+ec-bank-pattern-converter/ec-area-pattern-converter as we adopt new RF implementation, good stuffs in
+ec-object-iud-builder should tag along... except Playwright bundle as we had decided to use generic
+screen engine to replace old Playwright bundle."_
+
+Section G (2026-08-23/26) waived items 1 (SOW), 3 (JOURNAL), 4 (Playwright driver), 5
+(investigation/), 6 (evidence), 7 (CHECKLIST.md), and 20 (KB MD map) for Bank-/Area-pattern
+conversions and new-screen builds. **That waiver is now RETIRED except for items 4 and 5** (the
+Playwright driver + its investigation/ recon scripts) - those two stay waived because the Universal
+Screen Engine (`py/engine.py`) is the owner-decided replacement for hand-written Playwright drivers
+going forward; building a new one per conversion is now redundant work, not a shortcut.
+
+**Restored, effective immediately, for every Bank-pattern and Area-pattern conversion/new-screen
+build (both `-converter` and `-new-screen` skill variants):**
+- [ ] **1. SOW** (`<screen>_sow.md`) — classification, nav/grid/cell shape, test data, dev story.
+- [ ] **2. README.md** — bundle overview + exact run commands (already implicitly required; now explicit).
+- [ ] **3. JOURNAL.md** — per-branch work journal (built / done-wrong / done-well / improve / blockers -> resolution / decisions / evidence).
+- [ ] **6. evidence/** — step screenshots + a results record from a real run.
+- [ ] **7. CHECKLIST.md** — this list (Steps 0, A minus 4/5, B, C, D, E), copied into the bundle, ticked with evidence.
+- [ ] **20. KB selector map** (`ec-ui-knowledge/screens/<screen>.md`).
+
+**Still waived (unchanged):** item 4 (Playwright driver) and item 5 (investigation/ recon scripts) -
+do not build a new hand-written Playwright bundle for Bank-/Area-pattern work; the engine covers that
+role now. If a screen genuinely has no engine coverage yet and needs ad-hoc recon, a throwaway scratch
+script in `Workplaces/<screen>/` (gitignored) is fine - it does not need to become a permanent
+`investigation/` deliverable.
+
+**Never waived (unchanged from Section G):** items 8-19 and 21 (RF T3/suite, all verification gates,
+registry/scorecard rows, the 6-field PR body, never-self-merge).
+
+**Bundle location:** since items 4/5 are no longer produced, the remaining bundle artifacts (SOW,
+README, JOURNAL, evidence, CHECKLIST.md) still live under `screens/<menu path>/<Screen>/` alongside
+the existing RF files under `pageobjects/`/`tests/`/`testdata/` - this doc's Section A path convention
+is otherwise unchanged.
+
+**Scope:** applies going forward to every NEW Bank-/Area-pattern conversion or new-screen build from
+2026-08-27 onward. **Retroactive backfill** for screens already converted under the old lean rule is a
+separate, explicitly owner-authorized project - see `docs/lean-deliverable-backfill-workorder.md` for
+the list, batching plan, and per-screen instructions. Do not assume backfill is required for a screen
+not listed there without checking that doc first.

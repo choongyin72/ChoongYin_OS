@@ -1,6 +1,6 @@
 ---
 name: ec-area-pattern-new-screen
-description: Use when building a BRAND-NEW RF suite (no existing automation at all) for an EC screen that has a NAVIGATOR section (OV-GM) with the SAME LAYOUT as Area — e.g. "build the Area-pattern RF suite for <screen>", "automate <screen> like Area, RF only". Produces the lean, RF-only deliverable matching `area_page.resource`/`area_iud.robot`'s current shape, using the shared `Apply Navigator From Properties` keyword. For a navigator screen that already has SOME automation to upgrade, use `ec-area-pattern-converter` instead. For a screen with NO navigator section at all, use `ec-bank-pattern-new-screen` instead.
+description: Use when building a BRAND-NEW RF suite (no existing automation at all) for an EC screen that has a NAVIGATOR section (OV-GM) with the SAME LAYOUT as Area — e.g. "build the Area-pattern RF suite for <screen>", "automate <screen> like Area, RF only". Produces the RF suite plus SOW/README/JOURNAL/evidence/CHECKLIST/KB-map bundle (owner decision 2026-08-27 — no Playwright bundle, since the Universal Screen Engine replaces it), using the shared `Apply Navigator From Properties` keyword. For a navigator screen that already has SOME automation to upgrade, use `ec-area-pattern-converter` instead. For a screen with NO navigator section at all, use `ec-bank-pattern-new-screen` instead.
 ---
 
 # EC Area-Pattern New Screen — lean RF-only build from scratch, for navigator screens
@@ -120,6 +120,23 @@ Same orchestration as `ec-bank-pattern-new-screen`'s batch playbook. If any scre
 turns out not to fit Area's supported navigator shape, log it to the not-matching-Area checklist
 and continue with the rest — don't let one mismatch block the batch.
 
+## Bundle deliverables (owner decision 2026-08-27 — restored from `ec-object-iud-builder`)
+
+Section H of `docs/IUD-DELIVERABLE-CHECKLIST.md` retired the 2026-08-23/26 lean waiver: every new
+Area-pattern screen build now also produces, under `screens/<menu path>/<Screen>/`:
+- **`<screen>_sow.md`** — classification, navigator/grid/cell shape, test data, dev story.
+- **`README.md`** — bundle overview + exact run commands.
+- **`JOURNAL.md`** — per-branch work journal (built / done-wrong / done-well / improve /
+  blockers→resolution / decisions / evidence).
+- **`evidence/`** — step screenshots + a results record from the real live run.
+- **`CHECKLIST.md`** — a copy of `docs/IUD-DELIVERABLE-CHECKLIST.md` (Steps 0, A minus 4/5, B, C, D,
+  E), ticked with evidence.
+- **KB selector map** `ec-ui-knowledge/screens/<screen>.md`.
+
+**Still NOT required**: a hand-written Playwright driver or its `investigation/` recon scripts —
+the Universal Screen Engine covers that role now. A throwaway scratch script in
+`Workplaces/<screen>/` (gitignored) is fine for ad-hoc recon.
+
 ## What "done" looks like
 
 5 TCs, per-TC login/logout, navigator filled via the shared `Apply Navigator From Properties`
@@ -127,5 +144,4 @@ keyword, fixed test code, properties-file-driven insert/update/verify, explicit 
 wiring, zero inline DB-verify calls — matching `area_page.resource`/`area_iud.robot` exactly.
 Live 5/5, dryrun 100% on the full tree, DB self-clean confirmed via a fresh connection, filter
 keyword confirmed fired, no unauthorized shared T1/T2 file changes, new registry/scorecard rows
-added, PR raised (not self-merged). No Playwright bundle, SOW, JOURNAL, evidence, or KB-map entry
-required — if those are wanted, use `ec-object-iud-builder` instead.
+added, the bundle deliverables above produced, PR raised (not self-merged).
