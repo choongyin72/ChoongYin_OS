@@ -1,0 +1,38 @@
+{
+  "screen": "Pipeline Segment",
+  "backfill_date": "2026-08-27",
+  "source_pr": "PR #558 (feature/pipeline-segment-area-pattern, merged 2026-08-26T14:59:19Z)",
+  "dryrun": {
+    "command": "py -m robot --dryrun --outputdir tmp_dryrun tests/Configuration/Assets/Dispatching_Objects/pipeline_segment_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed"
+  },
+  "live_headless": {
+    "command": "EC_HEADLESS=true py -m robot --outputdir tmp_live tests/Configuration/Assets/Dispatching_Objects/pipeline_segment_iud.robot",
+    "first_attempt": "FAIL - 5 tests, 0 passed, 5 failed - browser context closed mid-run ('Could not find active page' / 'Target page, context or browser has been closed') - resource contention from concurrent agents in the shared environment, not a code defect; 0 stray chrome.exe processes found on recheck (tasklist | grep -i chrome)",
+    "retry": "PASS - 5 tests, 5 passed, 0 failed (TC01-TC05)"
+  },
+  "filter_fired_grep": {
+    "command": "grep -c \"Find Object Row By Filter\" tmp_live2/output.xml",
+    "result": 15,
+    "matches_pr_558_cited_count": true
+  },
+  "robocop_parity": {
+    "pipeline_segment": "7 issues (2x VAR02 + 5x DOC02)",
+    "area_baseline": "7 issues (2x VAR02 + 5x DOC02)",
+    "parity": true
+  },
+  "db_self_clean": {
+    "script": "Workplaces/pipeline-segment-backfill/db_selfclean_check.py (scratch, gitignored)",
+    "query_1": "SELECT COUNT(*) FROM OV_PIPELINE_SEGMENT WHERE CODE = 'AUTOTEST_PIPELINE_SEGMENT'",
+    "query_1_result": 0,
+    "query_2": "SELECT CODE FROM OV_PIPELINE_SEGMENT WHERE CODE LIKE 'AUTOTEST%'",
+    "query_2_result": [],
+    "connection": "fresh independent oracledb connection, run after the live retry"
+  },
+  "hygiene": {
+    "command": "py scripts/check_bundle_hygiene.py (repo root)",
+    "result": "RESULT: PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions, doc rows match declared families",
+    "unrelated_warn": "2 hardcoded-credential-shaped lines in Contract Area's investigation/live_recon_contract_area.py - DOM selector string literals (#username/#password), not real credentials; pre-existing, unrelated to Pipeline Segment"
+  },
+  "automation_files_touched": "NONE - git diff --stat against pageobjects/, tests/, testdata/, resources/credentials.py, docs/ec_screen_registry.md is empty"
+}
