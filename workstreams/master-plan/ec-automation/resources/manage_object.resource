@@ -625,9 +625,10 @@ Apply Navigator From Properties
     ${idx}=    Set Variable    ${0}
     FOR    ${label}    IN    @{data.keys()}
         ${idx}=    Evaluate    ${idx} + 1
-        IF    "${row2_from}" != "" and ${idx} > ${row2_from}
+        ${past_row2_from}=    Evaluate    $row2_from != "" and $idx > int($row2_from)
+        IF    ${past_row2_from}
             ${use_row}=    Set Variable    ${row2}
-            ${use_col}=    Evaluate    ${row2_start_col} + ${idx} - ${row2_from} - 1
+            ${use_col}=    Evaluate    ${row2_start_col} + ${idx} - int($row2_from) - 1
         ELSE
             ${use_row}=    Set Variable    ${row}
             ${use_col}=    Set Variable    ${col}
