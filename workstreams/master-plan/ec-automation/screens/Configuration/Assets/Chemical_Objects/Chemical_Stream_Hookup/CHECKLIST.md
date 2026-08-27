@@ -1,5 +1,13 @@
 # Chemical Stream Hookup - IUD Deliverable Checklist (vs docs/IUD-DELIVERABLE-CHECKLIST.md, 21 gates)
 
+_This file was originally written 2026-08-01 for the ORIGINAL 4-TC build (ticks below, Steps 0-E,
+are that build's real evidence — unchanged). It is updated 2026-08-27 as part of the retroactive
+backfill required by `docs/lean-deliverable-backfill-workorder.md` (Section H of
+`docs/IUD-DELIVERABLE-CHECKLIST.md`, retiring the 2026-08-23/26 lean waiver) to also cover PR #544
+(merged 2026-08-26), the Area-pattern conversion of this screen's RF suite from 4 TCs to 5 TCs.
+See the "Post-PR #544 status" section below for what changed and its own evidence. **No automation
+code was rebuilt, modified, or re-verified from scratch by this backfill.**
+
 ## Step 0 - check-existing gate
 - [x] 0a KB map created
 - [x] 0b grep ec-automation -> only this build (checked: 0 other file(s) reference 'chemical_stream_hookup')
@@ -29,3 +37,123 @@
 
 _Gates 10-16 RUN by `scripts/verify_screen.py` -> `VERIFY-REPORT.md` (OVERALL PASS); ticks from real exit codes.
 OV-GM specifics: navigator cascade Production Unit -> Area -> Facility Class 1 first-available + GO._
+
+---
+
+## Post-PR #544 status (Area-pattern conversion, merged 2026-08-26) — backfilled 2026-08-27
+
+This section restates the same 21 gates against the CURRENT state of the screen (5-TC
+Area-pattern structure), citing PR #544's own already-executed verification PLUS one fresh
+confirmation run of the existing, unmodified suite captured for evidence purposes this session
+(see the "Post-PR #544 status" §C notes below and `JOURNAL.md`'s "fresh confirmation run" entry).
+This is evidence capture of an already-proven suite, not a rebuild or re-verification from
+scratch — no automation file was changed to produce it.
+
+### Step 0
+- [x] **0a.** `ec-ui-knowledge/screens/chemical_stream_hookup.md` existed (from the 2026-08-01
+      build) and was updated by this backfill with the 5-TC structure — not re-scanned live.
+- [x] **0b.** `grep -ril "chemical_stream_hookup" workstreams/master-plan/ec-automation/{pageobjects,tests,screens,testdata,py}`
+      -> found the full existing bundle (page object, suite, 5 testdata properties files, this
+      `screens/.../Chemical_Stream_Hookup/` folder, `py/chemical_stream_hookup_iud.py`) — PR #544
+      REUSED/EXTENDED this in place (`ec-area-pattern-converter` territory), no parallel copy.
+- [x] **0c.** Shared T2 `resources/manage_object.resource` reused as-is by PR #544 (no gap found
+      for this screen's 3-level cascade); not modified by PR #544 or this backfill.
+
+### A. Bundle artifacts — `screens/Configuration/Assets/Chemical_Objects/Chemical_Stream_Hookup/`
+- [x] **1. `chemical_stream_hookup_sow.md`** — updated (not replaced): §1 (original build) kept
+      as-is; §2 added with the real PR #544 dev story, the live-probed navigator values, and the
+      `mandatory_field_gate.resource` design-decision writeup.
+- [x] **2. `README.md`** — updated with exact RF commands (dryrun/live headless/live headed) and
+      the `OV_CHEM_STRM_HOOKUP` DB self-clean query pattern; clarified RF is the maintained test,
+      Playwright is the preserved 2026-08-01 reference.
+- [x] **3. `JOURNAL.md`** — updated (not replaced): added a "2026-08-26 — Area-pattern conversion
+      (PR #544)" section (Built/Done well/Done wrong/Blockers/Decisions/Evidence, pulled from PR
+      #544's real body) and a "2026-08-27 — Documentation/evidence backfill" section for this task.
+- [ ] **4. `playwright/ec_iud_<slug>.py`** — N/A for PR #544. Playwright bundle permanently waived
+      for Bank-/Area-pattern conversions (`docs/IUD-DELIVERABLE-CHECKLIST.md` Section H). The
+      pre-existing `py/chemical_stream_hookup_iud.py` (2026-08-01) was left untouched — not
+      rebuilt, not re-verified, by PR #544 or this backfill.
+- [ ] **5. `investigation/`** — N/A for PR #544, same waiver. The pre-existing
+      `investigation/recon.py` (2026-08-01) was left untouched.
+- [x] **6. `evidence/`** — pre-existing screenshots (`csh_0[1-5]_*.png`, `results.json`,
+      2026-08-01/02) kept unchanged; they document the OLD 4-TC structure, confirmed via file
+      timestamp (2026-08-01/02, predating PR #544's 2026-08-26 merge). PR #544 itself was an
+      RF-only conversion (no Playwright driver run) and produced no screenshot artifact of its
+      own — its verification evidence was the PR body's own cited command output. **This backfill
+      ADDS fresh evidence for the current 5-TC structure**: `evidence/2026-08-27-area-pattern-backfill/`
+      (`log.html`, `report.html`, `output.xml`, `results.json`) from a real re-run of the existing,
+      unmodified suite (see item 12).
+- [x] **7. `CHECKLIST.md`** — this file (this section).
+
+### B. RF files — treeview-mirrored (NOT modified by this backfill)
+- [x] **8. T3 page object** `pageobjects/Configuration/Assets/Chemical_Objects/chemical_stream_hookup_page.resource`
+      — rewritten by PR #544 (2026-08-26), unmodified by this backfill; read in full to source the
+      selectors/mechanism transcribed into the KB map update.
+- [x] **9. Suite** `tests/Configuration/Assets/Chemical_Objects/chemical_stream_hookup_iud.robot`
+      — rewritten by PR #544 (2026-08-26), unmodified by this backfill; TC01 clean -> TC02 insert
+      -> TC03 update -> TC04 find -> TC05 delete/cleanup (read in full, not re-run).
+
+### C. Verification gates (evidence = PR #544's own cited output PLUS a fresh confirmation run
+executed by this backfill session, 2026-08-27 — see `JOURNAL.md`'s "fresh confirmation run" entry
+and `evidence/2026-08-27-area-pattern-backfill/`)
+- [x] **10. robocop clean (parity with Area)** — PR #544 body: 7 issues (VAR02 x2 + DOC02 x5),
+      parity with Area. RE-CONFIRMED this session: `py -m robocop check` on the same 2 files ->
+      **7 issues (VAR02 x2 + DOC02 x5)** — identical count, real command output.
+- [x] **11. `--dryrun` N/N PASS** — PR #544 body: full-tree 850/850 PASS. RE-CONFIRMED this
+      session (single-suite scope): `robot --dryrun` on `chemical_stream_hookup_iud.robot` ->
+      **5/5 PASS, 0 fail**.
+- [x] **12. LIVE headless run N/N PASS** — PR #544 body: 5/5 PASS. RE-CONFIRMED this session:
+      `EC_HEADLESS=true robot ... chemical_stream_hookup_iud.robot` -> **5/5 PASS, 0 fail** (real
+      run against the reachable corp sandbox, confirmed via `curl` HTTP 302 first; checked for
+      stray `chrome.exe` processes before running — none found). Artifacts in
+      `evidence/2026-08-27-area-pattern-backfill/`.
+- [x] **13. DB ground-truth** — PR #544 body: fresh oracledb connection confirmed `AUTOTEST_CSH`
+      free before, 0 residual `AUTOTEST%` after. RE-CONFIRMED this session: fresh `oracledb`
+      connection (`localhost:1521/ORCL`, `ECKERNEL_EC`) AFTER this session's own live run ->
+      `SELECT COUNT(*) FROM OV_CHEM_STRM_HOOKUP WHERE CODE LIKE 'AUTOTEST%'` = **0**. The suite's
+      own DB check lives inside the shared T2 `Verify Object Removed` (0 inline DB-verify calls in
+      the `.robot` FILE itself, confirmed via `grep -c` on the source this session).
+- [x] **14. FULL I-U-D scope** — TC02 Insert + TC03 Update + TC05 Delete all present and PASS (see
+      item 12, this session's own live run); TC04 Find also present (Area-pattern's 5th TC).
+- [x] **15. Self-clean confirmed** — PR #544 body: 0 residual after its own run. RE-CONFIRMED this
+      session via a fresh connection after this session's own live run (see item 13) -> **0**.
+- [x] **16. Hygiene PASS** — RE-CONFIRMED this session: `py scripts/check_bundle_hygiene.py`
+      (repo-wide) -> **RESULT: PASS** (no hardcoded creds R16, ASCII-clean R20, no CHECKLIST/
+      VERIFY-REPORT contradiction attributable to this screen).
+
+### D. Delivery
+- [x] **17. Registry row** — already present, MODIFIED IN PLACE by PR #544 (not this backfill);
+      confirmed live: `workstreams/master-plan/ec-automation/docs/ec_screen_registry.md`, Chemical
+      Stream Hookup row, states the full 5-TC conversion story including the confirmed navigator
+      values. This backfill does not touch the registry row again (append-only / no-duplicate-edit).
+- [x] **18. Scorecard row** — modified by PR #544 per its own "Files touched" list
+      (`docs/automation-scorecard.md`); not duplicated by this backfill.
+- [ ] **19. PR** — this backfill's own PR (branch `docs/chemical-stream-hookup-backfill-artifacts`),
+      6-field body, base = master, sync-before-push done, never self-merge. (Ticked once the PR is
+      raised — see PR body for the R9 fields.)
+
+### E. Knowledge base
+- [x] **20. KB selector map** `ec-ui-knowledge/screens/chemical_stream_hookup.md` — existed from
+      2026-08-01, updated 2026-08-27 by this backfill: 5-TC structure, confirmed navigator values
+      (`AS1 EC Exploration Norway` / `AS1_Area` / `AS1_Facility_01`), the
+      `mandatory_field_gate.resource` mechanism, and the `Find/Clear ... Row By Filter` grid-filter
+      wiring — transcribed from `chemical_stream_hookup_page.resource`'s own Variables/
+      Documentation section, not re-scanned live.
+- [x] **21. Reuse clause** — Step 0 found the screen ALREADY implemented (both the original
+      2026-08-01 build and PR #544's conversion); this backfill produced/refreshed the
+      deliverables that document PR #544: JOURNAL update (#3), the honest evidence-gap note (#6),
+      and the KB map update (#20), plus the SOW/README/CHECKLIST updates this specific
+      retroactive-backfill scope additionally requires.
+
+### Deviations from the standard 21-item list (stated explicitly, per R-no-silent-deviation)
+- Items 4/5 (Playwright driver + `investigation/`) are marked N/A per the PERMANENT waiver
+  (`docs/IUD-DELIVERABLE-CHECKLIST.md` Section H) — not a backfill gap, the current standing rule
+  for Bank-/Area-pattern work.
+- Items 17/18 (registry/scorecard rows) are NOT re-appended by this backfill — they already exist,
+  modified in place by PR #544; appending a second row for the same screen would violate the
+  append-only, no-duplicate convention (R23).
+- This backfill session ADDITIONALLY executed one fresh confirmation run (dryrun, live headless,
+  robocop, hygiene, DB self-clean before/after) of the existing, unmodified PR #544 suite, per
+  the workorder's item 4 allowance ("re-run the screen's live suite ONE more time ... evidence
+  capture of a real run, not a fresh verification cycle") — see `JOURNAL.md` and
+  `evidence/2026-08-27-area-pattern-backfill/`. No automation file was changed to produce it.

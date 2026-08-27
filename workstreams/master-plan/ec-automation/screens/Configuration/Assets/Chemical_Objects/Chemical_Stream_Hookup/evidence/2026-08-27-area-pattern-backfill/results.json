@@ -1,0 +1,15 @@
+{
+  "screen": "Chemical Stream Hookup",
+  "bf_code": "CO.0260",
+  "view": "OV_CHEM_STRM_HOOKUP",
+  "purpose": "Backfill evidence capture (docs/lean-deliverable-backfill-workorder.md, Batch 2) - re-run of the already-existing, already-working Area-pattern RF suite from PR #544. No automation files changed.",
+  "date": "2026-08-27",
+  "robocop": "7 issues (VAR02 x2 + DOC02 x5) on chemical_stream_hookup_page.resource + chemical_stream_hookup_iud.robot - exact parity with PR #544's own cited count",
+  "dryrun": "5/5 PASS, 0 fail (robot --dryrun)",
+  "live_headless": "5/5 PASS, 0 fail (EC_HEADLESS=true robot ... chemical_stream_hookup_iud.robot)",
+  "filter_keyword_fired": "grep -c \"Find Object Row By Filter\" output.xml -> 15 hits (non-zero)",
+  "pure_screen_verification": "grep -c inline DB-verify keywords in the .robot file itself -> 0 (DB checks live solely inside the shared T2 Verify Object Removed)",
+  "db_self_clean": "fresh oracledb connection (localhost:1521/ORCL, ECKERNEL_EC) -> SELECT COUNT(*) FROM OV_CHEM_STRM_HOOKUP WHERE CODE LIKE 'AUTOTEST%' = 0",
+  "hygiene": "py scripts/check_bundle_hygiene.py -> RESULT: PASS (repo-wide scan, no violations attributed to this screen)",
+  "artifacts": ["log.html", "report.html", "output.xml"]
+}
