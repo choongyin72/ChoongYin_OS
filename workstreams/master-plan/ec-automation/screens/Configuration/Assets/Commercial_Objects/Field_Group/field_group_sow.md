@@ -55,3 +55,42 @@ Banner-discovered mandatory dropdowns resolved in fix round 1; Field links into 
 ## 5. DELIVERABLES
 RF suite + page object under `tests|pageobjects/.../Commercial_Objects/field_group_*`,
 this bundle, registry row in `docs/ec_screen_registry.md`.
+
+---
+
+## 6. ADDENDUM — Bank-pattern conversion (PR #434, merged 2026-08-23) + backfill (2026-08-28)
+
+**Classification (current, live-confirmed):** plain Bank-pattern OV screen (manage-object,
+**no navigator** — confirmed live 2026-08-23). Grid id `manage_object_nav_nav:form:T_data`
+(re-used from T2's `${OV_MANAGE_OBJECT_TABLE}` constant, not re-hardcoded). DB view
+`OV_FIELD_GROUP`. Delete = End Date = Start Date (true delete).
+
+**What changed in PR #434:** converted the Field Group IUD suite from the older
+hardcoded-field-id/generated-code pattern (this SOW's original Sections 1-5, dated 2026-06-12,
+used `AUTOTEST_FG_<timestamp>`) to the label-driven, properties-file-driven, T2-consolidated
+Bank pattern (mirroring Bank/Country), with explicit grid Find/Clear Row By Filter wiring
+included from the start. Files rewritten: `field_group_page.resource` (+148/-58),
+`field_group_iud.robot` (+52/-44); new: `testdata/field_group_{insert,update,form_verify,
+grid_verify}.properties`; additive: `resources/credentials.py`
+(`FIELD_GROUP_EC_USER`/`FIELD_GROUP_EC_PASS`). Part of Batch 3 of the Bank-pattern conversion
+project (5 screens: Customer, Field Group, Licence, MMS Lease, Operator Lease).
+
+**Real gotcha from PR #434 (not invented):** the throwaway RF recon script used to
+live-confirm field labels found Code/Name/Start Date mandatory in objectForm; End Date/
+Description/Comments/Field Group Type (dropdown)/Reporting Field Group Indicator (checkbox)
+confirmed optional and omitted from the round-trip form-label list — except Description,
+kept in for business-realistic test data matching Bank's own convention. The plain
+manage-object navigator (no mandatory nav scope) was reconfirmed live, matching the registry.
+The `objectdates` End Date field id was reconfirmed live to match the pre-conversion file's
+own value exactly (no drift).
+
+**Current test data (fixed code, superseding Sections 1-4's generated-code description):**
+`AUTOTEST_FIELD_GROUP` / `Automation Test Field Group` (+` UPDATED`) / Start=End `2003-01-01`
+— see `testdata/field_group_insert.properties` / `field_group_update.properties`.
+
+**This backfill (2026-08-28, `docs/lean-deliverable-backfill-workorder.md` Batch 6):** the
+2026-08-23 conversion (PR #434) was built under the 2026-08-23/26 lean waiver, which skipped
+SOW/README/JOURNAL/evidence/CHECKLIST/KB-map. This addendum, `JOURNAL.md`, `CHECKLIST.md`, a
+fresh `evidence/backfill_2026-08-28/` live run, and `ec-ui-knowledge/screens/field_group.md`
+backfill those artifacts. No RF/Playwright automation file was modified to produce this
+addendum — see `JOURNAL.md` for the full account.
