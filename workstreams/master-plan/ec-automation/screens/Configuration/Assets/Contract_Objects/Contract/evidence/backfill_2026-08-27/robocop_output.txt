@@ -1,0 +1,66 @@
+tests\Configuration\Assets\Contract_Objects\contract_iud.robot:28:1 VAR02 Variable '${TEST_CODE}' is assigned but not used
+    |
+ 26 |
+ 27 | *** Variables ***
+ 28 | ${TEST_CODE}        AUTOTEST_CONTRACT
+    | ^^^^^^^^^^^^ VAR02
+ 29 | ${START_DATE}       2000-01-01
+ 30 | ${END_DATE}         ${START_DATE}
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_iud.robot:30:1 VAR02 Variable '${END_DATE}' is assigned but not used
+    |
+ 28 | ${TEST_CODE}        AUTOTEST_CONTRACT
+ 29 | ${START_DATE}       2000-01-01
+ 30 | ${END_DATE}         ${START_DATE}
+    | ^^^^^^^^^^^ VAR02
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_iud.robot:34:1 DOC02 Missing documentation in 'TC01 Verify Clean State' test case
+    |
+ 32 |
+ 33 | *** Test Cases ***
+ 34 | TC01 Verify Clean State
+    | ^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 35 |     Login To EC Application
+ 36 |     Open Contract Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_iud.robot:40:1 DOC02 Missing documentation in 'TC02 Insert Contract Data' test case
+    |
+ 40 | TC02 Insert Contract Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 41 |     Login To EC Application
+ 42 |     Open Contract Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_iud.robot:47:1 DOC02 Missing documentation in 'TC03 Update Contract Data' test case
+    |
+ 47 | TC03 Update Contract Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 48 |     Login To EC Application
+ 49 |     Open Contract Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_iud.robot:54:1 DOC02 Missing documentation in 'TC04 Find Contract Data' test case
+    |
+ 54 | TC04 Find Contract Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 55 |     Login To EC Application
+ 56 |     Open Contract Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_iud.robot:61:1 DOC02 Missing documentation in 'TC05 Delete Contract Data' test case
+    |
+ 61 | TC05 Delete Contract Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 62 |     Login To EC Application
+ 63 |     Open Contract Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+Found 7 issues.
