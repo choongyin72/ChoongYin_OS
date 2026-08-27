@@ -1,0 +1,41 @@
+{
+  "backfill_date": "2026-08-28",
+  "workorder": "docs/lean-deliverable-backfill-workorder.md, Batch 7",
+  "screen": "Cost Object Mapping",
+  "original_pr": 442,
+  "original_pr_date": "2026-08-23",
+  "dryrun": {
+    "command": "py -m robot --dryrun --outputdir Workplaces/cost-object-mapping-backfill/dryrun tests/Configuration/Assets/Financial_Objects/cost_object_mapping_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed",
+    "note": "One transient msys/bash stack-trace error on the first attempt (unrelated to the RF suite), resolved cleanly on a single retry."
+  },
+  "live_headless": {
+    "command": "EC_HEADLESS=true py -m robot --outputdir Workplaces/cost-object-mapping-backfill/live tests/Configuration/Assets/Financial_Objects/cost_object_mapping_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed",
+    "note": "First attempt, no retry needed."
+  },
+  "filter_grep": {
+    "command": "grep -c 'name=\"Find Cost Object Mapping Row By Filter\"' live/output.xml",
+    "result": 5
+  },
+  "robocop": {
+    "command": "py -m robocop check pageobjects/.../cost_object_mapping_page.resource tests/.../cost_object_mapping_iud.robot",
+    "result": "Found 9 issues",
+    "breakdown_this_run": "2 VAR02 + 2 LEN32 + 5 DOC02",
+    "breakdown_pr442_body": "4 VAR02 + 5 DOC02",
+    "note": "Total (9) matches PR #442's cited count exactly; per-rule breakdown differs, most likely robocop ruleset/version drift between 2026-08-23 and 2026-08-28 rather than a code change (no automation file touched between the two runs). Disclosed, not smoothed over."
+  },
+  "db_self_clean": {
+    "view": "OV_FIN_COST_OBJECT",
+    "autotest_cmap_count": 0,
+    "residual_autotest_rows": [],
+    "total_row_count": 90,
+    "connection": "fresh oracledb connection, independent of the test run"
+  },
+  "hygiene": {
+    "command": "py scripts/check_bundle_hygiene.py",
+    "result": "PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions, doc rows match declared families",
+    "note": "One unrelated pre-existing WARN about Contract_Area/investigation/live_recon_contract_area.py, not related to Cost Object Mapping."
+  },
+  "automation_modified": false
+}

@@ -122,7 +122,7 @@ completion note already covers ground truth)
 | 4 | Complete | #588 Chemical Tank, #589 Shift, #590 Contract Capacity, #591 Storage, #592 Tract, #593 Well Hole, #594 Contract Inventory | 7/7 backfilled + merged 2026-08-27. Zero automation files touched; provenance + sourced ticks verified per PR. _Row finalized by the reviewer at merge (no batch PR owned the log row this round)._ |
 | 5 | Not started | — | — |
 | 6 | Not started | — | — |
-| 7 | Not started | — | — |
+| 7 | In progress — Cost Object Mapping | (this PR) Cost Object Mapping | 1/7 backfilled 2026-08-28. Cost Object Mapping had a pre-existing bundle predating the RF conversion (legacy 2026-06-11 Playwright build) that needed refreshing (SOW/README), not fresh creation — legacy playwright/investigation/evidence left untouched. Zero automation files touched; live 5/5, dryrun 5/5, DB self-clean 0 residual (all re-confirmed 2026-08-28). Remaining Batch 7 screens (Vendor, State Lease, Product Description, DOA Credit Limit, Sales Order, Product Group) not started. |
 | 8 | Not started | — | — |
 | 9 | Not started | — | — |
 | 10 | Not started | — | — |
