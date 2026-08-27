@@ -121,7 +121,7 @@ completion note already covers ground truth)
 | 3 | Complete | #581 Pipeline Segment, #582 Contract, #583 Meter, #584 Price Rate, #585 Tank, #586 Collection Point, #587 Service | 7/7 backfilled + merged 2026-08-27 (push 3139679..c401951). Zero automation files touched; provenance + sourced ticks verified per PR. _Row finalized by the reviewer at merge (was "In progress - Collection Point", written before the batch landed)._ |
 | 4 | Complete | #588 Chemical Tank, #589 Shift, #590 Contract Capacity, #591 Storage, #592 Tract, #593 Well Hole, #594 Contract Inventory | 7/7 backfilled + merged 2026-08-27. Zero automation files touched; provenance + sourced ticks verified per PR. _Row finalized by the reviewer at merge (no batch PR owned the log row this round)._ |
 | 5 | Not started | — | — |
-| 6 | In progress — 1/7 | Field Group (PR TBD, this session) | Field Group backfilled 2026-08-28 (zero automation files touched; robocop/dryrun/live/DB-self-clean/hygiene all re-verified with matching evidence to PR #434's own baseline). Remaining 6/7 (Country, Payment Scheme, Customer, Operator Lease, MMS Lease, Licence) not started. |
+| 6 | In progress — 1/7 | #602 Field Group | Field Group backfilled 2026-08-28 (zero automation files touched; robocop/dryrun/live/DB-self-clean/hygiene all re-verified with matching evidence to PR #434's own baseline). Remaining 6/7 (Country, Payment Scheme, Customer, Operator Lease, MMS Lease, Licence) not started. |
 | 7 | Not started | — | — |
 | 8 | Not started | — | — |
 | 9 | Not started | — | — |
