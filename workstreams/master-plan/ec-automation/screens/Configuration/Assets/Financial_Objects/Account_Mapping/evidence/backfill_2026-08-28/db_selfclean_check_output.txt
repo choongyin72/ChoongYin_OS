@@ -1,0 +1,3 @@
+AUTOTEST_AM present: 0 (expect 0)
+AUTOTEST% residual rows: [] (expect [])
+Total OV_FIN_ACCOUNT_MAPPING rows: 75
