@@ -1,0 +1,2 @@
+AUTOTEST_CONTRACT exact count = 0
+AUTOTEST% prefix count = 0
