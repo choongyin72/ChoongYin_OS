@@ -127,7 +127,7 @@ completion note already covers ground truth)
 | 9 | Not started | — | — |
 | 10 | Not started | — | — |
 | 11 | Not started | — | — |
-| 12 | Not started | — | — |
+| 12 | In progress — PR #644 Report Context (1/6) | #644 Report Context | Report Context backfilled 2026-08-28 (SOW/README/JOURNAL/evidence/CHECKLIST/KB map; no automation touched; live re-run 5/5 first attempt; DB self-clean 0 residual via fresh connection). Remaining 5/6 screens of this batch (Document Template, Product, Chemical Product, Target Mapping Configuration, County) not yet started. |
 
 **Do not dispatch a batch until the previous batch's PRs are independently verified** (PR-read
 tool check, not subagent self-report alone) — same discipline as every other batch playbook in
