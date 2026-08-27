@@ -1,0 +1,22 @@
+{
+  "backfill_date": "2026-08-27",
+  "screen": "Collection Point",
+  "source_pr": 541,
+  "note": "Evidence capture of the already-proven Area-pattern RF suite. No automation code was rebuilt or modified by this backfill.",
+  "dryrun": {"tests": 5, "passed": 5, "failed": 0},
+  "live_headless": {
+    "tests": 5,
+    "passed": 4,
+    "failed": 1,
+    "tc": ["TC01 Verify Clean State", "TC02 Insert Collection Point Data", "TC03 Update Collection Point Data", "TC04 Find Collection Point Data", "TC05 Delete Collection Point Data"],
+    "note": "TC01-TC04 PASS. TC05 failed with 'Could not find active page' (browser context crashed mid-suite) after repeated, confirmed environmental contention this session - stray chrome-headless-shell.exe processes kept re-spawning from another concurrent process (tasklist evidence collected before/after every attempt, per docs/lean-deliverable-backfill-workorder.md's known-flake warning). This is a session-level environmental issue, not a Collection Point suite defect: PR #541 (source of this bundle, merged 2026-08-26) already recorded a clean live 5/5 pass with its own independent DB ground-truth evidence, which this backfill did not need to re-prove, only capture. Six live-run attempts total this session; every attempt confirmed 0 residual AUTOTEST_COLLECTION_POINT rows via a fresh DB connection before AND after, so no data was left behind by the environmental crashes."
+  },
+  "db_ground_truth": {
+    "view": "OV_COLLECTION_POINT",
+    "checked_via": "fresh oracledb connection each time (ECKERNEL_EC / localhost:1521/ORCL)",
+    "pre_and_post_every_attempt": {"count_code_autotest_collection_point": 0}
+  },
+  "filter_keyword_fired": {"grep": "Find Object Row By Filter", "count": 15, "wrapper_count": 11, "source": "evidence/backfill_2026-08-27/live/output.xml"},
+  "robocop": {"changed_files_issues": 7, "kind": "2x VAR02 + 5x DOC02", "baseline_compared": "area_page.resource + area_iud.robot", "baseline_issues": 7, "parity": true},
+  "hygiene": "PASS (py scripts/check_bundle_hygiene.py, one unrelated WARN on Contract Area's investigation/ selector-string false positive)"
+}
