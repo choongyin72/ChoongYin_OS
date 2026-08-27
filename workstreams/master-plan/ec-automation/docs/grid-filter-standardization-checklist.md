@@ -295,6 +295,13 @@ PR appends only its own ROW here — no per-PR section header._
 
 | Pilot | DONE (2026-08-26, OV-GM Area-parity) | `Find/Clear Pilot Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (feature/pilot-area-pattern, PR #560); confirmed fired 15x via output.xml grep on the live 5/5 run. |
 
+## Well Bore Interval Area-parity conversion (2026-08-27)
+
+| Well Bore Interval | DONE (2026-08-27, OV-GM Area-parity, BESPOKE T3 navigator - per-field groups, not the shared cascade keyword) | `Find/Clear Well Bore Interval Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (feature/well-bore-interval-area-pattern); confirmed fired 15x via output.xml grep on the live 5/5 run. |
+## Well Bore Area-parity conversion (2026-08-27)
+
+| Well Bore | DONE (2026-08-27, OV-GM Area-parity) | `Find/Clear Well Bore Row By Filter` (shared T2 delegation) wired into Update/Find/Verify-Found/Delete (feature/well-bore-area-pattern); confirmed fired 14x via output.xml grep on the live 5/5 run. First Area-parity conversion whose navigator does NOT fit the shared `Apply Navigator From Properties` shape (PER-FIELD groups G:1-G:5, not a same-row cascade) - a bespoke screen-local navigator keyword was added instead; this filter wrapper itself is still the standard shared-T2 delegation pattern, unaffected by that navigator difference. |
+
 ## How to update this doc
 
 When a new screen's T3 gets rebuilt to the Bank pattern, add it to the eligible

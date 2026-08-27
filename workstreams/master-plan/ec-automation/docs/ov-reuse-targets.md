@@ -66,6 +66,11 @@ see `docs/ec_screen_registry.md`'s Stream - All row for the full build record. D
 with the different, already-existing sibling screens Chemical Stream (`CHEM_STREAM`), Delivery
 Stream, or Manage Stream (`CO.0251`, a different BF_CODE with a real 3-level mandatory
 Business Unit/Area/Facility cascade nav, excluded from this Bank-layout set).
+**Cross-reference (2026-08-27):** the Manage Stream exclusion above was re-verified live (fresh
+Playwright session, no reused cookies) against the Area-pattern fit criteria — confirmed as three
+genuinely independent mandatory-and-empty navigator groups (Production Unit/Area/Facility Class 1,
+each its own `nav:form:G:N:FS` fieldset), not a same-row cascade, so it also does not fit Area's
+pattern. Full evidence in `docs/navigator-screens-not-matching-area.md`'s Manage Stream row.
 
 Stream-All `CD.0007` · Product Description `CD.0012` · Customer `CD.0019` · Vendor `CD.0020` ·
 Bank `CD.0021` · Bank Account `CD.0022` · Payment Term `CD.0023` · VAT Code `CD.0029` ·
