@@ -1,0 +1,86 @@
+tests\Configuration\Assets\Commercial_Objects\operator_lease_iud.robot:25:1 VAR02 Variable '${TEST_CODE}' is assigned but not used
+    |
+ 23 |
+ 24 | *** Variables ***
+ 25 | ${TEST_CODE}        AUTOTEST_OPERATOR_LEASE
+    | ^^^^^^^^^^^^ VAR02
+ 26 | ${OBJ_NAME}         AUTOTEST Operator Lease
+ 27 | ${START_DATE}       2000-01-01
+    |
+
+tests\Configuration\Assets\Commercial_Objects\operator_lease_iud.robot:26:1 VAR02 Variable '${OBJ_NAME}' is assigned but not used
+    |
+ 24 | *** Variables ***
+ 25 | ${TEST_CODE}        AUTOTEST_OPERATOR_LEASE
+ 26 | ${OBJ_NAME}         AUTOTEST Operator Lease
+    | ^^^^^^^^^^^ VAR02
+ 27 | ${START_DATE}       2000-01-01
+ 28 | ${END_DATE}         ${START_DATE}
+    |
+
+tests\Configuration\Assets\Commercial_Objects\operator_lease_iud.robot:28:1 VAR02 Variable '${END_DATE}' is assigned but not used
+    |
+ 26 | ${OBJ_NAME}         AUTOTEST Operator Lease
+ 27 | ${START_DATE}       2000-01-01
+ 28 | ${END_DATE}         ${START_DATE}
+    | ^^^^^^^^^^^ VAR02
+ 29 | # Must stay in sync with testdata/operator_lease_update.properties - TC03 DB-verifies against it.
+ 30 | ${OBJ_NAME_UPD}     AUTOTEST Operator Lease UPDATED
+    |
+
+tests\Configuration\Assets\Commercial_Objects\operator_lease_iud.robot:30:1 VAR02 Variable '${OBJ_NAME_UPD}' is assigned but not used
+    |
+ 28 | ${END_DATE}         ${START_DATE}
+ 29 | # Must stay in sync with testdata/operator_lease_update.properties - TC03 DB-verifies against it.
+ 30 | ${OBJ_NAME_UPD}     AUTOTEST Operator Lease UPDATED
+    | ^^^^^^^^^^^^^^^ VAR02
+    |
+
+tests\Configuration\Assets\Commercial_Objects\operator_lease_iud.robot:34:1 DOC02 Missing documentation in 'TC01 Verify Clean State' test case
+    |
+ 32 |
+ 33 | *** Test Cases ***
+ 34 | TC01 Verify Clean State
+    | ^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 35 |     Login To EC Application
+ 36 |     Open Operator Lease Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Commercial_Objects\operator_lease_iud.robot:40:1 DOC02 Missing documentation in 'TC02 Insert Operator Lease Data' test case
+    |
+ 40 | TC02 Insert Operator Lease Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 41 |     Login To EC Application
+ 42 |     Open Operator Lease Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Commercial_Objects\operator_lease_iud.robot:47:1 DOC02 Missing documentation in 'TC03 Update Operator Lease Data' test case
+    |
+ 47 | TC03 Update Operator Lease Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 48 |     Login To EC Application
+ 49 |     Open Operator Lease Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Commercial_Objects\operator_lease_iud.robot:54:1 DOC02 Missing documentation in 'TC04 Find Operator Lease Data' test case
+    |
+ 54 | TC04 Find Operator Lease Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 55 |     Login To EC Application
+ 56 |     Open Operator Lease Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Commercial_Objects\operator_lease_iud.robot:61:1 DOC02 Missing documentation in 'TC05 Delete Operator Lease Data' test case
+    |
+ 61 | TC05 Delete Operator Lease Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 62 |     Login To EC Application
+ 63 |     Open Operator Lease Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+Found 9 issues.
