@@ -328,6 +328,8 @@ PROPERTY_EC_PASS = os.environ.get("PROPERTY_EC_PASS", os.environ.get("EC_PASS", 
 TRANSPORT_ZONE_EC_USER = os.environ.get("TRANSPORT_ZONE_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 TRANSPORT_ZONE_EC_PASS = os.environ.get("TRANSPORT_ZONE_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 
+LIFTING_ACCOUNT_EC_USER = os.environ.get("LIFTING_ACCOUNT_EC_USER", os.environ.get("EC_USER", "sysadmin"))
+LIFTING_ACCOUNT_EC_PASS = os.environ.get("LIFTING_ACCOUNT_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 WELL_BORE_INTERVAL_EC_USER = os.environ.get("WELL_BORE_INTERVAL_EC_USER", os.environ.get("EC_USER", "sysadmin"))
 WELL_BORE_INTERVAL_EC_PASS = os.environ.get("WELL_BORE_INTERVAL_EC_PASS", os.environ.get("EC_PASS", "sysadmin"))
 WELL_BORE_EC_USER = os.environ.get("WELL_BORE_EC_USER", os.environ.get("EC_USER", "sysadmin"))

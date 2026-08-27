@@ -604,13 +604,38 @@ Apply Navigator From Properties
     ...    sequence to start wherever THAT screen's own DOM actually begins, confirmed by recon
     ...    (never assumed from another screen's convention) - the fill logic itself stays purely
     ...    positional (file order -> increasing column index from ${start_col}).
+    ...
+    ...    ${row2_from}/${row2}/${row2_start_col} (added 2026-08-27 for Lifting Account): optional,
+    ...    ${row2_from}=${EMPTY} preserves every existing caller's behaviour exactly (single row,
+    ...    same as before). Live DOM recon on Lifting Account (CO.2004) confirmed its navigator is
+    ...    ONE group (G:0, a single fieldset - not the "PER-FIELD groups" limitation above, which
+    ...    is about SEPARATE fieldsets) but the mandatory cascade is rendered across TWO grid rows
+    ...    within that one group: R:1 C:1..C:3 (Production Unit/Area/Facility Class 1), then R:3
+    ...    C:0 (Storage) - confirmed live: all four dd spans carry "{mandatory:true}
+    ...    MandatoryCellStyle" (genuinely empty), R:1's three plus R:3's one. When ${row2_from} is
+    ...    set (1-based count of properties-file keys to fill on the PRIMARY ${row}/${start_col}
+    ...    sequence), every key AFTER that count fills instead against ${group}:R:${row2}:
+    ...    C:${row2_start_col}, incrementing column the same way. One properties file, one call,
+    ...    ONE final Apply Navigator (GO) - matches the pre-existing hand-built driver's fill-both-
+    ...    rows-then-GO-once sequence (py/lifting_account_iud.py), not two separate GO clicks.
     [Arguments]    ${properties_path}    ${row}=1    ${group}=0    ${start_col}=1
+    ...    ${row2_from}=${EMPTY}    ${row2}=1    ${row2_start_col}=1
     ${data}=    Read Properties    ${properties_path}
     ${col}=    Set Variable    ${start_col}
+    ${idx}=    Set Variable    ${0}
     FOR    ${label}    IN    @{data.keys()}
-        ${dd}=    Set Variable    nav:form:G:${group}:R:${row}:C:${col}:dd
+        ${idx}=    Evaluate    ${idx} + 1
+        ${past_row2_from}=    Evaluate    $row2_from != "" and $idx > int($row2_from)
+        IF    ${past_row2_from}
+            ${use_row}=    Set Variable    ${row2}
+            ${use_col}=    Evaluate    ${row2_start_col} + ${idx} - int($row2_from) - 1
+        ELSE
+            ${use_row}=    Set Variable    ${row}
+            ${use_col}=    Set Variable    ${col}
+            ${col}=    Evaluate    ${col} + 1
+        END
+        ${dd}=    Set Variable    nav:form:G:${group}:R:${use_row}:C:${use_col}:dd
         Select EC Dropdown Option    ${dd}    ${data}[${label}]
         Sleep    0.7s
-        ${col}=    Evaluate    ${col} + 1
     END
     Apply Navigator

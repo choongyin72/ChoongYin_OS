@@ -1,61 +1,67 @@
 *** Settings ***
 Documentation       EC IUD Test - Lifting Account (Configuration > Assets > Transport_Objects).
-...                 OV-GM 4-LEVEL nav variant: PU -> Area -> Facility Class 1 cascade + mandatory
-...                 Storage dd on a second navigator row, filled with SPECIFIC owner-provided P1
-...                 values (Storage level empty under first-available AS1). Form Storage Name =
-...                 nav Storage (parent-matching). DELETE = End Date = Start Date (true delete in
-...                 OV_LIFTING_ACCOUNT). NEVER touch existing data; unique AUTOTEST_LA_<timestamp>
-...                 code per run. Start Date 2020-01-01 (ref-object effectiveness, DB-checked).
+...                 OV-GM (groupmodel manage-object) screen: the grid is filtered by a mandatory
+...                 navigator (ONE group, cascade spanning 2 rows) + GO. DELETE = End Date = Start
+...                 Date (true delete in OV_LIFTING_ACCOUNT). NEVER touch existing data.
+...                 Layered: this test -> lifting_account_page (T3) -> manage_object (T2) +
+...                 common (T1).
+...                 Converted to the Area-pattern 5-TC/per-TC-login/pure-screen-verify STRUCTURE
+...                 (2026-08-27), upgrading the pre-existing hand-built driver (py/
+...                 lifting_account_iud.py, commit 6e88e371) to properties-file-driven +
+...                 shared-keyword navigator fill, reusing its exact proven nav scope/insert data.
+...                 Uses a FIXED test code (AUTOTEST_LA_001, same as the pre-existing driver) -
+...                 confirmed absent from OV_LIFTING_ACCOUNT (2026-08-27, fresh oracledb check)
+...                 before this was wired in. Every run must complete TC05 (delete) so the code
+...                 is free for the next run.
+...                 EACH test case does its own real Login/Logout on ONE browser opened once in
+...                 Suite Setup - matches Area/Bank/Berth's own convention.
 
 Resource            ../../../../pageobjects/Configuration/Assets/Transport_Objects/lifting_account_page.resource
 
-Suite Setup         Set Up Lifting Account Suite
+Suite Setup         Open EC Application
 Suite Teardown      Close EC
+Test Teardown       Ensure Logged Out From EC Application
 
-Test Tags           iud    lifting-account
+Test Tags           iud    lifting_account
 
 
 *** Variables ***
-${TEST_CODE}        ${EMPTY}
-${OBJ_NAME}         ${EMPTY}
-${OBJ_NAME_UPD}     ${EMPTY}
+${TEST_CODE}        AUTOTEST_LA_001
 ${START_DATE}       2020-01-01
-${END_DATE}         2020-01-01
+${END_DATE}         ${START_DATE}
 
 
 *** Test Cases ***
 TC01 Verify Clean State
-    [Documentation]    Confirm the (freshly generated) test object does not exist before inserting.
-    [Tags]    clean-state
-    Lifting Account Row Should Not Exist    ${TEST_CODE}
-    Capture Step    lifting_account_tc01_clean
+    Login To EC Application
+    Open Lifting Account Screen With Navigator Values Populated
+    Verify Lifting Account Record Does Not Exist
+    Logout From EC Application
 
-TC02 Insert New Lifting Account
-    [Documentation]    Insert under the P1 navigator scope and confirm it lists.
-    [Tags]    insert
-    Insert Lifting Account Record    ${TEST_CODE}    ${OBJ_NAME}    ${START_DATE}
-    Lifting Account Row Should Exist    ${TEST_CODE}
-    Lifting Account Should Exist In DB    ${TEST_CODE}
-    Capture Step    lifting_account_tc02_inserted
+TC02 Insert Lifting Account Data
+    Login To EC Application
+    Open Lifting Account Screen With Navigator Values Populated
+    Insert Lifting Account Record And Save
+    Verify Lifting Account Record Exists
+    Logout From EC Application
 
-TC03 Update Lifting Account Name
-    [Documentation]    Edit the name and confirm the list reflects the change.
-    [Tags]    update
-    Update Lifting Account Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Lifting Account Row Should Show Name    ${TEST_CODE}    ${OBJ_NAME_UPD}
-    Capture Step    lifting_account_tc03_updated
+TC03 Update Lifting Account Data
+    Login To EC Application
+    Open Lifting Account Screen With Navigator Values Populated
+    Update Lifting Account Record And Save
+    Verify Lifting Account Record Updated
+    Logout From EC Application
 
-TC04 Delete Lifting Account
-    [Documentation]    Delete via End Date = Start Date and confirm it is gone.
-    [Tags]    delete    cleanup
-    Delete Lifting Account    ${TEST_CODE}    ${END_DATE}
-    Lifting Account Row Should Not Exist    ${TEST_CODE}
-    Lifting Account Should Not Exist In DB    ${TEST_CODE}
-    Capture Step    lifting_account_tc04_deleted
+TC04 Find Lifting Account Data
+    Login To EC Application
+    Open Lifting Account Screen With Navigator Values Populated
+    Find Lifting Account Record
+    Verify Lifting Account Record Found
+    Logout From EC Application
 
-
-*** Keywords ***
-Set Up Lifting Account Suite
-    [Documentation]    Generate a unique test code/name, open the screen, apply the P1 nav scope.
-    Prepare IUD Object Data    AUTOTEST_LA_    Lifting Account
-    Open Lifting Account Screen
+TC05 Delete Lifting Account Data
+    Login To EC Application
+    Open Lifting Account Screen With Navigator Values Populated
+    Delete Lifting Account Record And Save
+    Verify Lifting Account Record Removed
+    Logout From EC Application
