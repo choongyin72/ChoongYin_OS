@@ -3,7 +3,10 @@
 - **Type:** OV-GM (EC Object Configuration, date-effective) - manage-object groupmodel; navigator-GATED.
 - **BF_CODE:** CO.0258 - **Treeview:** Configuration > Assets > Chemical_Objects > Chemical Stream
 - **DB view:** `OV_CHEM_STREAM` (key `CODE`; `NAME`, `OBJECT_START/END_DATE`)
-- **Last verified:** 2026-07-30 - EC 14.2.4 - local sandbox - `verify_screen.py` OVERALL PASS (RF 4/4 pass + Playwright 8/8, DB-verified, self-clean)
+- **Last verified:** 2026-08-27 - EC 14.2.4 - local sandbox - live RF 5/5 pass (post PR #545
+  Area-pattern conversion), DB-verified, self-clean (fresh oracledb connection, 0 residual
+  `AUTOTEST%` rows in `OV_CHEM_STREAM` before and after). Prior state (2026-07-30):
+  `verify_screen.py` OVERALL PASS, RF 4/4 pass + Playwright 8/8.
 
 ## Selectors
 | Purpose | Selector |
@@ -36,9 +39,34 @@ type-to-search autocompletes with no default list - `select(label, "__FIRST__")`
 these (confirmed live), a real search value is required.
 
 ## Automation (code in ec-automation)
-- **Playwright:** `py/chemical_stream_iud.py` (shared engine `ec_object_iud.py` + `apply_ovgm_navigator`).
-- **RF:** T3 `pageobjects/Configuration/Assets/Chemical_Objects/chemical_stream_page.resource` (**label-driven**) + suite `tests/Configuration/Assets/Chemical_Objects/chemical_stream_iud.robot`.
-- **Gate:** `verify_screen.py` -> OVERALL PASS.
+- **Playwright (unchanged since 2026-07-30):** `py/chemical_stream_iud.py` (shared engine
+  `ec_object_iud.py` + `apply_ovgm_navigator`).
+- **RF (converted to the Area pattern, PR #545, merged 2026-08-26):** T3
+  `pageobjects/Configuration/Assets/Chemical_Objects/chemical_stream_page.resource` (**label-driven**,
+  5 TCs' worth of keywords) + suite
+  `tests/Configuration/Assets/Chemical_Objects/chemical_stream_iud.robot` (5 TCs: Verify Clean
+  State/Insert/Update/Find/Delete). Navigator fill now delegates to the shared T2
+  `Apply Navigator From Properties` (`resources/manage_object.resource`) driven by
+  `testdata/chemical_stream_navigator.properties` (replacing the old screen-local
+  `Apply Chemical Stream Navigator` keyword). Per-TC `Login To EC Application`/
+  `Logout From EC Application` on ONE browser opened once in Suite Setup, own credential pair
+  `CHEMICAL_STREAM_EC_USER`/`CHEMICAL_STREAM_EC_PASS` in `resources/credentials.py`. Fixed test
+  code `AUTOTEST_CHS` (was a per-run timestamped code before the conversion). Insert/Update/Verify
+  driven by `testdata/chemical_stream_{insert,update,form_verify,grid_verify}.properties` via the
+  shared T2 `Insert/Update Object From Properties`/`Verify Object *`. Explicit
+  `Find/Clear Chemical Stream Row By Filter` grid-filter wiring into Update/Find/Verify-Found/
+  Delete. Zero inline DB-verify calls remain in the `.robot` file — DB checks now live only inside
+  the shared T2 `Verify Object Removed`.
+- **From Connection popup handling — PRESERVED UNCHANGED by the conversion:** `stream_node_ref_popup`
+  is not the standard `object_popup` — screen-local T3 keywords `Open From Connection Popup List`
+  (select Object Type = CHEM_TANK in the popup's own inner dd `nav:form:G:4`, click the popup's own
+  inner GO `button:form:B`, wait for the popup's own list grid
+  `manage_object_nav_nav:form:T_data` — NOT the generic `PopupList:form:T_data`) and
+  `Pick From Connection Popup` (pick the first row). The generic T1 popup keywords in
+  `resources/popup.resource` do not fit this popup type and were never used here.
+- **Gate (pre-conversion snapshot):** `verify_screen.py` -> OVERALL PASS (2026-07-30). Post-conversion
+  evidence lives in `screens/Configuration/Assets/Chemical_Objects/Chemical_Stream/evidence/
+  2026-08-27_area_pattern_backfill/` (live 5/5 RF run, robocop, dryrun, DB self-clean check).
 
 ## Quirks
 - OV-GM navigator-gated: grid empty until cascade + GO. First-available nav PU is a sparse test scope - it is
