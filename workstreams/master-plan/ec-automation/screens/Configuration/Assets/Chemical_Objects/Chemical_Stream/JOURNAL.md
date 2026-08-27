@@ -78,3 +78,84 @@ live-verified 36-field/21-dropdown set (see the note's own updated content for t
 Investigation scripts moved into `investigation/`: `chs_find_real_code.py` (real DB codes under
 the P1 scope), `chs_structural_recon.py` (field_inventory before/after nav+row-select),
 `chs_pacing_sweep.py` (the 21-dropdown sweep), `chs_modal_repro.py` (the modal repro + fix proof).
+
+## 2026-08-26 - Area-pattern conversion (PR #545)
+
+_From here on, the entry style matches Bank's JOURNAL (Built / Done well / Done wrong-or-lessons /
+Blockers -> resolution / Decisions / Evidence), per `docs/lean-deliverable-backfill-workorder.md`._
+
+### Built
+- Converted the RF suite from its old 4-TC/single-suite-login/inline-DB-verify shape to Area's full
+  5-TC/per-TC-login/properties-file-driven/pure-screen-verify shape, per the owner's 2026-08-26
+  standing rule: any EC screen whose navigator matches Area's same-row cascade layout must follow
+  Area's FULL pattern, not just the navigator-fill piece.
+- `pageobjects/.../chemical_stream_page.resource` rebuilt: navigator fill delegates to the shared T2
+  `Apply Navigator From Properties` (`resources/manage_object.resource`), driven by new
+  `testdata/chemical_stream_navigator.properties`, replacing the old screen-local
+  `Apply Chemical Stream Navigator` keyword. The **From Connection popup keywords were left
+  UNTOUCHED** (`Open From Connection Popup List` / `Pick From Connection Popup`) - orthogonal to
+  the outer navigator, per explicit task instruction not to refactor working popup logic.
+- `tests/.../chemical_stream_iud.robot` rebuilt: 5 TCs (added TC04 Find), per-TC
+  `Login To EC Application`/`Logout From EC Application` on ONE browser opened once in Suite Setup,
+  switched from a per-run timestamped code to a fixed test code `AUTOTEST_CHS` (confirmed free in
+  `OV_CHEM_STREAM` via a fresh oracledb connection before wiring it in), zero inline DB-verify calls
+  left in the `.robot` file (the DB check now lives only inside the shared T2
+  `Verify Object Removed`).
+- New properties files: `testdata/chemical_stream_{insert,update,form_verify,grid_verify}.properties`
+  driving the shared T2 `Insert/Update Object From Properties`/`Verify Object *` for the plain
+  fields, plus explicit `Find/Clear Chemical Stream Row By Filter` grid-filter wiring into
+  Update/Find/Verify-Found/Delete.
+- `resources/credentials.py`: additive-only `CHEMICAL_STREAM_EC_USER`/`CHEMICAL_STREAM_EC_PASS`.
+
+### Done well
+- Live RF 5/5 pass (PR #545). Full-tree `robot --dryrun tests/` 850/850 pass at PR #545 time - no
+  regressions to any other screen's suite.
+- Filter-keyword wiring confirmed fired: `Find Object Row By Filter` -> 15 hits in live
+  `output.xml` (PR #545; re-confirmed 15 hits again in this session's own live re-run, see Evidence
+  below).
+- The mandatory From Connection popup's screen-local mechanism needed ZERO changes - confirmed
+  still executing successfully during TC02 Insert both at PR #545 time and in this session's re-run.
+- No shared T1/T2 file changes needed - `resources/manage_object.resource`'s existing
+  `Apply Navigator From Properties` already supported this screen's 3-level same-row cascade shape
+  without modification.
+
+### Done wrong / lessons
+- None disclosed in PR #545's own body beyond the popup-preservation caveat already covered above -
+  this was a clean structural conversion of an already-working screen, not a new investigation.
+- This screen's bundle (SOW/README/JOURNAL/CHECKLIST/evidence/KB map) was NOT refreshed at PR #545
+  merge time - the 2026-08-23..26 lean waiver (later retired 2026-08-27, Section H) allowed the RF
+  conversion to ship without the doc/evidence bundle around it. This 2026-08-27 entry is that
+  backfill, not a new build.
+
+### Blockers -> resolution
+- No blockers in PR #545's own body. This backfill session hit none either (network to the EC
+  sandbox reachable, no stray chrome.exe processes, live run passed first attempt).
+
+### Decisions
+- Popup logic (`stream_node_ref_popup` handling) stays screen-local and untouched - it is a
+  distinct EC popup TYPE (list grid `manage_object_nav_nav:form:T_data`, not the generic
+  `PopupList:form:T_data`), not a navigator, so the Area-pattern conversion applies only to the
+  outer navigator + TC structure, never to this popup's own driving logic.
+- Playwright driver (`py/chemical_stream_iud.py`) is out of scope for both PR #545 and this
+  backfill - kept unchanged, permanently waived per Section H (Universal Screen Engine replaces
+  that role going forward).
+
+### Evidence
+- PR #545 (2026-08-26): live RF 5/5 pass; DB self-clean via fresh oracledb connection, 0 residual
+  `AUTOTEST%` rows in `OV_CHEM_STREAM` before and after.
+- This backfill (2026-08-27, doc/evidence only, no RF file touched):
+  - `robot --dryrun tests/Configuration/Assets/Chemical_Objects/chemical_stream_iud.robot` -> 5/5
+    pass.
+  - Full-tree `robot --dryrun tests/` -> **883/883 pass**, no regressions.
+  - `EC_HEADLESS=true robot` live re-run -> **5/5 pass**; artifacts kept in
+    `evidence/2026-08-27_area_pattern_backfill/` (`log.html`, `output.xml`, `report.html`,
+    per-TC screenshots, `robocop_output.txt`).
+  - `Find Object Row By Filter` -> 15 hits confirmed again in this session's own `output.xml`.
+  - `py -m robocop check` on the changed files -> **7 issues** (VAR02 x2 + DOC02 x5) - same shape
+    as Area's own current baseline and Chemical Stream Hookup's; PR #545 cited 10 issues at its own
+    merge time, the count difference reflects robocop/config drift over the intervening period, not
+    a functional regression (no new issue category, same two files, same VAR02/DOC02 kinds).
+  - `py scripts/check_bundle_hygiene.py` (repo root) -> `PASS` (167 bundles + 271 recon scripts
+    scanned; the one WARN in the output is a pre-existing, unrelated Contract Area recon script).
+  - `investigation/check_autotest_residual.py` (new, this session) -> `AUTOTEST residual rows: []`
+    both before and after the live re-run.

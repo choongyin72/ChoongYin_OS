@@ -1,0 +1,66 @@
+tests\Configuration\Assets\Chemical_Objects\chemical_stream_iud.robot:34:1 VAR02 Variable '${TEST_CODE}' is assigned but not used
+    |
+ 32 |
+ 33 | *** Variables ***
+ 34 | ${TEST_CODE}        AUTOTEST_CHS
+    | ^^^^^^^^^^^^ VAR02
+ 35 | ${START_DATE}       2020-01-01
+ 36 | ${END_DATE}         ${START_DATE}
+    |
+
+tests\Configuration\Assets\Chemical_Objects\chemical_stream_iud.robot:36:1 VAR02 Variable '${END_DATE}' is assigned but not used
+    |
+ 34 | ${TEST_CODE}        AUTOTEST_CHS
+ 35 | ${START_DATE}       2020-01-01
+ 36 | ${END_DATE}         ${START_DATE}
+    | ^^^^^^^^^^^ VAR02
+    |
+
+tests\Configuration\Assets\Chemical_Objects\chemical_stream_iud.robot:40:1 DOC02 Missing documentation in 'TC01 Verify Clean State' test case
+    |
+ 38 |
+ 39 | *** Test Cases ***
+ 40 | TC01 Verify Clean State
+    | ^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 41 |     Login To EC Application
+ 42 |     Open Chemical Stream Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Chemical_Objects\chemical_stream_iud.robot:46:1 DOC02 Missing documentation in 'TC02 Insert Chemical Stream Data' test case
+    |
+ 46 | TC02 Insert Chemical Stream Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 47 |     Login To EC Application
+ 48 |     Open Chemical Stream Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Chemical_Objects\chemical_stream_iud.robot:53:1 DOC02 Missing documentation in 'TC03 Update Chemical Stream Data' test case
+    |
+ 53 | TC03 Update Chemical Stream Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 54 |     Login To EC Application
+ 55 |     Open Chemical Stream Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Chemical_Objects\chemical_stream_iud.robot:60:1 DOC02 Missing documentation in 'TC04 Find Chemical Stream Data' test case
+    |
+ 60 | TC04 Find Chemical Stream Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 61 |     Login To EC Application
+ 62 |     Open Chemical Stream Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Chemical_Objects\chemical_stream_iud.robot:67:1 DOC02 Missing documentation in 'TC05 Delete Chemical Stream Data' test case
+    |
+ 67 | TC05 Delete Chemical Stream Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 68 |     Login To EC Application
+ 69 |     Open Chemical Stream Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+Found 7 issues.
