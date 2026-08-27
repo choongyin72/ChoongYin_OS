@@ -1,0 +1,38 @@
+{
+  "backfill_date": "2026-08-28",
+  "original_pr": 485,
+  "original_merged_at": "2026-08-24T03:51:40Z",
+  "dryrun": {
+    "command": "robot --dryrun --outputdir Workplaces/product-backfill/dryrun tests/Configuration/Assets/Hydrocarbon_Objects/product_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed"
+  },
+  "live": {
+    "command": "EC_HEADLESS=true robot --outputdir Workplaces/product-backfill/live tests/Configuration/Assets/Hydrocarbon_Objects/product_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed",
+    "test_cases": [
+      "TC01 Verify Clean State - PASS",
+      "TC02 Insert Product Data - PASS",
+      "TC03 Update Product Data - PASS",
+      "TC04 Find Product Data - PASS",
+      "TC05 Delete Product Data - PASS"
+    ]
+  },
+  "db_self_clean": {
+    "method": "fresh oracledb connection, separate from the RF suite's own connection",
+    "query": "SELECT COUNT(*) FROM PRODUCT WHERE OBJECT_CODE='AUTOTEST_PRODUCT'; SELECT COUNT(*) FROM OV_PRODUCT WHERE CODE='AUTOTEST_PRODUCT'",
+    "result": "(0, 0) - zero residual rows"
+  },
+  "robocop": {
+    "command": "robocop check pageobjects/Configuration/Assets/Hydrocarbon_Objects/product_page.resource tests/Configuration/Assets/Hydrocarbon_Objects/product_iud.robot",
+    "exit_code": 1,
+    "issues_found": 12,
+    "issue_breakdown": "7x VAR02 (unused variable, kept for cross-reference documentation with testdata properties files) + 5x DOC02 (missing per-test-case [Documentation], suite-level Documentation covers it)",
+    "baseline_comparison": "robocop check against bank_page.resource/bank_iud.robot (the OV role-model exemplar) on the same environment produced exit_code=1, 13 issues, same VAR02/DOC02 pattern - Product's 12 issues are at parity with the established Bank baseline, not a new or worse defect",
+    "note": "No fix applied - out of scope for this backfill (documentation/evidence only, RF automation files not modified)"
+  },
+  "hygiene": {
+    "command": "py scripts/check_bundle_hygiene.py",
+    "result": "PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions, doc rows match declared families",
+    "unrelated_warning": "2 hardcoded-credential-pattern lines flagged in Contract_Area/investigation/live_recon_contract_area.py - pre-existing, unrelated to Product"
+  }
+}
