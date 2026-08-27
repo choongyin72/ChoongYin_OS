@@ -94,9 +94,54 @@ Playwright (Python sync) freestyle bundle + Robot Framework suite layered T3 -> 
 ## 4. DELIVERABLES
 | Deliverable | Path |
 |---|---|
-| Playwright bundle | `playwright/ec_iud_product_group.py` |
+| Playwright bundle | `playwright/ec_iud_product_group.py` (legacy, predates the Universal Screen Engine; kept as a reference walkthrough, not rebuilt) |
 | RF T3 page object | `pageobjects/Configuration/Assets/Royalty_Objects/product_group_page.resource` |
 | RF test suite | `tests/Configuration/Assets/Royalty_Objects/product_group_iud.robot` |
 | SOW | this document |
-| Evidence | `evidence/` (after a live run) |
+| Evidence | `evidence/` (original 2026-06-25 run) + `evidence/backfill_2026-08-28/` (backfill re-run) |
 | Registry + scorecard rows | `docs/ec_screen_registry.md`, `docs/automation-scorecard.md` |
+
+---
+
+## 5. DEV STORY / REVISION HISTORY
+
+### 5.1 Original build (2026-06-25)
+Built as a standalone Playwright + RF bundle against the older hardcoded-field-id RF pattern, per
+the design in Section 2 above (sandbox web app, `AUTOTEST_PG_<run>` unique-per-run codes).
+
+### 5.2 Bank-pattern conversion (PR #445, merged 2026-08-23, Batch 5)
+Rebuilt Product Group's RF suite from the older hardcoded-field-id pattern to the label-driven,
+properties-file-driven, T2-consolidated **Bank pattern** (mirrors `state_page.resource`/
+`state_iud.robot` exactly), including explicit grid-filter wiring from day one. Real facts pulled
+from the PR body:
+- Live recon (New Object form + `updateAttributes` ECCell label dump) confirmed screen-prefixed
+  labels "Product Group Code"/"Product Group Name" (NOT the generic "Code"/"Name" Bank itself
+  uses) and that only **Start Date** is CSS-mandatory beyond Code/Name — Sort Order, Product Group
+  Type (dropdown), and Comments are optional and deliberately left out of the IUD flow
+  (fill-only-needed-fields convention).
+- The suite grew from 4 TCs to 5 TCs (added TC04 Find), switched to per-TC login/logout (matching
+  Bank/State's convention), and moved to a **fixed** test code `AUTOTEST_PRODUCT_GROUP` (confirmed
+  free live) rather than the original per-run generated code.
+- New testdata: `testdata/product_group_{insert,update,form_verify,grid_verify}.properties`.
+- New dedicated credential pair `PRODUCT_GROUP_EC_USER`/`PRODUCT_GROUP_EC_PASS`
+  (`resources/credentials.py`, additive only).
+- No shared T1/T2 files (`resources/common.resource`, `resources/manage_object.resource`) were
+  touched.
+- Verification cited in the PR body: live run 5/5 PASS; fresh oracledb connection post-run
+  `SELECT COUNT(*) FROM OV_PRODUCT_GROUP WHERE CODE = 'AUTOTEST_PRODUCT_GROUP'` → `0` (self-clean);
+  `output.xml` grep for `Find Product Group Row By Filter` → 5 hits; robocop 9 issues (4 VAR02 + 5
+  DOC02), matching the established Batch 5 baseline exactly (no new issue classes); full-tree
+  dryrun 745/745 (net +1 over the prior 744 baseline, since the suite grew from 4 to 5 TCs).
+- No real regression or wrong turn was disclosed in PR #445's own body.
+
+### 5.3 This backfill (2026-08-28, Batch 7 of `docs/lean-deliverable-backfill-workorder.md`)
+PR #445 was built under the 2026-08-23 lean-waiver rule (Section G of
+`docs/IUD-DELIVERABLE-CHECKLIST.md`), which at the time waived JOURNAL/evidence/KB-map/CHECKLIST
+for Bank-pattern conversions. That waiver was retired by the owner 2026-08-27 (Section H). This
+backfill adds the retroactively-required `JOURNAL.md`, `CHECKLIST.md`, KB selector map
+(`ec-ui-knowledge/screens/product_group.md`), and a fresh dryrun + live evidence-capture re-run of
+the already-proven suite under `evidence/backfill_2026-08-28/`. **No RF automation file was
+rebuilt, modified, or re-verified from scratch** — the existing `product_group_page.resource` and
+`product_group_iud.robot` (both from PR #445) were re-run as-is for evidence capture only. This
+SOW and `README.md` (which predated the JOURNAL rule) were also refreshed to describe the current
+Bank-pattern shape instead of only the original 2026-06-25 build.
