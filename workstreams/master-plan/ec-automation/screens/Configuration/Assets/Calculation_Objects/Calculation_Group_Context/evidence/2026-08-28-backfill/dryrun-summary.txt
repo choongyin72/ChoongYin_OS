@@ -1,0 +1,37 @@
+Command: py -m robot --dryrun --outputdir Workplaces/calculation-group-context-backfill/dryrun tests/Configuration/Assets/Calculation_Objects/calculation_group_context_iud.robot
+Date: 2026-08-28
+
+==============================================================================
+Calculation Group Context Iud :: EC IUD Test - Calculation Group Context (C...
+==============================================================================
+TC01 Verify Clean State                                               | PASS |
+------------------------------------------------------------------------------
+TC02 Insert Calculation Group Context Data                            | PASS |
+------------------------------------------------------------------------------
+TC03 Update Calculation Group Context Data                            | PASS |
+------------------------------------------------------------------------------
+TC04 Find Calculation Group Context Data                              | PASS |
+------------------------------------------------------------------------------
+TC05 Delete Calculation Group Context Data                            | PASS |
+------------------------------------------------------------------------------
+Calculation Group Context Iud :: EC IUD Test - Calculation Group C... | PASS |
+5 tests, 5 passed, 0 failed
+==============================================================================
+
+Live run summary (EC_HEADLESS=true, same suite):
+5 tests, 5 passed, 0 failed
+
+Robocop parity check:
+py -m robocop check pageobjects/.../calculation_group_context_page.resource tests/.../calculation_group_context_iud.robot
+Found 13 issues (all DOC02 - missing [Documentation] in TC01-05, matching bank_iud.robot's own accepted
+baseline of 13 DOC02 issues exactly - no new issue classes).
+
+Hygiene check:
+py scripts/check_bundle_hygiene.py
+RESULT: PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions, doc
+rows match declared families. (One unrelated WARN for a different screen's investigation/ recon script -
+Contract Area - not this bundle.)
+
+DB self-clean (fresh oracledb connection, independent of the test run's own assertions):
+SELECT COUNT(*) FROM OV_CALC_GRP_CONTEXT WHERE CODE = 'AUTOTEST_CGC_BANK'
+Result: 0
