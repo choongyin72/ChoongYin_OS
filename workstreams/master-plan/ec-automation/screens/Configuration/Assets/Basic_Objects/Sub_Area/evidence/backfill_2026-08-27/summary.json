@@ -1,0 +1,31 @@
+{
+  "backfill_date": "2026-08-27",
+  "purpose": "Evidence-capture re-run of Sub Area's already-proven RF suite (PR #538 Area-pattern conversion), for lean-deliverable-backfill-workorder.md. No automation code was modified.",
+  "dryrun": {
+    "command": "py -m robot --dryrun --outputdir tmp_dryrun tests/Configuration/Assets/Basic_Objects/sub_area_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed"
+  },
+  "live": {
+    "command": "EC_HEADLESS=true py -m robot --outputdir tmp_live tests/Configuration/Assets/Basic_Objects/sub_area_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed",
+    "test_cases": [
+      "TC01 Verify Clean State - PASS",
+      "TC02 Insert Sub Area Data - PASS",
+      "TC03 Update Sub Area Data - PASS",
+      "TC04 Find Sub Area Data - PASS",
+      "TC05 Delete Sub Area Data - PASS"
+    ]
+  },
+  "db_self_clean": {
+    "view": "OV_SUB_AREA",
+    "query_1": "SELECT COUNT(*) FROM OV_SUB_AREA WHERE CODE = 'AUTOTEST_SUB_AREA'",
+    "result_1": 0,
+    "query_2": "SELECT CODE FROM OV_SUB_AREA WHERE CODE LIKE 'AUTOTEST%'",
+    "result_2": [],
+    "connection": "fresh oracledb connection, run after the live suite completed"
+  },
+  "hygiene": {
+    "command": "py scripts/check_bundle_hygiene.py",
+    "result": "PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions, doc rows match declared families"
+  }
+}
