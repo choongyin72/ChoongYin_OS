@@ -1,0 +1,16 @@
+{
+  "backfill_date": "2026-08-27",
+  "screen": "Contract Area",
+  "source_pr": 542,
+  "note": "Evidence capture of the already-proven Area-pattern RF suite. No automation code was rebuilt or modified by this backfill.",
+  "dryrun": {"tests": 5, "passed": 5, "failed": 0},
+  "live_headless": {"tests": 5, "passed": 5, "failed": 0, "tc": ["TC01 Verify Clean State", "TC02 Insert Contract Area Data", "TC03 Update Contract Area Data", "TC04 Find Contract Area Data", "TC05 Delete Contract Area Data"]},
+  "db_ground_truth": {
+    "view": "OV_CONTRACT_AREA",
+    "pre_run": {"count_code_autotest_contract_area": 0, "autotest_like_rows": []},
+    "post_run": {"count_code_autotest_contract_area": 0, "autotest_like_rows": []}
+  },
+  "filter_keyword_fired": {"grep": "Find Object Row By Filter", "count": 15, "source": "evidence/backfill_2026-08-27/live/output.xml"},
+  "robocop": {"changed_files_issues": 7, "kind": "2x VAR02 + 5x DOC02", "baseline_compared": "area_page.resource + area_iud.robot", "baseline_issues": 7, "parity": true},
+  "hygiene": "PASS (py scripts/check_bundle_hygiene.py, one unrelated WARN on investigation/ selector-string false positive)"
+}
