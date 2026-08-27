@@ -1,0 +1,86 @@
+tests\Configuration\Assets\Transport_Objects\berth_iud.robot:24:1 VAR02 Variable '${TEST_CODE}' is assigned but not used
+    |
+ 22 |
+ 23 | *** Variables ***
+ 24 | ${TEST_CODE}        AUTOTEST_BERTH
+    | ^^^^^^^^^^^^ VAR02
+ 25 | ${OBJ_NAME}         AUTOTEST Berth
+ 26 | ${START_DATE}       2000-01-01
+    |
+
+tests\Configuration\Assets\Transport_Objects\berth_iud.robot:25:1 VAR02 Variable '${OBJ_NAME}' is assigned but not used
+    |
+ 23 | *** Variables ***
+ 24 | ${TEST_CODE}        AUTOTEST_BERTH
+ 25 | ${OBJ_NAME}         AUTOTEST Berth
+    | ^^^^^^^^^^^ VAR02
+ 26 | ${START_DATE}       2000-01-01
+ 27 | ${END_DATE}         ${START_DATE}
+    |
+
+tests\Configuration\Assets\Transport_Objects\berth_iud.robot:27:1 VAR02 Variable '${END_DATE}' is assigned but not used
+    |
+ 25 | ${OBJ_NAME}         AUTOTEST Berth
+ 26 | ${START_DATE}       2000-01-01
+ 27 | ${END_DATE}         ${START_DATE}
+    | ^^^^^^^^^^^ VAR02
+ 28 | # Must stay in sync with testdata/berth_update.properties - TC03 verifies against it.
+ 29 | ${OBJ_NAME_UPD}     AUTOTEST Berth UPDATED
+    |
+
+tests\Configuration\Assets\Transport_Objects\berth_iud.robot:29:1 VAR02 Variable '${OBJ_NAME_UPD}' is assigned but not used
+    |
+ 27 | ${END_DATE}         ${START_DATE}
+ 28 | # Must stay in sync with testdata/berth_update.properties - TC03 verifies against it.
+ 29 | ${OBJ_NAME_UPD}     AUTOTEST Berth UPDATED
+    | ^^^^^^^^^^^^^^^ VAR02
+    |
+
+tests\Configuration\Assets\Transport_Objects\berth_iud.robot:33:1 DOC02 Missing documentation in 'TC01 Verify Clean State' test case
+    |
+ 31 |
+ 32 | *** Test Cases ***
+ 33 | TC01 Verify Clean State
+    | ^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 34 |     Login To EC Application
+ 35 |     Open Berth Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Transport_Objects\berth_iud.robot:39:1 DOC02 Missing documentation in 'TC02 Insert Berth Data' test case
+    |
+ 39 | TC02 Insert Berth Data
+    | ^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 40 |     Login To EC Application
+ 41 |     Open Berth Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Transport_Objects\berth_iud.robot:46:1 DOC02 Missing documentation in 'TC03 Update Berth Data' test case
+    |
+ 46 | TC03 Update Berth Data
+    | ^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 47 |     Login To EC Application
+ 48 |     Open Berth Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Transport_Objects\berth_iud.robot:53:1 DOC02 Missing documentation in 'TC04 Find Berth Data' test case
+    |
+ 53 | TC04 Find Berth Data
+    | ^^^^^^^^^^^^^^^^^^^^ DOC02
+ 54 |     Login To EC Application
+ 55 |     Open Berth Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Transport_Objects\berth_iud.robot:60:1 DOC02 Missing documentation in 'TC05 Delete Berth Data' test case
+    |
+ 60 | TC05 Delete Berth Data
+    | ^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 61 |     Login To EC Application
+ 62 |     Open Berth Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+Found 9 issues.
