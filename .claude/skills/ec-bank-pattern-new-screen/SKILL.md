@@ -1,9 +1,9 @@
 ---
 name: ec-bank-pattern-new-screen
-description: Use when building a BRAND-NEW RF suite (no existing automation at all) for an EC screen that has the SAME LAYOUT as Bank — e.g. "build the Bank-pattern RF suite for <screen>", "automate <screen> like Bank, RF only". Produces the lean, RF-only deliverable (page object + robot suite + properties files, no Playwright bundle/SOW/JOURNAL/KB-map overhead) matching the style of Batches 2-11's `bank_page.resource`/`berth_page.resource`. For a screen that already has SOME automation to upgrade, use `ec-bank-pattern-converter` instead. For the full 21-item deliverable (SOW, Playwright bundle, JOURNAL, evidence, KB map, verify_screen.py gate), use `ec-object-iud-builder` instead.
+description: Use when building a BRAND-NEW RF suite (no existing automation at all) for an EC screen that has the SAME LAYOUT as Bank — e.g. "build the Bank-pattern RF suite for <screen>", "automate <screen> like Bank, RF only". Produces the RF suite plus SOW/README/JOURNAL/evidence/CHECKLIST/KB-map bundle (owner decision 2026-08-27 — no Playwright bundle, since the Universal Screen Engine replaces it), matching the style of Batches 2-11's `bank_page.resource`/`berth_page.resource`. For a screen that already has SOME automation to upgrade, use `ec-bank-pattern-converter` instead.
 ---
 
-# EC Bank-Pattern New Screen — lean RF-only build from scratch
+# EC Bank-Pattern New Screen — RF-only build from scratch (with full bundle deliverables)
 
 > **INPUT CONTRACT: the user gives an EC screen name (or a batch of names).** You classify,
 > recon, build, verify, and raise a PR — hands-off. Only come back to the user for: a genuine
@@ -11,10 +11,11 @@ description: Use when building a BRAND-NEW RF suite (no existing automation at a
 
 This is the "from scratch" counterpart to `ec-bank-pattern-converter` — same target shape and
 verification bar, but the screen has ZERO existing RF automation to read first, so recon comes
-from DB metadata + a live scan instead of an existing driver. **Deliberately lean**: no
-Playwright bundle, SOW, JOURNAL, evidence screenshots, or KB-map entry — just the RF suite,
-matching the style Batches 2-11 shipped. If the repo's stricter 21-item deliverable standard
-is wanted instead, use `ec-object-iud-builder`.
+from DB metadata + a live scan instead of an existing driver. **Owner decision 2026-08-27**
+retired the earlier lean waiver: this skill now also produces the SOW/README/JOURNAL/evidence/
+CHECKLIST/KB-map bundle (see "Bundle deliverables" below) — the only thing still NOT built is a
+hand-written Playwright driver, since the Universal Screen Engine is the owner-decided
+replacement for that role going forward.
 
 ## Step 0 — check it's genuinely new, and genuinely Bank-shaped
 
@@ -123,11 +124,27 @@ Same orchestration as `ec-bank-pattern-converter`'s batch playbook:
 5. After merge: sync local master, personally spot-check 1-2 screens live yourself, clean up
    the batch's Workplaces clones.
 
+## Bundle deliverables (owner decision 2026-08-27 — restored from `ec-object-iud-builder`)
+
+Section H of `docs/IUD-DELIVERABLE-CHECKLIST.md` retired the 2026-08-23 lean waiver: every new
+Bank-pattern screen build now also produces, under `screens/<menu path>/<Screen>/`:
+- **`<screen>_sow.md`** — classification, grid/cell shape, test data, dev story.
+- **`README.md`** — bundle overview + exact run commands.
+- **`JOURNAL.md`** — per-branch work journal (built / done-wrong / done-well / improve /
+  blockers→resolution / decisions / evidence).
+- **`evidence/`** — step screenshots + a results record from the real live run.
+- **`CHECKLIST.md`** — a copy of `docs/IUD-DELIVERABLE-CHECKLIST.md` (Steps 0, A minus 4/5, B, C, D,
+  E), ticked with evidence.
+- **KB selector map** `ec-ui-knowledge/screens/<screen>.md`.
+
+**Still NOT required**: a hand-written Playwright driver or its `investigation/` recon scripts —
+the Universal Screen Engine covers that role now. A throwaway scratch script in
+`Workplaces/<screen>/` (gitignored) is fine for ad-hoc recon.
+
 ## What "done" looks like
 
 Label-driven, properties-file-driven RF suite with explicit grid-filter wiring, matching
 `bank_page.resource`/`berth_page.resource` exactly. Live 5/5, dryrun 100% on the full tree, DB
 self-clean confirmed via a fresh connection, filter keyword confirmed fired, no shared T1/T2
-file changes, new registry/scorecard rows added, PR raised (not self-merged). No Playwright
-bundle, SOW, JOURNAL, evidence, or KB-map entry required — if those are wanted, use
-`ec-object-iud-builder` instead.
+file changes, new registry/scorecard rows added, the bundle deliverables above produced, PR
+raised (not self-merged).

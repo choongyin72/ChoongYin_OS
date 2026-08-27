@@ -164,6 +164,27 @@ independently re-verify every PR via a read tool before counting it done, person
 screen in the batch turns out not to fit Area's supported navigator shape, don't let that block
 the rest of the batch — log it to the not-matching-Area checklist and continue with the others.
 
+## Bundle deliverables (owner decision 2026-08-27 — restored from `ec-object-iud-builder`)
+
+Section H of `docs/IUD-DELIVERABLE-CHECKLIST.md` retired the 2026-08-23/26 lean waiver: every Area-
+pattern conversion now also produces, under `screens/<menu path>/<Screen>/`:
+- **`<screen>_sow.md`** — classification, navigator/grid/cell shape, test data, dev story.
+- **`README.md`** — bundle overview + exact run commands.
+- **`JOURNAL.md`** — per-branch work journal (built / done-wrong / done-well / improve /
+  blockers→resolution / decisions / evidence).
+- **`evidence/`** — step screenshots + a results record from the real live run.
+- **`CHECKLIST.md`** — a copy of `docs/IUD-DELIVERABLE-CHECKLIST.md` (Steps 0, A minus 4/5, B, C, D,
+  E), ticked with evidence.
+- **KB selector map** `ec-ui-knowledge/screens/<screen>.md`.
+
+**Still NOT required** (superseded by the Universal Screen Engine, per the same owner decision):
+a hand-written Playwright driver (item 4) or its `investigation/` recon scripts (item 5) — a
+throwaway scratch script in `Workplaces/<screen>/` (gitignored) is fine for ad-hoc recon and does
+not need to become a permanent deliverable.
+
+Raising a PR without these bundle artifacts is no longer "done" for this skill — the RF-suite
+verification gates below are necessary but not sufficient.
+
 ## What "done" looks like for a screen
 
 5 TCs, per-TC login/logout, navigator filled via the shared `Apply Navigator From Properties`
@@ -171,5 +192,5 @@ keyword, fixed test code, properties-file-driven insert/update/verify, explicit 
 wiring, zero inline DB-verify calls — matching `area_page.resource`/`area_iud.robot` exactly,
 with the screen's own genuine navigator requirement kept intact. Live 5/5, dryrun 100% on the
 full tree, DB self-clean confirmed via a fresh connection, filter keyword confirmed fired, no
-unauthorized shared T1/T2 file changes, registry/scorecard docs updated, PR raised (not
-self-merged).
+unauthorized shared T1/T2 file changes, registry/scorecard docs updated, the bundle deliverables
+above produced, PR raised (not self-merged).
