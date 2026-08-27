@@ -1,0 +1,42 @@
+{
+  "backfill_date": "2026-08-27",
+  "work_order": "docs/lean-deliverable-backfill-workorder.md, Batch 3",
+  "screen": "Tank",
+  "original_pr": 553,
+  "note": "Tank was a brand-new build (ec-area-pattern-new-screen skill), not a conversion - never had a pre-existing bundle. This evidence capture re-runs the ALREADY-PROVEN suite from PR #553; no automation file was modified.",
+  "dryrun": {
+    "command": "py -m robot --dryrun --outputdir tmp_dryrun tests/Configuration/Assets/Tank_and_Storage_Objects/tank_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed"
+  },
+  "live_headless": {
+    "command": "EC_HEADLESS=true py -m robot --outputdir tmp_live tests/Configuration/Assets/Tank_and_Storage_Objects/tank_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed",
+    "note_on_flakes": "First several live-run attempts this session failed with page/connection errors (Could not find active page / Playwright process terminated with code 1 / WSAGetOverlappedResult connection reset) caused by an accumulating pile of stray chrome-headless-shell.exe/node.exe/robot.exe processes left behind by earlier failed attempts (confirmed via `tasklist`), not a Tank suite defect. One of those partial runs left a residual AUTOTEST_TANK row in OV_TANK (insert completed, delete never ran) - cleaned up by running TC05 alone before the final clean attempt. After a full process cleanup (taskkill on chrome-headless-shell.exe/node.exe/robot.exe) and confirming 0 residual rows, the suite ran clean end-to-end: 5/5 PASS."
+  },
+  "db_self_clean": {
+    "query": "SELECT CODE, NAME FROM OV_TANK WHERE UPPER(CODE) LIKE 'AUTOTEST%' OR UPPER(NAME) LIKE 'AUTOTEST%'",
+    "script": "screens/Configuration/Assets/Tank_and_Storage_Objects/Tank/investigation/dbcheck_selfclean.py",
+    "result_before_cleanup_run": "1 residual row (AUTOTEST_TANK, 'Automation Test Tank') from an earlier crashed attempt",
+    "result_after_tc05_cleanup": "0 residual rows",
+    "result_after_final_live_run": "0 residual rows"
+  },
+  "filter_fired_grep": {
+    "command": "grep -c \"Find Object Row By Filter\" evidence/backfill_2026-08-27/live/output.xml",
+    "result": 15,
+    "matches_pr553_cited_count": true
+  },
+  "robocop_parity": {
+    "command": "py -m robocop check pageobjects/Configuration/Assets/Tank_and_Storage_Objects/tank_page.resource tests/Configuration/Assets/Tank_and_Storage_Objects/tank_iud.robot",
+    "result": "7 issues",
+    "baseline_command": "py -m robocop check pageobjects/Configuration/Assets/Basic_Objects/area_page.resource tests/Configuration/Assets/Basic_Objects/area_iud.robot",
+    "baseline_result": "7 issues",
+    "parity": true
+  },
+  "hygiene": {
+    "command": "py scripts/check_bundle_hygiene.py",
+    "result": "RESULT: PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions, doc rows match declared families",
+    "note": "One pre-existing unrelated WARN on Contract_Area's investigation/live_recon_contract_area.py selector strings - not related to Tank"
+  },
+  "automation_files_modified": false,
+  "verification_note": "git diff --stat against pageobjects/, tests/, testdata/, resources/credentials.py, docs/ec_screen_registry.md, docs/automation-scorecard.md confirmed empty before commit"
+}
