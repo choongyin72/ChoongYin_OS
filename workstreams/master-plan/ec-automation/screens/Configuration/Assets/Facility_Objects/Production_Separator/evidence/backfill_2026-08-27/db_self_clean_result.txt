@@ -1,0 +1,17 @@
+Fresh oracledb connection, 2026-08-27, after the live re-run below:
+  SELECT COUNT(*) FROM OV_PRODSEPARATOR WHERE CODE = 'AUTOTEST_PSEP' -> 0
+  SELECT COUNT(*) FROM OV_PRODSEPARATOR WHERE CODE LIKE 'AUTOTEST%'  -> 0
+
+Live run: tests/Configuration/Assets/Facility_Objects/production_separator_iud.robot
+  EC_HEADLESS=true -> 5 tests, 5 passed, 0 failed (TC01-TC05, see ./live/log.html + output.xml)
+
+Dryrun: 5 tests, 5 passed, 0 failed (see ./dryrun/log.html + output.xml)
+
+robocop (pageobjects/.../production_separator_page.resource + tests/.../production_separator_iud.robot):
+  Found 7 issues, all DOC02 (missing [Documentation] in TC02-TC05 test cases) - identical in kind/
+  count to Area's own current baseline (also 7 DOC02 issues, re-checked same session) -> parity,
+  not a regression.
+
+Hygiene: py scripts/check_bundle_hygiene.py -> RESULT: PASS (no hardcoded creds, pure ASCII, no
+  CHECKLIST/VERIFY-REPORT contradictions). Unrelated WARN for Contract Area's investigation/
+  scripts noted in the same run, not applicable to this screen.
