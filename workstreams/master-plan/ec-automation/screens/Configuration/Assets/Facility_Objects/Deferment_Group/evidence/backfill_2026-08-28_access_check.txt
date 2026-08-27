@@ -1,0 +1,36 @@
+Real fact-check, 2026-08-28 — run during this backfill session after the live suite failed twice
+(initial attempt + one retry, per the "retry once, then disclose" rule) with:
+  TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+  Call log:
+    - waiting for locator("//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Deferment Group']").first() to be visible
+
+This exact symptom was already documented as a KNOWN, previously-resolved issue
+(docs/universal_screen_engine_open_items.md item 3 + PR #479's own body): TV_T_BASIS_ACCESS had
+LEVEL_ID=0 ("No access") for all 5 roles on this screen object (OBJECT_ID=1087), making the screen
+unreachable via menu search regardless of role. The owner granted access 2026-08-23, unblocking
+PR #479's merge.
+
+Rather than write another selector/theory script (banned by this project's "NEVER DO BLIND TEST"
+rule after a repeated, reproducible live failure), the known-issue check pointed straight at this
+table, so a single direct query was run against it to check whether the SAME condition had
+recurred:
+
+Query:
+  SELECT OBJECT_ID, ROLE_ID, LEVEL_ID
+  FROM TV_T_BASIS_ACCESS
+  WHERE OBJECT_ID = 1087
+  ORDER BY ROLE_ID;
+
+Result (via a fresh oracledb connection, EC_DB_USER=ECKERNEL_EC, local sandbox):
+  (1087, 'INST.MAN', 0)
+  (1087, 'OP', 0)
+  (1087, 'RES', 0)
+  (1087, 'SUP', 0)
+  (1087, 'SYST.ADM', 0)
+
+Conclusion: LEVEL_ID=0 ("No access") for all 5 roles again — CONFIRMED REGRESSION of the exact
+access grant that unblocked PR #479, not a new or different problem, and not an automation defect.
+Out of scope for this backfill task to fix (a role-access grant is a live-sandbox security-config
+change requiring its own explicit owner authorization — same conclusion the original blocker
+reached). Disclosed in JOURNAL.md ("Blockers -> resolution"), deferment_group_sow.md, and
+CHECKLIST.md rather than worked around or assumed fixed.
