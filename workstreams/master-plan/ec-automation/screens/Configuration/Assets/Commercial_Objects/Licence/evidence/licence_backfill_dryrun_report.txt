@@ -1,0 +1,19 @@
+==============================================================================
+Licence Iud :: EC IUD Test - Licence (Configuration > Assets > Commercial O...
+==============================================================================
+TC01 Verify Clean State                                               | PASS |
+------------------------------------------------------------------------------
+TC02 Insert Licence Data                                              | PASS |
+------------------------------------------------------------------------------
+TC03 Update Licence Data                                              | PASS |
+------------------------------------------------------------------------------
+TC04 Find Licence Data                                                | PASS |
+------------------------------------------------------------------------------
+TC05 Delete Licence Data                                              | PASS |
+------------------------------------------------------------------------------
+Licence Iud :: EC IUD Test - Licence (Configuration > Assets > Com... | PASS |
+5 tests, 5 passed, 0 failed
+==============================================================================
+Output:  C:\tmp\wt-licence-backfill\dryrun_out\output.xml
+Log:     C:\tmp\wt-licence-backfill\dryrun_out\log.html
+Report:  C:\tmp\wt-licence-backfill\dryrun_out\report.html
