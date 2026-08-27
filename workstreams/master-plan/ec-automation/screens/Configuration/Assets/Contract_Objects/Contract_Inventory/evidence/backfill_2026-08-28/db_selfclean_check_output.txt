@@ -1,0 +1,2 @@
+AUTOTEST_CONTRACT_INVENTORY exact count: 0
+AUTOTEST% prefix rows: []

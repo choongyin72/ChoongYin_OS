@@ -1,0 +1,66 @@
+tests\Configuration\Assets\Contract_Objects\contract_inventory_iud.robot:31:1 VAR02 Variable '${TEST_CODE}' is assigned but not used
+    |
+ 29 |
+ 30 | *** Variables ***
+ 31 | ${TEST_CODE}        AUTOTEST_CONTRACT_INVENTORY
+    | ^^^^^^^^^^^^ VAR02
+ 32 | ${START_DATE}       2000-01-01
+ 33 | ${END_DATE}         ${START_DATE}
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_inventory_iud.robot:33:1 VAR02 Variable '${END_DATE}' is assigned but not used
+    |
+ 31 | ${TEST_CODE}        AUTOTEST_CONTRACT_INVENTORY
+ 32 | ${START_DATE}       2000-01-01
+ 33 | ${END_DATE}         ${START_DATE}
+    | ^^^^^^^^^^^ VAR02
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_inventory_iud.robot:37:1 DOC02 Missing documentation in 'TC01 Verify Clean State' test case
+    |
+ 35 |
+ 36 | *** Test Cases ***
+ 37 | TC01 Verify Clean State
+    | ^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 38 |     Login To EC Application
+ 39 |     Open Contract Inventory Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_inventory_iud.robot:43:1 DOC02 Missing documentation in 'TC02 Insert Contract Inventory Data' test case
+    |
+ 43 | TC02 Insert Contract Inventory Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 44 |     Login To EC Application
+ 45 |     Open Contract Inventory Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_inventory_iud.robot:50:1 DOC02 Missing documentation in 'TC03 Update Contract Inventory Data' test case
+    |
+ 50 | TC03 Update Contract Inventory Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 51 |     Login To EC Application
+ 52 |     Open Contract Inventory Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_inventory_iud.robot:57:1 DOC02 Missing documentation in 'TC04 Find Contract Inventory Data' test case
+    |
+ 57 | TC04 Find Contract Inventory Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 58 |     Login To EC Application
+ 59 |     Open Contract Inventory Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Contract_Objects\contract_inventory_iud.robot:64:1 DOC02 Missing documentation in 'TC05 Delete Contract Inventory Data' test case
+    |
+ 64 | TC05 Delete Contract Inventory Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 65 |     Login To EC Application
+ 66 |     Open Contract Inventory Screen With Navigator Values Populated
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+Found 7 issues.
