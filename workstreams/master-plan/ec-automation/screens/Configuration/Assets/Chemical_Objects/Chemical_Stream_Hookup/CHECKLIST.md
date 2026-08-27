@@ -43,8 +43,11 @@ OV-GM specifics: navigator cascade Production Unit -> Area -> Facility Class 1 f
 ## Post-PR #544 status (Area-pattern conversion, merged 2026-08-26) — backfilled 2026-08-27
 
 This section restates the same 21 gates against the CURRENT state of the screen (5-TC
-Area-pattern structure), citing PR #544's own already-executed verification since this backfill
-task's scope explicitly does not re-run the live suite.
+Area-pattern structure), citing PR #544's own already-executed verification PLUS one fresh
+confirmation run of the existing, unmodified suite captured for evidence purposes this session
+(see the "Post-PR #544 status" §C notes below and `JOURNAL.md`'s "fresh confirmation run" entry).
+This is evidence capture of an already-proven suite, not a rebuild or re-verification from
+scratch — no automation file was changed to produce it.
 
 ### Step 0
 - [x] **0a.** `ec-ui-knowledge/screens/chemical_stream_hookup.md` existed (from the 2026-08-01
