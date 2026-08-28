@@ -1,0 +1,85 @@
+tests\Configuration\Assets\Revenue_Document_Objects\document_template_iud.robot:30:1 VAR02 Variable '${TEST_CODE}' is assigned but not used
+    |
+ 28 |
+ 29 | *** Variables ***
+ 30 | ${TEST_CODE}        AUTOTEST_DOCUMENT_TEMPLATE
+    | ^^^^^^^^^^^^ VAR02
+ 31 | ${OBJ_NAME}         AUTOTEST Document Template
+ 32 | ${START_DATE}       2000-01-01
+    |
+
+tests\Configuration\Assets\Revenue_Document_Objects\document_template_iud.robot:31:1 VAR02 Variable '${OBJ_NAME}' is assigned but not used
+    |
+ 29 | *** Variables ***
+ 30 | ${TEST_CODE}        AUTOTEST_DOCUMENT_TEMPLATE
+ 31 | ${OBJ_NAME}         AUTOTEST Document Template
+    | ^^^^^^^^^^^ VAR02
+ 32 | ${START_DATE}       2000-01-01
+ 33 | ${END_DATE}         ${START_DATE}
+    |
+
+tests\Configuration\Assets\Revenue_Document_Objects\document_template_iud.robot:33:1 VAR02 Variable '${END_DATE}' is assigned but not used
+    |
+ 31 | ${OBJ_NAME}         AUTOTEST Document Template
+ 32 | ${START_DATE}       2000-01-01
+ 33 | ${END_DATE}         ${START_DATE}
+    | ^^^^^^^^^^^ VAR02
+ 34 | ${OBJ_NAME_UPD}     AUTOTEST Document Template UPDATED
+    |
+
+tests\Configuration\Assets\Revenue_Document_Objects\document_template_iud.robot:34:1 VAR02 Variable '${OBJ_NAME_UPD}' is assigned but not used
+    |
+ 32 | ${START_DATE}       2000-01-01
+ 33 | ${END_DATE}         ${START_DATE}
+ 34 | ${OBJ_NAME_UPD}     AUTOTEST Document Template UPDATED
+    | ^^^^^^^^^^^^^^^ VAR02
+    |
+
+tests\Configuration\Assets\Revenue_Document_Objects\document_template_iud.robot:38:1 DOC02 Missing documentation in 'TC01 Verify Clean State' test case
+    |
+ 36 |
+ 37 | *** Test Cases ***
+ 38 | TC01 Verify Clean State
+    | ^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 39 |     Login To EC Application
+ 40 |     Open Document Template Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Revenue_Document_Objects\document_template_iud.robot:44:1 DOC02 Missing documentation in 'TC02 Insert Document Template Data' test case
+    |
+ 44 | TC02 Insert Document Template Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 45 |     Login To EC Application
+ 46 |     Open Document Template Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Revenue_Document_Objects\document_template_iud.robot:51:1 DOC02 Missing documentation in 'TC03 Update Document Template Data' test case
+    |
+ 51 | TC03 Update Document Template Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 52 |     Login To EC Application
+ 53 |     Open Document Template Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Revenue_Document_Objects\document_template_iud.robot:58:1 DOC02 Missing documentation in 'TC04 Find Document Template Data' test case
+    |
+ 58 | TC04 Find Document Template Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 59 |     Login To EC Application
+ 60 |     Open Document Template Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Revenue_Document_Objects\document_template_iud.robot:65:1 DOC02 Missing documentation in 'TC05 Delete Document Template Data' test case
+    |
+ 65 | TC05 Delete Document Template Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 66 |     Login To EC Application
+ 67 |     Open Document Template Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+Found 9 issues.
