@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.14.3 on win32)" generated="2026-08-28T05:41:20.663704" rpa="false" schemaversion="5">
+<suite id="s1" name="Target Mapping Configuration Find" source="C:\tmp\wt-targetmapping-backfill\workstreams\master-plan\ec-automation\tests\Configuration\Integration_Services\target_mapping_configuration_find.robot">
+<kw name="Open Target Mapping Configuration Screen" owner="target_mapping_configuration_page" type="SETUP">
+<kw name="Launch EC And Open Screen" owner="common">
+<kw name="Open EC Browser" owner="browser">
+<if>
+<branch type="IF" condition="${HEADLESS}">
+<kw name="New Browser" owner="Browser">
+<msg time="2026-08-28T05:41:21.162923" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "C:\\tmp\\wt-targetmapping-backfill\\workstreams\\master-plan\\ec-automation\\screens\\Configuration\\Integration_Services\\Target_Mapping_Configuration\\evidence\\browser\\traces\\temp\\f9c3d681-36fa-481c-9d3b-261ec54b93be"}</msg>
+<msg time="2026-08-28T05:41:21.250222" level="INFO">Starting Browser process C:\Tools\Python\Python314\Lib\site-packages\Browser\wrapper\index.js using at 127.0.0.1:60310</msg>
+<msg time="2026-08-28T05:41:23.408145" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"C:\\tmp\\wt-targetmapping-backfill\\workstreams\\master-plan\\ec-automation\\screens\\Configuration\\Integration_Services\\Target_Mapping_Configuration\\evidence\\browser\\traces\\temp\\f9c3d681-36fa-481c-9d3b-261ec54b93be"}</msg>
+<arg>chromium</arg>
+<arg>headless=${TRUE}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="PASS" start="2026-08-28T05:41:21.162045" elapsed="2.246403"/>
+</kw>
+<kw name="New Context" owner="Browser">
+<msg time="2026-08-28T05:41:23.419256" level="INFO">{
+  "acceptDownloads": true,
+  "bypassCSP": false,
+  "forcedColors": "none",
+  "ignoreHTTPSErrors": true,
+  "javaScriptEnabled": true,
+  "offline": false,
+  "reducedMotion": "no-preference",
+  "serviceWorkers": "allow",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  }
+}</msg>
+<msg time="2026-08-28T05:41:23.432282" level="INFO">Successfully created context. </msg>
+<msg time="2026-08-28T05:41:23.432421" level="INFO">{'acceptDownloads': True, 'bypassCSP': False, 'forcedColors': 'none', 'ignoreHTTPSErrors': True, 'javaScriptEnabled': True, 'offline': False, 'reducedMotion': 'no-preference', 'serviceWorkers': 'allow', 'viewport': {'width': 1920, 'height': 1080}}</msg>
+<arg>ignoreHTTPSErrors=${TRUE}</arg>
+<arg>viewport={'width': 1920, 'height': 1080}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new BrowserContext with specified options.</doc>
+<status status="PASS" start="2026-08-28T05:41:23.408865" elapsed="0.023770"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:41:21.161350" elapsed="2.271536"/>
+</branch>
+<branch type="ELSE">
+<variable name="@{args}">
+<var>--start-maximized</var>
+<status status="NOT RUN" start="2026-08-28T05:41:23.433265" elapsed="0.000127"/>
+</variable>
+<kw name="New Browser" owner="Browser">
+<arg>chromium</arg>
+<arg>headless=${FALSE}</arg>
+<arg>args=${args}</arg>
+<arg>slowMo=${SLOWMO}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="NOT RUN" start="2026-08-28T05:41:23.433642" elapsed="0.000085"/>
+</kw>
+<kw name="New Context" owner="Browser">
+<arg>ignoreHTTPSErrors=${TRUE}</arg>
+<arg>viewport=${None}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new BrowserContext with specified options.</doc>
+<status status="NOT RUN" start="2026-08-28T05:41:23.433890" elapsed="0.000075"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:41:23.433000" elapsed="0.001019"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:41:21.161312" elapsed="2.272750"/>
+</if>
+<kw name="Set Browser Timeout" owner="Browser">
+<arg>30s</arg>
+<tag>Config</tag>
+<tag>Setter</tag>
+<doc>Sets the timeout used by most input and getter keywords.</doc>
+<status status="PASS" start="2026-08-28T05:41:23.434171" elapsed="0.003448"/>
+</kw>
+<kw name="Set Strict Mode" owner="Browser">
+<arg>False</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Controls library strict mode.</doc>
+<status status="PASS" start="2026-08-28T05:41:23.437918" elapsed="0.000865"/>
+</kw>
+<doc>Launch Chromium + context (headless from environment).
+Headed: OS-maximised window (--start-maximized, no fixed viewport) so the
+page fills the screen. Headless: 1920x1080 virtual viewport as before.</doc>
+<status status="PASS" start="2026-08-28T05:41:21.161099" elapsed="2.277842"/>
+</kw>
+<kw name="Login To EC" owner="browser">
+<kw name="New Page" owner="Browser">
+<msg time="2026-08-28T05:41:31.575990" level="INFO">Successfully initialized new page object and opened url: https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/</msg>
+<arg>${EC_URL}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<status status="PASS" start="2026-08-28T05:41:23.439995" elapsed="8.136258"/>
+</kw>
+<kw name="Fill EC Login Form" owner="browser">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:41:31.577788" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="username"]</arg>
+<arg>${user}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:31.577203" elapsed="0.049545"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:41:31.627881" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="password"]</arg>
+<arg>${pass}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:31.627050" elapsed="0.013280"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:41:31.641353" level="INFO">Clicks the element 'css=[id="kc-login"]'.</msg>
+<arg>css=[id="kc-login"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:31.640624" elapsed="0.144154"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:41:32.086014" level="INFO">Waited for Element with selector css=[id="menu:searchForm:searchTxt"] at state visible</msg>
+<arg>css=[id="menu:searchForm:searchTxt"]</arg>
+<arg>visible</arg>
+<arg>timeout=60s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:41:31.785100" elapsed="0.301103"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-08-28T05:41:32.087482" level="INFO">Waiting page load to state to receive networkidle in 30000.0</msg>
+<msg time="2026-08-28T05:41:32.655911" level="INFO">Load state networkidle got in 30000</msg>
+<arg>networkidle</arg>
+<arg>timeout=30s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-08-28T05:41:32.086632" elapsed="0.569449"/>
+</kw>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>The ACTUAL login mechanics (fill username, fill password, click login,
+wait for the app to load) on the CURRENT page - the ONE place to update if EC's login
+flow ever changes (a new SSO step, MFA, a renamed field id). Login To EC and Bank's own
+Login To EC Application (bank_page.resource) both call this instead of duplicating the
+steps, so a future flow change is a one-place edit (owner-requested 2026-08-18, after
+Bank's wrapper was found to have copy-pasted this sequence instead of reusing it).</doc>
+<status status="PASS" start="2026-08-28T05:41:31.576623" elapsed="1.079591"/>
+</kw>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>Open the app and authenticate as sysadmin (defaults to the
+env-configured user); wait for the sidebar search box.</doc>
+<status status="PASS" start="2026-08-28T05:41:23.439368" elapsed="9.216951"/>
+</kw>
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Dismiss Unsaved Changes Dialog If Present" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:41:32.669551" level="INFO">${present} = 0</msg>
+<var>${present}</var>
+<arg>css=[id="confirmationForm:confirmation_modal"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:32.657091" elapsed="0.012513"/>
+</kw>
+<if>
+<branch type="IF" condition="${present} &gt; 0">
+<kw name="Log" owner="BuiltIn">
+<arg>Unsaved-changes dialog detected - discarding via No to unblock navigation</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-08-28T05:41:32.670256" elapsed="0.000063"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="confirmationForm:nobtn"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:41:32.670413" elapsed="0.000050"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:41:32.670554" elapsed="0.000044"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:41:32.670667" elapsed="0.000036"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:41:32.669875" elapsed="0.000853"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:41:32.669809" elapsed="0.000949"/>
+</if>
+<doc>EC shows its own "UNSAVED CHANGES" Yes/No/Cancel confirm when navigating
+away from a dirty New Object form. If an earlier step failed mid-fill (e.g. a
+dependent-dropdown timeout), this dialog can be left open and its overlay mask
+(#confirmationForm:confirmation_modal) then intercepts every click for the rest of
+the run - the whole suite silently stalls behind it. Detect + discard via No, so a
+single earlier failure can't cascade into the entire suite hanging.</doc>
+<status status="PASS" start="2026-08-28T05:41:32.656918" elapsed="0.013883"/>
+</kw>
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:41:32.674775" level="INFO">${visible} = 1</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:32.671158" elapsed="0.003653"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:41:32.675167" elapsed="0.000049"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:41:32.675364" elapsed="0.000040"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-08-28T05:41:32.675479" elapsed="0.000060"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:41:32.675611" elapsed="0.000036"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:41:32.675273" elapsed="0.000398"/>
+</branch>
+<status status="NOT RUN" start="2026-08-28T05:41:32.675261" elapsed="0.000436"/>
+</if>
+<status status="NOT RUN" start="2026-08-28T05:41:32.674909" elapsed="0.000801"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:41:32.674887" elapsed="0.000841"/>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="PASS" start="2026-08-28T05:41:32.670961" elapsed="0.004798"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-08-28T05:41:32.676235" level="INFO">Types the text 'Target Mapping Configuration' in the given field.</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:32.675829" elapsed="2.100501"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:41:35.607994" level="INFO">Waited for Element with selector xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Target Mapping Configuration'] at state visible</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:41:34.776573" elapsed="0.831577"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:41:35.608882" level="INFO">Clicks the element 'xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='Target Mapping Configuration']'.</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:35.608356" elapsed="0.026682"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-08-28T05:41:35.635941" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-08-28T05:41:35.638890" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-08-28T05:41:35.635319" elapsed="0.003727"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-08-28T05:41:37.140326" level="INFO">Slept 1 second 500 milliseconds.</msg>
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-08-28T05:41:35.639357" elapsed="1.501103"/>
+</kw>
+<kw name="Confirm Screen Loaded" owner="screen">
+<kw name="Get Text" owner="Browser">
+<msg time="2026-08-28T05:41:37.179534" level="INFO">Text: 'Target Mapping Configuration'</msg>
+<msg time="2026-08-28T05:41:37.179737" level="INFO">${label} = Target Mapping Configuration</msg>
+<var>${label}</var>
+<arg>css=[id="screenToolbar:form:screenLabel"]</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns text attribute of the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.141294" elapsed="0.038478"/>
+</kw>
+<kw name="Should Contain" owner="BuiltIn">
+<arg>${label}</arg>
+<arg>${screen_name}</arg>
+<arg>msg=Failed to navigate to ${screen_name}</arg>
+<doc>Fails if ``container`` does not contain ``item`` one or more times.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.179986" elapsed="0.000889"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Assert the loaded screen's toolbar label matches Target Mapping Configuration.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.140836" elapsed="0.040194"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:41:37.188023" level="INFO">Waited for Element with selector css=[id="screenToolbar:form:minmaxMenu"] at state visible</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.181607" elapsed="0.006586"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:41:37.188959" level="INFO">Clicks the element 'css=[id="screenToolbar:form:minmaxMenu"]'.</msg>
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.188423" elapsed="0.023516"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-08-28T05:41:37.213285" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-08-28T05:41:37.215775" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.212306" elapsed="0.003613"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-08-28T05:41:37.717086" level="INFO">Slept 500 milliseconds.</msg>
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.216112" elapsed="0.501092"/>
+</kw>
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="PASS" start="2026-08-28T05:41:37.181271" elapsed="0.536041"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="PASS" start="2026-08-28T05:41:32.656544" elapsed="5.060816"/>
+</kw>
+<arg>${TMC_SCREEN}</arg>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>The standard Suite Setup gesture: launch the browser, login as
+sysadmin (defaults to the env-configured user), navigate to ${screen_name}.
+Page objects delegate their Open &lt;X&gt; Screen keyword here in one line.</doc>
+<status status="PASS" start="2026-08-28T05:41:21.160373" elapsed="16.557035"/>
+</kw>
+<doc>Suite Setup: launch, login (screen-dedicated credentials), navigate.
+Does NOT click GO yet - callers filter first, then call
+Apply Target Mapping Configuration Navigator, matching this screen's real gesture
+order (filters are optional, but GO is always required to load the grid).</doc>
+<status status="PASS" start="2026-08-28T05:41:21.157279" elapsed="16.560180"/>
+</kw>
+<test id="s1-t1" name="TC01 Verify Clean State" line="43">
+<kw name="Apply Target Mapping Configuration Navigator" owner="target_mapping_configuration_page">
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:41:37.724635" level="INFO">Clicks the element 'css=[id="buttongo:form:B"]'.</msg>
+<arg>css=[id="${TMC_GO}"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.724174" elapsed="0.020369"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-08-28T05:41:37.745334" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-08-28T05:41:37.747581" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.744784" elapsed="0.002951"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-08-28T05:41:38.748562" level="INFO">Slept 1 second.</msg>
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.747970" elapsed="1.000741"/>
+</kw>
+<doc>Click this screen's own non-standard GO (buttongo:form:B) to (re)load the grid.</doc>
+<status status="PASS" start="2026-08-28T05:41:37.723797" elapsed="1.025047"/>
+</kw>
+<kw name="Target Mapping Configuration Row Count" owner="target_mapping_configuration_page">
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-08-28T05:41:38.755380" level="INFO">JavaScript executed successfully.</msg>
+<msg time="2026-08-28T05:41:38.755612" level="INFO">${n} = 20</msg>
+<var>${n}</var>
+<arg>${None}</arg>
+<arg>() =&gt; { const tb = document.getElementById('${TMC_GRID_DATA}'); return tb ? tb.querySelectorAll('tr').length : 0; }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-08-28T05:41:38.749582" elapsed="0.006065"/>
+</kw>
+<return>
+<value>${n}</value>
+<status status="PASS" start="2026-08-28T05:41:38.755776" elapsed="0.000194"/>
+</return>
+<msg time="2026-08-28T05:41:38.756149" level="INFO">${count} = 20</msg>
+<var>${count}</var>
+<doc>Return the number of currently rendered data rows in the grid (the
+tbody's own &lt;tr&gt; count) - used for the clean-state / baseline check in TC01, and by
+the DB row-count-unchanged proof around the live run.</doc>
+<status status="PASS" start="2026-08-28T05:41:38.749128" elapsed="0.007043"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${count} &gt; 0</arg>
+<arg>msg=Expected at least one row on initial grid load, got ${count}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-08-28T05:41:38.756322" elapsed="0.000589"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:41:38.868133" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="tmc_tc01_clean_load.png" target="_blank"&gt;&lt;img src="tmc_tc01_clean_load.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:41:38.757679" elapsed="0.110618"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:41:38.757475" elapsed="0.110915"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:41:38.757454" elapsed="0.110990"/>
+</if>
+<arg>tmc_tc01_clean_load</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="PASS" start="2026-08-28T05:41:38.757179" elapsed="0.111326"/>
+</kw>
+<doc>Not the usual "AUTOTEST code absent" check (this screen has no
+AUTOTEST/Insert lifecycle) - instead confirms the screen loads correctly: navigator
+renders, GO loads the grid, and at least one data row is visible (the screen's own
+baseline, ~20 real rows on this sandbox). Purely observational, no filter applied.</doc>
+<tag>clean-state</tag>
+<tag>find-only</tag>
+<tag>target-mapping-configuration</tag>
+<status status="PASS" start="2026-08-28T05:41:37.717549" elapsed="1.151088"/>
+</test>
+<test id="s1-t2" name="TC04 Find Existing Target Mapping Record" line="54">
+<kw name="Filter Target Mapping Configuration By Class" owner="target_mapping_configuration_page">
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:41:38.881957" level="INFO">Clicks the element 'css=[id="StandardNavigator:form:G:0:R:1:C:0:in"]'.</msg>
+<arg>css=[id="${TMC_NAV_CLASS}"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:38.881399" elapsed="0.043016"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-08-28T05:41:38.925419" level="INFO">Types the text 'PWEL_DAY_STATUS' in the given field.</msg>
+<arg>css=[id="${TMC_NAV_CLASS}"]</arg>
+<arg>${class_value}</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:38.924695" elapsed="0.042880"/>
+</kw>
+<arg>${TARGET_CLASS}</arg>
+<doc>Type into the (optional) Class navigator filter. Does NOT click GO -
+caller does that via Apply Target Mapping Configuration Navigator, so a caller can
+combine multiple filters before applying.</doc>
+<status status="PASS" start="2026-08-28T05:41:38.880903" elapsed="0.086832"/>
+</kw>
+<kw name="Apply Target Mapping Configuration Navigator" owner="target_mapping_configuration_page">
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:41:38.968906" level="INFO">Clicks the element 'css=[id="buttongo:form:B"]'.</msg>
+<arg>css=[id="${TMC_GO}"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:41:38.968450" elapsed="0.056086"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-08-28T05:41:39.025626" level="INFO">Waiting page load to state to receive networkidle in 15000.0</msg>
+<msg time="2026-08-28T05:41:39.029020" level="INFO">Load state networkidle got in 15000</msg>
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-08-28T05:41:39.024824" elapsed="0.004407"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-08-28T05:41:40.030671" level="INFO">Slept 1 second.</msg>
+<arg>1s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-08-28T05:41:39.029497" elapsed="1.001353"/>
+</kw>
+<doc>Click this screen's own non-standard GO (buttongo:form:B) to (re)load the grid.</doc>
+<status status="PASS" start="2026-08-28T05:41:38.968040" elapsed="1.062994"/>
+</kw>
+<kw name="Target Mapping Configuration Row Should Be Found" owner="target_mapping_configuration_page">
+<kw name="Find Target Mapping Configuration Row" owner="target_mapping_configuration_page">
+<kw name="Evaluate JavaScript" owner="Browser">
+<msg time="2026-08-28T05:41:40.041096" level="INFO">JavaScript executed successfully.</msg>
+<msg time="2026-08-28T05:41:40.041387" level="INFO">${row} = 14</msg>
+<var>${row}</var>
+<arg>${None}</arg>
+<arg>() =&gt; { const tb = document.getElementById('${TMC_GRID_DATA}'); if (!tb) return -1;</arg>
+<arg>const trs = tb.querySelectorAll('tr');</arg>
+<arg>for (let i = 0; i &lt; trs.length; i++) {</arg>
+<arg>const g = (c) =&gt; { const el = trs[i].querySelector(`input[id\$=":C\${c}_dd_input"]`); return el ? el.value : null; };</arg>
+<arg>if (g(0) === '${class_val}' &amp;&amp; g(1) === '${attribute}' &amp;&amp; g(2) === '${ec_key}' &amp;&amp; g(3) === '${key1}' &amp;&amp; g(4) === '${key2}') { return i; }</arg>
+<arg>}</arg>
+<arg>return -1; }</arg>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Executes given javascript on the selected element(s) or on page.</doc>
+<status status="PASS" start="2026-08-28T05:41:40.033360" elapsed="0.008065"/>
+</kw>
+<return>
+<value>${row}</value>
+<status status="PASS" start="2026-08-28T05:41:40.041592" elapsed="0.000229"/>
+</return>
+<msg time="2026-08-28T05:41:40.042059" level="INFO">${row} = 14</msg>
+<var>${row}</var>
+<arg>${class_val}</arg>
+<arg>${attribute}</arg>
+<arg>${ec_key}</arg>
+<arg>${key1}</arg>
+<arg>${key2}</arg>
+<doc>Read-only find: scan the currently-rendered grid rows for one whose
+Class/Attribute/Ec Key/Class Key 1/Class Key 2 (columns 0-4, `Cn_dd_input.value`)
+match the 5 given values. Returns the 0-based row index, or -1 if not found. Never
+clicks/selects/modifies the row - pure read.</doc>
+<status status="PASS" start="2026-08-28T05:41:40.032438" elapsed="0.009655"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${row} &gt;= 0</arg>
+<arg>msg=Row not found: Class=${class_val} Attribute=${attribute} EcKey=${ec_key} Key1=${key1} Key2=${key2}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2026-08-28T05:41:40.042323" elapsed="0.000841"/>
+</kw>
+<arg>${TARGET_CLASS}</arg>
+<arg>${TARGET_ATTRIBUTE}</arg>
+<arg>${TARGET_EC_KEY}</arg>
+<arg>${TARGET_KEY1}</arg>
+<arg>${TARGET_KEY2}</arg>
+<doc>Assert the exact 5-field row is present in the currently rendered grid,
+and its own fields read back match what was asked for (row-identity check, same
+spirit as the standing "verify row identity" rule - even though this is read-only
+with no Save at risk).</doc>
+<status status="PASS" start="2026-08-28T05:41:40.031394" elapsed="0.011899"/>
+</kw>
+<kw name="Target Mapping Configuration Row Should Exist In DB" owner="target_mapping_configuration_page">
+<kw name="Code Should Be Present In View" owner="DbVerify">
+<arg>OV_IMP_TARGET_MAPPING</arg>
+<arg>${ec_key}</arg>
+<doc>Fail unless ``code`` appears in any string column of ``view`` (DB ground truth).</doc>
+<status status="PASS" start="2026-08-28T05:41:40.044043" elapsed="0.110634"/>
+</kw>
+<arg>${TARGET_EC_KEY}</arg>
+<doc>DB ground-truth: assert this exact mapping (by its unique Ec Key) is
+present in OV_IMP_TARGET_MAPPING. Read-only.</doc>
+<status status="PASS" start="2026-08-28T05:41:40.043562" elapsed="0.111371"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:41:40.262745" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="tmc_tc04_found.png" target="_blank"&gt;&lt;img src="tmc_tc04_found.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:41:40.156169" elapsed="0.106798"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:41:40.155924" elapsed="0.107214"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:41:40.155892" elapsed="0.107352"/>
+</if>
+<arg>tmc_tc04_found</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="PASS" start="2026-08-28T05:41:40.155450" elapsed="0.107938"/>
+</kw>
+<doc>100% read-only: filter the navigator by the known Class, click GO, then
+verify the exact pre-existing row (Class/Attribute/EC Key/Class Key 1/Class Key 2) is
+present with matching field values, and cross-check it independently against the DB
+(OV_IMP_TARGET_MAPPING) by its unique EC Key. Never selects/edits/saves/deletes the row.</doc>
+<tag>find</tag>
+<tag>find-only</tag>
+<tag>target-mapping-configuration</tag>
+<status status="PASS" start="2026-08-28T05:41:38.875763" elapsed="1.388030"/>
+</test>
+<kw name="Close EC" owner="browser" type="TEARDOWN">
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-08-28T05:41:40.277788" level="INFO">Slept 0 seconds.</msg>
+<arg>${HOLD}</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-08-28T05:41:40.277186" elapsed="0.000683"/>
+</kw>
+<kw name="Close Browser" owner="Browser">
+<msg time="2026-08-28T05:41:40.363137" level="INFO">Closed browser</msg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-08-28T05:41:40.278133" elapsed="0.085284"/>
+</kw>
+<doc>Optional hold then close the browser (Suite Teardown).</doc>
+<status status="PASS" start="2026-08-28T05:41:40.276700" elapsed="0.086933"/>
+</kw>
+<doc>EC Find-only Test - Target Mapping Configuration (Configuration &gt; Integration
+Services &gt; Import &gt; Target Mapping Configuration, IS.0002). REDUCED SCOPE
+(owner-confirmed, and independently re-confirmed by this session's own live
+DOM probe: the Insert/Delete toolbar `&lt;li&gt;` both carry class
+`ui-submenu-state-disabled`; there is no Update icon at all) - this screen does
+NOT support Insert/Update/Delete, so only 2 test cases exist here: TC01 (clean
+load verification) and TC04 (find an existing real row). No TC02/TC03/TC05 -
+this is intentional, not an omission. Zero data mutation anywhere in this suite.
+
+Named `..._find.robot` (not the usual `..._iud.robot`) on purpose: this suite
+never performs an Insert, Update, or Delete, so the `_iud` suffix used by every
+other screen in this tree would misdescribe what it does. Kept in the same
+tests/Configuration/Integration_Services/ directory as its siblings
+(dummy_tag_event_object_iud.robot, remote_endpoint_config_iud.robot) for
+directory-structure consistency - only the filename suffix differs.
+
+TC04 uses ONE real, pre-existing row (owner-supplied, live-verified this
+session): Class=PWEL_DAY_STATUS, Attribute=AVG_LIQ_VOL, EC Key=ecValue16,
+Class Key 1="Key 1", Class Key 2="Key 2". Never modified/re-saved.
+
+Layered: this test -&gt; target_mapping_configuration_page (T3) -&gt; common.resource
+(T1 login/nav) + DbVerify (DB ground truth). Does NOT reuse manage_object.resource
+T2 Insert/Update/Delete keywords - they do not apply to this screen.</doc>
+<status status="PASS" start="2026-08-28T05:41:20.666291" elapsed="19.697423"/>
+</suite>
+<statistics>
+<total>
+<stat pass="2" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">clean-state</stat>
+<stat pass="1" fail="0" skip="0">find</stat>
+<stat pass="2" fail="0" skip="0">find-only</stat>
+<stat pass="2" fail="0" skip="0">target-mapping-configuration</stat>
+</tag>
+<suite>
+<stat name="Target Mapping Configuration Find" id="s1" pass="2" fail="0" skip="0">Target Mapping Configuration Find</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
