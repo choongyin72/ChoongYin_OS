@@ -125,6 +125,7 @@ completion note already covers ground truth)
 | 5 | Not started | — | — |
 | 6 | In progress — 1/7 | #602 Field Group | Field Group backfilled 2026-08-28 (zero automation files touched; robocop/dryrun/live/DB-self-clean/hygiene all re-verified with matching evidence to PR #434's own baseline). Remaining 6/7 (Country, Payment Scheme, Customer, Operator Lease, MMS Lease, Licence) not started. |
 | 7 | Not started | — | — |
+| 7 | In progress — Cost Object Mapping | (this PR) Cost Object Mapping | 1/7 backfilled 2026-08-28. Cost Object Mapping had a pre-existing bundle predating the RF conversion (legacy 2026-06-11 Playwright build) that needed refreshing (SOW/README), not fresh creation — legacy playwright/investigation/evidence left untouched. Zero automation files touched; live 5/5, dryrun 5/5, DB self-clean 0 residual (all re-confirmed 2026-08-28). Remaining Batch 7 screens (Vendor, State Lease, Product Description, DOA Credit Limit, Sales Order, Product Group) not started. |
 | 8 | Not started | — | — |
 | 9 | Not started | — | — |
 | 10 | Not started | — | — |
