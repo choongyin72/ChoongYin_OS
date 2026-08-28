@@ -1,0 +1,2286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.4.2 (Python 3.14.3 on win32)" generated="2026-08-28T05:07:27.003260" rpa="false" schemaversion="5">
+<suite id="s1" name="Deferment Group Iud" source="C:\tmp\wt-defermentgroup-backfill\workstreams\master-plan\ec-automation\tests\Configuration\Assets\Facility_Objects\deferment_group_iud.robot">
+<kw name="Open EC Application" owner="browser" type="SETUP">
+<kw name="Open EC Browser" owner="browser">
+<if>
+<branch type="IF" condition="${HEADLESS}">
+<kw name="New Browser" owner="Browser">
+<msg time="2026-08-28T05:07:27.557957" level="INFO">{"browser": "chromium", "headless": true, "chromiumSandbox": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "tracesDir": "C:\\tmp\\wt-defermentgroup-backfill\\workstreams\\master-plan\\ec-automation\\results\\_backfill_defermentgroup_retry\\browser\\traces\\temp\\34457c08-d73d-4090-8976-aecc33561cf3"}</msg>
+<msg time="2026-08-28T05:07:27.647823" level="INFO">Starting Browser process C:\Tools\Python\Python314\Lib\site-packages\Browser\wrapper\index.js using at 127.0.0.1:49402</msg>
+<msg time="2026-08-28T05:07:29.682620" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":true,"chromiumSandbox":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"tracesDir":"C:\\tmp\\wt-defermentgroup-backfill\\workstreams\\master-plan\\ec-automation\\results\\_backfill_defermentgroup_retry\\browser\\traces\\temp\\34457c08-d73d-4090-8976-aecc33561cf3"}</msg>
+<arg>chromium</arg>
+<arg>headless=${TRUE}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="PASS" start="2026-08-28T05:07:27.557283" elapsed="2.125597"/>
+</kw>
+<kw name="New Context" owner="Browser">
+<msg time="2026-08-28T05:07:29.693788" level="INFO">{
+  "acceptDownloads": true,
+  "bypassCSP": false,
+  "forcedColors": "none",
+  "ignoreHTTPSErrors": true,
+  "javaScriptEnabled": true,
+  "offline": false,
+  "reducedMotion": "no-preference",
+  "serviceWorkers": "allow",
+  "viewport": {
+    "height": 1080,
+    "width": 1920
+  }
+}</msg>
+<msg time="2026-08-28T05:07:29.710107" level="INFO">Successfully created context. </msg>
+<msg time="2026-08-28T05:07:29.710229" level="INFO">{'acceptDownloads': True, 'bypassCSP': False, 'forcedColors': 'none', 'ignoreHTTPSErrors': True, 'javaScriptEnabled': True, 'offline': False, 'reducedMotion': 'no-preference', 'serviceWorkers': 'allow', 'viewport': {'height': 1080, 'width': 1920}}</msg>
+<arg>ignoreHTTPSErrors=${TRUE}</arg>
+<arg>viewport={'width': 1920, 'height': 1080}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new BrowserContext with specified options.</doc>
+<status status="PASS" start="2026-08-28T05:07:29.683246" elapsed="0.027098"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:07:27.556747" elapsed="2.153730"/>
+</branch>
+<branch type="ELSE">
+<variable name="@{args}">
+<var>--start-maximized</var>
+<status status="NOT RUN" start="2026-08-28T05:07:29.710762" elapsed="0.000098"/>
+</variable>
+<kw name="New Browser" owner="Browser">
+<arg>chromium</arg>
+<arg>headless=${FALSE}</arg>
+<arg>args=${args}</arg>
+<arg>slowMo=${SLOWMO}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:29.711069" elapsed="0.000077"/>
+</kw>
+<kw name="New Context" owner="Browser">
+<arg>ignoreHTTPSErrors=${TRUE}</arg>
+<arg>viewport=${None}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new BrowserContext with specified options.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:29.711310" elapsed="0.000068"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:07:29.710555" elapsed="0.000879"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:27.556722" elapsed="2.154758"/>
+</if>
+<kw name="Set Browser Timeout" owner="Browser">
+<arg>30s</arg>
+<tag>Config</tag>
+<tag>Setter</tag>
+<doc>Sets the timeout used by most input and getter keywords.</doc>
+<status status="PASS" start="2026-08-28T05:07:29.711679" elapsed="0.003329"/>
+</kw>
+<kw name="Set Strict Mode" owner="Browser">
+<arg>False</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Controls library strict mode.</doc>
+<status status="PASS" start="2026-08-28T05:07:29.715284" elapsed="0.000797"/>
+</kw>
+<doc>Launch Chromium + context (headless from environment).
+Headed: OS-maximised window (--start-maximized, no fixed viewport) so the
+page fills the screen. Headless: 1920x1080 virtual viewport as before.</doc>
+<status status="PASS" start="2026-08-28T05:07:27.556550" elapsed="2.159691"/>
+</kw>
+<kw name="New Page" owner="Browser">
+<msg time="2026-08-28T05:07:32.399855" level="INFO">Successfully initialized new page object and opened url: https://ap-f0a7g341jn6d.corp.quorumsoftware.com:8443/</msg>
+<arg>${EC_URL}</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<status status="PASS" start="2026-08-28T05:07:29.716428" elapsed="2.683740"/>
+</kw>
+<doc>Launch the browser and load the EC login page - no credentials entered yet.
+Pure one-time environment setup (Suite Setup), NOT a business action. Each test case
+then does its own Login To EC Application (screen-specific, see that screen's T3 page
+resource) / Logout From EC Application cycle on this one already-open browser.</doc>
+<status status="PASS" start="2026-08-28T05:07:27.556116" elapsed="4.844270"/>
+</kw>
+<test id="s1-t1" name="TC01 Verify Clean State" line="33">
+<kw name="Login To EC Application" owner="deferment_group_page">
+<kw name="Login To EC Screen" owner="common">
+<kw name="Fill EC Login Form" owner="browser">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:07:32.433092" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="username"]</arg>
+<arg>${user}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:32.432123" elapsed="0.054228"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:07:32.488126" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="password"]</arg>
+<arg>${pass}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:32.486779" elapsed="0.020406"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:07:32.508209" level="INFO">Clicks the element 'css=[id="kc-login"]'.</msg>
+<arg>css=[id="kc-login"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:32.507501" elapsed="0.155207"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:07:32.977977" level="INFO">Waited for Element with selector css=[id="menu:searchForm:searchTxt"] at state visible</msg>
+<arg>css=[id="menu:searchForm:searchTxt"]</arg>
+<arg>visible</arg>
+<arg>timeout=60s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:07:32.663160" elapsed="0.315083"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-08-28T05:07:32.979874" level="INFO">Waiting page load to state to receive networkidle in 30000.0</msg>
+<msg time="2026-08-28T05:07:33.537479" level="INFO">Load state networkidle got in 30000</msg>
+<arg>networkidle</arg>
+<arg>timeout=30s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-08-28T05:07:32.978634" elapsed="0.559043"/>
+</kw>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>The ACTUAL login mechanics (fill username, fill password, click login,
+wait for the app to load) on the CURRENT page - the ONE place to update if EC's login
+flow ever changes (a new SSO step, MFA, a renamed field id). Login To EC and Bank's own
+Login To EC Application (bank_page.resource) both call this instead of duplicating the
+steps, so a future flow change is a one-place edit (owner-requested 2026-08-18, after
+Bank's wrapper was found to have copy-pasted this sequence instead of reusing it).</doc>
+<status status="PASS" start="2026-08-28T05:07:32.431282" elapsed="1.106545"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:07:33.627323" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="TC01%20Verify%20Clean%20State_login.png" target="_blank"&gt;&lt;img src="TC01%20Verify%20Clean%20State_login.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:07:33.538924" elapsed="0.088624"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:07:33.538691" elapsed="0.088957"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:33.538661" elapsed="0.089065"/>
+</if>
+<arg>${TEST NAME}_login</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="PASS" start="2026-08-28T05:07:33.538277" elapsed="0.089529"/>
+</kw>
+<arg>${DEFERMENT_GROUP_EC_USER}</arg>
+<arg>${DEFERMENT_GROUP_EC_PASS}</arg>
+<doc>Authenticate on the CURRENT page with ${user}/${pass}, then capture the
+login evidence screenshot. Shared body for every screen's own zero-arg "Login To EC
+Application" wrapper (bank_page.resource, object_list_page.resource, etc.) - each of
+those only supplies its own screen-specific credential defaults and delegates the
+actual mechanics here, since Bank's and Object List's wrappers were found to have
+identical bodies (owner query 2026-08-21) differing only in which credential constants
+were passed. Lives in common.resource (not browser.resource alone), which aggregates
+utils.resource - browser.resource deliberately has no Capture Step dependency.</doc>
+<status status="PASS" start="2026-08-28T05:07:32.430107" elapsed="1.197773"/>
+</kw>
+<doc>Authenticate as Deferment Group's OWN credentials
+(sysadmin/sysadmin from credentials.py) on the
+current page. Standing decision (owner, 2026-08-22): every EC screen gets its own
+dedicated credential pair. Zero-argument wrapper so deferment_group_iud.robot's test
+cases read as a plain business step; supplies Deferment Group's own credential
+defaults to the shared T1 Login To EC Screen (common.resource), which owns the
+actual login mechanics.</doc>
+<status status="PASS" start="2026-08-28T05:07:32.422026" elapsed="1.205927"/>
+</kw>
+<kw name="Open Deferment Group Screen" owner="deferment_group_page">
+<kw name="Open EC Screen" owner="common">
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Dismiss Unsaved Changes Dialog If Present" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:07:33.639793" level="INFO">${present} = 0</msg>
+<var>${present}</var>
+<arg>css=[id="confirmationForm:confirmation_modal"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:33.632506" elapsed="0.007353"/>
+</kw>
+<if>
+<branch type="IF" condition="${present} &gt; 0">
+<kw name="Log" owner="BuiltIn">
+<arg>Unsaved-changes dialog detected - discarding via No to unblock navigation</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:33.640448" elapsed="0.000072"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="confirmationForm:nobtn"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:33.640641" elapsed="0.000055"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:33.640804" elapsed="0.000052"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:33.640955" elapsed="0.000049"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:07:33.640040" elapsed="0.001000"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:33.640005" elapsed="0.001090"/>
+</if>
+<doc>EC shows its own "UNSAVED CHANGES" Yes/No/Cancel confirm when navigating
+away from a dirty New Object form. If an earlier step failed mid-fill (e.g. a
+dependent-dropdown timeout), this dialog can be left open and its overlay mask
+(#confirmationForm:confirmation_modal) then intercepts every click for the rest of
+the run - the whole suite silently stalls behind it. Detect + discard via No, so a
+single earlier failure can't cascade into the entire suite hanging.</doc>
+<status status="PASS" start="2026-08-28T05:07:33.632236" elapsed="0.008914"/>
+</kw>
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:07:33.646918" level="INFO">${visible} = 1</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:33.641635" elapsed="0.005419"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:33.647715" elapsed="0.000069"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:33.647992" elapsed="0.000055"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:33.648159" elapsed="0.000053"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:33.648318" elapsed="0.000049"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:07:33.647870" elapsed="0.000532"/>
+</branch>
+<status status="NOT RUN" start="2026-08-28T05:07:33.647853" elapsed="0.000586"/>
+</if>
+<status status="NOT RUN" start="2026-08-28T05:07:33.647288" elapsed="0.001172"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:33.647252" elapsed="0.001230"/>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="PASS" start="2026-08-28T05:07:33.641370" elapsed="0.007157"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-08-28T05:07:33.649237" level="INFO">Types the text 'Deferment Group' in the given field.</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:33.648627" elapsed="1.128897"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:07:44.850718" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-1.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-1.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-08-28T05:07:44.850893" level="INFO">See also file:///C:/tmp/wt-defermentgroup-backfill/workstreams/master-plan/ec-automation/results/_backfill_defermentgroup_retry/playwright-log.txt for additional details.</msg>
+<msg time="2026-08-28T05:07:44.851343" level="FAIL">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="FAIL" start="2026-08-28T05:07:34.777825" elapsed="10.078758">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:44.856856" elapsed="0.000114"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:44.857088" elapsed="0.000049"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:44.857231" elapsed="0.000045"/>
+</kw>
+<kw name="Confirm Screen Loaded" owner="screen">
+<arg>${screen_name}</arg>
+<doc>Assert the loaded screen's toolbar label matches Deferment Group.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:44.857499" elapsed="0.000052"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:44.857665" elapsed="0.000045"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="FAIL" start="2026-08-28T05:07:33.631863" elapsed="11.225966">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Capture Step" owner="utils">
+<arg>${TEST NAME}_open_screen</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:44.858017" elapsed="0.000052"/>
+</kw>
+<arg>${DEFERMENT_GROUP_SCREEN}</arg>
+<doc>Navigate to ${screen_name} and capture the open-screen evidence
+screenshot. Shared body for every screen's own zero-arg "Open &lt;Screen&gt; Screen"
+wrapper (bank_page.resource's Open Bank Screen, object_list_page.resource's Open
+Object List Screen, etc.) - each of those only supplies its own screen-name
+constant and delegates the actual navigation here, since Bank's and Object List's
+wrappers were found to have identical bodies (owner query 2026-08-21) differing
+only in which screen-name constant was passed. Assumes the caller already logged
+in this test case - this keyword ONLY navigates.</doc>
+<status status="FAIL" start="2026-08-28T05:07:33.631250" elapsed="11.226897">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<doc>Navigate to the Deferment Group screen. Assumes the caller already
+logged in this test case (via Login To EC Application) - this keyword ONLY
+navigates. Delegates to the shared T1 Open EC Screen (common.resource) for the
+actual mechanics.</doc>
+<status status="FAIL" start="2026-08-28T05:07:33.628235" elapsed="11.229986">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Verify Deferment Group Record Does Not Exist" owner="deferment_group_page">
+<doc>Friendly-narrative wrapper around the TC01 clean-state check, called
+with ZERO arguments (defaults ${code} to the suite's AUTOTEST_DEFERMENT_GROUP). Delegates to
+the shared T2 Verify Object Does Not Exist.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:44.860078" elapsed="0.000073"/>
+</kw>
+<kw name="Logout From EC Application" owner="browser">
+<doc>Click EC's real logout icon (top toolbar, next to the username) and confirm
+it genuinely returns to the login page - not just closing the browser tab. Live-verified
+2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
+Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
+logout and redirects to the Keycloak login page (#username field re-appears).
+Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+this T1 file has no dependency on another T1 file - a suite importing browser.resource
+alone still works (R21 review note, 2026-08-18: the prior version would have hit
+keyword-not-found on Logout for such a suite, even though none currently does this).</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:44.860302" elapsed="0.000053"/>
+</kw>
+<kw name="Ensure Logged Out From EC Application" owner="browser" type="TEARDOWN">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:07:44.865076" level="INFO">${already_at_login} = 0</msg>
+<var>${already_at_login}</var>
+<arg>css=[id="username"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:44.860861" elapsed="0.004262"/>
+</kw>
+<if>
+<branch type="IF" condition="${already_at_login} == 0">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:07:44.868853" level="INFO">${logout_icon_present} = 1</msg>
+<var>${logout_icon_present}</var>
+<arg>css=.ui-icon-top-logout</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:44.865564" elapsed="0.003338"/>
+</kw>
+<if>
+<branch type="IF" condition="${logout_icon_present} &gt; 0">
+<kw name="Logout From EC Application" owner="browser">
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:07:44.870075" level="INFO">Clicks the element 'xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]'.</msg>
+<arg>xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:44.869729" elapsed="0.025785"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:07:45.028534" level="INFO">Waited for Element with selector css=[id="username"] at state visible</msg>
+<arg>css=[id="username"]</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:07:44.895982" elapsed="0.132729"/>
+</kw>
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:07:45.103010" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="TC01%20Verify%20Clean%20State_logout.png" target="_blank"&gt;&lt;img src="TC01%20Verify%20Clean%20State_logout.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${TEST NAME}_logout</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:07:45.029221" elapsed="0.073999"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:07:45.028879" elapsed="0.074439"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:45.028851" elapsed="0.074522"/>
+</if>
+<doc>Click EC's real logout icon (top toolbar, next to the username) and confirm
+it genuinely returns to the login page - not just closing the browser tab. Live-verified
+2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
+Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
+logout and redirects to the Keycloak login page (#username field re-appears).
+Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+this T1 file has no dependency on another T1 file - a suite importing browser.resource
+alone still works (R21 review note, 2026-08-18: the prior version would have hit
+keyword-not-found on Logout for such a suite, even though none currently does this).</doc>
+<status status="PASS" start="2026-08-28T05:07:44.869446" elapsed="0.233984"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:07:44.869035" elapsed="0.234436"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:44.869010" elapsed="0.234492"/>
+</if>
+<status status="PASS" start="2026-08-28T05:07:44.865253" elapsed="0.238265"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:44.865225" elapsed="0.238315"/>
+</if>
+<doc>Test Teardown safety net (owner discovered this gap live, 2026-08-18): if a
+test case FAILS before reaching its own Logout From EC Application line, the browser is
+left logged in - the NEXT test's Login To EC Application then times out trying to fill</doc>
+<status status="PASS" start="2026-08-28T05:07:44.860612" elapsed="0.242958"/>
+</kw>
+<tag>deferment_group</tag>
+<tag>iud</tag>
+<status status="FAIL" start="2026-08-28T05:07:32.400866" elapsed="12.702758">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</test>
+<test id="s1-t2" name="TC02 Insert Deferment Group Data" line="39">
+<kw name="Login To EC Application" owner="deferment_group_page">
+<kw name="Login To EC Screen" owner="common">
+<kw name="Fill EC Login Form" owner="browser">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:07:45.118287" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="username"]</arg>
+<arg>${user}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:45.117839" elapsed="0.008960"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:07:45.127811" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="password"]</arg>
+<arg>${pass}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:45.127134" elapsed="0.008353"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:07:45.136369" level="INFO">Clicks the element 'css=[id="kc-login"]'.</msg>
+<arg>css=[id="kc-login"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:45.135779" elapsed="0.126566"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:07:45.562102" level="INFO">Waited for Element with selector css=[id="menu:searchForm:searchTxt"] at state visible</msg>
+<arg>css=[id="menu:searchForm:searchTxt"]</arg>
+<arg>visible</arg>
+<arg>timeout=60s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:07:45.262745" elapsed="0.299719"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-08-28T05:07:45.564123" level="INFO">Waiting page load to state to receive networkidle in 30000.0</msg>
+<msg time="2026-08-28T05:07:46.064564" level="INFO">Load state networkidle got in 30000</msg>
+<arg>networkidle</arg>
+<arg>timeout=30s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-08-28T05:07:45.562986" elapsed="0.501801"/>
+</kw>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>The ACTUAL login mechanics (fill username, fill password, click login,
+wait for the app to load) on the CURRENT page - the ONE place to update if EC's login
+flow ever changes (a new SSO step, MFA, a renamed field id). Login To EC and Bank's own
+Login To EC Application (bank_page.resource) both call this instead of duplicating the
+steps, so a future flow change is a one-place edit (owner-requested 2026-08-18, after
+Bank's wrapper was found to have copy-pasted this sequence instead of reusing it).</doc>
+<status status="PASS" start="2026-08-28T05:07:45.117549" elapsed="0.947389"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:07:46.132250" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="TC02%20Insert%20Deferment%20Group%20Data_login.png" target="_blank"&gt;&lt;img src="TC02%20Insert%20Deferment%20Group%20Data_login.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:07:46.066142" elapsed="0.066324"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:07:46.065881" elapsed="0.066690"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:46.065849" elapsed="0.066779"/>
+</if>
+<arg>${TEST NAME}_login</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="PASS" start="2026-08-28T05:07:46.065357" elapsed="0.067329"/>
+</kw>
+<arg>${DEFERMENT_GROUP_EC_USER}</arg>
+<arg>${DEFERMENT_GROUP_EC_PASS}</arg>
+<doc>Authenticate on the CURRENT page with ${user}/${pass}, then capture the
+login evidence screenshot. Shared body for every screen's own zero-arg "Login To EC
+Application" wrapper (bank_page.resource, object_list_page.resource, etc.) - each of
+those only supplies its own screen-specific credential defaults and delegates the
+actual mechanics here, since Bank's and Object List's wrappers were found to have
+identical bodies (owner query 2026-08-21) differing only in which credential constants
+were passed. Lives in common.resource (not browser.resource alone), which aggregates
+utils.resource - browser.resource deliberately has no Capture Step dependency.</doc>
+<status status="PASS" start="2026-08-28T05:07:45.117115" elapsed="1.015628"/>
+</kw>
+<doc>Authenticate as Deferment Group's OWN credentials
+(sysadmin/sysadmin from credentials.py) on the
+current page. Standing decision (owner, 2026-08-22): every EC screen gets its own
+dedicated credential pair. Zero-argument wrapper so deferment_group_iud.robot's test
+cases read as a plain business step; supplies Deferment Group's own credential
+defaults to the shared T1 Login To EC Screen (common.resource), which owns the
+actual login mechanics.</doc>
+<status status="PASS" start="2026-08-28T05:07:45.113915" elapsed="1.018877"/>
+</kw>
+<kw name="Open Deferment Group Screen" owner="deferment_group_page">
+<kw name="Open EC Screen" owner="common">
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Dismiss Unsaved Changes Dialog If Present" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:07:46.140009" level="INFO">${present} = 0</msg>
+<var>${present}</var>
+<arg>css=[id="confirmationForm:confirmation_modal"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:46.136198" elapsed="0.003851"/>
+</kw>
+<if>
+<branch type="IF" condition="${present} &gt; 0">
+<kw name="Log" owner="BuiltIn">
+<arg>Unsaved-changes dialog detected - discarding via No to unblock navigation</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:46.140442" elapsed="0.000054"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="confirmationForm:nobtn"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:46.140588" elapsed="0.000043"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:46.140716" elapsed="0.000044"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:46.140839" elapsed="0.000062"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:07:46.140166" elapsed="0.000765"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:46.140145" elapsed="0.000817"/>
+</if>
+<doc>EC shows its own "UNSAVED CHANGES" Yes/No/Cancel confirm when navigating
+away from a dirty New Object form. If an earlier step failed mid-fill (e.g. a
+dependent-dropdown timeout), this dialog can be left open and its overlay mask
+(#confirmationForm:confirmation_modal) then intercepts every click for the rest of
+the run - the whole suite silently stalls behind it. Detect + discard via No, so a
+single earlier failure can't cascade into the entire suite hanging.</doc>
+<status status="PASS" start="2026-08-28T05:07:46.135937" elapsed="0.005066"/>
+</kw>
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:07:46.144823" level="INFO">${visible} = 1</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:46.141421" elapsed="0.003451"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:46.145326" elapsed="0.000059"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:46.145570" elapsed="0.000045"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:46.145709" elapsed="0.000043"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:46.145840" elapsed="0.000041"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:07:46.145456" elapsed="0.000455"/>
+</branch>
+<status status="NOT RUN" start="2026-08-28T05:07:46.145442" elapsed="0.000501"/>
+</if>
+<status status="NOT RUN" start="2026-08-28T05:07:46.145007" elapsed="0.000952"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:46.144980" elapsed="0.001000"/>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="PASS" start="2026-08-28T05:07:46.141176" elapsed="0.004843"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-08-28T05:07:46.146603" level="INFO">Types the text 'Deferment Group' in the given field.</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:46.146104" elapsed="1.145263"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:07:57.369416" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-2.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-2.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-08-28T05:07:57.369587" level="INFO">See also file:///C:/tmp/wt-defermentgroup-backfill/workstreams/master-plan/ec-automation/results/_backfill_defermentgroup_retry/playwright-log.txt for additional details.</msg>
+<msg time="2026-08-28T05:07:57.369746" level="FAIL">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="FAIL" start="2026-08-28T05:07:47.291687" elapsed="10.079775">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:57.371775" elapsed="0.000132"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:57.372044" elapsed="0.000061"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:57.372207" elapsed="0.000050"/>
+</kw>
+<kw name="Confirm Screen Loaded" owner="screen">
+<arg>${screen_name}</arg>
+<doc>Assert the loaded screen's toolbar label matches Deferment Group.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:57.372451" elapsed="0.000055"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:57.372646" elapsed="0.000060"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="FAIL" start="2026-08-28T05:07:46.135531" elapsed="11.237297">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Capture Step" owner="utils">
+<arg>${TEST NAME}_open_screen</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:57.373042" elapsed="0.000056"/>
+</kw>
+<arg>${DEFERMENT_GROUP_SCREEN}</arg>
+<doc>Navigate to ${screen_name} and capture the open-screen evidence
+screenshot. Shared body for every screen's own zero-arg "Open &lt;Screen&gt; Screen"
+wrapper (bank_page.resource's Open Bank Screen, object_list_page.resource's Open
+Object List Screen, etc.) - each of those only supplies its own screen-name
+constant and delegates the actual navigation here, since Bank's and Object List's
+wrappers were found to have identical bodies (owner query 2026-08-21) differing
+only in which screen-name constant was passed. Assumes the caller already logged
+in this test case - this keyword ONLY navigates.</doc>
+<status status="FAIL" start="2026-08-28T05:07:46.135147" elapsed="11.238028">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<doc>Navigate to the Deferment Group screen. Assumes the caller already
+logged in this test case (via Login To EC Application) - this keyword ONLY
+navigates. Delegates to the shared T1 Open EC Screen (common.resource) for the
+actual mechanics.</doc>
+<status status="FAIL" start="2026-08-28T05:07:46.133035" elapsed="11.240216">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Insert Deferment Group Record And Save" owner="deferment_group_page">
+<doc>Friendly-narrative wrapper around T2's Insert Object From Properties
+And Verify Code, so deferment_group_iud.robot's test case body reads as a plain
+business step with ZERO arguments. Also checks the inserted Code matches the
+suite's AUTOTEST_DEFERMENT_GROUP. Pre-save evidence screenshot captured before Save is clicked,
+matching Bank/State/Berth.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:57.373408" elapsed="0.000057"/>
+</kw>
+<kw name="Verify Deferment Group Record Exists" owner="deferment_group_page">
+<doc>Friendly-narrative wrapper around the TC02 verification, called with
+ZERO arguments (defaults ${code} to the suite's AUTOTEST_DEFERMENT_GROUP). PURE SCREEN
+verification (no DB check here, matching Bank/State/Berth's TC02 convention): row
+exists in the grid, then the form shows what was just inserted (Deferment Group
+Code/Deferment Group Name only - Start Date is grid/insert-only, not present in
+updateAttributes). Delegates the full sequence (row-check, select, form-compare,
+screenshot) to the shared T2 Verify Object Insert Exists. Filters via Find
+Deferment Group Row By Filter first, clears after (2026-08-22 standardisation).</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:57.375109" elapsed="0.000062"/>
+</kw>
+<kw name="Logout From EC Application" owner="browser">
+<doc>Click EC's real logout icon (top toolbar, next to the username) and confirm
+it genuinely returns to the login page - not just closing the browser tab. Live-verified
+2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
+Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
+logout and redirects to the Keycloak login page (#username field re-appears).
+Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+this T1 file has no dependency on another T1 file - a suite importing browser.resource
+alone still works (R21 review note, 2026-08-18: the prior version would have hit
+keyword-not-found on Logout for such a suite, even though none currently does this).</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:57.375311" elapsed="0.000049"/>
+</kw>
+<kw name="Ensure Logged Out From EC Application" owner="browser" type="TEARDOWN">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:07:57.379709" level="INFO">${already_at_login} = 0</msg>
+<var>${already_at_login}</var>
+<arg>css=[id="username"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.375816" elapsed="0.003940"/>
+</kw>
+<if>
+<branch type="IF" condition="${already_at_login} == 0">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:07:57.383381" level="INFO">${logout_icon_present} = 1</msg>
+<var>${logout_icon_present}</var>
+<arg>css=.ui-icon-top-logout</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.380153" elapsed="0.003271"/>
+</kw>
+<if>
+<branch type="IF" condition="${logout_icon_present} &gt; 0">
+<kw name="Logout From EC Application" owner="browser">
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:07:57.384453" level="INFO">Clicks the element 'xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]'.</msg>
+<arg>xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.384133" elapsed="0.026604"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:07:57.540103" level="INFO">Waited for Element with selector css=[id="username"] at state visible</msg>
+<arg>css=[id="username"]</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.411005" elapsed="0.129263"/>
+</kw>
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:07:57.599098" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="TC02%20Insert%20Deferment%20Group%20Data_logout.png" target="_blank"&gt;&lt;img src="TC02%20Insert%20Deferment%20Group%20Data_logout.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${TEST NAME}_logout</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.540766" elapsed="0.058510"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:07:57.540421" elapsed="0.058951"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:57.540392" elapsed="0.059037"/>
+</if>
+<doc>Click EC's real logout icon (top toolbar, next to the username) and confirm
+it genuinely returns to the login page - not just closing the browser tab. Live-verified
+2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
+Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
+logout and redirects to the Keycloak login page (#username field re-appears).
+Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+this T1 file has no dependency on another T1 file - a suite importing browser.resource
+alone still works (R21 review note, 2026-08-18: the prior version would have hit
+keyword-not-found on Logout for such a suite, even though none currently does this).</doc>
+<status status="PASS" start="2026-08-28T05:07:57.383877" elapsed="0.215615"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:07:57.383531" elapsed="0.216029"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:57.383509" elapsed="0.216086"/>
+</if>
+<status status="PASS" start="2026-08-28T05:07:57.379875" elapsed="0.219740"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:57.379852" elapsed="0.219807"/>
+</if>
+<doc>Test Teardown safety net (owner discovered this gap live, 2026-08-18): if a
+test case FAILS before reaching its own Logout From EC Application line, the browser is
+left logged in - the NEXT test's Login To EC Application then times out trying to fill</doc>
+<status status="PASS" start="2026-08-28T05:07:57.375587" elapsed="0.224118"/>
+</kw>
+<tag>deferment_group</tag>
+<tag>iud</tag>
+<status status="FAIL" start="2026-08-28T05:07:45.110440" elapsed="12.489333">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</test>
+<test id="s1-t3" name="TC03 Update Deferment Group Data" line="46">
+<kw name="Login To EC Application" owner="deferment_group_page">
+<kw name="Login To EC Screen" owner="common">
+<kw name="Fill EC Login Form" owner="browser">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:07:57.614937" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="username"]</arg>
+<arg>${user}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.614486" elapsed="0.008320"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:07:57.623622" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="password"]</arg>
+<arg>${pass}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.623063" elapsed="0.006663"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:07:57.630342" level="INFO">Clicks the element 'css=[id="kc-login"]'.</msg>
+<arg>css=[id="kc-login"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.629930" elapsed="0.127766"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:07:57.959885" level="INFO">Waited for Element with selector css=[id="menu:searchForm:searchTxt"] at state visible</msg>
+<arg>css=[id="menu:searchForm:searchTxt"]</arg>
+<arg>visible</arg>
+<arg>timeout=60s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.757992" elapsed="0.202119"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-08-28T05:07:57.961267" level="INFO">Waiting page load to state to receive networkidle in 30000.0</msg>
+<msg time="2026-08-28T05:07:58.505103" level="INFO">Load state networkidle got in 30000</msg>
+<arg>networkidle</arg>
+<arg>timeout=30s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.960390" elapsed="0.544965"/>
+</kw>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>The ACTUAL login mechanics (fill username, fill password, click login,
+wait for the app to load) on the CURRENT page - the ONE place to update if EC's login
+flow ever changes (a new SSO step, MFA, a renamed field id). Login To EC and Bank's own
+Login To EC Application (bank_page.resource) both call this instead of duplicating the
+steps, so a future flow change is a one-place edit (owner-requested 2026-08-18, after
+Bank's wrapper was found to have copy-pasted this sequence instead of reusing it).</doc>
+<status status="PASS" start="2026-08-28T05:07:57.614178" elapsed="0.891340"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:07:58.590498" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="TC03%20Update%20Deferment%20Group%20Data_login.png" target="_blank"&gt;&lt;img src="TC03%20Update%20Deferment%20Group%20Data_login.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:07:58.506942" elapsed="0.083744"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:07:58.506508" elapsed="0.084281"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:58.506477" elapsed="0.084385"/>
+</if>
+<arg>${TEST NAME}_login</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="PASS" start="2026-08-28T05:07:58.505949" elapsed="0.084978"/>
+</kw>
+<arg>${DEFERMENT_GROUP_EC_USER}</arg>
+<arg>${DEFERMENT_GROUP_EC_PASS}</arg>
+<doc>Authenticate on the CURRENT page with ${user}/${pass}, then capture the
+login evidence screenshot. Shared body for every screen's own zero-arg "Login To EC
+Application" wrapper (bank_page.resource, object_list_page.resource, etc.) - each of
+those only supplies its own screen-specific credential defaults and delegates the
+actual mechanics here, since Bank's and Object List's wrappers were found to have
+identical bodies (owner query 2026-08-21) differing only in which credential constants
+were passed. Lives in common.resource (not browser.resource alone), which aggregates
+utils.resource - browser.resource deliberately has no Capture Step dependency.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.613823" elapsed="0.977170"/>
+</kw>
+<doc>Authenticate as Deferment Group's OWN credentials
+(sysadmin/sysadmin from credentials.py) on the
+current page. Standing decision (owner, 2026-08-22): every EC screen gets its own
+dedicated credential pair. Zero-argument wrapper so deferment_group_iud.robot's test
+cases read as a plain business step; supplies Deferment Group's own credential
+defaults to the shared T1 Login To EC Screen (common.resource), which owns the
+actual login mechanics.</doc>
+<status status="PASS" start="2026-08-28T05:07:57.610488" elapsed="0.980569"/>
+</kw>
+<kw name="Open Deferment Group Screen" owner="deferment_group_page">
+<kw name="Open EC Screen" owner="common">
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Dismiss Unsaved Changes Dialog If Present" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:07:58.602011" level="INFO">${present} = 0</msg>
+<var>${present}</var>
+<arg>css=[id="confirmationForm:confirmation_modal"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:58.596217" elapsed="0.005872"/>
+</kw>
+<if>
+<branch type="IF" condition="${present} &gt; 0">
+<kw name="Log" owner="BuiltIn">
+<arg>Unsaved-changes dialog detected - discarding via No to unblock navigation</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:58.602838" elapsed="0.000108"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="confirmationForm:nobtn"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:58.603179" elapsed="0.000145"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:58.603485" elapsed="0.000115"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:58.603737" elapsed="0.000066"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:07:58.602292" elapsed="0.001559"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:58.602245" elapsed="0.001662"/>
+</if>
+<doc>EC shows its own "UNSAVED CHANGES" Yes/No/Cancel confirm when navigating
+away from a dirty New Object form. If an earlier step failed mid-fill (e.g. a
+dependent-dropdown timeout), this dialog can be left open and its overlay mask
+(#confirmationForm:confirmation_modal) then intercepts every click for the rest of
+the run - the whole suite silently stalls behind it. Detect + discard via No, so a
+single earlier failure can't cascade into the entire suite hanging.</doc>
+<status status="PASS" start="2026-08-28T05:07:58.595881" elapsed="0.008187"/>
+</kw>
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:07:58.611734" level="INFO">${visible} = 1</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:58.605140" elapsed="0.006676"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:58.612472" elapsed="0.000123"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:58.613698" elapsed="0.000129"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:58.614084" elapsed="0.000066"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:07:58.614266" elapsed="0.000081"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:07:58.613362" elapsed="0.001023"/>
+</branch>
+<status status="NOT RUN" start="2026-08-28T05:07:58.613308" elapsed="0.001183"/>
+</if>
+<status status="NOT RUN" start="2026-08-28T05:07:58.611990" elapsed="0.002527"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:07:58.611954" elapsed="0.002589"/>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="PASS" start="2026-08-28T05:07:58.604493" elapsed="0.010104"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-08-28T05:07:58.615344" level="INFO">Types the text 'Deferment Group' in the given field.</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:07:58.614703" elapsed="1.149539"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:08:09.853159" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-3.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-3.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-08-28T05:08:09.853345" level="INFO">See also file:///C:/tmp/wt-defermentgroup-backfill/workstreams/master-plan/ec-automation/results/_backfill_defermentgroup_retry/playwright-log.txt for additional details.</msg>
+<msg time="2026-08-28T05:08:09.853502" level="FAIL">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="FAIL" start="2026-08-28T05:07:59.764781" elapsed="10.090770">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:09.855794" elapsed="0.000154"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:09.856101" elapsed="0.000080"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:09.856338" elapsed="0.000065"/>
+</kw>
+<kw name="Confirm Screen Loaded" owner="screen">
+<arg>${screen_name}</arg>
+<doc>Assert the loaded screen's toolbar label matches Deferment Group.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:09.856617" elapsed="0.000058"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:09.856792" elapsed="0.000048"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="FAIL" start="2026-08-28T05:07:58.595317" elapsed="11.261619">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Capture Step" owner="utils">
+<arg>${TEST NAME}_open_screen</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:09.857128" elapsed="0.000055"/>
+</kw>
+<arg>${DEFERMENT_GROUP_SCREEN}</arg>
+<doc>Navigate to ${screen_name} and capture the open-screen evidence
+screenshot. Shared body for every screen's own zero-arg "Open &lt;Screen&gt; Screen"
+wrapper (bank_page.resource's Open Bank Screen, object_list_page.resource's Open
+Object List Screen, etc.) - each of those only supplies its own screen-name
+constant and delegates the actual navigation here, since Bank's and Object List's
+wrappers were found to have identical bodies (owner query 2026-08-21) differing
+only in which screen-name constant was passed. Assumes the caller already logged
+in this test case - this keyword ONLY navigates.</doc>
+<status status="FAIL" start="2026-08-28T05:07:58.594664" elapsed="11.262595">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<doc>Navigate to the Deferment Group screen. Assumes the caller already
+logged in this test case (via Login To EC Application) - this keyword ONLY
+navigates. Delegates to the shared T1 Open EC Screen (common.resource) for the
+actual mechanics.</doc>
+<status status="FAIL" start="2026-08-28T05:07:58.591304" elapsed="11.266054">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Update Deferment Group Record And Save" owner="deferment_group_page">
+<doc>Friendly-narrative wrapper around T2's Update Object From Properties,
+called with ZERO arguments (defaults ${code} to the suite's AUTOTEST_DEFERMENT_GROUP).
+Pre-save evidence screenshot captured before Save is clicked, matching Bank/State/
+Berth. Filters via Find Deferment Group Row By Filter first, clears after
+(2026-08-22 standardisation).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:09.859158" elapsed="0.000070"/>
+</kw>
+<kw name="Verify Deferment Group Record Updated" owner="deferment_group_page">
+<doc>Friendly-narrative wrapper around the TC03 verification, called with
+ZERO arguments (defaults ${code} to the suite's AUTOTEST_DEFERMENT_GROUP). PURE SCREEN
+verification, matching Bank/State/Berth's TC03 convention: the form shows the
+updated Deferment Group Name. Delegates the full sequence (select, form-compare,
+screenshot) to the shared T2 Verify Object Form Record. Filters via Find Deferment
+Group Row By Filter first, clears after (2026-08-22 standardisation).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:09.860595" elapsed="0.000061"/>
+</kw>
+<kw name="Logout From EC Application" owner="browser">
+<doc>Click EC's real logout icon (top toolbar, next to the username) and confirm
+it genuinely returns to the login page - not just closing the browser tab. Live-verified
+2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
+Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
+logout and redirects to the Keycloak login page (#username field re-appears).
+Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+this T1 file has no dependency on another T1 file - a suite importing browser.resource
+alone still works (R21 review note, 2026-08-18: the prior version would have hit
+keyword-not-found on Logout for such a suite, even though none currently does this).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:09.860794" elapsed="0.000047"/>
+</kw>
+<kw name="Ensure Logged Out From EC Application" owner="browser" type="TEARDOWN">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:08:09.865774" level="INFO">${already_at_login} = 0</msg>
+<var>${already_at_login}</var>
+<arg>css=[id="username"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:09.861390" elapsed="0.004436"/>
+</kw>
+<if>
+<branch type="IF" condition="${already_at_login} == 0">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:08:09.870301" level="INFO">${logout_icon_present} = 1</msg>
+<var>${logout_icon_present}</var>
+<arg>css=.ui-icon-top-logout</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:09.866322" elapsed="0.004050"/>
+</kw>
+<if>
+<branch type="IF" condition="${logout_icon_present} &gt; 0">
+<kw name="Logout From EC Application" owner="browser">
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:08:09.871791" level="INFO">Clicks the element 'xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]'.</msg>
+<arg>xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:09.871245" elapsed="0.021949"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:08:09.994632" level="INFO">Waited for Element with selector css=[id="username"] at state visible</msg>
+<arg>css=[id="username"]</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:08:09.893489" elapsed="0.101339"/>
+</kw>
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:08:10.065657" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="TC03%20Update%20Deferment%20Group%20Data_logout.png" target="_blank"&gt;&lt;img src="TC03%20Update%20Deferment%20Group%20Data_logout.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${TEST NAME}_logout</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:08:09.995468" elapsed="0.070356"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:08:09.995001" elapsed="0.070919"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:09.994970" elapsed="0.071003"/>
+</if>
+<doc>Click EC's real logout icon (top toolbar, next to the username) and confirm
+it genuinely returns to the login page - not just closing the browser tab. Live-verified
+2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
+Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
+logout and redirects to the Keycloak login page (#username field re-appears).
+Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+this T1 file has no dependency on another T1 file - a suite importing browser.resource
+alone still works (R21 review note, 2026-08-18: the prior version would have hit
+keyword-not-found on Logout for such a suite, even though none currently does this).</doc>
+<status status="PASS" start="2026-08-28T05:08:09.870938" elapsed="0.195085"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:08:09.870509" elapsed="0.195552"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:09.870483" elapsed="0.195605"/>
+</if>
+<status status="PASS" start="2026-08-28T05:08:09.865950" elapsed="0.200152"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:09.865924" elapsed="0.200199"/>
+</if>
+<doc>Test Teardown safety net (owner discovered this gap live, 2026-08-18): if a
+test case FAILS before reaching its own Logout From EC Application line, the browser is
+left logged in - the NEXT test's Login To EC Application then times out trying to fill</doc>
+<status status="PASS" start="2026-08-28T05:08:09.861064" elapsed="0.205087"/>
+</kw>
+<tag>deferment_group</tag>
+<tag>iud</tag>
+<status status="FAIL" start="2026-08-28T05:07:57.606619" elapsed="12.459580">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</test>
+<test id="s1-t4" name="TC04 Find Deferment Group Data" line="53">
+<kw name="Login To EC Application" owner="deferment_group_page">
+<kw name="Login To EC Screen" owner="common">
+<kw name="Fill EC Login Form" owner="browser">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:08:10.079368" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="username"]</arg>
+<arg>${user}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:10.078974" elapsed="0.009182"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:08:10.089078" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="password"]</arg>
+<arg>${pass}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:10.088441" elapsed="0.012096"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:08:10.101662" level="INFO">Clicks the element 'css=[id="kc-login"]'.</msg>
+<arg>css=[id="kc-login"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:10.100937" elapsed="0.125890"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:08:10.434088" level="INFO">Waited for Element with selector css=[id="menu:searchForm:searchTxt"] at state visible</msg>
+<arg>css=[id="menu:searchForm:searchTxt"]</arg>
+<arg>visible</arg>
+<arg>timeout=60s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:08:10.227143" elapsed="0.207270"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-08-28T05:08:10.435389" level="INFO">Waiting page load to state to receive networkidle in 30000.0</msg>
+<msg time="2026-08-28T05:08:10.969944" level="INFO">Load state networkidle got in 30000</msg>
+<arg>networkidle</arg>
+<arg>timeout=30s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-08-28T05:08:10.434682" elapsed="0.535457"/>
+</kw>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>The ACTUAL login mechanics (fill username, fill password, click login,
+wait for the app to load) on the CURRENT page - the ONE place to update if EC's login
+flow ever changes (a new SSO step, MFA, a renamed field id). Login To EC and Bank's own
+Login To EC Application (bank_page.resource) both call this instead of duplicating the
+steps, so a future flow change is a one-place edit (owner-requested 2026-08-18, after
+Bank's wrapper was found to have copy-pasted this sequence instead of reusing it).</doc>
+<status status="PASS" start="2026-08-28T05:08:10.078685" elapsed="0.891600"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:08:11.036932" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="TC04%20Find%20Deferment%20Group%20Data_login.png" target="_blank"&gt;&lt;img src="TC04%20Find%20Deferment%20Group%20Data_login.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:08:10.971261" elapsed="0.065836"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:08:10.971028" elapsed="0.066171"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:10.971005" elapsed="0.066242"/>
+</if>
+<arg>${TEST NAME}_login</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="PASS" start="2026-08-28T05:08:10.970641" elapsed="0.066665"/>
+</kw>
+<arg>${DEFERMENT_GROUP_EC_USER}</arg>
+<arg>${DEFERMENT_GROUP_EC_PASS}</arg>
+<doc>Authenticate on the CURRENT page with ${user}/${pass}, then capture the
+login evidence screenshot. Shared body for every screen's own zero-arg "Login To EC
+Application" wrapper (bank_page.resource, object_list_page.resource, etc.) - each of
+those only supplies its own screen-specific credential defaults and delegates the
+actual mechanics here, since Bank's and Object List's wrappers were found to have
+identical bodies (owner query 2026-08-21) differing only in which credential constants
+were passed. Lives in common.resource (not browser.resource alone), which aggregates
+utils.resource - browser.resource deliberately has no Capture Step dependency.</doc>
+<status status="PASS" start="2026-08-28T05:08:10.078307" elapsed="0.959056"/>
+</kw>
+<doc>Authenticate as Deferment Group's OWN credentials
+(sysadmin/sysadmin from credentials.py) on the
+current page. Standing decision (owner, 2026-08-22): every EC screen gets its own
+dedicated credential pair. Zero-argument wrapper so deferment_group_iud.robot's test
+cases read as a plain business step; supplies Deferment Group's own credential
+defaults to the shared T1 Login To EC Screen (common.resource), which owns the
+actual login mechanics.</doc>
+<status status="PASS" start="2026-08-28T05:08:10.075222" elapsed="0.962193"/>
+</kw>
+<kw name="Open Deferment Group Screen" owner="deferment_group_page">
+<kw name="Open EC Screen" owner="common">
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Dismiss Unsaved Changes Dialog If Present" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:08:11.045532" level="INFO">${present} = 0</msg>
+<var>${present}</var>
+<arg>css=[id="confirmationForm:confirmation_modal"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:11.040873" elapsed="0.004726"/>
+</kw>
+<if>
+<branch type="IF" condition="${present} &gt; 0">
+<kw name="Log" owner="BuiltIn">
+<arg>Unsaved-changes dialog detected - discarding via No to unblock navigation</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:11.046134" elapsed="0.000068"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="confirmationForm:nobtn"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:11.046434" elapsed="0.000133"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:11.046760" elapsed="0.000098"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:11.047023" elapsed="0.000079"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:08:11.045757" elapsed="0.001386"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:11.045728" elapsed="0.001458"/>
+</if>
+<doc>EC shows its own "UNSAVED CHANGES" Yes/No/Cancel confirm when navigating
+away from a dirty New Object form. If an earlier step failed mid-fill (e.g. a
+dependent-dropdown timeout), this dialog can be left open and its overlay mask
+(#confirmationForm:confirmation_modal) then intercepts every click for the rest of
+the run - the whole suite silently stalls behind it. Detect + discard via No, so a
+single earlier failure can't cascade into the entire suite hanging.</doc>
+<status status="PASS" start="2026-08-28T05:08:11.040624" elapsed="0.006621"/>
+</kw>
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:08:11.053887" level="INFO">${visible} = 1</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:11.047824" elapsed="0.006153"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:11.054792" elapsed="0.000098"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:11.055267" elapsed="0.000071"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:11.055458" elapsed="0.000056"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:11.055624" elapsed="0.000049"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:08:11.055003" elapsed="0.000706"/>
+</branch>
+<status status="NOT RUN" start="2026-08-28T05:08:11.054981" elapsed="0.000766"/>
+</if>
+<status status="NOT RUN" start="2026-08-28T05:08:11.054258" elapsed="0.001510"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:11.054219" elapsed="0.001570"/>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="PASS" start="2026-08-28T05:08:11.047491" elapsed="0.008346"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-08-28T05:08:11.056475" level="INFO">Types the text 'Deferment Group' in the given field.</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:11.055923" elapsed="1.082470"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:08:22.220494" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-4.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-4.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-08-28T05:08:22.220752" level="INFO">See also file:///C:/tmp/wt-defermentgroup-backfill/workstreams/master-plan/ec-automation/results/_backfill_defermentgroup_retry/playwright-log.txt for additional details.</msg>
+<msg time="2026-08-28T05:08:22.221011" level="FAIL">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="FAIL" start="2026-08-28T05:08:12.138673" elapsed="10.083799">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:22.222735" elapsed="0.000099"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:22.222955" elapsed="0.000054"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:22.223105" elapsed="0.000049"/>
+</kw>
+<kw name="Confirm Screen Loaded" owner="screen">
+<arg>${screen_name}</arg>
+<doc>Assert the loaded screen's toolbar label matches Deferment Group.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:22.223352" elapsed="0.000057"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:22.223528" elapsed="0.000048"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="FAIL" start="2026-08-28T05:08:11.040270" elapsed="11.183404">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Capture Step" owner="utils">
+<arg>${TEST NAME}_open_screen</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:22.223877" elapsed="0.000054"/>
+</kw>
+<arg>${DEFERMENT_GROUP_SCREEN}</arg>
+<doc>Navigate to ${screen_name} and capture the open-screen evidence
+screenshot. Shared body for every screen's own zero-arg "Open &lt;Screen&gt; Screen"
+wrapper (bank_page.resource's Open Bank Screen, object_list_page.resource's Open
+Object List Screen, etc.) - each of those only supplies its own screen-name
+constant and delegates the actual navigation here, since Bank's and Object List's
+wrappers were found to have identical bodies (owner query 2026-08-21) differing
+only in which screen-name constant was passed. Assumes the caller already logged
+in this test case - this keyword ONLY navigates.</doc>
+<status status="FAIL" start="2026-08-28T05:08:11.039897" elapsed="11.184112">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<doc>Navigate to the Deferment Group screen. Assumes the caller already
+logged in this test case (via Login To EC Application) - this keyword ONLY
+navigates. Delegates to the shared T1 Open EC Screen (common.resource) for the
+actual mechanics.</doc>
+<status status="FAIL" start="2026-08-28T05:08:11.037624" elapsed="11.186480">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Find Deferment Group Record" owner="deferment_group_page">
+<doc>Friendly-narrative wrapper around the shared T2 Find Object Record,
+called with ZERO arguments (defaults ${code} to the suite's AUTOTEST_DEFERMENT_GROUP).
+Delegates the full select+capture sequence. Calls Find Deferment Group Row By
+Filter first (2026-08-22 standardisation). Deliberately does NOT clear the filter
+afterward - Verify Deferment Group Record Found (called right after, same TC) needs
+the grid still filtered to ${code} for its own grid-check, since it doesn't
+re-select the row itself; it clears the filter once both checks are done.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:22.227158" elapsed="0.000080"/>
+</kw>
+<kw name="Verify Deferment Group Record Found" owner="deferment_group_page">
+<doc>Friendly-narrative wrapper around the TC04 verification, called with
+ZERO arguments (defaults ${code} to the suite's AUTOTEST_DEFERMENT_GROUP): confirms BOTH the
+grid AND the form record match the expected (post-update) data. Delegates the full
+sequence (grid-compare, form-compare, screenshot) to the shared T2 Verify Object
+Found. Caller must already have selected the row (TC04 does, via Find Deferment
+Group Record before this) AND left the Code filter active from that same call -
+clears the filter itself once both checks are done (2026-08-22 standardisation).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:22.228945" elapsed="0.000066"/>
+</kw>
+<kw name="Logout From EC Application" owner="browser">
+<doc>Click EC's real logout icon (top toolbar, next to the username) and confirm
+it genuinely returns to the login page - not just closing the browser tab. Live-verified
+2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
+Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
+logout and redirects to the Keycloak login page (#username field re-appears).
+Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+this T1 file has no dependency on another T1 file - a suite importing browser.resource
+alone still works (R21 review note, 2026-08-18: the prior version would have hit
+keyword-not-found on Logout for such a suite, even though none currently does this).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:22.229163" elapsed="0.000053"/>
+</kw>
+<kw name="Ensure Logged Out From EC Application" owner="browser" type="TEARDOWN">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:08:22.234759" level="INFO">${already_at_login} = 0</msg>
+<var>${already_at_login}</var>
+<arg>css=[id="username"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.229702" elapsed="0.005117"/>
+</kw>
+<if>
+<branch type="IF" condition="${already_at_login} == 0">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:08:22.239882" level="INFO">${logout_icon_present} = 1</msg>
+<var>${logout_icon_present}</var>
+<arg>css=.ui-icon-top-logout</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.235360" elapsed="0.004585"/>
+</kw>
+<if>
+<branch type="IF" condition="${logout_icon_present} &gt; 0">
+<kw name="Logout From EC Application" owner="browser">
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:08:22.241790" level="INFO">Clicks the element 'xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]'.</msg>
+<arg>xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.241259" elapsed="0.054718"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:08:22.393649" level="INFO">Waited for Element with selector css=[id="username"] at state visible</msg>
+<arg>css=[id="username"]</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.296439" elapsed="0.097418"/>
+</kw>
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:08:22.489008" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="TC04%20Find%20Deferment%20Group%20Data_logout.png" target="_blank"&gt;&lt;img src="TC04%20Find%20Deferment%20Group%20Data_logout.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${TEST NAME}_logout</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.394504" elapsed="0.094739"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:08:22.394064" elapsed="0.095322"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:22.394023" elapsed="0.095445"/>
+</if>
+<doc>Click EC's real logout icon (top toolbar, next to the username) and confirm
+it genuinely returns to the login page - not just closing the browser tab. Live-verified
+2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
+Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
+logout and redirects to the Keycloak login page (#username field re-appears).
+Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+this T1 file has no dependency on another T1 file - a suite importing browser.resource
+alone still works (R21 review note, 2026-08-18: the prior version would have hit
+keyword-not-found on Logout for such a suite, even though none currently does this).</doc>
+<status status="PASS" start="2026-08-28T05:08:22.240727" elapsed="0.248915"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:08:22.240111" elapsed="0.249676"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:22.240080" elapsed="0.249780"/>
+</if>
+<status status="PASS" start="2026-08-28T05:08:22.234975" elapsed="0.254924"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:22.234945" elapsed="0.255005"/>
+</if>
+<doc>Test Teardown safety net (owner discovered this gap live, 2026-08-18): if a
+test case FAILS before reaching its own Logout From EC Application line, the browser is
+left logged in - the NEXT test's Login To EC Application then times out trying to fill</doc>
+<status status="PASS" start="2026-08-28T05:08:22.229452" elapsed="0.260569"/>
+</kw>
+<tag>deferment_group</tag>
+<tag>iud</tag>
+<status status="FAIL" start="2026-08-28T05:08:10.071814" elapsed="12.418294">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</test>
+<test id="s1-t5" name="TC05 Delete Deferment Group Data" line="60">
+<kw name="Login To EC Application" owner="deferment_group_page">
+<kw name="Login To EC Screen" owner="common">
+<kw name="Fill EC Login Form" owner="browser">
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:08:22.514883" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="username"]</arg>
+<arg>${user}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.514269" elapsed="0.014837"/>
+</kw>
+<kw name="Fill Text" owner="Browser">
+<msg time="2026-08-28T05:08:22.530728" level="INFO">Fills the text 'sysadmin' in the given field.</msg>
+<arg>css=[id="password"]</arg>
+<arg>${pass}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.529563" elapsed="0.014266"/>
+</kw>
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:08:22.545302" level="INFO">Clicks the element 'css=[id="kc-login"]'.</msg>
+<arg>css=[id="kc-login"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.544364" elapsed="0.131092"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:08:22.864837" level="INFO">Waited for Element with selector css=[id="menu:searchForm:searchTxt"] at state visible</msg>
+<arg>css=[id="menu:searchForm:searchTxt"]</arg>
+<arg>visible</arg>
+<arg>timeout=60s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.675801" elapsed="0.189272"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<msg time="2026-08-28T05:08:22.866232" level="INFO">Waiting page load to state to receive networkidle in 30000.0</msg>
+<msg time="2026-08-28T05:08:23.407848" level="INFO">Load state networkidle got in 30000</msg>
+<arg>networkidle</arg>
+<arg>timeout=30s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.865384" elapsed="0.542679"/>
+</kw>
+<arg>${user}</arg>
+<arg>${pass}</arg>
+<doc>The ACTUAL login mechanics (fill username, fill password, click login,
+wait for the app to load) on the CURRENT page - the ONE place to update if EC's login
+flow ever changes (a new SSO step, MFA, a renamed field id). Login To EC and Bank's own
+Login To EC Application (bank_page.resource) both call this instead of duplicating the
+steps, so a future flow change is a one-place edit (owner-requested 2026-08-18, after
+Bank's wrapper was found to have copy-pasted this sequence instead of reusing it).</doc>
+<status status="PASS" start="2026-08-28T05:08:22.513778" elapsed="0.894433"/>
+</kw>
+<kw name="Capture Step" owner="utils">
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:08:23.490154" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="TC05%20Delete%20Deferment%20Group%20Data_login.png" target="_blank"&gt;&lt;img src="TC05%20Delete%20Deferment%20Group%20Data_login.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${label}</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:08:23.409391" elapsed="0.080940"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:08:23.409008" elapsed="0.081430"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:23.408985" elapsed="0.081517"/>
+</if>
+<arg>${TEST NAME}_login</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="PASS" start="2026-08-28T05:08:23.408609" elapsed="0.081960"/>
+</kw>
+<arg>${DEFERMENT_GROUP_EC_USER}</arg>
+<arg>${DEFERMENT_GROUP_EC_PASS}</arg>
+<doc>Authenticate on the CURRENT page with ${user}/${pass}, then capture the
+login evidence screenshot. Shared body for every screen's own zero-arg "Login To EC
+Application" wrapper (bank_page.resource, object_list_page.resource, etc.) - each of
+those only supplies its own screen-specific credential defaults and delegates the
+actual mechanics here, since Bank's and Object List's wrappers were found to have
+identical bodies (owner query 2026-08-21) differing only in which credential constants
+were passed. Lives in common.resource (not browser.resource alone), which aggregates
+utils.resource - browser.resource deliberately has no Capture Step dependency.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.513198" elapsed="0.977443"/>
+</kw>
+<doc>Authenticate as Deferment Group's OWN credentials
+(sysadmin/sysadmin from credentials.py) on the
+current page. Standing decision (owner, 2026-08-22): every EC screen gets its own
+dedicated credential pair. Zero-argument wrapper so deferment_group_iud.robot's test
+cases read as a plain business step; supplies Deferment Group's own credential
+defaults to the shared T1 Login To EC Screen (common.resource), which owns the
+actual login mechanics.</doc>
+<status status="PASS" start="2026-08-28T05:08:22.508088" elapsed="0.982619"/>
+</kw>
+<kw name="Open Deferment Group Screen" owner="deferment_group_page">
+<kw name="Open EC Screen" owner="common">
+<kw name="Navigate To Screen" owner="screen">
+<kw name="Dismiss Unsaved Changes Dialog If Present" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:08:23.499903" level="INFO">${present} = 0</msg>
+<var>${present}</var>
+<arg>css=[id="confirmationForm:confirmation_modal"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:23.494894" elapsed="0.005076"/>
+</kw>
+<if>
+<branch type="IF" condition="${present} &gt; 0">
+<kw name="Log" owner="BuiltIn">
+<arg>Unsaved-changes dialog detected - discarding via No to unblock navigation</arg>
+<arg>level=WARN</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:23.500597" elapsed="0.000065"/>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>css=[id="confirmationForm:nobtn"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:23.500790" elapsed="0.000051"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:23.500941" elapsed="0.000047"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:23.501082" elapsed="0.000045"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:08:23.500185" elapsed="0.000977"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:23.500152" elapsed="0.001045"/>
+</if>
+<doc>EC shows its own "UNSAVED CHANGES" Yes/No/Cancel confirm when navigating
+away from a dirty New Object form. If an earlier step failed mid-fill (e.g. a
+dependent-dropdown timeout), this dialog can be left open and its overlay mask
+(#confirmationForm:confirmation_modal) then intercepts every click for the rest of
+the run - the whole suite silently stalls behind it. Detect + discard via No, so a
+single earlier failure can't cascade into the entire suite hanging.</doc>
+<status status="PASS" start="2026-08-28T05:08:23.494584" elapsed="0.006667"/>
+</kw>
+<kw name="Restore Treeview If Hidden" owner="screen">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:08:23.506408" level="INFO">${visible} = 1</msg>
+<var>${visible}</var>
+<arg>css=[id="menu:searchForm:searchTxt"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:23.501862" elapsed="0.004600"/>
+</kw>
+<if>
+<branch type="IF" condition="${visible} == 0">
+<kw name="Get Element Count" owner="Browser">
+<var>${toggle}</var>
+<arg>css=[id="screenToolbar:form:minmaxMenu"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:23.506958" elapsed="0.000070"/>
+</kw>
+<if>
+<branch type="IF" condition="${toggle} &gt; 0">
+<kw name="Click" owner="Browser">
+<arg>${SCREEN_MINMAX_BTN}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:23.507250" elapsed="0.000056"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:23.507421" elapsed="0.000053"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>0.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:23.507587" elapsed="0.000076"/>
+</kw>
+<status status="NOT RUN" start="2026-08-28T05:08:23.507111" elapsed="0.000595"/>
+</branch>
+<status status="NOT RUN" start="2026-08-28T05:08:23.507095" elapsed="0.000646"/>
+</if>
+<status status="NOT RUN" start="2026-08-28T05:08:23.506608" elapsed="0.001151"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:23.506580" elapsed="0.001203"/>
+</if>
+<doc>If a previous expand hid the treeview, toggle it back so the
+sidebar search box is usable again. No-op when the treeview is visible.</doc>
+<status status="PASS" start="2026-08-28T05:08:23.501471" elapsed="0.006373"/>
+</kw>
+<kw name="Type Text" owner="Browser">
+<msg time="2026-08-28T05:08:23.508456" level="INFO">Types the text 'Deferment Group' in the given field.</msg>
+<arg>${TREEVIEW_SEARCH}</arg>
+<arg>${screen_name}</arg>
+<arg>delay=60ms</arg>
+<arg>clear=Yes</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Types the given ``txt`` into the text field found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:23.507939" elapsed="1.132474"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:08:34.733903" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="browser/screenshot/fail-screenshot-5.png" target="_blank"&gt;&lt;img src="browser/screenshot/fail-screenshot-5.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<msg time="2026-08-28T05:08:34.734075" level="INFO">See also file:///C:/tmp/wt-defermentgroup-backfill/workstreams/master-plan/ec-automation/results/_backfill_defermentgroup_retry/playwright-log.txt for additional details.</msg>
+<msg time="2026-08-28T05:08:34.734197" level="FAIL">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</msg>
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<arg>visible</arg>
+<arg>timeout=10s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="FAIL" start="2026-08-28T05:08:24.640698" elapsed="10.094941">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Click" owner="Browser">
+<arg>xpath=//*[self::label or self::span][contains(@class,'tv-link') and normalize-space(text())='${screen_name}']</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:34.735889" elapsed="0.000097"/>
+</kw>
+<kw name="Wait For Load State" owner="Browser">
+<arg>networkidle</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits that the page reaches the required load state.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:34.736111" elapsed="0.000064"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<arg>1.5s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:34.736292" elapsed="0.000055"/>
+</kw>
+<kw name="Confirm Screen Loaded" owner="screen">
+<arg>${screen_name}</arg>
+<doc>Assert the loaded screen's toolbar label matches Deferment Group.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:34.736561" elapsed="0.000060"/>
+</kw>
+<kw name="Expand Screen To Full Page" owner="screen">
+<doc>Click the screen min/max toggle to hide the treeview so the
+loaded EC screen takes the full page width (more data columns visible).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:34.736800" elapsed="0.000112"/>
+</kw>
+<arg>${screen_name}</arg>
+<doc>Open a screen via the sidebar search, confirm it loaded, then
+expand it to full page (hide the treeview). Restores the treeview first if
+a previous expand left it hidden, so repeated navigation keeps working.</doc>
+<status status="FAIL" start="2026-08-28T05:08:23.494174" elapsed="11.242839">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Capture Step" owner="utils">
+<arg>${TEST NAME}_open_screen</arg>
+<doc>Take a screenshot into the output dir with a step label - unless
+True (environment.py, EC_CAPTURE_SCREENSHOTS env var) is OFF, in
+which case this is a no-op (owner-requested 2026-08-18, so a fast run can skip
+per-step evidence capture entirely).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:34.737216" elapsed="0.000062"/>
+</kw>
+<arg>${DEFERMENT_GROUP_SCREEN}</arg>
+<doc>Navigate to ${screen_name} and capture the open-screen evidence
+screenshot. Shared body for every screen's own zero-arg "Open &lt;Screen&gt; Screen"
+wrapper (bank_page.resource's Open Bank Screen, object_list_page.resource's Open
+Object List Screen, etc.) - each of those only supplies its own screen-name
+constant and delegates the actual navigation here, since Bank's and Object List's
+wrappers were found to have identical bodies (owner query 2026-08-21) differing
+only in which screen-name constant was passed. Assumes the caller already logged
+in this test case - this keyword ONLY navigates.</doc>
+<status status="FAIL" start="2026-08-28T05:08:23.493747" elapsed="11.243613">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<doc>Navigate to the Deferment Group screen. Assumes the caller already
+logged in this test case (via Login To EC Application) - this keyword ONLY
+navigates. Delegates to the shared T1 Open EC Screen (common.resource) for the
+actual mechanics.</doc>
+<status status="FAIL" start="2026-08-28T05:08:23.490937" elapsed="11.246508">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</kw>
+<kw name="Delete Deferment Group Record And Save" owner="deferment_group_page">
+<doc>Friendly-narrative wrapper around T2's Delete Object Via End Date,
+called with ZERO arguments (defaults ${code}/${date} to the suite's
+AUTOTEST_DEFERMENT_GROUP/2000-01-01). Select the deferment group, set End Date = Start Date
+(true delete), Save. Captures the TC05 evidence screenshot right after the End Date
+is filled but BEFORE Save is clicked, matching Bank/State/Berth. Filters via Find
+Deferment Group Row By Filter first, clears after (2026-08-22 standardisation).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:34.740934" elapsed="0.000097"/>
+</kw>
+<kw name="Verify Deferment Group Record Removed" owner="deferment_group_page">
+<doc>Friendly-narrative wrapper around the TC05 verification, called with
+ZERO arguments (defaults ${code} to the suite's AUTOTEST_DEFERMENT_GROUP): confirms ${code} is
+absent from BOTH the grid and the database.</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:34.744338" elapsed="0.000075"/>
+</kw>
+<kw name="Logout From EC Application" owner="browser">
+<doc>Click EC's real logout icon (top toolbar, next to the username) and confirm
+it genuinely returns to the login page - not just closing the browser tab. Live-verified
+2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
+Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
+logout and redirects to the Keycloak login page (#username field re-appears).
+Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+this T1 file has no dependency on another T1 file - a suite importing browser.resource
+alone still works (R21 review note, 2026-08-18: the prior version would have hit
+keyword-not-found on Logout for such a suite, even though none currently does this).</doc>
+<status status="NOT RUN" start="2026-08-28T05:08:34.744571" elapsed="0.000054"/>
+</kw>
+<kw name="Ensure Logged Out From EC Application" owner="browser" type="TEARDOWN">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:08:34.750252" level="INFO">${already_at_login} = 0</msg>
+<var>${already_at_login}</var>
+<arg>css=[id="username"]:visible</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:34.745269" elapsed="0.005035"/>
+</kw>
+<if>
+<branch type="IF" condition="${already_at_login} == 0">
+<kw name="Get Element Count" owner="Browser">
+<msg time="2026-08-28T05:08:34.756658" level="INFO">${logout_icon_present} = 1</msg>
+<var>${logout_icon_present}</var>
+<arg>css=.ui-icon-top-logout</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns the count of elements found with ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:34.750917" elapsed="0.005794"/>
+</kw>
+<if>
+<branch type="IF" condition="${logout_icon_present} &gt; 0">
+<kw name="Logout From EC Application" owner="browser">
+<kw name="Click" owner="Browser">
+<msg time="2026-08-28T05:08:34.757921" level="INFO">Clicks the element 'xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]'.</msg>
+<arg>xpath=//span[contains(@class,'ui-icon-top-logout')]/ancestor::a[1]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" start="2026-08-28T05:08:34.757559" elapsed="0.020702"/>
+</kw>
+<kw name="Wait For Elements State" owner="Browser">
+<msg time="2026-08-28T05:08:34.899761" level="INFO">Waited for Element with selector css=[id="username"] at state visible</msg>
+<arg>css=[id="username"]</arg>
+<arg>visible</arg>
+<arg>timeout=15s</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<status status="PASS" start="2026-08-28T05:08:34.778651" elapsed="0.121384"/>
+</kw>
+<if>
+<branch type="IF" condition="${CAPTURE_SCREENSHOTS}">
+<kw name="Take Screenshot" owner="Browser">
+<msg time="2026-08-28T05:08:34.970820" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="TC05%20Delete%20Deferment%20Group%20Data_logout.png" target="_blank"&gt;&lt;img src="TC05%20Delete%20Deferment%20Group%20Data_logout.png" width="800px"/&gt;&lt;/a&gt;</msg>
+<arg>filename=${OUTPUT_DIR}/${TEST NAME}_logout</arg>
+<tag>PageContent</tag>
+<doc>Takes a screenshot of the current window or element and saves it to disk.</doc>
+<status status="PASS" start="2026-08-28T05:08:34.900696" elapsed="0.070379"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:08:34.900245" elapsed="0.070941"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:34.900208" elapsed="0.071058"/>
+</if>
+<doc>Click EC's real logout icon (top toolbar, next to the username) and confirm
+it genuinely returns to the login page - not just closing the browser tab. Live-verified
+2026-08-18 both from the landing page and from inside a loaded screen (e.g. Bank, after
+Expand Screen To Full Page hides the treeview): clicking it triggers a PrimeFaces AJAX
+logout and redirects to the Keycloak login page (#username field re-appears).
+Screenshot capture is INLINED here (not a call to utils.resource's Capture Step) so
+this T1 file has no dependency on another T1 file - a suite importing browser.resource
+alone still works (R21 review note, 2026-08-18: the prior version would have hit
+keyword-not-found on Logout for such a suite, even though none currently does this).</doc>
+<status status="PASS" start="2026-08-28T05:08:34.757267" elapsed="0.214073"/>
+</kw>
+<status status="PASS" start="2026-08-28T05:08:34.756852" elapsed="0.214547"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:34.756824" elapsed="0.214617"/>
+</if>
+<status status="PASS" start="2026-08-28T05:08:34.750448" elapsed="0.221016"/>
+</branch>
+<status status="PASS" start="2026-08-28T05:08:34.750418" elapsed="0.221076"/>
+</if>
+<doc>Test Teardown safety net (owner discovered this gap live, 2026-08-18): if a
+test case FAILS before reaching its own Logout From EC Application line, the browser is
+left logged in - the NEXT test's Login To EC Application then times out trying to fill</doc>
+<status status="PASS" start="2026-08-28T05:08:34.744977" elapsed="0.226563"/>
+</kw>
+<tag>deferment_group</tag>
+<tag>iud</tag>
+<status status="FAIL" start="2026-08-28T05:08:22.500627" elapsed="12.470977">TimeoutError: locator.waitFor: Timeout 10000ms exceeded.
+Call log:
+  - waiting for locator('//*[self::label or self::span][contains(@class,\'tv-link\') and normalize-space(text())=\'Deferment Group\']').first() to be visible
+</status>
+</test>
+<kw name="Close EC" owner="browser" type="TEARDOWN">
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2026-08-28T05:08:34.980063" level="INFO">Slept 0 seconds.</msg>
+<arg>${HOLD}</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2026-08-28T05:08:34.979417" elapsed="0.000765"/>
+</kw>
+<kw name="Close Browser" owner="Browser">
+<msg time="2026-08-28T05:08:35.055919" level="INFO">Closed browser</msg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2026-08-28T05:08:34.980454" elapsed="0.075691"/>
+</kw>
+<doc>Optional hold then close the browser (Suite Teardown).</doc>
+<status status="PASS" start="2026-08-28T05:08:34.978970" elapsed="0.077357"/>
+</kw>
+<doc>EC IUD Test - Deferment Group (Configuration &gt; Assets &gt; Facility_Objects &gt; Deferment Group, CO.0149).
+Manage-Object (OV) screen. DELETE = End Date = Start Date (true delete in OV_DEFERMENT_GROUP).
+Layered: this test -&gt; deferment_group_page (T3) -&gt; manage_object (T2) + common (T1).
+NEVER touch existing data. Uses a FIXED test code (AUTOTEST_DEFERMENT_GROUP,
+matching Bank/State/Berth's convention) rather than a generated unique code -
+confirmed absent from OV_DEFERMENT_GROUP before this was wired in (2026-08-23).
+Every run must complete TC05 (delete) so the code is free for the next
+run - EC never lets a DELETED code be reused, but this fixed code only
+stays reusable if each run actually cleans up after itself.
+EACH test case does its own real Login/Logout on ONE browser opened once
+in Suite Setup, matching Bank/State/Berth's convention (docs/rf-suite-styles.md).</doc>
+<status status="FAIL" start="2026-08-28T05:07:27.006030" elapsed="68.050365"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="5" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="0" fail="5" skip="0">deferment_group</stat>
+<stat pass="0" fail="5" skip="0">iud</stat>
+</tag>
+<suite>
+<stat name="Deferment Group Iud" id="s1" pass="0" fail="5" skip="0">Deferment Group Iud</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
