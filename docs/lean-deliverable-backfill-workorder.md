@@ -129,7 +129,7 @@ completion note already covers ground truth)
 | 8 | Not started | — | — |
 | 9 | Not started | — | — |
 | 10 | Not started | — | — |
-| 11 | Not started | — | — |
+| 11 | In progress - Trailer backfilled | Trailer PR pending | Trailer (1/7) backfilled 2026-08-28: `trailer_sow.md`/`README.md`/`JOURNAL.md`/`CHECKLIST.md`/KB map updated to reflect the PR #475 Bank-pattern conversion (2026-08-23); evidence/ refreshed with a live 5/5 RF run. Zero automation files touched. Remaining Batch 11 screens (Storage Flow, Stream Item Category, Data Extract Set, Carrier, Bank Account, Deferment Group) not yet started. |
 | 12 | Not started | — | — |
 
 **Do not dispatch a batch until the previous batch's PRs are independently verified** (PR-read
