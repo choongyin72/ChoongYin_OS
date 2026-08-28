@@ -1,0 +1,37 @@
+{
+  "backfill_date": "2026-08-28",
+  "screen": "Sales Order",
+  "original_pr": 444,
+  "original_merge_date": "2026-08-23",
+  "purpose": "evidence-capture re-run of an already-proven, already-merged RF suite; no automation code touched",
+  "dryrun": {
+    "command": "py -m robot --dryrun --outputdir tmp_dryrun_so tests/Configuration/Assets/Financial_Objects/sales_order_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed",
+    "artifacts": "dryrun/log.html, dryrun/report.html, dryrun/output.xml"
+  },
+  "live_headless": {
+    "command": "EC_HEADLESS=true py -m robot --outputdir tmp_live_so tests/Configuration/Assets/Financial_Objects/sales_order_iud.robot",
+    "result": "5 tests, 5 passed, 0 failed (TC01-TC05), first attempt, no flake",
+    "artifacts": "live/log.html, live/report.html, live/output.xml"
+  },
+  "db_self_clean": {
+    "method": "fresh oracledb connection, separate from the test run",
+    "query_1": "SELECT COUNT(*) FROM OV_PRODUCT_SALES_ORDER WHERE CODE = 'AUTOTEST_SO'",
+    "result_1": 0,
+    "query_2": "SELECT CODE, NAME FROM OV_PRODUCT_SALES_ORDER WHERE UPPER(CODE) LIKE 'AUTOTEST%' OR UPPER(NAME) LIKE 'AUTOTEST%'",
+    "result_2": []
+  },
+  "filter_fired_grep": {
+    "command": "grep -c 'name=\"Find Sales Order Row By Filter\"' live/output.xml",
+    "result": 5
+  },
+  "robocop": {
+    "command": "py -m robocop check pageobjects/Configuration/Assets/Financial_Objects/sales_order_page.resource tests/Configuration/Assets/Financial_Objects/sales_order_iud.robot",
+    "result": "7 issues (2x VAR02 unused-variable + 5x DOC02 missing test-case documentation) - same shape/count as PR #444's own cited baseline (also 7 issues)"
+  },
+  "hygiene": {
+    "command": "py scripts/check_bundle_hygiene.py",
+    "result": "RESULT: PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions, doc rows match declared families (one unrelated pre-existing WARN about Contract_Area's investigation/ script, not related to Sales Order)"
+  },
+  "automation_files_modified": false
+}
