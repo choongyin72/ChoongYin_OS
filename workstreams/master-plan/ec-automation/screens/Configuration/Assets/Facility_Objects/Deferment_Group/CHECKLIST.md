@@ -28,10 +28,13 @@ today._
       `py/deferment_group_iud.py` from before the waiver was left untouched, not deleted.
 - **5.** `investigation/` — **N/A, permanently waived** (same Section H clause). Not built/refreshed.
 - [x] **6.** `evidence/` — real artifacts added 2026-08-28: two live-attempt `log.html`/`output.xml`/
-      screenshot sets (both FAILED, disclosed honestly, see below), one dryrun `log.html`/`output.xml`
-      (PASSED), and `backfill_2026-08-28_access_check.txt` (the DB query that root-caused the failure).
-      Pre-existing 2026-07-26 screenshots (`deferment_group_0[1-5]_*.png`, `rf_report.html`) kept as
-      historical evidence of the pre-Batch-8 shape, not deleted.
+      screenshot sets (both FAILED, disclosed honestly), one dryrun `log.html`/`output.xml` (PASSED),
+      `backfill_2026-08-28_access_check.txt` (the DB query that root-caused the failure), and — after
+      the owner granted access the same day — `2026-08-28_access_regranted/` (live 5/5 PASS
+      `log.html`/`output.xml`/`report.html`) + `2026-08-28_access_regranted_check.txt` (the before/after
+      access grant + self-clean query). Pre-existing 2026-07-26 screenshots
+      (`deferment_group_0[1-5]_*.png`, `rf_report.html`) kept as historical evidence of the
+      pre-Batch-8 shape, not deleted.
 - [x] **7.** `CHECKLIST.md` — this file.
 
 ## B. RF files (pre-existing, from PR #479 — NOT modified by this backfill)
@@ -49,16 +52,16 @@ today._
 - [x] **11. `--dryrun` N/N PASS** — re-run 2026-08-28: `robot --dryrun tests/.../deferment_group_iud.robot`
       → **5/5 PASS, 0 failed** (`evidence/backfill_2026-08-28_dryrun/`). This is a static structure
       check only — does not require live EC access, so it is unaffected by item 12's failure below.
-- [ ] **12. LIVE headed/headless run N/N PASS** — **NOT ticked for today's run.** Historical evidence:
-      PR #479's own body cites **5/5 PASS** at merge time (2026-08-23). This backfill's own re-run
-      2026-08-28 (for evidence capture, no automation changes) got **0/5 PASS, both an initial attempt
-      and one retry** — `TimeoutError` waiting for the `Deferment Group` menu-search tv-link, ALL 5
-      TCs. Root-caused via a direct DB query (not a guess) to a REGRESSED `TV_T_BASIS_ACCESS`
-      role-access grant (`LEVEL_ID=0`, all 5 roles, `OBJECT_ID=1087`) — the same access gate PR #479
-      itself had to get fixed before it could merge. See `evidence/backfill_2026-08-28_live_attempt{1,2}/`
-      and `evidence/backfill_2026-08-28_access_check.txt`. This is a live-sandbox environment/access
-      fact, out of this backfill task's scope to fix (a role-access grant needs its own explicit
-      owner authorization) — disclosed honestly rather than ticked.
+- [x] **12. LIVE headed/headless run N/N PASS** — **RE-VERIFIED 2026-08-28, PASS.** The owner granted
+      the `SYST.ADM` role (the sandbox login role) access on `OBJECT_ID=1087` — confirmed live via a
+      fresh `oracledb` connection: `SYST.ADM` = `LEVEL_ID 60` (was `0` at the time item 12 was first
+      logged as blocked; the other 4 roles remain `0`, unaffected since they're not the sandbox login
+      role). Re-ran the suite immediately after: `EC_HEADLESS=true robot tests/.../deferment_group_iud.robot`
+      → **5/5 PASS**, all TCs (Clean State / Insert / Update / Find / Delete). See
+      `evidence/2026-08-28_access_regranted/{log.html,output.xml,report.html}` and
+      `evidence/2026-08-28_access_regranted_check.txt` (the before/after DB query + the run). The
+      earlier two FAILED attempts (`evidence/backfill_2026-08-28_live_attempt{1,2}/`) are kept as
+      historical record of the original blocker, not deleted or overwritten.
 - [x] **13. DB ground-truth** — historical, PR #479: `Code Should Be Present/Absent In View
       OV_DEFERMENT_GROUP` (insert/find/delete) + `Field Should Equal In View OV_DEFERMENT_GROUP <code>
       NAME` (update), plus this session's own `SELECT ... FROM TV_T_BASIS_ACCESS WHERE OBJECT_ID = 1087`
@@ -66,9 +69,9 @@ today._
 - [x] **14. FULL I-U-D scope** — historical, PR #479: Insert + Update + Delete + Find all present
       (TC02-05), confirmed by reading the suite/T3 2026-08-28 — the scope itself hasn't regressed,
       only live reachability has.
-- [x] **15. Self-clean confirmed** — historical, PR #479: fresh `oracledb` connection, `SELECT COUNT(*)
-      FROM OV_DEFERMENT_GROUP WHERE CODE = 'AUTOTEST_DEFERMENT_GROUP'` → 0 residual rows at merge time.
-      Not re-verified today since no live insert/delete cycle ran (blocked by item 12).
+- [x] **15. Self-clean confirmed** — RE-VERIFIED 2026-08-28 after today's live 5/5 run: fresh
+      `oracledb` connection, `SELECT COUNT(*) FROM OV_DEFERMENT_GROUP WHERE CODE =
+      'AUTOTEST_DEFERMENT_GROUP'` → **0 residual rows**. See `evidence/2026-08-28_access_regranted_check.txt`.
 - [x] **16. Hygiene PASS** — re-run 2026-08-28: `py scripts/check_bundle_hygiene.py` → repo-wide
       RESULT: PASS (no hardcoded creds, pure ASCII, no CHECKLIST/VERIFY-REPORT contradictions).
 
@@ -87,6 +90,7 @@ today._
 - **21.** Reuse clause — N/A in the original 21-item numbering (this document uses the workorder's
       Section H item set, which does not carry item 21 forward as a separate gate for backfill tasks).
 
-_Items 12/15 are honestly left partially unticked/qualified rather than hand-typed PASS — no command
-today proved a live PASS; the historical PR #479 evidence is cited separately from today's own
-(failed) re-verification attempt, per this project's no-guessing / no-fabricated-tick rule._
+_Items 12/15 were left honestly unticked in this bundle's original PR (#642) — no command that day
+proved a live PASS. Update 2026-08-28: the owner granted the `SYST.ADM` role access on
+`OBJECT_ID=1087`; both items are now ticked on a real re-run, not a fabricated one — see the DB query
+and live-run evidence cited above._

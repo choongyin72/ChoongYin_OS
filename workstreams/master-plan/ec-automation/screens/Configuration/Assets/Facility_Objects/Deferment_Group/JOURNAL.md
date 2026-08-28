@@ -66,6 +66,13 @@ Bank-pattern). View `OV_DEFERMENT_GROUP`. This JOURNAL was rewritten 2026-08-28 
   role-access grant is a real, consequential sandbox security-config change requiring its own explicit
   owner authorization, same conclusion as the original blocker). Flagged here, in the SOW, and in
   CHECKLIST.md rather than silently worked around or assumed fixed.
+- **RESOLVED 2026-08-28 (same day, owner-authorized):** the owner granted access. Re-checked via a
+  fresh `oracledb` connection before re-running anything: `SYST.ADM` (the sandbox login role) now
+  shows `LEVEL_ID=60` on `OBJECT_ID=1087` (was `0`); the other 4 roles remain `0`, unaffected since
+  they aren't the login role. Re-ran the live suite immediately after: **5/5 PASS**, all TCs. Then
+  re-checked self-clean with another fresh connection: `SELECT COUNT(*) FROM OV_DEFERMENT_GROUP WHERE
+  CODE = 'AUTOTEST_DEFERMENT_GROUP'` -> **0 residual rows**. See
+  `evidence/2026-08-28_access_regranted/` and `evidence/2026-08-28_access_regranted_check.txt`.
 
 ## Decisions
 - The RF automation itself (T3, suite, testdata, credentials) was **NOT modified** as part of this
@@ -94,3 +101,7 @@ Bank-pattern). View `OV_DEFERMENT_GROUP`. This JOURNAL was rewritten 2026-08-28 
   - Pre-existing `deferment_group_0[1-5]_*.png` + `rf_report.html` (2026-07-26) — kept as historical
     evidence of the PRE-Batch-8 shape; superseded by PR #479's own (uncaptured-as-files, PR-body-cited)
     5/5 evidence for the current shape.
+  - `evidence/2026-08-28_access_regranted/` — `log.html` + `output.xml` + `report.html` from the
+    live 5/5 PASS re-run after the owner's access grant, same day.
+  - `evidence/2026-08-28_access_regranted_check.txt` — the before/after `TV_T_BASIS_ACCESS` query
+    plus the post-run DB self-clean query and result.
