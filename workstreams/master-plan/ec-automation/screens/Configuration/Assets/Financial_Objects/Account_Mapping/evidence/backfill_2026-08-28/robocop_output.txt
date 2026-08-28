@@ -1,0 +1,66 @@
+tests\Configuration\Assets\Financial_Objects\account_mapping_iud.robot:27:1 VAR02 Variable '${TEST_CODE}' is assigned but not used
+    |
+ 25 |
+ 26 | *** Variables ***
+ 27 | ${TEST_CODE}        AUTOTEST_AM
+    | ^^^^^^^^^^^^ VAR02
+ 28 | ${START_DATE}       2003-01-01
+ 29 | ${END_DATE}         ${START_DATE}
+    |
+
+tests\Configuration\Assets\Financial_Objects\account_mapping_iud.robot:29:1 VAR02 Variable '${END_DATE}' is assigned but not used
+    |
+ 27 | ${TEST_CODE}        AUTOTEST_AM
+ 28 | ${START_DATE}       2003-01-01
+ 29 | ${END_DATE}         ${START_DATE}
+    | ^^^^^^^^^^^ VAR02
+    |
+
+tests\Configuration\Assets\Financial_Objects\account_mapping_iud.robot:33:1 DOC02 Missing documentation in 'TC01 Verify Clean State' test case
+    |
+ 31 |
+ 32 | *** Test Cases ***
+ 33 | TC01 Verify Clean State
+    | ^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 34 |     Login To EC Application
+ 35 |     Open Account Mapping Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Financial_Objects\account_mapping_iud.robot:39:1 DOC02 Missing documentation in 'TC02 Insert Account Mapping Data' test case
+    |
+ 39 | TC02 Insert Account Mapping Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 40 |     Login To EC Application
+ 41 |     Open Account Mapping Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Financial_Objects\account_mapping_iud.robot:46:1 DOC02 Missing documentation in 'TC03 Update Account Mapping Data' test case
+    |
+ 46 | TC03 Update Account Mapping Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 47 |     Login To EC Application
+ 48 |     Open Account Mapping Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Financial_Objects\account_mapping_iud.robot:53:1 DOC02 Missing documentation in 'TC04 Find Account Mapping Data' test case
+    |
+ 53 | TC04 Find Account Mapping Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 54 |     Login To EC Application
+ 55 |     Open Account Mapping Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Financial_Objects\account_mapping_iud.robot:60:1 DOC02 Missing documentation in 'TC05 Delete Account Mapping Data' test case
+    |
+ 60 | TC05 Delete Account Mapping Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 61 |     Login To EC Application
+ 62 |     Open Account Mapping Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+Found 7 issues.
