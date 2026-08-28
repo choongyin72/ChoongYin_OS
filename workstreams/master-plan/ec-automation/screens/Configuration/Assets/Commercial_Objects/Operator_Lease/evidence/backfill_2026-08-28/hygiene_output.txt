@@ -1,0 +1,7 @@
+[hygiene] scanned 167 bundle(s) + 272 recon script(s)
+
+[hygiene] WARN - 2 hardcoded-credential line(s) in investigation/ recon scripts (use tmp/scripts/ec_session.py):
+   workstreams\master-plan\ec-automation\screens\Configuration\Assets\Contract_Objects\Contract_Area\investigation\live_recon_contract_area.py:44: for u in ("#username", "input[name='username']"):
+   workstreams\master-plan\ec-automation\screens\Configuration\Assets\Contract_Objects\Contract_Area\investigation\live_recon_contract_area.py:46: for pw in ("#password", "input[name='password']"):
+
+[hygiene] RESULT: PASS - no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT contradictions, doc rows match declared families

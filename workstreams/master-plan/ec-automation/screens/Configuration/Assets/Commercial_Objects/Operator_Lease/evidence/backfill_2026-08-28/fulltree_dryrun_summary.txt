@@ -1,0 +1,11 @@
+Full-tree parity dryrun (py -m robot --dryrun tests/), run 2026-08-28 from worktree
+C:/tmp/wt-operatorlease-backfill/workstreams/master-plan/ec-automation:
+
+Tests                                                                 | PASS |
+883 tests, 883 passed, 0 failed
+
+The raw output.xml for this run was ~51 MB (over GitHub's 50 MB recommended max) and was not
+committed - this summary plus the tail of the console output (captured at task time) is the
+retained evidence. The single-suite dryrun (dryrun_output.xml, 5/5 PASS) in this same folder is
+the primary evidence for Operator Lease itself; the full-tree run above is the parity/regression
+check confirming no other suite broke.
