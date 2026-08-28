@@ -2,10 +2,52 @@
 **Project:** EC Web App System Test (local sandbox)
 **Task:** EC Screen Insert/Update/Delete (IUD) Automation — County
 **Author:** Choong-Yin Lee / Claude Fable 5
-**Date:** 2026-06-11
-**Version:** 1.0 — COMPLETE (RF suite + Playwright reference, live + DB-verified)
+**Date:** 2026-06-11 (v1.0), updated 2026-08-23/24 (v2.0 — Bank-pattern conversion), backfilled 2026-08-28
+**Version:** 2.0 — CURRENT: RF suite = Bank pattern (label-driven, properties-file-driven, T2-consolidated,
+pure screen-verify). Sections below marked v1.0 describe the ORIGINAL 2026-06-11 build, superseded by
+the conversion — kept for history, not the live shape.
 
 ---
+
+## 0. CLASSIFICATION (current, v2.0 — read this first)
+| Property | Value |
+|---|---|
+| Pattern | **Bank pattern**, plain OV (manage-object), **no navigator section** — same shape as Bank/State |
+| Screen type | Manage Object (OV), date-effective |
+| Navigator | None (Date filter + GO only, confirmed live — no mandatory dropdown) |
+| Grid id | `manage_object_nav_nav:form:T_data` |
+| DB view (ground truth) | `OV_COUNTY` |
+| Field labels | **Screen-prefixed**: "County Code" / "County Name" (NOT generic "Code"/"Name" — same as State/Region) |
+| Mandatory fields (Insert) | County Code, County Name, Start Date (confirmed live via `MandatoryCellStyle`) |
+| Non-mandatory fields present | Master System Code/Name (read-only display), Description, API Code, State dropdown — left unset per IUD-fill-only-needed-fields convention |
+| Delete semantics | End Date = Start Date (true delete from `OV_COUNTY`) |
+| Fixed test code | `AUTOTEST_COUNTY` (matches Account/Bank convention) |
+| Grid-filter wiring | Explicit, included from the conversion (`Find/Clear County Row By Filter`) |
+| DB-verify style | **Pure screen-verify** (matches Bank's owner-requested 2026-08-18 convention) — no inline DB-read keyword in the .robot suite itself; DB ground-truth is asserted via the shared T2 layer + a fresh-connection post-run check, not an in-suite `DbVerify` call |
+
+## Dev story (real, from PR history — not invented)
+- **2026-06-11** — original build (v1.0 below): old hardcoded-field-id Playwright + RF pair, Basic Objects section (12 screens).
+- **2026-08-23, PR #429** ("County IUD suite - Bank-pattern conversion (batch-2)") — converted `county_page.resource`
+  (T3) and `county_iud.robot` from the hardcoded-field-id pattern to the label-driven, properties-file-driven,
+  T2-consolidated Bank pattern, alongside Country/Regulatory Permits/Currency/VAT Code in parallel isolated
+  worker clones (`tmp/batch2_shared_findings.md`). Real gotcha hit during this build: County Code/County Name
+  are screen-prefixed labels (not generic "Code"/"Name"), same as State — threaded `code_label=County Code`
+  through every T2 call. Also confirmed the `objectdates` Delete field id
+  (`tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input`) via a live insert+delete probe round-trip before
+  hardcoding it. Live run: 5/5 pass; DB self-clean confirmed 0 residual `AUTOTEST%` rows in `OV_COUNTY` via a
+  fresh oracledb connection; grid-filter wiring confirmed fired 5x in output.xml.
+- **2026-08-24, PR #489** ("align County suite to Bank's exact pure-screen-verify pattern") — a smaller,
+  targeted fix, not a rebuild. Owner asked why `county_iud.robot` differed from `bank_iud.robot`; direct
+  file comparison found County still had two extra inline DB-verify keywords (`County Should Exist In DB`,
+  `County Should Be Updated In DB`) that `bank_iud.robot` deliberately does not carry (owner decision
+  2026-08-18: "PURE SCREEN verification... no DB check at all here"). Removed both — the T2-delegated
+  `Verify County Record Exists`/`Verify County Record Updated` already provide full screen-level
+  verification, so removing the duplicate DB reads did not reduce real coverage. Re-verified: dryrun
+  792/792 pass (full tree), live 5/5 pass, DB self-clean via fresh oracledb connection = 0 `AUTOTEST%` rows.
+
+---
+
+## v1.0 (original, 2026-06-11) — SUPERSEDED, kept for history
 
 ## 1. REQUIREMENT
 Automate Insert / Update / Delete on the **County** screen and prove, at DB level,
