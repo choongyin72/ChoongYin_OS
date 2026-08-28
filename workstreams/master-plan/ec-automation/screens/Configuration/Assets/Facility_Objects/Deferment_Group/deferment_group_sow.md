@@ -52,6 +52,11 @@ grant that unblocked PR #479 has regressed in this sandbox. This is a live-envir
 fact, not an automation defect; it is disclosed here and in JOURNAL/CHECKLIST rather than silently
 worked around, per this project's standing rules on honest disclosure of live-run failures.
 
+**Resolved same day (2026-08-28):** owner granted access. Fresh-connection re-check confirms
+`SYST.ADM` (sandbox login role) now `LEVEL_ID=60` on `OBJECT_ID=1087`. Live suite re-run: 5/5 PASS.
+Post-run self-clean re-check: 0 residual `AUTOTEST_DEFERMENT_GROUP` rows. See JOURNAL.md's updated
+"Blockers -> resolution" and `evidence/2026-08-28_access_regranted/`.
+
 ## Lessons / known risks
 - Optional dropdowns skipped (none mandatory).
 - Delete uses the shared engine's row-absence wait (async grid redraw) — no screen-specific tuning.

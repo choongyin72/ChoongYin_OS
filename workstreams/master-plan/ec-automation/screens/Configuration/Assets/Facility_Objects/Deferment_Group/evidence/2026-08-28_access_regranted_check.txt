@@ -1,0 +1,15 @@
+Deferment Group (OBJECT_ID=1087) access re-check, 2026-08-28 (post owner grant)
+Fresh oracledb connection, ECKERNEL_EC / localhost:1521/ORCL
+
+SELECT ROLE_ID, LEVEL_ID FROM TV_T_BASIS_ACCESS WHERE OBJECT_ID = 1087 ORDER BY ROLE_ID
+('INST.MAN', 0)
+('OP', 0)
+('RES', 0)
+('SUP', 0)
+('SYST.ADM', 60)
+
+SYST.ADM (the sandbox login role) = LEVEL_ID 60 (edit on Approved Data) - was 0 at PR #642 time.
+This unblocked the live suite; re-run 5/5 PASS (see log.html/output.xml in this same folder).
+
+Independent DB self-clean check (fresh connection, after live run):
+SELECT COUNT(*) FROM OV_DEFERMENT_GROUP WHERE CODE = 'AUTOTEST_DEFERMENT_GROUP' -> 0 residual rows
