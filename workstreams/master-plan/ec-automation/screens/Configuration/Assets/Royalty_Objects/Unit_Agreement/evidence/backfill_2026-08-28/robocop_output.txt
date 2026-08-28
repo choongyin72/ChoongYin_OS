@@ -1,0 +1,105 @@
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:24:1 VAR02 Variable '${TEST_CODE}' is assigned but not used
+    |
+ 22 |
+ 23 | *** Variables ***
+ 24 | ${TEST_CODE}        AUTOTEST_UA
+    | ^^^^^^^^^^^^ VAR02
+ 25 | ${OBJ_NAME}        AUTOTEST Unit Agreement
+ 26 | ${START_DATE}       2000-01-01
+    |
+
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:25:1 VAR02 Variable '${OBJ_NAME}' is assigned but not used
+    |
+ 23 | *** Variables ***
+ 24 | ${TEST_CODE}        AUTOTEST_UA
+ 25 | ${OBJ_NAME}        AUTOTEST Unit Agreement
+    | ^^^^^^^^^^^ VAR02
+ 26 | ${START_DATE}       2000-01-01
+ 27 | ${END_DATE}         ${START_DATE}
+    |
+
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:27:1 VAR02 Variable '${END_DATE}' is assigned but not used
+    |
+ 25 | ${OBJ_NAME}        AUTOTEST Unit Agreement
+ 26 | ${START_DATE}       2000-01-01
+ 27 | ${END_DATE}         ${START_DATE}
+    | ^^^^^^^^^^^ VAR02
+ 28 | # These 2 values must stay in sync with testdata/unit_agreement_insert.properties - TC02
+ 29 | # form-verifies them against what that file actually set, not an independent assumption.
+    |
+
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:30:1 VAR02 Variable '${OBJ_COMMENTS}' is assigned but not used
+    |
+ 28 | # These 2 values must stay in sync with testdata/unit_agreement_insert.properties - TC02
+ 29 | # form-verifies them against what that file actually set, not an independent assumption.
+ 30 | ${OBJ_COMMENTS}     AUTOTEST Comments
+    | ^^^^^^^^^^^^^^^ VAR02
+ 31 | # These 2 values must stay in sync with testdata/unit_agreement_update.properties - TC03
+ 32 | # form-verifies them against what that file actually set, not an independent assumption.
+    |
+
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:33:1 VAR02 Variable '${OBJ_NAME_UPD}' is assigned but not used
+    |
+ 31 | # These 2 values must stay in sync with testdata/unit_agreement_update.properties - TC03
+ 32 | # form-verifies them against what that file actually set, not an independent assumption.
+ 33 | ${OBJ_NAME_UPD}      AUTOTEST Unit Agreement UPDATED
+    | ^^^^^^^^^^^^^^^ VAR02
+ 34 | ${OBJ_COMMENTS_UPD}    AUTOTEST Comments UPDATED
+    |
+
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:34:1 VAR02 Variable '${OBJ_COMMENTS_UPD}' is assigned but not used
+    |
+ 32 | # form-verifies them against what that file actually set, not an independent assumption.
+ 33 | ${OBJ_NAME_UPD}      AUTOTEST Unit Agreement UPDATED
+ 34 | ${OBJ_COMMENTS_UPD}    AUTOTEST Comments UPDATED
+    | ^^^^^^^^^^^^^^^^^^^ VAR02
+    |
+
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:38:1 DOC02 Missing documentation in 'TC01 Verify Clean State' test case
+    |
+ 36 |
+ 37 | *** Test Cases ***
+ 38 | TC01 Verify Clean State
+    | ^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 39 |     Login To EC Application
+ 40 |     Open Unit Agreement Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:44:1 DOC02 Missing documentation in 'TC02 Insert Unit Agreement Data' test case
+    |
+ 44 | TC02 Insert Unit Agreement Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 45 |     Login To EC Application
+ 46 |     Open Unit Agreement Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:51:1 DOC02 Missing documentation in 'TC03 Update Unit Agreement Data' test case
+    |
+ 51 | TC03 Update Unit Agreement Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 52 |     Login To EC Application
+ 53 |     Open Unit Agreement Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:58:1 DOC02 Missing documentation in 'TC04 Find Unit Agreement Data' test case
+    |
+ 58 | TC04 Find Unit Agreement Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 59 |     Login To EC Application
+ 60 |     Open Unit Agreement Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+tests\Configuration\Assets\Royalty_Objects\unit_agreement_iud.robot:65:1 DOC02 Missing documentation in 'TC05 Delete Unit Agreement Data' test case
+    |
+ 65 | TC05 Delete Unit Agreement Data
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ DOC02
+ 66 |     Login To EC Application
+ 67 |     Open Unit Agreement Screen
+    | Suggestion: Add a [Documentation] setting to the test case.
+    |
+
+Found 11 issues.

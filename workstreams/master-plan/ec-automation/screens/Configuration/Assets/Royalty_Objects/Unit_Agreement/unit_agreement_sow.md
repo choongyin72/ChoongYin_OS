@@ -3,12 +3,68 @@
 **Task:** EC Screen Insert/Update/Delete (IUD) Automation - Unit Agreement
 **Screen:** Configuration > Assets > Royalty Objects > Unit Agreement (RC.0055)
 **Author:** Choong-Yin Lee / Claude Opus 4.8
-**Date:** 2026-06-25
-**Version:** 1.0
+**Date:** 2026-06-25 (original); updated 2026-08-28 for the Bank-pattern conversion + deliverable backfill
+**Version:** 2.0
 
 ---
 
-## 1. REQUIREMENT
+## 0. UPDATE — 2026-08-28 (deliverable backfill, `docs/lean-deliverable-backfill-workorder.md` Batch 8)
+
+This SOW originally described the 2026-06-25 hand-written, hardcoded-field-id build (Sections 1-4
+below, kept unchanged as history). That build was **converted to the full Bank pattern via PR #446**
+(merged 2026-08-23T07:08:31Z, Batch 5 of the original Bank-pattern conversion project). This update
+records what PR #446 actually changed, pulled from its own PR body — not invented:
+
+- **Classification confirmed:** plain manage-object OV, Bank family — **no navigator** (date-only,
+  not OV-GM). Grid `manage_object_nav_nav:form:T_data`, reused via T2's `${OV_MANAGE_OBJECT_TABLE}`
+  constant in the T3, not re-hardcoded.
+- **View/slug mismatch (confirmed live, registry-documented):** the object view is `OV_UNIT_AGR`
+  (base table `UNIT_AGR`, app `EC_REVN`) — the automation slug/screen folder is "unit_agreement" /
+  "Unit Agreement"; the DB view name does not simply derive from that slug. `libraries/DbVerify.py`
+  calls always cite `ov_unit_agr` explicitly rather than deriving it.
+- **Real field labels (live recon, 2026-08-23):** Unit Agreement's own Code/Name labels are
+  **screen-prefixed** — "Unit Agreement Code" / "Unit Agreement Name" — NOT the generic "Code"/"Name"
+  Bank itself uses. `updateAttributes` (the Update tab) exposes exactly 3 labels: Unit Agreement Code
+  (read-only), Unit Agreement Name, Comments. Start Date/End Date live only in `objectForm`
+  (insert) and `objectdates` (delete) — never in `updateAttributes`.
+- **Mandatory fields (insert):** Unit Agreement Code, Unit Agreement Name, Start Date. Comments is
+  optional (`{mandatory:false}`). End Date is deliberately left unset at insert — setting it equal to
+  Start Date at insert time would create a zero-length, true-delete-on-insert window.
+- **Delete mechanism:** End Date = Start Date via the packed `objectdates` row
+  (`tab:tabPanel:objectdates:form:G:0:R:0:C:3:da_input`) — hardcoded deliberately (not label-driven),
+  same documented precedent as Bank's own `py/ec_object_iud.py` `END_DATE_ID` constant: this row
+  packs two fields (Start Date at `C:1`, End Date at `C:3` with its label at `C:2`) that the
+  one-field-per-row label scan cannot safely resolve. The exact id was already proven live by this
+  screen's own prior hand-written driver before the conversion.
+- **Grid-filter wiring** (`Find/Clear Unit Agreement Row By Filter`, delegating to the shared T2
+  `Find/Clear Object Row By Filter`) was included in PR #446 from day one, not bolted on later.
+- **Dev story / real gotcha (from PR #446's own body):** live recon on 2026-08-23 confirmed the
+  screen-prefixed labels and the `updateAttributes` 3-field scope via a throwaway RF script (deleted
+  before commit) rather than assuming from the 2026-06-25 SOW's original description below. The
+  CURRENT T3 (`unit_agreement_page.resource`) uses the label-driven, properties-file-driven pattern
+  described above; Section 2.2's field-id table below reflects the PRE-conversion shape and is kept
+  for history only.
+- **No shared-file edits** — T2 (`resources/manage_object.resource`) and T1 (`resources/
+  common.resource`) keywords were reused as-is.
+- **Test code changed from per-run to fixed:** the current live suite uses the FIXED code
+  `AUTOTEST_UA` (confirmed absent from `OV_UNIT_AGR` before use), not the original per-run
+  `AUTOTEST_UA_<run>` described in Section 2.3 below — TC05 (delete) must complete every run so the
+  code stays free for the next run.
+
+### Test data (current, PR #446 / the live suite as of this backfill)
+| Field | Value |
+|---|---|
+| Code | `AUTOTEST_UA` (fixed, not per-run) |
+| Name (Insert) | `AUTOTEST Unit Agreement` |
+| Name (Update) | `AUTOTEST Unit Agreement UPDATED` |
+| Comments (Insert) | `AUTOTEST Comments` |
+| Comments (Update) | `AUTOTEST Comments UPDATED` |
+| Start Date | `2000-01-01` |
+| End Date (Delete) | `2000-01-01` (= Start Date -> true delete) |
+
+---
+
+## 1. REQUIREMENT (original, 2026-06-25 — history)
 
 ### 1.1 Objective
 Automate Insert, Update, Delete (IUD) on the Unit Agreement screen to validate that the screen
