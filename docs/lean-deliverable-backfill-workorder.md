@@ -122,6 +122,8 @@ completion note already covers ground truth)
 | 4 | Complete | #588 Chemical Tank, #589 Shift, #590 Contract Capacity, #591 Storage, #592 Tract, #593 Well Hole, #594 Contract Inventory | 7/7 backfilled + merged 2026-08-27. Zero automation files touched; provenance + sourced ticks verified per PR. _Row finalized by the reviewer at merge (no batch PR owned the log row this round)._ |
 | 5 | In progress — Transport Zone done | Transport Zone: PR TBD (branch `docs/transport-zone-backfill-artifacts`) | 1/6 backfilled 2026-08-28 (Transport Zone: SOW/README/JOURNAL/CHECKLIST/KB map + evidence added around the already-merged PR #557 Area-pattern conversion; zero automation files touched, confirmed via `git status`). Live re-run hit one disclosed page-load timeout on TC01 (first attempt 4/5), immediate single retry passed 5/5 — no chrome/node process killed, per this task's process rule. Remaining: Property, Pilot, Well Bore Interval, Well Bore, Lifting Account. |
 | 6 | Not started | — | — |
+| 5 | Not started | — | — |
+| 6 | In progress — 1/7 | #602 Field Group | Field Group backfilled 2026-08-28 (zero automation files touched; robocop/dryrun/live/DB-self-clean/hygiene all re-verified with matching evidence to PR #434's own baseline). Remaining 6/7 (Country, Payment Scheme, Customer, Operator Lease, MMS Lease, Licence) not started. |
 | 7 | Not started | — | — |
 | 8 | Not started | — | — |
 | 9 | Not started | — | — |
