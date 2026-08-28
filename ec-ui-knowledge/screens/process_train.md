@@ -3,7 +3,9 @@
 - **Type:** OV (EC Object Configuration, date-effective) - Bank-family (`manage_object_nav`)
 - **BF_CODE:** CO.0120 - **Treeview:** Configuration > Assets > Facility_Objects > Process Train _(DB treeview JSON)_
 - **DB view:** `OV_PROCESS_TRAIN` (key `CODE`; `NAME`, `OBJECT_START/END_DATE`)
-- **Last verified:** 2026-08-23 - EC 14.2.4 - local sandbox - Batch 9 Bank-pattern conversion, live RF 5/5
+- **Last verified:** 2026-08-28 - EC 14.2.4 - local sandbox - re-confirmed live RF 5/5 during the
+  docs/evidence backfill (`docs/lean-deliverable-backfill-workorder.md`, Batch 10); content below
+  otherwise unchanged since the 2026-08-23 Batch 9 Bank-pattern conversion (PR #469).
 - ⚠️ **CORRECTION (2026-08-23):** the earlier "plain (optional dropdowns only, none mandatory)"
   note below is WRONG for actually persisting the record. Live repro: Insert with only Code/
   Name/Start Date clicked Save successfully (button enabled, click succeeded) but the row
