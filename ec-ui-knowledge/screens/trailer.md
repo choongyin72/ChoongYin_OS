@@ -1,7 +1,7 @@
 # Screen: Trailer
 
 - **Type:** Plain OV (EC Object Configuration, date-effective) - Bank family; date-only navigator + GO.
-  No mandatory navigator cascade.
+  No mandatory navigator scope (date-only GO; the grid loads without any prerequisite dropdown).
 - **BF_CODE:** CO.0265 - **Treeview:** Configuration > Assets > Transport_Objects > Trailer
 - **DB view:** `OV_TRAILER` (key `CODE`; `NAME`, `OBJECT_START/END_DATE`)
 - **Last verified:** 2026-08-28 - EC 14.2.4 - local sandbox - live RF suite 5/5 pass (this backfill
