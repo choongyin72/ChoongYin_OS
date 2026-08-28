@@ -1,0 +1,44 @@
+Vendor RF suite — backfill evidence capture, 2026-08-28
+(Batches 1-6 already merged: PRs #566-607. This is Batch 7's Vendor screen.)
+
+Commands run (this repo, worktree C:/tmp/wt-vendor-backfill):
+
+1) Dryrun (screen-scoped)
+   robot --dryrun --outputdir C:/tmp/vendor-dryrun tests/Configuration/Assets/Commercial_Objects/vendor_iud.robot
+   Result: 5 tests, 5 passed, 0 failed
+   TC01 Verify Clean State ....... PASS
+   TC02 Insert Vendor Data ....... PASS
+   TC03 Update Vendor Data ....... PASS
+   TC04 Find Vendor Data ......... PASS
+   TC05 Delete Vendor Data ....... PASS
+
+2) Live run (headless)
+   EC_HEADLESS=true robot --outputdir C:/tmp/vendor-live tests/Configuration/Assets/Commercial_Objects/vendor_iud.robot
+   Result: 5 tests, 5 passed, 0 failed (same TC breakdown as above, all PASS)
+   First attempt succeeded — no retry needed.
+   Full log.html + output.xml from this run are kept alongside this file (both under 500KB,
+   screen-scoped single-suite output, not full-tree — no truncation needed per the size guidance).
+
+3) Grid-filter fired check
+   grep -c 'name="Find Vendor Row By Filter"' C:/tmp/vendor-live/output.xml
+   Result: 5   (matches PR #439's original citation of "wired in from day one")
+
+4) DB self-clean (fresh oracledb connection, not reused from the suite run)
+   SELECT COUNT(*) FROM OV_VENDOR WHERE CODE='AUTOTEST_VEND'
+   Result: 0   (0 residual rows after TC05's delete — self-clean confirmed)
+
+5) robocop (T3 + suite)
+   robocop check pageobjects/Configuration/Assets/Commercial_Objects/vendor_page.resource \
+       tests/Configuration/Assets/Commercial_Objects/vendor_iud.robot
+   Result: 7 issues (2 VAR02 + 5 DOC02) — matches PR #439's cited baseline count exactly,
+   no new issue classes introduced by this backfill (no automation files were touched).
+
+6) Repo-wide hygiene
+   py scripts/check_bundle_hygiene.py
+   Result: PASS — no hardcoded creds (R16), pure ASCII (R20), no CHECKLIST/VERIFY-REPORT
+   contradictions, doc rows match declared families. (One unrelated WARN for a different
+   screen's recon script — Contract_Area — not Vendor.)
+
+No RF/page-object/testdata files were modified as part of this backfill task. This evidence
+capture is a re-run of the already-existing, already-proven suite from PR #439 (merged
+2026-08-23), for documentation purposes only.
