@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport name="R07_012_FC_Lifting_Report" language="java"
+              pageWidth="1191" pageHeight="842" orientation="Landscape"
+              columnWidth="1140" leftMargin="24" rightMargin="27"
+              topMargin="28" bottomMargin="38"
+              whenNoDataType="AllSectionsNoDetail">
+
+    <!-- ============================================================
+         R07.012 - FC Lifting Report - converted from Crystal Reports.
+         Format: JasperReports 7.0.3 COMPACT format (element kind=...) -
+         confirmed live via Maven-resolved net.sf.jasperreports:jasperreports:7.0.3
+         that this is the format this engine build actually loads;
+         the "standard" xmlns format failed to load even a trivial file.
+         Data source: local sandbox TV_FC_LIFTING_REPORT.
+         See workstreams/crystal-to-jasper-conversion/R07.012/visual_spec.md.
+         ============================================================ -->
+
+    <style name="HeaderBandStyle" mode="Opaque" forecolor="#FFFFFF" backcolor="#454087"
+           fontName="Arial" fontSize="9.0" bold="true" italic="true">
+        <box><pen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+    </style>
+
+    <style name="HeaderCellBoxStyle" mode="Opaque" backcolor="#454087" forecolor="#D6D6D6"/>
+
+    <style name="HeaderTextOverlayStyle" mode="Transparent" forecolor="#FFFFFF"
+           fontName="Arial" fontSize="9.0" bold="true" italic="true"/>
+
+    <style name="TitleStyle" forecolor="#000000" fontName="Arial" fontSize="21.0" bold="true" italic="true"/>
+
+    <style name="SubtitleStyle" forecolor="#000000" fontName="Arial" fontSize="12.0" italic="true"/>
+
+    <style name="DetailTextStyle" forecolor="#000000" fontName="Arial" fontSize="8.0">
+        <box leftPadding="3" rightPadding="3">
+            <topPen lineWidth="1.0" lineColor="#D6D6D6"/>
+            <bottomPen lineWidth="1.0" lineColor="#D6D6D6"/>
+            <rightPen lineWidth="1.0" lineColor="#D6D6D6"/>
+        </box>
+    </style>
+
+    <style name="TotalRowStyle" forecolor="#000000" fontName="Arial" fontSize="8.0" bold="true">
+        <box rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+    </style>
+
+    <style name="FootnoteStyle" forecolor="#000000" fontName="Arial" fontSize="10.0" italic="true"/>
+
+    <style name="FooterStripStyle" forecolor="#000000" fontName="Arial" fontSize="6.0" bold="true" italic="true"/>
+
+    <!-- Zero-value white-on-white suppression - one style per zero-hideable numeric
+         column, each with its own field-specific condition. -->
+    <style name="LiftedQtyZeroStyle" forecolor="#000000" fontName="Arial" fontSize="8.0">
+        <box rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+        <conditionalStyle conditionExpression="$F{LIFTED_QTY} != null &amp;&amp; $F{LIFTED_QTY}.doubleValue() == 0.0" forecolor="#FFFFFF"/>
+    </style>
+    <style name="InpexZeroStyle" forecolor="#000000" fontName="Arial" fontSize="8.0">
+        <box rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+        <conditionalStyle conditionExpression="$F{INPEX_QTY} != null &amp;&amp; $F{INPEX_QTY}.doubleValue() == 0.0" forecolor="#FFFFFF"/>
+    </style>
+    <style name="TotalQtyZeroStyle" forecolor="#000000" fontName="Arial" fontSize="8.0">
+        <box rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+        <conditionalStyle conditionExpression="$F{TOTAL_QTY} != null &amp;&amp; $F{TOTAL_QTY}.doubleValue() == 0.0" forecolor="#FFFFFF"/>
+    </style>
+    <style name="OpicZeroStyle" forecolor="#000000" fontName="Arial" fontSize="8.0">
+        <box rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+        <conditionalStyle conditionExpression="$F{OPIC_QTY} != null &amp;&amp; $F{OPIC_QTY}.doubleValue() == 0.0" forecolor="#FFFFFF"/>
+    </style>
+    <style name="OsakaZeroStyle" forecolor="#000000" fontName="Arial" fontSize="8.0">
+        <box rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+        <conditionalStyle conditionExpression="$F{OSAKA_QTY} != null &amp;&amp; $F{OSAKA_QTY}.doubleValue() == 0.0" forecolor="#FFFFFF"/>
+    </style>
+    <style name="KansaiZeroStyle" forecolor="#000000" fontName="Arial" fontSize="8.0">
+        <box rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+        <conditionalStyle conditionExpression="$F{KANSAI_QTY} != null &amp;&amp; $F{KANSAI_QTY}.doubleValue() == 0.0" forecolor="#FFFFFF"/>
+    </style>
+    <style name="JeraZeroStyle" forecolor="#000000" fontName="Arial" fontSize="8.0">
+        <box rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+        <conditionalStyle conditionExpression="$F{JERA_QTY} != null &amp;&amp; $F{JERA_QTY}.doubleValue() == 0.0" forecolor="#FFFFFF"/>
+    </style>
+    <style name="TohoZeroStyle" forecolor="#000000" fontName="Arial" fontSize="8.0">
+        <box rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+        <conditionalStyle conditionExpression="$F{TOHO_QTY} != null &amp;&amp; $F{TOHO_QTY}.doubleValue() == 0.0" forecolor="#FFFFFF"/>
+    </style>
+
+    <!-- P_REPORT_DATE drives the reporting month. It MUST be declared before P_START_DATE
+         and P_END_DATE, because a defaultValueExpression can only reference parameters
+         declared earlier in the file. Both date parameters parse this one value; the month
+         boundaries are derived in the query with Oracle's own TRUNC(x,'MM') / LAST_DAY(x),
+         matching queries/R07.012_FC_LIFT_Subqueries.sql line 24. So any date within a month
+         yields that whole month. -->
+    <parameter name="P_REPORT_DATE" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["2025-07-01T00:00:00"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_START_DATE" class="java.sql.Timestamp" forPrompting="false">
+        <defaultValueExpression><![CDATA[new java.sql.Timestamp(new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($P{P_REPORT_DATE}).getTime())]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_END_DATE" class="java.sql.Timestamp" forPrompting="false">
+        <defaultValueExpression><![CDATA[new java.sql.Timestamp(new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse($P{P_REPORT_DATE}).getTime())]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_OPENING_INVENTORY" class="java.math.BigDecimal" forPrompting="false">
+        <defaultValueExpression><![CDATA[new java.math.BigDecimal("323715.028671")]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_DISCLAIMER_TEXT" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["* Production is reconciled to Inventory and Liftings at month-end. Daily Inventory measurements are not reconciled."]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_PUBLISH_DATE" class="java.sql.Timestamp" forPrompting="false">
+        <defaultValueExpression><![CDATA[new java.sql.Timestamp(new java.text.SimpleDateFormat("yyyy-MM-dd").parse("2025-08-05").getTime())]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_LAST_REFRESH" class="java.sql.Timestamp" forPrompting="false">
+        <defaultValueExpression><![CDATA[new java.sql.Timestamp(new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2025-08-05 08:19:03").getTime())]]></defaultValueExpression>
+    </parameter>
+    <!-- Base folder for relative resources, TRAILING SEPARATOR INCLUDED. "./" resolves to the
+         current absolute directory at run time; kept relative rather than a hardcoded absolute
+         path so it stays environment-independent. Point it at another folder to load the logo
+         from there. Consumed by the title band's image element as $P{P_BASE_URL} + "logo.png",
+         so any replacement value must also end in "/". -->
+    <parameter name="P_BASE_URL" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["/extension/ZREP/reports/"]]></defaultValueExpression>
+    </parameter>
+    <!-- Superseded by the P_BASE_URL concatenation above and no longer referenced by any
+         element. Left declared so any caller already passing it does not break. -->
+    <parameter name="P_LOGO_PATH" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["logo.png"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_LBL_INPEX" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["INPEX"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_LBL_TOTAL" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["TOTAL"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_LBL_OPIC" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["OPIC"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_LBL_OSAKA" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["Osaka Gas"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_LBL_KANSAI" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["Kansai Electric"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_LBL_JERA" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["JERA"]]></defaultValueExpression>
+    </parameter>
+    <parameter name="P_LBL_TOHO" class="java.lang.String" forPrompting="false">
+        <defaultValueExpression><![CDATA["Toho Gas"]]></defaultValueExpression>
+    </parameter>
+
+    <query language="sql">
+        <![CDATA[
+SELECT DAYTIME,
+       MAX(PROD_FORECAST) AS PRODUCTION,
+       MAX(PROD_CLOSING_BALANCE) AS INVENTORY,
+       NVL(MAX(TOTAL_LIFTED_QTY), 0) AS LIFTED_QTY,
+       NVL(MAX(CASE WHEN COMPANY_CODE = 'INPEX_ICHTHYS' THEN LIFTED_QTY END), 0) AS INPEX_QTY,
+       NVL(MAX(CASE WHEN COMPANY_CODE = 'TOTAL_ICHTHYS' THEN LIFTED_QTY END), 0) AS TOTAL_QTY,
+       NVL(MAX(CASE WHEN COMPANY_CODE = 'CPC_ICHTHYS' THEN LIFTED_QTY END), 0) AS OPIC_QTY,
+       NVL(MAX(CASE WHEN COMPANY_CODE = 'OSAKA_GAS_ICHTHYS' THEN LIFTED_QTY END), 0) AS OSAKA_QTY,
+       NVL(MAX(CASE WHEN COMPANY_CODE = 'KANSAI_ELECTRIC_ICHTHYS' THEN LIFTED_QTY END), 0) AS KANSAI_QTY,
+       NVL(MAX(CASE WHEN COMPANY_CODE = 'CHUBU_ELECTRIC_ICHTHYS' THEN LIFTED_QTY END), 0) AS JERA_QTY,
+       NVL(MAX(CASE WHEN COMPANY_CODE = 'TOHO_GAS_ICHTHYS' THEN LIFTED_QTY END), 0) AS TOHO_QTY,
+       MAX(CARGO_NAME) AS CARGO_NAME,
+       MAX(CARRIER_NAME) AS VESSEL,
+       MAX(CARGO_STATUS) AS LIFTING_STATUS
+  FROM TV_FC_LIFTING_REPORT
+ WHERE DAYTIME BETWEEN TRUNC($P{P_START_DATE}, 'MM') AND LAST_DAY($P{P_END_DATE})
+ GROUP BY DAYTIME
+ ORDER BY DAYTIME
+        ]]>
+    </query>
+
+    <field name="DAYTIME" class="java.sql.Timestamp"/>
+    <field name="PRODUCTION" class="java.math.BigDecimal"/>
+    <field name="INVENTORY" class="java.math.BigDecimal"/>
+    <field name="LIFTED_QTY" class="java.math.BigDecimal"/>
+    <field name="INPEX_QTY" class="java.math.BigDecimal"/>
+    <field name="TOTAL_QTY" class="java.math.BigDecimal"/>
+    <field name="OPIC_QTY" class="java.math.BigDecimal"/>
+    <field name="OSAKA_QTY" class="java.math.BigDecimal"/>
+    <field name="KANSAI_QTY" class="java.math.BigDecimal"/>
+    <field name="JERA_QTY" class="java.math.BigDecimal"/>
+    <field name="TOHO_QTY" class="java.math.BigDecimal"/>
+    <field name="CARGO_NAME" class="java.lang.String"/>
+    <field name="VESSEL" class="java.lang.String"/>
+    <field name="LIFTING_STATUS" class="java.lang.String"/>
+
+    <variable name="V_PRODUCTION_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+        <expression><![CDATA[$F{PRODUCTION}]]></expression>
+    </variable>
+    <variable name="V_LIFTED_QTY_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+        <expression><![CDATA[$F{LIFTED_QTY}]]></expression>
+    </variable>
+    <variable name="V_INPEX_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+        <expression><![CDATA[$F{INPEX_QTY}]]></expression>
+    </variable>
+    <variable name="V_TOTAL_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+        <expression><![CDATA[$F{TOTAL_QTY}]]></expression>
+    </variable>
+    <variable name="V_OPIC_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+        <expression><![CDATA[$F{OPIC_QTY}]]></expression>
+    </variable>
+    <variable name="V_OSAKA_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+        <expression><![CDATA[$F{OSAKA_QTY}]]></expression>
+    </variable>
+    <variable name="V_KANSAI_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+        <expression><![CDATA[$F{KANSAI_QTY}]]></expression>
+    </variable>
+    <variable name="V_JERA_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+        <expression><![CDATA[$F{JERA_QTY}]]></expression>
+    </variable>
+    <variable name="V_TOHO_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+        <expression><![CDATA[$F{TOHO_QTY}]]></expression>
+    </variable>
+
+    <title height="134" splitType="Stretch">
+<element kind="image" x="0" y="0" width="144" height="75">
+                <!-- Built from P_BASE_URL so the logo can live in a different folder.
+                     P_BASE_URL carries its own trailing "/" (default "./"), so nothing is
+                     inserted here. -->
+                <expression><![CDATA[$P{P_BASE_URL} + "logo.png"]]></expression>
+            </element>
+            <element kind="staticText" x="450" y="0" width="250" height="26" style="TitleStyle" hTextAlign="Center" vTextAlign="Middle"
+                     fontName="Arial" fontSize="21.0" bold="true" italic="true">
+                <text><![CDATA[Lifting Report]]></text>
+            </element>
+            <element kind="staticText" x="450" y="26" width="250" height="14" style="SubtitleStyle" hTextAlign="Center">
+                <text><![CDATA[Field Condensate]]></text>
+            </element>
+            <element kind="staticText" x="450" y="41" width="250" height="14" style="SubtitleStyle" hTextAlign="Center">
+                <text><![CDATA[(in US BBL at 60F)]]></text>
+            </element>
+            <element kind="textField" x="450" y="58" width="250" height="14" style="SubtitleStyle" hTextAlign="Center">
+                <expression><![CDATA[new java.text.SimpleDateFormat("MMMM yyyy").format($P{P_START_DATE})]]></expression>
+            </element>
+            <element kind="line" x="0" y="104" width="1140" height="1">
+                <pen lineWidth="1.5" lineColor="#454087"/>
+            </element>
+</title>
+
+    <pageHeader height="27" splitType="Stretch">
+<element kind="staticText" x="0" y="0" width="1128" height="13" style="HeaderBandStyle" hTextAlign="Left" vTextAlign="Middle">
+                <text><![CDATA[ Publish Date: 05 August 2025]]></text>
+            </element>
+
+            <element kind="rectangle" x="0" y="13" width="49" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="staticText" x="0" y="13" width="49" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <text><![CDATA[Date]]></text>
+            </element>
+            <element kind="rectangle" x="48" y="13" width="65" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="staticText" x="48" y="13" width="65" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <text><![CDATA[Production*]]></text>
+            </element>
+            <element kind="rectangle" x="112" y="13" width="77" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="staticText" x="112" y="13" width="77" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <text><![CDATA[Inventory*]]></text>
+            </element>
+            <element kind="rectangle" x="188" y="13" width="77" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="staticText" x="188" y="13" width="77" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <text><![CDATA[Lifted Qty]]></text>
+            </element>
+            <element kind="rectangle" x="265" y="13" width="77" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="textField" x="265" y="13" width="77" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$P{P_LBL_INPEX}]]></expression>
+            </element>
+            <element kind="rectangle" x="341" y="13" width="77" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="textField" x="341" y="13" width="77" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$P{P_LBL_TOTAL}]]></expression>
+            </element>
+            <element kind="rectangle" x="417" y="13" width="77" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="textField" x="417" y="13" width="77" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$P{P_LBL_OPIC}]]></expression>
+            </element>
+            <element kind="rectangle" x="493" y="13" width="77" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="textField" x="493" y="13" width="77" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$P{P_LBL_OSAKA}]]></expression>
+            </element>
+            <element kind="rectangle" x="570" y="13" width="77" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="textField" x="570" y="13" width="77" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$P{P_LBL_KANSAI}]]></expression>
+            </element>
+            <element kind="rectangle" x="646" y="13" width="77" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="textField" x="646" y="13" width="77" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$P{P_LBL_JERA}]]></expression>
+            </element>
+            <element kind="rectangle" x="723" y="13" width="77" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="textField" x="723" y="13" width="77" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$P{P_LBL_TOHO}]]></expression>
+            </element>
+            <element kind="rectangle" x="799" y="13" width="92" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="staticText" x="799" y="13" width="92" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <text><![CDATA[Cargo ID]]></text>
+            </element>
+            <element kind="rectangle" x="891" y="13" width="147" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="staticText" x="891" y="13" width="147" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <text><![CDATA[Vessel]]></text>
+            </element>
+            <element kind="rectangle" x="1037" y="13" width="91" height="14" style="HeaderCellBoxStyle"><pen lineWidth="1.0"/></element>
+            <element kind="staticText" x="1037" y="13" width="91" height="14" style="HeaderTextOverlayStyle" hTextAlign="Center" vTextAlign="Middle">
+                <text><![CDATA[Lifting Status]]></text>
+            </element>
+
+</pageHeader>
+
+    <columnHeader height="13" splitType="Stretch">
+<element kind="rectangle" x="0" y="0" width="113" height="13" style="HeaderCellBoxStyle" printWhenExpression="$V{PAGE_NUMBER} == 1" removeLineWhenBlank="true"><pen lineWidth="1.0"/></element>
+            <element kind="staticText" x="0" y="0" width="113" height="13" style="HeaderTextOverlayStyle"
+                     hTextAlign="Center" vTextAlign="Middle"
+                     printWhenExpression="$V{PAGE_NUMBER} == 1" removeLineWhenBlank="true">
+                <text><![CDATA[Opening Inventory ]]></text>
+            </element>
+            <element kind="textField" x="113" y="0" width="76" height="13" style="DetailTextStyle" pattern="#,##0"
+                     hTextAlign="Right" vTextAlign="Middle"
+                     printWhenExpression="$V{PAGE_NUMBER} == 1" removeLineWhenBlank="true">
+                <expression><![CDATA[$P{P_OPENING_INVENTORY}]]></expression>
+            </element>
+            <element kind="staticText" x="188" y="0" width="77" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+            <element kind="staticText" x="265" y="0" width="77" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+            <element kind="staticText" x="341" y="0" width="77" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+            <element kind="staticText" x="417" y="0" width="77" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+            <element kind="staticText" x="493" y="0" width="77" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+            <element kind="staticText" x="570" y="0" width="77" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+            <element kind="staticText" x="646" y="0" width="77" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+            <element kind="staticText" x="723" y="0" width="77" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+            <element kind="staticText" x="799" y="0" width="92" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+            <element kind="staticText" x="891" y="0" width="147" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+            <element kind="staticText" x="1037" y="0" width="91" height="13" style="DetailTextStyle" printWhenExpression="$V{PAGE_NUMBER} == 1"><text><![CDATA[]]></text></element>
+</columnHeader>
+
+    <detail>
+        <band height="14" splitType="Prevent">
+<element kind="textField" x="0" y="0" width="49" height="14" style="DetailTextStyle" pattern="dd-MM-yyyy" hTextAlign="Center" vTextAlign="Middle">
+                <expression><![CDATA[$F{DAYTIME}]]></expression>
+                <box><pen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+            </element>
+            <element kind="textField" x="48" y="0" width="65" height="14" style="DetailTextStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{PRODUCTION}]]></expression>
+            </element>
+            <element kind="textField" x="112" y="0" width="77" height="14" style="DetailTextStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{INVENTORY}]]></expression>
+            </element>
+            <element kind="textField" x="188" y="0" width="77" height="14" style="LiftedQtyZeroStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{LIFTED_QTY}]]></expression>
+            </element>
+            <element kind="textField" x="265" y="0" width="77" height="14" style="InpexZeroStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{INPEX_QTY}]]></expression>
+            </element>
+            <element kind="textField" x="341" y="0" width="77" height="14" style="TotalQtyZeroStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{TOTAL_QTY}]]></expression>
+            </element>
+            <element kind="textField" x="417" y="0" width="77" height="14" style="OpicZeroStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{OPIC_QTY}]]></expression>
+            </element>
+            <element kind="textField" x="493" y="0" width="77" height="14" style="OsakaZeroStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{OSAKA_QTY}]]></expression>
+            </element>
+            <element kind="textField" x="570" y="0" width="77" height="14" style="KansaiZeroStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{KANSAI_QTY}]]></expression>
+            </element>
+            <element kind="textField" x="646" y="0" width="77" height="14" style="JeraZeroStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{JERA_QTY}]]></expression>
+            </element>
+            <element kind="textField" x="723" y="0" width="77" height="14" style="TohoZeroStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$F{TOHO_QTY}]]></expression>
+            </element>
+            <element kind="textField" x="799" y="0" width="92" height="14" style="DetailTextStyle" blankWhenNull="true" hTextAlign="Left" vTextAlign="Middle">
+                <expression><![CDATA[$F{CARGO_NAME}]]></expression>
+            </element>
+            <element kind="textField" x="891" y="0" width="147" height="14" style="DetailTextStyle" blankWhenNull="true" hTextAlign="Left" vTextAlign="Middle">
+                <expression><![CDATA[$F{VESSEL}]]></expression>
+            </element>
+            <element kind="textField" x="1037" y="0" width="91" height="14" style="DetailTextStyle" blankWhenNull="true" hTextAlign="Left" vTextAlign="Middle">
+                <expression><![CDATA[$F{LIFTING_STATUS}]]></expression>
+            </element>
+        </band>
+    </detail>
+
+    <summary height="21" splitType="Stretch">
+<element kind="staticText" x="0" y="7" width="49" height="14" style="TotalRowStyle" hTextAlign="Left" vTextAlign="Middle">
+                <text><![CDATA[Total]]></text>
+                <box leftPadding="3" rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><leftPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+            </element>
+            <element kind="textField" x="48" y="7" width="65" height="14" style="TotalRowStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$V{V_PRODUCTION_TOTAL}]]></expression>
+            </element>
+            <element kind="textField" x="188" y="7" width="77" height="14" style="TotalRowStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$V{V_LIFTED_QTY_TOTAL}]]></expression>
+                <box rightPadding="3"><topPen lineWidth="1.0" lineColor="#D6D6D6"/><leftPen lineWidth="1.0" lineColor="#D6D6D6"/><bottomPen lineWidth="1.0" lineColor="#D6D6D6"/><rightPen lineWidth="1.0" lineColor="#D6D6D6"/></box>
+            </element>
+            <element kind="textField" x="265" y="7" width="77" height="14" style="TotalRowStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$V{V_INPEX_TOTAL}]]></expression>
+            </element>
+            <element kind="textField" x="341" y="7" width="77" height="14" style="TotalRowStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$V{V_TOTAL_TOTAL}]]></expression>
+            </element>
+            <element kind="textField" x="417" y="7" width="77" height="14" style="TotalRowStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$V{V_OPIC_TOTAL}]]></expression>
+            </element>
+            <element kind="textField" x="493" y="7" width="77" height="14" style="TotalRowStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$V{V_OSAKA_TOTAL}]]></expression>
+            </element>
+            <element kind="textField" x="570" y="7" width="77" height="14" style="TotalRowStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$V{V_KANSAI_TOTAL}]]></expression>
+            </element>
+            <element kind="textField" x="646" y="7" width="77" height="14" style="TotalRowStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$V{V_JERA_TOTAL}]]></expression>
+            </element>
+            <element kind="textField" x="723" y="7" width="77" height="14" style="TotalRowStyle" pattern="#,##0" hTextAlign="Right" vTextAlign="Middle">
+                <expression><![CDATA[$V{V_TOHO_TOTAL}]]></expression>
+            </element>
+</summary>
+
+    <pageFooter height="24" splitType="Stretch">
+<element kind="textField" x="0" y="0" width="1140" height="12" style="FootnoteStyle" blankWhenNull="true" hTextAlign="Left">
+                <expression><![CDATA[$P{P_DISCLAIMER_TEXT}]]></expression>
+            </element>
+            <element kind="line" x="0" y="13" width="1140" height="1">
+                <pen lineWidth="1.5" lineColor="#454087"/>
+            </element>
+            <element kind="textField" x="0" y="17" width="200" height="7" style="FooterStripStyle" pattern="dd-MMM-yyyy HH:mm.ss" evaluationTime="Report" hTextAlign="Left">
+                <expression><![CDATA["Last refresh date: " + new java.text.SimpleDateFormat("dd-MMM-yyyy HH:mm.ss").format($P{P_LAST_REFRESH})]]></expression>
+            </element>
+            <element kind="staticText" x="450" y="17" width="200" height="7" style="FooterStripStyle" hTextAlign="Center">
+                <text><![CDATA[Security Classification: Restricted]]></text>
+            </element>
+            <element kind="textField" x="1057" y="17" width="83" height="7" style="FooterStripStyle" evaluationTime="Report" hTextAlign="Right">
+                <expression><![CDATA["Page " + $V{PAGE_NUMBER} + " of " + $V{PAGE_NUMBER}]]></expression>
+            </element>
+</pageFooter>
+
+</jasperReport>

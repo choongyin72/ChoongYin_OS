@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Pulls JasperReports 6.17.0 and its transitive dependencies into ./jr6170-lib, so the
+  downgraded JRXML can be compiled and rendered by the SAME library version the report is
+  being targeted at, rather than by a nearby one.
+
+      mvn -q dependency:copy-dependencies -DoutputDirectory=jr6170-lib
+
+  Note: EC 14.2.4's own engines are 6.21.4 (legacy) and 7.0.1 (V7). 6.17.0 is the owner's
+  chosen target for this downgrade exercise, so it is pinned here explicitly.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.example.reports</groupId>
+    <artifactId>jr6-downgrade</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>6.17.0</version>
+        </dependency>
+        <!-- Expression compiler: JasperReports needs a Java compiler at runtime to build the
+             report's expression class. Without this, compileReport fails on a JDK-only JRE
+             path with "Unable to find a compiler". -->
+        <dependency>
+            <groupId>org.eclipse.jdt</groupId>
+            <artifactId>ecj</artifactId>
+            <version>3.33.0</version>
+        </dependency>
+        <!-- Oracle driver, so the downgraded report can be filled against the same local DB
+             the 7.x version was verified against. -->
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
+            <version>23.4.0.24.05</version>
+        </dependency>
+    </dependencies>
+</project>
