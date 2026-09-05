@@ -1,0 +1,615 @@
+"""Generate R07.001's JRXML by TRACING the reference PDF.
+
+Rather than hand-placing ~1263 text spans and ~1000 cells across 7 pages and hoping the
+geometry is right, this reads Crystal's own drawings and text out of the reference and emits
+matching JasperReports elements. Everything lands where Crystal put it, which removes the
+entire class of defect that dominated R07.003-006 (columns derived by guesswork, cells that
+overlap or leave gaps, values in the wrong box).
+
+Architecture, mirroring R07.003's verified 1+4:
+    page 1  -> <title>
+    pages 2-7 -> one <detail> band with 6 records gated on $V{REPORT_COUNT}
+
+Coordinates: local = absolute - margin. Margins are read from the reference's own layout
+(24 left / 28 top) so a traced absolute position maps straight onto a local one.
+"""
+import collections
+import io
+import os
+import sys
+
+import fitz
+
+# Import tile_lib from THIS file's directory, not from tmp/. Two copies of this generator
+# existed (tmp/ and here) and telling which was live needed a cmp - self-contained now.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import tile_lib
+
+B = r"C:\Projects\INPEX\sources\CrystalReports\R07.001"
+REF = B + r"\crytsal report in pdf\R07.001 - Offshore Daily Operations Report.pdf"
+OUT = B + r"\output\R07_001_Offshore_Daily_Ops_Report.jrxml"
+
+LEFT, TOP = 24, 28
+PAGE_W, PAGE_H = 842, 1191
+COL_W = 791
+# The reference's lowest page content sits at local y 1092 with height 13, i.e. it needs a band
+# of at least 1105. With bottomMargin 38 and a 30pt footer the band caps at 1095 and the design
+# fails validation, so the bottom margin and footer are trimmed to make room.
+BOTTOM = 30
+FOOTER_H = 26
+BAND_H = PAGE_H - TOP - BOTTOM - FOOTER_H      # 1107
+
+ref = fitz.open(REF)
+PURPLE = lambda f: bool(f) and f[2] > 0.4 and f[0] < 0.45 and f[1] < 0.45
+
+
+def hexc(c):
+    if not c:
+        return None
+    return "#%02X%02X%02X" % tuple(max(0, min(255, int(round(v * 255)))) for v in c)
+
+
+def esc(t):
+    """Text goes inside <![CDATA[...]]>, so it must NOT be XML-escaped - escaping turned
+    'Health, Safety & Environment' into 'Health, Safety &amp; Environment' and broke the
+    string. The only thing CDATA cannot contain is the terminator itself."""
+    return t.replace("]]>", "]]&gt;")
+
+
+def classify_rect(dr):
+    """Return ('fill'|'border'|'rule'|None, ...) for a drawing."""
+    r = dr["rect"]
+    w, h = r.x1 - r.x0, r.y1 - r.y0
+    if w < 1 and h < 1:
+        return None
+    if h < 3 and w >= 20:
+        return "rule"
+    if w < 3 and h >= 4:
+        return "vrule"
+    if w >= 6 and h >= 4:
+        return "fill" if PURPLE(dr.get("fill")) else "border"
+    return None
+
+
+# OWNER REQUEST (2026-09-02): "CPF grid table is too near to FPSO grid table.... add some gap".
+# Measured white separation between consecutive tables on page 1, inside a cell column:
+#     CPF1  -> FPSO1 :  0.96pt   <- the odd one out
+#     FPSO1 -> CPF2  : 15.89pt
+#     CPF2  -> FPSO2 : 11.98pt
+#     FPSO2 -> next  : 11.87pt
+# So ~12pt is this page's own spacing; the CPF1/FPSO1 pair is the outlier. Insert an 11pt gap
+# by shifting the FPSO1 table and everything below it down. The title band has 25pt of measured
+# headroom (lowest content 1110, band bottom 1135), so this fits without overflow.
+# Keyed by page index -> (local y at/after which to shift, delta).
+GAP_INSERT = {0: (212, 11)}
+
+
+def shift_y(y, p):
+    g = GAP_INSERT.get(p)
+    return y + g[1] if g and y >= g[0] else y
+
+
+# No text should sit ON a border line. "Total" traced to x=23.00 with the table's left border
+# also at 23.00, so the word touched the line (owner: "Total word is hit the borderline...
+# move it far a bit"). Anything with less than this clearance is pushed out to it. The
+# threshold is below the 1.00-2.00pt insets the other first-column labels already have, so
+# those are left untouched.
+MIN_TEXT_INSET = 2
+INSET_TRIGGER = 1.0
+TOP_CLEAR_TRIGGER = 2.9   # the report own healthy clearance, ink-measured
+# Measured: with vTextAlign="Top" the rendered glyph top lands this far below the element box
+# top for these 8-10pt Arial labels (element y 255 -> glyph top 256.45).
+GLYPH_DROP = 2.03   # INK offset, measured: element y 156 -> first inked pixel 186.03 abs
+# Row grouping for the vertical clearance push. Spans whose y falls in the same bucket are one
+# row and all receive the row largest requirement, so a row never ends up half-shifted.
+ROW_BUCKET = 3
+
+TILE_STATS = {}
+CONTENT_MAX_Y = 1098        # local; the reference's footer strip sits at 1111 and is emitted
+                            # separately in <pageFooter>, so it must not be traced into a band
+
+
+def page_elements(p):
+    """Trace one reference page into JRXML element strings (local coords)."""
+    page = ref[p]
+    out = []
+
+    # ---- borders and fills, drawn first so text sits on top ----------------------
+    fills, borders, rules, vrules = [], [], [], []
+    RAW_VRULE = []          # (x, y0, y1) unrounded, local - see the join pass below
+    RAW_EDGES = set()       # unrounded local y of every rect/fill top and bottom
+    for dr in page.get_drawings():
+        k = classify_rect(dr)
+        if k is None:
+            continue
+        r = dr["rect"]
+        if r.y0 - TOP >= CONTENT_MAX_Y:
+            continue
+        rec = (round(r.x0 - LEFT), round(r.y0 - TOP),
+               max(1, round(r.x1 - r.x0)), max(1, round(r.y1 - r.y0)),
+               hexc(dr.get("color")) or "#D6D6D6", dr.get("width") or 1.0)
+        {"fill": fills, "border": borders, "rule": rules, "vrule": vrules}[k].append(rec)
+        # Keep the UNROUNDED local coordinates too. Rounding destroys the only signal that
+        # distinguishes a boundary Crystal means to be closed from one it means to be open:
+        # both a 0.50pt hairline (rounding artefact) and a 1.35pt deliberate separator become
+        # a 1.00pt gap once rounded. Closing both is what broke page 1's HSE tables.
+        if k == "vrule":
+            RAW_VRULE.append((r.x0 - LEFT, r.y0 - TOP, r.y1 - TOP))
+        elif k == "border":
+            RAW_EDGES.add(r.y0 - TOP)
+            RAW_EDGES.add(r.y1 - TOP)
+        elif k == "fill":
+            RAW_EDGES.add(r.y0 - TOP)
+            RAW_EDGES.add(r.y1 - TOP)
+
+    # Crystal leaves a gap between neighbouring cells, so every boundary is drawn twice and
+    # after rounding some pairs collapse to 1pt while others stay 2pt - the "borderline
+    # thickness is not the same" defect. Tile to exactly one line per boundary.
+    borders, tstats = tile_lib.tile(borders)
+
+    # Owner defect item 3 (round 01, after clarification): "head column row and data column
+    # row is no connected" - the purple header band looked detached from the table's left
+    # border. Measured cause: rounding separates a fill from the border that encloses it.
+    #     reference: fill_left 23.65, border_left 23.15  -> 0.50pt hairline
+    #     traced   : fill_left 24.00, border_left 23.00  -> 1.00pt white sliver
+    # Crystal's 0.50 is unreachable on an integer grid (Part Z9), so snap each fill flush to
+    # the tiled border edges instead - the band then starts exactly on the border line. Fills
+    # are emitted BEFORE borders, so the border still draws on top.
+    bx = sorted({x for x, _, _, _, _, _ in borders} | {x + w for x, _, w, _, _, _ in borders})
+    by = sorted({y for _, y, _, _, _, _ in borders} | {y + h for _, y, _, h, _, _ in borders})
+    snapped_fills = []
+    fills_snapped = 0
+    for x, y, w, h, col, lw in fills:
+        nx, ny, nx1, ny1 = x, y, x + w, y + h
+        for pool, val, setter in ((bx, x, "x0"), (bx, x + w, "x1"),
+                                  (by, y, "y0"), (by, y + h, "y1")):
+            if not pool:
+                continue
+            n = min(pool, key=lambda e: abs(e - val))
+            if abs(n - val) <= 1.5:
+                if setter == "x0":
+                    nx = n
+                elif setter == "x1":
+                    nx1 = n
+                elif setter == "y0":
+                    ny = n
+                else:
+                    ny1 = n
+        # Pull the BOTTOM up 1pt so the band's own bottom border line lands on white and is
+        # visible. Snapping the fill flush on all four sides fixed the left sliver but painted
+        # the grey #D6D6D6 border exactly on the purple edge, where it vanishes - the band then
+        # has no closing line and reads as running straight into the row below. The reference
+        # insets its fill 0.5pt for exactly this reason (rect 241.40..254.55, fill
+        # 241.90..254.05); 0.5 is unreachable on an integer grid, so 1pt on the bottom only -
+        # it keeps the band's height at the reference's 12pt and leaves left/right flush.
+        if ny1 - ny >= 4 and any(abs(e - ny1) < 0.01 for e in by):
+            ny1 -= 1
+        if nx1 - nx >= 4 and ny1 - ny >= 3:
+            if (nx, ny, nx1 - nx, ny1 - ny) != (x, y, w, h):
+                fills_snapped += 1
+            snapped_fills.append((nx, ny, nx1 - nx, ny1 - ny, col, lw))
+        else:
+            snapped_fills.append((x, y, w, h, col, lw))
+    fills = snapped_fills
+    tstats["fills-snapped"] = fills_snapped
+
+    # OWNER DEFECT item 3, judged INTERNALLY (owner: "this kind of borderline issues... dont
+    # compare with crystal report layout"). Profiling down a column INSIDE the first cell shows
+    # what the reader actually sees below a header band:
+    #     grey line 253.48..254.55  <- the band's own bottom border
+    #     WHITE     254.55..255.50  <- a 0.95pt gap
+    #     grey line 255.50..256.57  <- the traced row separator
+    # Two parallel lines 1pt apart at the header/body junction. That is the "header row and
+    # data column row is not connected": the header's closing line and the body's opening line
+    # are DUPLICATES sitting apart instead of one shared line. Drop the separator that
+    # duplicates a band's bottom border so a single line joins header to body.
+    # OWNER-SPECIFIED FIX (2026-09-02): "remove the second one grey line in each grid table
+    # which have two grey lines" - keep the UPPER line of a doubled pair, drop the lower.
+    #
+    # Generalised from an earlier version that only looked below purple bands. Any horizontal
+    # line already present within DOUBLE_LINE_GAP ABOVE a rule - whether that line is another
+    # rule or a tiled border-rect edge - makes the rule the redundant second line.
+    #
+    # Note on an earlier regression: this drop was briefly disabled because Crystal has a line
+    # at y=170 that the output lacked, which looked like a missing line. It is not missing - it
+    # IS the duplicate (band bottom border ~169, rule 170). That misdiagnosis came from diffing
+    # the line list against Crystal on a BORDERLINE issue, which the owner had ruled out.
+    # Crystal draws doubles; one shared line is what reads correctly.
+    DOUBLE_LINE_GAP = 2.5
+    uppers = sorted(set(by) | {ry for _, ry, _, _, _, _ in rules})
+    kept_rules, dropped = [], 0
+    for rx, ry, rw, rh, rc, rlw in rules:
+        dup = rw > 200 and any(ry - DOUBLE_LINE_GAP <= u < ry - 0.01 for u in uppers)
+        if dup:
+            dropped += 1
+        else:
+            kept_rules.append((rx, ry, rw, rh, rc, rlw))
+    rules = kept_rules
+    tstats["second-of-double-line-dropped"] = dropped
+
+    # Every horizontal line the reader can see: standalone rules plus the top/bottom edges of
+    # every tiled border rect. Used to give row labels clearance from the line above them.
+    hy = sorted(set(by) | {ry for _, ry, _, _, _, _ in rules})
+
+    # Owner defect items 3,4,5,6: "column header row is not connected to its data row".
+    # The tiling pass only ever touched the cell RECTANGLES; the traced column verticals were
+    # left where rounding put them. Crystal's own 0.50pt hairline between a header's bottom
+    # and the data verticals below rounds to 174 vs 175 - a full 1pt break, and the owner saw
+    # it on four tables. Snap each vertical's ends onto a neighbouring rect edge so the grid
+    # closes by construction. Only sub-1.5pt moves, so a deliberate blank band is never
+    # bridged (same reasoning as tile_lib's gap_close).
+    # WHETHER to join is decided from the UNROUNDED reference gap, not the rounded one.
+    # Crystal leaves 0.50pt where it means "joined" (a hairline artefact of its own cell
+    # spacing) and >=1.0pt where it means "separate" - e.g. page 1's HSE tables, where the
+    # 1.35pt gap below each purple band is closed by its own horizontal rule. Both round to a
+    # 1.00pt gap, so a rounded-size rule closed both and merged the HSE data rows into their
+    # header bands. Consult the raw geometry instead.
+    # DISABLED 2026-09-02 after it regressed page 1's HSE section (owner-reported).
+    #
+    # The intent was to close the 1pt break the owner reported as "column header row is not
+    # connected to its data row" (items 3-6). It did that, but it ALSO closed the band-to-row
+    # gap in page 1's four HSE tables, where the reference deliberately leaves 0.75-1.00pt and
+    # separates the rows with its own horizontal rule. Measured:
+    #     boundary          ref      pre-fix   with-join
+    #     band 254.05 ->   +1.00     +1.00      0.00   <- merged into the band
+    #     band 346.00 ->   +0.75     +1.00      0.00
+    #     band 390.85 ->   +1.00     +1.00      0.00
+    # Two attempts to discriminate the two cases failed: a rounded gap-size test cannot (both
+    # are 1.00 once rounded), and a raw-gap test finds Crystal's border rect edge 0.50pt away
+    # rather than the band edge 1.00pt away, so it closes anyway.
+    #
+    # Setting JOIN_MAX to 0 keeps the two VERIFIED fixes (text-x origin, degenerate-rectangle
+    # rules) and drops only the pass that regressed. Items 3-6 therefore remain open and need a
+    # different approach - raised with the owner rather than patched with a third guess.
+    # THE DISCRIMINATOR, measured from the reference rather than assumed (two earlier attempts
+    # failed - see the note above). Crystal draws its OWN horizontal rule just under a header
+    # band where it intends the data rows to be separated from it, and draws none where the
+    # grid should run continuously:
+    #     p1 HSE 1st CPF  band 254.05  -> hrule at 255.90   keep open
+    #     p1 HSE 2nd CPF  band 346.00  -> hrule at 347.50   keep open
+    #     p1 HSE 2nd FPSO band 390.85  -> hrule at 392.75   keep open
+    #     p3 ProdRisk     band 174.25  -> NONE              join (item 5)
+    #     p5 ProdRisk     band 174.25  -> NONE              join (item 6)
+    # So: veto the join when a traced horizontal rule sits within HRULE_VETO of the candidate
+    # edge. That closes items 5 and 6 without re-merging the HSE rows into their bands.
+    JOIN_MAX = 1.5          # rounded gap at or below this may be closed, subject to the veto
+    # HRULE_VETO = 0 -> the veto is OFF, and the comment block above is a MISDIAGNOSIS I am
+    # leaving in place as a record. I disabled the join because a metric (band-fill-bottom to
+    # nearest vertical-top) went to 0.00 and I read that as "the rows merged into the band".
+    # That metric goes to 0.00 by definition when a vertical is extended up to the band - it
+    # moves no horizontal line at all. The owner's complaint in that round was the 1pt white
+    # fill sliver down the left edge, fixed separately by the fill snap above.
+    #
+    # Measured with the join ON and the fill inset in place - ink sampled down the left border
+    # column through the band/row boundary:
+    #     reference : ink 241.00..255.08 | white 0.24pt | ink 255.32..262.00
+    #     join OFF  : ink 241.00..254.48 | white 0.48pt | ink 254.96..262.00   <- visible break
+    #     join ON   : ink 241.00..262.00 continuous, no gap                    <- connected
+    # and the horizontal separation survives: fill_bottom 253, border_bottom 254 (grey line on
+    # white), row separator hrule 256 - the same shape as the reference's 254.05 / 254.55 /
+    # 255.90. So the join and the fill inset are compatible; only the sliver ever conflicted.
+    HRULE_VETO = 0.0
+    rule_ys = [ry for _, ry, _, _, _, _ in rules]
+
+    # A vertical's X must sit on the tiled column grid too, not just its ends on row edges.
+    # Rounding can put them 1pt apart: on page 7 the Comments table's border right edge tiled
+    # to local 788 (abs 812.00) while the traced vertical rounded to 789 (abs 813.00), leaving
+    # the column line 1pt OUTSIDE the table - the reference has it just inside (812.65 vs
+    # 812.75). This is owner item 8, and it had been hidden by a measurement bug: the
+    # acceptance test counted purple fills as border rects, so it compared the fill edge
+    # (coincidentally 813.00) instead of the border edge.
+    vrules = [((min(bx, key=lambda e: abs(e - x)) if bx and
+                abs(min(bx, key=lambda e: abs(e - x)) - x) <= 1.5 else x),
+               y, w, h, col, lw)
+              for x, y, w, h, col, lw in vrules]
+    edges = sorted({y for _, y, _, _, _, _ in borders}
+                   | {y + h for _, y, _, h, _, _ in borders})
+    raw_edges = sorted(RAW_EDGES)
+    joined = kept = 0
+    snapped = []
+    for i, (x, y, w, h, col, lw) in enumerate(vrules):
+        rx, ry0, ry1 = RAW_VRULE[i] if i < len(RAW_VRULE) else (x, y, y + h)
+        y0, y1 = y, y + h
+        for raw_end, rounded_end, is_top in ((ry0, y0, True), (ry1, y1, False)):
+            if not raw_edges:
+                continue
+            # A horizontal rule immediately below the candidate edge IS Crystal's separator -
+            # joining across it merges the data rows into the header band.
+            if is_top and any(rounded_end - HRULE_VETO <= ry <= rounded_end + HRULE_VETO
+                              for ry in rule_ys):
+                kept += 1
+                continue
+            cand = [e for e in edges if abs(e - rounded_end) <= JOIN_MAX]
+            if not cand:
+                continue
+            snap_to = min(cand, key=lambda e: abs(e - rounded_end))
+            if is_top:
+                y0 = snap_to
+            else:
+                y1 = snap_to
+        if (y0, y1) != (y, y + h) and y1 - y0 >= 3:
+            joined += 1
+            snapped.append((x, y0, w, y1 - y0, col, lw))
+        else:
+            snapped.append((x, y, w, h, col, lw))
+    vrules = snapped
+    tstats["vrule-joined"] = joined
+    tstats["vrule-kept-open"] = kept
+
+    TILE_STATS[p + 1] = tstats
+
+    for x, y, w, h, col, lw in fills:
+        out.append(f'<element kind="rectangle" x="{x}" y="{shift_y(y, p)}" width="{w}" height="{h}" '
+                   f'mode="Opaque" backcolor="#454087">'
+                   # NO pen. A fill is only a fill in Crystal. Giving it a 1pt grey outline
+                   # put a second stroke ~1pt from the traced border rect on the same
+                   # boundary, so every purple band's verticals rendered 1.98pt against the
+                   # reference's 1.02pt - the "borderline thickness" defect, self-inflicted.
+                   f'<pen lineWidth="0.0"/></element>')
+    for x, y, w, h, col, lw in borders:
+        out.append(f'<element kind="rectangle" x="{x}" y="{shift_y(y, p)}" width="{w}" height="{h}" '
+                   f'mode="Transparent">'
+                   f'<pen lineWidth="1.0" lineColor="{col}"/></element>')
+    # ROOT CAUSE 1 of the owner's 8 defects (round 01): a kind="line" with width/height 1
+    # draws its 1pt stroke across that whole 1pt box, so it renders CENTRED - 0.5pt off the
+    # nominal coordinate - while a rectangle's border renders ON the nominal edge. Mixing the
+    # two primitives put every traced rule 0.5pt away from the cell grid it was meant to meet:
+    #   header rect bottom abs 174.00, data vertical rendered 175.00 -> a 1.00pt break
+    #   header rect right edge abs 805.00, data vertical rendered 805.50 -> misaligned
+    # MEASURED, not assumed: a kind="line" renders its path at nominal + penWidth/2 even when
+    # declared width="0" (tried it - all 402 verticals still landed on 23.50 for a nominal 23).
+    # Decimal coordinates are rejected by 7.0.3 (Part Z9), so the line cannot be nudged back.
+    #
+    # So the rules are drawn as DEGENERATE RECTANGLES instead: a rectangle's border sits ON the
+    # nominal edge, and zero width collapses its left and right edges onto the same x - one
+    # vertical line, at exactly the coordinate the cell grid uses. Same for height 0 and a
+    # horizontal rule. One primitive for all grid geometry means the pieces meet by
+    # construction rather than by luck.
+    for x, y, w, h, col, lw in rules:
+        out.append(f'<element kind="rectangle" x="{x}" y="{shift_y(y, p)}" width="{w}" height="0" '
+                   f'mode="Transparent">'
+                   f'<pen lineWidth="{lw:.1f}" lineColor="{col}"/></element>')
+    for x, y, w, h, col, lw in vrules:
+        out.append(f'<element kind="rectangle" x="{x}" y="{shift_y(y, p)}" width="0" height="{h}" '
+                   f'mode="Transparent">'
+                   f'<pen lineWidth="{lw:.1f}" lineColor="{col}"/></element>')
+
+    # ---- the INPEX logo -----------------------------------------------------------
+    # get_drawings() and get_text() do not return images, so a pure trace omits the logo
+    # entirely - the same defect R07.002 and R07.003 both shipped with. The reference places
+    # it identically on all 7 pages: abs (22.65, 41.20)-(150.20, 63.20) -> local -1,13 128x22.
+    # logo_ref.png is extracted FROM the reference PDF (tmp/extract_001_logo.py). The
+    # logo.png already sitting in output/ is a different INPEX mark - aspect 1.903 against
+    # the reference's 5.791 - so RetainShape aspect-fitted it into a fraction of the box.
+    out.append('<element kind="image" x="-1" y="13" width="128" height="22" '
+               'scaleImage="FillFrame">'
+               '<expression><![CDATA["logo_ref.png"]]></expression></element>')
+
+    # ---- text: one element per reference span, at the reference's own bbox --------
+    n_text = 0
+    pending = []          # (x, y, w, h, size, bold, ital, fc, text) awaiting the row push
+    row_need = {}         # row bucket -> largest downward push any span in that row needs
+    for b in page.get_text("dict")["blocks"]:
+        for l in b.get("lines", []):
+            for s in l["spans"]:
+                t = s["text"]
+                if not t.strip():
+                    continue
+                x0, y0, x1, y1 = s["bbox"]
+                if y0 - TOP >= CONTENT_MAX_Y:
+                    continue
+                size = round(s["size"], 1)
+                fn = s["font"]
+                bold = "Bold" in fn or "bold" in fn
+                ital = "Italic" in fn or "Oblique" in fn
+                fc = hexc(s.get("color") and (
+                    ((s["color"] >> 16) & 255) / 255.0,
+                    ((s["color"] >> 8) & 255) / 255.0,
+                    (s["color"] & 255) / 255.0)) or "#000000"
+                # a little slack so JasperReports never clips the glyphs (Part F1)
+                w = max(8, int(round(x1 - x0)) + 6)
+                h = max(int(round(size * 1.45)), int(round(y1 - y0)) + 3)
+                # ROOT CAUSE 2 of the owner's 8 defects (round 01): the x had a "- 1" on it.
+                # It was added as anti-clipping slack (Part F1) alongside the width + 6, but
+                # slack belongs in the WIDTH, not in the origin - the -1 shifted all 1242
+                # texts 1pt left, which is only visible where a value sits against a cell's
+                # left border. That is exactly the six sections the owner listed, two of them
+                # with the text starting LEFT of the border line (inset -0.50pt).
+                # y keeps its -1: vTextAlign="Top" plus the grown height means the glyph is
+                # positioned by the box top, and removing it moves every baseline (verified
+                # separately - see check_8_defects.py).
+                x = int(round(x0 - LEFT))
+                y = int(round(y0 - TOP)) - 1
+                # No text may sit ON a border line. "Total" traced to x=23.00 with the table's
+                # left border also at 23.00, so the word touched it. Push out to
+                # MIN_TEXT_INSET only when the clearance is under INSET_TRIGGER, which leaves
+                # the 1.00-2.00pt insets the other first-column labels already have alone.
+                # Compare against the table's LEFTMOST border only. Using the nearest edge
+                # instead pushed a page-2 label from a 1.00pt inset to 3.00pt, because it
+                # happened to sit on an interior cell boundary that carries no drawn line in
+                # that row.
+                if bx and (x - min(bx)) < INSET_TRIGGER:
+                    x = min(bx) + MIN_TEXT_INSET
+                # Same rule vertically (owner: "some data values from data columns had hit its
+                # top borderline"). Measured clearances of 0.45pt between a label's rendered
+                # glyph top and the horizontal line above it - the text is where the reference
+                # puts it, but the tiled/joined lines moved closer to it. Push the text down
+                # 1pt where the clearance is under a point.
+                # Compare against the RENDERED GLYPH TOP, not the element box top. With
+                # vTextAlign="Top" JasperReports drops the glyph GLYPH_DROP below the box top,
+                # so a line can pass through the box and still sit right on the glyph - which
+                # is why comparing box tops fixed only some of them and left three at 0.45pt.
+                # ROW-BASED, not per-element (owner: "apply it as row based instead of column
+                # based"). The push is only RECORDED here; it is resolved per row after every
+                # span on the page is known, then the row's largest requirement is applied to
+                # ALL of that row's spans. Deciding per span would push some values in a row
+                # and not others, leaving a row's values vertically out of line with each
+                # other - trading a border-clearance defect for an alignment one.
+                glyph_top = y + GLYPH_DROP
+                above = [e for e in hy if e <= glyph_top]
+                need = 0
+                if above:
+                    clr = glyph_top - max(above)
+                    if clr < TOP_CLEAR_TRIGGER:
+                        need = int(TOP_CLEAR_TRIGGER - clr) + 1
+                # Key the row by the CELL RECTANGLE the glyph sits in, not by a y bucket. A
+                # 3pt bucket grouped spans from different rows, so one row's requirement was
+                # applied to a neighbouring row and pushed its label DOWN ACROSS the border
+                # line into the next cell - clearance 16.45pt became 1.45pt on the wrong side.
+                # A span with no containing cell is keyed on its own y, i.e. left ungrouped.
+                # Key on the ROW'S TOP LINE - the nearest horizontal edge at or above the
+                # glyph. Every cell across a row shares that line, so a label and its values
+                # always get the same push. Keying on the containing CELL instead looked right
+                # but wasn't: a label and its number sat in different rects, took different
+                # pushes, and the values dropped below their labels - the column-based
+                # behaviour the owner warned about.
+                pending.append((x, y, w, h, size, bold, ital, fc, t, need))
+
+    # ---- second pass: apply the ROW's push to every span in that row ----------------
+    # ROW GROUPING BY PROXIMITY. Spans within ROW_BUCKET of each other vertically are one row;
+    # the row's largest requirement is applied to all of them, so relative offsets inside the
+    # row are preserved exactly and the push can never pull a value off its label's baseline.
+    # Two earlier keys failed here: a fixed y bucket grouped spans from DIFFERENT rows (pushing
+    # one label down across its border line), and keying on the containing cell or the row's
+    # top edge split spans of the SAME row (the numbers dropped below their labels - the
+    # column-based behaviour the owner warned about).
+    row_push = {}
+    for i, sp in enumerate(sorted(range(len(pending)), key=lambda k: pending[k][1])):
+        y = pending[sp][1]
+        placed = False
+        for ry in list(row_push):
+            if abs(ry - y) <= ROW_BUCKET:
+                row_push[ry] = max(row_push[ry], pending[sp][9])
+                placed = True
+                break
+        if not placed:
+            row_push[y] = pending[sp][9]
+
+    def push_for(y):
+        # Pick the CLOSEST row centre, not the first within range. Returning the first match
+        # in dict-insertion order could hand a span a neighbouring row's push, which pushed
+        # one label down across its own bottom border into the next row's space.
+        cands = [(abs(ry - y), v) for ry, v in row_push.items() if abs(ry - y) <= ROW_BUCKET]
+        return min(cands)[1] if cands else 0
+
+    for x, y, w, h, size, bold, ital, fc, t, _need in pending:
+        y2 = shift_y(y + push_for(y), p)
+        out.append(
+            f'<element kind="staticText" x="{x}" y="{y2}" width="{w}" '
+            f'height="{h}" fontName="Arial" fontSize="{size}" '
+            f'bold="{str(bold).lower()}" italic="{str(ital).lower()}" '
+            f'forecolor="{fc}" hTextAlign="Left" vTextAlign="Top">'
+            f'<box leftPadding="0" rightPadding="0" topPadding="0" '
+            f'bottomPadding="0"><pen lineWidth="0.0"/></box>'
+            f'<text><![CDATA[{esc(t)}]]></text></element>')
+        n_text += 1
+
+    return out, len(fills), len(borders), len(rules) + len(vrules), n_text
+
+
+HEADER = f'''<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport name="R07_001_Offshore_Daily_Ops_Report" language="java"
+              pageWidth="{PAGE_W}" pageHeight="{PAGE_H}" orientation="Portrait"
+              columnWidth="{COL_W}" leftMargin="{LEFT}" rightMargin="27"
+              topMargin="{TOP}" bottomMargin="{BOTTOM}"
+              whenNoDataType="AllSectionsNoDetail"
+              titleNewPage="false">
+
+    <!-- ============================================================
+         R07.001 - Offshore Daily Operations Report.
+
+         GENERATED BY TRACING THE REFERENCE PDF (tmp/gen_001.py). Every
+         cell rectangle, rule and text span is emitted at the position
+         Crystal itself uses, read from the reference's own get_drawings()
+         and get_text('dict'). Nothing here is derived by guesswork.
+
+         That deliberately avoids the defect class that dominated
+         R07.003-006: columns invented rather than measured, cells that
+         overlap or leave 1pt gaps (doubling every border), and values
+         placed in the wrong box. See DeepDiveLearnings/JASPERREPORT-7-0-3.MD
+         Parts Y, Z, AA, AB.
+
+         7 pages: page 1 in <title>, pages 2-7 as 6 forced-break
+         <detail> records gated on $V{{REPORT_COUNT}}.
+
+         LAYOUT ONLY - data binding deferred, values are the reference's.
+         ============================================================ -->
+
+    <parameter name="P_LAST_REFRESH" class="java.lang.String"/>
+
+'''
+
+parts = [HEADER]
+stats = []
+
+# ---- page 1 -> <title> -------------------------------------------------------------
+els, nf, nb, nr, nt = page_elements(0)
+stats.append((1, nf, nb, nr, nt))
+parts.append(f'    <title height="{BAND_H}" splitType="Stretch">\n')
+parts.append("\n".join("        " + e for e in els))
+parts.append("\n    </title>\n\n")
+
+# ---- pages 2-7 -> <detail> with 6 records ------------------------------------------
+parts.append('    <detail>\n    <band height="%d" splitType="Prevent">\n' % BAND_H)
+for p in range(1, len(ref)):
+    els, nf, nb, nr, nt = page_elements(p)
+    stats.append((p + 1, nf, nb, nr, nt))
+    cond = f'<printWhenExpression><![CDATA[$V{{REPORT_COUNT}} == {p}]]></printWhenExpression>'
+    for e in els:
+        # insert the record condition as the element's first child
+        idx = e.index(">") + 1
+        parts.append("        " + e[:idx] + cond + e[idx:] + "\n")
+parts.append("    </band>\n    </detail>\n\n')".replace("')", ""))
+
+# ---- footer, traced from the reference's own footer strip --------------------------
+# Footer traced from the reference: rule at abs 1138.7 and the strip texts at abs 1140.8.
+# The footer band starts at PAGE_H - BOTTOM - FOOTER_H = 1135, so the rule sits at local 3
+# and the texts at local 5. The refresh date is a static value, matching this project's
+# layout-only phase (values are the reference's) rather than an unset parameter.
+foot_texts = []
+fp = ref[0]
+for b in fp.get_text("dict")["blocks"]:
+    for l in b.get("lines", []):
+        for s in l["spans"]:
+            t = s["text"].strip()
+            if t and s["bbox"][1] - TOP >= CONTENT_MAX_Y:
+                fx = int(round(s["bbox"][0] - LEFT))
+                fw = int(round(s["bbox"][2] - s["bbox"][0])) + 8
+                foot_texts.append((fx, fw, t))
+foot_texts.sort()
+
+foot_els = [f'        <element kind="line" x="0" y="3" width="{COL_W - 1}" height="1">'
+            f'<pen lineWidth="1.5" lineColor="#454087"/></element>']
+for fx, fw, t in foot_texts:
+    if t.lower().startswith("page "):
+        expr = ('<expression><![CDATA["Page " + $V{PAGE_NUMBER} + " of 7"]]>'
+                '</expression>')
+        foot_els.append(
+            f'        <element kind="textField" x="{fx}" y="5" width="{fw}" height="10" '
+            f'fontName="Arial" fontSize="6.0" italic="true" hTextAlign="Left">'
+            f'<box leftPadding="0"><pen lineWidth="0.0"/></box>{expr}</element>')
+    else:
+        foot_els.append(
+            f'        <element kind="staticText" x="{fx}" y="5" width="{fw}" height="10" '
+            f'fontName="Arial" fontSize="6.0" italic="true" hTextAlign="Left">'
+            f'<box leftPadding="0"><pen lineWidth="0.0"/></box>'
+            f'<text><![CDATA[{esc(t)}]]></text></element>')
+
+parts.append(f'    <pageFooter height="{FOOTER_H}" splitType="Stretch">\n'
+             + "\n".join(foot_els)
+             + '\n    </pageFooter>\n\n</jasperReport>\n')
+
+io.open(OUT, "w", encoding="utf-8").write("".join(parts))
+
+print(f"band height: {BAND_H}")
+print(f"{'page':>5} {'fills':>6} {'borders':>8} {'rules':>6} {'texts':>6}")
+tot = [0, 0, 0, 0]
+for p, nf, nb, nr, nt in stats:
+    print(f"{p:>5} {nf:>6} {nb:>8} {nr:>6} {nt:>6}")
+    tot = [tot[0] + nf, tot[1] + nb, tot[2] + nr, tot[3] + nt]
+print(f"{'all':>5} {tot[0]:>6} {tot[1]:>8} {tot[2]:>6} {tot[3]:>6}")
+print("\ntiling:")
+for p, st in sorted(TILE_STATS.items()):
+    if st:
+        print(f"  page {p}: " + "  ".join(f"{k}={v}" for k, v in sorted(st.items())))
+print(f"\nwritten: {OUT}")

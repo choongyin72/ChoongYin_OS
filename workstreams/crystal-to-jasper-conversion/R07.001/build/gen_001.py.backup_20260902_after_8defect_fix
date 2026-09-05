@@ -1,0 +1,330 @@
+"""Generate R07.001's JRXML by TRACING the reference PDF.
+
+Rather than hand-placing ~1263 text spans and ~1000 cells across 7 pages and hoping the
+geometry is right, this reads Crystal's own drawings and text out of the reference and emits
+matching JasperReports elements. Everything lands where Crystal put it, which removes the
+entire class of defect that dominated R07.003-006 (columns derived by guesswork, cells that
+overlap or leave gaps, values in the wrong box).
+
+Architecture, mirroring R07.003's verified 1+4:
+    page 1  -> <title>
+    pages 2-7 -> one <detail> band with 6 records gated on $V{REPORT_COUNT}
+
+Coordinates: local = absolute - margin. Margins are read from the reference's own layout
+(24 left / 28 top) so a traced absolute position maps straight onto a local one.
+"""
+import collections
+import io
+import os
+import sys
+
+import fitz
+
+# Import tile_lib from THIS file's directory, not from tmp/. Two copies of this generator
+# existed (tmp/ and here) and telling which was live needed a cmp - self-contained now.
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import tile_lib
+
+B = r"C:\Projects\INPEX\sources\CrystalReports\R07.001"
+REF = B + r"\crytsal report in pdf\R07.001 - Offshore Daily Operations Report.pdf"
+OUT = B + r"\output\R07_001_Offshore_Daily_Ops_Report.jrxml"
+
+LEFT, TOP = 24, 28
+PAGE_W, PAGE_H = 842, 1191
+COL_W = 791
+# The reference's lowest page content sits at local y 1092 with height 13, i.e. it needs a band
+# of at least 1105. With bottomMargin 38 and a 30pt footer the band caps at 1095 and the design
+# fails validation, so the bottom margin and footer are trimmed to make room.
+BOTTOM = 30
+FOOTER_H = 26
+BAND_H = PAGE_H - TOP - BOTTOM - FOOTER_H      # 1107
+
+ref = fitz.open(REF)
+PURPLE = lambda f: bool(f) and f[2] > 0.4 and f[0] < 0.45 and f[1] < 0.45
+
+
+def hexc(c):
+    if not c:
+        return None
+    return "#%02X%02X%02X" % tuple(max(0, min(255, int(round(v * 255)))) for v in c)
+
+
+def esc(t):
+    """Text goes inside <![CDATA[...]]>, so it must NOT be XML-escaped - escaping turned
+    'Health, Safety & Environment' into 'Health, Safety &amp; Environment' and broke the
+    string. The only thing CDATA cannot contain is the terminator itself."""
+    return t.replace("]]>", "]]&gt;")
+
+
+def classify_rect(dr):
+    """Return ('fill'|'border'|'rule'|None, ...) for a drawing."""
+    r = dr["rect"]
+    w, h = r.x1 - r.x0, r.y1 - r.y0
+    if w < 1 and h < 1:
+        return None
+    if h < 3 and w >= 20:
+        return "rule"
+    if w < 3 and h >= 4:
+        return "vrule"
+    if w >= 6 and h >= 4:
+        return "fill" if PURPLE(dr.get("fill")) else "border"
+    return None
+
+
+TILE_STATS = {}
+CONTENT_MAX_Y = 1098        # local; the reference's footer strip sits at 1111 and is emitted
+                            # separately in <pageFooter>, so it must not be traced into a band
+
+
+def page_elements(p):
+    """Trace one reference page into JRXML element strings (local coords)."""
+    page = ref[p]
+    out = []
+
+    # ---- borders and fills, drawn first so text sits on top ----------------------
+    fills, borders, rules, vrules = [], [], [], []
+    for dr in page.get_drawings():
+        k = classify_rect(dr)
+        if k is None:
+            continue
+        r = dr["rect"]
+        if r.y0 - TOP >= CONTENT_MAX_Y:
+            continue
+        rec = (round(r.x0 - LEFT), round(r.y0 - TOP),
+               max(1, round(r.x1 - r.x0)), max(1, round(r.y1 - r.y0)),
+               hexc(dr.get("color")) or "#D6D6D6", dr.get("width") or 1.0)
+        {"fill": fills, "border": borders, "rule": rules, "vrule": vrules}[k].append(rec)
+
+    # Crystal leaves a gap between neighbouring cells, so every boundary is drawn twice and
+    # after rounding some pairs collapse to 1pt while others stay 2pt - the "borderline
+    # thickness is not the same" defect. Tile to exactly one line per boundary.
+    borders, tstats = tile_lib.tile(borders)
+
+    # Owner defect items 3,4,5,6: "column header row is not connected to its data row".
+    # The tiling pass only ever touched the cell RECTANGLES; the traced column verticals were
+    # left where rounding put them. Crystal's own 0.50pt hairline between a header's bottom
+    # and the data verticals below rounds to 174 vs 175 - a full 1pt break, and the owner saw
+    # it on four tables. Snap each vertical's ends onto a neighbouring rect edge so the grid
+    # closes by construction. Only sub-1.5pt moves, so a deliberate blank band is never
+    # bridged (same reasoning as tile_lib's gap_close).
+    edges = sorted({y for _, y, _, _, _, _ in borders}
+                   | {y + h for _, y, _, h, _, _ in borders})
+    joined = 0
+    snapped = []
+    for x, y, w, h, col, lw in vrules:
+        y0, y1 = y, y + h
+        near0 = [e for e in edges if abs(e - y0) <= 1.5]
+        near1 = [e for e in edges if abs(e - y1) <= 1.5]
+        if near0:
+            y0 = min(near0, key=lambda e: abs(e - y0))
+        if near1:
+            y1 = min(near1, key=lambda e: abs(e - y1))
+        if (y0, y1) != (y, y + h) and y1 - y0 >= 3:
+            joined += 1
+            snapped.append((x, y0, w, y1 - y0, col, lw))
+        else:
+            snapped.append((x, y, w, h, col, lw))
+    vrules = snapped
+    tstats["vrule-joined"] = joined
+
+    TILE_STATS[p + 1] = tstats
+
+    for x, y, w, h, col, lw in fills:
+        out.append(f'<element kind="rectangle" x="{x}" y="{y}" width="{w}" height="{h}" '
+                   f'mode="Opaque" backcolor="#454087">'
+                   # NO pen. A fill is only a fill in Crystal. Giving it a 1pt grey outline
+                   # put a second stroke ~1pt from the traced border rect on the same
+                   # boundary, so every purple band's verticals rendered 1.98pt against the
+                   # reference's 1.02pt - the "borderline thickness" defect, self-inflicted.
+                   f'<pen lineWidth="0.0"/></element>')
+    for x, y, w, h, col, lw in borders:
+        out.append(f'<element kind="rectangle" x="{x}" y="{y}" width="{w}" height="{h}" '
+                   f'mode="Transparent">'
+                   f'<pen lineWidth="1.0" lineColor="{col}"/></element>')
+    # ROOT CAUSE 1 of the owner's 8 defects (round 01): a kind="line" with width/height 1
+    # draws its 1pt stroke across that whole 1pt box, so it renders CENTRED - 0.5pt off the
+    # nominal coordinate - while a rectangle's border renders ON the nominal edge. Mixing the
+    # two primitives put every traced rule 0.5pt away from the cell grid it was meant to meet:
+    #   header rect bottom abs 174.00, data vertical rendered 175.00 -> a 1.00pt break
+    #   header rect right edge abs 805.00, data vertical rendered 805.50 -> misaligned
+    # MEASURED, not assumed: a kind="line" renders its path at nominal + penWidth/2 even when
+    # declared width="0" (tried it - all 402 verticals still landed on 23.50 for a nominal 23).
+    # Decimal coordinates are rejected by 7.0.3 (Part Z9), so the line cannot be nudged back.
+    #
+    # So the rules are drawn as DEGENERATE RECTANGLES instead: a rectangle's border sits ON the
+    # nominal edge, and zero width collapses its left and right edges onto the same x - one
+    # vertical line, at exactly the coordinate the cell grid uses. Same for height 0 and a
+    # horizontal rule. One primitive for all grid geometry means the pieces meet by
+    # construction rather than by luck.
+    for x, y, w, h, col, lw in rules:
+        out.append(f'<element kind="rectangle" x="{x}" y="{y}" width="{w}" height="0" '
+                   f'mode="Transparent">'
+                   f'<pen lineWidth="{lw:.1f}" lineColor="{col}"/></element>')
+    for x, y, w, h, col, lw in vrules:
+        out.append(f'<element kind="rectangle" x="{x}" y="{y}" width="0" height="{h}" '
+                   f'mode="Transparent">'
+                   f'<pen lineWidth="{lw:.1f}" lineColor="{col}"/></element>')
+
+    # ---- the INPEX logo -----------------------------------------------------------
+    # get_drawings() and get_text() do not return images, so a pure trace omits the logo
+    # entirely - the same defect R07.002 and R07.003 both shipped with. The reference places
+    # it identically on all 7 pages: abs (22.65, 41.20)-(150.20, 63.20) -> local -1,13 128x22.
+    # logo_ref.png is extracted FROM the reference PDF (tmp/extract_001_logo.py). The
+    # logo.png already sitting in output/ is a different INPEX mark - aspect 1.903 against
+    # the reference's 5.791 - so RetainShape aspect-fitted it into a fraction of the box.
+    out.append('<element kind="image" x="-1" y="13" width="128" height="22" '
+               'scaleImage="FillFrame">'
+               '<expression><![CDATA["logo_ref.png"]]></expression></element>')
+
+    # ---- text: one element per reference span, at the reference's own bbox --------
+    n_text = 0
+    for b in page.get_text("dict")["blocks"]:
+        for l in b.get("lines", []):
+            for s in l["spans"]:
+                t = s["text"]
+                if not t.strip():
+                    continue
+                x0, y0, x1, y1 = s["bbox"]
+                if y0 - TOP >= CONTENT_MAX_Y:
+                    continue
+                size = round(s["size"], 1)
+                fn = s["font"]
+                bold = "Bold" in fn or "bold" in fn
+                ital = "Italic" in fn or "Oblique" in fn
+                fc = hexc(s.get("color") and (
+                    ((s["color"] >> 16) & 255) / 255.0,
+                    ((s["color"] >> 8) & 255) / 255.0,
+                    (s["color"] & 255) / 255.0)) or "#000000"
+                # a little slack so JasperReports never clips the glyphs (Part F1)
+                w = max(8, int(round(x1 - x0)) + 6)
+                h = max(int(round(size * 1.45)), int(round(y1 - y0)) + 3)
+                # ROOT CAUSE 2 of the owner's 8 defects (round 01): the x had a "- 1" on it.
+                # It was added as anti-clipping slack (Part F1) alongside the width + 6, but
+                # slack belongs in the WIDTH, not in the origin - the -1 shifted all 1242
+                # texts 1pt left, which is only visible where a value sits against a cell's
+                # left border. That is exactly the six sections the owner listed, two of them
+                # with the text starting LEFT of the border line (inset -0.50pt).
+                # y keeps its -1: vTextAlign="Top" plus the grown height means the glyph is
+                # positioned by the box top, and removing it moves every baseline (verified
+                # separately - see check_8_defects.py).
+                x = int(round(x0 - LEFT))
+                y = int(round(y0 - TOP)) - 1
+                out.append(
+                    f'<element kind="staticText" x="{x}" y="{y}" width="{w}" '
+                    f'height="{h}" fontName="Arial" fontSize="{size}" '
+                    f'bold="{str(bold).lower()}" italic="{str(ital).lower()}" '
+                    f'forecolor="{fc}" hTextAlign="Left" vTextAlign="Top">'
+                    f'<box leftPadding="0" rightPadding="0" topPadding="0" '
+                    f'bottomPadding="0"><pen lineWidth="0.0"/></box>'
+                    f'<text><![CDATA[{esc(t)}]]></text></element>')
+                n_text += 1
+
+    return out, len(fills), len(borders), len(rules) + len(vrules), n_text
+
+
+HEADER = f'''<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport name="R07_001_Offshore_Daily_Ops_Report" language="java"
+              pageWidth="{PAGE_W}" pageHeight="{PAGE_H}" orientation="Portrait"
+              columnWidth="{COL_W}" leftMargin="{LEFT}" rightMargin="27"
+              topMargin="{TOP}" bottomMargin="{BOTTOM}"
+              whenNoDataType="AllSectionsNoDetail"
+              titleNewPage="false">
+
+    <!-- ============================================================
+         R07.001 - Offshore Daily Operations Report.
+
+         GENERATED BY TRACING THE REFERENCE PDF (tmp/gen_001.py). Every
+         cell rectangle, rule and text span is emitted at the position
+         Crystal itself uses, read from the reference's own get_drawings()
+         and get_text('dict'). Nothing here is derived by guesswork.
+
+         That deliberately avoids the defect class that dominated
+         R07.003-006: columns invented rather than measured, cells that
+         overlap or leave 1pt gaps (doubling every border), and values
+         placed in the wrong box. See DeepDiveLearnings/JASPERREPORT-7-0-3.MD
+         Parts Y, Z, AA, AB.
+
+         7 pages: page 1 in <title>, pages 2-7 as 6 forced-break
+         <detail> records gated on $V{{REPORT_COUNT}}.
+
+         LAYOUT ONLY - data binding deferred, values are the reference's.
+         ============================================================ -->
+
+    <parameter name="P_LAST_REFRESH" class="java.lang.String"/>
+
+'''
+
+parts = [HEADER]
+stats = []
+
+# ---- page 1 -> <title> -------------------------------------------------------------
+els, nf, nb, nr, nt = page_elements(0)
+stats.append((1, nf, nb, nr, nt))
+parts.append(f'    <title height="{BAND_H}" splitType="Stretch">\n')
+parts.append("\n".join("        " + e for e in els))
+parts.append("\n    </title>\n\n")
+
+# ---- pages 2-7 -> <detail> with 6 records ------------------------------------------
+parts.append('    <detail>\n    <band height="%d" splitType="Prevent">\n' % BAND_H)
+for p in range(1, len(ref)):
+    els, nf, nb, nr, nt = page_elements(p)
+    stats.append((p + 1, nf, nb, nr, nt))
+    cond = f'<printWhenExpression><![CDATA[$V{{REPORT_COUNT}} == {p}]]></printWhenExpression>'
+    for e in els:
+        # insert the record condition as the element's first child
+        idx = e.index(">") + 1
+        parts.append("        " + e[:idx] + cond + e[idx:] + "\n")
+parts.append("    </band>\n    </detail>\n\n')".replace("')", ""))
+
+# ---- footer, traced from the reference's own footer strip --------------------------
+# Footer traced from the reference: rule at abs 1138.7 and the strip texts at abs 1140.8.
+# The footer band starts at PAGE_H - BOTTOM - FOOTER_H = 1135, so the rule sits at local 3
+# and the texts at local 5. The refresh date is a static value, matching this project's
+# layout-only phase (values are the reference's) rather than an unset parameter.
+foot_texts = []
+fp = ref[0]
+for b in fp.get_text("dict")["blocks"]:
+    for l in b.get("lines", []):
+        for s in l["spans"]:
+            t = s["text"].strip()
+            if t and s["bbox"][1] - TOP >= CONTENT_MAX_Y:
+                fx = int(round(s["bbox"][0] - LEFT))
+                fw = int(round(s["bbox"][2] - s["bbox"][0])) + 8
+                foot_texts.append((fx, fw, t))
+foot_texts.sort()
+
+foot_els = [f'        <element kind="line" x="0" y="3" width="{COL_W - 1}" height="1">'
+            f'<pen lineWidth="1.5" lineColor="#454087"/></element>']
+for fx, fw, t in foot_texts:
+    if t.lower().startswith("page "):
+        expr = ('<expression><![CDATA["Page " + $V{PAGE_NUMBER} + " of 7"]]>'
+                '</expression>')
+        foot_els.append(
+            f'        <element kind="textField" x="{fx}" y="5" width="{fw}" height="10" '
+            f'fontName="Arial" fontSize="6.0" italic="true" hTextAlign="Left">'
+            f'<box leftPadding="0"><pen lineWidth="0.0"/></box>{expr}</element>')
+    else:
+        foot_els.append(
+            f'        <element kind="staticText" x="{fx}" y="5" width="{fw}" height="10" '
+            f'fontName="Arial" fontSize="6.0" italic="true" hTextAlign="Left">'
+            f'<box leftPadding="0"><pen lineWidth="0.0"/></box>'
+            f'<text><![CDATA[{esc(t)}]]></text></element>')
+
+parts.append(f'    <pageFooter height="{FOOTER_H}" splitType="Stretch">\n'
+             + "\n".join(foot_els)
+             + '\n    </pageFooter>\n\n</jasperReport>\n')
+
+io.open(OUT, "w", encoding="utf-8").write("".join(parts))
+
+print(f"band height: {BAND_H}")
+print(f"{'page':>5} {'fills':>6} {'borders':>8} {'rules':>6} {'texts':>6}")
+tot = [0, 0, 0, 0]
+for p, nf, nb, nr, nt in stats:
+    print(f"{p:>5} {nf:>6} {nb:>8} {nr:>6} {nt:>6}")
+    tot = [tot[0] + nf, tot[1] + nb, tot[2] + nr, tot[3] + nt]
+print(f"{'all':>5} {tot[0]:>6} {tot[1]:>8} {tot[2]:>6} {tot[3]:>6}")
+print("\ntiling:")
+for p, st in sorted(TILE_STATS.items()):
+    if st:
+        print(f"  page {p}: " + "  ".join(f"{k}={v}" for k, v in sorted(st.items())))
+print(f"\nwritten: {OUT}")
