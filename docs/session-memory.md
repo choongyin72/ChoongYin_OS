@@ -227,3 +227,61 @@ standardization-checklist.md` are both now closed out (23/23 and 37/37 respectiv
 Persistent memory updated: new `project_bank_pattern_conversion_batches_2026_08.md` (full batch/PR
 history + reusable process), cross-linked from `project_grid_filter_standardization_2026_08.md` and
 `MEMORY.md`.
+
+## 2026-09-05 — INPEX R10.026 → R10.034 Crystal→Jasper layout, all eight verified
+
+**Outcome:** all eight JRXMLs in R10.026 → R10.034 are owner-verified OK and frozen. The last,
+R10.034, took seven defects in a final round, all raised by the owner from screenshots of our own
+build. Full write-up with the original's measured geometry beside each fix:
+`workstreams/crystal-to-jasper-conversion/R10-026-034-STATUS.md`.
+
+**Owner decisions this session, in their own words:**
+- On verified reports: "its very dangerous move action... DONT REPEAT SUCH MSITAKE AGAIN" — after
+  the chain was run over the already-verified R10.026 without asking. The freeze is now CODE: a
+  `VERIFIED` set in `tmp/r10_chain.py` that refuses to open those files (all 8 now listed, chain
+  reports `0 report file(s)`). Overriding needs `--include=<stem>` plus the owner's word.
+- On the match standard: ">98%... remaining 2% its for our own cosmetic touch up.. as its original
+  report layout also have its own minor defect".
+- On strictness: "sometime such rules not need to follow extreme strick... as long as the logo is
+  show and not cause any problem... thats fine... we just fix it when receive complaint from user".
+- **The boundary on that:** "if we doing number figure for financials, invoice procurement. then
+  accuracy is very important." Cosmetic deltas are fix-on-complaint; anything numeric — including a
+  correct value sitting in the WRONG COLUMN — is exact-or-defect. This is why R10.034's rows 2/4/5
+  had to be rebuilt rather than accepted.
+
+**Accepted as-is on R10.034 (measured, reported, not defects):** the navy `#454087` rule at page
+y 120.10 present in the original and absent from the build; the title centred at 297.50 against the
+original's 368.79. Both await a user complaint rather than a fix.
+
+**Method that finally worked, after a session of finding defects one at a time:**
+1. `tmp/r10_034_probe.py` — read the ORIGINAL's own ink for every flagged region BEFORE changing
+   anything. Every target in the fix is the original's measured geometry, never a heuristic.
+2. `tmp/r10_034_fix.py` / `r10_034_mergehdr.py` — one pass, guarded, with a backup.
+3. `tmp/r10_034_check.py` — ten PASS/FAIL checks, deliberately not numeric, because a number lets
+   me argue "close enough" against a >98% standard.
+4. `tmp/r10_audit.py` — runs all 24 detecting passes plus the gate so the whole defect inventory is
+   known up front. Built after the owner's "u can't find a way to handle defects as most defects
+   are repeated.. just that its occurred in difference report layout" — a process failure, not a
+   knowledge one.
+
+**Four mistakes worth carrying forward:**
+1. *A rename invalidated the search that followed it.* The row rebuild renamed the number element to
+   `x="1" width="16"`, then asked for "the first `staticText` on this row" to find the LABEL — and
+   got the number again, moving it into the label's slot. Now: identify the label as the WIDE
+   `staticText`, do it FIRST, and assert each rebuilt row ends with exactly one number at `x=1 w=16`
+   and one label at `x=20 w=245`.
+2. *`\b` after a closing quote never matches.* `y="360"\b` sits between `"` and a space, both
+   non-word, so every cell lookup silently failed — which would have duplicated existing cells. The
+   closing quote already makes the match exact. Caught only by a guard asserting the end state.
+3. *A check that fails for its own reasons is worse than no check.* The first gap check returned
+   `None` and read FAIL while the build measured 4.0pt against the original's 4.3pt — a correct
+   result reported as a defect, which invites the "close enough" argument the design exists to stop.
+4. *I described a defect from memory instead of measuring it.* For most of the session I reported
+   R10.034's missing header rule as "the rule exists at `y=0`, move it to `y=93`". It does not
+   exist at all; the `y=0` rule is the pageFooter's own, correctly placed in a 30pt band — so
+   `y=93` put it 63pt outside that band, which is precisely what the `JRValidationException` I kept
+   reverting from was saying. Re-measuring took one command.
+
+**Persistent memory:** new `feedback_cosmetic_diff_fix_on_complaint.md` (with the financial-figures
+boundary). `MEMORY.md` compacted 164 → 118 lines, verified lossless by `tmp/memcheck.py`
+(0 broken links; the 13 unindexed files predate the compaction).
