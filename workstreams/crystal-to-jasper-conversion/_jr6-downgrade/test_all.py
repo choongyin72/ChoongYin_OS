@@ -80,15 +80,28 @@ def cp7(report):
     return None
 
 
-def harness(report):
+def harness(report, jrxml=None):
+    """The report's harness sources, and the main class that fills THIS jrxml.
+
+    Some R10 folders hold more than one report file and more than one *Verify.java - R10.030
+    has three jrxml against R10030SdsVerify/R10030Verify, R10.031 two, R10.012 two. Taking
+    main[0] picks whichever the directory listing happened to put first, which is not a
+    choice at all. The pairing rule is the one tmp/r10_regen.py already uses and renders with:
+    a file whose name contains SDS fills through the Sds harness, everything else through the
+    plain one.
+    """
     d = os.path.join(BASE, report, "java", "src", "com", "example", "reports")
     if not os.path.isdir(d):
         return None, None
-    srcs = [os.path.join(d, f) for f in os.listdir(d) if f.endswith(".java")]
-    main = [f for f in srcs if f.endswith("Verify.java")]
+    srcs = [os.path.join(d, f) for f in os.listdir(d)
+            if f.endswith(".java") and "backup" not in f]
+    main = [os.path.basename(f)[:-5] for f in srcs if f.endswith("Verify.java")]
     if not main:
         return None, None
-    return srcs, "com.example.reports." + os.path.basename(main[0])[:-5]
+    sds = next((c for c in main if "Sds" in c), None)
+    plain = next((c for c in main if "Sds" not in c), None)
+    cls = sds if (jrxml and "SDS" in jrxml.upper() and sds) else (plain or main[0])
+    return srcs, "com.example.reports." + cls
 
 
 def brief(text, n=110):
@@ -110,12 +123,22 @@ def brief(text, n=110):
     return text.strip().splitlines()[-1][:n] if text.strip() else "?"
 
 
-def test(report):
+def candidates(report):
+    out = os.path.join(BASE, report, "output")
+    if not os.path.isdir(out):
+        return []
+    return sorted(f for f in os.listdir(out)
+                  if f.endswith(".jrxml") and "backup" not in f
+                  and "variant" not in f.lower())
+
+
+def test(report, pick=None):
     out = os.path.join(BASE, report, "output")
     jr6 = os.path.join(out, "jr6")
     srcs = glob = None
-    cand = [f for f in os.listdir(out)
-            if f.endswith(".jrxml") and "backup" not in f and "variant" not in f.lower()]
+    cand = candidates(report)
+    if pick:
+        cand = [f for f in cand if f == pick]
     if len(cand) != 1:
         return report, "NO-JRXML", f"{len(cand)} candidates", ""
     src = os.path.join(out, cand[0])
@@ -129,7 +152,7 @@ def test(report):
         return report, "CONVERT-FAIL", brief(log), ""
 
     # ---- 2. the report's own harness, built twice
-    srcs, mainclass = harness(report)
+    srcs, mainclass = harness(report, cand[0])
     if not srcs:
         return report, "NO-HARNESS", "no *Verify.java", ""
     c7 = cp7(report)
@@ -218,16 +241,25 @@ def test(report):
 
 def main():
     todo = sys.argv[1:] or REPORTS
-    rows = []
+    # A folder holding several report files is expanded into one run per file, rather than
+    # reported as NO-JRXML and skipped. That skip is why R10.012/030/031 - seven files, all
+    # already layout-verified - had no 6.17 copy at all.
+    jobs = []
     for r in todo:
+        cand = candidates(r)
+        jobs.extend([(r, c) for c in cand] if len(cand) > 1 else [(r, None)])
+    rows = []
+    for r, pick in jobs:
+        label = r if pick is None else f"{r} {pick[:-6][-28:]}"
         try:
-            row = test(r)
+            row = test(r, pick)
         except subprocess.TimeoutExpired:
             row = (r, "TIMEOUT", "", "")
         except Exception as e:                                  # noqa: BLE001
             row = (r, "ERROR", f"{type(e).__name__}: {e}"[:110], "")
+        row = (label,) + tuple(row[1:])
         rows.append(row)
-        print(f"{row[0]:<9} {row[1]:<16} {row[3]:<13} {row[2]}", flush=True)
+        print(f"{row[0]:<38} {row[1]:<16} {row[3]:<13} {row[2]}", flush=True)
 
     print("\n=== SUMMARY")
     for st in ("IDENTICAL", "DIFFERS", "COMPILE-FAIL", "FILL-FAIL", "CONVERT-FAIL"):

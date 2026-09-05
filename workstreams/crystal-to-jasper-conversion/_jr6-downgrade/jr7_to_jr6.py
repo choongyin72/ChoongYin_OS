@@ -75,8 +75,13 @@ COMMON_ATTRS = {"kind", "x", "y", "width", "height", "style", "mode", "forecolor
                 "markup", "rotation", "lineSpacing"}
 KIND_ATTRS = {
     "staticText": COMMON_ATTRS,
+    # textAdjust is JR7's replacement for JR6's isStretchWithOverflow. R10.001 carries one
+    # textAdjust="StretchHeight"; the mapping is in emit_element, and ScaleFont is REFUSED
+    # there because 6.x has no equivalent and silently dropping it would reflow the field.
     "textField": COMMON_ATTRS | {"pattern", "blankWhenNull", "evaluationTime",
-                                 "stretchWithOverflow", "evaluationGroup"},
+                                 "stretchWithOverflow", "evaluationGroup", "textAdjust"},
+    # R10.006 uses <element kind="break" type="Page"/> for its page break.
+    "break": {"kind", "type"},
     "rectangle": COMMON_ATTRS | {"radius"},
     "line": COMMON_ATTRS | {"direction"},
     "ellipse": COMMON_ATTRS,
@@ -97,6 +102,7 @@ KIND_CHILDREN = {
     "line": {"pen", "box", "printWhenExpression"},
     "ellipse": {"pen", "box", "printWhenExpression"},
     "image": {"expression", "box", "printWhenExpression"},
+    "break": {"printWhenExpression"},
 }
 
 
@@ -271,9 +277,25 @@ def emit_element(el, indent):
 
     if kind == "textField":
         # pattern / isBlankWhenNull / evaluationTime live on the <textField> tag in 6.x
+        # JR7 replaced isStretchWithOverflow with textAdjust. Map it rather than drop it: a
+        # field that stretches in 7.x and is cut in 6.x loses text with no error at all - the
+        # same silent-overflow class as Part F1, where a box shorter than fontSize*1.2 made
+        # JasperReports discard the word "Delivered".
+        stretch = el.get("stretchWithOverflow")
+        adjust = el.get("textAdjust")
+        if adjust is not None:
+            if adjust == "StretchHeight":
+                stretch = "true"
+            elif adjust == "CutText":
+                stretch = "false"
+            else:
+                # ScaleFont has no 6.x equivalent - refuse rather than render differently
+                raise SystemExit(
+                    f"REFUSING to convert: textAdjust={adjust!r} has no JasperReports 6.x "
+                    f"equivalent (only StretchHeight/CutText map to isStretchWithOverflow).")
         tf = [("pattern", el.get("pattern")),
               ("isBlankWhenNull", el.get("blankWhenNull")),
-              ("isStretchWithOverflow", el.get("stretchWithOverflow")),
+              ("isStretchWithOverflow", stretch),
               ("evaluationTime", el.get("evaluationTime")),
               ("evaluationGroup", el.get("evaluationGroup"))]
         out = f'{indent}<textField{attrs([(k, v) for k, v in tf if v is not None])}>\n'
@@ -310,7 +332,43 @@ def emit_element(el, indent):
                 f'{cdata(child_text(el, "expression"))}</imageExpression>\n')
         return out + f'{indent}</image>\n'
 
+    if kind == "break":
+        # 6.x requires a <reportElement> child even though a break draws nothing. JR7's compact
+        # form carries no geometry for it (R10.006: <element kind="break" type="Page"/>), so a
+        # 1x1 placeholder at the origin is synthesised. Whether that is harmless is not assumed:
+        # verify_jr6.py compares every span and rect of the two renders exactly, so a break that
+        # landed differently would show up as a positional difference rather than pass quietly.
+        pairs = [(k, el.get(k)) for k in ("x", "y", "width", "height")]
+        if all(v is None for _k, v in pairs):
+            pairs = [("x", "0"), ("y", "0"), ("width", "1"), ("height", "1")]
+        else:
+            pairs = [(k, v if v is not None else "0") for k, v in pairs]
+        out = f'{indent}<break{attrs([("type", el.get("type") or "Page")])}>\n'
+        out += f'{indent}    <reportElement{attrs(pairs)}/>\n'
+        return out + f'{indent}</break>\n'
+
     raise SystemExit(f"unhandled element kind={kind!r} - converter needs extending")
+
+
+def band_open(band_attrib, indent):
+    """Open a <band>, moving its print condition from an ATTRIBUTE to a 6.x CHILD element.
+
+    JR7 writes <band height=".." printWhenExpression="..">; the 6.x XSD has no such attribute
+    and rejects the file outright:
+
+        cvc-complex-type.3.2.2: Attribute 'printWhenExpression' is not allowed to appear in
+        element 'band'
+
+    R10.030's three reports gate their detail band on $F{NO}, so all three failed to compile
+    until this was split out. Same shape as the element-level case already handled in
+    emit_report_element - JR7 allows attribute or child, 6.x allows only the child.
+    """
+    d = dict(band_attrib)
+    pwe = d.pop("printWhenExpression", None)
+    s = f'{indent}<band{attrs(d.items())}>\n'
+    if pwe is not None:
+        s += f'{indent}    <printWhenExpression>{cdata(pwe)}</printWhenExpression>\n'
+    return s
 
 
 def emit_style(st, indent):
@@ -428,7 +486,7 @@ def main():
                 continue
             out += f'        <{tag}>\n'
             for band in sec.findall("band"):
-                out += f'            <band{attrs(band.attrib.items())}>\n'
+                out += band_open(band.attrib, "            ")
                 out += emit_band_body(band, "                ")
                 out += '            </band>\n'
             out += f'        </{tag}>\n'
@@ -445,13 +503,13 @@ def main():
         emitted += 1
         if tag in NEEDS_BAND_WRAP:
             ba = [(k, v) for k, v in b.attrib.items()]
-            out += f'    <{tag}>\n        <band{attrs(ba)}>\n'
+            out += f'    <{tag}>\n' + band_open(dict(ba), "        ")
             out += emit_band_body(b, "            ")
             out += f'        </band>\n    </{tag}>\n\n'
         else:
             out += f'    <{tag}>\n'
             for band in b.findall("band"):
-                out += f'        <band{attrs(band.attrib.items())}>\n'
+                out += band_open(band.attrib, "        ")
                 out += emit_band_body(band, "            ")
                 out += '        </band>\n'
             out += f'    </{tag}>\n\n'
